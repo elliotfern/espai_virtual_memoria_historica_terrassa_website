@@ -1,0 +1,17 @@
+{
+  "name": "myvendor/elliot",
+  "description": "My package composer",
+  "type": "project",
+  "require": {
+    "php": "^8.2",
+    "vlucas/phpdotenv": "^5.5",
+    "firebase/php-jwt": "6.8.1"
+  },
+  "license": "Apache-2.0",
+  "authors": [
+    {
+      "name": "Elliot Fernandez",
+      "email": "elliot@hispantic.com"
+    }
+  ]
+}

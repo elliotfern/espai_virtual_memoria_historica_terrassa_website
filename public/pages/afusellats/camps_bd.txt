@@ -1,0 +1,58 @@
+a.cognoms, a.nom, 
+
+01. dades personals:
+data_naixement
+ciutat_naixement
+ciutat_residencia
+adreca
+estudi_cat
+
+02. dades familiars:
+estat_civil
+esposa
+fills_num
+fills_noms
+
+03. dades laborals:
+ofici_cat
+empresa
+
+04. dades politiques/sindicals:
+partit_politic
+sindicat
+
+05. proces judicial:
+copia_exp
+pj.procediment_cat
+num_causa
+data_inici_proces
+jutge_instructor
+secretari_instructor
+jutjat
+any_inicial
+consell_guerra_data
+ciutat_consellGuerra
+president_tribunal
+defensor
+fiscal
+ponent
+tribunal_vocals
+acusacio
+acusacio_2
+testimoni_acusacio
+sentencia_data
+sentencia
+data_sentencia
+data_execucio
+ciutat_enterrament
+espai
+
+06. Biografia/observacions
+observacions
+biografia
+familiars
+
+07. Dades bibliografiques/arxiu
+ref_num_arxiu
+font_1
+font_2
