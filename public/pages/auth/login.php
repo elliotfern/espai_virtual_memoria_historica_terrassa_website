@@ -3,12 +3,12 @@
 if(!isset($_SESSION['user'])){
     ?>
     <!DOCTYPE html>
-    <html lang="en">
+    <html lang="ca">
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Elliot Fernandez - Login page</title>
+        <title>Gestió Memòria Històrica Terrassa - Pàgina de login</title>
         <script
       src="https://code.jquery.com/jquery-3.6.0.min.js"
       integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
@@ -31,28 +31,28 @@ if(!isset($_SESSION['user'])){
     <div class="card mx-auto" style="max-width: 400px;">
         <div class="card-body">
             <div class="container">
-                <h1>Login</h1>
+                <h1>Accès al web</h1>
                 <?php
     echo '<div class="alert alert-success" id="loginMessageOk" style="display:none" role="alert">
-                  <h4 class="alert-heading"><strong>Login OK!</h4></strong>
-                  <h6>Login successful, please wait a moment.</h6>
+                  <h4 class="alert-heading"><strong>Dades correctes!</h4></strong>
+                  <h6>Les dades introduïdes són correcte, en uns segons et redirigim a la pàgina.</h6>
                   </div>';
           
     echo '<div class="alert alert-danger" id="loginMessageErr" style="display:none" role="alert">
-                  <h4 class="alert-heading"><strong>Error login</h4></strong>
-                  <h6>Username or password are incorrect.</h6>
+                  <h4 class="alert-heading"><strong>Error!</h4></strong>
+                  <h6>Nom d\'usuari o contrasenya incorrectes</h6>
                   </div>';
     ?>
     
                 <form action="" method="post" class="login">
-                    <label for="username">Username</label>
+                    <label for="username">Correu electrònic</label>
                     <input type="text" name="username" id="username" class="form-control">
                     <br>
     
-                    <label for="password">Password</label>
+                    <label for="password">Contrasenya</label>
                     <input type="password" name="password" id="password" class="form-control">
                     <br>
-                    <button name="login" id="btnLogin" class="btn btn-primary">Login</button>
+                    <button name="login" id="btnLogin" class="btn btn-primary">Entra</button>
     
                 </form>
                 </div>
@@ -66,7 +66,7 @@ if(!isset($_SESSION['user'])){
     <?php
 
 /*
-$password = "OlivaresTerrassa2024!";
+$password = "OlivaresT";
 $hash = password_hash($password, PASSWORD_DEFAULT);
 echo $hash;
 */
