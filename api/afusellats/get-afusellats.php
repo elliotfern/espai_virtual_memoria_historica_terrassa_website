@@ -28,14 +28,14 @@ if (isset($headers['Authorization'])) {
                 }
             echo json_encode($data);
         
-        // 2) Pagina informacio tv show
+        // 2) Pagina informacio fitxa afusellat
         // ruta GET => "/api/afusellats/get/?type=fitxa&id=35"
         } elseif (isset($_GET['type']) && $_GET['type'] == 'fitxa' && isset($_GET['id'])) {
             $id = $_GET['id'];
             global $conn;
             $data = array();
             $stmt = $conn->prepare(
-            "SELECT a.id, a.cognoms, a.nom, a.copia_exp, a.data_naixement, a.edat, m1.ciutat AS ciutat_naixement, m2.ciutat AS ciutat_residencia, a.adreca, a.estat_civil, a.esposa, a.fills_num, a.fills_noms, es.estudi_cat, o.ofici_cat, a.empresa, fp.partit_politic, fs.sindicat, pj.procediment_cat, a.num_causa, a.data_inici_proces, a.jutge_instructor, a.secretari_instructor, a.jutjat, a.any_inicial, a.consell_guerra_data, m3.ciutat AS ciutat_consellGuerra, a.president_tribunal, a.defensor, a.fiscal, a.ponent, a.tribunal_vocals, a.acusacio, a.acusacio_2, a.testimoni_acusacio, a.sentencia_data, a.sentencia, a.data_sentencia, a.data_execucio, m4.ciutat AS ciutat_enterrament, e.espai, a.ref_num_arxiu, a.font_1, a.font_2, a.familiars, a.observacions, a.biografia
+            "SELECT a.id, a.cognoms, a.nom, a.copia_exp, a.data_naixement, a.edat, m1.id AS ciutat_naixement_id, m1.ciutat AS ciutat_naixement, m2.ciutat AS ciutat_residencia, m2.id AS ciutat_residencia_id, a.adreca, ec.estat_cat AS estat_civil, ec.id AS estat_civil_id, a.esposa, a.fills_num, a.fills_noms, es.estudi_cat, es.id AS estudis_id, o.ofici_cat, o.id AS ofici_id, a.empresa, fp.partit_politic, fp.id AS partit_politic_id, fs.sindicat, fs.id AS sindicat_id, pj.procediment_cat, a.num_causa, a.data_inici_proces, a.jutge_instructor, a.secretari_instructor, a.jutjat, a.any_inicial, a.consell_guerra_data, m3.ciutat AS ciutat_consellGuerra, a.president_tribunal, a.defensor, a.fiscal, a.ponent, a.tribunal_vocals, a.acusacio, a.acusacio_2, a.testimoni_acusacio, a.sentencia_data, a.sentencia, a.data_sentencia, a.data_execucio, m4.ciutat AS ciutat_enterrament, e.espai, a.ref_num_arxiu, a.font_1, a.font_2, a.familiars, a.observacions, a.biografia
             FROM db_afusellats AS a
             LEFT JOIN aux_espai AS e ON a.lloc_execucio_enterrament = e.id
             LEFT JOIN aux_dades_municipis AS m1 ON a.municipi_naixement = m1.id
@@ -47,6 +47,7 @@ if (isset($headers['Authorization'])) {
             LEFT JOIN aux_oficis AS o ON a.ofici = o.id 
             LEFT JOIN aux_filiacio_sindical AS fs ON a.filiacio_sindical = fs.id
             LEFT JOIN aux_procediment_judicial AS pj ON a.procediment = pj.id
+            LEFT JOIN aux_estat_civil as ec ON a.estat_civil = ec.id
             WHERE a.id = $id");
             $stmt->execute();
             if($stmt->rowCount() === 0) echo ('No rows');

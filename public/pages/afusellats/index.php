@@ -137,7 +137,7 @@ $(document).ready(function () {
                     // 'meta' contiene metadatos sobre la celda, como el índice de la columna
 
                     return (
-                        '<button type="button" onclick="btnModificaBook('+row.id+')" id="btnModificaBook" class="btn btn-sm btn-warning">Modificar dades</button>'
+                        '<button type="button" onclick="btnModificaAfusellat('+row.id+')" id="btnModificaAfusellat" class="btn btn-sm btn-warning">Modificar dades</button>'
                     );
                 },
             },
@@ -160,6 +160,15 @@ $(document).ready(function () {
         ] // <- Se añadió la coma aquí
     });
 });
+
+// BOTO MODIFICAR FITXA PERSONA
+function btnModificaAfusellat(id) {
+    let idAfusellat = id;
+    let url = devDirectory + "/afusellats/fitxa/modifica/" + idAfusellat;
+
+    // Redirigir al usuario a la página deseada
+    window.location.href = url;
+}
 </script>
 
 <?php

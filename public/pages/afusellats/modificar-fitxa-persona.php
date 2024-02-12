@@ -2,12 +2,9 @@
 $id = $params['id'];
 ?>
 
-<script type="module">
-    fitxaPersonaAfusellat('<?php echo $id; ?>')
-</script>
-
 <div class="container fitxa-persona">
 <h2 id="fitxaNomCognoms"></h2>
+
 
 <div class="tab">
   <button class="tablinks" onclick="openTab(event, 'tab1')">Dades personals</button>
@@ -19,34 +16,110 @@ $id = $params['id'];
   <button class="tablinks" onclick="openTab(event, 'tab7')">Dades bibliogràfiques</button>
 </div>
 
+<form id="personalForm">
 <div id="tab1" class="tabcontent">
-  <h3>Dades personals</h3>
-  <p id="data_naixement"></p>
-  <p id="data_execucio"></p>
-  <p id="ciutat_naixement"></p>
-  <p id="ciutat_residencia"></p>
-  <p id="adreca"></p>
-  <p id="estudi_cat"></p>
+    <div class="row">
+        <h3>Dades personals</h3>
+            <div class="col-md-6 negreta">
+                <label for="nom" class="form-label">Nom:</label>
+                <input type="text" class="form-control" id="nom" name="nom" value="">
+            </div>
+
+            <div class="col-md-6 negreta">
+                <label for="cognoms" class="form-label">Cognoms:</label>
+                <input type="text" class="form-control" id="cognoms" name="cognoms" value="">
+            </div>
+
+            <div class="col-md-6 negreta">
+                <label for="data_naixement" class="form-label">Data de naixement:</label>
+                <input type="text" class="form-control" id="data_naixement" name="data_naixement" value="">
+            </div>
+
+            <div class="col-md-6 negreta">
+                <label for="ciutat_naixement" class="form-label">Ciutat de naixement:</label>
+                <select class="form-select" aria-label="Default select example" id="ciutat_naixement">
+                </select>
+            </div>
+
+            <div class="col-md-6 negreta">
+                <label for="ciutat_residencia" class="form-label">Ciutat de residència:</label>
+                <select class="form-select" aria-label="Default select example" id="ciutat_residencia">
+                </select>
+            </div>
+
+            <div class="col-md-6 negreta">
+                <label for="adreca" class="form-label">Adreça:</label>
+                <input type="text" class="form-control" id="adreca" name="adreca" value="">
+            </div>
+
+            <div class="col-md-6 negreta">
+                <label for="estudi_cat" class="form-label">Estudis:</label>
+                <select class="form-select" aria-label="Default select example" id="estudi_cat">
+                </select>
+            </div>
+            
+    </div>
 </div>
 
 <div id="tab2" class="tabcontent">
-  <h3>Dades familiars</h3>
-  <p id="estat_civil"></p>
-  <p id="esposa"></p>
-  <p id="fills_num"></p>
-  <p id="fills_noms"></p>
+    <div class="row">
+        <h3>Dades familiars</h3>
+            <div class="col-md-6 negreta">
+                <label for="estat_civil" class="form-label">Estat civil:</label>
+                <select class="form-select" aria-label="Default select example" id="estat_civil">
+                </select>
+            </div>
+
+            <div class="col-md-6 negreta">
+                <label for="esposa" class="form-label">Esposa:</label>
+                <input type="text" class="form-control" id="esposa" name="esposa" value="">
+            </div>
+
+            <div class="col-md-6 negreta">
+                <label for="fills_num" class="form-label">Número de fills:</label>
+                <input type="text" class="form-control" id="fills_num" name="fills_num" value="">
+            </div>
+
+            <div class="col-md-6 negreta">
+                <label for="fills_noms" class="form-label">Noms dels fills:</label>
+                <input type="text" class="form-control" id="fills_noms" name="fills_noms" value="">
+            </div>
+    </div>
 </div>
 
 <div id="tab3" class="tabcontent">
-  <h3>Dades laborals</h3>
-  <p id="ofici_cat"></p>
-  <p id="empresa"></p>
+    <div class="row">
+        <h3>Dades laborals</h3>
+
+        <div class="col-md-6 negreta">
+            <label for="ofici_cat" class="form-label">Ofici:</label>
+            <select class="form-select" aria-label="Default select example" id="ofici_cat">
+            </select>
+        </div>
+
+        <div class="col-md-6 negreta">
+            <label for="empresa" class="form-label">Empresa:</label>
+            <input type="text" class="form-control" id="empresa" name="empresa" value="">
+        </div>
+    </div>
 </div>
 
 <div id="tab4" class="tabcontent">
-  <h3>Dades polítiques/sindicals</h3>
-  <p id="partit_politic"></p>
-  <p id="sindicat"></p>
+    <div class="row">
+        <h3>Dades polítiques/sindicals</h3>
+        <div class="col-md-6 negreta">
+                <label for="partit_politic" class="form-label">Partit polític:</label>
+                <select class="form-select" aria-label="Default select example" id="partit_politic">
+                </select>
+        </div>
+
+        <div class="col-md-6 negreta">
+                <label for="sindicat" class="form-label">Sindicat:</label>
+                <select class="form-select" aria-label="Default select example" id="sindicat">
+                </select>
+        </div>
+   
+    </div>
 </div>
 
 <div id="tab5" class="tabcontent">
@@ -91,9 +164,17 @@ $id = $params['id'];
   <p id="font_2"></p>
 </div>
 
-<button type="button" onclick="btnModificaAfusellat('<?php echo $id; ?>')" id="btnModificaAfusellat" class="btn btn-sm btn-warning">Modificar dades</button>
+<div class="row espai-superior">
+    <div class="col">
+        <a class="btn btn-secondary" role="button" aria-disabled="true" onclick="goBack()">Tornar enrere</a>
+    </div>
 
+    <div class="col d-flex justify-content-end align-items-center">
+        <a class="btn btn-primary" role="button" aria-disabled="true">Modificar dades</a>
+    </div>
 </div>
+</form>
+
 <style>
 
 .fitxa-persona {
@@ -131,16 +212,6 @@ $id = $params['id'];
 </style>
 
 <script>
-
-  // BOTO MODIFICAR FITXA PERSONA
-function btnModificaAfusellat(id) {
-    let idAfusellat = id;
-    let url = devDirectory + "/afusellats/fitxa/modifica/" + idAfusellat;
-
-    // Redirigir al usuario a la página deseada
-    window.location.href = url;
-}
-
     function openTab(evt, tabName) {
   // Obtén todos los elementos con la clase tabcontent y ocúltalos
   var tabcontent = document.getElementsByClassName("tabcontent");
@@ -166,6 +237,13 @@ document.getElementsByClassName("tablinks")[0].className += " active";
 
 <script>
 // Carregar tota la informacio des de la base de dades
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Llama a la función fitxaPersonaAfusellat para cargar los datos
+    fitxaPersonaAfusellat('<?php echo $id; ?>');
+});
+
+
 function fitxaPersonaAfusellat(slug) {
   let urlAjax = devDirectory + "/api/afusellats/get/?type=fitxa&id=" + slug;
   $.ajax({
@@ -185,36 +263,30 @@ function fitxaPersonaAfusellat(slug) {
         let fitxa = data[0];
     
         // DOM modifications
-        // 01. dades personals
         document.getElementById('fitxaNomCognoms').innerHTML = "Fitxa: " + fitxa.nom + " " + fitxa.cognoms;
-        document.getElementById('data_naixement').innerHTML = "Data de naixement: " + fitxa.data_naixement;
-        document.getElementById('ciutat_naixement').innerHTML = "Ciutat de naixement: " + fitxa.ciutat_naixement;
-        document.getElementById('ciutat_residencia').innerHTML = "Ciutat de residència: " + fitxa.ciutat_residencia;
-        document.getElementById('adreca').innerHTML = "Adreça: " + fitxa.adreca;
-        document.getElementById('estudi_cat').innerHTML = "Estudis: " + fitxa.estudi_cat;
+        
+        // 01. dades personals
+        document.getElementById('nom').value = fitxa.nom;
+        document.getElementById('cognoms').value = fitxa.cognoms;
+        document.getElementById('data_naixement').value = fitxa.data_naixement;
+        auxiliarSelect(fitxa.ciutat_naixement_id, "municipis", "ciutat_naixement", "ciutat");
+        auxiliarSelect(fitxa.ciutat_residencia_id, "municipis", "ciutat_residencia", "ciutat");
+        document.getElementById('adreca').value = fitxa.adreca;
+        auxiliarSelect(fitxa.estudis_id, "estudis", "estudi_cat", "estudi_cat")
         
         // 02. dades familiars:
-        document.getElementById('estat_civil').innerHTML = "Estat civil: " + fitxa.estat_civil;
-        document.getElementById('esposa').innerHTML = "Esposa: " + fitxa.esposa;
-        document.getElementById('fills_num').innerHTML = "Número de fills: " + fitxa.fills_num;
-        document.getElementById('fills_noms').innerHTML = "Noms fills: " + fitxa.fills_noms;
+        auxiliarSelect(fitxa.estat_civil_id, "estats", "estat_civil", "estat_cat");
+        document.getElementById('esposa').value = fitxa.esposa;
+        document.getElementById('fills_num').value = fitxa.fills_num;
+        document.getElementById('fills_noms').value = fitxa.fills_noms;
 
         // 03. dades laborals:
-        document.getElementById('ofici_cat').innerHTML = "Ofici: " + fitxa.ofici_cat;
-        document.getElementById('empresa').innerHTML = "Empresa: " + fitxa.empresa;
+        auxiliarSelect(fitxa.ofici_id, "oficis", "ofici_cat", "ofici_cat");
+        document.getElementById('empresa').value = fitxa.empresa;
 
         // 04. dades politiques
-        if (fitxa.partit_politic === null || fitxa.partit_politic === "NULL") {
-            document.getElementById('partit_politic').innerHTML = "Afiliació política: - ";
-        } else {
-            document.getElementById('partit_politic').innerHTML = "Afiliació política: " + fitxa.partit_politic;
-        }
-
-        if (fitxa.sindicat === null || fitxa.sindicat === "NULL") {
-            document.getElementById('sindicat').innerHTML = "Afiliació sindical: - ";
-        } else {
-            document.getElementById('sindicat').innerHTML = "Afiliació sindical: " + fitxa.sindicat;
-        }
+        auxiliarSelect(fitxa.partit_politic_id, "partits", "partit_politic", "partit_politic");
+        auxiliarSelect(fitxa.sindicat_id, "sindicats", "sindicat", "sindicat");
 
         // 05. dades proces judicial
         document.getElementById('copia_exp').innerHTML = "Còpia expedient: " + fitxa.copia_exp;
@@ -265,10 +337,75 @@ function fitxaPersonaAfusellat(slug) {
   })
 }
 
+
+// Carregar el select
+function auxiliarSelect(idAux, api, elementId, valorText) {
+  let urlAjax = devDirectory + "/api/auxiliars/get/?type=" + api;
+  $.ajax({
+    url: urlAjax,
+    method: "GET",
+    dataType: "json",
+    beforeSend: function (xhr) {
+      // Obtener el token del localStorage
+      let token = localStorage.getItem('token');
+
+      // Incluir el token en el encabezado de autorización
+      xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+    },
+
+    success: function (data) {
+       try {
+        // Obtener la referencia al elemento select
+        var selectElement = document.getElementById(elementId);
+
+        // Limpiar el select por si ya tenía opciones anteriores
+        selectElement.innerHTML = "";
+
+        // Agregar una opción predeterminada "Selecciona una opción"
+        var defaultOption = document.createElement("option");
+        defaultOption.text = "Selecciona una opció:";
+        defaultOption.value = ""; // Valor vacío
+        selectElement.appendChild(defaultOption);
+
+        // Iterar sobre los datos obtenidos de la API
+        data.forEach(function (item) {
+          // Crear una opción y agregarla al select
+         // console.log(item.ciutat)
+          var option = document.createElement("option");
+          option.value = item.id; // Establecer el valor de la opción
+          option.text = item[valorText]; // Establecer el texto visible de la opción
+          selectElement.appendChild(option);
+        });
+
+        // Seleccionar automáticamente el valor
+        if (idAux) {
+          selectElement.value = idAux;
+        }
+
+      } catch (error) {
+        console.error('Error al parsear JSON:', error);  // Muestra el error de parsing
+      }
+    }
+  })
+}
+
+function goBack() {
+  window.history.back();
+}
+
 </script>
 
-
-
+<style>
+    .negreta {
+        margin-top: 20px;
+        font-weight: bold;
+    }
+    
+    .espai-superior {
+        margin-top: 25px;
+    }
+    </style>
+</div>
 
 <?php
 # footer

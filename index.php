@@ -144,6 +144,7 @@ class Route {
     $route->add("/api/auth","api/auth.php");
 
     $route->add("/api/afusellats/get","api/afusellats/get-afusellats.php");
+    $route->add("/api/auxiliars/get","api/auxiliars/get-aux.php");
 
     // aqui comença la lògica del sistema
 
@@ -173,6 +174,7 @@ class Route {
         // afusellats
         $route->add("/afusellats","public/pages/afusellats/index.php");
         $route->add("/afusellats/fitxa/{id}","public/pages/afusellats/fitxa-persona.php");
+        $route->add("/afusellats/fitxa/modifica/{id}","public/pages/afusellats/modificar-fitxa-persona.php");
 
 }
 
