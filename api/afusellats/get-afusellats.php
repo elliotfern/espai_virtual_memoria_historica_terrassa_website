@@ -16,8 +16,7 @@ if (isset($headers['Authorization'])) {
             global $conn;
             $data = array();
             $stmt = $conn->prepare(
-            "SELECT 	
-            a.id, a.cognoms, nom, a.copia_exp, a.data_naixement, a.edat, e.espai, a.data_execucio
+            "SELECT a.id, a.cognoms, nom, a.copia_exp, a.data_naixement, a.edat, e.espai_cat, a.data_execucio
             FROM db_afusellats AS a
             INNER JOIN aux_espai AS e ON a.lloc_execucio_enterrament = e.id
             ORDER BY a.cognoms ASC");
@@ -35,7 +34,7 @@ if (isset($headers['Authorization'])) {
             global $conn;
             $data = array();
             $stmt = $conn->prepare(
-            "SELECT a.id, a.cognoms, a.nom, a.copia_exp, a.data_naixement, a.edat, m1.id AS ciutat_naixement_id, m1.ciutat AS ciutat_naixement, m2.ciutat AS ciutat_residencia, m2.id AS ciutat_residencia_id, a.adreca, ec.estat_cat AS estat_civil, ec.id AS estat_civil_id, a.esposa, a.fills_num, a.fills_noms, es.estudi_cat, es.id AS estudis_id, o.ofici_cat, o.id AS ofici_id, a.empresa, fp.partit_politic, fp.id AS partit_politic_id, fs.sindicat, fs.id AS sindicat_id, pj.procediment_cat, a.num_causa, a.data_inici_proces, a.jutge_instructor, a.secretari_instructor, a.jutjat, a.any_inicial, a.consell_guerra_data, m3.ciutat AS ciutat_consellGuerra, a.president_tribunal, a.defensor, a.fiscal, a.ponent, a.tribunal_vocals, a.acusacio, a.acusacio_2, a.testimoni_acusacio, a.sentencia_data, a.sentencia, a.data_sentencia, a.data_execucio, m4.ciutat AS ciutat_enterrament, e.espai, a.ref_num_arxiu, a.font_1, a.font_2, a.familiars, a.observacions, a.biografia
+            "SELECT a.id, a.cognoms, a.nom, a.copia_exp, a.data_naixement, a.edat, m1.id AS ciutat_naixement_id, m1.ciutat AS ciutat_naixement, m2.ciutat AS ciutat_residencia, m2.id AS ciutat_residencia_id, a.adreca, ec.estat_cat AS estat_civil, ec.id AS estat_civil_id, a.esposa, a.fills_num, a.fills_noms, es.estudi_cat, es.id AS estudis_id, o.ofici_cat, o.id AS ofici_id, a.empresa, fp.partit_politic, fp.id AS partit_politic_id, fs.sindicat, fs.id AS sindicat_id, pj.procediment_cat, pj.id AS procediment_id, a.num_causa, a.data_inici_proces, a.jutge_instructor, a.secretari_instructor, j.jutjat_cat AS jutjat, j.id AS jutjat_id, a.any_inicial, a.consell_guerra_data, m3.ciutat AS ciutat_consellGuerra, m3.id AS ciutat_consellGuerra_id, a.president_tribunal, a.defensor, a.fiscal, a.ponent, a.tribunal_vocals, acu.acusacio_cat AS acusacio, acu.id AS acusacio_id, acu2.acusacio_cat AS acusacio2, acu2.id AS acusacio_id2, a.testimoni_acusacio, a.sentencia_data, sen.sentencia_cat AS sentencia, sen.id AS sentencia_id, a.data_sentencia, a.data_execucio, m4.ciutat AS ciutat_enterrament, m4.id AS ciutat_enterrament_id, e.espai_cat AS espai, e.id AS espai_id, a.ref_num_arxiu, a.font_1, a.font_2, a.familiars, a.observacions, a.biografia
             FROM db_afusellats AS a
             LEFT JOIN aux_espai AS e ON a.lloc_execucio_enterrament = e.id
             LEFT JOIN aux_dades_municipis AS m1 ON a.municipi_naixement = m1.id
@@ -48,6 +47,10 @@ if (isset($headers['Authorization'])) {
             LEFT JOIN aux_filiacio_sindical AS fs ON a.filiacio_sindical = fs.id
             LEFT JOIN aux_procediment_judicial AS pj ON a.procediment = pj.id
             LEFT JOIN aux_estat_civil as ec ON a.estat_civil = ec.id
+            LEFT JOIN aux_jutjats as j ON a.jutjat = j.id
+            LEFT JOIN aux_acusacions AS acu ON a.acusacio = acu.id
+            LEFT JOIN aux_acusacions AS acu2 ON a.acusacio_2 = acu2.id
+            LEFT JOIN aux_sentencies AS sen ON a.sentencia = sen.id
             WHERE a.id = $id");
             $stmt->execute();
             if($stmt->rowCount() === 0) echo ('No rows');

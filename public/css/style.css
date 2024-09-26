@@ -105,3 +105,52 @@ th,
 td {
   padding: 15px;
 }
+
+/* FITXA PERSONA */
+.fitxa-persona {
+    background-color: #A0BEF7;
+    padding: 15px;
+    border: solid black 1px;
+}
+
+.tab {
+    margin-bottom: 25px;
+}
+    /* Esconde todos los divs con clase tabcontent excepto el primero */
+.tabcontent {
+  display: none;
+}
+
+/* Estilo de los botones de la pestaña */
+.tab button {
+  background-color: #f2f2f2;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  padding: 10px 20px;
+  transition: background-color 0.3s;
+}
+
+/* Cambia el color de fondo del botón activo */
+.tab button.active {
+  background-color: #B6B6B6;
+}
+
+.tab button:hover {
+  background-color: #323232;
+  color: white;
+}
+
+/* ESTILS GENERALS */
+.negreta {
+  margin-top: 20px;
+  font-weight: bold;
+}
+
+.espai-superior {
+  margin-top: 25px;
+}
+
+.avis-form {
+color: red;
+font-size: 14px;
+}

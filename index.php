@@ -143,6 +143,8 @@ class Route {
     // API SERVER 
     $route->add("/api/auth","api/auth.php");
 
+    $route->add("/api/represaliats/get","api/represaliats/get-represaliats.php");
+
     $route->add("/api/afusellats/get","api/afusellats/get-afusellats.php");
     $route->add("/api/auxiliars/get","api/auxiliars/get-aux.php");
 
@@ -170,6 +172,9 @@ class Route {
         // homepage
         $route->add("/","public/pages/homepage/admin.php");
         $route->add("/admin","public/pages/homepage/admin.php");
+
+        // llistat complet
+        $route->add("/represaliats","public/pages/represaliats/index.php");
 
         // afusellats
         $route->add("/afusellats","public/pages/afusellats/index.php");

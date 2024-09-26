@@ -23,6 +23,7 @@ $id = $params['id'];
   <h3>Dades personals</h3>
   <p id="data_naixement"></p>
   <p id="data_execucio"></p>
+  <p id="edat"></p>
   <p id="ciutat_naixement"></p>
   <p id="ciutat_residencia"></p>
   <p id="adreca"></p>
@@ -94,41 +95,6 @@ $id = $params['id'];
 <button type="button" onclick="btnModificaAfusellat('<?php echo $id; ?>')" id="btnModificaAfusellat" class="btn btn-sm btn-warning">Modificar dades</button>
 
 </div>
-<style>
-
-.fitxa-persona {
-    background-color: #A0BEF7;
-    padding: 15px;
-    border: solid black 1px;
-}
-
-.tab {
-    margin-bottom: 25px;
-}
-    /* Esconde todos los divs con clase tabcontent excepto el primero */
-.tabcontent {
-  display: none;
-}
-
-/* Estilo de los botones de la pestaña */
-.tab button {
-  background-color: #f2f2f2;
-  border: 1px solid #ccc;
-  cursor: pointer;
-  padding: 10px 20px;
-  transition: background-color 0.3s;
-}
-
-/* Cambia el color de fondo del botón activo */
-.tab button.active {
-  background-color: #B6B6B6;
-}
-
-.tab button:hover {
-  background-color: #323232;
-  color: white;
-}
-</style>
 
 <script>
 
@@ -187,75 +153,76 @@ function fitxaPersonaAfusellat(slug) {
         // DOM modifications
         // 01. dades personals
         document.getElementById('fitxaNomCognoms').innerHTML = "Fitxa: " + fitxa.nom + " " + fitxa.cognoms;
-        document.getElementById('data_naixement').innerHTML = "Data de naixement: " + fitxa.data_naixement;
-        document.getElementById('ciutat_naixement').innerHTML = "Ciutat de naixement: " + fitxa.ciutat_naixement;
-        document.getElementById('ciutat_residencia').innerHTML = "Ciutat de residència: " + fitxa.ciutat_residencia;
-        document.getElementById('adreca').innerHTML = "Adreça: " + fitxa.adreca;
-        document.getElementById('estudi_cat').innerHTML = "Estudis: " + fitxa.estudi_cat;
+        document.getElementById('data_naixement').innerHTML = "<span class='negreta'>Data de naixement:</span> " + fitxa.data_naixement;
+        document.getElementById('edat').innerHTML = "<span class='negreta'>Edat:</span> " + fitxa.edat + " anys";
+        document.getElementById('ciutat_naixement').innerHTML = "<span class='negreta'>Ciutat de naixement:</span> " + fitxa.ciutat_naixement;
+        document.getElementById('ciutat_residencia').innerHTML = "<span class='negreta'>Ciutat de residència:</span> " + fitxa.ciutat_residencia;
+        document.getElementById('adreca').innerHTML = "<span class='negreta'>Adreça:</span> " + fitxa.adreca;
+        document.getElementById('estudi_cat').innerHTML = "<span class='negreta'>Estudis:</span> " + fitxa.estudi_cat;
         
         // 02. dades familiars:
-        document.getElementById('estat_civil').innerHTML = "Estat civil: " + fitxa.estat_civil;
-        document.getElementById('esposa').innerHTML = "Esposa: " + fitxa.esposa;
-        document.getElementById('fills_num').innerHTML = "Número de fills: " + fitxa.fills_num;
-        document.getElementById('fills_noms').innerHTML = "Noms fills: " + fitxa.fills_noms;
+        document.getElementById('estat_civil').innerHTML = "<span class='negreta'>Estat civil:</span> " + fitxa.estat_civil;
+        document.getElementById('esposa').innerHTML = "<span class='negreta'>Esposa:</span> " + fitxa.esposa;
+        document.getElementById('fills_num').innerHTML = "<span class='negreta'>Número de fills:</span> " + fitxa.fills_num;
+        document.getElementById('fills_noms').innerHTML = "<span class='negreta'>Noms fills:</span> " + fitxa.fills_noms;
 
         // 03. dades laborals:
-        document.getElementById('ofici_cat').innerHTML = "Ofici: " + fitxa.ofici_cat;
-        document.getElementById('empresa').innerHTML = "Empresa: " + fitxa.empresa;
+        document.getElementById('ofici_cat').innerHTML = "<span class='negreta'>Ofici:</span> " + fitxa.ofici_cat;
+        document.getElementById('empresa').innerHTML = "<span class='negreta'>Empresa:</span> " + fitxa.empresa;
 
         // 04. dades politiques
         if (fitxa.partit_politic === null || fitxa.partit_politic === "NULL") {
-            document.getElementById('partit_politic').innerHTML = "Afiliació política: - ";
+            document.getElementById('partit_politic').innerHTML = "<span class='negreta'>Afiliació política:</span> - ";
         } else {
-            document.getElementById('partit_politic').innerHTML = "Afiliació política: " + fitxa.partit_politic;
+            document.getElementById('partit_politic').innerHTML = "<span class='negreta'>Afiliació política:</span> " + fitxa.partit_politic;
         }
 
         if (fitxa.sindicat === null || fitxa.sindicat === "NULL") {
-            document.getElementById('sindicat').innerHTML = "Afiliació sindical: - ";
+            document.getElementById('sindicat').innerHTML = "<span class='negreta'>Afiliació sindical:</span> - ";
         } else {
-            document.getElementById('sindicat').innerHTML = "Afiliació sindical: " + fitxa.sindicat;
+            document.getElementById('sindicat').innerHTML = "<span class='negreta'>Afiliació sindical:</span> " + fitxa.sindicat;
         }
 
         // 05. dades proces judicial
-        document.getElementById('copia_exp').innerHTML = "Còpia expedient: " + fitxa.copia_exp;
-        document.getElementById('procediment_cat').innerHTML = "Tipus de procediment: " + fitxa.procediment_cat;
-        document.getElementById('num_causa').innerHTML = "Número de causa: " + fitxa.num_causa;
-        document.getElementById('data_inici_proces').innerHTML = "Data inici del procés judicial: " + fitxa.data_inici_proces;
-        document.getElementById('jutge_instructor').innerHTML = "Jutge instructor: " + fitxa.jutge_instructor;
-        document.getElementById('secretari_instructor').innerHTML = "Secretari instructor: " + fitxa.secretari_instructor;
-        document.getElementById('jutjat').innerHTML = "Jutjat: " + fitxa.jutjat;
-        document.getElementById('any_inicial').innerHTML = "Any inici del procés: " + fitxa.any_inicial;
-        document.getElementById('consell_guerra_data').innerHTML = "Data del consell de guerra: " + fitxa.consell_guerra_data;
-        document.getElementById('ciutat_consellGuerra').innerHTML = "Ciutat del consell de guerra: " + fitxa.ciutat_consellGuerra;
-        document.getElementById('president_tribunal').innerHTML = "President del tribunal: " + fitxa.president_tribunal;
-        document.getElementById('defensor').innerHTML = "Advocat defensor: " + fitxa.defensor;
-        document.getElementById('fiscal').innerHTML = "Fiscal: " + fitxa.fiscal;
-        document.getElementById('ponent').innerHTML = "Ponent: " + fitxa.ponent;
-        document.getElementById('tribunal_vocals').innerHTML = "Vocals tribunal: " + fitxa.tribunal_vocals;
-        document.getElementById('acusacio').innerHTML = "Acusació: " + fitxa.acusacio;
-        document.getElementById('acusacio_2').innerHTML = "Acusació 2: " + fitxa.acusacio_2;
-        document.getElementById('testimoni_acusacio').innerHTML = "Testimoni acusació: " + fitxa.testimoni_acusacio;
-        document.getElementById('sentencia_data').innerHTML = "Data de la sentència: " + fitxa.sentencia_data;
-        document.getElementById('sentencia').innerHTML = "Sentència: " + fitxa.sentencia;
-        document.getElementById('data_sentencia').innerHTML = "Data sentència: " + fitxa.data_sentencia;
-        document.getElementById('data_execucio').innerHTML = "Data execució: " + fitxa.data_execucio;
-        document.getElementById('espai').innerHTML = "Lloc execució: " + fitxa.espai;
+        document.getElementById('copia_exp').innerHTML = "<span class='negreta'>Còpia expedient:</span> " + fitxa.copia_exp;
+        document.getElementById('procediment_cat').innerHTML = "<span class='negreta'>Tipus de procediment:</span> " + fitxa.procediment_cat;
+        document.getElementById('num_causa').innerHTML = "<span class='negreta'>Número de causa:</span> " + fitxa.num_causa;
+        document.getElementById('data_inici_proces').innerHTML = "<span class='negreta'>Data inici del procés judicial:</span> " + fitxa.data_inici_proces;
+        document.getElementById('jutge_instructor').innerHTML = "<span class='negreta'>Jutge instructor:</span> " + fitxa.jutge_instructor;
+        document.getElementById('secretari_instructor').innerHTML = "<span class='negreta'>Secretari instructor:</span> " + fitxa.secretari_instructor;
+        document.getElementById('jutjat').innerHTML = "<span class='negreta'>Jutjat:</span> " + fitxa.jutjat;
+        document.getElementById('any_inicial').innerHTML = "<span class='negreta'>Any inici del procés:</span> " + fitxa.any_inicial;
+        document.getElementById('consell_guerra_data').innerHTML = "<span class='negreta'>Data del consell de guerra:</span> " + fitxa.consell_guerra_data;
+        document.getElementById('ciutat_consellGuerra').innerHTML = "<span class='negreta'>Ciutat del consell de guerra:</span> " + fitxa.ciutat_consellGuerra;
+        document.getElementById('president_tribunal').innerHTML = "<span class='negreta'>President del tribunal:</span> " + fitxa.president_tribunal;
+        document.getElementById('defensor').innerHTML = "<span class='negreta'>Advocat defensor:</span> " + fitxa.defensor;
+        document.getElementById('fiscal').innerHTML = "<span class='negreta'>Fiscal:</span> " + fitxa.fiscal;
+        document.getElementById('ponent').innerHTML = "<span class='negreta'>Ponent:</span> " + fitxa.ponent;
+        document.getElementById('tribunal_vocals').innerHTML = "<span class='negreta'>Vocals tribunal:</span> " + fitxa.tribunal_vocals;
+        document.getElementById('acusacio').innerHTML = "<span class='negreta'>Acusació:</span> " + fitxa.acusacio;
+        document.getElementById('acusacio_2').innerHTML = "<span class='negreta'>Acusació 2:</span> " + fitxa.acusacio_2;
+        document.getElementById('testimoni_acusacio').innerHTML = "<span class='negreta'>Testimoni acusació:</span> " + fitxa.testimoni_acusacio;
+        document.getElementById('sentencia_data').innerHTML = "<span class='negreta'>Data de la sentència:</span> " + fitxa.sentencia_data;
+        document.getElementById('sentencia').innerHTML = "<span class='negreta'>Sentència:</span> " + fitxa.sentencia;
+        document.getElementById('data_sentencia').innerHTML = "<span class='negreta'>Data sentència:</span> " + fitxa.data_sentencia;
+        document.getElementById('data_execucio').innerHTML = "<span class='negreta'>Data de defunció (execució):</span> " + fitxa.data_execucio;
+        document.getElementById('espai').innerHTML = "<span class='negreta'>Lloc execució:</span> " + fitxa.espai;
 
         if (fitxa.ciutat_enterrament === null || fitxa.ciutat_enterrament === "NULL") {
-            document.getElementById('ciutat_enterrament').innerHTML = "Ciutat enterrament: - ";
+            document.getElementById('ciutat_enterrament').innerHTML = "<span class='negreta'>Ciutat enterrament:</span> - ";
         } else {
-            document.getElementById('ciutat_enterrament').innerHTML = "Ciutat enterrament: " + fitxa.ciutat_enterrament;
+            document.getElementById('ciutat_enterrament').innerHTML = "<span class='negreta'>Ciutat enterrament:</span> " + fitxa.ciutat_enterrament;
         }
 
         // 06. dades biografiques
-        document.getElementById('familiars').innerHTML = "Familiars: " + fitxa.familiars;
-        document.getElementById('observacions').innerHTML = "Observacions: " + fitxa.observacions;
-        document.getElementById('biografia').innerHTML = "Biografia: " + fitxa.biografia;
+        document.getElementById('familiars').innerHTML = "<span class='negreta'>Familiars:</span> " + fitxa.familiars;
+        document.getElementById('observacions').innerHTML = "<span class='negreta'>Observacions:</span> " + fitxa.observacions;
+        document.getElementById('biografia').innerHTML = "<span class='negreta'>Biografia:</span> " + fitxa.biografia;
         
         // 07. Dades bibliografiques/arxiu
-        document.getElementById('ref_num_arxiu').innerHTML = "Referència arxiu: " + fitxa.ref_num_arxiu;
-        document.getElementById('font_1').innerHTML = "Font 1: " + fitxa.font_1;
-        document.getElementById('font_2').innerHTML = "Font 2: " + fitxa.font_2;
+        document.getElementById('ref_num_arxiu').innerHTML = "<span class='negreta'>Referència arxiu:</span> " + fitxa.ref_num_arxiu;
+        document.getElementById('font_1').innerHTML = "<span class='negreta'>Font 1:</span> " + fitxa.font_1;
+        document.getElementById('font_2').innerHTML = "<span class='negreta'>Font 2:</span> " + fitxa.font_2;
 
         /* document.getElementById("authorPhoto").src = `../../public/img/library-author/${data.nameImg}.jpg`;*/
       } catch (error) {

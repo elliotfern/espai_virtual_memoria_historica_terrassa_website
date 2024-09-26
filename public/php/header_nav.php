@@ -18,7 +18,8 @@ $loggedInUser = ($_SESSION['user']['id']);
 	</div>
 
 	<div class="container-fluid text-center" style="padding-top:20px;padding-bottom:25px">
-		<h1 class="text-center"><a href="'. APP_DEV .'/admin">Intranet Memòria Històrica de Terrassa</a></h1>
+		<h1>Espai Virtual de la Memòria Històrica de Terrassa - EVMHT</h1>
+		<h4 class="text-center"><a href="'. APP_DEV .'/admin">Gestió Interna</a></h4>
 	</div>
 	
 	<div class="container-fluid text-center">
@@ -26,6 +27,8 @@ $loggedInUser = ($_SESSION['user']['id']);
 			<button class="navbar-toggler text-center" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon text-center"></span>
 			</button>
+			<p><span class="text-center"><a href="'. APP_DEV .'/represaliats">Llistat complert</a></span></p>
+
 		<div class="collapse navbar-collapse justify-content-center menuHeader" id="navbarTogglerDemo01">
 		<ul class="navbar-nav text-center">
 				<li class="nav-item nav-link">

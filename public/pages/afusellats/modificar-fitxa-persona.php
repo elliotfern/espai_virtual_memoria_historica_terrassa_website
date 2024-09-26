@@ -20,19 +20,37 @@ $id = $params['id'];
 <div id="tab1" class="tabcontent">
     <div class="row">
         <h3>Dades personals</h3>
-            <div class="col-md-6 negreta">
-                <label for="nom" class="form-label">Nom:</label>
+            <div class="col-md-6">
+                <label for="nom" class="form-label negreta">Nom:</label>
                 <input type="text" class="form-control" id="nom" name="nom" value="">
+
+              <div class="avis-form">
+                * Camp obligatori
+              </div>
             </div>
 
-            <div class="col-md-6 negreta">
-                <label for="cognoms" class="form-label">Cognoms:</label>
+            <div class="col-md-6">
+                <label for="cognoms" class="form-label negreta">Cognoms:</label>
                 <input type="text" class="form-control" id="cognoms" name="cognoms" value="">
+
+                <div class="avis-form">
+                * Camp obligatori
+              </div>
             </div>
 
             <div class="col-md-6 negreta">
                 <label for="data_naixement" class="form-label">Data de naixement:</label>
                 <input type="text" class="form-control" id="data_naixement" name="data_naixement" value="">
+            </div>
+
+            <div class="col-md-6">
+              <label for="data_execucio" class="form-label negreta">Data de defunció (execució):</label>
+              <input type="text" class="form-control" id="data_execucio" name="data_execucio" value="">
+            </div>
+
+            <div class="col-md-6">
+              <label for="edat" class="form-label negreta">Edat:</label>
+              <input type="text" class="form-control" id="edat" name="edat" value="">
             </div>
 
             <div class="col-md-6 negreta">
@@ -64,8 +82,8 @@ $id = $params['id'];
 <div id="tab2" class="tabcontent">
     <div class="row">
         <h3>Dades familiars</h3>
-            <div class="col-md-6 negreta">
-                <label for="estat_civil" class="form-label">Estat civil:</label>
+            <div class="col-md-6">
+                <label for="estat_civil" class="form-label negreta">Estat civil:</label>
                 <select class="form-select" aria-label="Default select example" id="estat_civil">
                 </select>
             </div>
@@ -123,45 +141,176 @@ $id = $params['id'];
 </div>
 
 <div id="tab5" class="tabcontent">
-  <h3>Procés judicial</h3>
-  <p id="copia_exp"></p>
-  <p id="procediment_cat"></p>
-  <p id="num_causa"></p>
-  <p id="data_inici_proces"></p>
-  <p id="jutge_instructor"></p>
-  <p id="secretari_instructor"></p>
-  <p id="jutjat"></p>
-  <p id="any_inicial"></p>
-  <p id="consell_guerra_data"></p>
-  <p id="ciutat_consellGuerra"></p>
-  <p id="president_tribunal"></p>
-  <p id="defensor"></p>
-  <p id="fiscal"></p>
-  <p id="ponent"></p>
-  <p id="tribunal_vocals"></p>
-  <p id="acusacio"></p>
-  <p id="acusacio_2"></p>
-  <p id="testimoni_acusacio"></p>
-  <p id="sentencia_data"></p>
-  <p id="sentencia"></p>
-  <p id="data_sentencia"></p>
-  <p id="data_execucio"></p>
-  <p id="ciutat_enterrament"></p>
-  <p id="espai"></p>
+  <div class="row">
+    <h3>Procés judicial</h3>
+
+    <div class="col-md-6">
+        <label for="copia_exp" class="form-label negreta">Còpia expedient:</label>
+        <input type="text" class="form-control" id="copia_exp" name="copia_exp" value="">
+    </div>
+
+    <div class="col-md-6">
+      <label for="procediment_cat" class="form-label negreta">Tipus de procediment:</label>
+      <select class="form-select" aria-label="Default select example" id="procediment_cat">
+      </select>
+    </div>
+
+    <div class="col-md-6">
+      <label for="num_causa" class="form-label negreta">Número de causa:</label>
+      <input type="text" class="form-control" id="num_causa" name="num_causa" value="">
+    </div>
+
+    <div class="col-md-6">
+      <label for="data_inici_proces" class="form-label negreta">Data inici del procés judicial:</label>
+      <input type="text" class="form-control" id="data_inici_proces" name="data_inici_proces" value="">
+    </div>
+
+    <div class="col-md-6">
+      <label for="jutjat" class="form-label negreta">Jutjat:</label>
+      <select class="form-select" aria-label="Default select example" id="jutjat">
+      </select>
+    </div>
+
+    <div class="col-md-6">
+      <label for="jutge_instructor" class="form-label negreta">Jutge instructor:</label>
+      <input type="text" class="form-control" id="jutge_instructor" name="jutge_instructor" value="">
+    </div>
+
+    <div class="col-md-6">
+      <label for="secretari_instructor" class="form-label negreta">Secretari instructor:</label>
+      <input type="text" class="form-control" id="secretari_instructor" name="secretari_instructor" value="">
+    </div>
+
+    <div class="col-md-6">
+      <label for="any_inicial" class="form-label negreta">Any inici procés:</label>
+      <input type="text" class="form-control" id="any_inicial" name="any_inicial" value="">
+    </div>
+
+    <div class="col-md-6">
+      <label for="consell_guerra_data" class="form-label negreta">Data Consell de guerra:</label>
+      <input type="text" class="form-control" id="consell_guerra_data" name="consell_guerra_data" value="">
+    </div>
+
+    <div class="col-md-6">
+      <label for="ciutat_consellGuerra" class="form-label negreta">Ciutat Consell de guerra:</label>
+      <select class="form-select" aria-label="Default select example" id="ciutat_consellGuerra">
+      </select>
+    </div>
+
+    <div class="col-md-6">
+      <label for="president_tribunal" class="form-label negreta">President Tribunal:</label>
+      <input type="text" class="form-control" id="president_tribunal" name="president_tribunal" value="">
+    </div>
+
+    <div class="col-md-6">
+      <label for="defensor" class="form-label negreta">Defensor:</label>
+      <input type="text" class="form-control" id="defensor" name="defensor" value="">
+    </div>
+
+    <div class="col-md-6">
+      <label for="fiscal" class="form-label negreta">Fiscal:</label>
+      <input type="text" class="form-control" id="fiscal" name="fiscal" value="">
+    </div>
+
+    <div class="col-md-6">
+      <label for="ponent" class="form-label negreta">Ponent:</label>
+      <input type="text" class="form-control" id="ponent" name="ponent" value="">
+    </div>
+
+    <div class="col-md-6">
+      <label for="tribunal_vocals" class="form-label negreta">Vocals del tribunal:</label>
+      <input type="text" class="form-control" id="tribunal_vocals" name="tribunal_vocals" value="">
+    </div>
+
+    <div class="col-md-6">
+      <label for="acusacio" class="form-label negreta">Acusació 1:</label>
+      <select class="form-select" aria-label="Default select example" id="acusacio">
+      </select>
+    </div>
+
+    <div class="col-md-6">
+      <label for="acusacio_2" class="form-label negreta">Acusació 2:</label>
+      <select class="form-select" aria-label="Default select example" id="acusacio_2">
+      </select>
+    </div>
+
+    <div class="col-md-6">
+      <label for="testimoni_acusacio" class="form-label negreta">Testimoni acusació:</label>
+      <input type="text" class="form-control" id="testimoni_acusacio" name="testimoni_acusacio" value="">
+    </div>
+
+    <div class="col-md-6">
+      <label for="sentencia_data" class="form-label negreta">Data sentència:</label>
+      <input type="text" class="form-control" id="sentencia_data" name="sentencia_data" value="">
+    </div>
+
+    <div class="col-md-6">
+      <label for="sentencia" class="form-label negreta">Sentència:</label>
+      <select class="form-select" aria-label="Default select example" id="sentencia">
+      </select>
+    </div>
+
+    <div class="col-md-6">
+      <label for="data_sentencia" class="form-label negreta">Any sentència:</label>
+      <input type="text" class="form-control" id="data_sentencia" name="data_sentencia" value="">
+    </div>
+
+    <div class="col-md-6">
+      <label for="ciutat_enterrament" class="form-label negreta">Ciutat enterrament:</label>
+      <select class="form-select" aria-label="Default select example" id="ciutat_enterrament">
+      </select>
+    </div>
+
+    <div class="col-md-6">
+      <label for="espai" class="form-label negreta">Lloc d'excecució:</label>
+      <select class="form-select" aria-label="Default select example" id="espai">
+      </select>
+    </div>
+
+</div>
 </div>
 
 <div id="tab6" class="tabcontent">
-  <h3>Biografia/observacions</h3>
-  <p id="observacions"></p>
-  <p id="familiars"></p>
-  <p id="biografia"></p>
+  <div class="row">
+    <h3>Biografia/observacions</h3>
+    <div class="col-md-6">
+      <label for="observacions" class="form-label negreta">Observacions:</label>
+      <input type="text" class="form-control" id="observacions" name="observacions" value="">
+    </div>
+
+    <div class="col-md-6">
+      <label for="familiars" class="form-label negreta">Familiars:</label>
+      <input type="text" class="form-control" id="familiars" name="familiars" value="">
+    </div>
+
+    <div class="col-md-12">
+      <label for="biografia" class="form-label negreta">Biografia:</label>
+      <textarea class="form-control" id="biografia" name="biografia" rows="20"></textarea>
+    </div>
+
+  </div>
 </div>
 
 <div id="tab7" class="tabcontent">
-  <h3>Dades bibliografiques i d'arxiu</h3>
-  <p id="ref_num_arxiu"></p>
-  <p id="font_1"></p>
-  <p id="font_2"></p>
+  <div class="row">
+    <h3>Dades bibliografiques i d'arxiu</h3>
+
+    <div class="col-md-6">
+      <label for="ref_num_arxiu" class="form-label negreta">Referència número arxiu:</label>
+      <input type="text" class="form-control" id="ref_num_arxiu" name="ref_num_arxiu" value="">
+    </div>
+
+    <div class="col-md-6">
+      <label for="font_1" class="form-label negreta">Font 1:</label>
+      <input type="text" class="form-control" id="font_1" name="font_1" value="">
+    </div>
+
+    <div class="col-md-6">
+      <label for="font_2" class="form-label negreta">Font 2:</label>
+      <input type="text" class="form-control" id="font_2" name="font_2" value="">
+    </div>
+
+  </div>
 </div>
 
 <div class="row espai-superior">
@@ -174,42 +323,6 @@ $id = $params['id'];
     </div>
 </div>
 </form>
-
-<style>
-
-.fitxa-persona {
-    background-color: #A0BEF7;
-    padding: 15px;
-    border: solid black 1px;
-}
-
-.tab {
-    margin-bottom: 25px;
-}
-    /* Esconde todos los divs con clase tabcontent excepto el primero */
-.tabcontent {
-  display: none;
-}
-
-/* Estilo de los botones de la pestaña */
-.tab button {
-  background-color: #f2f2f2;
-  border: 1px solid #ccc;
-  cursor: pointer;
-  padding: 10px 20px;
-  transition: background-color 0.3s;
-}
-
-/* Cambia el color de fondo del botón activo */
-.tab button.active {
-  background-color: #B6B6B6;
-}
-
-.tab button:hover {
-  background-color: #323232;
-  color: white;
-}
-</style>
 
 <script>
     function openTab(evt, tabName) {
@@ -264,6 +377,8 @@ function fitxaPersonaAfusellat(slug) {
     
         // DOM modifications
         document.getElementById('fitxaNomCognoms').innerHTML = "Fitxa: " + fitxa.nom + " " + fitxa.cognoms;
+
+        // function auxiliarSelect: idAux, api, elementId (form), valorText
         
         // 01. dades personals
         document.getElementById('nom').value = fitxa.nom;
@@ -273,6 +388,7 @@ function fitxaPersonaAfusellat(slug) {
         auxiliarSelect(fitxa.ciutat_residencia_id, "municipis", "ciutat_residencia", "ciutat");
         document.getElementById('adreca').value = fitxa.adreca;
         auxiliarSelect(fitxa.estudis_id, "estudis", "estudi_cat", "estudi_cat")
+        document.getElementById('edat').value = fitxa.edat;
         
         // 02. dades familiars:
         auxiliarSelect(fitxa.estat_civil_id, "estats", "estat_civil", "estat_cat");
@@ -289,45 +405,43 @@ function fitxaPersonaAfusellat(slug) {
         auxiliarSelect(fitxa.sindicat_id, "sindicats", "sindicat", "sindicat");
 
         // 05. dades proces judicial
-        document.getElementById('copia_exp').innerHTML = "Còpia expedient: " + fitxa.copia_exp;
-        document.getElementById('procediment_cat').innerHTML = "Tipus de procediment: " + fitxa.procediment_cat;
-        document.getElementById('num_causa').innerHTML = "Número de causa: " + fitxa.num_causa;
-        document.getElementById('data_inici_proces').innerHTML = "Data inici del procés judicial: " + fitxa.data_inici_proces;
-        document.getElementById('jutge_instructor').innerHTML = "Jutge instructor: " + fitxa.jutge_instructor;
-        document.getElementById('secretari_instructor').innerHTML = "Secretari instructor: " + fitxa.secretari_instructor;
-        document.getElementById('jutjat').innerHTML = "Jutjat: " + fitxa.jutjat;
-        document.getElementById('any_inicial').innerHTML = "Any inici del procés: " + fitxa.any_inicial;
-        document.getElementById('consell_guerra_data').innerHTML = "Data del consell de guerra: " + fitxa.consell_guerra_data;
-        document.getElementById('ciutat_consellGuerra').innerHTML = "Ciutat del consell de guerra: " + fitxa.ciutat_consellGuerra;
-        document.getElementById('president_tribunal').innerHTML = "President del tribunal: " + fitxa.president_tribunal;
-        document.getElementById('defensor').innerHTML = "Advocat defensor: " + fitxa.defensor;
-        document.getElementById('fiscal').innerHTML = "Fiscal: " + fitxa.fiscal;
-        document.getElementById('ponent').innerHTML = "Ponent: " + fitxa.ponent;
-        document.getElementById('tribunal_vocals').innerHTML = "Vocals tribunal: " + fitxa.tribunal_vocals;
-        document.getElementById('acusacio').innerHTML = "Acusació: " + fitxa.acusacio;
-        document.getElementById('acusacio_2').innerHTML = "Acusació 2: " + fitxa.acusacio_2;
-        document.getElementById('testimoni_acusacio').innerHTML = "Testimoni acusació: " + fitxa.testimoni_acusacio;
-        document.getElementById('sentencia_data').innerHTML = "Data de la sentència: " + fitxa.sentencia_data;
-        document.getElementById('sentencia').innerHTML = "Sentència: " + fitxa.sentencia;
-        document.getElementById('data_sentencia').innerHTML = "Data sentència: " + fitxa.data_sentencia;
-        document.getElementById('data_execucio').innerHTML = "Data execució: " + fitxa.data_execucio;
-        document.getElementById('espai').innerHTML = "Lloc execució: " + fitxa.espai;
+        document.getElementById('copia_exp').value = fitxa.copia_exp;
+        auxiliarSelect(fitxa.procediment_id, "procediments", "procediment_cat", "procediment_cat");
 
-        if (fitxa.ciutat_enterrament === null || fitxa.ciutat_enterrament === "NULL") {
-            document.getElementById('ciutat_enterrament').innerHTML = "Ciutat enterrament: - ";
-        } else {
-            document.getElementById('ciutat_enterrament').innerHTML = "Ciutat enterrament: " + fitxa.ciutat_enterrament;
-        }
+        document.getElementById('procediment_cat').value = fitxa.procediment_cat;
+        document.getElementById('num_causa').value = fitxa.num_causa;
+        document.getElementById('data_inici_proces').value = fitxa.data_inici_proces;
+        document.getElementById('jutge_instructor').value = fitxa.jutge_instructor;
+        document.getElementById('secretari_instructor').value = fitxa.secretari_instructor;
+        auxiliarSelect(fitxa.jutjat_id, "jutjats", "jutjat", "jutjat_cat");
+        document.getElementById('any_inicial').value =  fitxa.any_inicial;
+        document.getElementById('consell_guerra_data').value = fitxa.consell_guerra_data;
+        auxiliarSelect(fitxa.ciutat_consellGuerra_id, "municipis", "ciutat_consellGuerra", "ciutat");
+        document.getElementById('president_tribunal').value = fitxa.president_tribunal;
+        document.getElementById('defensor').value = fitxa.defensor;
+        document.getElementById('fiscal').value = fitxa.fiscal;
+        document.getElementById('ponent').value = fitxa.ponent;
+        document.getElementById('tribunal_vocals').value = fitxa.tribunal_vocals;
+        auxiliarSelect(fitxa.acusacio_id, "acusacions", "acusacio", "acusacio_cat");
+        auxiliarSelect(fitxa.acusacio_id2, "acusacions", "acusacio_2", "acusacio_cat");
+        document.getElementById('testimoni_acusacio').value = fitxa.testimoni_acusacio;
+        document.getElementById('sentencia_data').value = fitxa.sentencia_data;
+        auxiliarSelect(fitxa.sentencia_id, "sentencies", "sentencia", "sentencia_cat");
+        document.getElementById('data_sentencia').value = fitxa.data_sentencia;
+        document.getElementById('data_execucio').value = fitxa.data_execucio;
+        auxiliarSelect(fitxa.sentencia_id, "sentencies", "sentencia", "sentencia_cat");
+        auxiliarSelect(fitxa.espai_id, "espais", "espai", "espai_cat");
+        auxiliarSelect(fitxa.ciutat_enterrament_id, "municipis", "ciutat_enterrament", "ciutat");
 
         // 06. dades biografiques
-        document.getElementById('familiars').innerHTML = "Familiars: " + fitxa.familiars;
-        document.getElementById('observacions').innerHTML = "Observacions: " + fitxa.observacions;
-        document.getElementById('biografia').innerHTML = "Biografia: " + fitxa.biografia;
+        document.getElementById('familiars').value = fitxa.familiars;
+        document.getElementById('observacions').value = fitxa.observacions;
+        document.getElementById('biografia').value =  fitxa.biografia;
         
         // 07. Dades bibliografiques/arxiu
-        document.getElementById('ref_num_arxiu').innerHTML = "Referència arxiu: " + fitxa.ref_num_arxiu;
-        document.getElementById('font_1').innerHTML = "Font 1: " + fitxa.font_1;
-        document.getElementById('font_2').innerHTML = "Font 2: " + fitxa.font_2;
+        document.getElementById('ref_num_arxiu').value = fitxa.ref_num_arxiu;
+        document.getElementById('font_1').value = fitxa.font_1;
+        document.getElementById('font_2').value = fitxa.font_2;
 
         /* document.getElementById("authorPhoto").src = `../../public/img/library-author/${data.nameImg}.jpg`;*/
       } catch (error) {
@@ -395,16 +509,6 @@ function goBack() {
 
 </script>
 
-<style>
-    .negreta {
-        margin-top: 20px;
-        font-weight: bold;
-    }
-    
-    .espai-superior {
-        margin-top: 25px;
-    }
-    </style>
 </div>
 
 <?php

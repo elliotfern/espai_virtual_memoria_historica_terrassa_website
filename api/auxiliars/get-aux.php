@@ -106,6 +106,86 @@ if (isset($headers['Authorization'])) {
             }
             echo json_encode($data);
 
+        // 7) Llistat procediments judicials
+        // ruta GET => "/api/auxiliars/get/?type=procediments"
+        } elseif (isset($_GET['type']) && $_GET['type'] == 'procediments' ) {
+            global $conn;
+            $data = array();
+            $stmt = $conn->prepare(
+                "SELECT pj.id, pj.procediment_cat
+                FROM aux_procediment_judicial AS pj
+                ORDER BY pj.procediment_cat ASC");
+            $stmt->execute();
+            if ($stmt->rowCount() === 0) echo ('No rows');
+                while($users = $stmt->fetch(PDO::FETCH_ASSOC) ){
+                    $data[] = $users;
+            }
+            echo json_encode($data);
+        
+        // 7) Llistat jutjats
+        // ruta GET => "/api/auxiliars/get/?type=jutjats"
+        } elseif (isset($_GET['type']) && $_GET['type'] == 'jutjats' ) {
+            global $conn;
+            $data = array();
+            $stmt = $conn->prepare(
+                "SELECT j.id, j.jutjat_cat
+                FROM aux_jutjats AS j
+                ORDER BY j.jutjat_cat ASC");
+            $stmt->execute();
+            if ($stmt->rowCount() === 0) echo ('No rows');
+                while($users = $stmt->fetch(PDO::FETCH_ASSOC) ){
+                    $data[] = $users;
+            }
+            echo json_encode($data);
+
+        // 8) Llistat tipus acusacions
+        // ruta GET => "/api/auxiliars/get/?type=acusacions"
+        } elseif (isset($_GET['type']) && $_GET['type'] == 'acusacions' ) {
+            global $conn;
+            $data = array();
+            $stmt = $conn->prepare(
+                "SELECT sa.id, sa.acusacio_cat
+                FROM aux_acusacions AS sa
+                ORDER BY sa.acusacio_cat ASC");
+            $stmt->execute();
+            if ($stmt->rowCount() === 0) echo ('No rows');
+                while($users = $stmt->fetch(PDO::FETCH_ASSOC) ){
+                    $data[] = $users;
+            }
+            echo json_encode($data);
+        
+        // 9) Llistat sentencies
+        // ruta GET => "/api/auxiliars/get/?type=sentencies"
+        } elseif (isset($_GET['type']) && $_GET['type'] == 'sentencies' ) {
+            global $conn;
+            $data = array();
+            $stmt = $conn->prepare(
+                "SELECT sen.id, sen.sentencia_cat
+                FROM aux_sentencies AS sen
+                ORDER BY sen.sentencia_cat ASC");
+            $stmt->execute();
+            if ($stmt->rowCount() === 0) echo ('No rows');
+                while($users = $stmt->fetch(PDO::FETCH_ASSOC) ){
+                    $data[] = $users;
+            }
+            echo json_encode($data);
+
+        // 9) Llistat espais
+        // ruta GET => "/api/auxiliars/get/?type=espais"
+        } elseif (isset($_GET['type']) && $_GET['type'] == 'espais' ) {
+            global $conn;
+            $data = array();
+            $stmt = $conn->prepare(
+                "SELECT esp.id, esp.espai_cat
+                FROM aux_espai AS esp
+                ORDER BY esp.espai_cat ASC");
+            $stmt->execute();
+            if ($stmt->rowCount() === 0) echo ('No rows');
+                while($users = $stmt->fetch(PDO::FETCH_ASSOC) ){
+                    $data[] = $users;
+            }
+            echo json_encode($data);
+
         } else {
             // Si 'type', 'id' o 'token' están ausentes o 'type' no es 'user' en la URL
             header('HTTP/1.1 403 Forbidden');

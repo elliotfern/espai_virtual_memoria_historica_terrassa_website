@@ -10,8 +10,10 @@ Thumbs.db
 /vendor/
 /node_modules/
 /public/img/
+/.vscode/
 
 # Ignorar archivos de configuración local (ejemplo para PHP)
 .env
-elliotfern.code-workspace
 pass.txt
+contra.php
+memoria_intranet.code-workspace
