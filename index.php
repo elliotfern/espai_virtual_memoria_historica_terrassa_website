@@ -175,10 +175,10 @@ class Route {
 
         // llistat complet
         $route->add("/represaliats","public/pages/represaliats/index.php");
+        $route->add("/represaliats/fitxa/{id}","public/pages/represaliats/fitxa-persona.php");
 
         // afusellats
         $route->add("/afusellats","public/pages/afusellats/index.php");
-        $route->add("/afusellats/fitxa/{id}","public/pages/afusellats/fitxa-persona.php");
         $route->add("/afusellats/fitxa/modifica/{id}","public/pages/afusellats/modificar-fitxa-persona.php");
 
 }

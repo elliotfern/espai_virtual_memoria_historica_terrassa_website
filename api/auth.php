@@ -10,7 +10,7 @@ if (isset($headers['Authorization'])) {
         // Token válido, puedes continuar con el código para obtener los datos del usuario
 
         // 1) Informacion usuario
-        // ruta => "https://control.elliotfern.com/api/auth/?type=user&id=1"
+        // ruta => "/api/auth/?type=user&id=1"
         if (isset($_GET['type']) && $_GET['type'] === 'user' && isset($_GET['id'])) {
         
             // Asigna valores a las variables después de verificar que no son null

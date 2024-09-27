@@ -9,14 +9,12 @@ $favicon = APP_DEV . "/public/img/icon.png";
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <link rel="profile" href="https://gmpg.org/xfn/11">
-<meta name="robots" content="index, follow, noodp, noydir">
-<meta name="yandex-verification" content="23d54f548c9bde46" />
-<meta name="locality" content="Dublin, Ireland" />
+<meta name="robots" content="noindex, nofollow">
 <meta name="distribution" content="global" />
 
 <link rel="profile" href="http://gmpg.org/xfn/11">
 <link rel="shortcut icon" href="<?php echo $favicon; ?>">
-<title>Gestió interna - Memòria Històrica de Terrassa</title>
+<title>Espai Virtual de la Memòria Històrica de Terrassa - Gestió interna</title>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
@@ -27,8 +25,18 @@ $favicon = APP_DEV . "/public/img/icon.png";
 <link href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css" rel="stylesheet">
 <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
 
+<script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+
 <script src="<?php echo APP_DEV;?>/public/js/globals.js"></script>
 
 </head>
 <body>
 
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-2 sticky-md-top fixe" style="background-color:#000000!important;height:100vh;width:20%">
+    <?php require_once(APP_ROOT . APP_DEV . '/public/php/sidebar.php'); ?>
+    </div>
+
+    <div class="col-sm-10" style="width:80%">
+        <div class="container-fluid p-3">

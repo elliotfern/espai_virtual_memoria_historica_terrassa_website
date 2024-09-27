@@ -1,7 +1,5 @@
 <?php
 
-echo '<div class="container">';
-echo '<h2>Espai Virtual de la Memòria Històrica de Terrassa - EVMHT</h2>';
 echo '<h4>Llistat complert de represaliats</h4>';
 
 echo "<hr>";
@@ -22,7 +20,6 @@ echo '<table class="table table-striped datatable" id="represaliatsTable">
     </div>';
 
 echo '</div>'; // Cierre de div para "container"
-echo '</div>'; // Cierre de div para el contenedor principal
 
 ?>
 <script>
@@ -109,8 +106,8 @@ $(document).ready(function () {
                     }
 
                     // Concatenar el nombre completo, las fechas y la edad
-                    return '<a href="/afusellats/fitxa/' + row.id + '">' +
-                        row.cognom1 + ' ' + row.cognom2 + ', ' + row.nom + '</a>' +
+                    return '<strong><a href="/represaliats/fitxa/' + row.id + '">' +
+                        row.cognom1 + ' ' + row.cognom2 + ', ' + row.nom + '</strong></a>' +
                         '<div style="font-size: 0.8em; color: gray;">' +
                         row.data_naixement + ' - ' + row.data_defuncio +
                         (edadAlMorir ? ' (' + edadAlMorir + ')' : '') + // Mostrar edad si está disponible

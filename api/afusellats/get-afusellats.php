@@ -16,10 +16,13 @@ if (isset($headers['Authorization'])) {
             global $conn;
             $data = array();
             $stmt = $conn->prepare(
-            "SELECT a.id, a.cognoms, nom, a.copia_exp, a.data_naixement, a.edat, e.espai_cat, a.data_execucio
+            "SELECT a.id, dp.cognom1, dp.cognom2, dp.nom, a.copia_exp, dp.data_naixement, dp.edat, dp.data_defuncio,
+            e1.ciutat, e1.comarca, e1.provincia, e1.comunitat, e1.pais, e2.ciutat AS ciutat2, e2.comarca AS comarca2, e2.provincia AS provincia2, e2.comunitat AS comunitat2, e2.pais AS pais2
             FROM db_afusellats AS a
-            INNER JOIN aux_espai AS e ON a.lloc_execucio_enterrament = e.id
-            ORDER BY a.cognoms ASC");
+            LEFT JOIN db_dades_personals AS dp ON a.idPersona = dp.id
+            LEFT JOIN aux_dades_municipis AS e1 ON dp.municipi_naixement = e1.id
+            LEFT JOIN aux_dades_municipis AS e2 ON dp.municipi_defuncio = e2.id
+            ORDER BY dp.cognom1 ASC");
             $stmt->execute();
             if($stmt->rowCount() === 0) echo ('No rows');
                 while($users = $stmt->fetch(PDO::FETCH_ASSOC) ){
@@ -34,24 +37,45 @@ if (isset($headers['Authorization'])) {
             global $conn;
             $data = array();
             $stmt = $conn->prepare(
-            "SELECT a.id, a.cognoms, a.nom, a.copia_exp, a.data_naixement, a.edat, m1.id AS ciutat_naixement_id, m1.ciutat AS ciutat_naixement, m2.ciutat AS ciutat_residencia, m2.id AS ciutat_residencia_id, a.adreca, ec.estat_cat AS estat_civil, ec.id AS estat_civil_id, a.esposa, a.fills_num, a.fills_noms, es.estudi_cat, es.id AS estudis_id, o.ofici_cat, o.id AS ofici_id, a.empresa, fp.partit_politic, fp.id AS partit_politic_id, fs.sindicat, fs.id AS sindicat_id, pj.procediment_cat, pj.id AS procediment_id, a.num_causa, a.data_inici_proces, a.jutge_instructor, a.secretari_instructor, j.jutjat_cat AS jutjat, j.id AS jutjat_id, a.any_inicial, a.consell_guerra_data, m3.ciutat AS ciutat_consellGuerra, m3.id AS ciutat_consellGuerra_id, a.president_tribunal, a.defensor, a.fiscal, a.ponent, a.tribunal_vocals, acu.acusacio_cat AS acusacio, acu.id AS acusacio_id, acu2.acusacio_cat AS acusacio2, acu2.id AS acusacio_id2, a.testimoni_acusacio, a.sentencia_data, sen.sentencia_cat AS sentencia, sen.id AS sentencia_id, a.data_sentencia, a.data_execucio, m4.ciutat AS ciutat_enterrament, m4.id AS ciutat_enterrament_id, e.espai_cat AS espai, e.id AS espai_id, a.ref_num_arxiu, a.font_1, a.font_2, a.familiars, a.observacions, a.biografia
+            "SELECT 
+            pj.procediment_cat, 
+            pj.id AS procediment_id, 
+            a.num_causa, 
+            a.data_inici_proces, 
+            a.jutge_instructor, 
+            a.secretari_instructor, 
+            j.jutjat_cat AS jutjat, 
+            j.id AS jutjat_id, 
+            a.any_inicial, 
+            a.consell_guerra_data, 
+            a.president_tribunal, 
+            a.defensor, 
+            a.fiscal, 
+            a.ponent, 
+            a.tribunal_vocals, 
+            acu.acusacio_cat AS acusacio, 
+            acu.id AS acusacio_id, 
+            acu2.acusacio_cat AS acusacio2, 
+            acu2.id AS acusacio_id2, 
+            a.testimoni_acusacio, 
+            a.sentencia_data, 
+            sen.sentencia_cat AS sentencia, 
+            sen.id AS sentencia_id, 
+            a.data_sentencia, 
+            a.data_execucio,
+            a.ref_num_arxiu, 
+            a.font_1, 
+            a.font_2, 
+            a.familiars, 
+            a.observacions, 
+            a.biografia
             FROM db_afusellats AS a
-            LEFT JOIN aux_espai AS e ON a.lloc_execucio_enterrament = e.id
-            LEFT JOIN aux_dades_municipis AS m1 ON a.municipi_naixement = m1.id
-            LEFT JOIN aux_dades_municipis AS m2 ON a.municipi_residencia = m2.id
-            LEFT JOIN aux_dades_municipis AS m3 ON a.lloc_consell_guerra = m3.id
-            LEFT JOIN aux_dades_municipis AS m4 ON a.enterrament_lloc = m4.id
-            LEFT JOIN aux_filiacio_politica AS fp ON a.filiciacio_politica = fp.id
-            LEFT JOIN aux_estudis AS es ON a.estudis = es.id
-            LEFT JOIN aux_oficis AS o ON a.ofici = o.id 
-            LEFT JOIN aux_filiacio_sindical AS fs ON a.filiacio_sindical = fs.id
             LEFT JOIN aux_procediment_judicial AS pj ON a.procediment = pj.id
-            LEFT JOIN aux_estat_civil as ec ON a.estat_civil = ec.id
             LEFT JOIN aux_jutjats as j ON a.jutjat = j.id
             LEFT JOIN aux_acusacions AS acu ON a.acusacio = acu.id
             LEFT JOIN aux_acusacions AS acu2 ON a.acusacio_2 = acu2.id
             LEFT JOIN aux_sentencies AS sen ON a.sentencia = sen.id
-            WHERE a.id = $id");
+            WHERE a.idPersona = $id");
             $stmt->execute();
             if($stmt->rowCount() === 0) echo ('No rows');
                 while($users = $stmt->fetch(PDO::FETCH_ASSOC) ){

@@ -1,6 +1,5 @@
 <?php
 
-echo '<div class="container">';
 echo '<h2>Base de dades: Afusellats</h2>';
 
 echo "<p><button type='button' class='btn btn-dark btn-sm' id='btnAddActor' onclick='btnFAddActor()' data-bs-toggle='modal' data-bs-target='#modalCreateActor'>Crear nou registre</button></p>";
@@ -11,10 +10,9 @@ echo '<div class="' . TABLE_DIV_CLASS . '">';
 echo '<table class="table table-striped datatable" id="afusellatsTable">
         <thead class="' . TABLE_THREAD . '">
         <tr>
-            <th>Nom complet</th>
-            <th>Data naixement</th>
-            <th>Data execució</th>
-            <th>Lloc afusellament</th>
+             <th>Nom complet</th>
+            <th>Municipi naixement</th>
+            <th>Municipi defunció</th>
             <th></th>
             <th></th>
         </tr>
@@ -23,7 +21,6 @@ echo '<table class="table table-striped datatable" id="afusellatsTable">
     </div>';
 
 echo '</div>'; // Cierre de div para "container"
-echo '</div>'; // Cierre de div para el contenedor principal
 
 ?>
 <script>
@@ -67,8 +64,61 @@ $(document).ready(function () {
 
         columns: [
              // Aquí está la configuración para agregar el botón en la columna deseada
+             {
+                targets: [0],
+                orderable: true,
+                render: function (data, type, row, meta) {
+                    // Función para convertir fecha de formato DD/MM/YYYY a YYYY-MM-DD
+                    function convertirFecha(fecha) {
+                        if (!fecha) return null;
+                        const partes = fecha.split('/');
+                        // Si la fecha ya está en un formato incorrecto, devolver null
+                        if (partes.length !== 3) return null;
+                        // Reorganizamos a YYYY-MM-DD
+                        return `${partes[2]}-${partes[1]}-${partes[0]}`;
+                    }
+
+                    // Función para calcular la edad al morir
+                    function calcularEdadAlMorir(fechaNacimiento, fechaDefuncion) {
+                        const nacimiento = new Date(fechaNacimiento);
+                        const defuncion = new Date(fechaDefuncion);
+                        let edad = defuncion.getFullYear() - nacimiento.getFullYear();
+
+                        const mesNacimiento = nacimiento.getMonth();
+                        const diaNacimiento = nacimiento.getDate();
+                        const mesDefuncion = defuncion.getMonth();
+                        const diaDefuncion = defuncion.getDate();
+
+                        if (mesDefuncion < mesNacimiento || (mesDefuncion === mesNacimiento && diaDefuncion < diaNacimiento)) {
+                            edad--;
+                        }
+
+                        return edad;
+                    }
+
+                    // Convertir fechas al formato aceptado por Date
+                    const fechaNacimiento = convertirFecha(row.data_naixement);
+                    const fechaDefuncion = convertirFecha(row.data_defuncio);
+
+                    // Verificamos que las fechas de nacimiento y defunción no sean nulas y sean válidas
+                    let edadAlMorir = '';
+                    if (fechaNacimiento && fechaDefuncion) {
+                        edadAlMorir = calcularEdadAlMorir(fechaNacimiento, fechaDefuncion) + ' anys';
+                    }
+
+                    // Concatenar el nombre completo, las fechas y la edad
+                    return '<strong><a href="/represaliats/fitxa/' + row.id + '">' +
+                        row.cognom1 + ' ' + row.cognom2 + ', ' + row.nom + '</strong></a>' +
+                        '<div style="font-size: 0.8em; color: gray;">' +
+                        row.data_naixement + ' - ' + row.data_defuncio +
+                        (edadAlMorir ? ' (' + edadAlMorir + ')' : '') + // Mostrar edad si está disponible
+                        '</div>';
+                },
+            },
+
             {
-                targets: [0], // Indica que esta configuración se aplica a la columna número 5 (contando desde 0)
+                // lloc naixement
+                targets: [1], // Indica que esta configuración se aplica a la columna número 5 (contando desde 0)
                 orderable: true, // Indica que la columna no es ordenable
                 render: function (data, type, row, meta) {
                     // La función de renderizado se llama para cada celda en la columna especificada.
@@ -76,44 +126,17 @@ $(document).ready(function () {
                     // 'type' indica si el renderizado es para 'display', 'filter', 'sort' u 'type'
                     // 'row' contiene los datos de la fila
                     // 'meta' contiene metadatos sobre la celda, como el índice de la columna
-                    return '<a href="/afusellats/fitxa/'+ row.id +'">' + row.cognoms + ', ' + row.nom + '</a>';
-
-                },
-            },
-
-            {
-                targets: [1], // Indica que esta configuración se aplica a la columna número 5 (contando desde 0)
-                type: 'date-eu',
-                orderable: true, // Indica que la columna es ordenable
-                render: function (data, type, row, meta) {
-                    // La función de renderizado se llama para cada celda en la columna especificada.
-                    // 'data' contiene el valor de la celda
-                    // 'type' indica si el renderizado es para 'display', 'filter', 'sort' u 'type'
-                    // 'row' contiene los datos de la fila
-                    // 'meta' contiene metadatos sobre la celda, como el índice de la columna
                     
-                    return row.data_naixement;
-                },
-            },
-
-            {
-                targets: [2], // Indica que esta configuración se aplica a la columna número 5 (contando desde 0)
-                type: 'date-eu',
-                orderable: true, // Indica que la columna es ordenable
-                render: function (data, type, row, meta) {
-                    // La función de renderizado se llama para cada celda en la columna especificada.
-                    // 'data' contiene el valor de la celda
-                    // 'type' indica si el renderizado es para 'display', 'filter', 'sort' u 'type'
-                    // 'row' contiene los datos de la fila
-                    // 'meta' contiene metadatos sobre la celda, como el índice de la columna
-                    
-                    return row.data_execucio;
+                    return row.ciutat + 
+                    '<div style="font-size: 0.8em; color: gray;">' + 
+                    row.comarca + ', ' +  row.provincia + ', ' + row.comunitat + ', ' + row.pais + 
+                    '</div>';
                 },
             },
 
             {
                 // lloc afusellament
-                targets: [3], // Indica que esta configuración se aplica a la columna número 5 (contando desde 0)
+                targets: [2], // Indica que esta configuración se aplica a la columna número 5 (contando desde 0)
                 orderable: true, // Indica que la columna no es ordenable
                 render: function (data, type, row, meta) {
                     // La función de renderizado se llama para cada celda en la columna especificada.
@@ -122,12 +145,15 @@ $(document).ready(function () {
                     // 'row' contiene los datos de la fila
                     // 'meta' contiene metadatos sobre la celda, como el índice de la columna
                     
-                    return row.espai_cat;
+                    return row.ciutat2 + 
+                    '<div style="font-size: 0.8em; color: gray;">' + 
+                    row.comarca2 + ', ' +  row.provincia2 + ', ' + row.comunitat2 + ', ' + row.pais2 + 
+                    '</div>';
                 },
             },
 
             {
-                targets: [4], // Indica que esta configuración se aplica a la columna número 5 (contando desde 0)
+                targets: [3], // Indica que esta configuración se aplica a la columna número 5 (contando desde 0)
                 orderable: false, // Indica que la columna no es ordenable
                 render: function (data, type, row, meta) {
                     // La función de renderizado se llama para cada celda en la columna especificada.
@@ -143,7 +169,7 @@ $(document).ready(function () {
             },
 
             {
-                targets: [5], // Indica que esta configuración se aplica a la columna número 5 (contando desde 0)
+                targets: [4], // Indica que esta configuración se aplica a la columna número 5 (contando desde 0)
                 orderable: false, // Indica que la columna no es ordenable
                 render: function (data, type, row, meta) {
                     // La función de renderizado se llama para cada celda en la columna especificada.

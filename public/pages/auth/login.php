@@ -8,7 +8,8 @@ if(!isset($_SESSION['user'])){
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Gestió Memòria Històrica Terrassa - Pàgina de login</title>
+        <title>Espai Virtual de la Memòria Històrica Terrassa - Gestió interna</title>
+        <meta name="robots" content="noindex, nofollow">
         <script
       src="https://code.jquery.com/jquery-3.6.0.min.js"
       integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
@@ -31,15 +32,15 @@ if(!isset($_SESSION['user'])){
     <div class="card mx-auto" style="max-width: 400px;">
         <div class="card-body">
             <div class="container">
-                <h1>Accès al web</h1>
+                <h3>Espai Virtual de la Memòria Històrica de Terrassa - EVMHT</h3>
                 <?php
     echo '<div class="alert alert-success" id="loginMessageOk" style="display:none" role="alert">
-                  <h4 class="alert-heading"><strong>Dades correctes!</h4></strong>
+                  <h4 class="alert-heading"><strong>Dades correctes!</strong></h4>
                   <h6>Les dades introduïdes són correcte, en uns segons et redirigim a la pàgina.</h6>
                   </div>';
           
     echo '<div class="alert alert-danger" id="loginMessageErr" style="display:none" role="alert">
-                  <h4 class="alert-heading"><strong>Error!</h4></strong>
+                  <h4 class="alert-heading"><strong>Error!</strong></h4>
                   <h6>Nom d\'usuari o contrasenya incorrectes</h6>
                   </div>';
     ?>
