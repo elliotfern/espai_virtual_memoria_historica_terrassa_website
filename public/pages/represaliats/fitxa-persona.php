@@ -129,11 +129,15 @@ function fitxaPersonaAfusellat(slug) {
 
   const categorias = {
     1: "Afusellat",
-    2: "Exiliat",
-    3: "Categoria 3",
-    4: "Categoria 4",
-    5: "Categoria 5",
-    6: "Categoria 6"
+    2: 'Deportat',
+    3: 'Mort en combat',
+    4: '',
+    5: '',
+    6: '',
+    7: '',
+    8: '',
+    9: '',
+    10: 'Exiliat'
   };
 
 
@@ -203,6 +207,9 @@ function fitxaPersonaAfusellat(slug) {
               if (categoriaNumerica === 1) {
                 let devDirectory = "/api/afusellats/get";
                 urlAjax2 = devDirectory + "?type=fitxa&id=" + idPersona;
+              } else if (categoriaNumerica === 10) {
+                let devDirectory = "/api/exiliats/get";
+                urlAjax2 = devDirectory + "?type=fitxa&id=" + idPersona;
               }
               
               $.ajax({
@@ -216,7 +223,8 @@ function fitxaPersonaAfusellat(slug) {
                 success: function (data) {
                   try {
                     const fitxa2 = data[0];
-
+                    
+                    if (categoriaNumerica === 1) {
                     // 01. Afusellats - dades proces judicial
                     const divInfo = document.getElementById('informacion');
                     divInfo.style.display = 'block';
@@ -248,6 +256,15 @@ function fitxaPersonaAfusellat(slug) {
                       <p id="ciutat_enterrament"></p>
                       <p id="espai"><span class='negreta'>Lloc execució:</span>  ${fitxa2.espai}</p>
                       `;
+                    } else if (categoriaNumerica === 10) {
+                        // 10 Exiliats
+                        const divInfo = document.getElementById('informacion');
+                        divInfo.style.display = 'block';
+                        divInfo.innerHTML = `
+                          <h3>${categorias[idCategoria]}</h3>
+                          <h5>En elaboració:</h5>
+                          `;
+                    }
 
                   } catch (error) {
                     console.error("Error procesando la respuesta de la API:", error);

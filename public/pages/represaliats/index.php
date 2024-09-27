@@ -126,10 +126,13 @@ $(document).ready(function () {
                     // 'row' contiene los datos de la fila
                     // 'meta' contiene metadatos sobre la celda, como el índice de la columna
                     
-                    return row.ciutat + 
-                    '<div style="font-size: 0.8em; color: gray;">' + 
-                    row.comarca + ', ' +  row.provincia + ', ' + row.comunitat + ', ' + row.pais + 
-                    '</div>';
+                    return (row.ciutat ?? "Desconegut") + 
+                        '<div style="font-size: 0.8em; color: gray;">' + 
+                        (row.comarca ?? "Desconegut") + ', ' + 
+                        (row.provincia ?? "Desconegut") + ', ' + 
+                        (row.comunitat ?? "Desconegut") + ', ' + 
+                        (row.pais ?? "Desconegut") + 
+                        '</div>';
                 },
             },
 
@@ -144,10 +147,13 @@ $(document).ready(function () {
                     // 'row' contiene los datos de la fila
                     // 'meta' contiene metadatos sobre la celda, como el índice de la columna
                     
-                    return row.ciutat2 + 
-                    '<div style="font-size: 0.8em; color: gray;">' + 
-                    row.comarca2 + ', ' +  row.provincia2 + ', ' + row.comunitat2 + ', ' + row.pais2 + 
-                    '</div>';
+                    return (row.ciutat2 ?? "Desconegut") + 
+                        '<div style="font-size: 0.8em; color: gray;">' + 
+                        (row.comarca2 ?? "Desconegut") + ', ' + 
+                        (row.provincia2 ?? "Desconegut") + ', ' + 
+                        (row.comunitat2 ?? "Desconegut") + ', ' + 
+                        (row.pais2 ?? "Desconegut") + 
+                        '</div>';
                 },
             },
 
@@ -164,8 +170,15 @@ $(document).ready(function () {
                         // Mapeo de números a sus textos correspondientes
                         const textoMapeo = {
                             1: 'Afusellat',
-                            2: 'Exiliat',
-                            3: 'Mort en combat'
+                            2: 'Deportat',
+                            3: 'Mort en combat',
+                            4: '',
+                            5: '',
+                            6: '',
+                            7: '',
+                            8: '',
+                            9: '',
+                            10: 'Exiliat'
                         };
 
                         // Construir el resultado

@@ -148,6 +148,8 @@ class Route {
     $route->add("/api/afusellats/get","api/afusellats/get-afusellats.php");
     $route->add("/api/auxiliars/get","api/auxiliars/get-aux.php");
 
+    $route->add("/api/exiliats/get","api/exiliats/get-exiliats.php");
+
     // aqui comença la lògica del sistema
 
     session_set_cookie_params([
