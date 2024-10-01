@@ -27,7 +27,7 @@ $favicon = APP_DEV . "/public/img/icon.png";
 
 <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
 
-<script src="<?php echo APP_DEV;?>/public/js/globals.js"></script>
+<script type="module" src="<?php echo APP_DEV;?>/dist/main.js"></script>
 
 </head>
 <body>

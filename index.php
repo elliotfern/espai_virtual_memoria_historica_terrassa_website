@@ -138,10 +138,11 @@ class Route {
     require_once(APP_ROOT . APP_DEV . '/public/php/functions.php');
 
     $route->add("/login","public/pages/auth/login.php");
-    $route->add("/api/auth/login","php-process/auth/login-process.php");
+    
 
     // API SERVER 
-    $route->add("/api/auth","api/auth.php");
+    $route->add("/api/auth/get","api/auth/auth.php");
+    $route->add("/api/auth/login","api/auth/login-process.php");
 
     $route->add("/api/represaliats/get","api/represaliats/get-represaliats.php");
 

@@ -12,11 +12,7 @@
     </a>
     <hr class="text-white">
 
-    <?php
-    // Genera o obtén tu clave secreta
-    $loggedInUser = ($_SESSION['user']['id']);
-    ?>
-      <span class="d-flex align-items-center text-decoration-none">
+    <span class="d-flex align-items-center text-decoration-none">
         <strong>
             <div id="userDiv" style="color:white"></div>
         </strong>
@@ -156,92 +152,5 @@
 
     <hr class="text-white">
      
-    <p><a href="#" class="links-sidebar link-sortir" onclick="logout()">Sortir</a></p>
+    <p><a href="#" class="links-sidebar link-sortir" id="btnSortir">Sortir</a></p>
   </div>
-
-  <script>
-        nameUser('<?php echo $loggedInUser; ?>')
-
-       function nameUser(idUser) {
-        let urlAjax =  "https://" + window.location.hostname + "/api/auth/?type=user&id=" + idUser;
-        $.ajax({
-            url: urlAjax,
-            type: 'GET',
-            beforeSend: function (xhr) {
-                // Obtener el token del localStorage
-                let token = localStorage.getItem('token');
-
-                // Incluir el token en el encabezado de autorización
-                xhr.setRequestHeader('Authorization', 'Bearer ' + token);
-            },
-            success: function (data) {
-               // Modifica el contenido de un div con el resultado de la API
-               let responseData = JSON.parse(data);  // Parsea la respuesta JSON
-                let welcomeMessage = responseData.nom ? `Hola, ${responseData.nom}` : 'Usuari desconegut';
-                $('#userDiv').html(welcomeMessage);  // Muestra el mensaje en tu página
-
-                // Alternativamente, guarda el ID de usuario en localStorage
-                localStorage.setItem('user_id', responseData.id);
-            },
-            error: function (error) {
-                console.error('Error: ' + JSON.stringify(error));
-            }
-        });
-    }
-    function deleteCookie(name, path, domain) {
-    if (getCookie(name)) {
-        document.cookie = name + "=" + 
-          ((path) ? ";path=" + path : "") +
-          ((domain) ? ";domain=" + domain : "") +
-          ";expires=Thu, 01 Jan 1970 00:00:01 GMT";
-    }
-}
-
-function getCookie(name) {
-    const value = "; " + document.cookie;
-    const parts = value.split("; " + name + "=");
-    if (parts.length === 2) return parts.pop().split(";").shift();
-}
-
-function deleteAllCookies() {
-    const cookies = document.cookie.split("; ");
-
-    // Eliminar cookies en la ruta actual y todas las subrutas
-    cookies.forEach(cookie => {
-        const eqPos = cookie.indexOf("=");
-        const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
-        const pathParts = location.pathname.split('/');
-        for (let i = 0; i < pathParts.length; i++) {
-            const path = pathParts.slice(0, i + 1).join('/') || '/';
-            deleteCookie(name, path);
-            deleteCookie(name, path, window.location.hostname);
-            if (window.location.hostname.includes('.')) {
-                deleteCookie(name, path, '.' + window.location.hostname);
-            }
-        }
-    });
-
-    // Eliminar cookies en el dominio raíz
-    cookies.forEach(cookie => {
-        const eqPos = cookie.indexOf("=");
-        const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
-        deleteCookie(name, '/');
-        deleteCookie(name, '/', window.location.hostname);
-        if (window.location.hostname.includes('.')) {
-            deleteCookie(name, '/', '.' + window.location.hostname);
-        }
-    });
-}
-
-function logout() {
-    // Eliminar todas las cookies
-    deleteAllCookies();
-
-    // Si usas localStorage o sessionStorage, también es buena idea limpiarlos
-    localStorage.clear();
-    sessionStorage.clear();
-
-    // Redirigir a la página de inicio de sesión
-    window.location.href = 'https://gestio.memoriaterrassa.cat/login';
-}
-</script>

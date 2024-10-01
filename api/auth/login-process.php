@@ -10,10 +10,14 @@ $dotenv->load();
 
 $jwtSecret = $_ENV['TOKEN'];
 
-if (isset($_POST['userName'])) {
-    $username = $_POST['userName'];
-    $password = $_POST['password'];
-    $hasError = 1;
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+  // Obtener el cuerpo de la solicitud
+  $data = json_decode(file_get_contents('php://input'), true); // Decodifica el JSON
+
+  // Asegúrate de que las variables están definidas
+  $username = isset($data['userName']) ? $data['userName'] : null;
+  $password = isset($data['password']) ? $data['password'] : null;
+  $hasError = 1;
 } else {
     $response['status'] = 'error';
 
@@ -41,6 +45,7 @@ $stmt = $conn->prepare(
           session_start();
           $_SESSION['user']['id'] = $row['id'];
           $_SESSION['user']['username'] = $row['email'];
+          $idUser = $row['id'];
 
           $key = $jwtSecret;
           $algorithm = "HS256";  // Elige el algoritmo adecuado para tu aplicación
@@ -63,6 +68,7 @@ $stmt = $conn->prepare(
           // Preparar la respuesta
           $response = array(
             "token" => $jwt,
+            "idUser" => $idUser,
             "status" => "success"
           );
 
