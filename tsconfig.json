@@ -2,6 +2,7 @@
   "compilerOptions": {
     "target": "es6",                          // Elige la versión de ECMAScript a compilar (puedes usar "es6" o superior).
     "module": "es2015", 
+    "moduleResolution": "node",
     "strict": true,                            // Habilitar todas las verificaciones estrictas.
     "allowJs": true,                   // Permite la importación de archivos .js
     "outDir": "./dist",                        // Carpeta de salida para los archivos .js generados.
@@ -10,6 +11,9 @@
     "lib": ["es2015", "dom"],             // Incluye ES2015 para soporte de Promises y otras funciones modernas.
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["src/**/*"],                     // Archivos TypeScript a incluir para compilar.
+ "include": [
+    "src",
+    "types"
+  ], 
   "exclude": ["node_modules"]                  // Excluir la carpeta node_modules.
 }

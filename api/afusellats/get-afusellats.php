@@ -67,8 +67,7 @@ if (isset($headers['Authorization'])) {
             a.font_1, 
             a.font_2, 
             a.familiars, 
-            a.observacions, 
-            a.biografia
+            a.observacions
             FROM db_afusellats AS a
             LEFT JOIN aux_procediment_judicial AS pj ON a.procediment = pj.id
             LEFT JOIN aux_jutjats as j ON a.jutjat = j.id

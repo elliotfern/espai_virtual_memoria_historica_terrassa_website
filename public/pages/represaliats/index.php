@@ -1,239 +1,269 @@
 <?php
 
 echo '<h4>Llistat complert de represaliats</h4>';
-
 echo "<hr>";
 
+// Añadimos el input de búsqueda
+echo '<input type="text" id="searchInput" placeholder="Buscar...">';
+
+// Añadimos el div donde se renderizará la tabla
 echo '<div class="' . TABLE_DIV_CLASS . '">';
-echo '<table class="table table-striped datatable" id="represaliatsTable">
-        <thead class="' . TABLE_THREAD . '">
+echo '<table class="table table-striped" id="represaliatsTable">
+        <thead>
         <tr>
             <th>Nom complet</th>
             <th>Municipi naixement</th>
             <th>Municipi defunció</th>
             <th>Col·lectiu</th>
-            <th></th>
-            <th></th>
+            <th>Modificar</th>
+            <th>Eliminar</th>
         </tr>
         </thead>
-        </table>
-    </div>';
+        <tbody id="represaliatsBody">
+        <!-- Aquí se insertarán las filas de la tabla dinámicamente -->
+        </tbody>
+    </table>';
 
-echo '</div>'; // Cierre de div para "container"
+// Paginación
+echo '<div id="pagination">
+        <button id="prevPage" disabled>Anterior</button>
+        <span id="currentPage">1</span> de <span id="totalPages">1</span>
+        <button id="nextPage">Siguiente</button>
+    </div>';
+echo '</div>';
 
 ?>
 <script>
-$(document).ready(function () {
-    // Agregar función de ordenación personalizada para fechas en formato dd/mm/yyyy
-    jQuery.extend(jQuery.fn.dataTableExt.oSort, {
-        "date-eu-pre": function (dateString) {
-            var dateParts = dateString.split('/');
-            return Date.parse(dateParts[2] + '-' + dateParts[1] + '-' + dateParts[0]) || 0;
-        },
-
-        "date-eu-asc": function (a, b) {
-            return a - b;
-        },
-
-        "date-eu-desc": function (a, b) {
-            return b - a;
-        }
-    });
-
+document.addEventListener("DOMContentLoaded", function () {
     let server = window.location.hostname;
     let urlAjax = "https://" + server + "/api/represaliats/get/?type=tots";
-    $('#represaliatsTable').DataTable({
-        "pageLength": 30, // Mostrar solo 30 resultados por página
-        ajax: {
-            url: urlAjax,
-            type: "POST",
-            dataSrc: "",
-            beforeSend: function (xhr) {
-                // Obtener el token del localStorage
-                let token = localStorage.getItem('token');
+    let currentPage = 1;
+    let rowsPerPage = 10; // Número de filas por página
+    let totalPages = 1;
+    let datos = [];
 
-                // Incluir el token en el encabezado de autorización
-                xhr.setRequestHeader('Authorization', 'Bearer ' + token);
-            },
+    // Función para obtener los datos con Fetch API y async/await
+    async function obtenerDatos() {
+        try {
+            let token = localStorage.getItem('token');
+            let response = await fetch(urlAjax, {
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
+            });
 
-        },
-        order: [
-            [0, "asc"]
-        ],
+            if (!response.ok) {
+                throw new Error(`Error HTTP: ${response.status}`);
+            }
 
-        columns: [
-            // Aquí está la configuración para agregar el botón en la columna deseada
-            {
-                targets: [0],
-                orderable: true,
-                render: function (data, type, row, meta) {
-                    // Función para convertir fecha de formato DD/MM/YYYY a YYYY-MM-DD
-                    function convertirFecha(fecha) {
-                        if (!fecha) return null;
-                        const partes = fecha.split('/');
-                        // Si la fecha ya está en un formato incorrecto, devolver null
-                        if (partes.length !== 3) return null;
-                        // Reorganizamos a YYYY-MM-DD
-                        return `${partes[2]}-${partes[1]}-${partes[0]}`;
-                    }
+            datos = await response.json(); // Parseamos la respuesta a JSON
+            totalPages = Math.ceil(datos.length / rowsPerPage); // Calculamos el número total de páginas
+            document.getElementById('totalPages').textContent = totalPages; // Actualizamos el número total de páginas
+            renderizarTabla(currentPage); // Renderizamos la tabla para la página actual
+        } catch (error) {
+            console.error("Error al obtener los datos: ", error.message);
+        }
+    }
 
-                    // Función para calcular la edad al morir
-                    function calcularEdadAlMorir(fechaNacimiento, fechaDefuncion) {
-                        const nacimiento = new Date(fechaNacimiento);
-                        const defuncion = new Date(fechaDefuncion);
-                        let edad = defuncion.getFullYear() - nacimiento.getFullYear();
+    // Función para renderizar la tabla con paginación
+    function renderizarTabla(page) {
+        const tbody = document.getElementById("represaliatsBody");
+        tbody.innerHTML = ''; // Limpiar el contenido actual
+        let start = (page - 1) * rowsPerPage;
+        let end = start + rowsPerPage;
+        const datosPaginados = datos.slice(start, end); // Obtener el rango de datos para esta página
 
-                        const mesNacimiento = nacimiento.getMonth();
-                        const diaNacimiento = nacimiento.getDate();
-                        const mesDefuncion = defuncion.getMonth();
-                        const diaDefuncion = defuncion.getDate();
+        datosPaginados.forEach(function (row) {
+            const tr = document.createElement("tr");
 
-                        if (mesDefuncion < mesNacimiento || (mesDefuncion === mesNacimiento && diaDefuncion < diaNacimiento)) {
-                            edad--;
-                        }
+            // Nombre completo
+            const tdNombre = document.createElement("td");
+            const nombreCompleto = `${row.cognom1} ${row.cognom2}, ${row.nom}`;
+            tdNombre.innerHTML = `<strong><a href="/represaliats/fitxa/${row.id}">${nombreCompleto}</a></strong>`;
+            tr.appendChild(tdNombre);
 
-                        return edad;
-                    }
+            // Municipio nacimiento
+            const tdMunicipiNaixement = document.createElement("td");
+            const municipiNaixement = `${row.ciutat ?? "Desconegut"} (${row.comarca ?? "Desconegut"}, ${row.provincia ?? "Desconegut"}, ${row.comunitat ?? "Desconegut"}, ${row.pais ?? "Desconegut"})`;
+            tdMunicipiNaixement.textContent = municipiNaixement;
+            tr.appendChild(tdMunicipiNaixement);
 
-                    // Convertir fechas al formato aceptado por Date
-                    const fechaNacimiento = convertirFecha(row.data_naixement);
-                    const fechaDefuncion = convertirFecha(row.data_defuncio);
+            // Municipio defunció
+            const tdMunicipiDefuncio = document.createElement("td");
+            const municipiDefuncio = `${row.ciutat2 ?? "Desconegut"} (${row.comarca2 ?? "Desconegut"}, ${row.provincia2 ?? "Desconegut"}, ${row.comunitat2 ?? "Desconegut"}, ${row.pais2 ?? "Desconegut"})`;
+            tdMunicipiDefuncio.textContent = municipiDefuncio;
+            tr.appendChild(tdMunicipiDefuncio);
 
-                    // Verificamos que las fechas de nacimiento y defunción no sean nulas y sean válidas
-                    let edadAlMorir = '';
-                    if (fechaNacimiento && fechaDefuncion) {
-                        edadAlMorir = calcularEdadAlMorir(fechaNacimiento, fechaDefuncion) + ' anys';
-                    }
+            // Col·lectiu
+            const tdCollectiu = document.createElement("td");
+            const categorias = row.categoria ? row.categoria.replace(/[{}]/g, '').split(',').map(Number) : [];
+            const collectiuTexto = categorias.map(num => {
+                switch(num) {
+                    case 1: return 'Afusellat';
+                    case 2: return 'Deportat';
+                    case 3: return 'Mort en combat';
+                    case 10: return 'Exiliat';
+                    default: return '';
+                }
+            }).filter(Boolean).join(', ');
+            tdCollectiu.textContent = collectiuTexto;
+            tr.appendChild(tdCollectiu);
 
-                    // Concatenar el nombre completo, las fechas y la edad
-                    return '<strong><a href="/represaliats/fitxa/' + row.id + '">' +
-                        row.cognom1 + ' ' + row.cognom2 + ', ' + row.nom + '</strong></a>' +
-                        '<div style="font-size: 0.8em; color: gray;">' +
-                        row.data_naixement + ' - ' + row.data_defuncio +
-                        (edadAlMorir ? ' (' + edadAlMorir + ')' : '') + // Mostrar edad si está disponible
-                        '</div>';
-                },
-            },
+            // Botón Modificar
+            const tdModificar = document.createElement("td");
+            const btnModificar = document.createElement("button");
+            btnModificar.textContent = "Modificar dades";
+            btnModificar.classList.add("btn", "btn-sm", "btn-warning");
+            btnModificar.onclick = function () {
+                window.location.href = "/afusellats/fitxa/modifica/" + row.id;
+            };
+            tdModificar.appendChild(btnModificar);
+            tr.appendChild(tdModificar);
 
-            {
-                // lloc naixement
-                targets: [1], // Indica que esta configuración se aplica a la columna número 5 (contando desde 0)
-                orderable: true, // Indica que la columna no es ordenable
-                render: function (data, type, row, meta) {
-                    // La función de renderizado se llama para cada celda en la columna especificada.
-                    // 'data' contiene el valor de la celda
-                    // 'type' indica si el renderizado es para 'display', 'filter', 'sort' u 'type'
-                    // 'row' contiene los datos de la fila
-                    // 'meta' contiene metadatos sobre la celda, como el índice de la columna
-                    
-                    return (row.ciutat ?? "Desconegut") + 
-                        '<div style="font-size: 0.8em; color: gray;">' + 
-                        (row.comarca ?? "Desconegut") + ', ' + 
-                        (row.provincia ?? "Desconegut") + ', ' + 
-                        (row.comunitat ?? "Desconegut") + ', ' + 
-                        (row.pais ?? "Desconegut") + 
-                        '</div>';
-                },
-            },
+            // Botón Eliminar
+            const tdEliminar = document.createElement("td");
+            const btnEliminar = document.createElement("button");
+            btnEliminar.textContent = "Eliminar";
+            btnEliminar.classList.add("btn", "btn-sm", "btn-danger");
+            btnEliminar.onclick = function () {
+                if (confirm("¿Estás seguro de que deseas eliminar este registro?")) {
+                    window.location.href = "/afusellats/eliminar/" + row.id;
+                }
+            };
+            tdEliminar.appendChild(btnEliminar);
+            tr.appendChild(tdEliminar);
 
-            {
-                // lloc afusellament
-                targets: [2], // Indica que esta configuración se aplica a la columna número 5 (contando desde 0)
-                orderable: true, // Indica que la columna no es ordenable
-                render: function (data, type, row, meta) {
-                    // La función de renderizado se llama para cada celda en la columna especificada.
-                    // 'data' contiene el valor de la celda
-                    // 'type' indica si el renderizado es para 'display', 'filter', 'sort' u 'type'
-                    // 'row' contiene los datos de la fila
-                    // 'meta' contiene metadatos sobre la celda, como el índice de la columna
-                    
-                    return (row.ciutat2 ?? "Desconegut") + 
-                        '<div style="font-size: 0.8em; color: gray;">' + 
-                        (row.comarca2 ?? "Desconegut") + ', ' + 
-                        (row.provincia2 ?? "Desconegut") + ', ' + 
-                        (row.comunitat2 ?? "Desconegut") + ', ' + 
-                        (row.pais2 ?? "Desconegut") + 
-                        '</div>';
-                },
-            },
+            // Añadir la fila a la tabla
+            tbody.appendChild(tr);
+        });
 
-            {
-                targets: [3], 
-                orderable: true, // Permitir ordenamiento
-                render: function (data, type, row, meta) {
-                    // Suponiendo que 'data' viene como '{1,2,3}'
-                    let categorias = row.categoria;
-                    if (categorias) {
-                        // Eliminar las llaves y dividir en un array
-                        let arrayDatos = categorias.replace(/[{}]/g, '').split(',').map(Number);
-                        
-                        // Mapeo de números a sus textos correspondientes
-                        const textoMapeo = {
-                            1: 'Afusellat',
-                            2: 'Deportat',
-                            3: 'Mort en combat',
-                            4: '',
-                            5: '',
-                            6: '',
-                            7: '',
-                            8: '',
-                            9: '',
-                            10: 'Exiliat'
-                        };
+        // Actualizar el estado de la paginación
+        document.getElementById('currentPage').textContent = currentPage;
+        document.getElementById('prevPage').disabled = currentPage === 1;
+        document.getElementById('nextPage').disabled = currentPage === totalPages;
+    }
 
-                        // Construir el resultado
-                        let resultado = arrayDatos.map(num => textoMapeo[num] || '').filter(Boolean).join(', ');
+    // Función para buscar en todos los datos
+    function buscarEnTodosLosDatos() {
+        const input = document.getElementById("searchInput").value.toLowerCase();
+        const tbody = document.getElementById("represaliatsBody");
+        tbody.innerHTML = ''; // Limpiar el contenido actual
 
-                        return resultado;
-                    }
+        // Filtrar los datos que coincidan con la búsqueda
+        const resultadosFiltrados = datos.filter(function (row) {
+            const nombreCompleto = `${row.cognom1} ${row.cognom2}, ${row.nom}`.toLowerCase();
+            const municipiNaixement = `${row.ciutat ?? "Desconegut"} (${row.comarca ?? "Desconegut"}, ${row.provincia ?? "Desconegut"}, ${row.comunitat ?? "Desconegut"}, ${row.pais ?? "Desconegut"})`.toLowerCase();
+            const municipiDefuncio = `${row.ciutat2 ?? "Desconegut"} (${row.comarca2 ?? "Desconegut"}, ${row.provincia2 ?? "Desconegut"}, ${row.comunitat2 ?? "Desconegut"}, ${row.pais2 ?? "Desconegut"})`.toLowerCase();
+            const categorias = row.categoria ? row.categoria.replace(/[{}]/g, '').split(',').map(Number) : [];
+            const collectiuTexto = categorias.map(num => {
+                switch(num) {
+                    case 1: return 'Afusellat';
+                    case 2: return 'Deportat';
+                    case 3: return 'Mort en combat';
+                    case 10: return 'Exiliat';
+                    default: return '';
+                }
+            }).filter(Boolean).join(', ').toLowerCase();
 
-                    return ''; // Devolver una cadena vacía si no hay datos
-                },
-            },
+            // Verifica si alguno de los campos coincide con la búsqueda
+            return nombreCompleto.includes(input) || municipiNaixement.includes(input) || 
+                   municipiDefuncio.includes(input) || collectiuTexto.includes(input);
+        });
 
-            {
-                targets: [4], // Indica que esta configuración se aplica a la columna número 5 (contando desde 0)
-                orderable: false, // Indica que la columna no es ordenable
-                render: function (data, type, row, meta) {
-                    // La función de renderizado se llama para cada celda en la columna especificada.
-                    // 'data' contiene el valor de la celda
-                    // 'type' indica si el renderizado es para 'display', 'filter', 'sort' u 'type'
-                    // 'row' contiene los datos de la fila
-                    // 'meta' contiene metadatos sobre la celda, como el índice de la columna
+        // Renderiza los resultados filtrados
+        resultadosFiltrados.forEach(function (row) {
+            const tr = document.createElement("tr");
 
-                    return (
-                        '<button type="button" onclick="btnModificaAfusellat('+row.id+')" id="btnModificaAfusellat" class="btn btn-sm btn-warning">Modificar dades</button>'
-                    );
-                },
-            },
+            // Nombre completo
+            const tdNombre = document.createElement("td");
+            const nombreCompleto = `${row.cognom1} ${row.cognom2}, ${row.nom}`;
+            tdNombre.innerHTML = `<strong><a href="/represaliats/fitxa/${row.id}">${nombreCompleto}</a></strong>`;
+            tr.appendChild(tdNombre);
 
-            {
-                targets: [5], // Indica que esta configuración se aplica a la columna número 5 (contando desde 0)
-                orderable: false, // Indica que la columna no es ordenable
-                render: function (data, type, row, meta) {
-                    // La función de renderizado se llama para cada celda en la columna especificada.
-                    // 'data' contiene el valor de la celda
-                    // 'type' indica si el renderizado es para 'display', 'filter', 'sort' u 'type'
-                    // 'row' contiene los datos de la fila
-                    // 'meta' contiene metadatos sobre la celda, como el índice de la columna
+            // Municipio nacimiento
+            const tdMunicipiNaixement = document.createElement("td");
+            const municipiNaixement = `${row.ciutat ?? "Desconegut"} (${row.comarca ?? "Desconegut"}, ${row.provincia ?? "Desconegut"}, ${row.comunitat ?? "Desconegut"}, ${row.pais ?? "Desconegut"})`;
+            tdMunicipiNaixement.textContent = municipiNaixement;
+            tr.appendChild(tdMunicipiNaixement);
 
-                    return (
-                        '<button type="button" onclick="btnDeleteBook('+row.id+')" id="btnDeleteBook" class="btn btn-sm btn-danger" >Eliminar</button>'
-                    );
-                },
-            },
-        ] // <- Se añadió la coma aquí
+            // Municipio defunció
+            const tdMunicipiDefuncio = document.createElement("td");
+            const municipiDefuncio = `${row.ciutat2 ?? "Desconegut"} (${row.comarca2 ?? "Desconegut"}, ${row.provincia2 ?? "Desconegut"}, ${row.comunitat2 ?? "Desconegut"}, ${row.pais2 ?? "Desconegut"})`;
+            tdMunicipiDefuncio.textContent = municipiDefuncio;
+            tr.appendChild(tdMunicipiDefuncio);
+
+            // Col·lectiu
+            const tdCollectiu = document.createElement("td");
+            const categorias = row.categoria ? row.categoria.replace(/[{}]/g, '').split(',').map(Number) : [];
+            const collectiuTexto = categorias.map(num => {
+                switch(num) {
+                    case 1: return 'Afusellat';
+                    case 2: return 'Deportat';
+                    case 3: return 'Mort en combat';
+                    case 10: return 'Exiliat';
+                    default: return '';
+                }
+            }).filter(Boolean).join(', ');
+            tdCollectiu.textContent = collectiuTexto;
+            tr.appendChild(tdCollectiu);
+
+            // Botón Modificar
+            const tdModificar = document.createElement("td");
+            const btnModificar = document.createElement("button");
+            btnModificar.textContent = "Modificar dades";
+            btnModificar.classList.add("btn", "btn-sm", "btn-warning");
+            btnModificar.onclick = function () {
+                window.location.href = "/afusellats/fitxa/modifica/" + row.id;
+            };
+            tdModificar.appendChild(btnModificar);
+            tr.appendChild(tdModificar);
+
+            // Botón Eliminar
+            const tdEliminar = document.createElement("td");
+            const btnEliminar = document.createElement("button");
+            btnEliminar.textContent = "Eliminar";
+            btnEliminar.classList.add("btn", "btn-sm", "btn-danger");
+            btnEliminar.onclick = function () {
+                if (confirm("¿Estás seguro de que deseas eliminar este registro?")) {
+                    window.location.href = "/afusellats/eliminar/" + row.id;
+                }
+            };
+            tdEliminar.appendChild(btnEliminar);
+            tr.appendChild(tdEliminar);
+
+            // Añadir la fila a la tabla
+            tbody.appendChild(tr);
+        });
+
+        // Actualizar el estado de la paginación (opcional si se quiere mantener la paginación después de la búsqueda)
+        totalPages = Math.ceil(resultadosFiltrados.length / rowsPerPage);
+        document.getElementById('totalPages').textContent = totalPages;
+        document.getElementById('currentPage').textContent = currentPage;
+    }
+
+    // Función para cambiar de página
+    function cambiarPagina(delta) {
+        currentPage += delta;
+        if (currentPage < 1) currentPage = 1;
+        if (currentPage > totalPages) currentPage = totalPages;
+        renderizarTabla(currentPage);
+    }
+
+    // Evento para el buscador que ejecuta la búsqueda global
+    document.getElementById("searchInput").addEventListener("input", buscarEnTodosLosDatos);
+
+    // Eventos para la paginación
+    document.getElementById('prevPage').addEventListener('click', function() {
+        cambiarPagina(-1);
     });
+    document.getElementById('nextPage').addEventListener('click', function() {
+        cambiarPagina(1);
+    });
+
+    // Llamada inicial para obtener los datos
+    obtenerDatos();
 });
-
-// BOTO MODIFICAR FITXA PERSONA
-function btnModificaAfusellat(id) {
-    let idAfusellat = id;
-    let url = devDirectory + "/afusellats/fitxa/modifica/" + idAfusellat;
-
-    // Redirigir al usuario a la página deseada
-    window.location.href = url;
-}
 </script>
 
 <?php

@@ -1,6 +1,7 @@
-import { login } from './services/auth/auth.js';
-import { logout } from './services/cookies/cookiesUtils.js';
-import { nameUser } from './components/userName/userName.js';
+import { login } from "./services/auth/auth.js";
+import { logout } from "./services/cookies/cookiesUtils.js";
+import { nameUser } from "./components/userName/userName.js";
+import {initButtons} from "./components/fitxaRepressaliat/fitxaRepresaliat.js";
 
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -8,7 +9,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     btnLogin?.addEventListener("click", (event: Event) => {
         event.preventDefault();
-
         const userName = (document.querySelector("#username") as HTMLInputElement)?.value;
         const password = (document.querySelector("#password") as HTMLInputElement)?.value;
 
@@ -20,16 +20,24 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     const userIdFromStorage = localStorage.getItem('user_id');
-
     if (userIdFromStorage) {
         nameUser(userIdFromStorage).catch(error => {
             console.error('Error al llamar a nameUser desde localStorage:', error);
         });
     }
 
-    // Tancar sessio cookies delete
     const btnLogout = document.querySelector("#btnSortir") as HTMLButtonElement;
     btnLogout?.addEventListener("click", () => {
-        logout(); // Llama a la función logout
+        logout();
     });
+
+    // Verificar si estamos en la página de ficha de represaliat
+    const pathArray = window.location.pathname.split('/');
+    const isFichaRepresaliat = pathArray[pathArray.length - 2] === 'fitxa';
+
+    if (isFichaRepresaliat) {
+        const id = pathArray[pathArray.length - 1];
+        // Llama a initButtons cuando la página se haya cargado
+        initButtons(id); // Pasar el id
+    }
 });

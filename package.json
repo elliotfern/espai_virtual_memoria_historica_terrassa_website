@@ -1,7 +1,12 @@
 {
   "devDependencies": {
+    "@eslint/js": "^9.11.1",
+    "@types/eslint__js": "^8.42.3",
     "@types/jquery": "^3.5.19",
-    "typescript": "^5.6.2"
+    "eslint": "^9.11.1",
+    "globals": "^15.10.0",
+    "typescript": "^5.6.2",
+    "typescript-eslint": "^8.8.0"
   },
   "name": "memoria_intranet",
   "version": "1.0.0",
@@ -12,5 +17,8 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "dayjs": "^1.11.13"
+  }
 }
