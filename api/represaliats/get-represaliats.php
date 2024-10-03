@@ -28,6 +28,37 @@ if (isset($headers['Authorization'])) {
                 }
             echo json_encode($data);
 
+        // 2) Llistat tots per categories
+        // ruta GET => "/api/represaliats/get/?type=totesCategories&cat="
+        // api/represaliats/get/?type=totesCategories&categoria=afusellats
+        } elseif (isset($_GET['type']) && $_GET['type'] == 'totesCategories' && isset($_GET['categoria'])) {
+           
+            // Obtener y sanitizar la entrada
+            $cat = filter_input(INPUT_GET, 'categoria', FILTER_DEFAULT);
+
+            if ($cat === "afusellats") {
+                $catNum = 1;
+            } else if ($cat === "exiliats") {
+                $catNum = 10;
+            }
+
+            global $conn;
+            $data = array();
+            $stmt = $conn->prepare(
+            "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, e1.comarca, e1.provincia, e1.comunitat, e1.pais, a.categoria, e2.ciutat AS ciutat2, e2.comarca AS comarca2, e2.provincia AS provincia2, e2.comunitat AS comunitat2, e2.pais AS pais2
+            FROM db_dades_personals AS a
+            LEFT JOIN aux_dades_municipis AS e1 ON a.municipi_naixement = e1.id
+            LEFT JOIN aux_dades_municipis AS e2 ON a.municipi_defuncio = e2.id
+            WHERE FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
+            ORDER BY a.cognom1 ASC;");
+            $stmt->bindParam(1, $catNum, PDO::PARAM_STR);
+            $stmt->execute();
+            if($stmt->rowCount() === 0) echo ('No rows');
+                while($users = $stmt->fetch(PDO::FETCH_ASSOC) ){
+                    $data[] = $users;
+                }
+            echo json_encode($data);
+
         // 2) Pagina informacio fitxa afusellat
         // ruta GET => "/api/represaliats/get/?type=fitxa&id=35"
         } elseif (isset($_GET['type']) && $_GET['type'] == 'fitxa' && isset($_GET['id'])) {

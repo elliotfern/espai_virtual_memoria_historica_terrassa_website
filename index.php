@@ -184,6 +184,9 @@ class Route {
         $route->add("/afusellats","public/pages/afusellats/index.php");
         $route->add("/afusellats/fitxa/modifica/{id}","public/pages/afusellats/modificar-fitxa-persona.php");
 
+        // exiliats
+        $route->add("/exiliats","public/pages/afusellats/index.php");
+
 }
 
 ?>

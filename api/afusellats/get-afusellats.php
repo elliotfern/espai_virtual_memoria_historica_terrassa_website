@@ -11,13 +11,13 @@ if (isset($headers['Authorization'])) {
         // Token válido, puedes continuar con el código para obtener los datos del usuario
 
         // 1) Llistat afusellats
-        // ruta GET => "/api/afusellats/get/?type=llistat"
-        if (isset($_GET['type']) && $_GET['type'] == 'llistat' ) {
+        // ruta GET => "/api/afusellats/get/?type=tots"
+        if (isset($_GET['type']) && $_GET['type'] == 'tots' ) {
             global $conn;
             $data = array();
             $stmt = $conn->prepare(
             "SELECT a.id, dp.cognom1, dp.cognom2, dp.nom, a.copia_exp, dp.data_naixement, dp.edat, dp.data_defuncio,
-            e1.ciutat, e1.comarca, e1.provincia, e1.comunitat, e1.pais, e2.ciutat AS ciutat2, e2.comarca AS comarca2, e2.provincia AS provincia2, e2.comunitat AS comunitat2, e2.pais AS pais2
+            e1.ciutat, e1.comarca, e1.provincia, e1.comunitat, e1.pais, e2.ciutat AS ciutat2, e2.comarca AS comarca2, e2.provincia AS provincia2, e2.comunitat AS comunitat2, e2.pais AS pais2, dp.categoria
             FROM db_afusellats AS a
             LEFT JOIN db_dades_personals AS dp ON a.idPersona = dp.id
             LEFT JOIN aux_dades_municipis AS e1 ON dp.municipi_naixement = e1.id
