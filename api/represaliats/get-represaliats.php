@@ -38,7 +38,7 @@ if (isset($headers['Authorization'])) {
 
             if ($cat === "afusellats") {
                 $catNum = 1;
-            } else if ($cat === "exiliats") {
+            } else if ($cat === "exili-deportacio") {
                 $catNum = 10;
             }
 

@@ -1,10 +1,10 @@
 <?php
 
-echo '<h4>Llistat complert de represaliats</h4>';
+echo '<h2>Base de dades: Exiliats i deportats</h2>';
 echo "<hr>";
 
 // Añadimos el input de búsqueda
-echo '<input type="text" id="searchInput" placeholder="Buscar...">';
+echo '<input type="text" id="searchInput" placeholder="Cercar...">';
 
 // Añadimos el div donde se renderizará la tabla
 echo '<div class="' . TABLE_DIV_CLASS . '">';
@@ -28,7 +28,7 @@ echo '<table class="table table-striped" id="represaliatsTable">
 echo '<div id="pagination">
         <button id="prevPage" disabled>Anterior</button>
         <span id="currentPage">1</span> de <span id="totalPages">1</span>
-        <button id="nextPage">Siguiente</button>
+        <button id="nextPage">Següent</button>
     </div>';
 echo '</div>';
 

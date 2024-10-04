@@ -2,18 +2,18 @@ import { fetchData } from "../../services/api/api.js";
 import { Represeliat } from "../../types/types.js";
 import { devDirectory, categorias } from "../../config.js";
 
-export async function cargarTabla(pag:string) {
-    let urlAjax = '';
-    if (pag === "represaliats") {
-        urlAjax = `${devDirectory}/api/represaliats/get/?type=tots`;
-    } else {
-        urlAjax = `${devDirectory}/api/represaliats/get/?type=totesCategories&categoria=${pag}`;
-    }
+export async function cargarTabla(pag: string) {
+  let urlAjax = "";
+  if (pag === "tots") {
+    urlAjax = `${devDirectory}/api/represaliats/get/?type=tots`;
+  } else {
+    urlAjax = `${devDirectory}/api/represaliats/get/?type=totesCategories&categoria=${pag}`;
+  }
 
-    let currentPage = 1;
-    const rowsPerPage = 10; // Número de filas por página
-    let totalPages = 1;
-    let datos: Represeliat[] = [];
+  let currentPage = 1;
+  const rowsPerPage = 10; // Número de filas por página
+  let totalPages = 1;
+  let datos: Represeliat[] = [];
 
   // Función para obtener los datos
   async function obtenerDatos() {
@@ -42,7 +42,7 @@ export async function cargarTabla(pag:string) {
       // Nombre completo
       const tdNombre = document.createElement("td");
       const nombreCompleto = `${row.cognom1} ${row.cognom2 ?? ""}, ${row.nom}`;
-      tdNombre.innerHTML = `<strong><a href="/represaliats/fitxa/${row.id}">${nombreCompleto}</a></strong>`;
+      tdNombre.innerHTML = `<strong><a href="/tots/fitxa/${row.id}">${nombreCompleto}</a></strong>`;
       tr.appendChild(tdNombre);
 
       // Municipio nacimiento
@@ -77,29 +77,45 @@ export async function cargarTabla(pag:string) {
       tdCollectiu.textContent = collectiuTexto;
       tr.appendChild(tdCollectiu);
 
-      // Botón Modificar
-      const tdModificar = document.createElement("td");
-      const btnModificar = document.createElement("button");
-      btnModificar.textContent = "Modificar dades";
-      btnModificar.classList.add("btn", "btn-sm", "btn-warning");
-      btnModificar.onclick = function () {
-        window.location.href = `/afusellats/fitxa/modifica/${row.id}`;
-      };
-      tdModificar.appendChild(btnModificar);
-      tr.appendChild(tdModificar);
+      // Obtener el user_id de localStorage
+      const userId = localStorage.getItem("user_id");
+
+      // Verificar si el usuario es el admin con id 1
+      if (userId === "1") {
+        // Botón Modificar
+        const tdModificar = document.createElement("td");
+        const btnModificar = document.createElement("button");
+        btnModificar.textContent = "Modificar dades";
+        btnModificar.classList.add("btn", "btn-sm", "btn-warning");
+        btnModificar.onclick = function () {
+          window.location.href = `/afusellats/fitxa/modifica/${row.id}`;
+        };
+        tdModificar.appendChild(btnModificar);
+        tr.appendChild(tdModificar);
+      } else {
+        // Crear la fila vacía
+        const tdModificar = document.createElement("td");
+        tr.appendChild(tdModificar);
+      }
 
       // Botón Eliminar
-      const tdEliminar = document.createElement("td");
-      const btnEliminar = document.createElement("button");
-      btnEliminar.textContent = "Eliminar";
-      btnEliminar.classList.add("btn", "btn-sm", "btn-danger");
-      btnEliminar.onclick = function () {
-        if (confirm("¿Estás seguro de que deseas eliminar este registro?")) {
-          window.location.href = `/afusellats/eliminar/${row.id}`;
-        }
-      };
-      tdEliminar.appendChild(btnEliminar);
-      tr.appendChild(tdEliminar);
+      if (userId === "1") {
+        const tdEliminar = document.createElement("td");
+        const btnEliminar = document.createElement("button");
+        btnEliminar.textContent = "Eliminar";
+        btnEliminar.classList.add("btn", "btn-sm", "btn-danger");
+        btnEliminar.onclick = function () {
+          if (confirm("¿Estás seguro de que deseas eliminar este registro?")) {
+            window.location.href = `/afusellats/eliminar/${row.id}`;
+          }
+        };
+        tdEliminar.appendChild(btnEliminar);
+        tr.appendChild(tdEliminar);
+      } else {
+        // Crear la fila vacía
+        const tdModificar = document.createElement("td");
+        tr.appendChild(tdModificar);
+      }
 
       // Añadir la fila a la tabla
       tbody.appendChild(tr);
@@ -109,10 +125,14 @@ export async function cargarTabla(pag:string) {
     const currentPageElement = document.getElementById("currentPage")!;
     currentPageElement.textContent = currentPage.toString();
 
-    const prevPageButton = document.getElementById("prevPage") as HTMLButtonElement;
+    const prevPageButton = document.getElementById(
+      "prevPage"
+    ) as HTMLButtonElement;
     prevPageButton.disabled = currentPage === 1;
 
-    const nextPageButton = document.getElementById("nextPage") as HTMLButtonElement;
+    const nextPageButton = document.getElementById(
+      "nextPage"
+    ) as HTMLButtonElement;
     nextPageButton.disabled = currentPage === totalPages;
   }
 
@@ -125,7 +145,9 @@ export async function cargarTabla(pag:string) {
 
     // Filtrar los datos que coincidan con la búsqueda
     const resultadosFiltrados = datos.filter((row) => {
-      const nombreCompleto = `${row.cognom1} ${row.cognom2 ?? ""}, ${row.nom}`.toLowerCase();
+      const nombreCompleto = `${row.cognom1} ${row.cognom2 ?? ""}, ${
+        row.nom
+      }`.toLowerCase();
       const municipiNaixement = `${row.ciutat ?? "Desconegut"} (${
         row.comarca ?? "Desconegut"
       }, ${row.provincia ?? "Desconegut"}, ${row.comunitat ?? "Desconegut"}, ${
@@ -171,7 +193,7 @@ export async function cargarTabla(pag:string) {
       // Nombre completo
       const tdNombre = document.createElement("td");
       const nombreCompleto = `${row.cognom1} ${row.cognom2 ?? ""}, ${row.nom}`;
-      tdNombre.innerHTML = `<strong><a href="/represaliats/fitxa/${row.id}">${nombreCompleto}</a></strong>`;
+      tdNombre.innerHTML = `<strong><a href="/tots/fitxa/${row.id}">${nombreCompleto}</a></strong>`;
       tr.appendChild(tdNombre);
 
       // Municipio nacimiento
@@ -206,29 +228,44 @@ export async function cargarTabla(pag:string) {
       tdCollectiu.textContent = collectiuTexto;
       tr.appendChild(tdCollectiu);
 
+      // Obtener el user_id de localStorage
+      const userId = localStorage.getItem("user_id");
+
       // Botón Modificar
-      const tdModificar = document.createElement("td");
-      const btnModificar = document.createElement("button");
-      btnModificar.textContent = "Modificar dades";
-      btnModificar.classList.add("btn", "btn-sm", "btn-warning");
-      btnModificar.onclick = function () {
-        window.location.href = `/afusellats/fitxa/modifica/${row.id}`;
-      };
-      tdModificar.appendChild(btnModificar);
-      tr.appendChild(tdModificar);
+      if (userId === "1") {
+        const tdModificar = document.createElement("td");
+        const btnModificar = document.createElement("button");
+        btnModificar.textContent = "Modificar dades";
+        btnModificar.classList.add("btn", "btn-sm", "btn-warning");
+        btnModificar.onclick = function () {
+          window.location.href = `/afusellats/fitxa/modifica/${row.id}`;
+        };
+        tdModificar.appendChild(btnModificar);
+        tr.appendChild(tdModificar);
+      } else {
+        // Crear la fila vacía
+        const tdModificar = document.createElement("td");
+        tr.appendChild(tdModificar);
+      }
 
       // Botón Eliminar
-      const tdEliminar = document.createElement("td");
-      const btnEliminar = document.createElement("button");
-      btnEliminar.textContent = "Eliminar";
-      btnEliminar.classList.add("btn", "btn-sm", "btn-danger");
-      btnEliminar.onclick = function () {
-        if (confirm("¿Estás seguro de que deseas eliminar este registro?")) {
-          window.location.href = `/afusellats/eliminar/${row.id}`;
-        }
-      };
-      tdEliminar.appendChild(btnEliminar);
-      tr.appendChild(tdEliminar);
+      if (userId === "1") {
+        const tdEliminar = document.createElement("td");
+        const btnEliminar = document.createElement("button");
+        btnEliminar.textContent = "Eliminar";
+        btnEliminar.classList.add("btn", "btn-sm", "btn-danger");
+        btnEliminar.onclick = function () {
+          if (confirm("¿Estás seguro de que deseas eliminar este registro?")) {
+            window.location.href = `/afusellats/eliminar/${row.id}`;
+          }
+        };
+        tdEliminar.appendChild(btnEliminar);
+        tr.appendChild(tdEliminar);
+      } else {
+        // Crear la fila vacía
+        const tdModificar = document.createElement("td");
+        tr.appendChild(tdModificar);
+      }
 
       // Añadir la fila a la tabla
       tbody.appendChild(tr);
@@ -236,7 +273,9 @@ export async function cargarTabla(pag:string) {
   }
 
   // Eventos
-  document.getElementById("searchInput")!.addEventListener("input", buscarEnTodosLosDatos);
+  document
+    .getElementById("searchInput")!
+    .addEventListener("input", buscarEnTodosLosDatos);
   document.getElementById("prevPage")!.addEventListener("click", () => {
     if (currentPage > 1) {
       currentPage--;
@@ -252,5 +291,4 @@ export async function cargarTabla(pag:string) {
 
   // Carga inicial de datos
   await obtenerDatos();
-
 }

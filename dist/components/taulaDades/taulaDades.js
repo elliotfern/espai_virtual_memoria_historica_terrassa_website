@@ -11,8 +11,8 @@ import { fetchData } from "../../services/api/api.js";
 import { devDirectory, categorias } from "../../config.js";
 export function cargarTabla(pag) {
     return __awaiter(this, void 0, void 0, function* () {
-        let urlAjax = '';
-        if (pag === "represaliats") {
+        let urlAjax = "";
+        if (pag === "tots") {
             urlAjax = `${devDirectory}/api/represaliats/get/?type=tots`;
         }
         else {
@@ -50,7 +50,7 @@ export function cargarTabla(pag) {
                 // Nombre completo
                 const tdNombre = document.createElement("td");
                 const nombreCompleto = `${row.cognom1} ${(_a = row.cognom2) !== null && _a !== void 0 ? _a : ""}, ${row.nom}`;
-                tdNombre.innerHTML = `<strong><a href="/represaliats/fitxa/${row.id}">${nombreCompleto}</a></strong>`;
+                tdNombre.innerHTML = `<strong><a href="/tots/fitxa/${row.id}">${nombreCompleto}</a></strong>`;
                 tr.appendChild(tdNombre);
                 // Municipio nacimiento
                 const tdMunicipiNaixement = document.createElement("td");
@@ -73,28 +73,45 @@ export function cargarTabla(pag) {
                     .join(", ");
                 tdCollectiu.textContent = collectiuTexto;
                 tr.appendChild(tdCollectiu);
-                // Botón Modificar
-                const tdModificar = document.createElement("td");
-                const btnModificar = document.createElement("button");
-                btnModificar.textContent = "Modificar dades";
-                btnModificar.classList.add("btn", "btn-sm", "btn-warning");
-                btnModificar.onclick = function () {
-                    window.location.href = `/afusellats/fitxa/modifica/${row.id}`;
-                };
-                tdModificar.appendChild(btnModificar);
-                tr.appendChild(tdModificar);
+                // Obtener el user_id de localStorage
+                const userId = localStorage.getItem("user_id");
+                // Verificar si el usuario es el admin con id 1
+                if (userId === "1") {
+                    // Botón Modificar
+                    const tdModificar = document.createElement("td");
+                    const btnModificar = document.createElement("button");
+                    btnModificar.textContent = "Modificar dades";
+                    btnModificar.classList.add("btn", "btn-sm", "btn-warning");
+                    btnModificar.onclick = function () {
+                        window.location.href = `/afusellats/fitxa/modifica/${row.id}`;
+                    };
+                    tdModificar.appendChild(btnModificar);
+                    tr.appendChild(tdModificar);
+                }
+                else {
+                    // Crear la fila vacía
+                    const tdModificar = document.createElement("td");
+                    tr.appendChild(tdModificar);
+                }
                 // Botón Eliminar
-                const tdEliminar = document.createElement("td");
-                const btnEliminar = document.createElement("button");
-                btnEliminar.textContent = "Eliminar";
-                btnEliminar.classList.add("btn", "btn-sm", "btn-danger");
-                btnEliminar.onclick = function () {
-                    if (confirm("¿Estás seguro de que deseas eliminar este registro?")) {
-                        window.location.href = `/afusellats/eliminar/${row.id}`;
-                    }
-                };
-                tdEliminar.appendChild(btnEliminar);
-                tr.appendChild(tdEliminar);
+                if (userId === "1") {
+                    const tdEliminar = document.createElement("td");
+                    const btnEliminar = document.createElement("button");
+                    btnEliminar.textContent = "Eliminar";
+                    btnEliminar.classList.add("btn", "btn-sm", "btn-danger");
+                    btnEliminar.onclick = function () {
+                        if (confirm("¿Estás seguro de que deseas eliminar este registro?")) {
+                            window.location.href = `/afusellats/eliminar/${row.id}`;
+                        }
+                    };
+                    tdEliminar.appendChild(btnEliminar);
+                    tr.appendChild(tdEliminar);
+                }
+                else {
+                    // Crear la fila vacía
+                    const tdModificar = document.createElement("td");
+                    tr.appendChild(tdModificar);
+                }
                 // Añadir la fila a la tabla
                 tbody.appendChild(tr);
             });
@@ -148,7 +165,7 @@ export function cargarTabla(pag) {
                 // Nombre completo
                 const tdNombre = document.createElement("td");
                 const nombreCompleto = `${row.cognom1} ${(_a = row.cognom2) !== null && _a !== void 0 ? _a : ""}, ${row.nom}`;
-                tdNombre.innerHTML = `<strong><a href="/represaliats/fitxa/${row.id}">${nombreCompleto}</a></strong>`;
+                tdNombre.innerHTML = `<strong><a href="/tots/fitxa/${row.id}">${nombreCompleto}</a></strong>`;
                 tr.appendChild(tdNombre);
                 // Municipio nacimiento
                 const tdMunicipiNaixement = document.createElement("td");
@@ -171,34 +188,52 @@ export function cargarTabla(pag) {
                     .join(", ");
                 tdCollectiu.textContent = collectiuTexto;
                 tr.appendChild(tdCollectiu);
+                // Obtener el user_id de localStorage
+                const userId = localStorage.getItem("user_id");
                 // Botón Modificar
-                const tdModificar = document.createElement("td");
-                const btnModificar = document.createElement("button");
-                btnModificar.textContent = "Modificar dades";
-                btnModificar.classList.add("btn", "btn-sm", "btn-warning");
-                btnModificar.onclick = function () {
-                    window.location.href = `/afusellats/fitxa/modifica/${row.id}`;
-                };
-                tdModificar.appendChild(btnModificar);
-                tr.appendChild(tdModificar);
+                if (userId === "1") {
+                    const tdModificar = document.createElement("td");
+                    const btnModificar = document.createElement("button");
+                    btnModificar.textContent = "Modificar dades";
+                    btnModificar.classList.add("btn", "btn-sm", "btn-warning");
+                    btnModificar.onclick = function () {
+                        window.location.href = `/afusellats/fitxa/modifica/${row.id}`;
+                    };
+                    tdModificar.appendChild(btnModificar);
+                    tr.appendChild(tdModificar);
+                }
+                else {
+                    // Crear la fila vacía
+                    const tdModificar = document.createElement("td");
+                    tr.appendChild(tdModificar);
+                }
                 // Botón Eliminar
-                const tdEliminar = document.createElement("td");
-                const btnEliminar = document.createElement("button");
-                btnEliminar.textContent = "Eliminar";
-                btnEliminar.classList.add("btn", "btn-sm", "btn-danger");
-                btnEliminar.onclick = function () {
-                    if (confirm("¿Estás seguro de que deseas eliminar este registro?")) {
-                        window.location.href = `/afusellats/eliminar/${row.id}`;
-                    }
-                };
-                tdEliminar.appendChild(btnEliminar);
-                tr.appendChild(tdEliminar);
+                if (userId === "1") {
+                    const tdEliminar = document.createElement("td");
+                    const btnEliminar = document.createElement("button");
+                    btnEliminar.textContent = "Eliminar";
+                    btnEliminar.classList.add("btn", "btn-sm", "btn-danger");
+                    btnEliminar.onclick = function () {
+                        if (confirm("¿Estás seguro de que deseas eliminar este registro?")) {
+                            window.location.href = `/afusellats/eliminar/${row.id}`;
+                        }
+                    };
+                    tdEliminar.appendChild(btnEliminar);
+                    tr.appendChild(tdEliminar);
+                }
+                else {
+                    // Crear la fila vacía
+                    const tdModificar = document.createElement("td");
+                    tr.appendChild(tdModificar);
+                }
                 // Añadir la fila a la tabla
                 tbody.appendChild(tr);
             });
         }
         // Eventos
-        document.getElementById("searchInput").addEventListener("input", buscarEnTodosLosDatos);
+        document
+            .getElementById("searchInput")
+            .addEventListener("input", buscarEnTodosLosDatos);
         document.getElementById("prevPage").addEventListener("click", () => {
             if (currentPage > 1) {
                 currentPage--;

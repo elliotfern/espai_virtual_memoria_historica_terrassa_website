@@ -4,6 +4,23 @@ import { nameUser } from "./components/userName/userName.js";
 import { initButtons } from "./components/fitxaRepressaliat/fitxaRepresaliat.js";
 import { cargarTabla } from "./components/taulaDades/taulaDades.js"; // Asegúrate de que la ruta sea correcta
 document.addEventListener("DOMContentLoaded", () => {
+    // Intervalo para mantener la sesión activa
+    setInterval(function () {
+        const server = window.location.hostname;
+        const url = `https://${server}/session_live`;
+        if (navigator.onLine) {
+            fetch(url)
+                .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+                return response.text();
+            })
+                .catch((error) => {
+                console.error("Error keeping session alive:", error);
+            });
+        }
+    }, 600000); // 10 minutos (600000 milisegundos)
     const btnLogin = document.querySelector("#btnLogin");
     btnLogin === null || btnLogin === void 0 ? void 0 : btnLogin.addEventListener("click", (event) => {
         var _a, _b;
@@ -17,10 +34,10 @@ document.addEventListener("DOMContentLoaded", () => {
             console.log("Faltan datos para iniciar sesión.");
         }
     });
-    const userIdFromStorage = localStorage.getItem('user_id');
+    const userIdFromStorage = localStorage.getItem("user_id");
     if (userIdFromStorage) {
-        nameUser(userIdFromStorage).catch(error => {
-            console.error('Error al llamar a nameUser desde localStorage:', error);
+        nameUser(userIdFromStorage).catch((error) => {
+            console.error("Error al llamar a nameUser desde localStorage:", error);
         });
     }
     const btnLogout = document.querySelector("#btnSortir");
@@ -28,18 +45,18 @@ document.addEventListener("DOMContentLoaded", () => {
         logout();
     });
     // Verificar la URL y llamar a las funciones correspondientes
-    const pathArray = window.location.pathname.split('/');
+    const pathArray = window.location.pathname.split("/");
     const pageType = pathArray[pathArray.length - 1]; // Obtenemos el nombre de la página
-    if (pageType === 'represaliats') {
+    if (pageType === "tots") {
         cargarTabla(pageType); // Llamar a la función para cargar la tabla
     }
-    else if (pageType === 'afusellats') {
+    else if (pageType === "afusellats") {
         cargarTabla(pageType); // También cargar para afusellats
     }
-    else if (pageType === 'exiliats') {
+    else if (pageType === "exili-deportacio") {
         cargarTabla(pageType); // También cargar para exiliats
     }
-    else if (pathArray[pathArray.length - 2] === 'fitxa') {
+    else if (pathArray[pathArray.length - 2] === "fitxa") {
         const id = pathArray[pathArray.length - 1];
         initButtons(id); // Pasar el id
     }

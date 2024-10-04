@@ -131,13 +131,16 @@ class Route {
     define("APP_SERVER", $url_server); 
     define("APP_ROOT", $url_root);
     define("APP_DEV",$dev);
+    
+    // Services
+    $route->add("/session_live","public/php/keep_session_alive.php");
 
     // Route for paths containing '/control/'
     require_once(APP_ROOT . APP_DEV . '/connection.php');
     require_once(APP_ROOT . APP_DEV . '/public/php/variables.php'); 
     require_once(APP_ROOT . APP_DEV . '/public/php/functions.php');
 
-    $route->add("/login","public/pages/auth/login.php");
+    $route->add("/login","public/pages/00_homepage/login.php");
     
 
     // API SERVER 
@@ -172,20 +175,27 @@ class Route {
         // Header (solo para las paginas)
         require_once(APP_ROOT . APP_DEV . '/public/php/header.php');
     
-        // homepage
-        $route->add("/","public/pages/homepage/admin.php");
-        $route->add("/admin","public/pages/homepage/admin.php");
+        // 00. Homepage
+        $route->add("/","public/pages/00_homepage/admin.php");
+        $route->add("/admin","public/pages/00_homepage/admin.php");
+        $route->add("/inici","public/pages/00_homepage/admin.php");
 
-        // llistat complet
-        $route->add("/represaliats","public/pages/represaliats/index.php");
-        $route->add("/represaliats/fitxa/{id}","public/pages/represaliats/fitxa-persona.php");
+        // 0. Llistat complet
+        $route->add("/tots","public/pages/0_tots/index.php");
+        $route->add("/tots/fitxa/{id}","public/pages/0_tots/fitxa-persona.php");
+        $route->add("/tots/fitxa/modifica/{id}","public/pages/0_tots/modificar-fitxa-persona.php");
 
-        // afusellats
-        $route->add("/afusellats","public/pages/afusellats/index.php");
-        $route->add("/afusellats/fitxa/modifica/{id}","public/pages/afusellats/modificar-fitxa-persona.php");
+        // 1. Represaliats
+        $route->add("/represaliats","public/pages/1_represaliats/index.php");
+        $route->add("/represaliats/processats","public/pages/1_represaliats/processats_empresonats.php");
+        $route->add("/represaliats/afusellats","public/pages/1_represaliats/afusellats.php");
 
-        // exiliats
-        $route->add("/exiliats","public/pages/afusellats/index.php");
+        // 2. Exili
+        $route->add("/exiliats","public/pages/2_exili/index.php");
+        $route->add("/exiliats/exili-deportacio","public/pages/2_exili/exili_deportats.php");
+
+        // 3. Cost huma
+        $route->add("/cost-huma","public/pages/3_cost_huma/index.php");
 
 }
 
