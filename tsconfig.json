@@ -1,19 +1,28 @@
 {
   "compilerOptions": {
-    "target": "es6",                          // Elige la versión de ECMAScript a compilar (puedes usar "es6" o superior).
-    "module": "es2015", 
+    "module": "commonjs",  // O "CommonJS" si prefieres módulos CommonJS
+    "target": "ES2020",
     "moduleResolution": "node",
-    "strict": true,                            // Habilitar todas las verificaciones estrictas.
-    "allowJs": true,                   // Permite la importación de archivos .js
-    "outDir": "./dist",                        // Carpeta de salida para los archivos .js generados.
-    "rootDir": "./src",                        // Carpeta donde estarán los archivos TypeScript.
-    "esModuleInterop": true,                   // Interoperabilidad de módulos.
-    "lib": ["es2015", "dom"],             // Incluye ES2015 para soporte de Promises y otras funciones modernas.
-    "forceConsistentCasingInFileNames": true
-  },
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "allowJs": true,
+    "outDir": "./dist",
+    "rootDir": "./src/frontend/",
+    "lib": ["es2017", "dom"],
+    "forceConsistentCasingInFileNames": true,
+    "typeRoots": ["./node_modules/@types", "src/frontend/types"]
+      },
+
  "include": [
-    "src",
-    "src/types"
+    "src/frontend",
+    "src/frontend/types/global.d.ts",
+    "src/frontend/types",
   ], 
-  "exclude": ["node_modules"]                  // Excluir la carpeta node_modules.
+  "exclude": ["node_modules"],
+  "scripts": {
+      "build": "webpack --config ./node_modules/ts-node/register ./webpack.config.ts --mode production",
+      "dev": "webpack serve --config webpack.config.ts --mode development",
+      "start": "npm run dev"
+  }
 }

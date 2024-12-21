@@ -1,202 +1,105 @@
 <?php
 
+// Configuración inicial para mostrar errores en desarrollo
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-require 'vendor/autoload.php';
+// Incluir configuraciones y rutas
+require_once __DIR__ . '/src/backend/config/config.php';
+require_once __DIR__ . '/src/backend/utils/verificacioSessio.php';
+require_once __DIR__ . '/src/backend/routes/routes.php';
 
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
-$dotenv->load();
+// Obtener la ruta solicitada
+$requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
-$token = $_ENV['TOKEN'];
-define("APP_TOKEN",$token );
-
-class Route {
-    private function simpleRoute($file, $route){
-        //replacing first and last forward slashes
-        //$_REQUEST['uri'] will be empty if req uri is /
-
-        if(!empty($_REQUEST['uri'])){
-            $route = preg_replace("/(^\/)|(\/$)/","",$route);
-            $reqUri =  preg_replace("/(^\/)|(\/$)/","",$_REQUEST['uri']);
-        }else{
-            $reqUri = "/";
-        }
-
-        if($reqUri == $route){
-            $params = [];
-            include($file);
-            exit();
-
-        }
-
-    }
-
-    function add($route,$file){
-
-        //will store all the parameters value in this array
-        $params = [];
-
-        //will store all the parameters names in this array
-        $paramKey = [];
-
-        //finding if there is any {?} parameter in $route
-        preg_match_all("/(?<={).+?(?=})/", $route, $paramMatches);
-
-        //if the route does not contain any param call simpleRoute();
-        if(empty($paramMatches[0])){
-            $this->simpleRoute($file,$route);
-            return;
-        }
-
-        //setting parameters names
-        foreach($paramMatches[0] as $key){
-            $paramKey[] = $key;
-        }
-
-       
-        //replacing first and last forward slashes
-        //$_REQUEST['uri'] will be empty if req uri is /
-
-        if(!empty($_REQUEST['uri'])){
-            $route = preg_replace("/(^\/)|(\/$)/","",$route);
-            $reqUri =  preg_replace("/(^\/)|(\/$)/","",$_REQUEST['uri']);
-        }else{
-            $reqUri = "/";
-        }
-
-        //exploding route address
-        $uri = explode("/", $route);
-
-        //will store index number where {?} parameter is required in the $route 
-        $indexNum = []; 
-
-        //storing index number, where {?} parameter is required with the help of regex
-        foreach($uri as $index => $param){
-            if(preg_match("/{.*}/", $param)){
-                $indexNum[] = $index;
-            }
-        }
-
-        //exploding request uri string to array to get
-        //the exact index number value of parameter from $_REQUEST['uri']
-        $reqUri = explode("/", $reqUri);
-
-        //running for each loop to set the exact index number with reg expression
-        //this will help in matching route
-        foreach($indexNum as $key => $index){
-
-             //in case if req uri with param index is empty then return
-            //because url is not valid for this route
-            if(empty($reqUri[$index])){
-                return;
-            }
-
-            //setting params with params names
-            $params[$paramKey[$key]] = $reqUri[$index];
-
-            //this is to create a regex for comparing route address
-            $reqUri[$index] = "{.*}";
-        }
-
-        //converting array to sting
-        $reqUri = implode("/",$reqUri);
-
-        //replace all / with \/ for reg expression
-        //regex to match route is ready !
-        $reqUri = str_replace("/", '\\/', $reqUri);
-
-        //now matching route with regex
-        if(preg_match("/$reqUri/", $route))
-        {
-            include($file);
-            exit();
-
-        }
-    }
-
-        function notFound($file){
-            include($file);
-            exit();
-        }
-    }
-
-    $route = new Route(); 
-
-    $url_root = $_SERVER['DOCUMENT_ROOT'];
-    $url_server = $_SERVER['HTTP_HOST'];
-    $dev = "";
-
-    define("APP_SERVER", $url_server); 
-    define("APP_ROOT", $url_root);
-    define("APP_DEV",$dev);
-    
-    // Services
-    $route->add("/session_live","public/php/keep_session_alive.php");
-
-    // Route for paths containing '/control/'
-    require_once(APP_ROOT . APP_DEV . '/connection.php');
-    require_once(APP_ROOT . APP_DEV . '/public/php/variables.php'); 
-    require_once(APP_ROOT . APP_DEV . '/public/php/functions.php');
-
-    $route->add("/login","public/pages/00_homepage/login.php");
-    
-
-    // API SERVER 
-    $route->add("/api/auth/get","api/auth/auth.php");
-    $route->add("/api/auth/login","api/auth/login-process.php");
-
-    $route->add("/api/represaliats/get","api/represaliats/get-represaliats.php");
-
-    $route->add("/api/afusellats/get","api/afusellats/get-afusellats.php");
-    $route->add("/api/auxiliars/get","api/auxiliars/get-aux.php");
-
-    $route->add("/api/exiliats/get","api/exiliats/get-exiliats.php");
-
-    // aqui comença la lògica del sistema
-
-    session_set_cookie_params([
-        'lifetime' => 60 * 60 * 24 * 30,  // Duración de la cookie en segundos
-        'path' => '/',
-        'domain' => $url_server,  // Reemplaza con tu dominio real
-        'secure' => true,
-        'httponly' => true
-    ]);
-    session_start();
-
-    if (empty($_SESSION['user']) || !session_id()) {
-
-        header('Location: ' .$dev . '/login');
-        exit(); 
-
-    } else {
-
-        // Header (solo para las paginas)
-        require_once(APP_ROOT . APP_DEV . '/public/php/header.php');
-    
-        // 00. Homepage
-        $route->add("/","public/pages/00_homepage/admin.php");
-        $route->add("/admin","public/pages/00_homepage/admin.php");
-        $route->add("/inici","public/pages/00_homepage/admin.php");
-
-        // 0. Llistat complet
-        $route->add("/tots","public/pages/0_tots/index.php");
-        $route->add("/tots/fitxa/{id}","public/pages/0_tots/fitxa-persona.php");
-        $route->add("/tots/fitxa/modifica/{id}","public/pages/0_tots/modificar-fitxa-persona.php");
-
-        // 1. Represaliats
-        $route->add("/represaliats","public/pages/1_represaliats/index.php");
-        $route->add("/represaliats/processats","public/pages/1_represaliats/processats_empresonats.php");
-        $route->add("/represaliats/afusellats","public/pages/1_represaliats/afusellats.php");
-
-        // 2. Exili
-        $route->add("/exiliats","public/pages/2_exili/index.php");
-        $route->add("/exiliats/exili-deportacio","public/pages/2_exili/exili_deportats.php");
-
-        // 3. Cost huma
-        $route->add("/cost-huma","public/pages/3_cost_huma/index.php");
-
+// Normalizar la ruta eliminando barras finales, excepto para la raíz
+$requestUri = rtrim($requestUri, '/');
+if ($requestUri === '') {
+    $requestUri = '/';
 }
 
-?>
+// Verificar si la ruta es solo el idioma, sin "/reserva"
+if (preg_match('#^/(fr|en|es)$#', $requestUri, $matches)) {
+    $language = $matches[1];
+    // Redirigir a la página correspondiente /fr/reserva, /en/reserva, /ca/reserva
+    header("Location: /$language/reserva", true, 301);
+    exit();
+}
+
+// Detectar el idioma desde la URL (si existe en la ruta)
+preg_match('#^/(fr|en|es)/#', $requestUri, $matches);
+$language = $matches[1] ?? null;  // Si hay un idioma en la URL, lo usamos
+
+// Si no hay idioma en la URL y es la raíz (o idioma por defecto), usamos 'es'
+if (empty($language)) {
+    // Comprobamos si la ruta es la raíz (ejemplo: /reserva) y no incluye idioma
+    if (preg_match('#^/benvinguda$#', $requestUri)) {
+        $language = 'ca';  // Asumimos que si está en la raíz, el idioma es 'es'
+    } else {
+        // Si la cookie 'language' ya existe, usamos ese valor; sino, asignamos 'es' por defecto
+        $language = $_COOKIE['language'] ?? 'ca';
+    }
+}
+
+// Establecer la cookie del idioma
+setcookie('language', $language, time() + 3600 * 24 * 30, '/');  // 30 días
+$_COOKIE['language'] = $language;
+
+
+// Cargar las traducciones correspondientes al idioma
+$translations = require __DIR__ . "/src/backend/locales/{$language}.php";
+
+// Inicializar una variable para los parámetros de la ruta
+$routeParams = [];
+
+// Buscar si la ruta es una ruta dinámica y extraer los parámetros
+$routeFound = false;
+foreach ($routes as $route => $routeInfo) {
+    // Crear un patrón para la ruta dinámica reemplazando los parámetros {param} por expresiones regulares
+    $pattern = preg_replace('/\{[a-zA-Z0-9_]+\}/', '([a-zA-Z0-9_-]+)', $route);
+
+    if (preg_match('#^' . $pattern . '$#', $requestUri, $matches)) {
+        // Si encontramos la ruta, extraemos los parámetros
+        $routeFound = true;
+        $routeParams = array_slice($matches, 1);  // El primer elemento es la ruta misma, los parámetros son los siguientes
+
+        // Asignamos la vista asociada a la ruta
+        $view = $routeInfo['view'];
+        break;
+    }
+}
+
+// Si la ruta no es encontrada, asignamos la página 404
+if (!$routeFound) {
+    $view = 'public/includes/404.php';
+    $noHeaderFooter = false;
+} else {
+    // Verificar si la ruta requiere sesión
+    $needsSession = $routeInfo['needs_session'] ?? false;
+    if ($needsSession) {
+        verificarSesion(); // Llamada a la función de verificación de sesión
+    }
+
+    // Verificar si la ruta necesita verificación adicional
+    $needsVerification = $routeInfo['needs_verification'] ?? false;
+    if ($needsVerification) {
+        verificarAcceso(); // Llamada al middleware para verificar la verificación
+    }
+
+    // Determinar si la vista necesita encabezado y pie de página
+    $noHeaderFooter = $routeInfo['no_header_footer'] ?? false;
+}
+
+// Incluir encabezado y pie de página si no se especifica que no lo tenga
+if (!$noHeaderFooter) {
+    include 'public/includes/header.php';
+}
+
+// Incluir la vista asociada a la ruta
+include $view;
+
+// Incluir pie de página si no se especifica que no lo tenga
+if (!$noHeaderFooter) {
+    include 'public/includes/footer.php';
+}
