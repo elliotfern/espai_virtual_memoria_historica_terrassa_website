@@ -2,10 +2,10 @@ import { fetchData } from '../../services/api/api';
 import { Represeliat } from '../../types/types';
 import { categorias } from '../../config';
 
-export async function cargarTabla(pag: string) {
+export async function cargarTabla(pag: string, context: number) {
   let urlAjax = '';
   const devDirectory = `https://${window.location.hostname}`;
-  if (pag === 'tots') {
+  if (pag === 'tots' || pag === 'base-dades-global') {
     urlAjax = `${devDirectory}/api/represaliats/get/?type=tots`;
   } else {
     urlAjax = `${devDirectory}/api/represaliats/get/?type=totesCategories&categoria=${pag}`;
@@ -15,6 +15,14 @@ export async function cargarTabla(pag: string) {
   const rowsPerPage = 10; // Número de filas por página
   let totalPages = 1;
   let datos: Represeliat[] = [];
+
+  let webFitxa = '';
+
+  if (context === 1) {
+    webFitxa = `/fitxa/`;
+  } else {
+    webFitxa = `/gestio/tots/fitxa/`;
+  }
 
   // Función para obtener los datos
   async function obtenerDatos() {
@@ -42,7 +50,7 @@ export async function cargarTabla(pag: string) {
       // Nombre completo
       const tdNombre = document.createElement('td');
       const nombreCompleto = `${row.cognom1} ${row.cognom2 ?? ''}, ${row.nom}`;
-      tdNombre.innerHTML = `<strong><a href="/gestio/tots/fitxa/${row.id}">${nombreCompleto}</a></strong>`;
+      tdNombre.innerHTML = `<strong><a href="${webFitxa}${row.id}">${nombreCompleto}</a></strong>`;
       tr.appendChild(tdNombre);
 
       // Municipio nacimiento
@@ -82,6 +90,8 @@ export async function cargarTabla(pag: string) {
         };
         tdModificar.appendChild(btnModificar);
         tr.appendChild(tdModificar);
+      } else if (context === 1) {
+        // nada
       } else {
         // Crear la fila vacía
         const tdModificar = document.createElement('td');
@@ -101,6 +111,8 @@ export async function cargarTabla(pag: string) {
         };
         tdEliminar.appendChild(btnEliminar);
         tr.appendChild(tdEliminar);
+      } else if (context === 1) {
+        // nada
       } else {
         // Crear la fila vacía
         const tdModificar = document.createElement('td');
@@ -201,6 +213,8 @@ export async function cargarTabla(pag: string) {
         };
         tdModificar.appendChild(btnModificar);
         tr.appendChild(tdModificar);
+      } else if (context === 1) {
+        // nada
       } else {
         // Crear la fila vacía
         const tdModificar = document.createElement('td');
@@ -220,6 +234,8 @@ export async function cargarTabla(pag: string) {
         };
         tdEliminar.appendChild(btnEliminar);
         tr.appendChild(tdEliminar);
+      } else if (context === 1) {
+        // nada
       } else {
         // Crear la fila vacía
         const tdModificar = document.createElement('td');

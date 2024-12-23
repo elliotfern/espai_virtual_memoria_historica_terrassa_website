@@ -6,10 +6,16 @@ $base_routes = [
     '/' => 'public/web-publica/index.php',
     '/benvinguda' => 'public/web-publica/index.php',
     '/inici' => 'public/web-publica/inici.php',
+
+    // PAGINES ESPECIFIQUES
     '/represaliats' => 'public/web-publica/represaliats.php',
     '/exiliats' => 'public/web-publica/exiliats.php',
     '/cost-huma' => 'public/web-publica/cost-huma.php',
 
+    '/base-dades-global' => 'public/web-publica/base-dades-global.php',
+    '/fitxa/{id}' => 'public/web-publica/fitxa-represaliat.php',
+
+    // ALTRES PAGINES
     '/contacte' => 'public/web-publica/contacte.php',
     '/credits' => 'public/web-publica/credits.php',
     '/avis-legal' => 'public/web-publica/avis-legal.php',
@@ -40,6 +46,10 @@ $routes = [
     '/avis-legal' => ['view' => 'public/web-publica/avis-legal.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => true],
 
     '/politica-privacitat' => ['view' => 'public/web-publica/politica-privacitat.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => true],
+
+    '/base-dades-global' => ['view' => 'public/web-publica/base-dades-global.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => true],
+
+    '/fitxa/{id}' =>  ['view' => 'public/web-publica/fitxa-represaliat.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => true],
 
 ];
 

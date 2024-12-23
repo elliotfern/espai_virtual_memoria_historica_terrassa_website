@@ -16,9 +16,20 @@ export function initButtons(id: string): void {
     { id: 7, label: 'Altres dades', category: 'tab7' },
   ];
 
-  buttons.forEach((button) => {
+  buttons.forEach((button, index) => {
     const btn = document.createElement('button');
-    btn.className = 'tablinks';
+
+    // Asignar las clases base y las columnas de Bootstrap
+    btn.className = 'tablinks col'; // Asegura que ocupe todo el ancho
+
+    // Alternar colores: azul para índices impares, gris para índices pares
+    if (index % 2 === 0) {
+      btn.classList.add('colorBtn1'); // Azul (Bootstrap)
+    } else {
+      btn.classList.add('colorBtn2'); // Gris (Bootstrap)
+    }
+
+    // Establecer el texto y el dataset del botón
     btn.innerText = button.label;
     btn.dataset.tab = button.category;
 
