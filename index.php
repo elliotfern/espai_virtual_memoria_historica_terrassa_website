@@ -23,7 +23,7 @@ if ($requestUri === '') {
 if (preg_match('#^/(fr|en|es)$#', $requestUri, $matches)) {
     $language = $matches[1];
     // Redirigir a la página correspondiente /fr/reserva, /en/reserva, /ca/reserva
-    header("Location: /$language/reserva", true, 301);
+    header("Location: /$language/inici", true, 301);
     exit();
 }
 
@@ -34,7 +34,7 @@ $language = $matches[1] ?? null;  // Si hay un idioma en la URL, lo usamos
 // Si no hay idioma en la URL y es la raíz (o idioma por defecto), usamos 'es'
 if (empty($language)) {
     // Comprobamos si la ruta es la raíz (ejemplo: /reserva) y no incluye idioma
-    if (preg_match('#^/benvinguda$#', $requestUri)) {
+    if (preg_match('#^/inici$#', $requestUri)) {
         $language = 'ca';  // Asumimos que si está en la raíz, el idioma es 'es'
     } else {
         // Si la cookie 'language' ya existe, usamos ese valor; sino, asignamos 'es' por defecto
@@ -88,18 +88,32 @@ if (!$routeFound) {
     }
 
     // Determinar si la vista necesita encabezado y pie de página
-    $noHeaderFooter = $routeInfo['no_header_footer'] ?? false;
+    $noHeaderFooter = $routeInfo['header_footer'] ?? false;
+
+    // Determinar si la vista el menu del header
+    $headerMenu = $routeInfo['header_menu_footer'] ?? false;
+
+    $apiSenseHTML = $routeInfo['apiSenseHTML'] ?? false;
 }
 
 // Incluir encabezado y pie de página si no se especifica que no lo tenga
-if (!$noHeaderFooter) {
+if ($noHeaderFooter) {
     include 'public/includes/header.php';
-}
 
-// Incluir la vista asociada a la ruta
-include $view;
+    // Incluir la vista asociada a la ruta
+    include $view;
 
-// Incluir pie de página si no se especifica que no lo tenga
-if (!$noHeaderFooter) {
+    include 'public/includes/footer-end.php';
+} elseif ($headerMenu) {
+    include 'public/includes/header.php';
+    include 'public/includes/header-menu.php';
+
+    // Incluir la vista asociada a la ruta
+    include $view;
+
     include 'public/includes/footer.php';
+    include 'public/includes/footer-end.php';
+} elseif ($apiSenseHTML) {
+    // Incluir la vista asociada a la ruta
+    include $view;
 }

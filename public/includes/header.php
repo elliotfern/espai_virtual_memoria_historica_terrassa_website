@@ -15,11 +15,11 @@ $favicon = "/public/img/icon.png";
 
   <link rel="profile" href="http://gmpg.org/xfn/11">
   <link rel="shortcut icon" href="<?php echo $favicon; ?>">
-  <title>Espai Virtual de la Memòria Històrica de Terrassa - Gestió interna</title>
+  <title>Espai Virtual de la Memòria Històrica de Terrassa</title>
 
-
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 </head>
 
 <body>
-
-  <div class="container">

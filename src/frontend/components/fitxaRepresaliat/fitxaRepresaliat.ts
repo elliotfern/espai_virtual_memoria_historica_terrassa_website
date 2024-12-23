@@ -1,39 +1,34 @@
-import {
-  categorias,
-  convertirFecha,
-  calcularEdadAlMorir,
-} from "../../config";
-import { fetchData } from "../../services/api/api";
-import { Fitxa, FitxaJudicial } from "../../types/types";
-const dayjs = window.dayjs;
+import { categorias, convertirFecha, calcularEdadAlMorir } from '../../config';
+import { fetchData } from '../../services/api/api';
+import { Fitxa, FitxaJudicial } from '../../types/types';
 
 export function initButtons(id: string): void {
-  const contenedorBotones = document.getElementById("botons1");
+  const contenedorBotones = document.getElementById('botons1');
   if (!contenedorBotones) return; // Asegurarse de que el contenedor de botones existe
 
   const buttons: { id: number; label: string; category: string }[] = [
-    { id: 1, label: "Dades personals", category: "tab1" },
-    { id: 2, label: "Dades familiars", category: "tab2" },
-    { id: 3, label: "Dades acadèmiques i laborals", category: "tab3" },
-    { id: 4, label: "Dades polítiques i sindicals", category: "tab4" },
-    { id: 5, label: "Biografia", category: "tab5" },
-    { id: 6, label: "Fonts documentals", category: "tab6" },
-    { id: 7, label: "Altres dades", category: "tab7" },
+    { id: 1, label: 'Dades personals', category: 'tab1' },
+    { id: 2, label: 'Dades familiars', category: 'tab2' },
+    { id: 3, label: 'Dades acadèmiques i laborals', category: 'tab3' },
+    { id: 4, label: 'Dades polítiques i sindicals', category: 'tab4' },
+    { id: 5, label: 'Biografia', category: 'tab5' },
+    { id: 6, label: 'Fonts documentals', category: 'tab6' },
+    { id: 7, label: 'Altres dades', category: 'tab7' },
   ];
 
   buttons.forEach((button) => {
-    const btn = document.createElement("button");
-    btn.className = "tablinks";
+    const btn = document.createElement('button');
+    btn.className = 'tablinks';
     btn.innerText = button.label;
     btn.dataset.tab = button.category;
 
     btn.onclick = () => {
       // Eliminar la clase 'active' de todos los botones
-      const allButtons = contenedorBotones.getElementsByClassName("tablinks");
-      Array.from(allButtons).forEach((b) => b.classList.remove("active"));
+      const allButtons = contenedorBotones.getElementsByClassName('tablinks');
+      Array.from(allButtons).forEach((b) => b.classList.remove('active'));
 
       // Agregar la clase 'active' al botón actual
-      btn.classList.add("active");
+      btn.classList.add('active');
 
       // Mostrar información correspondiente
       mostrarInformacion(button.category, id, button.label); // Pasar el ID de la persona
@@ -43,7 +38,7 @@ export function initButtons(id: string): void {
   });
 
   // Cargar automáticamente el tab1 y el div de info al iniciar
-  mostrarInformacion("tab1", id,buttons[0].label);
+  mostrarInformacion('tab1', id, buttons[0].label);
 
   // Generar botones de categorías dinámicamente
   generarBotonesCategoria(id);
@@ -51,18 +46,16 @@ export function initButtons(id: string): void {
 
 // Función para generar los botones según la categoría obtenida de la API
 async function generarBotonesCategoria(idPersona: string): Promise<void> {
-  const devDirectory =  `https://${window.location.hostname}`;
+  const devDirectory = `https://${window.location.hostname}`;
   const url = `${devDirectory}/api/represaliats/get/?type=fitxa&id=${idPersona}`; // URL para obtener la información de la ficha
 
   try {
     const data = await fetchData(url); // Llamada a la API para obtener la ficha
     if (Array.isArray(data)) {
       const fitxa = data[0]; // Ahora TypeScript sabe que 'data' es un array
-      const categoriasNumericas = fitxa.categoria
-        .replace(/[{}]/g, "")
-        .split(","); // Obtener las categorías en formato de array
+      const categoriasNumericas = fitxa.categoria.replace(/[{}]/g, '').split(','); // Obtener las categorías en formato de array
 
-      const contenedorCategorias = document.getElementById("botons2");
+      const contenedorCategorias = document.getElementById('botons2');
       if (!contenedorCategorias) return;
 
       // Iterar sobre las categorías numéricas y crear botones dinámicamente
@@ -71,41 +64,35 @@ async function generarBotonesCategoria(idPersona: string): Promise<void> {
 
         if (catTitle) {
           // Solo crear botón si la categoría tiene un título definido
-          const btn = document.createElement("button");
-          btn.className = "tablinks";
+          const btn = document.createElement('button');
+          btn.className = 'tablinks';
           btn.innerText = catTitle;
           btn.dataset.tab = `categoria${catNum}`;
 
           // Asignar la función que mostrará información al hacer clic en el botón
           btn.onclick = () => {
-            const divInfo = document.getElementById("fitxa-categoria");
+            const divInfo = document.getElementById('fitxa-categoria');
             if (!divInfo) return; // Verifica si el div existe
 
             // Si el contenido ya está visible, ocultarlo y eliminar la clase 'active'
-            if (
-              divInfo.style.display === "block" &&
-              divInfo.dataset.categoria === String(catNum)
-            ) {
-              divInfo.style.display = "none";
-              btn.classList.remove("active");
+            if (divInfo.style.display === 'block' && divInfo.dataset.categoria === String(catNum)) {
+              divInfo.style.display = 'none';
+              btn.classList.remove('active');
             } else {
               // Limpiar el contenido previo y actualizar el dataset
-              divInfo.innerHTML = "";
+              divInfo.innerHTML = '';
               divInfo.dataset.categoria = String(catNum);
 
               // Eliminar la clase 'active' de todos los botones
-              const allButtons =
-                contenedorCategorias.getElementsByClassName("tablinks");
-              Array.from(allButtons).forEach((b) =>
-                b.classList.remove("active")
-              );
+              const allButtons = contenedorCategorias.getElementsByClassName('tablinks');
+              Array.from(allButtons).forEach((b) => b.classList.remove('active'));
 
               // Agregar la clase 'active' al botón actual
-              btn.classList.add("active");
+              btn.classList.add('active');
 
               // Mostrar información de la categoría
               mostrarCategoria(catNum, idPersona);
-              divInfo.style.display = "block"; // Asegúrate de mostrar el div
+              divInfo.style.display = 'block'; // Asegúrate de mostrar el div
             }
           };
 
@@ -114,10 +101,10 @@ async function generarBotonesCategoria(idPersona: string): Promise<void> {
         }
       });
     } else {
-      throw new Error("La API no devolvió un array.");
+      throw new Error('La API no devolvió un array.');
     }
   } catch (error) {
-    console.error("Error al generar botones de categoría:", error);
+    console.error('Error al generar botones de categoría:', error);
   }
 }
 
@@ -125,28 +112,22 @@ async function generarBotonesCategoria(idPersona: string): Promise<void> {
 const categoriaCache: { [key: string]: FitxaJudicial | null } = {};
 
 // Función para mostrar la información de la categoría
-async function mostrarCategoria(
-  categoriaNumerica: string,
-  idPersona: string
-): Promise<void> {
-  const divInfo = document.getElementById("fitxa-categoria");
+async function mostrarCategoria(categoriaNumerica: string, idPersona: string): Promise<void> {
+  const divInfo = document.getElementById('fitxa-categoria');
   if (!divInfo) return; // Verifica si el div existe
 
   // Si el contenido ya está visible, lo ocultamos
-  if (
-    divInfo.style.display === "block" &&
-    divInfo.dataset.categoria === String(categoriaNumerica)
-  ) {
-    divInfo.style.display = "none";
+  if (divInfo.style.display === 'block' && divInfo.dataset.categoria === String(categoriaNumerica)) {
+    divInfo.style.display = 'none';
     return;
   }
 
   // Limpiar contenido previo y actualizar el dataset
-  divInfo.innerHTML = "";
+  divInfo.innerHTML = '';
   divInfo.dataset.categoria = String(categoriaNumerica);
 
-  let urlAjax2 = "";
-  const devDirectory =  `https://${window.location.hostname}`;
+  let urlAjax2 = '';
+  const devDirectory = `https://${window.location.hostname}`;
 
   // Definir la URL de la API dependiendo de la categoría
   if (parseInt(categoriaNumerica) === 1) {
@@ -154,7 +135,7 @@ async function mostrarCategoria(
   } else if (parseInt(categoriaNumerica) === 10) {
     urlAjax2 = `${devDirectory}/api/exiliats/get?type=fitxa&id=${idPersona}`;
   } else {
-    console.error("Categoria no válida:", categoriaNumerica);
+    console.error('Categoria no válida:', categoriaNumerica);
     return;
   }
 
@@ -169,11 +150,11 @@ async function mostrarCategoria(
         categoriaCache[categoriaNumerica] = fitxa2; // Almacenar en caché
 
         // Continúa con tu código
-        const divInfo = document.getElementById("fitxa-categoria");
+        const divInfo = document.getElementById('fitxa-categoria');
         if (!divInfo) return;
 
         // Mostrar el div en caso de estar oculto
-        divInfo.style.display = "block";
+        divInfo.style.display = 'block';
 
         // Mostrar la información dependiendo de la categoría
         if (parseInt(categoriaNumerica) === 1) {
@@ -209,16 +190,16 @@ async function mostrarCategoria(
           `;
         }
       } else {
-        throw new Error("La API no devolvió un array.");
+        throw new Error('La API no devolvió un array.');
       }
     } catch (error) {
-      console.error("Error al obtener la información de la categoría:", error);
+      console.error('Error al obtener la información de la categoría:', error);
     }
   } else {
     // Si los datos ya están en caché, usarlos
     const fitxa2 = categoriaCache[categoriaNumerica];
     if (fitxa2) {
-      divInfo.style.display = "block";
+      divInfo.style.display = 'block';
       divInfo.innerHTML = `
         <h3>${categorias[categoriaNumerica]}</h3>
         <p><strong>Procés judicial:</strong> ${fitxa2.procediment_cat}</p>
@@ -255,7 +236,7 @@ let cachedData: Fitxa | null = null;
 async function mostrarInformacion(tab: string, idPersona: string, label: string): Promise<void> {
   // Si los datos aún no están en cache, realizamos la consulta a la API
 
-  const devDirectory =  `https://${window.location.hostname}`;
+  const devDirectory = `https://${window.location.hostname}`;
   if (!cachedData) {
     const url = `${devDirectory}/api/represaliats/get/?type=fitxa&id=${idPersona}`; // URL para obtener la información
     try {
@@ -264,34 +245,29 @@ async function mostrarInformacion(tab: string, idPersona: string, label: string)
       if (Array.isArray(data)) {
         cachedData = data[0] as Fitxa; // Hacer cast explícito a 'Fitxa'
       } else {
-        throw new Error("La API no devolvió un array.");
+        throw new Error('La API no devolvió un array.');
       }
     } catch (error) {
-      console.error("Error al obtener la información:", error);
+      console.error('Error al obtener la información:', error);
       return;
     }
   }
 
   // Ahora, independientemente de si los datos se obtuvieron de la API o del caché, se procede a mostrar la información
   const fitxa = cachedData; // Usamos los datos cacheados
-  const divInfo = document.getElementById("fitxa");
-  const divAdditionalInfo = document.getElementById("info");
+  const divInfo = document.getElementById('fitxa');
+  const divAdditionalInfo = document.getElementById('info');
   if (!divInfo || !divAdditionalInfo) return;
 
   // Limpiar el contenido anterior de fitxa
-  divInfo.innerHTML = "";
+  divInfo.innerHTML = '';
 
-  const sexeText =
-    parseInt(fitxa.sexe, 10) === 1
-      ? "Home"
-      : parseInt(fitxa.sexe, 10) === 2
-      ? "Dona"
-      : "desconegut";
+  const sexeText = parseInt(fitxa.sexe, 10) === 1 ? 'Home' : parseInt(fitxa.sexe, 10) === 2 ? 'Dona' : 'desconegut';
 
   const fechaNacimiento = convertirFecha(fitxa.data_naixement);
   const fechaDefuncion = convertirFecha(fitxa.data_defuncio);
 
-  let edatAlMorir = "";
+  let edatAlMorir = '';
   if (fechaNacimiento && fechaDefuncion) {
     const edat = calcularEdadAlMorir(fechaNacimiento, fechaDefuncion);
     if (edat !== null) {
@@ -299,16 +275,16 @@ async function mostrarInformacion(tab: string, idPersona: string, label: string)
     }
   }
 
-  const carrecText = fitxa.carrec_cat === null ? "Desconegut" : fitxa.carrec_cat;
-  const partitPolitic = fitxa.partit_politic === null ? "Desconegut" : fitxa.partit_politic;
-  const sindicat = fitxa.sindicat === null ? "Desconegut" : fitxa.sindicat;
+  const carrecText = fitxa.carrec_cat === null ? 'Desconegut' : fitxa.carrec_cat;
+  const partitPolitic = fitxa.partit_politic === null ? 'Desconegut' : fitxa.partit_politic;
+  const sindicat = fitxa.sindicat === null ? 'Desconegut' : fitxa.sindicat;
 
-  const dataCreacio = dayjs(fitxa.data_creacio).format("DD-MM-YYYY");
-  const dataActualitzacio = dayjs(fitxa.data_actualitzacio).format("DD-MM-YYYY");
+  const dataCreacio = fitxa.data_creacio;
+  const dataActualitzacio = fitxa.data_actualitzacio;
 
   // Dependiendo del tab, generar el contenido
   switch (tab) {
-    case "tab1":
+    case 'tab1':
       divInfo.innerHTML = `
         <h3>${label}</h3>
         <p><span class='negreta'>Nom complet:</span> ${fitxa.nom} ${fitxa.cognom1} ${fitxa.cognom2}</p>
@@ -321,7 +297,7 @@ async function mostrarInformacion(tab: string, idPersona: string, label: string)
         <p><span class='negreta'>Ciutat de defunció:</span> ${fitxa.ciutat_defuncio} (${fitxa.comarca_defuncio}, ${fitxa.provincia_defuncio}, ${fitxa.comunitat_defuncio}, ${fitxa.pais_defuncio})</p>
       `;
       break;
-    case "tab2":
+    case 'tab2':
       divInfo.innerHTML = `
         <h3>${label}</h3>
         <p><span class='negreta'>Estat civil:</span> ${fitxa.estat_civil}</p>
@@ -330,7 +306,7 @@ async function mostrarInformacion(tab: string, idPersona: string, label: string)
         <p><span class='negreta'>Noms fills:</span> ${fitxa.fills_noms}</p>
       `;
       break;
-    case "tab3":
+    case 'tab3':
       divInfo.innerHTML = `
         <h3>${label}</h3>
         <p><span class='negreta'>Estudis:</span> ${fitxa.estudi_cat}</p>
@@ -341,7 +317,7 @@ async function mostrarInformacion(tab: string, idPersona: string, label: string)
         <p><span class='negreta'>Sub-sector econòmic:</span> ${fitxa.sub_sector_cat}</p>
       `;
       break;
-    case "tab4":
+    case 'tab4':
       divInfo.innerHTML = `
         <h3>${label}</h3>
         <h5>Activitat política i sindical abans de l'esclat de la guerra:</h5>
@@ -353,14 +329,14 @@ async function mostrarInformacion(tab: string, idPersona: string, label: string)
         <p><span class='negreta'>Afiliació sindical:</span> -</p>
       `;
       break;
-    case "tab5":
+    case 'tab5':
       divInfo.innerHTML = `
         <h3>${label}</h3>
         <p><span class='negreta'>Observacions:</span> ${fitxa.observacions}</p>
         <p><span class='negreta'>Biografia:</span> ${fitxa.biografia}</p>
       `;
       break;
-    case "tab6":
+    case 'tab6':
       divInfo.innerHTML = `
         <h3>${label}</h3>
         <p><span class='negreta'>Referència arxiu:</span> ${fitxa.ref_num_arxiu}</p>
@@ -368,7 +344,7 @@ async function mostrarInformacion(tab: string, idPersona: string, label: string)
         <p><span class='negreta'>Font 2:</span> ${fitxa.font_2}</p>
       `;
       break;
-    case "tab7":
+    case 'tab7':
       divInfo.innerHTML = `
         <h3>${label}</h3>
         <span class='negreta'>Fitxa creada per: </span> ${fitxa.autorNom} (${fitxa.biografia_cat})<br>
@@ -379,7 +355,6 @@ async function mostrarInformacion(tab: string, idPersona: string, label: string)
     default:
       divInfo.innerHTML = `<p>No hay información disponible para esta categoría.</p>`;
   }
-
 
   // Aquí puedes mantener el contenido de divAdditionalInfo si es necesario
   divAdditionalInfo.innerHTML = `

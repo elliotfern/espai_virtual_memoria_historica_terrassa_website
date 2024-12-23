@@ -1,6 +1,10 @@
 <?php
 
-use Dotenv\Dotenv;
+// Configuración de cabeceras para aceptar JSON y responder JSON
+header("Content-Type: application/json");
+header("Access-Control-Allow-Origin: https://memoriaterrassa.cat");
+header("Access-Control-Allow-Methods: POST");
+
 use Firebase\JWT\JWT;
 
 $jwtSecret = $_ENV['TOKEN'];
@@ -12,28 +16,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   // Asegúrate de que las variables están definidas
   $username = isset($data['userName']) ? $data['userName'] : null;
   $password = isset($data['password']) ? $data['password'] : null;
-  $hasError = 1;
 } else {
   $response['status'] = 'error';
-
   header("Content-Type: application/json");
   echo json_encode($response);
+  exit;
 }
 
-
 global $conn;
-$data = array();
-$stmt = $conn->prepare(
-  "SELECT u.id, u.email, u.password
+/** @var PDO $conn */
+$query = "SELECT u.id, u.email, u.password
     FROM auth_users AS u
-    WHERE u.email = :email"
-);
+    WHERE u.email = :email";
+$stmt = $conn->prepare($query);
+
 $stmt->execute(
   ['email' => $username]
 );
+
 if ($stmt->rowCount() === 0) {
-  $_SESSION['message'] = array('type' => 'danger', 'msg' => 'Your account has not ben enabled.');
+  $response['status'] = 'error';
+  // Establecer el encabezado como JSON
+  header('Content-Type: application/json');
+
+  // Devolver la respuesta JSON
+  echo json_encode($response);
+  exit;
 } else {
+
   while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     $hash = $row['password'];
     $id = $row['id'];
