@@ -9,6 +9,7 @@ if (isset($_GET['type']) && $_GET['type'] === 'user' && isset($_GET['id'])) {
 
     global $conn;
     $data = array();
+    /** @var PDO $conn */
     $stmt = $conn->prepare(
         "SELECT u.nom
                     FROM auth_users AS u

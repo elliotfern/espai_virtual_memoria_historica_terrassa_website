@@ -10,8 +10,8 @@
             <thead class="table-dark">
                 <tr>
                     <th>Nom complet</th>
-                    <th>Municipi naixement</th>
-                    <th>Municipi defunció</th>
+                    <th>Dades naixement</th>
+                    <th>Dades defunció</th>
                     <th>Col·lectiu represaliat</th>
                 </tr>
             </thead>

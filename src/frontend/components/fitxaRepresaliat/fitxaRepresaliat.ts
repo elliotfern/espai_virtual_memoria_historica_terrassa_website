@@ -1,6 +1,6 @@
 import { categorias, convertirFecha, calcularEdadAlMorir } from '../../config';
 import { fetchData } from '../../services/api/api';
-import { Fitxa, FitxaJudicial } from '../../types/types';
+import { Fitxa, FitxaJudicial, FitxaFamiliars } from '../../types/types';
 
 export function initButtons(id: string): void {
   const contenedorBotones = document.getElementById('botons1');
@@ -242,6 +242,7 @@ async function mostrarCategoria(categoriaNumerica: string, idPersona: string): P
 
 // Variable para almacenar la información obtenida de la API
 let cachedData: Fitxa | null = null;
+let cachedData2: FitxaFamiliars[];
 
 // Función para mostrar la información según el tab
 async function mostrarInformacion(tab: string, idPersona: string, label: string): Promise<void> {
@@ -249,14 +250,24 @@ async function mostrarInformacion(tab: string, idPersona: string, label: string)
 
   const devDirectory = `https://${window.location.hostname}`;
   if (!cachedData) {
-    const url = `${devDirectory}/api/represaliats/get/?type=fitxa&id=${idPersona}`; // URL para obtener la información
+    const url = `${devDirectory}/api/represaliats/get/?type=fitxa&id=${idPersona}`;
+
+    const url2 = `${devDirectory}/api/represaliats/get/?type=fitxaDadesFamiliars&id=${idPersona}`; // URL para obtener la información de los familiares
+
     try {
       const data = await fetchData(url);
+      const dataFamiliars = await fetchData(url2);
 
       if (Array.isArray(data)) {
         cachedData = data[0] as Fitxa; // Hacer cast explícito a 'Fitxa'
       } else {
         throw new Error('La API no devolvió un array.');
+      }
+
+      if (Array.isArray(dataFamiliars) && dataFamiliars.length > 0) {
+        cachedData2 = dataFamiliars; // Hacer cast explícito a 'Fitxa'
+      } else {
+        console.log('No hi ha dades disponibles');
       }
     } catch (error) {
       console.error('Error al obtener la información:', error);
@@ -266,6 +277,11 @@ async function mostrarInformacion(tab: string, idPersona: string, label: string)
 
   // Ahora, independientemente de si los datos se obtuvieron de la API o del caché, se procede a mostrar la información
   const fitxa = cachedData; // Usamos los datos cacheados
+  let fitxaFam;
+  if (Array.isArray(cachedData2) && cachedData2.length > 0) {
+    fitxaFam = cachedData2;
+  }
+  // Usamos los datos cacheados
   const divInfo = document.getElementById('fitxa');
   const divAdditionalInfo = document.getElementById('info');
   if (!divInfo || !divAdditionalInfo) return;
@@ -297,29 +313,40 @@ async function mostrarInformacion(tab: string, idPersona: string, label: string)
   switch (tab) {
     case 'tab1':
       divInfo.innerHTML = `
-        <h3>${label}</h3>
-        <p><span class='negreta'>Nom complet:</span> ${fitxa.nom} ${fitxa.cognom1} ${fitxa.cognom2}</p>
+        <h3 class="titolSeccio">${label}</h3>
         <p><span class='negreta'>Sexe:</span> ${sexeText}</p>
         <p><span class='negreta'>Data de naixement:</span> ${fitxa.data_naixement}</p>
         <p><span class='negreta'>Data de defunció:</span> ${fitxa.data_defuncio}</p>
         <p><span class='negreta'>Edat:</span> ${edatAlMorir}</p>
         <p><span class='negreta'>Ciutat de naixement:</span> ${fitxa.ciutat_naixement} (${fitxa.comarca_naixement}, ${fitxa.provincia_naixement}, ${fitxa.comunitat_naixement}, ${fitxa.pais_naixement})</p>
-        <p><span class='negreta'>Lloc de residència:</span> ${fitxa.adreca}, ${fitxa.ciutat_residencia} (${fitxa.comarca_residencia}, ${fitxa.provincia_residencia} ${fitxa.comunitat_residencia}, ${fitxa.pais_residencia})</p>
+        <p><span class='negreta'>Lloc de residència:</span> ${fitxa.adreca}, ${fitxa.ciutat_residencia} (${fitxa.comarca_residencia}, ${fitxa.provincia_residencia}, ${fitxa.comunitat_residencia}, ${fitxa.pais_residencia})</p>
         <p><span class='negreta'>Ciutat de defunció:</span> ${fitxa.ciutat_defuncio} (${fitxa.comarca_defuncio}, ${fitxa.provincia_defuncio}, ${fitxa.comunitat_defuncio}, ${fitxa.pais_defuncio})</p>
+        <p><span class='negreta'Tipologia espai de defunció:</span> ${fitxa.tipologia_espai}</p>
+        <p><span class='negreta'Observacions espai de defunció:</span> ${fitxa.observacions_espai}</p>
+        <p><span class='negreta'Causa de la defunció:</span> ${fitxa.causa_defuncio}</p>
       `;
       break;
     case 'tab2':
       divInfo.innerHTML = `
-        <h3>${label}</h3>
+        <h3 class="titolSeccio">${label}</h3>
         <p><span class='negreta'>Estat civil:</span> ${fitxa.estat_civil}</p>
-        <p><span class='negreta'>Cònjuge:</span> ${fitxa.esposa}</p>
-        <p><span class='negreta'>Número de fills:</span> ${fitxa.fills_num}</p>
-        <p><span class='negreta'>Noms fills:</span> ${fitxa.fills_noms}</p>
       `;
+
+      // Recorremos el array de familiares y mostramos la información
+      if (fitxaFam) {
+        divInfo.innerHTML += `<div class="familiar"><p><span class='negreta'>Relació de familiars:</span></p>`;
+        fitxaFam.forEach((familiar) => {
+          divInfo.innerHTML += `
+        <p><span class='negreta'>${familiar.relacio_parentiu}:</span> ${familiar.nomFamiliar} ${familiar.cognomFamiliar1} 
+        ${familiar.cognomFamiliar2} ${familiar.anyNaixementFamiliar ? `(${familiar.anyNaixementFamiliar})` : ''}</p>
+      </div>`;
+        });
+      }
+
       break;
     case 'tab3':
       divInfo.innerHTML = `
-        <h3>${label}</h3>
+        <h3 class="titolSeccio">${label}</h3>
         <p><span class='negreta'>Estudis:</span> ${fitxa.estudi_cat}</p>
         <p><span class='negreta'>Ofici:</span> ${fitxa.ofici_cat}</p>
         <p><span class='negreta'>Empresa:</span> ${fitxa.empresa}</p>
@@ -330,7 +357,7 @@ async function mostrarInformacion(tab: string, idPersona: string, label: string)
       break;
     case 'tab4':
       divInfo.innerHTML = `
-        <h3>${label}</h3>
+        <h3 class="titolSeccio">${label}</h3>
         <h5>Activitat política i sindical abans de l'esclat de la guerra:</h5>
         <p><span class='negreta'>Afiliació política:</span> ${partitPolitic}</p>
         <p><span class='negreta'>Afiliació sindical:</span> ${sindicat}</p>
@@ -342,14 +369,14 @@ async function mostrarInformacion(tab: string, idPersona: string, label: string)
       break;
     case 'tab5':
       divInfo.innerHTML = `
-        <h3>${label}</h3>
+        <h3 class="titolSeccio">${label}</h3>
         <p><span class='negreta'>Observacions:</span> ${fitxa.observacions}</p>
         <p><span class='negreta'>Biografia:</span> ${fitxa.biografia}</p>
       `;
       break;
     case 'tab6':
       divInfo.innerHTML = `
-        <h3>${label}</h3>
+        <h3 class="titolSeccio">${label}</h3>
         <p><span class='negreta'>Referència arxiu:</span> ${fitxa.ref_num_arxiu}</p>
         <p><span class='negreta'>Font 1:</span> ${fitxa.font_1}</p>
         <p><span class='negreta'>Font 2:</span> ${fitxa.font_2}</p>
@@ -357,7 +384,7 @@ async function mostrarInformacion(tab: string, idPersona: string, label: string)
       break;
     case 'tab7':
       divInfo.innerHTML = `
-        <h3>${label}</h3>
+        <h3 class="titolSeccio">${label}</h3>
         <span class='negreta'>Fitxa creada per: </span> ${fitxa.autorNom} (${fitxa.biografia_cat})<br>
         <span class='negreta'>Data de creació: </span>${dataCreacio}<br>
         <span class='negreta'>Darrera actualització: </span> ${dataActualitzacio}
@@ -369,9 +396,6 @@ async function mostrarInformacion(tab: string, idPersona: string, label: string)
 
   // Aquí puedes mantener el contenido de divAdditionalInfo si es necesario
   divAdditionalInfo.innerHTML = `
-      <h4><strong>Fitxa represaliat:</strong> ${fitxa.nom} ${fitxa.cognom1} ${fitxa.cognom2}</h4>
-      <span class='negreta'>Fitxa creada per: </span> ${fitxa.autorNom} (${fitxa.biografia_cat})<br>
-      <span class='negreta'>Data de creació: </span>${dataCreacio}<br>
-      <span class='negreta'>Darrera actualització: </span> ${dataActualitzacio}
+      <h4 class="titolRepresaliat"> ${fitxa.nom} ${fitxa.cognom1} ${fitxa.cognom2}</h4>
     `; // No se limpia el contenido
 }

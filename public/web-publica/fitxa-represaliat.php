@@ -5,15 +5,11 @@ $id = $routeParams[0];
 <div class="container fitxaRepresaliat">
     <div class="tab row" id="botons1"></div>
     <div class="container" style="padding: 100px">
+        <div id="info"> </div>
 
         <div id="fitxa" class="fitxa-persona"> </div>
 
-        <div id="info"> </div>
-
-        <hr>
-
-
-        <h6><strong>Tipus de repressió:</strong></h6>
+        <h6 class="titolSeccio" style="margin-top:25px"><strong>Tipus de repressió:</strong></h6>
         <div class="tab" id="botons2"></div>
         <div id="fitxa-categoria" class="fitxa-persona" style="margin-top:50px;margin-bottom:50px;display:none"> </div>
     </div>

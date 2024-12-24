@@ -1,8 +1,8 @@
 <div class="container-fluid full-screen2 bg-image2">
-    <div class="container">
+    <div class="container my-5">
         <!-- Nuevo div con un grid 3x3 usando Bootstrap -->
-        <div class="row g-6" style="margin-bottom: 40px;">
-            <div class="col-4 square">
+        <div class="row g-4 justify-content-center" style="margin-bottom: 40px;">
+            <div class="col-12 col-md-4 col-lg-3 square">
                 <div class="card d-flex flex-row" style="padding:30px;background-color: #05050545!important">
                     <div class="card-body text-end">
                         <h5 class="card-title" style="color:white;font-size: 1.5rem;font-weight: bold;">
@@ -14,7 +14,7 @@
                 </div>
             </div>
 
-            <div class="col-4 square">
+            <div class="col-12 col-md-4 col-lg-3 square">
                 <div class="card d-flex flex-row" style="padding:30px;background-color: #05050545!important">
                     <div class="card-body text-end">
                         <h5 class="card-title" style="color:white;font-size: 1.5rem;font-weight: bold;">
@@ -26,7 +26,7 @@
                 </div>
             </div>
 
-            <div class="col-4 square">
+            <div class="col-12 col-md-4 col-lg-3 square">
                 <div class="card d-flex flex-row" style="padding:30px;background-color: #05050545!important">
                     <div class="card-body text-end">
                         <h5 class="card-title" style="color:white;font-size: 1.5rem;font-weight: bold;">
@@ -39,8 +39,8 @@
             </div>
 
         </div>
-        <div class="row g-6" style="margin-bottom: 40px;">
-            <div class="col-4 square">
+        <div class="row g-4 justify-content-center" style="margin-bottom: 40px;">
+            <div class="col-12 col-md-4 col-lg-3 square">
                 <div class="card d-flex flex-row" style="padding:30px;background-color: #05050545!important">
                     <div class="card-body text-end">
                         <h5 class="card-title" style="color:white;font-size: 1.5rem;font-weight: bold;">
@@ -53,7 +53,7 @@
                 </div>
             </div>
 
-            <div class="col-4 square">
+            <div class="col-12 col-md-4 col-lg-3 square">
                 <div class="card d-flex flex-row" style="padding:30px;background-color: #05050545!important">
                     <div class="card-body text-end">
                         <h5 class="card-title" style="color:white;font-size: 1.5rem;font-weight: bold;">
@@ -65,7 +65,7 @@
                 </div>
             </div>
 
-            <div class="col-4 square">
+            <div class="col-12 col-md-4 col-lg-3 square">
                 <div class="card d-flex flex-row" style="padding:30px;background-color: #05050545!important">
                     <div class="card-body text-end">
                         <h5 class="card-title" style="color:white;font-size: 1.5rem;font-weight: bold;">
@@ -78,8 +78,8 @@
                 </div>
             </div>
         </div>
-        <div class="row g-6" style="margin-bottom: 40px;">
-            <div class="col-4 square">
+        <div class="row g-4 justify-content-center" style="margin-bottom: 40px;">
+            <div class="col-12 col-md-4 col-lg-3 square">
                 <div class="card d-flex flex-row" style="padding:30px;background-color: #05050545!important">
                     <div class="card-body text-end">
                         <h5 class="card-title" style="color:white;font-size: 1.5rem;font-weight: bold;">
@@ -91,7 +91,7 @@
                 </div>
             </div>
 
-            <div class="col-4 square">
+            <div class="col-12 col-md-4 col-lg-3 square">
                 <div class="card d-flex flex-row" style="padding:30px;background-color: #05050545!important">
                     <div class="card-body text-end">
                         <h5 class="card-title" style="color:white;font-size: 1.5rem;font-weight: bold;">
@@ -103,7 +103,7 @@
                 </div>
             </div>
 
-            <div class="col-4 square">
+            <div class="col-12 col-md-4 col-lg-3 square">
                 <div class="card d-flex flex-row" style="padding:30px;background-color: #05050545!important">
                     <div class="card-body text-end">
                         <h5 class="card-title" style="color:white;font-size: 1.5rem;font-weight: bold;">

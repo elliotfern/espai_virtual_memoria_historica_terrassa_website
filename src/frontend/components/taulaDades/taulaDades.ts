@@ -55,13 +55,13 @@ export async function cargarTabla(pag: string, context: number) {
 
       // Municipio nacimiento
       const tdMunicipiNaixement = document.createElement('td');
-      const municipiNaixement = `${row.ciutat ?? 'Desconegut'} (${row.comarca ?? 'Desconegut'}, ${row.provincia ?? 'Desconegut'}, ${row.comunitat ?? 'Desconegut'}, ${row.pais ?? 'Desconegut'})`;
+      const municipiNaixement = `${row.data_naixement ?? 'Desconegut'} (${row.ciutat ?? 'Desconegut'})`;
       tdMunicipiNaixement.textContent = municipiNaixement;
       tr.appendChild(tdMunicipiNaixement);
 
       // Municipio defunció
       const tdMunicipiDefuncio = document.createElement('td');
-      const municipiDefuncio = `${row.ciutat2 ?? 'Desconegut'} (${row.comarca2 ?? 'Desconegut'}, ${row.provincia2 ?? 'Desconegut'}, ${row.comunitat2 ?? 'Desconegut'}, ${row.pais2 ?? 'Desconegut'})`;
+      const municipiDefuncio = `${row.data_defuncio ?? 'Desconegut'} (${row.ciutat2 ?? 'Desconegut'})`;
       tdMunicipiDefuncio.textContent = municipiDefuncio;
       tr.appendChild(tdMunicipiDefuncio);
 
@@ -144,8 +144,8 @@ export async function cargarTabla(pag: string, context: number) {
     // Filtrar los datos que coincidan con la búsqueda
     const resultadosFiltrados = datos.filter((row) => {
       const nombreCompleto = `${row.cognom1} ${row.cognom2 ?? ''}, ${row.nom}`.toLowerCase();
-      const municipiNaixement = `${row.ciutat ?? 'Desconegut'} (${row.comarca ?? 'Desconegut'}, ${row.provincia ?? 'Desconegut'}, ${row.comunitat ?? 'Desconegut'}, ${row.pais ?? 'Desconegut'})`.toLowerCase();
-      const municipiDefuncio = `${row.ciutat2 ?? 'Desconegut'} (${row.comarca2 ?? 'Desconegut'}, ${row.provincia2 ?? 'Desconegut'}, ${row.comunitat2 ?? 'Desconegut'}, ${row.pais2 ?? 'Desconegut'})`.toLowerCase();
+      const municipiNaixement = `${row.data_naixement ?? 'Desconegut'} (${row.ciutat ?? 'Desconegut'})`.toLowerCase();
+      const municipiDefuncio = `${row.data_defuncio ?? 'Desconegut'} (${row.ciutat2 ?? 'Desconegut'})`.toLowerCase();
       const categoriasIds = row.categoria ? row.categoria.replace(/[{}]/g, '').split(',').map(Number) : [];
       const collectiuTexto = categoriasIds
         .map((num) => categorias[num] || '') // Usar la constante categorias
@@ -174,18 +174,18 @@ export async function cargarTabla(pag: string, context: number) {
       // Nombre completo
       const tdNombre = document.createElement('td');
       const nombreCompleto = `${row.cognom1} ${row.cognom2 ?? ''}, ${row.nom}`;
-      tdNombre.innerHTML = `<strong><a href="/gestio/tots/fitxa/${row.id}">${nombreCompleto}</a></strong>`;
+      tdNombre.innerHTML = `<strong><a href="${window.location.origin}${webFitxa}${row.id}">${nombreCompleto}</a></strong>`;
       tr.appendChild(tdNombre);
 
       // Municipio nacimiento
       const tdMunicipiNaixement = document.createElement('td');
-      const municipiNaixement = `${row.ciutat ?? 'Desconegut'} (${row.comarca ?? 'Desconegut'}, ${row.provincia ?? 'Desconegut'}, ${row.comunitat ?? 'Desconegut'}, ${row.pais ?? 'Desconegut'})`;
+      const municipiNaixement = `${row.data_naixement ?? 'Desconegut'} (${row.ciutat ?? 'Desconegut'})`;
       tdMunicipiNaixement.textContent = municipiNaixement;
       tr.appendChild(tdMunicipiNaixement);
 
       // Municipio defunció
       const tdMunicipiDefuncio = document.createElement('td');
-      const municipiDefuncio = `${row.ciutat2 ?? 'Desconegut'} (${row.comarca2 ?? 'Desconegut'}, ${row.provincia2 ?? 'Desconegut'}, ${row.comunitat2 ?? 'Desconegut'}, ${row.pais2 ?? 'Desconegut'})`;
+      const municipiDefuncio = `${row.data_defuncio ?? 'Desconegut'} (${row.ciutat2 ?? 'Desconegut'})`;
       tdMunicipiDefuncio.textContent = municipiDefuncio;
       tr.appendChild(tdMunicipiDefuncio);
 
