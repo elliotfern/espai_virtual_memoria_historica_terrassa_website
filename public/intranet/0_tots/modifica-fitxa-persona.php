@@ -1,26 +1,121 @@
 <?php
+require_once APP_ROOT . '/public/intranet/includes/header.php';
 
-$id = $params['id'];
+$id = $routeParams[0];
 ?>
 
-<div class="container fitxa-persona">
+
+<div class="container" style="margin-bottom:50px">
   <h2 id="fitxaNomCognoms"></h2>
 
 
   <div class="tab">
+    <button class="tablinks" onclick="openTab(event, 'tab8')">Categoria repressió</button>
     <button class="tablinks" onclick="openTab(event, 'tab1')">Dades personals</button>
     <button class="tablinks" onclick="openTab(event, 'tab2')">Dades familiars</button>
-    <button class="tablinks" onclick="openTab(event, 'tab3')">Dades laborals</button>
-    <button class="tablinks" onclick="openTab(event, 'tab4')">Dades polítiques/sindicals</button>
-    <button class="tablinks" onclick="openTab(event, 'tab5')">Procés judicial</button>
-    <button class="tablinks" onclick="openTab(event, 'tab6')">Biografia/observacions</button>
-    <button class="tablinks" onclick="openTab(event, 'tab7')">Dades bibliogràfiques</button>
+    <button class="tablinks" onclick="openTab(event, 'tab3')">Dades acadèmiques i laborals</button>
+    <button class="tablinks" onclick="openTab(event, 'tab4')">Dades polítiques i sindicals</button>
+    <button class="tablinks" onclick="openTab(event, 'tab5')">Biografia</button>
+    <button class="tablinks" onclick="openTab(event, 'tab6')">Fonts documentals</button>
+    <button class="tablinks" onclick="openTab(event, 'tab7')">Altres dades</button>
   </div>
 
   <form id="personalForm">
+
+    <div id="tab8" class="tabcontent">
+      <div class="row">
+        <h3>Categoria repressió</h3>
+
+        <div class="container">
+          <div class="row">
+
+            <div class="col-md-12" style="margin-top:20px;margin-bottom:20px">
+              <h6><strong>Represaliats 1939/1979:</strong></h6>
+
+              <div id="categoria" class="d-flex flex-wrap">
+                <div class="form-check me-3">
+                  <input class="form-check-input" type="checkbox" id="categoria6" name="categoria" value="categoria6">
+                  <label class="form-check-label" for="categoria6">
+                    Processat/Empresonat
+                  </label>
+                </div>
+
+                <div class="form-check me-3">
+                  <input class="form-check-input" type="checkbox" id="categoria1" name="categoria" value="categoria1">
+                  <label class="form-check-label" for="categoria1">
+                    Afusellat
+                  </label>
+                </div>
+
+                <div class="form-check me-3">
+                  <input class="form-check-input" type="checkbox" id="categoria7" name="categoria" value="categoria7">
+                  <label class="form-check-label" for="categoria7">
+                    Depurat
+                  </label>
+                </div>
+
+              </div>
+            </div> <!-- Fi bloc repressio 1939-79 -->
+
+            <div class="col-md-12" style="margin-bottom:20px">
+              <h6><strong>Exili:</strong></h6>
+
+              <div id="categoria" class="d-flex flex-wrap">
+                <div class="form-check me-3">
+                  <input class="form-check-input" type="checkbox" id="categoria10" name="categoria" value="categoria10">
+                  <label class="form-check-label" for="categoria10">
+                    Exiliat
+                  </label>
+                </div>
+
+                <div class="form-check me-3">
+                  <input class="form-check-input" type="checkbox" id="categoria2" name="categoria" value="categoria2">
+                  <label class="form-check-label" for="categoria2">
+                    Deportat
+                  </label>
+                </div>
+
+              </div>
+            </div> <!-- Fi bloc exili -->
+
+            <div class="col-md-12" style="margin-top:20px">
+              <h6><strong>Cost humà de la guerra:</strong></h6>
+
+              <div id="categoria" class="d-flex flex-wrap">
+                <div class="form-check me-3">
+                  <input class="form-check-input" type="checkbox" id="categoria3" name="categoria" value="categoria3">
+                  <label class="form-check-label" for="categoria3">
+                    Mort o desaparegut al front
+                  </label>
+                </div>
+
+                <div class="form-check me-3">
+                  <input class="form-check-input" type="checkbox" id="categoria4" name="categoria" value="categoria4">
+                  <label class="form-check-label" for="categoria4">
+                    Mort civil
+                  </label>
+                </div>
+
+                <div class="form-check me-3">
+                  <input class="form-check-input" type="checkbox" id="categoria5" name="categoria" value="categoria5">
+                  <label class="form-check-label" for="categoria5">
+                    Represàlia republicana
+                  </label>
+                </div>
+
+              </div>
+            </div> <!-- Fi bloc cost huma -->
+
+          </div> <!-- Fi bloc row -->
+        </div> <!-- Fi bloc container -->
+
+      </div>
+    </div> <!-- Fi tab8 categoria repressio -->
+
     <div id="tab1" class="tabcontent">
       <div class="row">
         <h3>Dades personals</h3>
+
         <div class="col-md-6">
           <label for="nom" class="form-label negreta">Nom:</label>
           <input type="text" class="form-control" id="nom" name="nom" value="">
@@ -31,12 +126,30 @@ $id = $params['id'];
         </div>
 
         <div class="col-md-6">
-          <label for="cognoms" class="form-label negreta">Cognoms:</label>
-          <input type="text" class="form-control" id="cognoms" name="cognoms" value="">
+          <label for="cognom1" class="form-label negreta">Primer cognom:</label>
+          <input type="text" class="form-control" id="cognom1" name="cognom1" value="">
 
           <div class="avis-form">
             * Camp obligatori
           </div>
+        </div>
+
+        <div class="col-md-6">
+          <label for="cognom2" class="form-label negreta">Segon cognom:</label>
+          <input type="text" class="form-control" id="cognom2" name="cognom3" value="">
+
+          <div class="avis-form">
+            * Camp obligatori
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="sexe" class="form-label negreta">Gènere:</label>
+          <select class="form-select" id="sexe" name="sexe">
+            <option selected disabled>Selecciona una opció:</option>
+            <option value="1">Home</option>
+            <option value="2">Dona</option>
+          </select>
         </div>
 
         <div class="col-md-6 negreta">
@@ -45,40 +158,47 @@ $id = $params['id'];
         </div>
 
         <div class="col-md-6">
-          <label for="data_execucio" class="form-label negreta">Data de defunció (execució):</label>
-          <input type="text" class="form-control" id="data_execucio" name="data_execucio" value="">
-        </div>
-
-        <div class="col-md-6">
-          <label for="edat" class="form-label negreta">Edat:</label>
-          <input type="text" class="form-control" id="edat" name="edat" value="">
+          <label for="data_defuncio" class="form-label negreta">Data de defunció:</label>
+          <input type="text" class="form-control" id="data_defuncio" name="data_defuncio" value="">
         </div>
 
         <div class="col-md-6 negreta">
           <label for="ciutat_naixement" class="form-label">Ciutat de naixement:</label>
-          <select class="form-select" aria-label="Default select example" id="ciutat_naixement">
+          <select class="form-select" id="ciutat_naixement" value="">
+          </select>
+        </div>
+
+        <div class="col-md-6 negreta">
+          <label for="ciutat_defuncio" class="form-label">Ciutat de defuncio:</label>
+          <select class="form-select" id="ciutat_defuncio" value="">
           </select>
         </div>
 
         <div class="col-md-6 negreta">
           <label for="ciutat_residencia" class="form-label">Ciutat de residència:</label>
-          <select class="form-select" aria-label="Default select example" id="ciutat_residencia">
+          <select class="form-select" id="ciutat_residencia" value="">
           </select>
         </div>
 
         <div class="col-md-6 negreta">
-          <label for="adreca" class="form-label">Adreça:</label>
+          <label for="adreca" class="form-label">Adreça residència:</label>
           <input type="text" class="form-control" id="adreca" name="adreca" value="">
         </div>
 
         <div class="col-md-6 negreta">
-          <label for="estudi_cat" class="form-label">Estudis:</label>
-          <select class="form-select" aria-label="Default select example" id="estudi_cat">
+          <label for="tipologia_lloc_defuncio" class="form-label">Tipologia lloc de defunció:</label>
+          <select class="form-select" id="tipologia_lloc_defuncio" value="">
+          </select>
+        </div>
+
+        <div class="col-md-6 negreta">
+          <label for="causa_defuncio" class="form-label">Causa de la defunció:</label>
+          <select class="form-select" id="causa_defuncio" value="">
           </select>
         </div>
 
       </div>
-    </div>
+    </div> <!-- Fi tab1 -->
 
     <div id="tab2" class="tabcontent">
       <div class="row">
@@ -104,11 +224,17 @@ $id = $params['id'];
           <input type="text" class="form-control" id="fills_noms" name="fills_noms" value="">
         </div>
       </div>
-    </div>
+    </div> <!-- Fi tab2 -->
 
     <div id="tab3" class="tabcontent">
       <div class="row">
-        <h3>Dades laborals</h3>
+        <h3>Dades laborals i acadèmiques</h3>
+
+        <div class="col-md-6 negreta">
+          <label for="estudi_cat" class="form-label">Estudis:</label>
+          <select class="form-select" aria-label="Default select example" id="estudi_cat">
+          </select>
+        </div>
 
         <div class="col-md-6 negreta">
           <label for="ofici_cat" class="form-label">Ofici:</label>
@@ -121,7 +247,7 @@ $id = $params['id'];
           <input type="text" class="form-control" id="empresa" name="empresa" value="">
         </div>
       </div>
-    </div>
+    </div> <!-- Fi tab3 -->
 
     <div id="tab4" class="tabcontent">
       <div class="row">
@@ -139,7 +265,7 @@ $id = $params['id'];
         </div>
 
       </div>
-    </div>
+    </div> <!-- Fi tab4 -->
 
     <div id="tab5" class="tabcontent">
       <div class="row">
@@ -269,7 +395,7 @@ $id = $params['id'];
         </div>
 
       </div>
-    </div>
+    </div> <!-- Fi tab5 -->
 
     <div id="tab6" class="tabcontent">
       <div class="row">
@@ -290,7 +416,7 @@ $id = $params['id'];
         </div>
 
       </div>
-    </div>
+    </div> <!-- Fi tab6 -->
 
     <div id="tab7" class="tabcontent">
       <div class="row">
@@ -312,7 +438,8 @@ $id = $params['id'];
         </div>
 
       </div>
-    </div>
+    </div> <!-- Fi tab8 -->
+
 
     <div class="row espai-superior">
       <div class="col">
@@ -323,7 +450,7 @@ $id = $params['id'];
         <a class="btn btn-primary" role="button" aria-disabled="true">Modificar dades</a>
       </div>
     </div>
-  </form>
+  </form> <!-- Fi Form -->
 
   <script>
     function openTab(evt, tabName) {
@@ -345,7 +472,7 @@ $id = $params['id'];
     }
 
     // Mostrar la primera pestaña por defecto
-    document.getElementById("tab1").style.display = "block";
+    document.getElementById("tab8").style.display = "block";
     document.getElementsByClassName("tablinks")[0].className += " active";
   </script>
 
@@ -358,153 +485,176 @@ $id = $params['id'];
     });
 
 
-    function fitxaPersonaAfusellat(slug) {
+    async function fitxaPersonaAfusellat(slug) {
       const devDirectory = `https://${window.location.hostname}`;
-      let urlAjax = devDirectory + "/api/afusellats/get/?type=fitxa&id=" + slug;
-      $.ajax({
-        url: urlAjax,
-        method: "GET",
-        dataType: "json",
-        beforeSend: function(xhr) {
-          // Obtener el token del localStorage
-          let token = localStorage.getItem('token');
 
-          // Incluir el token en el encabezado de autorización
-          xhr.setRequestHeader('Authorization', 'Bearer ' + token);
-        },
+      let urlAjax = devDirectory + "/api/represaliats/get/?type=fitxa&id=" + slug;
 
-        success: function(data) {
-          try {
-            let fitxa = data[0];
+      // Obtener el token del localStorage
+      let token = localStorage.getItem('token');
 
-            // DOM modifications
-            document.getElementById('fitxaNomCognoms').innerHTML = "Fitxa: " + fitxa.nom + " " + fitxa.cognoms;
-
-            // function auxiliarSelect: idAux, api, elementId (form), valorText
-
-            // 01. dades personals
-            document.getElementById('nom').value = fitxa.nom;
-            document.getElementById('cognoms').value = fitxa.cognoms;
-            document.getElementById('data_naixement').value = fitxa.data_naixement;
-            auxiliarSelect(fitxa.ciutat_naixement_id, "municipis", "ciutat_naixement", "ciutat");
-            auxiliarSelect(fitxa.ciutat_residencia_id, "municipis", "ciutat_residencia", "ciutat");
-            document.getElementById('adreca').value = fitxa.adreca;
-            auxiliarSelect(fitxa.estudis_id, "estudis", "estudi_cat", "estudi_cat")
-            document.getElementById('edat').value = fitxa.edat;
-
-            // 02. dades familiars:
-            auxiliarSelect(fitxa.estat_civil_id, "estats", "estat_civil", "estat_cat");
-            document.getElementById('esposa').value = fitxa.esposa;
-            document.getElementById('fills_num').value = fitxa.fills_num;
-            document.getElementById('fills_noms').value = fitxa.fills_noms;
-
-            // 03. dades laborals:
-            auxiliarSelect(fitxa.ofici_id, "oficis", "ofici_cat", "ofici_cat");
-            document.getElementById('empresa').value = fitxa.empresa;
-
-            // 04. dades politiques
-            auxiliarSelect(fitxa.partit_politic_id, "partits", "partit_politic", "partit_politic");
-            auxiliarSelect(fitxa.sindicat_id, "sindicats", "sindicat", "sindicat");
-
-            // 05. dades proces judicial
-            document.getElementById('copia_exp').value = fitxa.copia_exp;
-            auxiliarSelect(fitxa.procediment_id, "procediments", "procediment_cat", "procediment_cat");
-
-            document.getElementById('procediment_cat').value = fitxa.procediment_cat;
-            document.getElementById('num_causa').value = fitxa.num_causa;
-            document.getElementById('data_inici_proces').value = fitxa.data_inici_proces;
-            document.getElementById('jutge_instructor').value = fitxa.jutge_instructor;
-            document.getElementById('secretari_instructor').value = fitxa.secretari_instructor;
-            auxiliarSelect(fitxa.jutjat_id, "jutjats", "jutjat", "jutjat_cat");
-            document.getElementById('any_inicial').value = fitxa.any_inicial;
-            document.getElementById('consell_guerra_data').value = fitxa.consell_guerra_data;
-            auxiliarSelect(fitxa.ciutat_consellGuerra_id, "municipis", "ciutat_consellGuerra", "ciutat");
-            document.getElementById('president_tribunal').value = fitxa.president_tribunal;
-            document.getElementById('defensor').value = fitxa.defensor;
-            document.getElementById('fiscal').value = fitxa.fiscal;
-            document.getElementById('ponent').value = fitxa.ponent;
-            document.getElementById('tribunal_vocals').value = fitxa.tribunal_vocals;
-            auxiliarSelect(fitxa.acusacio_id, "acusacions", "acusacio", "acusacio_cat");
-            auxiliarSelect(fitxa.acusacio_id2, "acusacions", "acusacio_2", "acusacio_cat");
-            document.getElementById('testimoni_acusacio').value = fitxa.testimoni_acusacio;
-            document.getElementById('sentencia_data').value = fitxa.sentencia_data;
-            auxiliarSelect(fitxa.sentencia_id, "sentencies", "sentencia", "sentencia_cat");
-            document.getElementById('data_sentencia').value = fitxa.data_sentencia;
-            document.getElementById('data_execucio').value = fitxa.data_execucio;
-            auxiliarSelect(fitxa.sentencia_id, "sentencies", "sentencia", "sentencia_cat");
-            auxiliarSelect(fitxa.espai_id, "espais", "espai", "espai_cat");
-            auxiliarSelect(fitxa.ciutat_enterrament_id, "municipis", "ciutat_enterrament", "ciutat");
-
-            // 06. dades biografiques
-            document.getElementById('familiars').value = fitxa.familiars;
-            document.getElementById('observacions').value = fitxa.observacions;
-            document.getElementById('biografia').value = fitxa.biografia;
-
-            // 07. Dades bibliografiques/arxiu
-            document.getElementById('ref_num_arxiu').value = fitxa.ref_num_arxiu;
-            document.getElementById('font_1').value = fitxa.font_1;
-            document.getElementById('font_2').value = fitxa.font_2;
-
-            /* document.getElementById("authorPhoto").src = `../../public/img/library-author/${data.nameImg}.jpg`;*/
-          } catch (error) {
-            console.error('Error al parsear JSON:', error); // Muestra el error de parsing
-          }
+      // Configurar las opciones de la solicitud
+      const options = {
+        method: 'GET',
+        headers: {
+          'Authorization': 'Bearer ' + token,
+          'Content-Type': 'application/json'
         }
-      })
+      };
+
+      try {
+        // Hacer la solicitud fetch y esperar la respuesta
+        const response = await fetch(urlAjax, options);
+
+        // Verificar si la respuesta es correcta
+        if (!response.ok) {
+          throw new Error('Error en la solicitud');
+        }
+
+        // Parsear los datos JSON
+        const fitxa = await response.json();
+
+
+        // DOM modifications
+        document.getElementById('fitxaNomCognoms').innerHTML = "Modificació de la fitxa: " + fitxa[0].nom + " " + fitxa[0].cognom1 + " " + fitxa[0].cognom2;
+
+        // function auxiliarSelect: idAux, api, elementId (form), valorText
+
+        // 08. Categoria repressio
+
+        // Procesa los datos para obtener los valores como un array
+        const selectedValues = fitxa[0].categoria.replace(/{|}/g, '').split(',');
+
+        // Selecciona automáticamente los checkboxes correspondientes
+        selectedValues.forEach(value => {
+          const checkbox = document.querySelector(`input[type="checkbox"][value="categoria${value}"]`);
+          if (checkbox) {
+            checkbox.checked = true; // Marca el checkbox
+          }
+        });
+
+        // 01. dades personals
+        document.getElementById('nom').value = fitxa[0].nom;
+        document.getElementById('cognom1').value = fitxa[0].cognom1;
+        document.getElementById('cognom2').value = fitxa[0].cognom2;
+
+        // Selecciona el elemento <select> del DOM
+        const selectElement = document.getElementById("sexe");
+
+        // Asigna el valor del select según fitxa[0].sexe
+        if (fitxa[0].sexe) {
+          selectElement.value = fitxa[0].sexe; // Cambia el valor seleccionado automáticamente
+        }
+
+        document.getElementById('data_naixement').value = fitxa[0].data_naixement;
+        document.getElementById('data_defuncio').value = fitxa[0].data_defuncio;
+
+        auxiliarSelect(fitxa[0].ciutat_naixement_id, "municipis", "ciutat_naixement", "ciutat");
+        auxiliarSelect(fitxa[0].ciutat_defuncio_id, "municipis", "ciutat_defuncio", "ciutat");
+        auxiliarSelect(fitxa[0].ciutat_residencia_id, "municipis", "ciutat_residencia", "ciutat");
+        document.getElementById('adreca').value = fitxa[0].adreca;
+
+        auxiliarSelect(fitxa[0].tipologia_lloc_defuncio_id, "tipologia_espais", "tipologia_lloc_defuncio", "tipologia_espai_ca");
+
+        auxiliarSelect(fitxa[0].causa_defuncio_id, "causa_defuncio", "causa_defuncio", "causa_defuncio_ca");
+
+        // 02. dades familiars:
+        auxiliarSelect(fitxa.estat_civil_id, "estats", "estat_civil", "estat_cat");
+        document.getElementById('esposa').value = fitxa.esposa;
+        document.getElementById('fills_num').value = fitxa.fills_num;
+        document.getElementById('fills_noms').value = fitxa.fills_noms;
+
+        // 03. dades laborals i academiques:
+        auxiliarSelect(fitxa.ofici_id, "oficis", "ofici_cat", "ofici_cat");
+        document.getElementById('empresa').value = fitxa.empresa;
+        auxiliarSelect(fitxa[0].estudis_id, "estudis", "estudi_cat", "estudi_cat")
+
+        // 04. dades politiques
+        auxiliarSelect(fitxa.partit_politic_id, "partits", "partit_politic", "partit_politic");
+        auxiliarSelect(fitxa.sindicat_id, "sindicats", "sindicat", "sindicat");
+
+        // 05. dades proces judicial
+
+        // 06. dades biografiques
+        document.getElementById('familiars').value = fitxa.familiars;
+        document.getElementById('observacions').value = fitxa.observacions;
+        document.getElementById('biografia').value = fitxa.biografia;
+
+        // 07. Dades bibliografiques/arxiu
+        document.getElementById('ref_num_arxiu').value = fitxa.ref_num_arxiu;
+        document.getElementById('font_1').value = fitxa.font_1;
+        document.getElementById('font_2').value = fitxa.font_2;
+
+        /* document.getElementById("authorPhoto").src = `../../public/img/library-author/${data.nameImg}.jpg`;*/
+      } catch (error) {
+        console.error('Error al parsear JSON:', error); // Muestra el error de parsing
+      }
     }
 
 
     // Carregar el select
-    function auxiliarSelect(idAux, api, elementId, valorText) {
+    async function auxiliarSelect(idAux, api, elementId, valorText) {
+
       const devDirectory = `https://${window.location.hostname}`;
       let urlAjax = devDirectory + "/api/auxiliars/get/?type=" + api;
-      $.ajax({
-        url: urlAjax,
-        method: "GET",
-        dataType: "json",
-        beforeSend: function(xhr) {
-          // Obtener el token del localStorage
-          let token = localStorage.getItem('token');
 
-          // Incluir el token en el encabezado de autorización
-          xhr.setRequestHeader('Authorization', 'Bearer ' + token);
-        },
+      // Obtener el token del localStorage
+      let token = localStorage.getItem('token');
 
-        success: function(data) {
-          try {
-            // Obtener la referencia al elemento select
-            var selectElement = document.getElementById(elementId);
-
-            // Limpiar el select por si ya tenía opciones anteriores
-            selectElement.innerHTML = "";
-
-            // Agregar una opción predeterminada "Selecciona una opción"
-            var defaultOption = document.createElement("option");
-            defaultOption.text = "Selecciona una opció:";
-            defaultOption.value = ""; // Valor vacío
-            selectElement.appendChild(defaultOption);
-
-            // Iterar sobre los datos obtenidos de la API
-            data.forEach(function(item) {
-              // Crear una opción y agregarla al select
-              // console.log(item.ciutat)
-              var option = document.createElement("option");
-              option.value = item.id; // Establecer el valor de la opción
-              option.text = item[valorText]; // Establecer el texto visible de la opción
-              selectElement.appendChild(option);
-            });
-
-            // Seleccionar automáticamente el valor
-            if (idAux) {
-              selectElement.value = idAux;
-            }
-
-          } catch (error) {
-            console.error('Error al parsear JSON:', error); // Muestra el error de parsing
-          }
+      // Configurar las opciones de la solicitud
+      const options = {
+        method: 'GET',
+        headers: {
+          'Authorization': 'Bearer ' + token,
+          'Content-Type': 'application/json'
         }
-      })
+      };
+
+      try {
+        // Hacer la solicitud fetch y esperar la respuesta
+        const response = await fetch(urlAjax, options);
+
+        // Verificar si la respuesta es correcta
+        if (!response.ok) {
+          throw new Error('Error en la solicitud');
+        }
+
+        // Parsear los datos JSON
+        const data = await response.json();
+
+
+        // Obtener la referencia al elemento select
+        var selectElement = document.getElementById(elementId);
+
+        // Limpiar el select por si ya tenía opciones anteriores
+        selectElement.innerHTML = "";
+
+        // Agregar una opción predeterminada "Selecciona una opción"
+        var defaultOption = document.createElement("option");
+        defaultOption.text = "Selecciona una opció:";
+        defaultOption.value = ""; // Valor vacío
+        selectElement.appendChild(defaultOption);
+
+        // Iterar sobre los datos obtenidos de la API
+        data.forEach(function(item) {
+          // Crear una opción y agregarla al select
+          // console.log(item.ciutat)
+          var option = document.createElement("option");
+          option.value = item.id; // Establecer el valor de la opción
+          option.text = item[valorText]; // Establecer el texto visible de la opción
+          selectElement.appendChild(option);
+        });
+
+        // Seleccionar automáticamente el valor
+        if (idAux) {
+          selectElement.value = idAux;
+        }
+
+      } catch (error) {
+        console.error('Error al parsear JSON:', error); // Muestra el error de parsing
+      }
     }
+
 
     function goBack() {
       window.history.back();
