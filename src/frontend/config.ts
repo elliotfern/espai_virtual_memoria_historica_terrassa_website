@@ -1,15 +1,14 @@
-
 export const categorias: { [key: string]: string } = {
-  1: "Afusellat",
-  2: "Deportat",
-  3: "Mort en combat",
-  4: "",
-  5: "",
-  6: "",
-  7: "",
-  8: "",
-  9: "",
-  10: "Exiliat",
+  1: 'Afusellat',
+  2: 'Deportat',
+  3: 'Mort en combat',
+  4: 'Mort civil',
+  5: 'Represàlia republicana',
+  6: 'Processat/Empresonat',
+  7: 'Depurat',
+  8: 'Dona',
+  9: '',
+  10: 'Exiliat',
 };
 
 // Función para convertir fecha de formato DD/MM/YYYY a YYYY-MM-DD
@@ -35,7 +34,7 @@ export function calcularEdadAlMorir(fechaNacimiento: string, fechaDefuncion: str
   const diaDefuncion = defuncion.getDate();
 
   if (mesDefuncion < mesNacimiento || (mesDefuncion === mesNacimiento && diaDefuncion < diaNacimiento)) {
-      edad--;
+    edad--;
   }
 
   return edad;
