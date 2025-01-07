@@ -111,16 +111,24 @@ if (isset($_GET['type']) && $_GET['type'] == 'tots') {
             o.id AS ofici_id, 
             dp.empresa, 
             fp.partit_politic, 
-            fp.id AS partit_politic_id, 
+            fp.id AS partit_politic_id,
+            dp.filiacio_politica,
             fs.sindicat, 
             fs.id AS sindicat_id,
+            dp.filiacio_sindical,
+            dp.activitat_durant_guerra,
             se.sector_cat,
+            se.id AS sector_id,
             sse.sub_sector_cat,
+            sse.id AS sub_sector_id,
             oc.carrec_cat,
+            oc.id AS carrecs_empresa_id,
             u.nom AS autorNom,
+            dp.autor AS autor_id,
             u.biografia_cat,
             dp.data_creacio,
-            dp.data_actualitzacio
+            dp.data_actualitzacio,
+            dp.observacions
             FROM db_dades_personals AS dp
             LEFT JOIN aux_dades_municipis AS m1 ON dp.municipi_naixement = m1.id
             LEFT JOIN aux_dades_municipis_comarca AS m1a ON m1.comarca = m1a.id
@@ -142,7 +150,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'tots') {
 
             LEFT JOIN aux_tipologia_espais AS tespai ON dp.tipologia_lloc_defuncio = tespai.id
             LEFT JOIN aux_causa_defuncio AS causaD ON dp.causa_defuncio = causaD.id
-            LEFT JOIN aux_filiacio_politica AS fp ON dp.filiciacio_politica = fp.id
+            LEFT JOIN aux_filiacio_politica AS fp ON dp.filiacio_politica = fp.id
             LEFT JOIN aux_estudis AS es ON dp.estudis = es.id
             LEFT JOIN aux_oficis AS o ON dp.ofici = o.id 
             LEFT JOIN aux_filiacio_sindical AS fs ON dp.filiacio_sindical = fs.id

@@ -5,7 +5,7 @@ $id = $routeParams[0];
 ?>
 
 
-<div class="container" style="margin-bottom:50px">
+<div class="container" style="margin-bottom:50px;border: 1px solid gray;border-radius: 10px;padding:25px;background-color:#eaeaea">
   <h2 id="fitxaNomCognoms"></h2>
 
 
@@ -85,7 +85,7 @@ $id = $routeParams[0];
                 <div class="form-check me-3">
                   <input class="form-check-input" type="checkbox" id="categoria3" name="categoria" value="categoria3">
                   <label class="form-check-label" for="categoria3">
-                    Mort o desaparegut al front
+                    Mort o desaparegut en combat
                   </label>
                 </div>
 
@@ -106,6 +106,11 @@ $id = $routeParams[0];
               </div>
             </div> <!-- Fi bloc cost huma -->
 
+            <div class="col-md-12" style="margin-top:20px">
+              <h6><strong>Modificació dades repressió:</strong></h6>
+              <div id="btnRepressio" class="d-flex flex-wrap"></div>
+            </div>
+
           </div> <!-- Fi bloc row -->
         </div> <!-- Fi bloc container -->
 
@@ -116,7 +121,7 @@ $id = $routeParams[0];
       <div class="row">
         <h3>Dades personals</h3>
 
-        <div class="col-md-6">
+        <div class="col-md-4">
           <label for="nom" class="form-label negreta">Nom:</label>
           <input type="text" class="form-control" id="nom" name="nom" value="">
 
@@ -125,7 +130,7 @@ $id = $routeParams[0];
           </div>
         </div>
 
-        <div class="col-md-6">
+        <div class="col-md-4">
           <label for="cognom1" class="form-label negreta">Primer cognom:</label>
           <input type="text" class="form-control" id="cognom1" name="cognom1" value="">
 
@@ -134,16 +139,16 @@ $id = $routeParams[0];
           </div>
         </div>
 
-        <div class="col-md-6">
+        <div class="col-md-4">
           <label for="cognom2" class="form-label negreta">Segon cognom:</label>
-          <input type="text" class="form-control" id="cognom2" name="cognom3" value="">
+          <input type="text" class="form-control" id="cognom2" name="cognom2" value="">
 
           <div class="avis-form">
             * Camp obligatori
           </div>
         </div>
 
-        <div class="mb-3">
+        <div class="col-md-4">
           <label for="sexe" class="form-label negreta">Gènere:</label>
           <select class="form-select" id="sexe" name="sexe">
             <option selected disabled>Selecciona una opció:</option>
@@ -152,47 +157,47 @@ $id = $routeParams[0];
           </select>
         </div>
 
-        <div class="col-md-6 negreta">
-          <label for="data_naixement" class="form-label">Data de naixement:</label>
+        <div class="col-md-4">
+          <label for="data_naixement" class="form-label negreta">Data de naixement:</label>
           <input type="text" class="form-control" id="data_naixement" name="data_naixement" value="">
         </div>
 
-        <div class="col-md-6">
+        <div class="col-md-4">
           <label for="data_defuncio" class="form-label negreta">Data de defunció:</label>
           <input type="text" class="form-control" id="data_defuncio" name="data_defuncio" value="">
         </div>
 
-        <div class="col-md-6 negreta">
-          <label for="ciutat_naixement" class="form-label">Ciutat de naixement:</label>
-          <select class="form-select" id="ciutat_naixement" value="">
+        <div class="col-md-4">
+          <label for="ciutat_naixement" class="form-label negreta">Ciutat de naixement:</label>
+          <select class="form-select" name="ciutat_naixement" id=",municipi_naixement" value="">
           </select>
         </div>
 
-        <div class="col-md-6 negreta">
-          <label for="ciutat_defuncio" class="form-label">Ciutat de defuncio:</label>
-          <select class="form-select" id="ciutat_defuncio" value="">
+        <div class="col-md-4">
+          <label for="ciutat_defuncio" class="form-label negreta">Ciutat de defuncio:</label>
+          <select class="form-select" name="ciutat_defuncio" id="municipi_defuncio" value="">
           </select>
         </div>
 
-        <div class="col-md-6 negreta">
-          <label for="ciutat_residencia" class="form-label">Ciutat de residència:</label>
-          <select class="form-select" id="ciutat_residencia" value="">
+        <div class="col-md-4">
+          <label for="ciutat_residencia" class="form-label negreta">Ciutat de residència:</label>
+          <select class="form-select" name="municipi_residencia" id="ciutat_residencia" value="">
           </select>
         </div>
 
-        <div class="col-md-6 negreta">
-          <label for="adreca" class="form-label">Adreça residència:</label>
+        <div class="col-md-4">
+          <label for="adreca" class="form-label negreta">Adreça residència:</label>
           <input type="text" class="form-control" id="adreca" name="adreca" value="">
         </div>
 
-        <div class="col-md-6 negreta">
-          <label for="tipologia_lloc_defuncio" class="form-label">Tipologia lloc de defunció:</label>
+        <div class="col-md-4">
+          <label for="tipologia_lloc_defuncio" class="form-label negreta">Tipologia lloc de defunció:</label>
           <select class="form-select" id="tipologia_lloc_defuncio" value="">
           </select>
         </div>
 
-        <div class="col-md-6 negreta">
-          <label for="causa_defuncio" class="form-label">Causa de la defunció:</label>
+        <div class="col-md-4">
+          <label for="causa_defuncio" class="form-label negreta">Causa de la defunció:</label>
           <select class="form-select" id="causa_defuncio" value="">
           </select>
         </div>
@@ -203,26 +208,12 @@ $id = $routeParams[0];
     <div id="tab2" class="tabcontent">
       <div class="row">
         <h3>Dades familiars</h3>
-        <div class="col-md-6">
+        <div class="col-md-4">
           <label for="estat_civil" class="form-label negreta">Estat civil:</label>
-          <select class="form-select" aria-label="Default select example" id="estat_civil">
+          <select class="form-select" id="estat_civil">
           </select>
         </div>
 
-        <div class="col-md-6 negreta">
-          <label for="esposa" class="form-label">Esposa:</label>
-          <input type="text" class="form-control" id="esposa" name="esposa" value="">
-        </div>
-
-        <div class="col-md-6 negreta">
-          <label for="fills_num" class="form-label">Número de fills:</label>
-          <input type="text" class="form-control" id="fills_num" name="fills_num" value="">
-        </div>
-
-        <div class="col-md-6 negreta">
-          <label for="fills_noms" class="form-label">Noms dels fills:</label>
-          <input type="text" class="form-control" id="fills_noms" name="fills_noms" value="">
-        </div>
       </div>
     </div> <!-- Fi tab2 -->
 
@@ -230,38 +221,75 @@ $id = $routeParams[0];
       <div class="row">
         <h3>Dades laborals i acadèmiques</h3>
 
-        <div class="col-md-6 negreta">
-          <label for="estudi_cat" class="form-label">Estudis:</label>
-          <select class="form-select" aria-label="Default select example" id="estudi_cat">
+        <div class="col-md-4">
+          <label for="estudi_cat" class="form-label negreta">Estudis:</label>
+          <select class="form-select" id="estudi_cat" value="">
           </select>
         </div>
 
-        <div class="col-md-6 negreta">
-          <label for="ofici_cat" class="form-label">Ofici:</label>
-          <select class="form-select" aria-label="Default select example" id="ofici_cat">
+        <div class="col-md-4">
+          <label for="ofici" class="form-label negreta">Ofici:</label>
+          <select class="form-select" id="ofici" value="">
           </select>
         </div>
 
-        <div class="col-md-6 negreta">
-          <label for="empresa" class="form-label">Empresa:</label>
+        <div class="col-md-4">
+          <label for="empresa" class="form-label negreta">Empresa:</label>
           <input type="text" class="form-control" id="empresa" name="empresa" value="">
         </div>
+
+        <div class="col-md-4">
+          <label for="carrec_empresa" class="form-label negreta">Càrrec empresa:</label>
+          <select class="form-select" id="carrec_empresa" value="">
+          </select>
+        </div>
+
+        <div class="col-md-4">
+          <label for="sector" class="form-label negreta">Sector econòmic:</label>
+          <select class="form-select" id="sector" value="">
+          </select>
+        </div>
+
+        <div class="col-md-4">
+          <label for="sub_sector" class="form-label negreta">Sub-sector econòmic:</label>
+          <select class="form-select" id="sub_sector" value="">
+          </select>
+        </div>
+
       </div>
     </div> <!-- Fi tab3 -->
 
     <div id="tab4" class="tabcontent">
       <div class="row">
         <h3>Dades polítiques/sindicals</h3>
-        <div class="col-md-6 negreta">
-          <label for="partit_politic" class="form-label">Partit polític:</label>
-          <select class="form-select" aria-label="Default select example" id="partit_politic">
-          </select>
+
+        <div class="container">
+          <div class="row">
+            <div class="col-md-12" style="margin-top:20px;margin-bottom:20px">
+              <h6><strong>Filiació política:</strong></h6>
+
+              <div id="partit_politic" class="d-flex flex-wrap">
+
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div class="col-md-6 negreta">
-          <label for="sindicat" class="form-label">Sindicat:</label>
-          <select class="form-select" aria-label="Default select example" id="sindicat">
-          </select>
+        <div class="container">
+          <div class="row">
+            <div class="col-md-12" style="margin-top:20px;margin-bottom:20px">
+              <h6><strong>Filiació sindical:</strong></h6>
+
+              <div id="sindicat" class="d-flex flex-wrap">
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <label for="activitat_durant_guerra" class="form-label negreta">Activitat política/sindical durant la guerra:</label>
+          <textarea class="form-control" id="activitat_durant_guerra" name="activitat_durant_guerra" value="" rows="3"></textarea>
         </div>
 
       </div>
@@ -269,185 +297,56 @@ $id = $routeParams[0];
 
     <div id="tab5" class="tabcontent">
       <div class="row">
-        <h3>Procés judicial</h3>
+        <h3>Biografia</h3>
 
-        <div class="col-md-6">
-          <label for="copia_exp" class="form-label negreta">Còpia expedient:</label>
-          <input type="text" class="form-control" id="copia_exp" name="copia_exp" value="">
-        </div>
-
-        <div class="col-md-6">
-          <label for="procediment_cat" class="form-label negreta">Tipus de procediment:</label>
-          <select class="form-select" aria-label="Default select example" id="procediment_cat">
-          </select>
-        </div>
-
-        <div class="col-md-6">
-          <label for="num_causa" class="form-label negreta">Número de causa:</label>
-          <input type="text" class="form-control" id="num_causa" name="num_causa" value="">
-        </div>
-
-        <div class="col-md-6">
-          <label for="data_inici_proces" class="form-label negreta">Data inici del procés judicial:</label>
-          <input type="text" class="form-control" id="data_inici_proces" name="data_inici_proces" value="">
-        </div>
-
-        <div class="col-md-6">
-          <label for="jutjat" class="form-label negreta">Jutjat:</label>
-          <select class="form-select" aria-label="Default select example" id="jutjat">
-          </select>
-        </div>
-
-        <div class="col-md-6">
-          <label for="jutge_instructor" class="form-label negreta">Jutge instructor:</label>
-          <input type="text" class="form-control" id="jutge_instructor" name="jutge_instructor" value="">
-        </div>
-
-        <div class="col-md-6">
-          <label for="secretari_instructor" class="form-label negreta">Secretari instructor:</label>
-          <input type="text" class="form-control" id="secretari_instructor" name="secretari_instructor" value="">
-        </div>
-
-        <div class="col-md-6">
-          <label for="any_inicial" class="form-label negreta">Any inici procés:</label>
-          <input type="text" class="form-control" id="any_inicial" name="any_inicial" value="">
-        </div>
-
-        <div class="col-md-6">
-          <label for="consell_guerra_data" class="form-label negreta">Data Consell de guerra:</label>
-          <input type="text" class="form-control" id="consell_guerra_data" name="consell_guerra_data" value="">
-        </div>
-
-        <div class="col-md-6">
-          <label for="ciutat_consellGuerra" class="form-label negreta">Ciutat Consell de guerra:</label>
-          <select class="form-select" aria-label="Default select example" id="ciutat_consellGuerra">
-          </select>
-        </div>
-
-        <div class="col-md-6">
-          <label for="president_tribunal" class="form-label negreta">President Tribunal:</label>
-          <input type="text" class="form-control" id="president_tribunal" name="president_tribunal" value="">
-        </div>
-
-        <div class="col-md-6">
-          <label for="defensor" class="form-label negreta">Defensor:</label>
-          <input type="text" class="form-control" id="defensor" name="defensor" value="">
-        </div>
-
-        <div class="col-md-6">
-          <label for="fiscal" class="form-label negreta">Fiscal:</label>
-          <input type="text" class="form-control" id="fiscal" name="fiscal" value="">
-        </div>
-
-        <div class="col-md-6">
-          <label for="ponent" class="form-label negreta">Ponent:</label>
-          <input type="text" class="form-control" id="ponent" name="ponent" value="">
-        </div>
-
-        <div class="col-md-6">
-          <label for="tribunal_vocals" class="form-label negreta">Vocals del tribunal:</label>
-          <input type="text" class="form-control" id="tribunal_vocals" name="tribunal_vocals" value="">
-        </div>
-
-        <div class="col-md-6">
-          <label for="acusacio" class="form-label negreta">Acusació 1:</label>
-          <select class="form-select" aria-label="Default select example" id="acusacio">
-          </select>
-        </div>
-
-        <div class="col-md-6">
-          <label for="acusacio_2" class="form-label negreta">Acusació 2:</label>
-          <select class="form-select" aria-label="Default select example" id="acusacio_2">
-          </select>
-        </div>
-
-        <div class="col-md-6">
-          <label for="testimoni_acusacio" class="form-label negreta">Testimoni acusació:</label>
-          <input type="text" class="form-control" id="testimoni_acusacio" name="testimoni_acusacio" value="">
-        </div>
-
-        <div class="col-md-6">
-          <label for="sentencia_data" class="form-label negreta">Data sentència:</label>
-          <input type="text" class="form-control" id="sentencia_data" name="sentencia_data" value="">
-        </div>
-
-        <div class="col-md-6">
-          <label for="sentencia" class="form-label negreta">Sentència:</label>
-          <select class="form-select" aria-label="Default select example" id="sentencia">
-          </select>
-        </div>
-
-        <div class="col-md-6">
-          <label for="data_sentencia" class="form-label negreta">Any sentència:</label>
-          <input type="text" class="form-control" id="data_sentencia" name="data_sentencia" value="">
-        </div>
-
-        <div class="col-md-6">
-          <label for="ciutat_enterrament" class="form-label negreta">Ciutat enterrament:</label>
-          <select class="form-select" aria-label="Default select example" id="ciutat_enterrament">
-          </select>
-        </div>
-
-        <div class="col-md-6">
-          <label for="espai" class="form-label negreta">Lloc d'excecució:</label>
-          <select class="form-select" aria-label="Default select example" id="espai">
-          </select>
-        </div>
 
       </div>
     </div> <!-- Fi tab5 -->
 
     <div id="tab6" class="tabcontent">
       <div class="row">
-        <h3>Biografia/observacions</h3>
-        <div class="col-md-6">
-          <label for="observacions" class="form-label negreta">Observacions:</label>
-          <input type="text" class="form-control" id="observacions" name="observacions" value="">
-        </div>
+        <h3>Fonts documentals</h3>
 
-        <div class="col-md-6">
-          <label for="familiars" class="form-label negreta">Familiars:</label>
-          <input type="text" class="form-control" id="familiars" name="familiars" value="">
-        </div>
-
-        <div class="col-md-12">
-          <label for="biografia" class="form-label negreta">Biografia:</label>
-          <textarea class="form-control" id="biografia" name="biografia" rows="20"></textarea>
-        </div>
 
       </div>
     </div> <!-- Fi tab6 -->
 
     <div id="tab7" class="tabcontent">
       <div class="row">
-        <h3>Dades bibliografiques i d'arxiu</h3>
+        <h3>Altres dades</h3>
 
-        <div class="col-md-6">
-          <label for="ref_num_arxiu" class="form-label negreta">Referència número arxiu:</label>
-          <input type="text" class="form-control" id="ref_num_arxiu" name="ref_num_arxiu" value="">
+        <div class="col-md-12">
+          <label for="observacions" class="form-label negreta">Observacions:</label>
+          <textarea class="form-control" id="observacions" name="observacions" value="" rows="3"></textarea>
         </div>
 
-        <div class="col-md-6">
-          <label for="font_1" class="form-label negreta">Font 1:</label>
-          <input type="text" class="form-control" id="font_1" name="font_1" value="">
+        <div class="col-md-4">
+          <label for="autor" class="form-label negreta">Autor fitxa:</label>
+          <select class="form-select" id="autor" value="">
+          </select>
         </div>
 
-        <div class="col-md-6">
-          <label for="font_2" class="form-label negreta">Font 2:</label>
-          <input type="text" class="form-control" id="font_2" name="font_2" value="">
+        <div class="col-md-4">
+          <label for="data_creacio" class="form-label negreta">Data de creació de la fitxa:</label>
+          <div id="data_creacio"></div>
+        </div>
+
+        <div class="col-md-4">
+          <label for="data_actualitzacio" class="form-label negreta">Data d'actualització:</label>
+          <div id="data_actualitzacio"></div>
         </div>
 
       </div>
-    </div> <!-- Fi tab8 -->
+    </div> <!-- Fi tab7 -->
 
 
-    <div class="row espai-superior">
+    <div class="row espai-superior" style="border-top: 1px solid black;padding-top:25px">
       <div class="col">
-        <a class="btn btn-secondary" role="button" aria-disabled="true" onclick="goBack()">Tornar enrere</a>
+        <a class="btn btn-secondary" role="button" aria-disabled="true" onclick="goBack()">Cancel·lar els canvis</a>
       </div>
 
       <div class="col d-flex justify-content-end align-items-center">
-        <a class="btn btn-primary" role="button" aria-disabled="true">Modificar dades</a>
+        <a class="btn btn-primary" role="button" aria-disabled="true" id="btnModificarDadesPersonals">Modificar dades</a>
       </div>
     </div>
   </form> <!-- Fi Form -->
@@ -521,7 +420,18 @@ $id = $routeParams[0];
         // function auxiliarSelect: idAux, api, elementId (form), valorText
 
         // 08. Categoria repressio
-
+        const categorias = {
+          1: 'Afusellat',
+          2: 'Deportat',
+          3: 'Mort en combat',
+          4: 'Mort civil',
+          5: 'Represàlia republicana',
+          6: 'Processat/Empresonat',
+          7: 'Depurat',
+          8: 'Dona',
+          9: '',
+          10: 'Exiliat',
+        };
         // Procesa los datos para obtener los valores como un array
         const selectedValues = fitxa[0].categoria.replace(/{|}/g, '').split(',');
 
@@ -532,6 +442,8 @@ $id = $routeParams[0];
             checkbox.checked = true; // Marca el checkbox
           }
         });
+
+        generarLinks(selectedValues, categorias, slug);
 
         // 01. dades personals
         document.getElementById('nom').value = fitxa[0].nom;
@@ -559,31 +471,41 @@ $id = $routeParams[0];
         auxiliarSelect(fitxa[0].causa_defuncio_id, "causa_defuncio", "causa_defuncio", "causa_defuncio_ca");
 
         // 02. dades familiars:
-        auxiliarSelect(fitxa.estat_civil_id, "estats", "estat_civil", "estat_cat");
-        document.getElementById('esposa').value = fitxa.esposa;
-        document.getElementById('fills_num').value = fitxa.fills_num;
-        document.getElementById('fills_noms').value = fitxa.fills_noms;
+        auxiliarSelect(fitxa[0].estat_civil_id, "estats", "estat_civil", "estat_cat");
+
+        // cridar a funcio per carregar API amb les dades familiars
 
         // 03. dades laborals i academiques:
-        auxiliarSelect(fitxa.ofici_id, "oficis", "ofici_cat", "ofici_cat");
-        document.getElementById('empresa').value = fitxa.empresa;
         auxiliarSelect(fitxa[0].estudis_id, "estudis", "estudi_cat", "estudi_cat")
+        auxiliarSelect(fitxa[0].ofici_id, "oficis", "ofici", "ofici_cat");
+
+        auxiliarSelect(fitxa[0].sector_id, "sectors_economics", "sector", "sector_cat");
+
+        auxiliarSelect(fitxa[0].sub_sector_id, "sub_sectors_economics", "sub_sector", "sub_sector_cat");
+
+
+        document.getElementById('empresa').value = fitxa[0].empresa;
+        auxiliarSelect(fitxa[0].carrecs_empresa_id, "carrecs_empresa", "carrec_empresa", "carrec_cat");
 
         // 04. dades politiques
-        auxiliarSelect(fitxa.partit_politic_id, "partits", "partit_politic", "partit_politic");
-        auxiliarSelect(fitxa.sindicat_id, "sindicats", "sindicat", "sindicat");
+        fetchCheckBoxs(fitxa[0].filiacio_politica, "partits", "partit_politic");
 
-        // 05. dades proces judicial
+        fetchCheckBoxs(fitxa[0].filiacio_sindical, "sindicats", "sindicat");
+        document.getElementById('activitat_durant_guerra').value = fitxa[0].activitat_durant_guerra;
 
-        // 06. dades biografiques
-        document.getElementById('familiars').value = fitxa.familiars;
-        document.getElementById('observacions').value = fitxa.observacions;
-        document.getElementById('biografia').value = fitxa.biografia;
+        // 05. Biografia
 
-        // 07. Dades bibliografiques/arxiu
-        document.getElementById('ref_num_arxiu').value = fitxa.ref_num_arxiu;
-        document.getElementById('font_1').value = fitxa.font_1;
-        document.getElementById('font_2').value = fitxa.font_2;
+        // 06. Fonts documentals
+
+        // 07. Altres dades
+        document.getElementById('observacions').value = fitxa[0].observacions;
+        auxiliarSelect(fitxa[0].autor_id, "autors_fitxa", "autor", "nom");
+
+        const dataCreacio = cambiarFormatoFecha(fitxa[0].data_creacio);
+        const dataActualitzacio = cambiarFormatoFecha(fitxa[0].data_actualitzacio);
+
+        document.getElementById('data_creacio').innerText = dataCreacio;
+        document.getElementById('data_actualitzacio').innerText = dataActualitzacio;
 
         /* document.getElementById("authorPhoto").src = `../../public/img/library-author/${data.nameImg}.jpg`;*/
       } catch (error) {
@@ -591,6 +513,10 @@ $id = $routeParams[0];
       }
     }
 
+    function cambiarFormatoFecha(fechaOriginal) {
+      const [year, month, day] = fechaOriginal.split("-");
+      return `${day}/${month}/${year}`;
+    }
 
     // Carregar el select
     async function auxiliarSelect(idAux, api, elementId, valorText) {
@@ -659,6 +585,145 @@ $id = $routeParams[0];
     function goBack() {
       window.history.back();
     }
-  </script>
 
+
+    // Función para generar los botones como enlaces
+    function generarLinks(selectedValues, categorias, userId) {
+      const container = document.getElementById("btnRepressio");
+
+      // Limpiar el contenedor
+      container.innerHTML = "";
+
+      // Recorrer los valores seleccionados
+      selectedValues.forEach((id) => {
+        const categoriaId = parseInt(id.trim()); // Convertir a número
+        const titulo = categorias[categoriaId]; // Obtener el título correspondiente
+
+        if (titulo) {
+          // Crear enlace
+          const link = document.createElement("a");
+          link.href = `https://memoriaterrassa.cat/gestio/tots/fitxa/categoria-${categoriaId}/modifica/${userId}`;
+          link.className = "btn btn-success m-2"; // Clases Bootstrap para estilo
+          link.textContent = titulo; // Asignar texto del enlace
+          link.target = "_blank"; // Abrir en una nueva pestaña o ventana
+
+          // Añadir el enlace al contenedor
+          container.appendChild(link);
+        }
+      });
+    }
+
+    // Función para obtener el listado de partidos políticos desde la API
+    const fetchCheckBoxs = async (elementId, apiUrl, nodeElement) => {
+      try {
+        // Simulamos una llamada a la API
+        const devDirectory = `https://${window.location.hostname}`;
+        let urlAjax = devDirectory + "/api/auxiliars/get/?type=" + apiUrl;
+
+        const response = await fetch(urlAjax); // Cambia la URL a tu API real
+        const data = await response.json(); // Convertimos la respuesta en JSON
+
+        // Generar los checkboxes
+        renderCheckboxes(data, elementId, nodeElement);
+
+      } catch (error) {
+        console.error('Error al obtener los partidos políticos:', error);
+      }
+    };
+
+    // Función para generar los checkboxes dinámicamente
+    const renderCheckboxes = (data, elementId, nodeElement) => {
+      const container = document.getElementById(nodeElement);
+
+      // Si partitId es una cadena con formato '{10}' o '{1,2,3}', limpiamos y convertimos a array de números
+      const selectedPartits = elementId
+        .replace(/[{}]/g, '') // Eliminamos los caracteres '{' y '}'
+        .split(',') // Dividimos por coma para obtener un array de strings
+        .map(id => parseInt(id, 10)); // Convertimos cada elemento a un número entero
+
+      let checkbox = "";
+      let nomElement = "";
+      if (nodeElement === "partit_politic") {
+        checkbox = "partido";
+        nomElement = "partit_politic";
+      } else if (nodeElement === "sindicat") {
+        checkbox = "sindicat";
+        nomElement = "sindicat";
+      }
+
+      data.forEach((partido) => {
+        // Crear el checkbox
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.id = `${checkbox}-${partido.id}`;
+        checkbox.value = partido.id; // El valor debe ser el id del partido
+        checkbox.className = 'form-check-input me-2'; // Clases de Bootstrap para estilo
+
+        // Verificamos si el partido está seleccionado
+        if (selectedPartits.includes(partido.id)) {
+          checkbox.checked = true; // Marcamos el checkbox si el partido está en el listado de seleccionados
+        }
+
+        // Crear la etiqueta
+        const label = document.createElement('label');
+        label.htmlFor = `${checkbox}-${partido.id}`; // Corregimos el id de la etiqueta
+        label.textContent = partido[nomElement]; // Nombre del partido
+        label.className = 'form-check-label me-4'; // Clases para espaciado
+
+        // Agrupar checkbox y label en un div
+        const div = document.createElement('div');
+        div.className = 'd-flex align-items-center'; // Clases de alineación
+        div.appendChild(checkbox);
+        div.appendChild(label);
+
+        // Añadir al contenedor principal
+        container.appendChild(div);
+      });
+    };
+
+    // Función para manejar el envío del formulario
+    function enviarFormulario(event) {
+      event.preventDefault(); // Prevenir que el formulario se envíe por defecto
+
+      // Obtener el formulario
+      const form = document.getElementById("personalForm");
+
+      // Crear un objeto para almacenar los datos del formulario
+      const formData = new FormData(form);
+
+      // Seleccionar todos los checkboxes con el nombre "categoria" que están seleccionados
+      const checkboxesSeleccionados = Array.from(document.querySelectorAll('input[name="categoria"]:checked'));
+
+      // Extraer los valores de los checkboxes seleccionados y convertirlos en números
+      const categoriaIds = checkboxesSeleccionados.map(checkbox => parseInt(checkbox.value.replace('categoria', '')));
+
+      // Añadir el array de categorias al FormData (convertido a string JSON)
+      formData.append("categorias", JSON.stringify(categoriaIds));
+
+
+      // Preparar la solicitud AJAX
+      const xhr = new XMLHttpRequest();
+      xhr.open("POST", "ruta_del_backend.php", true); // Cambia "ruta_del_backend.php" por la URL de tu backend
+
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+          if (xhr.status === 200) {
+            // Éxito: manejar la respuesta del servidor
+            console.log("Respuesta del servidor:", xhr.responseText);
+
+          } else {
+            // Error
+            console.error("Error al enviar el formulario.");
+
+          }
+        }
+      };
+
+      // Enviar los datos del formulario
+      xhr.send(formData);
+    }
+
+    // Asignar la función al botón del formulario
+    document.getElementById("btnModificarDadesPersonals").addEventListener("click", enviarFormulario);
+  </script>
 </div>
