@@ -58,7 +58,7 @@ export function initButtons(id: string): void {
 // Función para generar los botones según la categoría obtenida de la API
 async function generarBotonesCategoria(idPersona: string): Promise<void> {
   const devDirectory = `https://${window.location.hostname}`;
-  const url = `${devDirectory}/api/represaliats/get/?type=fitxa&id=${idPersona}`; // URL para obtener la información de la ficha
+  const url = `${devDirectory}/api/dades_personals/get/?type=fitxa&id=${idPersona}`; // URL para obtener la información de la ficha
 
   try {
     const data = await fetchData(url); // Llamada a la API para obtener la ficha
@@ -250,9 +250,9 @@ async function mostrarInformacion(tab: string, idPersona: string, label: string)
 
   const devDirectory = `https://${window.location.hostname}`;
   if (!cachedData) {
-    const url = `${devDirectory}/api/represaliats/get/?type=fitxa&id=${idPersona}`;
+    const url = `${devDirectory}/api/dades_personals/get/?type=fitxa&id=${idPersona}`;
 
-    const url2 = `${devDirectory}/api/represaliats/get/?type=fitxaDadesFamiliars&id=${idPersona}`; // URL para obtener la información de los familiares
+    const url2 = `${devDirectory}/api/dades_personals/get/?type=fitxaDadesFamiliars&id=${idPersona}`; // URL para obtener la información de los familiares
 
     try {
       const data = await fetchData(url);

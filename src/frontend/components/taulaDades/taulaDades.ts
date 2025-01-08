@@ -6,9 +6,9 @@ export async function cargarTabla(pag: string, context: number) {
   let urlAjax = '';
   const devDirectory = `https://${window.location.hostname}`;
   if (pag === 'tots' || pag === 'base-dades-global') {
-    urlAjax = `${devDirectory}/api/represaliats/get/?type=tots`;
+    urlAjax = `${devDirectory}/api/dades_personals/get/?type=tots`;
   } else {
-    urlAjax = `${devDirectory}/api/represaliats/get/?type=totesCategories&categoria=${pag}`;
+    urlAjax = `${devDirectory}/api/dades_personals/get/?type=totesCategories&categoria=${pag}`;
   }
 
   let currentPage = 1;

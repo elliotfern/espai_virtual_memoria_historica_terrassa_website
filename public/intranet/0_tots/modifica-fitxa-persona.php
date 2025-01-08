@@ -4,8 +4,18 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
 $id = $routeParams[0];
 ?>
 
-
 <div class="container" style="margin-bottom:50px;border: 1px solid gray;border-radius: 10px;padding:25px;background-color:#eaeaea">
+
+  <div class="alert alert-success" role="alert" id="okMessage" style="display:none">
+    <h4 class="alert-heading"><strong>Modificació correcte!</strong></h4>
+    <div id="okText"></div>
+  </div>
+
+  <div class="alert alert-danger" role="alert" id="errMessage" style="display:none">
+    <h4 class="alert-heading"><strong>Error en les dades!</strong></h4>
+    <div id="errText"></div>
+  </div>
+
   <h2 id="fitxaNomCognoms"></h2>
 
 
@@ -21,13 +31,16 @@ $id = $routeParams[0];
   </div>
 
   <form id="personalForm">
-
     <div id="tab8" class="tabcontent">
       <div class="row">
         <h3>Categoria repressió</h3>
 
         <div class="container">
           <div class="row">
+
+            <div class="avis-form">
+              * Has d'escollir almenys 1 categoria.
+            </div>
 
             <div class="col-md-12" style="margin-top:20px;margin-bottom:20px">
               <h6><strong>Represaliats 1939/1979:</strong></h6>
@@ -102,7 +115,6 @@ $id = $routeParams[0];
                     Represàlia republicana
                   </label>
                 </div>
-
               </div>
             </div> <!-- Fi bloc cost huma -->
 
@@ -169,19 +181,19 @@ $id = $routeParams[0];
 
         <div class="col-md-4">
           <label for="ciutat_naixement" class="form-label negreta">Ciutat de naixement:</label>
-          <select class="form-select" name="ciutat_naixement" id=",municipi_naixement" value="">
+          <select class="form-select" name="municipi_naixement" id="municipi_naixement" value="">
           </select>
         </div>
 
         <div class="col-md-4">
           <label for="ciutat_defuncio" class="form-label negreta">Ciutat de defuncio:</label>
-          <select class="form-select" name="ciutat_defuncio" id="municipi_defuncio" value="">
+          <select class="form-select" name="municipi_defuncio" id="municipi_defuncio" value="">
           </select>
         </div>
 
         <div class="col-md-4">
           <label for="ciutat_residencia" class="form-label negreta">Ciutat de residència:</label>
-          <select class="form-select" name="municipi_residencia" id="ciutat_residencia" value="">
+          <select class="form-select" name="municipi_residencia" id="municipi_residencia" value="">
           </select>
         </div>
 
@@ -192,13 +204,13 @@ $id = $routeParams[0];
 
         <div class="col-md-4">
           <label for="tipologia_lloc_defuncio" class="form-label negreta">Tipologia lloc de defunció:</label>
-          <select class="form-select" id="tipologia_lloc_defuncio" value="">
+          <select class="form-select" id="tipologia_lloc_defuncio" value="" name="tipologia_lloc_defuncio">
           </select>
         </div>
 
         <div class="col-md-4">
           <label for="causa_defuncio" class="form-label negreta">Causa de la defunció:</label>
-          <select class="form-select" id="causa_defuncio" value="">
+          <select class="form-select" id="causa_defuncio" value="" name="causa_defuncio">
           </select>
         </div>
 
@@ -210,7 +222,7 @@ $id = $routeParams[0];
         <h3>Dades familiars</h3>
         <div class="col-md-4">
           <label for="estat_civil" class="form-label negreta">Estat civil:</label>
-          <select class="form-select" id="estat_civil">
+          <select class="form-select" id="estat_civil" name="estat_civil" value="">
           </select>
         </div>
 
@@ -222,14 +234,14 @@ $id = $routeParams[0];
         <h3>Dades laborals i acadèmiques</h3>
 
         <div class="col-md-4">
-          <label for="estudi_cat" class="form-label negreta">Estudis:</label>
-          <select class="form-select" id="estudi_cat" value="">
+          <label for="estudis" class="form-label negreta">Estudis:</label>
+          <select class="form-select" id="estudis" value="" name="estudis">
           </select>
         </div>
 
         <div class="col-md-4">
           <label for="ofici" class="form-label negreta">Ofici:</label>
-          <select class="form-select" id="ofici" value="">
+          <select class="form-select" id="ofici" value="" name="ofici">
           </select>
         </div>
 
@@ -240,19 +252,19 @@ $id = $routeParams[0];
 
         <div class="col-md-4">
           <label for="carrec_empresa" class="form-label negreta">Càrrec empresa:</label>
-          <select class="form-select" id="carrec_empresa" value="">
+          <select class="form-select" id="carrec_empresa" value="" name="carrec_empresa">
           </select>
         </div>
 
         <div class="col-md-4">
           <label for="sector" class="form-label negreta">Sector econòmic:</label>
-          <select class="form-select" id="sector" value="">
+          <select class="form-select" id="sector" value="" name="sector">
           </select>
         </div>
 
         <div class="col-md-4">
           <label for="sub_sector" class="form-label negreta">Sub-sector econòmic:</label>
-          <select class="form-select" id="sub_sector" value="">
+          <select class="form-select" id="sub_sector" value="" name="sub_sector">
           </select>
         </div>
 
@@ -322,7 +334,7 @@ $id = $routeParams[0];
 
         <div class="col-md-4">
           <label for="autor" class="form-label negreta">Autor fitxa:</label>
-          <select class="form-select" id="autor" value="">
+          <select class="form-select" id="autor" value="" name="autor">
           </select>
         </div>
 
@@ -339,6 +351,7 @@ $id = $routeParams[0];
       </div>
     </div> <!-- Fi tab7 -->
 
+    <input type="hidden" name="id" id="id" value="<?php echo $id; ?>">
 
     <div class="row espai-superior" style="border-top: 1px solid black;padding-top:25px">
       <div class="col">
@@ -346,7 +359,7 @@ $id = $routeParams[0];
       </div>
 
       <div class="col d-flex justify-content-end align-items-center">
-        <a class="btn btn-primary" role="button" aria-disabled="true" id="btnModificarDadesPersonals">Modificar dades</a>
+        <a class="btn btn-primary" role="button" aria-disabled="true" id="btnModificarDadesPersonals" onclick="enviarFormulario(event)">Modificar dades</a>
       </div>
     </div>
   </form> <!-- Fi Form -->
@@ -387,7 +400,7 @@ $id = $routeParams[0];
     async function fitxaPersonaAfusellat(slug) {
       const devDirectory = `https://${window.location.hostname}`;
 
-      let urlAjax = devDirectory + "/api/represaliats/get/?type=fitxa&id=" + slug;
+      let urlAjax = devDirectory + "/api/dades_personals/get/?type=fitxa&id=" + slug;
 
       // Obtener el token del localStorage
       let token = localStorage.getItem('token');
@@ -461,9 +474,9 @@ $id = $routeParams[0];
         document.getElementById('data_naixement').value = fitxa[0].data_naixement;
         document.getElementById('data_defuncio').value = fitxa[0].data_defuncio;
 
-        auxiliarSelect(fitxa[0].ciutat_naixement_id, "municipis", "ciutat_naixement", "ciutat");
-        auxiliarSelect(fitxa[0].ciutat_defuncio_id, "municipis", "ciutat_defuncio", "ciutat");
-        auxiliarSelect(fitxa[0].ciutat_residencia_id, "municipis", "ciutat_residencia", "ciutat");
+        auxiliarSelect(fitxa[0].ciutat_naixement_id, "municipis", "municipi_naixement", "ciutat");
+        auxiliarSelect(fitxa[0].ciutat_defuncio_id, "municipis", "municipi_defuncio", "ciutat");
+        auxiliarSelect(fitxa[0].ciutat_residencia_id, "municipis", "municipi_residencia", "ciutat");
         document.getElementById('adreca').value = fitxa[0].adreca;
 
         auxiliarSelect(fitxa[0].tipologia_lloc_defuncio_id, "tipologia_espais", "tipologia_lloc_defuncio", "tipologia_espai_ca");
@@ -476,7 +489,7 @@ $id = $routeParams[0];
         // cridar a funcio per carregar API amb les dades familiars
 
         // 03. dades laborals i academiques:
-        auxiliarSelect(fitxa[0].estudis_id, "estudis", "estudi_cat", "estudi_cat")
+        auxiliarSelect(fitxa[0].estudis_id, "estudis", "estudis", "estudi_cat")
         auxiliarSelect(fitxa[0].ofici_id, "oficis", "ofici", "ofici_cat");
 
         auxiliarSelect(fitxa[0].sector_id, "sectors_economics", "sector", "sector_cat");
@@ -602,7 +615,8 @@ $id = $routeParams[0];
         if (titulo) {
           // Crear enlace
           const link = document.createElement("a");
-          link.href = `https://memoriaterrassa.cat/gestio/tots/fitxa/categoria-${categoriaId}/modifica/${userId}`;
+          const devDirectory = `https://${window.location.hostname}`;
+          link.href = `${devDirectory}/gestio/tots/fitxa/categoria/modifica/${categoriaId}/${userId}`;
           link.className = "btn btn-success m-2"; // Clases Bootstrap para estilo
           link.textContent = titulo; // Asignar texto del enlace
           link.target = "_blank"; // Abrir en una nueva pestaña o ventana
@@ -641,13 +655,13 @@ $id = $routeParams[0];
         .split(',') // Dividimos por coma para obtener un array de strings
         .map(id => parseInt(id, 10)); // Convertimos cada elemento a un número entero
 
-      let checkbox = "";
+      let checkboxName = "";
       let nomElement = "";
       if (nodeElement === "partit_politic") {
-        checkbox = "partido";
+        checkboxName = "partido";
         nomElement = "partit_politic";
       } else if (nodeElement === "sindicat") {
-        checkbox = "sindicat";
+        checkboxName = "sindicat";
         nomElement = "sindicat";
       }
 
@@ -655,7 +669,8 @@ $id = $routeParams[0];
         // Crear el checkbox
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
-        checkbox.id = `${checkbox}-${partido.id}`;
+        checkbox.id = `${checkboxName}-${partido.id}`;
+        checkbox.name = `${checkboxName}`;
         checkbox.value = partido.id; // El valor debe ser el id del partido
         checkbox.className = 'form-check-input me-2'; // Clases de Bootstrap para estilo
 
@@ -666,7 +681,7 @@ $id = $routeParams[0];
 
         // Crear la etiqueta
         const label = document.createElement('label');
-        label.htmlFor = `${checkbox}-${partido.id}`; // Corregimos el id de la etiqueta
+        label.htmlFor = `${checkbox.id}`; // Corregimos el id de la etiqueta
         label.textContent = partido[nomElement]; // Nombre del partido
         label.className = 'form-check-label me-4'; // Clases para espaciado
 
@@ -682,48 +697,109 @@ $id = $routeParams[0];
     };
 
     // Función para manejar el envío del formulario
-    function enviarFormulario(event) {
+    async function enviarFormulario(event) {
       event.preventDefault(); // Prevenir que el formulario se envíe por defecto
-
       // Obtener el formulario
       const form = document.getElementById("personalForm");
 
       // Crear un objeto para almacenar los datos del formulario
-      const formData = new FormData(form);
+      const formData = {};
+      new FormData(form).forEach((value, key) => {
+        formData[key] = value; // Agregar cada campo al objeto formData
+      });
 
-      // Seleccionar todos los checkboxes con el nombre "categoria" que están seleccionados
-      const checkboxesSeleccionados = Array.from(document.querySelectorAll('input[name="categoria"]:checked'));
+      // Obtener todos los checkboxes seleccionados de la categoría
+      const selectedCategories = [];
+      document.querySelectorAll('input[name="categoria"]:checked').forEach((checkbox) => {
+        selectedCategories.push(checkbox.value.replace('categoria', ''));
+      });
 
-      // Extraer los valores de los checkboxes seleccionados y convertirlos en números
-      const categoriaIds = checkboxesSeleccionados.map(checkbox => parseInt(checkbox.value.replace('categoria', '')));
+      // Convertir el array de categorías seleccionadas al formato {1,2,3}
+      formData['categoria'] = `{${selectedCategories.join(',')}}`;
 
-      // Añadir el array de categorias al FormData (convertido a string JSON)
-      formData.append("categorias", JSON.stringify(categoriaIds));
+      // Obtener todos los checkboxes seleccionados del partit
+      const selectedPartits = [];
+      document.querySelectorAll('input[name="partido"]:checked').forEach((checkbox) => {
+        selectedPartits.push(checkbox.value.replace('partido', ''));
+      });
 
+      // Convertir el array de categorías seleccionadas al formato {1,2,3}
+      formData['filiacio_politica'] = `{${selectedPartits.join(',')}}`;
 
-      // Preparar la solicitud AJAX
-      const xhr = new XMLHttpRequest();
-      xhr.open("POST", "ruta_del_backend.php", true); // Cambia "ruta_del_backend.php" por la URL de tu backend
+      // Obtener todos los checkboxes seleccionados del sindicat
+      const selectedSindicats = [];
+      document.querySelectorAll('input[name="sindicat"]:checked').forEach((checkbox) => {
+        selectedSindicats.push(checkbox.value.replace('sindicat', ''));
+      });
 
-      xhr.onreadystatechange = function() {
-        if (xhr.readyState === XMLHttpRequest.DONE) {
-          if (xhr.status === 200) {
-            // Éxito: manejar la respuesta del servidor
-            console.log("Respuesta del servidor:", xhr.responseText);
+      // Convertir el array de categorías seleccionadas al formato {1,2,3}
+      formData['filiacio_sindical'] = `{${selectedSindicats.join(',')}}`;
 
+      // Obtener el user_id de localStorage
+      const userId = localStorage.getItem('user_id');
+      if (userId) {
+        formData['userId'] = userId;
+      }
+
+      // Convertir los datos del formulario a JSON
+      const jsonData = JSON.stringify(formData);
+      const devDirectory = `https://${window.location.hostname}`;
+      let urlAjax = devDirectory + "/api/dades_personals/put";
+
+      try {
+        // Hacer la solicitud con fetch y await
+        const response = await fetch(urlAjax, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json", // Indicar que se envía JSON
+          },
+          body: jsonData, // Enviar los datos en formato JSON
+        });
+
+        // Procesar la respuesta como texto o JSON
+        const data = await response.json();
+
+        // Verificar si la solicitud fue exitosa
+        if (response.ok) {
+          // Verificar si el status es success
+          if (data.status === "success") {
+            // Cambiar el display del div con id 'OkMessage' a 'block'
+            const okMessageDiv = document.getElementById("okMessage");
+            const okTextDiv = document.getElementById("okText");
+
+            if (okMessageDiv && okTextDiv) {
+              okMessageDiv.style.display = "block";
+              okTextDiv.textContent = data.message || "Les dades s'han actualitzat correctament!";
+            }
           } else {
-            // Error
-            console.error("Error al enviar el formulario.");
-
+            // Si el status no es success, manejar el error aquí
+            const errMessageDiv = document.getElementById("errMessage");
+            const errTextDiv = document.getElementById("errText");
+            if (errMessageDiv && errTextDiv) {
+              errMessageDiv.style.display = "block";
+              errTextDiv.innerHTML = data.errors.join('<br>') || "S'ha produit un error a la base de dades.";
+            }
+          }
+        } else {
+          // Manejar errores de respuesta del servidor
+          const errMessageDiv = document.getElementById("errMessage");
+          const errTextDiv = document.getElementById("errText");
+          if (errMessageDiv && errTextDiv) {
+            errMessageDiv.style.display = "block";
+            errTextDiv.innerHTML = data.errors.join('<br>') || "S'ha produit un error a la base de dades.";
           }
         }
-      };
+      } catch (error) {
+        // Manejar errores de red
+        const errMessageDiv = document.getElementById("errMessage");
+        const errTextDiv = document.getElementById("errText");
+        if (errMessageDiv && errTextDiv) {
+          errMessageDiv.style.display = "block";
+          errTextDiv.innerHTML = error.join('<br>') || "S'ha produit un error a la xarxa.";
+        }
+        console.error("Error:", error);
+      }
 
-      // Enviar los datos del formulario
-      xhr.send(formData);
     }
-
-    // Asignar la función al botón del formulario
-    document.getElementById("btnModificarDadesPersonals").addEventListener("click", enviarFormulario);
   </script>
 </div>

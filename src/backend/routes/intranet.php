@@ -13,7 +13,15 @@ $base_routes = [
     // 0. Llistat complet
     '/gestio/tots' => 'public/intranet/0_tots/index.php',
     '/gestio/tots/fitxa/{id}' => 'public/intranet/0_tots/fitxa-persona.php',
+
+    // MODIFICA FITXA PERSONA
     '/gestio/tots/fitxa/modifica/{id}' => 'public/intranet/0_tots/modifica-fitxa-persona.php',
+
+    // INSEREIX NOVA FITXA PERSONA
+    '/gestio/tots/fitxa-nova' => 'public/intranet/0_tots/nova-fitxa-persona.php',
+
+    // MODIFICA REPRESSIO
+    '/gestio/tots/fitxa/categoria/modifica/{categoriaId}/{id}' => 'public/intranet/0_tots/modifica-fitxa-repressio.php',
 
     // 1. Represaliats
     '/gestio/represaliats' => 'public/intranet/1_represaliats/index.php',
@@ -45,6 +53,12 @@ $routes = [
     '/gestio/tots/fitxa/{id}' => ['view' => 'public/intranet/0_tots/fitxa-persona.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
 
     '/gestio/tots/fitxa/modifica/{id}' => ['view' => 'public/intranet/0_tots/modifica-fitxa-persona.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
+
+    '/gestio/tots/fitxa-nova' => ['view' => 'public/intranet/0_tots/nova-fitxa-persona.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
+
+    // Modificacio fitxes
+
+    '/gestio/tots/fitxa/categoria/modifica/{categoriaId}/{id}' => ['view' => 'public/intranet/0_tots/modifica-fitxa-repressio.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
 
 ];
 

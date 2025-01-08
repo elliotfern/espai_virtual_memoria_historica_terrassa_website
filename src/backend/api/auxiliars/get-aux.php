@@ -1,7 +1,6 @@
 <?php
 
-// Token válido, puedes continuar con el código para obtener los datos del usuario
-
+// DB_DADES PERSONALS
 // 1) Llistat municipis
 // ruta GET => "/api/auxiliars/get/?type=municipis"
 if (isset($_GET['type']) && $_GET['type'] == 'municipis') {
@@ -9,8 +8,8 @@ if (isset($_GET['type']) && $_GET['type'] == 'municipis') {
     $data = array();
     $stmt = $conn->prepare(
         "SELECT m.id, m.ciutat
-            FROM aux_dades_municipis AS m
-            ORDER BY m.ciutat ASC"
+        FROM aux_dades_municipis AS m
+        ORDER BY m.ciutat ASC"
     );
     $stmt->execute();
     if ($stmt->rowCount() === 0) echo ('No rows');
@@ -26,8 +25,8 @@ if (isset($_GET['type']) && $_GET['type'] == 'municipis') {
     $data = array();
     $stmt = $conn->prepare(
         "SELECT e.id, e.estudi_cat
-            FROM aux_estudis AS e
-            ORDER BY e.estudi_cat ASC"
+        FROM aux_estudis AS e
+        ORDER BY e.estudi_cat ASC"
     );
     $stmt->execute();
     if ($stmt->rowCount() === 0) echo ('No rows');
@@ -43,8 +42,8 @@ if (isset($_GET['type']) && $_GET['type'] == 'municipis') {
     $data = array();
     $stmt = $conn->prepare(
         "SELECT o.id, o.ofici_cat
-                FROM aux_oficis AS o
-                ORDER BY o.ofici_cat ASC"
+            FROM aux_oficis AS o
+            ORDER BY o.ofici_cat ASC"
     );
     $stmt->execute();
     if ($stmt->rowCount() === 0) echo ('No rows');
@@ -61,8 +60,8 @@ if (isset($_GET['type']) && $_GET['type'] == 'municipis') {
     $data = array();
     $stmt = $conn->prepare(
         "SELECT se.id, se.sector_cat
-                FROM aux_sector_economic AS se
-                ORDER BY se.sector_cat ASC"
+            FROM aux_sector_economic AS se
+            ORDER BY se.sector_cat ASC"
     );
     $stmt->execute();
     if ($stmt->rowCount() === 0) echo ('No rows');
@@ -78,8 +77,8 @@ if (isset($_GET['type']) && $_GET['type'] == 'municipis') {
     $data = array();
     $stmt = $conn->prepare(
         "SELECT sse.id, sse.sub_sector_cat
-                FROM aux_sub_sector_economic AS sse
-                ORDER BY sse.sub_sector_cat ASC"
+            FROM aux_sub_sector_economic AS sse
+            ORDER BY sse.sub_sector_cat ASC"
     );
     $stmt->execute();
     if ($stmt->rowCount() === 0) echo ('No rows');
@@ -95,8 +94,8 @@ if (isset($_GET['type']) && $_GET['type'] == 'municipis') {
     $data = array();
     $stmt = $conn->prepare(
         "SELECT ce.id, ce.carrec_cat
-                FROM aux_ofici_carrec AS ce
-                ORDER BY ce.carrec_cat ASC"
+            FROM aux_ofici_carrec AS ce
+            ORDER BY ce.carrec_cat ASC"
     );
     $stmt->execute();
     if ($stmt->rowCount() === 0) echo ('No rows');
@@ -112,8 +111,8 @@ if (isset($_GET['type']) && $_GET['type'] == 'municipis') {
     $data = array();
     $stmt = $conn->prepare(
         "SELECT ec.id, ec.estat_cat
-                FROM aux_estat_civil AS ec
-                ORDER BY ec.estat_cat ASC"
+            FROM aux_estat_civil AS ec
+            ORDER BY ec.estat_cat ASC"
     );
     $stmt->execute();
     if ($stmt->rowCount() === 0) echo ('No rows');
@@ -129,8 +128,8 @@ if (isset($_GET['type']) && $_GET['type'] == 'municipis') {
     $data = array();
     $stmt = $conn->prepare(
         "SELECT p.id, p.partit_politic
-                FROM aux_filiacio_politica AS p
-                ORDER BY p.partit_politic ASC"
+            FROM aux_filiacio_politica AS p
+            ORDER BY p.partit_politic ASC"
     );
     $stmt->execute();
     if ($stmt->rowCount() === 0) echo ('No rows');
@@ -146,8 +145,8 @@ if (isset($_GET['type']) && $_GET['type'] == 'municipis') {
     $data = array();
     $stmt = $conn->prepare(
         "SELECT s.id, s.sindicat
-                FROM aux_filiacio_sindical AS s
-                ORDER BY s.sindicat ASC"
+            FROM aux_filiacio_sindical AS s
+            ORDER BY s.sindicat ASC"
     );
     $stmt->execute();
     if ($stmt->rowCount() === 0) echo ('No rows');
@@ -156,75 +155,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'municipis') {
     }
     echo json_encode($data);
 
-    // 7) Llistat procediments judicials
-    // ruta GET => "/api/auxiliars/get/?type=procediments"
-} elseif (isset($_GET['type']) && $_GET['type'] == 'procediments') {
-    global $conn;
-    $data = array();
-    $stmt = $conn->prepare(
-        "SELECT pj.id, pj.procediment_cat
-                FROM aux_procediment_judicial AS pj
-                ORDER BY pj.procediment_cat ASC"
-    );
-    $stmt->execute();
-    if ($stmt->rowCount() === 0) echo ('No rows');
-    while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $data[] = $users;
-    }
-    echo json_encode($data);
-
-    // 7) Llistat jutjats
-    // ruta GET => "/api/auxiliars/get/?type=jutjats"
-} elseif (isset($_GET['type']) && $_GET['type'] == 'jutjats') {
-    global $conn;
-    $data = array();
-    $stmt = $conn->prepare(
-        "SELECT j.id, j.jutjat_cat
-                FROM aux_jutjats AS j
-                ORDER BY j.jutjat_cat ASC"
-    );
-    $stmt->execute();
-    if ($stmt->rowCount() === 0) echo ('No rows');
-    while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $data[] = $users;
-    }
-    echo json_encode($data);
-
-    // 8) Llistat tipus acusacions
-    // ruta GET => "/api/auxiliars/get/?type=acusacions"
-} elseif (isset($_GET['type']) && $_GET['type'] == 'acusacions') {
-    global $conn;
-    $data = array();
-    $stmt = $conn->prepare(
-        "SELECT sa.id, sa.acusacio_cat
-                FROM aux_acusacions AS sa
-                ORDER BY sa.acusacio_cat ASC"
-    );
-    $stmt->execute();
-    if ($stmt->rowCount() === 0) echo ('No rows');
-    while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $data[] = $users;
-    }
-    echo json_encode($data);
-
-    // 9) Llistat sentencies
-    // ruta GET => "/api/auxiliars/get/?type=sentencies"
-} elseif (isset($_GET['type']) && $_GET['type'] == 'sentencies') {
-    global $conn;
-    $data = array();
-    $stmt = $conn->prepare(
-        "SELECT sen.id, sen.sentencia_cat
-                FROM aux_sentencies AS sen
-                ORDER BY sen.sentencia_cat ASC"
-    );
-    $stmt->execute();
-    if ($stmt->rowCount() === 0) echo ('No rows');
-    while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $data[] = $users;
-    }
-    echo json_encode($data);
-
-    // 9) Llistat espais
+    // 7) Llistat espais
     // ruta GET => "/api/auxiliars/get/?type=espais"
 } elseif (isset($_GET['type']) && $_GET['type'] == 'espais') {
     global $conn;
@@ -284,6 +215,127 @@ if (isset($_GET['type']) && $_GET['type'] == 'municipis') {
         "SELECT u.id, u.nom
                 FROM auth_users AS u
                 ORDER BY u.nom ASC"
+    );
+    $stmt->execute();
+    if ($stmt->rowCount() === 0) echo ('No rows');
+    while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $data[] = $users;
+    }
+    echo json_encode($data);
+
+    // DB_AFUSELLATS
+    // 7) Llistat procediments judicials
+    // ruta GET => "/api/auxiliars/get/?type=procediments"
+} elseif (isset($_GET['type']) && $_GET['type'] == 'procediments') {
+    global $conn;
+    $data = array();
+    $stmt = $conn->prepare(
+        "SELECT pj.id, pj.procediment_cat
+                    FROM aux_procediment_judicial AS pj
+                    ORDER BY pj.procediment_cat ASC"
+    );
+    $stmt->execute();
+    if ($stmt->rowCount() === 0) echo ('No rows');
+    while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $data[] = $users;
+    }
+    echo json_encode($data);
+
+    // 7) Llistat jutjats
+    // ruta GET => "/api/auxiliars/get/?type=jutjats"
+} elseif (isset($_GET['type']) && $_GET['type'] == 'jutjats') {
+    global $conn;
+    $data = array();
+    $stmt = $conn->prepare(
+        "SELECT j.id, j.jutjat_cat
+                    FROM aux_jutjats AS j
+                    ORDER BY j.jutjat_cat ASC"
+    );
+    $stmt->execute();
+    if ($stmt->rowCount() === 0) echo ('No rows');
+    while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $data[] = $users;
+    }
+    echo json_encode($data);
+
+    // 8) Llistat tipus acusacions
+    // ruta GET => "/api/auxiliars/get/?type=acusacions"
+} elseif (isset($_GET['type']) && $_GET['type'] == 'acusacions') {
+    global $conn;
+    $data = array();
+    $stmt = $conn->prepare(
+        "SELECT sa.id, sa.acusacio_cat
+                    FROM aux_acusacions AS sa
+                    ORDER BY sa.acusacio_cat ASC"
+    );
+    $stmt->execute();
+    if ($stmt->rowCount() === 0) echo ('No rows');
+    while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $data[] = $users;
+    }
+    echo json_encode($data);
+
+    // 9) Llistat sentencies
+    // ruta GET => "/api/auxiliars/get/?type=sentencies"
+} elseif (isset($_GET['type']) && $_GET['type'] == 'sentencies') {
+    global $conn;
+    $data = array();
+    $stmt = $conn->prepare(
+        "SELECT sen.id, sen.sentencia_cat
+                    FROM aux_sentencies AS sen
+                    ORDER BY sen.sentencia_cat ASC"
+    );
+    $stmt->execute();
+    if ($stmt->rowCount() === 0) echo ('No rows');
+    while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $data[] = $users;
+    }
+    echo json_encode($data);
+
+    // DB COST HUMA
+    // 1) LListat condició civil/militar
+    // ruta GET => "/api/auxiliars/get/?type=condicio_civil_militar"
+} elseif (isset($_GET['type']) && $_GET['type'] == 'condicio_civil_militar') {
+    global $conn;
+    $data = array();
+    $stmt = $conn->prepare(
+        "SELECT c.id, c.condicio_ca
+        FROM aux_condicio AS c
+        ORDER BY c.condicio_ca ASC"
+    );
+    $stmt->execute();
+    if ($stmt->rowCount() === 0) echo ('No rows');
+    while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $data[] = $users;
+    }
+    echo json_encode($data);
+
+    // 2) Llistat bàndols guerra
+    // ruta GET => "/api/auxiliars/get/?type=bandols_guerra"
+} elseif (isset($_GET['type']) && $_GET['type'] == 'bandols_guerra') {
+    global $conn;
+    $data = array();
+    $stmt = $conn->prepare(
+        "SELECT b.id, b.bandol_ca
+        FROM aux_bandol AS b
+        ORDER BY b.bandol_ca ASC"
+    );
+    $stmt->execute();
+    if ($stmt->rowCount() === 0) echo ('No rows');
+    while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $data[] = $users;
+    }
+    echo json_encode($data);
+
+    // 2) Llistat cossos militats
+    // ruta GET => "/api/auxiliars/get/?type=cossos_militars"
+} elseif (isset($_GET['type']) && $_GET['type'] == 'cossos_militars') {
+    global $conn;
+    $data = array();
+    $stmt = $conn->prepare(
+        "SELECT c.id, c.cos_militar_ca 
+        FROM aux_cossos_militars AS c
+        ORDER BY c.cos_militar_ca ASC"
     );
     $stmt->execute();
     if ($stmt->rowCount() === 0) echo ('No rows');
