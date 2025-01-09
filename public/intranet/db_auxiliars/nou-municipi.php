@@ -1,22 +1,8 @@
 <?php
+require_once APP_ROOT . '/public/intranet/includes/header.php';
 
-$condicio_id = "";
-$bandol_id = "";
-$any_lleva = "";
-$unitat_inicial = "";
-$cos_id = "";
-$unitat_final = "";
-$graduacio_final = "";
-$periple_militar = "";
-$circumstancia_mort_id = "";
-$desaparegut_data = "";
-$desaparegut_lloc_id = "";
-$desaparegut_data_aparicio = "";
-$desaparegut_lloc_aparicio_id = "";
-$idPersona;
-$nom = "";
-$cognom1 = "";
-$cognom2 = "";
+$ciutat_old = "";
+$btnModificar = 2;
 
 // Verificar si la ID existe en la base de datos
 $query = "SELECT 
@@ -44,7 +30,7 @@ $stmt = $conn->prepare($query);
 $stmt->bindParam(':idPersona', $idPersona, PDO::PARAM_INT);
 $stmt->execute();
 
-$btnModificar = "";
+
 if ($stmt->rowCount() > 0) {
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         // Acceder a las variables de la consulta
@@ -94,11 +80,10 @@ if ($stmt->rowCount() > 0) {
 ?>
 
 <div class="container" style="margin-bottom:50px;border: 1px solid gray;border-radius: 10px;padding:25px;background-color:#eaeaea">
-    <form id="mortCombatForm">
+    <form id="municipiForm">
         <div class="container">
             <div class="row">
-                <h2>Tipus de repressió: Morts en combat</h2>
-                <h4 id="fitxaNomCognoms">Fitxa: <a href="https://memoriaterrassa.cat/fitxa/<?php echo $idPersona; ?>" target="_blank"><?php echo $nom . " " . $cognom1 . " " . $cognom2; ?></a></h4>
+                <h2>Nou Municipi</h2>
 
                 <div class="alert alert-success" role="alert" id="okMessage" style="display:none">
                     <h4 class="alert-heading"><strong>Modificació correcte!</strong></h4>
@@ -110,88 +95,9 @@ if ($stmt->rowCount() > 0) {
                     <div id="errText"></div>
                 </div>
 
-                <input type="hidden" name="idPersona" id="idPersona" value="<?php echo $idPersona; ?>">
-
                 <div class="col-md-4">
-                    <label for="condicio" class="form-label negreta">Condició:</label>
-                    <select class="form-select" name="condicio" id="condicio" value="">
-                    </select>
-                </div>
-
-                <div class="col-md-4">
-                    <label for="bandol" class="form-label negreta">Bàndol durant la guerra:</label>
-                    <select class="form-select" name="bandol" id="bandol" value="">
-                    </select>
-                </div>
-
-                <div class="col-md-4">
-                    <label for="any_lleva" class="form-label negreta">Any lleva:</label>
-                    <input type="text" class="form-control" id="any_lleva" name="any_lleva" value="<?php echo $any_lleva; ?>">
-                </div>
-
-                <div class="col-md-4">
-                    <label for="unitat_inicial" class="form-label negreta">Unitat inicial:</label>
-                    <input type="text" class="form-control" id="unitat_inicial" name="unitat_inicial" value="<?php echo $unitat_inicial; ?>">
-                </div>
-
-                <div class="col-md-4">
-                    <label for="cos" class="form-label negreta">Cos militar:</label>
-                    <select class="form-select" name="cos" id="cos" value="">
-                    </select>
-                </div>
-
-                <div class="col-md-4">
-                    <label for="unitat_final" class="form-label negreta">Unitat final:</label>
-                    <input type="text" class="form-control" id="unitat_final" name="unitat_final" value="<?php echo $unitat_final; ?>">
-                </div>
-
-                <div class="col-md-4">
-                    <label for="graduacio_final" class="form-label negreta">Graduació final:</label>
-                    <input type="text" class="form-control" id="graduacio_final" name="graduacio_final" value="<?php echo $graduacio_final; ?>">
-                </div>
-
-                <div class="col-md-12">
-                    <label for="periple_militar" class="form-label negreta">Periple militar:</label>
-                    <textarea class="form-control" id="periple_militar" name="periple_militar" rows="3"><?php echo $periple_militar; ?></textarea>
-                </div>
-
-                <div class="col-md-4">
-                    <label for="circumstancia_mort" class="form-label negreta">Circumstància mort:</label>
-                    <select class="form-select" name="circumstancia_mort" id="circumstancia_mort" value="">
-                    </select>
-                </div>
-
-                <div class="col-md-4">
-                    <label for="desaparegut_data" class="form-label negreta">Data de la desaparació:</label>
-                    <input type="text" class="form-control" id="desaparegut_data" name="desaparegut_data" value="<?php echo $desaparegut_data; ?>">
-                </div>
-
-                <div class="col-md-4">
-                    <label for="desaparegut_lloc" class="form-label negreta">Lloc de desaparació:</label>
-                    <select class="form-select" name="desaparegut_lloc" id="desaparegut_lloc" value="">
-                    </select>
-
-                    <div class="mt-2">
-                        <a href="https://memoriaterrassa.cat/gestio/municipi/nou" target="_blank" class="btn btn-secondary btn-sm" id="afegirMunicipi1">Afegir municipi</a>
-                        <button id="refreshButton1" class="btn btn-primary btn-sm">Actualitzar llistat Municipis</button>
-                    </div>
-                </div>
-
-                <div class="col-md-4">
-                    <label for="desaparegut_data_aparicio" class="form-label negreta">Data d'aparació del desaparegut:</label>
-                    <input type="text" class="form-control" id="desaparegut_data_aparicio" name="desaparegut_data_aparicio" value="<?php echo $desaparegut_data_aparicio; ?>">
-                </div>
-
-                <div class="col-md-4">
-                    <label for="desaparegut_lloc_aparicio" class="form-label negreta">Lloc d'aparació del desaparegut:</label>
-                    <select class="form-select" name="desaparegut_lloc_aparicio" id="desaparegut_lloc_aparicio" value="">
-                    </select>
-
-                    <div class="mt-2">
-                        <a href="https://memoriaterrassa.cat/gestio/municipi/nou" target="_blank" class="btn btn-secondary btn-sm" id="afegirMunicipi1">Afegir municipi</a>
-                        <button id="refreshButton2" class="btn btn-primary btn-sm">Actualitzar llistat Municipis</button>
-                    </div>
-
+                    <label for="ciutat" class="form-label negreta">Nom municipi:</label>
+                    <input type="text" class="form-control" id="ciutat" name="ciutat" value="<?php echo $ciutat_old; ?>">
                 </div>
 
                 <div class="row espai-superior" style="border-top: 1px solid black;padding-top:25px">
@@ -277,29 +183,15 @@ if ($stmt->rowCount() > 0) {
         }
     }
 
-    auxiliarSelect("<?php echo $condicio_id; ?>", "condicio_civil_militar", "condicio", "condicio_ca");
-    auxiliarSelect("<?php echo $bandol_id; ?>", "bandols_guerra", "bandol", "bandol_ca");
-    auxiliarSelect("<?php echo $cos_id; ?>", "cossos_militars", "cos", "cos_militar_ca");
-    auxiliarSelect("<?php echo $circumstancia_mort_id; ?>", "causa_defuncio", "circumstancia_mort", "causa_defuncio_ca");
-    auxiliarSelect("<?php echo $desaparegut_lloc_id; ?>", "municipis", "desaparegut_lloc", "ciutat");
-    auxiliarSelect("<?php echo $desaparegut_lloc_aparicio_id; ?>", "municipis", "desaparegut_lloc_aparicio", "ciutat");
+    //auxiliarSelect("<?php echo $ciutat_old; ?>", "condicio_civil_militar", "condicio", "condicio_ca");
 
-    document.getElementById('refreshButton2').addEventListener('click', function(event) {
-        event.preventDefault();
-        auxiliarSelect("<?php echo $desaparegut_lloc_aparicio_id; ?>", "municipis", "desaparegut_lloc_aparicio", "ciutat");
-    });
-
-    document.getElementById('refreshButton1').addEventListener('click', function(event) {
-        event.preventDefault();
-        auxiliarSelect("<?php echo $desaparegut_lloc_id; ?>", "municipis", "desaparegut_lloc", "ciutat");
-    });
 
     // Función para manejar el envío del formulario
     async function enviarFormulario(event) {
         event.preventDefault(); // Prevenir el envío por defecto
 
         // Obtener el formulario
-        const form = document.getElementById("mortCombatForm");
+        const form = document.getElementById("municipiForm");
 
         // Crear un objeto para almacenar los datos del formulario
         const formData = {};
@@ -310,7 +202,7 @@ if ($stmt->rowCount() > 0) {
         // Convertir los datos del formulario a JSON
         const jsonData = JSON.stringify(formData);
         const devDirectory = `https://${window.location.hostname}`;
-        let urlAjax = devDirectory + "/api/cost_huma_front/put";
+        let urlAjax = devDirectory + "/api/auxiliars/put";
 
         try {
             // Hacer la solicitud con fetch y await
@@ -365,7 +257,7 @@ if ($stmt->rowCount() > 0) {
         event.preventDefault(); // Prevenir el envío por defecto
 
         // Obtener el formulario
-        const form = document.getElementById("mortCombatForm");
+        const form = document.getElementById("municipiForm");
 
         // Crear un objeto para almacenar los datos del formulario
         const formData = {};
@@ -376,7 +268,7 @@ if ($stmt->rowCount() > 0) {
         // Convertir los datos del formulario a JSON
         const jsonData = JSON.stringify(formData);
         const devDirectory = `https://${window.location.hostname}`;
-        let urlAjax = devDirectory + "/api/cost_huma_front/post";
+        let urlAjax = devDirectory + "/api/auxiliars/post/?type=municipi";
 
         try {
             // Hacer la solicitud con fetch y await

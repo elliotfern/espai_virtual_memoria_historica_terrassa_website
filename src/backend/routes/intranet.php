@@ -6,16 +6,20 @@ $base_routes = [
     '/gestio/entrada' => 'public/intranet/00_homepage/login.php',
 
     //intranet
-
     '/gestio' => 'public/intranet/00_homepage/admin.php',
     '/gestio/admin' => 'public/intranet/00_homepage/admin.php',
 
     // 0. Llistat complet
     '/gestio/tots' => 'public/intranet/0_tots/index.php',
-    '/gestio/tots/fitxa/{id}' => 'public/intranet/0_tots/fitxa-persona.php',
 
     // MODIFICA FITXA PERSONA
     '/gestio/tots/fitxa/modifica/{id}' => 'public/intranet/0_tots/modifica-fitxa-persona.php',
+
+    // GESTIÓ FAMILIARS
+    '/gestio/tots/fitxa/familiars/{id}' => 'public/intranet/db_familiars/fitxa-familiar.php',
+    '/gestio/tots/fitxa/familiar/modifica/{id}/{id}' => 'public/intranet/db_familiars/modifica-nou-familiar.php',
+    '/gestio/tots/fitxa/familiar/elimina/{id}' => 'public/intranet/db_familiars/elimina-familiar.php',
+    '/gestio/tots/fitxa/familiar/nou/{id}' => 'public/intranet/db_familiars/modifica-nou-familiar.php',
 
     // INSEREIX NOVA FITXA PERSONA
     '/gestio/tots/fitxa-nova' => 'public/intranet/0_tots/nova-fitxa-persona.php',
@@ -35,6 +39,9 @@ $base_routes = [
     // 3. Cost huma
     '/gestio/cost-huma' => 'public/pages/3_cost_huma/index.php',
 
+    // AUXILIARS
+    '/gestio/municipi/nou' => 'public/intranet/db_auxiliars/nou-municipi.php',
+
 ];
 
 // Rutas principales sin idioma explícito (solo para el idioma por defecto)
@@ -50,15 +57,24 @@ $routes = [
     // LLISTAT TOTS
     '/gestio/tots' => ['view' => 'public/intranet/0_tots/index.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
 
-    '/gestio/tots/fitxa/{id}' => ['view' => 'public/intranet/0_tots/fitxa-persona.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
-
     '/gestio/tots/fitxa/modifica/{id}' => ['view' => 'public/intranet/0_tots/modifica-fitxa-persona.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
 
     '/gestio/tots/fitxa-nova' => ['view' => 'public/intranet/0_tots/nova-fitxa-persona.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
 
     // Modificacio fitxes
-
     '/gestio/tots/fitxa/categoria/modifica/{categoriaId}/{id}' => ['view' => 'public/intranet/0_tots/modifica-fitxa-repressio.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
+
+    // Gestió familiars
+    '/gestio/tots/fitxa/familiars/{id}' => ['view' => 'public/intranet/db_familiars/fitxa-familiar.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
+
+    '/gestio/tots/fitxa/familiar/modifica/{id}/{id}' => ['view' => 'public/intranet/db_familiars/modifica-nou-familiar.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
+
+    '/gestio/tots/fitxa/familiar/elimina/{id}' => ['view' => 'public/intranet/db_familiars/elimina-familiar.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
+
+    '/gestio/tots/fitxa/familiar/nou/{id}' => ['view' => 'public/intranet/db_familiars/modifica-nou-familiar.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
+
+    // AUXILIARS
+    '/gestio/municipi/nou' => ['view' => 'public/intranet/db_auxiliars/nou-municipi.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
 
 ];
 

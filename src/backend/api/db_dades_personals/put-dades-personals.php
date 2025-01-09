@@ -38,10 +38,6 @@ if (empty($data['cognom1'])) {
     $errors[] = 'El camp cognom1 és obligatori.';
 }
 
-if (empty($data['cognom2'])) {
-    $errors[] = 'El camp cognom2 és obligatori.';
-}
-
 if (empty($data['categoria'])) {
     $errors[] = 'El camp categoria és obligatori.';
 }

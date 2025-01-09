@@ -343,6 +343,80 @@ if (isset($_GET['type']) && $_GET['type'] == 'municipis') {
         $data[] = $users;
     }
     echo json_encode($data);
+
+    // DB_DEPORTATS AUXILIARS
+    // 1) Llistat situacions deportats
+    // ruta GET => "/api/auxiliars/get/?type=situacions_deportats"
+} elseif (isset($_GET['type']) && $_GET['type'] == 'situacions_deportats') {
+    global $conn;
+    $data = array();
+    $stmt = $conn->prepare(
+        "SELECT s.id, s.situacio_ca 
+        FROM aux_situacions_deportats AS s
+        ORDER BY s.situacio_ca ASC"
+    );
+    $stmt->execute();
+    if ($stmt->rowCount() === 0) echo ('No rows');
+    while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $data[] = $users;
+    }
+    echo json_encode($data);
+
+    // 2) Llistat tipus de presons deportats
+    // ruta GET => "/api/auxiliars/get/?type=tipus_presons"
+} elseif (isset($_GET['type']) && $_GET['type'] == 'tipus_presons') {
+    global $conn;
+    $data = array();
+    $stmt = $conn->prepare(
+        "SELECT t.id, t.tipus_preso_ca
+        FROM aux_tipus_presons AS t
+        ORDER BY t.tipus_preso_ca ASC"
+    );
+    $stmt->execute();
+    if ($stmt->rowCount() === 0) echo ('No rows');
+    while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $data[] = $users;
+    }
+    echo json_encode($data);
+
+    // DB_FAMILIARS
+    // 1) Llistat relacions de parentiu
+    // ruta GET => "/api/auxiliars/get/?type=relacions_parentiu"
+} elseif (isset($_GET['type']) && $_GET['type'] == 'relacions_parentiu') {
+    global $conn;
+    $data = array();
+    $stmt = $conn->prepare(
+        "SELECT r.id, r.relacio_parentiu
+        FROM aux_familiars_relacio AS r
+        ORDER BY r.relacio_parentiu ASC"
+    );
+    $stmt->execute();
+    if ($stmt->rowCount() === 0) echo ('No rows');
+    while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $data[] = $users;
+    }
+    echo json_encode($data);
+
+    // 2) Llistat complert represaliats 
+    // ruta GET => "/api/auxiliars/get/?type=llistat_complert_represaliats"
+} elseif (isset($_GET['type']) && $_GET['type'] == 'llistat_complert_represaliats') {
+    global $conn;
+    $data = array();
+    $stmt = $conn->prepare(
+        "SELECT dp.id, 
+       dp.nom, 
+       dp.cognom1, 
+       dp.cognom2, 
+       CONCAT(dp.cognom1, ' ', dp.cognom2, ', ', dp.nom) AS nom_complert
+        FROM db_dades_personals AS dp
+        ORDER BY dp.cognom1 ASC"
+    );
+    $stmt->execute();
+    if ($stmt->rowCount() === 0) echo ('No rows');
+    while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $data[] = $users;
+    }
+    echo json_encode($data);
 } else {
     // Si 'type', 'id' o 'token' están ausentes o 'type' no es 'user' en la URL
     header('HTTP/1.1 403 Forbidden');

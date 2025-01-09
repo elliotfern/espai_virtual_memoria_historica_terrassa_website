@@ -17,11 +17,14 @@ export async function cargarTabla(pag: string, context: number) {
   let datos: Represeliat[] = [];
 
   let webFitxa = '';
+  let webTarget = '';
 
   if (context === 1) {
     webFitxa = `/fitxa/`;
+    webTarget = '_self';
   } else {
-    webFitxa = `/gestio/tots/fitxa/`;
+    webFitxa = `/fitxa/`;
+    webTarget = '_blank';
   }
 
   // Función para obtener los datos
@@ -50,7 +53,7 @@ export async function cargarTabla(pag: string, context: number) {
       // Nombre completo
       const tdNombre = document.createElement('td');
       const nombreCompleto = `${row.cognom1} ${row.cognom2 ?? ''}, ${row.nom}`;
-      tdNombre.innerHTML = `<strong><a href="${webFitxa}${row.id}">${nombreCompleto}</a></strong>`;
+      tdNombre.innerHTML = `<strong><a href="${webFitxa}${row.id}" target="${webTarget}">${nombreCompleto}</a></strong>`;
       tr.appendChild(tdNombre);
 
       // Municipio nacimiento
@@ -174,7 +177,7 @@ export async function cargarTabla(pag: string, context: number) {
       // Nombre completo
       const tdNombre = document.createElement('td');
       const nombreCompleto = `${row.cognom1} ${row.cognom2 ?? ''}, ${row.nom}`;
-      tdNombre.innerHTML = `<strong><a href="${window.location.origin}${webFitxa}${row.id}">${nombreCompleto}</a></strong>`;
+      tdNombre.innerHTML = `<strong><a href="${window.location.origin}${webFitxa}${row.id}" target="${webTarget}">${nombreCompleto}</a></strong>`;
       tr.appendChild(tdNombre);
 
       // Municipio nacimiento

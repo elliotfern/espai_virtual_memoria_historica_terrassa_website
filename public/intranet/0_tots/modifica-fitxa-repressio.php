@@ -15,7 +15,7 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
 if ($categoriaId === 1) {
     echo "afusellat";
 } else if ($categoriaId === 2) {
-    echo "Deportat";
+    require_once APP_ROOT . '/public/intranet/0_tots/modifica/deportats.php';
 } else if ($categoriaId === 3) {
     require_once APP_ROOT . '/public/intranet/0_tots/modifica/morts_combat.php';
 } else if ($categoriaId === 4) {
@@ -31,5 +31,5 @@ if ($categoriaId === 1) {
 } else if ($categoriaId === 9) {
     echo "";
 } else if ($categoriaId === 10) {
-    echo "Exiliat";
+    require_once APP_ROOT . '/public/intranet/0_tots/modifica/exiliats.php';
 }

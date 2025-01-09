@@ -183,18 +183,34 @@ $id = $routeParams[0];
           <label for="ciutat_naixement" class="form-label negreta">Ciutat de naixement:</label>
           <select class="form-select" name="municipi_naixement" id="municipi_naixement" value="">
           </select>
+          <div class="mt-2">
+            <a href="https://memoriaterrassa.cat/gestio/municipi/nou" target="_blank" class="btn btn-secondary btn-sm" id="afegirMunicipi1">Afegir municipi</a>
+            <button id="refreshButton1" class="btn btn-primary btn-sm">Actualitzar llistat Municipis</button>
+          </div>
+
         </div>
 
         <div class="col-md-4">
           <label for="ciutat_defuncio" class="form-label negreta">Ciutat de defuncio:</label>
           <select class="form-select" name="municipi_defuncio" id="municipi_defuncio" value="">
           </select>
+
+          <div class="mt-2">
+            <a href="https://memoriaterrassa.cat/gestio/municipi/nou" target="_blank" class="btn btn-secondary btn-sm" id="afegirMunicipi2">Afegir municipi</a>
+            <button id="refreshButton2" class="btn btn-primary btn-sm">Actualitzar llistat Municipis</button>
+          </div>
         </div>
 
         <div class="col-md-4">
           <label for="ciutat_residencia" class="form-label negreta">Ciutat de residència:</label>
           <select class="form-select" name="municipi_residencia" id="municipi_residencia" value="">
           </select>
+
+          <div class="mt-2">
+            <a href="https://memoriaterrassa.cat/gestio/municipi/nou" target="_blank" class="btn btn-secondary btn-sm" id="afegirMunicipi3">Afegir municipi</a>
+            <button id="refreshButton3" class="btn btn-primary btn-sm">Actualitzar llistat Municipis</button>
+          </div>
+
         </div>
 
         <div class="col-md-4">
@@ -224,6 +240,13 @@ $id = $routeParams[0];
           <label for="estat_civil" class="form-label negreta">Estat civil:</label>
           <select class="form-select" id="estat_civil" name="estat_civil" value="">
           </select>
+        </div>
+
+        <hr style="margin-top:25px">
+        <h4>Establir relacions de parantiu</h4>
+
+        <div class="col-md-4">
+          <a href="https://memoriaterrassa.cat/gestio/tots/fitxa/familiars/<?php echo $id; ?>" target="_blank" class="btn btn-success">Afegir/veure familiars</a>
         </div>
 
       </div>
@@ -478,6 +501,24 @@ $id = $routeParams[0];
         auxiliarSelect(fitxa[0].ciutat_defuncio_id, "municipis", "municipi_defuncio", "ciutat");
         auxiliarSelect(fitxa[0].ciutat_residencia_id, "municipis", "municipi_residencia", "ciutat");
         document.getElementById('adreca').value = fitxa[0].adreca;
+
+        // botons refrescar llistat municipis
+        // Añadir evento al botón para actualizar los municipios
+        document.getElementById('refreshButton1').addEventListener('click', function(event) {
+          event.preventDefault();
+          auxiliarSelect(fitxa[0].ciutat_naixement_id, "municipis", "municipi_naixement", "ciutat");
+        });
+
+        document.getElementById('refreshButton2').addEventListener('click', function(event) {
+          event.preventDefault();
+          auxiliarSelect(fitxa[0].ciutat_defuncio_id, "municipis", "municipi_defuncio", "ciutat");
+        });
+
+        document.getElementById('refreshButton3').addEventListener('click', function(event) {
+          event.preventDefault();
+          auxiliarSelect(fitxa[0].ciutat_residencia_id, "municipis", "municipi_residencia", "ciutat");
+        });
+
 
         auxiliarSelect(fitxa[0].tipologia_lloc_defuncio_id, "tipologia_espais", "tipologia_lloc_defuncio", "tipologia_espai_ca");
 
