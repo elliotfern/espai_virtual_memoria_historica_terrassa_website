@@ -175,6 +175,11 @@ if ($stmt->rowCount() > 0) {
                     <label for="tipologia_primer_desti" class="form-label negreta">Tipologia del primer destí a l'exili:</label>
                     <select class="form-select" name="tipologia_primer_desti" id="tipologia_primer_desti" value="">
                     </select>
+
+                    <div class="mt-2">
+                        <a href="https://memoriaterrassa.cat/gestio/tipologia-espai/nou" target="_blank" class="btn btn-secondary btn-sm" id="afegirMunicipi77">Afegir tipologia espai</a>
+                        <button id="refreshButtonTipologia22" class="btn btn-primary btn-sm">Actualitzar llistat espais</button>
+                    </div>
                 </div>
 
                 <div class="col-md-12">
@@ -207,9 +212,15 @@ if ($stmt->rowCount() > 0) {
                 </div>
 
                 <div class="col-md-4">
-                    <label for="tipologia_ultim_desti" class="form-label negreta">Tipologia del darrer a l'exili:</label>
+                    <label for="tipologia_ultim_desti" class="form-label negreta">Tipologia del darrer destí a l'exili:</label>
                     <select class="form-select" name="tipologia_ultim_desti" id="tipologia_ultim_desti" value="">
                     </select>
+
+                    <div class="mt-2">
+                        <a href="https://memoriaterrassa.cat/gestio/tipologia-espai/nou" target="_blank" class="btn btn-secondary btn-sm" id="afegirMunicipi778">Afegir tipologia espai</a>
+                        <button id="refreshButtonTipologia2" class="btn btn-primary btn-sm">Actualitzar llistat espais</button>
+                    </div>
+
                 </div>
 
                 <div class="col-md-4">
@@ -346,6 +357,12 @@ if ($stmt->rowCount() > 0) {
     });
 
     auxiliarSelect("<?php echo $tipologia_primer_desti_id; ?>", "tipologia_espais", "tipologia_primer_desti", "tipologia_espai_ca");
+
+    document.getElementById('refreshButtonTipologia22').addEventListener('click', function(event) {
+        event.preventDefault();
+        auxiliarSelect("<?php echo $tipologia_primer_desti_id; ?>", "tipologia_espais", "tipologia_primer_desti", "tipologia_espai_ca");
+    });
+
     auxiliarSelect("<?php echo $ultim_desti_exili_id; ?>", "municipis", "ultim_desti_exili", "ciutat");
 
     document.getElementById('refreshButton4').addEventListener('click', function(event) {
@@ -355,7 +372,10 @@ if ($stmt->rowCount() > 0) {
 
     auxiliarSelect("<?php echo $tipologia_ultim_desti_id; ?>", "tipologia_espais", "tipologia_ultim_desti", "tipologia_espai_ca");
 
-
+    document.getElementById('refreshButtonTipologia2').addEventListener('click', function(event) {
+        event.preventDefault();
+        auxiliarSelect("<?php echo $tipologia_ultim_desti_id; ?>", "tipologia_espais", "tipologia_ultim_desti", "tipologia_espai_ca");
+    });
 
     // Función para manejar el envío del formulario
     async function enviarFormulario(event) {

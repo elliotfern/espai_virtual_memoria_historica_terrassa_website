@@ -222,12 +222,21 @@ $id = $routeParams[0];
           <label for="tipologia_lloc_defuncio" class="form-label negreta">Tipologia lloc de defunció:</label>
           <select class="form-select" id="tipologia_lloc_defuncio" value="" name="tipologia_lloc_defuncio">
           </select>
+          <div class="mt-2">
+            <a href="https://memoriaterrassa.cat/gestio/tipologia-espai/nou" target="_blank" class="btn btn-secondary btn-sm" id="afegirMunicipi4">Afegir tipologia espai</a>
+            <button id="refreshButton4" class="btn btn-primary btn-sm">Actualitzar llistat espais</button>
+          </div>
+
         </div>
 
         <div class="col-md-4">
           <label for="causa_defuncio" class="form-label negreta">Causa de la defunció:</label>
           <select class="form-select" id="causa_defuncio" value="" name="causa_defuncio">
           </select>
+          <div class="mt-2">
+            <a href="https://memoriaterrassa.cat/gestio/causa-mort/nou" target="_blank" class="btn btn-secondary btn-sm" id="afegirMunicipi5">Afegir causa de mort</a>
+            <button id="refreshButton5" class="btn btn-primary btn-sm">Actualitzar llistat causa mort</button>
+          </div>
         </div>
 
       </div>
@@ -266,6 +275,10 @@ $id = $routeParams[0];
           <label for="ofici" class="form-label negreta">Ofici:</label>
           <select class="form-select" id="ofici" value="" name="ofici">
           </select>
+          <div class="mt-2">
+            <a href="https://memoriaterrassa.cat/gestio/ofici/nou" target="_blank" class="btn btn-secondary btn-sm" id="afegirMunicipi1">Afegir ofici</a>
+            <button id="refreshButtonOfici" class="btn btn-primary btn-sm">Actualitzar llistat oficis</button>
+          </div>
         </div>
 
         <div class="col-md-4">
@@ -277,6 +290,11 @@ $id = $routeParams[0];
           <label for="carrec_empresa" class="form-label negreta">Càrrec empresa:</label>
           <select class="form-select" id="carrec_empresa" value="" name="carrec_empresa">
           </select>
+
+          <div class="mt-2">
+            <a href="https://memoriaterrassa.cat/gestio/carrec-empresa/nou" target="_blank" class="btn btn-secondary btn-sm" id="afegirMunicipi6">Afegir càrrec empresa</a>
+            <button id="refreshButtonCarrec" class="btn btn-primary btn-sm">Actualitzar llistat càrrecs</button>
+          </div>
         </div>
 
         <div class="col-md-4">
@@ -289,6 +307,10 @@ $id = $routeParams[0];
           <label for="sub_sector" class="form-label negreta">Sub-sector econòmic:</label>
           <select class="form-select" id="sub_sector" value="" name="sub_sector">
           </select>
+          <div class="mt-2">
+            <a href="https://memoriaterrassa.cat/gestio/sub-sector-economic/nou" target="_blank" class="btn btn-secondary btn-sm" id="afegirMunicipi6">Afegir sub-sector econòmic</a>
+            <button id="refreshButtonSubSector" class="btn btn-primary btn-sm">Actualitzar llistat sub-sectors</button>
+          </div>
         </div>
 
       </div>
@@ -308,6 +330,11 @@ $id = $routeParams[0];
               </div>
             </div>
           </div>
+
+          <div class="mt-2">
+            <a href="https://memoriaterrassa.cat/gestio/partit-politic/nou" target="_blank" class="btn btn-secondary btn-sm" id="afegirMunicipi7">Afegir partit polític</a>
+            <button id="refreshButtonPartits" class="btn btn-primary btn-sm">Actualitzar llistat partits</button>
+          </div>
         </div>
 
         <div class="container">
@@ -320,6 +347,12 @@ $id = $routeParams[0];
               </div>
             </div>
           </div>
+
+          <div class="mt-2">
+            <a href="https://memoriaterrassa.cat/gestio/sindicat/nou" target="_blank" class="btn btn-secondary btn-sm" id="afegirMunicipi8">Afegir sindicat</a>
+            <button id="refreshButtonSindicats" class="btn btn-primary btn-sm">Actualitzar llistat sindicats</button>
+          </div>
+
         </div>
 
         <div class="col-md-12">
@@ -522,7 +555,17 @@ $id = $routeParams[0];
 
         auxiliarSelect(fitxa[0].tipologia_lloc_defuncio_id, "tipologia_espais", "tipologia_lloc_defuncio", "tipologia_espai_ca");
 
+        document.getElementById('refreshButton4').addEventListener('click', function(event) {
+          event.preventDefault();
+          auxiliarSelect(fitxa[0].tipologia_lloc_defuncio_id, "tipologia_espais", "tipologia_lloc_defuncio", "tipologia_espai_ca");
+        });
+
         auxiliarSelect(fitxa[0].causa_defuncio_id, "causa_defuncio", "causa_defuncio", "causa_defuncio_ca");
+
+        document.getElementById('refreshButton5').addEventListener('click', function(event) {
+          event.preventDefault();
+          auxiliarSelect(fitxa[0].causa_defuncio_id, "causa_defuncio", "causa_defuncio", "causa_defuncio_ca");
+        });
 
         // 02. dades familiars:
         auxiliarSelect(fitxa[0].estat_civil_id, "estats", "estat_civil", "estat_cat");
@@ -533,19 +576,47 @@ $id = $routeParams[0];
         auxiliarSelect(fitxa[0].estudis_id, "estudis", "estudis", "estudi_cat")
         auxiliarSelect(fitxa[0].ofici_id, "oficis", "ofici", "ofici_cat");
 
+        document.getElementById('refreshButtonOfici').addEventListener('click', function(event) {
+          event.preventDefault();
+          auxiliarSelect(fitxa[0].ofici_id, "oficis", "ofici", "ofici_cat");
+        });
+
+
         auxiliarSelect(fitxa[0].sector_id, "sectors_economics", "sector", "sector_cat");
 
         auxiliarSelect(fitxa[0].sub_sector_id, "sub_sectors_economics", "sub_sector", "sub_sector_cat");
 
+        document.getElementById('refreshButtonSubSector').addEventListener('click', function(event) {
+          event.preventDefault();
+          auxiliarSelect(fitxa[0].sub_sector_id, "sub_sectors_economics", "sub_sector", "sub_sector_cat");
+        });
 
         document.getElementById('empresa').value = fitxa[0].empresa;
+
         auxiliarSelect(fitxa[0].carrecs_empresa_id, "carrecs_empresa", "carrec_empresa", "carrec_cat");
+
+        document.getElementById('refreshButtonCarrec').addEventListener('click', function(event) {
+          event.preventDefault();
+          auxiliarSelect(fitxa[0].carrecs_empresa_id, "carrecs_empresa", "carrec_empresa", "carrec_cat");
+        });
 
         // 04. dades politiques
         fetchCheckBoxs(fitxa[0].filiacio_politica, "partits", "partit_politic");
 
+        document.getElementById('refreshButtonPartits').addEventListener('click', function(event) {
+          event.preventDefault();
+          fetchCheckBoxs(fitxa[0].filiacio_politica, "partits", "partit_politic");
+        });
+
         fetchCheckBoxs(fitxa[0].filiacio_sindical, "sindicats", "sindicat");
+
+        document.getElementById('refreshButtonSindicats').addEventListener('click', function(event) {
+          event.preventDefault();
+          fetchCheckBoxs(fitxa[0].filiacio_sindical, "sindicats", "sindicat");
+        });
+
         document.getElementById('activitat_durant_guerra').value = fitxa[0].activitat_durant_guerra;
+
 
         // 05. Biografia
 
@@ -689,6 +760,9 @@ $id = $routeParams[0];
     // Función para generar los checkboxes dinámicamente
     const renderCheckboxes = (data, elementId, nodeElement) => {
       const container = document.getElementById(nodeElement);
+
+      // Limpiar el contenedor antes de agregar nuevos checkboxes
+      container.innerHTML = '';
 
       // Si partitId es una cadena con formato '{10}' o '{1,2,3}', limpiamos y convertimos a array de números
       const selectedPartits = elementId

@@ -41,6 +41,13 @@ $base_routes = [
 
     // AUXILIARS
     '/gestio/municipi/nou' => 'public/intranet/db_auxiliars/nou-municipi.php',
+    '/gestio/ofici/nou' => 'public/intranet/db_auxiliars/nou-ofici.php',
+    '/gestio/tipologia-espai/nou' => 'public/intranet/db_auxiliars/nou-tipologia-espai.php',
+    '/gestio/causa-mort/nou' => 'public/intranet/db_auxiliars/nou-causa-mort.php',
+    '/gestio/carrec-empresa/nou' => 'public/intranet/db_auxiliars/nou-carrec-empresa.php',
+    '/gestio/sub-sector-economic/nou' => 'public/intranet/db_auxiliars/nou-subsector-economic.php',
+    '/gestio/partit-politic/nou' => 'public/intranet/db_auxiliars/nou-partit-politic.php',
+    '/gestio/sindicat/nou' => 'public/intranet/db_auxiliars/nou-sindicat.php',
 
 ];
 
@@ -75,6 +82,20 @@ $routes = [
 
     // AUXILIARS
     '/gestio/municipi/nou' => ['view' => 'public/intranet/db_auxiliars/nou-municipi.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
+
+    '/gestio/ofici/nou' => ['view' => 'public/intranet/db_auxiliars/nou-ofici.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
+
+    '/gestio/tipologia-espai/nou' => ['view' => 'public/intranet/db_auxiliars/nou-tipologia-espai.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
+
+    '/gestio/causa-mort/nou' => ['view' => 'public/intranet/db_auxiliars/nou-causa-mort.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
+
+    '/gestio/carrec-empresa/nou' => ['view' => 'public/intranet/db_auxiliars/nou-carrec-empresa.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
+
+    '/gestio/sub-sector-economic/nou' => ['view' => 'public/intranet/db_auxiliars/nou-subsector-economic.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
+
+    '/gestio/partit-politic/nou' => ['view' => 'public/intranet/db_auxiliars/nou-partit-politic.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
+
+    '/gestio/sindicat/nou' => ['view' => 'public/intranet/db_auxiliars/nou-sindicat.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
 
 ];
 
