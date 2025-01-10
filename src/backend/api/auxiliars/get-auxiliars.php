@@ -417,6 +417,24 @@ if (isset($_GET['type']) && $_GET['type'] == 'municipis') {
         $data[] = $users;
     }
     echo json_encode($data);
+
+    // DB_MORTS CIVILS
+    // 1) Llistat relacions de parentiu
+    // ruta GET => "/api/auxiliars/get/?type=llocs_bombardeig"
+} elseif (isset($_GET['type']) && $_GET['type'] == 'llocs_bombardeig') {
+    global $conn;
+    $data = array();
+    $stmt = $conn->prepare(
+        "SELECT l.id, l.lloc_bombardeig_ca
+        FROM aux_llocs_bombardeig AS l
+        ORDER BY l.lloc_bombardeig_ca ASC"
+    );
+    $stmt->execute();
+    if ($stmt->rowCount() === 0) echo ('No rows');
+    while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $data[] = $users;
+    }
+    echo json_encode($data);
 } else {
     // Si 'type', 'id' o 'token' están ausentes o 'type' no es 'user' en la URL
     header('HTTP/1.1 403 Forbidden');

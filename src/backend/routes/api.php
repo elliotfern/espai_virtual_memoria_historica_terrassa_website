@@ -11,6 +11,11 @@ $base_routes = [
     '/api/cost_huma_front/put' => 'src/backend/api/db_cost_huma_front/put-cost-huma-front.php',
     '/api/cost_huma_front/post' => 'src/backend/api/db_cost_huma_front/post-cost-huma-front.php',
 
+    // API db_cost_huma_morts_civils
+    '/api/cost_huma_civils/get' => 'src/backend/api/db_cost_huma_civils/get-cost-huma-civils.php',
+    '/api/cost_huma_civils/put' => 'src/backend/api/db_cost_huma_civils/put-cost-huma-civils.php',
+    '/api/cost_huma_civils/post' => 'src/backend/api/db_cost_huma_civils/post-cost-huma-civils.php',
+
     // API db_dades_personals
     '/api/dades_personals/get' => 'src/backend/api/db_dades_personals/get-dades-personals.php',
     '/api/dades_personals/put' => 'src/backend/api/db_dades_personals/put-dades-personals.php',
@@ -54,6 +59,13 @@ $routes = [
     '/api/cost_huma_front/put' => ['view' => 'src/backend/api/db_cost_huma_front/put-cost-huma-front.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
 
     '/api/cost_huma_front/post' => ['view' => 'src/backend/api/db_cost_huma_front/post-cost-huma-front.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+
+    // API db_cost_huma_morts_civils
+    '/api/cost_huma_civils/get' => ['view' => 'src/backend/api/db_cost_huma_civils/get-cost-huma-civils.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+
+    '/api/cost_huma_civils/put' => ['view' => 'src/backend/api/db_cost_huma_civils/put-cost-huma-civils.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+
+    '/api/cost_huma_civils/post' => ['view' => 'src/backend/api/db_cost_huma_civils/post-cost-huma-civils.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
 
     // API db_dades_personals
     '/api/dades_personals/get' => ['view' => 'src/backend/api/db_dades_personals/get-dades-personals.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],

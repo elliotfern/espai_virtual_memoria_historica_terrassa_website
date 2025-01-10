@@ -19,7 +19,7 @@ if ($categoriaId === 1) {
 } else if ($categoriaId === 3) {
     require_once APP_ROOT . '/public/intranet/0_tots/modifica/morts_combat.php';
 } else if ($categoriaId === 4) {
-    echo "Mort civil";
+    require_once APP_ROOT . '/public/intranet/0_tots/modifica/morts_civils.php';
 } else if ($categoriaId === 5) {
     echo "Represàlia republicana";
 } else if ($categoriaId === 6) {

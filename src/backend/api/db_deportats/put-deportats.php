@@ -30,61 +30,7 @@ $data = json_decode($inputData, true);
 $errors = [];
 
 // Validación de los datos recibidos
-if (empty($data['situacio'])) {
-    $errors[] = 'El camp situacio és obligatori.';
-}
 
-if (empty($data['data_alliberament'])) {
-    $errors[] = 'El camp data_alliberament és obligatori.';
-}
-
-if (empty($data['lloc_mort_alliberament'])) {
-    $errors[] = 'El camp lloc_mort_alliberament és obligatori.';
-}
-
-if (empty($data['preso_tipus'])) {
-    $errors[] = 'El camp preso_tipus és obligatori.';
-}
-
-if (empty($data['preso_nom'])) {
-    $errors[] = 'El camp preso_nom és obligatori.';
-}
-
-if (empty($data['preso_data_sortida'])) {
-    $errors[] = 'El camp preso_data_sortida és obligatori.';
-}
-
-if (empty($data['preso_localitat'])) {
-    $errors[] = 'El camp preso_localitat és obligatori.';
-}
-
-if (empty($data['preso_num_matricula'])) {
-    $errors[] = 'El camp preso_num_matricula és obligatori.';
-}
-
-if (empty($data['deportacio_nom_camp'])) {
-    $errors[] = 'El camp deportacio_nom_camp és obligatori.';
-}
-
-if (empty($data['deportacio_data_entrada'])) {
-    $errors[] = 'El camp deportacio_data_entrada és obligatori.';
-}
-
-if (empty($data['deportacio_num_matricula'])) {
-    $errors[] = 'El camp deportacio_num_matricula és obligatori.';
-}
-
-if (empty($data['deportacio_nom_subcamp'])) {
-    $errors[] = 'El camp deportacio_nom_subcamp és obligatori.';
-}
-
-if (empty($data['deportacio_data_entrada_subcamp'])) {
-    $errors[] = 'El camp deportacio_data_entrada_subcamp és obligatori.';
-}
-
-if (empty($data['deportacio_nom_matricula_subcamp'])) {
-    $errors[] = 'El camp deportacio_nom_matricula_subcamp és obligatori.';
-}
 
 // Si hay errores, devolver una respuesta con los errores
 if (!empty($errors)) {

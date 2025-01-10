@@ -30,9 +30,6 @@ $data = json_decode($inputData, true);
 $errors = [];
 
 // Validación de los datos recibidos
-if (empty($data['data_exili'])) {
-    $errors[] = 'El camp data_exili és obligatori.';
-}
 
 
 // Si hay errores, devolver una respuesta con los errores
