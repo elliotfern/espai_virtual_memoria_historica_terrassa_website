@@ -34,65 +34,6 @@ if (empty($data['data_exili'])) {
     $errors[] = 'El camp data_exili és obligatori.';
 }
 
-if (empty($data['lloc_partida'])) {
-    $errors[] = 'El camp lloc_partida és obligatori.';
-}
-
-if (empty($data['lloc_pas_frontera'])) {
-    $errors[] = 'El camp lloc_pas_frontera és obligatori.';
-}
-
-if (empty($data['amb_qui_passa_frontera'])) {
-    $errors[] = 'El camp amb_qui_passa_frontera és obligatori.';
-}
-
-if (empty($data['primer_desti_exili'])) {
-    $errors[] = 'El camp primer_desti_exili és obligatori.';
-}
-
-if (empty($data['primer_desti_data'])) {
-    $errors[] = 'El camp primer_desti_data és obligatori.';
-}
-
-if (empty($data['tipologia_primer_desti'])) {
-    $errors[] = 'El camp tipologia_primer_desti és obligatori.';
-}
-
-if (empty($data['dades_lloc_primer_desti'])) {
-    $errors[] = 'El camp dades_lloc_primer_desti és obligatori.';
-}
-
-if (empty($data['periple_recorregut'])) {
-    $errors[] = 'El camp periple_recorregut és obligatori.';
-}
-
-if (empty($data['deportat'])) {
-    $errors[] = 'El camp deportat és obligatori.';
-}
-
-if (empty($data['ultim_desti_exili'])) {
-    $errors[] = 'El camp ultim_desti_exili és obligatori.';
-}
-
-if (empty($data['tipologia_ultim_desti'])) {
-    $errors[] = 'El camp tipologia_ultim_desti és obligatori.';
-}
-
-if (empty($data['participacio_resistencia'])) {
-    $errors[] = 'El camp participacio_resistencia és obligatori.';
-}
-
-if (empty($data['dades_resistencia'])) {
-    $errors[] = 'El camp dades_resistencia és obligatori.';
-}
-
-if (empty($data['activitat_politica_exili'])) {
-    $errors[] = 'El camp activitat_politica_exili és obligatori.';
-}
-
-if (empty($data['activitat_sindical_exili'])) {
-    $errors[] = 'El camp activitat_sindical_exili és obligatori.';
-}
 
 // Si hay errores, devolver una respuesta con los errores
 if (!empty($errors)) {

@@ -82,7 +82,7 @@ export async function cargarTabla(pag: string, context: number) {
       const userId = localStorage.getItem('user_id');
 
       // Verificar si el usuario es el admin con id 1
-      if (userId === '1') {
+      if (userId === '1' || userId === '3' || userId === '4' || userId === '6') {
         // Botón Modificar
         const tdModificar = document.createElement('td');
         const btnModificar = document.createElement('button');
@@ -206,13 +206,13 @@ export async function cargarTabla(pag: string, context: number) {
       const userId = localStorage.getItem('user_id');
 
       // Botón Modificar
-      if (userId === '1') {
+      if (userId === '1' || userId === '3' || userId === '4' || userId === '6') {
         const tdModificar = document.createElement('td');
         const btnModificar = document.createElement('button');
         btnModificar.textContent = 'Modificar dades';
         btnModificar.classList.add('btn', 'btn-sm', 'btn-warning');
         btnModificar.onclick = function () {
-          window.location.href = `/afusellats/fitxa/modifica/${row.id}`;
+          window.location.href = `/gestio/tots/fitxa/modifica/${row.id}`;
         };
         tdModificar.appendChild(btnModificar);
         tr.appendChild(tdModificar);
@@ -232,7 +232,7 @@ export async function cargarTabla(pag: string, context: number) {
         btnEliminar.classList.add('btn', 'btn-sm', 'btn-danger');
         btnEliminar.onclick = function () {
           if (confirm('¿Estás seguro de que deseas eliminar este registro?')) {
-            window.location.href = `/afusellats/eliminar/${row.id}`;
+            window.location.href = `/gestio/eliminar/${row.id}`;
           }
         };
         tdEliminar.appendChild(btnEliminar);

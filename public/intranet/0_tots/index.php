@@ -1,7 +1,7 @@
 <?php require_once APP_ROOT . '/public/intranet/includes/header.php'; ?>
 
 <div class="container">
-    <h4>Llistat complert de represaliats</h4>
+    <h4>Llistat complert de víctimes i represaliats</h4>
 
     <hr>
 

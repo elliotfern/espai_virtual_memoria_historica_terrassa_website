@@ -5,6 +5,7 @@ header("Content-Type: application/json");
 header("Access-Control-Allow-Origin: https://memoriaterrassa.cat");
 header("Access-Control-Allow-Methods: POST");
 
+require 'vendor/autoload.php'; // Assegura't que tens la biblioteca JWT instal·lada
 use Firebase\JWT\JWT;
 
 $jwtSecret = $_ENV['TOKEN'];
@@ -16,38 +17,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   // Asegúrate de que las variables están definidas
   $username = isset($data['userName']) ? $data['userName'] : null;
   $password = isset($data['password']) ? $data['password'] : null;
-} else {
-  $response['status'] = 'error';
-  header("Content-Type: application/json");
-  echo json_encode($response);
-  exit;
-}
 
-global $conn;
-/** @var PDO $conn */
-$query = "SELECT u.id, u.email, u.password
-    FROM auth_users AS u
-    WHERE u.email = :email";
-$stmt = $conn->prepare($query);
+  if (empty($username) || empty($password)) {
+    $response['status'] = 'error';
+    $response['message'] = 'El camp email i password són obligatoris.';
+    echo json_encode($response);
+    exit;
+  }
 
-$stmt->execute(
-  ['email' => $username]
-);
+  global $conn;
+  /** @var PDO $conn */
+  $query = "SELECT u.id, u.email, u.password
+              FROM auth_users AS u
+              WHERE u.email = :email";
+  $stmt = $conn->prepare($query);
+  $stmt->execute(['email' => $username]);
 
-if ($stmt->rowCount() === 0) {
-  $response['status'] = 'error';
-  // Establecer el encabezado como JSON
-  header('Content-Type: application/json');
-
-  // Devolver la respuesta JSON
-  echo json_encode($response);
-  exit;
-} else {
-
-  while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+  if ($stmt->rowCount() === 0) {
+    $response['status'] = 'error';
+    $response['message'] = 'Usuari no trobat.';
+    echo json_encode($response);
+    exit;
+  } else {
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
     $hash = $row['password'];
     $id = $row['id'];
-    if (password_verify($password, $hash) && ($id == 1 || $id == 2 || $id == 3 || $id == 4 || $id == 5)) {
+
+    if (password_verify($password, $hash) && in_array($id, [1, 2, 3, 4, 6])) {
       session_start();
       $_SESSION['user']['id'] = $row['id'];
       $_SESSION['user']['username'] = $row['email'];
@@ -61,15 +57,8 @@ if ($stmt->rowCount() === 0) {
         "kid" => "key_api"
       );
 
-      $headers = [
-        'x-forwarded-for' => 'localhost'
-      ];
-
       // Encode headers in the JWT string
       $jwt = JWT::encode($payload, $key, $algorithm);
-
-      // Almacenar en localStorage
-      // Devolver el token al cliente (puedes enviarlo en una respuesta JSON)
 
       // Preparar la respuesta
       $response = array(
@@ -91,17 +80,19 @@ if ($stmt->rowCount() === 0) {
       setcookie('token', $jwt, $cookie_options);
       setcookie('user_id', $idUser, $cookie_options);
 
-      // Establecer el encabezado como JSON
-      header('Content-Type: application/json');
-
       // Devolver la respuesta JSON
       echo json_encode($response);
+      exit;
     } else {
-      // response output
       $response['status'] = 'error';
-
-      header("Content-Type: application/json");
+      $response['message'] = 'Usuari no autoritzat o contrasenya incorrecta.';
       echo json_encode($response);
+      exit;
     }
   }
+} else {
+  $response['status'] = 'error';
+  $response['message'] = 'Método no permitido.';
+  echo json_encode($response);
+  exit;
 }

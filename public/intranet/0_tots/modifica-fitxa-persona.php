@@ -191,7 +191,7 @@ $id = $routeParams[0];
         </div>
 
         <div class="col-md-4">
-          <label for="ciutat_defuncio" class="form-label negreta">Ciutat de defuncio:</label>
+          <label for="ciutat_defuncio" class="form-label negreta">Lloc de defuncio (ciutat o país):</label>
           <select class="form-select" name="municipi_defuncio" id="municipi_defuncio" value="">
           </select>
 
@@ -202,7 +202,7 @@ $id = $routeParams[0];
         </div>
 
         <div class="col-md-4">
-          <label for="ciutat_residencia" class="form-label negreta">Ciutat de residència:</label>
+          <label for="ciutat_residencia" class="form-label negreta">Ciutat de residència abans de la guerra:</label>
           <select class="form-select" name="municipi_residencia" id="municipi_residencia" value="">
           </select>
 
