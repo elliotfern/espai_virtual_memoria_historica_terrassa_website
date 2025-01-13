@@ -97,6 +97,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'tots') {
             m3b.provincia AS provincia_defuncio,
             m3c.comunitat AS comunitat_defuncio,
             m3d.estat AS pais_defuncio,
+            
             dp.adreca, 
             tespai.tipologia_espai_ca,
             tespai.id AS tipologia_lloc_defuncio_id,

@@ -6,8 +6,6 @@ $base_routes = [
     '/' => 'public/web-publica/index.php',
     '/benvinguda' => 'public/web-publica/index.php',
     '/inici' => 'public/web-publica/inici.php',
-    '/404' => 'public/includes/404.php',
-    '/*' => 'public/includes/404.php',
 
     // PAGINES ESPECIFIQUES
     '/represaliats' => 'public/web-publica/represaliats.php',
@@ -29,10 +27,6 @@ $base_routes = [
 $routes = [
     // ACCES SECCIO GESTIO
     '/' => ['view' => 'public/web-publica/index.php', 'needs_session' => false, 'header_footer' => true, 'header_menu_footer' => false],
-
-    '/404' => ['view' => 'public/includes/404.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => true],
-
-    '/*' => ['view' => 'public/includes/404.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => true],
 
     // HOMEPAGE GESTIO
     '/benvinguda' => ['view' => 'public/web-publica/index.php', 'needs_session' => false, 'header_footer' => true, 'header_menu_footer' => false],

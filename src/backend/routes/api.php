@@ -1,13 +1,17 @@
 <?php
-
-// Define las rutas base que quieres traducir
 $base_routes = [
     // API INTRANET
     '/api/auth/get' => 'src/backend/api/auth/auth.php',
     '/api/auth/login' => 'src/backend/api/auth/login-process.php',
 
     // API INTRANET OPERACIONS CRUD
+    // API db_dades_personals
+    '/api/dades_personals/get' => 'src/backend/api/db_dades_personals/get-dades-personals.php',
+    '/api/dades_personals/put' => 'src/backend/api/db_dades_personals/put-dades-personals.php',
+    '/api/dades_personals/post' => 'src/backend/api/db_dades_personals/post-dades-personals.php',
+
     // API db_cost_huma_morts_front
+    '/api/cost_huma_front/get' => 'src/backend/api/db_cost_huma_front/get-cost-huma-front.php',
     '/api/cost_huma_front/put' => 'src/backend/api/db_cost_huma_front/put-cost-huma-front.php',
     '/api/cost_huma_front/post' => 'src/backend/api/db_cost_huma_front/post-cost-huma-front.php',
 
@@ -16,10 +20,10 @@ $base_routes = [
     '/api/cost_huma_civils/put' => 'src/backend/api/db_cost_huma_civils/put-cost-huma-civils.php',
     '/api/cost_huma_civils/post' => 'src/backend/api/db_cost_huma_civils/post-cost-huma-civils.php',
 
-    // API db_dades_personals
-    '/api/dades_personals/get' => 'src/backend/api/db_dades_personals/get-dades-personals.php',
-    '/api/dades_personals/put' => 'src/backend/api/db_dades_personals/put-dades-personals.php',
-    '/api/dades_personals/post' => 'src/backend/api/db_dades_personals/post-dades-personals.php',
+    // API db_represalia_republicana
+    '/api/represalia_republicana/get' => 'src/backend/api/db_represalia_republicana/get-represalia-republicana.php',
+    '/api/represalia_republicana/put' => 'src/backend/api/db_represalia_republicana/put-represalia-republicana.php',
+    '/api/represalia_republicana/post' => 'src/backend/api/db_represalia_republicana/post-represalia-republicana.php',
 
     // API db_exiliats
     '/api/exiliats/get' => 'src/backend/api/db_exiliats/get-exiliats.php',
@@ -38,6 +42,16 @@ $base_routes = [
 
     // API db_afusellats
     '/api/afusellats/get' => 'src/backend/api/afusellats/get-afusellats.php',
+
+    // API db_processats
+    '/api/processats/get' => 'src/backend/api/db_processats/get-processats.php',
+    '/api/processats/put' => 'src/backend/api/db_processats/put-processats.php',
+    '/api/processats/post' => 'src/backend/api/db_processats/post-processats.php',
+
+    // API db_depurats
+    '/api/depurats/get' => 'src/backend/api/db_depurats/get-depurats.php',
+    '/api/depurats/put' => 'src/backend/api/db_depurats/put-depurats.php',
+    '/api/depurats/post' => 'src/backend/api/db_depurats/post-depurats.php',
 
     // API taules auxiliars
     '/api/auxiliars/get' => 'src/backend/api/auxiliars/get-auxiliars.php',
@@ -95,10 +109,31 @@ $routes = [
 
     '/api/familiars/post' => ['view' => 'src/backend/api/db_familiars/post-familiars.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
 
-    // API WEB PUBLICA
+    // API db_represalia_republicana
+    '/api/represalia_republicana/get' => ['view' => 'src/backend/api/db_represalia_republicana/get-represalia-republicana.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
 
+    '/api/represalia_republicana/put' => ['view' => 'src/backend/api/db_represalia_republicana/put-represalia-republicana.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+
+    '/api/represalia_republicana/post' => ['view' => 'src/backend/api/db_represalia_republicana/post-represalia-republicana.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+
+    // API db_afusellats
     '/api/afusellats/get' => ['view' => 'src/backend/api/afusellats/get-afusellats.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
 
+    // API db_processats
+    '/api/processats/get' => ['view' => 'src/backend/api/db_processats/get-processats.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+
+    '/api/processats/put' => ['view' => 'src/backend/api/db_processats/put-processats.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+
+    '/api/processats/post' => ['view' => 'src/backend/api/db_processats/post-processats.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+
+    // API db_depurats
+    '/api/depurats/get' => ['view' => 'src/backend/api/db_depurats/get-depurats.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+
+    '/api/depurats/put' => ['view' => 'src/backend/api/db_depurats/put-depurats.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+
+    '/api/depurats/post' => ['view' => 'src/backend/api/db_depurats/post-depurats.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+
+    // API taules auxiliars
     '/api/auxiliars/get' => ['view' => 'src/backend/api/auxiliars/get-auxiliars.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
 
     '/api/auxiliars/post' => ['view' => 'src/backend/api/auxiliars/post-auxiliars.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],

@@ -1,6 +1,7 @@
 import { categorias, convertirFecha, calcularEdadAlMorir } from '../../config';
 import { fetchData } from '../../services/api/api';
 import { Fitxa, FitxaJudicial, FitxaFamiliars } from '../../types/types';
+import { fitxaTipusRepressio } from './tab_tipus_repressio';
 
 export function initButtons(id: string): void {
   const contenedorBotones = document.getElementById('botons1');
@@ -58,7 +59,7 @@ export function initButtons(id: string): void {
 // Función para generar los botones según la categoría obtenida de la API
 async function generarBotonesCategoria(idPersona: string): Promise<void> {
   const devDirectory = `https://${window.location.hostname}`;
-  const url = `${devDirectory}/api/dades_personals/get/?type=fitxa&id=${idPersona}`; // URL para obtener la información de la ficha
+  const url = `${devDirectory}/api/dades_personals/get/?type=fitxa&id=${idPersona}`;
 
   try {
     const data = await fetchData(url); // Llamada a la API para obtener la ficha
@@ -142,9 +143,23 @@ async function mostrarCategoria(categoriaNumerica: string, idPersona: string): P
 
   // Definir la URL de la API dependiendo de la categoría
   if (parseInt(categoriaNumerica) === 1) {
-    urlAjax2 = `${devDirectory}/api/afusellats/get?type=fitxa&id=${idPersona}`;
+    urlAjax2 = `${devDirectory}/api/afusellats/get/?type=fitxa&id=${idPersona}`;
+  } else if (parseInt(categoriaNumerica) === 2) {
+    urlAjax2 = `${devDirectory}/api/deportats/get/?type=fitxa&id=${idPersona}`;
+  } else if (parseInt(categoriaNumerica) === 3) {
+    urlAjax2 = `${devDirectory}/api/cost_huma_front/get/?type=fitxa&id=${idPersona}`;
+  } else if (parseInt(categoriaNumerica) === 4) {
+    urlAjax2 = `${devDirectory}/api/cost_huma_civils/get/?type=fitxa&id=${idPersona}`;
+  } else if (parseInt(categoriaNumerica) === 5) {
+    urlAjax2 = `${devDirectory}/api/represalia_republicana/get/?type=fitxa&id=${idPersona}`;
+  } else if (parseInt(categoriaNumerica) === 6) {
+    urlAjax2 = `${devDirectory}/api/processats/get/?type=fitxa&id=${idPersona}`;
+  } else if (parseInt(categoriaNumerica) === 7) {
+    urlAjax2 = `${devDirectory}/api/depurats/get/?type=fitxa&id=${idPersona}`;
+  } else if (parseInt(categoriaNumerica) === 8) {
+    urlAjax2 = `${devDirectory}/api/dones/get/?type=fitxa&id=${idPersona}`;
   } else if (parseInt(categoriaNumerica) === 10) {
-    urlAjax2 = `${devDirectory}/api/exiliats/get?type=fitxa&id=${idPersona}`;
+    urlAjax2 = `${devDirectory}/api/exiliats/get/?type=fitxa&id=${idPersona}`;
   } else {
     console.error('Categoria no válida:', categoriaNumerica);
     return;
@@ -168,38 +183,8 @@ async function mostrarCategoria(categoriaNumerica: string, idPersona: string): P
         divInfo.style.display = 'block';
 
         // Mostrar la información dependiendo de la categoría
-        if (parseInt(categoriaNumerica) === 1) {
-          divInfo.innerHTML += `
-            <h3>${categorias[categoriaNumerica]}</h3>
-            <p><strong>Procés judicial:</strong> ${fitxa2.procediment_cat}</p>
-            <p><strong>Número de causa:</strong> ${fitxa2.num_causa}</p>
-            <p><strong>Data inici del procés judicial:</strong> ${fitxa2.data_inici_proces}</p>
-            <p><strong>Jutge instructor:</strong> ${fitxa2.jutge_instructor}</p>
-            <p><strong>Secretari instructor:</strong> ${fitxa2.secretari_instructor}</p>
-            <p><strong>Jutjat:</strong> ${fitxa2.jutjat}</p>
-            <p><strong>Any inici del procés:</strong> ${fitxa2.any_inicial}</p>
-            <p><strong>Data del consell de guerra:</strong> ${fitxa2.consell_guerra_data}</p>
-            <p><strong>Ciutat del consell de guerra:</strong> ${fitxa2.ciutat_consellGuerra}</p>
-            <p><strong>President del tribunal:</strong> ${fitxa2.president_tribunal}</p>
-            <p><strong>Advocat defensor:</strong> ${fitxa2.defensor}</p>
-            <p><strong>Fiscal:</strong> ${fitxa2.fiscal}</p>
-            <p><strong>Ponent:</strong> ${fitxa2.ponent}</p>
-            <p><strong>Vocals tribunal:</strong> ${fitxa2.tribunal_vocals}</p>
-            <p><strong>Acusació:</strong> ${fitxa2.acusacio}</p>
-            <p><strong>Acusació 2:</strong> ${fitxa2.acusacio_2}</p>
-            <p><strong>Testimoni acusació:</strong> ${fitxa2.testimoni_acusacio}</p>
-            <p><strong>Data de la sentència:</strong> ${fitxa2.sentencia_data}</p>
-            <p><strong>Sentència:</strong> ${fitxa2.sentencia}</p>
-            <p><strong>Data sentència:</strong> ${fitxa2.data_sentencia}</p>
-            <p><strong>Data de defunció (execució):</strong> ${fitxa2.data_execucio}</p>
-            <p><strong>Lloc execució:</strong> ${fitxa2.espai}</p>
-          `;
-        } else if (parseInt(categoriaNumerica) === 10) {
-          divInfo.innerHTML += `
-            <h3>${categorias[categoriaNumerica]}</h3>
-            <h5>En elaboració:</h5>
-          `;
-        }
+
+        fitxaTipusRepressio(categoriaNumerica, fitxa2);
       } else {
         throw new Error('La API no devolvió un array.');
       }
@@ -210,32 +195,7 @@ async function mostrarCategoria(categoriaNumerica: string, idPersona: string): P
     // Si los datos ya están en caché, usarlos
     const fitxa2 = categoriaCache[categoriaNumerica];
     if (fitxa2) {
-      divInfo.style.display = 'block';
-      divInfo.innerHTML = `
-        <h3>${categorias[categoriaNumerica]}</h3>
-        <p><strong>Procés judicial:</strong> ${fitxa2.procediment_cat}</p>
-        <p><strong>Número de causa:</strong> ${fitxa2.num_causa}</p>
-        <p><strong>Data inici del procés judicial:</strong> ${fitxa2.data_inici_proces}</p>
-        <p><strong>Jutge instructor:</strong> ${fitxa2.jutge_instructor}</p>
-        <p><strong>Secretari instructor:</strong> ${fitxa2.secretari_instructor}</p>
-        <p><strong>Jutjat:</strong> ${fitxa2.jutjat}</p>
-        <p><strong>Any inici del procés:</strong> ${fitxa2.any_inicial}</p>
-        <p><strong>Data del consell de guerra:</strong> ${fitxa2.consell_guerra_data}</p>
-        <p><strong>Ciutat del consell de guerra:</strong> ${fitxa2.ciutat_consellGuerra}</p>
-        <p><strong>President del tribunal:</strong> ${fitxa2.president_tribunal}</p>
-        <p><strong>Advocat defensor:</strong> ${fitxa2.defensor}</p>
-        <p><strong>Fiscal:</strong> ${fitxa2.fiscal}</p>
-        <p><strong>Ponent:</strong> ${fitxa2.ponent}</p>
-        <p><strong>Vocals tribunal:</strong> ${fitxa2.tribunal_vocals}</p>
-        <p><strong>Acusació:</strong> ${fitxa2.acusacio}</p>
-        <p><strong>Acusació 2:</strong> ${fitxa2.acusacio_2}</p>
-        <p><strong>Testimoni acusació:</strong> ${fitxa2.testimoni_acusacio}</p>
-        <p><strong>Data de la sentència:</strong> ${fitxa2.sentencia_data}</p>
-        <p><strong>Sentència:</strong> ${fitxa2.sentencia}</p>
-        <p><strong>Data sentència:</strong> ${fitxa2.data_sentencia}</p>
-        <p><strong>Data de defunció (execució):</strong> ${fitxa2.data_execucio}</p>
-        <p><strong>Lloc execució:</strong> ${fitxa2.espai}</p>
-      `;
+      fitxaTipusRepressio(categoriaNumerica, fitxa2);
     }
   }
 }

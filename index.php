@@ -19,8 +19,11 @@ if ($requestUri === '') {
     $requestUri = '/';
 }
 
+// Detectar l'idioma de l'usuari des de la URL o la cookie
+$language = 'ca'; // Per defecte, català
+
 // Verificar si la ruta es solo el idioma, sin "/reserva"
-if (preg_match('#^/(fr|en|es)$#', $requestUri, $matches)) {
+if (preg_match('#^/(fr|en|ca|es)$#', $requestUri, $matches)) {
     $language = $matches[1];
     // Redirigir a la página correspondiente /fr/reserva, /en/reserva, /ca/reserva
     header("Location: /$language/inici", true, 301);
@@ -74,6 +77,8 @@ foreach ($routes as $route => $routeInfo) {
 if (!$routeFound) {
     $view = 'public/includes/404.php';
     $noHeaderFooter = false;
+    $headerMenu = true;
+    $apiSenseHTML = false;
 } else {
     // Verificar si la ruta requiere sesión
     $needsSession = $routeInfo['needs_session'] ?? false;

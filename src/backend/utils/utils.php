@@ -22,12 +22,16 @@ function generateLanguageRoutes(array $base_routes, bool $use_languages = true):
                 $routes[$path] = [
                     'view' => $view,
                     'needs_session' => false,
+                    'header_footer' => false,
+                    'header_menu_footer' => true
                 ];
             } else {
                 // Las rutas para otros idiomas tendrán el prefijo de idioma (ej. /fr/, /en/)
                 $routes["/{$lang}{$path}"] = [
                     'view' => $view,
                     'needs_session' => false,
+                    'header_footer' => false,
+                    'header_menu_footer' => true
                 ];
             }
         }

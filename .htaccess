@@ -7,15 +7,10 @@
     RewriteRule ^(.*)$ https://%1/$1 [L,R=301]
 
     # Si la solicitud es a una URL que no existe, redirigir a la página principal
-    RewriteCond %{REQUEST_URI} ^/es$
+    RewriteCond %{REQUEST_URI} ^/ca$
     RewriteRule ^ / [L,R=301]
 
     # Redirigir "/" a "/reserva"
-    RewriteRule ^$ /benvinguda [L,R=301]
-
-    # Redirección para /control/ a /control/reserves-pendents
-    RewriteCond %{REQUEST_URI} ^/control/$
-    RewriteRule ^(.*)$ /control/reserves-pendents [R=301,L]
 
     # Reescribir las rutas dinámicas, asegurándose de que no se trate de archivos o directorios existentes
     RewriteCond %{REQUEST_FILENAME} !-f
