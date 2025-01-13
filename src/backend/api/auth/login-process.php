@@ -80,10 +80,58 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       setcookie('token', $jwt, $cookie_options);
       setcookie('user_id', $idUser, $cookie_options);
 
+      // Si la inserció té èxit, cal registrar acces usuari en la base de control de acces
+      $dataAcces = date('Y-m-d H:i:s');
+      $idUser = $idUser;
+      $tipusOperacio = 1;
+
+      // Crear la consulta SQL
+      $sql2 = "INSERT INTO auth_users_control_acces (
+        idUser, dataAcces, tipusOperacio
+        ) VALUES (
+        :idUser, :dataAcces, :tipusOperacio
+        )";
+
+      // Preparar la consulta
+      $stmt = $conn->prepare($sql2);
+
+      // Enlazar los parámetros con los valores de las variables PHP
+      $stmt->bindParam(':idUser', $idUser, PDO::PARAM_INT);
+      $stmt->bindParam(':tipusOperacio', $tipusOperacio, PDO::PARAM_INT);
+      $stmt->bindParam(':dataAcces', $dataAcces, PDO::PARAM_STR);
+
+      // Ejecutar la consulta
+      $stmt->execute();
+
       // Devolver la respuesta JSON
       echo json_encode($response);
+
       exit;
     } else {
+
+      // Si la inserció té èxit, cal registrar acces usuari en la base de control de acces
+      $dataAcces = date('Y-m-d H:i:s');
+      $idUser = $id;
+      $tipusOperacio = 2;
+
+      // Crear la consulta SQL
+      $sql2 = "INSERT INTO auth_users_control_acces (
+      idUser, dataAcces, tipusOperacio
+      ) VALUES (
+      :idUser, :dataAcces, :tipusOperacio
+      )";
+
+      // Preparar la consulta
+      $stmt = $conn->prepare($sql2);
+
+      // Enlazar los parámetros con los valores de las variables PHP
+      $stmt->bindParam(':idUser', $idUser, PDO::PARAM_INT);
+      $stmt->bindParam(':tipusOperacio', $tipusOperacio, PDO::PARAM_INT);
+      $stmt->bindParam(':dataAcces', $dataAcces, PDO::PARAM_STR);
+
+      // Ejecutar la consulta
+      $stmt->execute();
+
       $response['status'] = 'error';
       $response['message'] = 'Usuari no autoritzat o contrasenya incorrecta.';
       echo json_encode($response);
