@@ -89,7 +89,10 @@ export async function cargarTabla(pag: string, context: number) {
         btnModificar.textContent = 'Modificar dades';
         btnModificar.classList.add('btn', 'btn-sm', 'btn-warning');
         btnModificar.onclick = function () {
-          window.location.href = `/gestio/tots/fitxa/modifica/${row.id}`;
+          const link = document.createElement('a');
+          link.href = `/gestio/tots/fitxa/modifica/${row.id}`;
+          link.target = '_blank';
+          link.click();
         };
         tdModificar.appendChild(btnModificar);
         tr.appendChild(tdModificar);
@@ -212,7 +215,10 @@ export async function cargarTabla(pag: string, context: number) {
         btnModificar.textContent = 'Modificar dades';
         btnModificar.classList.add('btn', 'btn-sm', 'btn-warning');
         btnModificar.onclick = function () {
-          window.location.href = `/gestio/tots/fitxa/modifica/${row.id}`;
+          const link = document.createElement('a');
+          link.href = `/gestio/tots/fitxa/modifica/${row.id}`;
+          link.target = '_blank';
+          link.click();
         };
         tdModificar.appendChild(btnModificar);
         tr.appendChild(tdModificar);

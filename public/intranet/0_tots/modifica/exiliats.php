@@ -21,9 +21,11 @@ $idPersona;
 $nom = "";
 $cognom1 = "";
 $cognom2 = "";
+$id = "";
 
 // Verificar si la ID existe en la base de datos
-$query = "SELECT 
+$query = "SELECT
+e.id,
 e.data_exili,
 e.lloc_partida,
 e.lloc_pas_frontera,
@@ -75,6 +77,7 @@ if ($stmt->rowCount() > 0) {
         $nom = $row['nom'] ?? "";
         $cognom1 = $row['cognom1'] ?? "";
         $cognom2 = $row['cognom2'] ?? "";
+        $id = $row['id'] ?? "";
 
         // Crear el botón o usar los datos (TIPO PUT)
         $btnModificar = 1;
@@ -122,6 +125,7 @@ if ($stmt->rowCount() > 0) {
                 </div>
 
                 <input type="hidden" name="idPersona" id="idPersona" value="<?php echo $idPersona; ?>">
+                <input type="hidden" name="id" id="id" value="<?php echo $idPersona; ?>">
 
                 <div class="col-md-4">
                     <label for="data_exili" class="form-label negreta">Data exili:</label>
@@ -390,6 +394,12 @@ if ($stmt->rowCount() > 0) {
             formData[key] = value; // Agregar cada campo al objeto formData
         });
 
+        // Obtener el user_id de localStorage
+        const userId = localStorage.getItem('user_id');
+        if (userId) {
+            formData['userId'] = userId;
+        }
+
         // Convertir los datos del formulario a JSON
         const jsonData = JSON.stringify(formData);
         const devDirectory = `https://${window.location.hostname}`;
@@ -462,6 +472,12 @@ if ($stmt->rowCount() > 0) {
         new FormData(form).forEach((value, key) => {
             formData[key] = value; // Agregar cada campo al objeto formData
         });
+
+        // Obtener el user_id de localStorage
+        const userId = localStorage.getItem('user_id');
+        if (userId) {
+            formData['userId'] = userId;
+        }
 
         // Convertir los datos del formulario a JSON
         const jsonData = JSON.stringify(formData);

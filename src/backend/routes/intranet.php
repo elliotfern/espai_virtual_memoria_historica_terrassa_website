@@ -24,6 +24,9 @@ $base_routes = [
     // INSEREIX NOVA FITXA PERSONA
     '/gestio/tots/fitxa-nova' => 'public/intranet/0_tots/nova-fitxa-persona.php',
 
+    // PÀGINES DE CONTROL DE CANVIS
+    '/gestio/registre-canvis' => 'public/intranet/control_registre_canvis/index.php',
+
     // MODIFICA REPRESSIO
     '/gestio/tots/fitxa/categoria/modifica/{categoriaId}/{id}' => 'public/intranet/0_tots/modifica-fitxa-repressio.php',
 
@@ -96,6 +99,9 @@ $routes = [
     '/gestio/partit-politic/nou' => ['view' => 'public/intranet/db_auxiliars/nou-partit-politic.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
 
     '/gestio/sindicat/nou' => ['view' => 'public/intranet/db_auxiliars/nou-sindicat.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
+
+    // REGISTRE CANVIS
+    '/gestio/registre-canvis' => ['view' => 'public/intranet/control_registre_canvis/index.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
 
 ];
 

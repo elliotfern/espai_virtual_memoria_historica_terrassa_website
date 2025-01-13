@@ -199,6 +199,12 @@ if ($stmt->rowCount() > 0) {
             formData[key] = value; // Agregar cada campo al objeto formData
         });
 
+        // Obtener el user_id de localStorage
+        const userId = localStorage.getItem('user_id');
+        if (userId) {
+            formData['userId'] = userId;
+        }
+
         // Convertir los datos del formulario a JSON
         const jsonData = JSON.stringify(formData);
         const devDirectory = `https://${window.location.hostname}`;
@@ -264,6 +270,12 @@ if ($stmt->rowCount() > 0) {
         new FormData(form).forEach((value, key) => {
             formData[key] = value; // Agregar cada campo al objeto formData
         });
+
+        // Obtener el user_id de localStorage
+        const userId = localStorage.getItem('user_id');
+        if (userId) {
+            formData['userId'] = userId;
+        }
 
         // Convertir los datos del formulario a JSON
         const jsonData = JSON.stringify(formData);
