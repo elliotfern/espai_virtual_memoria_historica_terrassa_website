@@ -59,6 +59,7 @@ $base_routes = [
     '/gestio/tots/fitxa/fonts-documentals/nou-llibre/{id}' => 'public/intranet/db_fonts_documentals/modifica-nou-llibre.php',
 
     '/gestio/tots/fitxa/fonts-documentals/crear-llibre' => 'public/intranet/db_fonts_documentals/afegir-nou-llibre.php',
+    '/gestio/tots/fitxa/fonts-documentals/crear-arxiu' => 'public/intranet/db_fonts_documentals/afegir-nou-arxiu.php',
 
 ];
 
@@ -105,6 +106,8 @@ $routes = [
     '/gestio/tots/fitxa/fonts-documentals/nou-arxiu/{id}' => ['view' => 'public/intranet/db_fonts_documentals/modifica-nou-arxiu.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
 
     '/gestio/tots/fitxa/fonts-documentals/modifica-arxiu/{id}/{id}' => ['view' => 'public/intranet/db_fonts_documentals/modifica-nou-arxiu.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
+
+    '/gestio/tots/fitxa/fonts-documentals/crear-arxiu' => ['view' => 'public/intranet/db_fonts_documentals/afegir-nou-arxiu.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
 
     // AUXILIARS
     '/gestio/municipi/nou' => ['view' => 'public/intranet/db_auxiliars/nou-municipi.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],

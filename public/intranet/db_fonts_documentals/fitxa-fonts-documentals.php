@@ -143,14 +143,15 @@ if ($stmt->rowCount() > 0) {
                     $ciutat_arxiu = $row['ciutat'] ?? null;
                     $codi = $row['codi'] ?? null;
                     $arxiu = $row['arxiu'] ?? null;
+                    $idArxiu = $row['id'] ?? null;
 
                     echo '<tr>';
                     echo '<td>' . $referencia . '</td>';
                     echo '<td>' . $arxiu .  '</td>';
                     echo '<td>' . $codi .  '</td>';
                     echo '<td>' . $ciutat_arxiu .  '</td>';
-                    echo '<td><a href="https://memoriaterrassa.cat/gestio/tots/fitxa/fonts-documentals/modifica-llibre/' . $idPersona . "/" . $idLlibre . '" class="btn btn-primary">Modifica</a></td>';
-                    echo '<td><a href="https://memoriaterrassa.cat/gestio/tots/fitxa/fonts-documentals/elimina/' . $idLlibre . '" class="btn btn-danger">Elimina</a></td>';
+                    echo '<td><a href="https://memoriaterrassa.cat/gestio/tots/fitxa/fonts-documentals/modifica-arxiu/' . $idPersona . "/" . $idArxiu . '" class="btn btn-primary">Modifica</a></td>';
+                    echo '<td><a href="https://memoriaterrassa.cat/gestio/tots/fitxa/fonts-documentals/elimina/' . $idArxiu . '" class="btn btn-danger">Elimina</a></td>';
                     echo '</tr>';
                 }
 

@@ -16,7 +16,7 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
 $modificaBtn = "";
 $idRepresaliat = "";
 
-if ($categoriaId === "modifica-llibre") {
+if ($categoriaId === "modifica-arxiu") {
     $modificaBtn = 1;
     $idRepresaliat = $routeParams[1];
 } else {
@@ -24,19 +24,20 @@ if ($categoriaId === "modifica-llibre") {
 }
 
 $id_old = "";
-$llibre_old = "";
-$pagina_old = "";
+$codi_old = "";
+$referencia_old = "";
 $idPersona;
 $idParent_old = "";
 
 if ($modificaBtn === 1) {
     // Verificar si la ID existe en la base de datos
-    $query = "SELECT b.id, b.llibre, b.idRepresaliat, b.pagina, d.nom,
+    $query = "SELECT a.id, a.referencia, a.codi, a.idRepresaliat,
+    d.nom,
     d.cognom1,
     d.cognom2
-    FROM aux_bibliografia_llibres AS b
-    LEFT JOIN db_dades_personals AS d ON b.idRepresaliat = d.id
-    WHERE b.id = :id";
+    FROM aux_bibliografia_arxius AS a
+    LEFT JOIN db_dades_personals AS d ON a.idRepresaliat = d.id
+    WHERE a.id = :id";
 
     $stmt = $conn->prepare($query);
     $stmt->bindParam(':id', $idRepresaliat, PDO::PARAM_INT);
@@ -46,8 +47,8 @@ if ($modificaBtn === 1) {
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             // Acceder a las variables de la consulta
             $id_old = $row['id'] ?? "";
-            $llibre_old = $row['llibre'] ?? "";
-            $pagina_old = $row['pagina'] ?? "";
+            $referencia_old = $row['referencia'] ?? "";
+            $codi_old = $row['codi'] ?? "";
             $idParent_old = $row['idRepresaliat'] ?? "";
             $nom = $row['nom'] ?? "";
             $cognom1 = $row['cognom1'] ?? "";
@@ -102,21 +103,21 @@ if ($modificaBtn === 1) {
                 <input type="hidden" name="id" id="id" value="<?php echo $id_old; ?>">
 
                 <div class="col-md-4">
-                    <label for="llibre" class="form-label negreta">Llibre:</label>
-                    <select class="form-select" name="llibre" id="llibre" value="">
+                    <label for="referencia" class="form-label negreta">Referència documentació:</label>
+                    <input type="text" class="form-control" name="referencia" id="referencia" value="<?php echo $referencia_old; ?>">
+                </div>
+
+
+                <div class="col-md-4">
+                    <label for="codi" class="form-label negreta">Codi arxiu:</label>
+                    <select class="form-select" name="codi" id="codi" value="<?php echo $codi_old; ?>">
                     </select>
 
                     <div class="mt-2">
-                        <a href="https://memoriaterrassa.cat/gestio/tots/fitxa/fonts-documentals/crear-llibre" target="_blank" class="btn btn-secondary btn-sm" id="afegirLlibre1">Afegir llibre</a>
-                        <button id="refreshButtonLlibres" class="btn btn-primary btn-sm">Actualitzar llistat llibres</button>
+                        <a href="https://memoriaterrassa.cat/gestio/tots/fitxa/fonts-documentals/crear-arxiu" target="_blank" class="btn btn-secondary btn-sm" id="afegirArxiu1">Afegir codi arxiu</a>
+                        <button id="refreshButtonArxius" class="btn btn-primary btn-sm">Actualitzar llistat arxius</button>
                     </div>
                 </div>
-
-                <div class="col-md-4">
-                    <label for="pagina" class="form-label negreta">Pàgines (opcional):</label>
-                    <input type="text" class="form-control" name="pagina" id="pagina" value="<?php echo $pagina_old; ?>">
-                </div>
-
 
                 <div class="col-md-4">
                     <label for="idRepresaliat" class="form-label negreta">Represaliat:</label>
@@ -211,12 +212,12 @@ if ($modificaBtn === 1) {
         }
     }
 
-    auxiliarSelect("<?php echo $llibre_old; ?>", "llistat_llibres_bibliografia", "llibre", "llibre");
+    auxiliarSelect("<?php echo $codi_old; ?>", "llistat_arxivistica", "codi", "arxiu");
     auxiliarSelect("<?php echo $idParent_old; ?>", "llistat_complert_represaliats", "idRepresaliat", "nom_complert");
 
-    document.getElementById('refreshButtonLlibres').addEventListener('click', function(event) {
+    document.getElementById('refreshButtonArxius').addEventListener('click', function(event) {
         event.preventDefault();
-        auxiliarSelect("<?php echo $llibre_old; ?>", "llistat_llibres_bibliografia", "llibre", "llibre");
+        auxiliarSelect("<?php echo $codi_old; ?>", "llistat_arxivistica", "codi", "arxiu");
     });
 
     // Función para manejar el envío del formulario
@@ -241,7 +242,7 @@ if ($modificaBtn === 1) {
         // Convertir los datos del formulario a JSON
         const jsonData = JSON.stringify(formData);
         const devDirectory = `https://${window.location.hostname}`;
-        let urlAjax = devDirectory + "/api/db_fonts_documentals/put/type=bibliografia";
+        let urlAjax = devDirectory + "/api/db_fonts_documentals/put/type=arxivistica";
 
         try {
             // Hacer la solicitud con fetch y await
@@ -320,7 +321,7 @@ if ($modificaBtn === 1) {
         // Convertir los datos del formulario a JSON
         const jsonData = JSON.stringify(formData);
         const devDirectory = `https://${window.location.hostname}`;
-        let urlAjax = devDirectory + "/api/fonts_documentals/post/?type=bibliografia";
+        let urlAjax = devDirectory + "/api/fonts_documentals/post/?type=arxivistica";
 
         try {
             // Hacer la solicitud con fetch y await

@@ -455,6 +455,24 @@ if (isset($_GET['type']) && $_GET['type'] == 'municipis') {
         $data[] = $users;
     }
     echo json_encode($data);
+
+    // 1) Llistat relacions de parentiu
+    // ruta GET => "/api/auxiliars/get/?type=llistat_arxivistica"
+} elseif (isset($_GET['type']) && $_GET['type'] == 'llistat_arxivistica') {
+    global $conn;
+    $data = array();
+    $stmt = $conn->prepare(
+        "SELECT l.id, 
+           CONCAT(l.codi, ', ', SUBSTRING(l.arxiu, 1, 40), '...') AS arxiu
+        FROM aux_bibliografia_arxius_codis AS l
+        ORDER BY l.arxiu ASC"
+    );
+    $stmt->execute();
+    if ($stmt->rowCount() === 0) echo ('No rows');
+    while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $data[] = $users;
+    }
+    echo json_encode($data);
 } else {
     // Si 'type', 'id' o 'token' están ausentes o 'type' no es 'user' en la URL
     header('HTTP/1.1 403 Forbidden');
