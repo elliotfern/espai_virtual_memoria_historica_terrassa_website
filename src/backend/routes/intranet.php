@@ -26,6 +26,7 @@ $base_routes = [
 
     // PÀGINES DE CONTROL DE CANVIS
     '/gestio/registre-canvis' => 'public/intranet/control_registre_canvis/index.php',
+    '/gestio/control-acces' => 'public/intranet/control_registre_canvis/control-acces.php',
 
     // MODIFICA REPRESSIO
     '/gestio/tots/fitxa/categoria/modifica/{categoriaId}/{id}' => 'public/intranet/0_tots/modifica-fitxa-repressio.php',
@@ -51,6 +52,13 @@ $base_routes = [
     '/gestio/sub-sector-economic/nou' => 'public/intranet/db_auxiliars/nou-subsector-economic.php',
     '/gestio/partit-politic/nou' => 'public/intranet/db_auxiliars/nou-partit-politic.php',
     '/gestio/sindicat/nou' => 'public/intranet/db_auxiliars/nou-sindicat.php',
+
+    // Gestió fons documentals
+    '/gestio/tots/fitxa/fonts-documentals/fitxa/{id}' => 'public/intranet/db_fonts_documentals/fitxa-fonts-documentals.php',
+    '/gestio/tots/fitxa/fonts-documentals/modifica-llibre/{id}/{id}' => 'public/intranet/db_fonts_documentals/modifica-nou-llibre.php',
+    '/gestio/tots/fitxa/fonts-documentals/nou-llibre/{id}' => 'public/intranet/db_fonts_documentals/modifica-nou-llibre.php',
+
+    '/gestio/tots/fitxa/fonts-documentals/crear-llibre' => 'public/intranet/db_fonts_documentals/afegir-nou-llibre.php',
 
 ];
 
@@ -83,6 +91,21 @@ $routes = [
 
     '/gestio/tots/fitxa/familiar/nou/{id}' => ['view' => 'public/intranet/db_familiars/modifica-nou-familiar.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
 
+    // Gestió fonts documentals (bibliografia i arxius)
+    '/gestio/tots/fitxa/fonts-documentals/fitxa/{id}' => ['view' => 'public/intranet/db_fonts_documentals/fitxa-fonts-documentals.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
+
+    // llibres
+    '/gestio/tots/fitxa/fonts-documentals/nou-llibre/{id}' => ['view' => 'public/intranet/db_fonts_documentals/modifica-nou-llibre.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
+
+    '/gestio/tots/fitxa/fonts-documentals/modifica-llibre/{id}/{id}' => ['view' => 'public/intranet/db_fonts_documentals/modifica-nou-llibre.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
+
+    '/gestio/tots/fitxa/fonts-documentals/crear-llibre' => ['view' => 'public/intranet/db_fonts_documentals/afegir-nou-llibre.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
+
+    // arxius
+    '/gestio/tots/fitxa/fonts-documentals/nou-arxiu/{id}' => ['view' => 'public/intranet/db_fonts_documentals/modifica-nou-arxiu.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
+
+    '/gestio/tots/fitxa/fonts-documentals/modifica-arxiu/{id}/{id}' => ['view' => 'public/intranet/db_fonts_documentals/modifica-nou-arxiu.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
+
     // AUXILIARS
     '/gestio/municipi/nou' => ['view' => 'public/intranet/db_auxiliars/nou-municipi.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
 
@@ -102,6 +125,8 @@ $routes = [
 
     // REGISTRE CANVIS
     '/gestio/registre-canvis' => ['view' => 'public/intranet/control_registre_canvis/index.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
+
+    '/gestio/control-acces' => ['view' => 'public/intranet/control_registre_canvis/control-acces.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
 
 ];
 

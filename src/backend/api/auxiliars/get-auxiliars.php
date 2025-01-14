@@ -435,6 +435,26 @@ if (isset($_GET['type']) && $_GET['type'] == 'municipis') {
         $data[] = $users;
     }
     echo json_encode($data);
+
+    // DB_FONTS DOCUMENTALS
+    // BIBLIOGRAFIA
+    // 1) Llistat relacions de parentiu
+    // ruta GET => "/api/auxiliars/get/?type=llistat_llibres_bibliografia"
+} elseif (isset($_GET['type']) && $_GET['type'] == 'llistat_llibres_bibliografia') {
+    global $conn;
+    $data = array();
+    $stmt = $conn->prepare(
+        "SELECT l.id, l.llibre, l.autor, l.any,
+       CONCAT(l.autor, ', ', SUBSTRING(l.llibre, 1, 40), '...', ', ', l.any) AS llibre
+        FROM aux_bibliografia_llibre_detalls AS l
+        ORDER BY l.llibre ASC"
+    );
+    $stmt->execute();
+    if ($stmt->rowCount() === 0) echo ('No rows');
+    while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $data[] = $users;
+    }
+    echo json_encode($data);
 } else {
     // Si 'type', 'id' o 'token' están ausentes o 'type' no es 'user' en la URL
     header('HTTP/1.1 403 Forbidden');

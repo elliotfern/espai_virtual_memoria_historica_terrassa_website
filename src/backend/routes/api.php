@@ -57,6 +57,10 @@ $base_routes = [
     '/api/auxiliars/get' => 'src/backend/api/auxiliars/get-auxiliars.php',
     '/api/auxiliars/post' => 'src/backend/api/auxiliars/post-auxiliars.php',
     '/api/auxiliars/put' => 'src/backend/api/auxiliars/put-auxiliars.php',
+
+    // API db_fonts documentals (aux_bibliografia_llibre_detalls)
+    '/api/fonts_documentals/post' => 'src/backend/api/db_fonts_documentals/post-fonts-documentals.php',
+    '/api/fonts_documentals/put' => 'src/backend/api/db_fonts_documentals/put-fonts-documentals.php',
 ];
 
 // Rutas principales sin idioma explícito (solo para el idioma por defecto)
@@ -139,6 +143,11 @@ $routes = [
     '/api/auxiliars/post' => ['view' => 'src/backend/api/auxiliars/post-auxiliars.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
 
     '/api/auxiliars/put' => ['view' => 'src/backend/api/auxiliars/put-auxiliars.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+
+    // API fonts documentals
+    '/api/fonts_documentals/post' => ['view' => 'src/backend/api/db_fonts_documentals/post-fonts-documentals.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+
+    '/api/fonts_documentals/put' => ['view' => 'src/backend/api/db_fonts_documentals/put-fonts-documentals.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
 
 ];
 

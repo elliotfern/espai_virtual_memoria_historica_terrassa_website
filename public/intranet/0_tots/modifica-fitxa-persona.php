@@ -375,6 +375,13 @@ $id = $routeParams[0];
       <div class="row">
         <h3>Fonts documentals</h3>
 
+        <hr style="margin-top:25px">
+        <h4>Modificar llistat de fonts documentals (bibliografia i arxius)</h4>
+
+        <div class="col-md-4">
+          <a href="https://memoriaterrassa.cat/gestio/tots/fitxa/fonts-documentals/fitxa/<?php echo $id; ?>" target="_blank" class="btn btn-success">Afegir/veure fonts</a>
+        </div>
+
 
       </div>
     </div> <!-- Fi tab6 -->
@@ -880,18 +887,22 @@ $id = $routeParams[0];
           if (data.status === "success") {
             // Cambiar el display del div con id 'OkMessage' a 'block'
             const okMessageDiv = document.getElementById("okMessage");
+            const errMessageDiv = document.getElementById("errMessage");
             const okTextDiv = document.getElementById("okText");
 
-            if (okMessageDiv && okTextDiv) {
+            if (okMessageDiv && okTextDiv && errMessageDiv) {
               okMessageDiv.style.display = "block";
+              errMessageDiv.style.display = "none";
               okTextDiv.textContent = data.message || "Les dades s'han actualitzat correctament!";
             }
           } else {
             // Si el status no es success, manejar el error aquí
             const errMessageDiv = document.getElementById("errMessage");
+            const okMessageDiv = document.getElementById("okMessage");
             const errTextDiv = document.getElementById("errText");
-            if (errMessageDiv && errTextDiv) {
+            if (errMessageDiv && errTextDiv && okMessageDiv) {
               errMessageDiv.style.display = "block";
+              okMessageDiv.style.display = "none";
               errTextDiv.innerHTML = data.errors.join('<br>') || "S'ha produit un error a la base de dades.";
             }
           }
