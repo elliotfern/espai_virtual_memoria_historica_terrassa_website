@@ -9,8 +9,11 @@ $base_routes = [
     '/gestio' => 'public/intranet/00_homepage/admin.php',
     '/gestio/admin' => 'public/intranet/00_homepage/admin.php',
 
-    // 0. Llistat complet
+    // 0. Llistats pàgines
     '/gestio/tots' => 'public/intranet/0_tots/index.php',
+    '/gestio/exiliats' => 'public/intranet/2_exili/index.php',
+    '/gestio/represaliats' => 'public/intranet/1_represaliats/index.php',
+    '/gestio/cost-huma' => 'public/pages/3_cost_huma/index.php',
 
     // MODIFICA FITXA PERSONA
     '/gestio/tots/fitxa/modifica/{id}' => 'public/intranet/0_tots/modifica-fitxa-persona.php',
@@ -75,6 +78,14 @@ $routes = [
 
     // LLISTAT TOTS
     '/gestio/tots' => ['view' => 'public/intranet/0_tots/index.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
+
+    '/gestio/represaliats' => ['view' => 'public/intranet/1_represaliats/index.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
+
+    '/gestio/exiliats' => ['view' => 'public/intranet/2_exili/index.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
+
+    '/gestio/cost-huma' => ['view' => 'public/intranet/3_cost_huma/index.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
+
+    // BASE DE DADES PERSONALS
 
     '/gestio/tots/fitxa/modifica/{id}' => ['view' => 'public/intranet/0_tots/modifica-fitxa-persona.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
 

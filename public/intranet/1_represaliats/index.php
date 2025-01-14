@@ -1,7 +1,7 @@
 <?php require_once APP_ROOT . '/public/intranet/includes/header.php'; ?>
 
 <div class="container">
-    <h4>Llistat d'exiliats i deportats</h4>
+    <h4>Llistat de represaliats (1939-1979)</h4>
 
     <hr>
 

@@ -29,37 +29,89 @@ if (isset($_GET['type']) && $_GET['type'] == 'tots') {
     }
 
     // 2) Llistat tots per categories
-    // ruta GET => "https://memoriaterrassa.cat//api/represaliats/get/?type=totesCategories&cat="
     // ruta GET => "https://memoriaterrassa.cat/api/represaliats/get/?type=totesCategories&categoria=afusellats"
 } elseif (isset($_GET['type']) && $_GET['type'] == 'totesCategories' && isset($_GET['categoria'])) {
 
     // Obtener y sanitizar la entrada
     $cat = filter_input(INPUT_GET, 'categoria', FILTER_DEFAULT);
 
-    if ($cat === "afusellats") {
-        $catNum = 1;
-    } else if ($cat === "exili-deportacio") {
-        $catNum = 10;
-    }
+    if ($cat === "cost-huma") {
+        $catNum1 = 3;
+        $catNum2 = 4;
+        $catNum3 = 5;
 
-    global $conn;
-    $data = array();
-    /** @var PDO $conn */
-    $stmt = $conn->prepare(
-        "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, e1.comarca, e1.provincia, e1.comunitat, e1.pais, a.categoria, e2.ciutat AS ciutat2, e2.comarca AS comarca2, e2.provincia AS provincia2, e2.comunitat AS comunitat2, e2.pais AS pais2
+        $sql = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2
             FROM db_dades_personals AS a
             LEFT JOIN aux_dades_municipis AS e1 ON a.municipi_naixement = e1.id
             LEFT JOIN aux_dades_municipis AS e2 ON a.municipi_defuncio = e2.id
-            WHERE FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
-            ORDER BY a.cognom1 ASC;"
-    );
-    $stmt->bindParam(1, $catNum, PDO::PARAM_STR);
-    $stmt->execute();
-    if ($stmt->rowCount() === 0) echo ('No rows');
-    while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $data[] = $users;
+            WHERE 
+            FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
+                OR FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
+                OR FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
+            ORDER BY a.cognom1 ASC;";
+        global $conn;
+        $data = array();
+        /** @var PDO $conn */
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(1, $catNum1, PDO::PARAM_STR);
+        $stmt->bindParam(2, $catNum2, PDO::PARAM_STR);
+        $stmt->bindParam(3, $catNum3, PDO::PARAM_STR);
+        $stmt->execute();
+        if ($stmt->rowCount() === 0) echo ('No rows');
+        while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $data[] = $users;
+        }
+        echo json_encode($data);
+    } else if ($cat === "exiliats") {
+        $catNum1 = 10;
+        $catNum2 = 2;
+        $sql = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2
+            FROM db_dades_personals AS a
+            LEFT JOIN aux_dades_municipis AS e1 ON a.municipi_naixement = e1.id
+            LEFT JOIN aux_dades_municipis AS e2 ON a.municipi_defuncio = e2.id
+            WHERE 
+                FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
+                OR FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
+            ORDER BY a.cognom1 ASC;";
+        global $conn;
+        $data = array();
+        /** @var PDO $conn */
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(1, $catNum1, PDO::PARAM_STR);
+        $stmt->bindParam(2, $catNum2, PDO::PARAM_STR);
+        $stmt->execute();
+        if ($stmt->rowCount() === 0) echo ('No rows');
+        while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $data[] = $users;
+        }
+        echo json_encode($data);
+    } else if ($cat === "represaliats") {
+        $catNum1 = 1;
+        $catNum2 = 6;
+        $catNum3 = 7;
+        $sql = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2
+            FROM db_dades_personals AS a
+            LEFT JOIN aux_dades_municipis AS e1 ON a.municipi_naixement = e1.id
+            LEFT JOIN aux_dades_municipis AS e2 ON a.municipi_defuncio = e2.id
+            WHERE 
+                FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
+                OR FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
+                OR FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
+            ORDER BY a.cognom1 ASC;";
+        global $conn;
+        $data = array();
+        /** @var PDO $conn */
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(1, $catNum1, PDO::PARAM_STR);
+        $stmt->bindParam(2, $catNum2, PDO::PARAM_STR);
+        $stmt->bindParam(3, $catNum3, PDO::PARAM_STR);
+        $stmt->execute();
+        if ($stmt->rowCount() === 0) echo ('No rows');
+        while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $data[] = $users;
+        }
+        echo json_encode($data);
     }
-    echo json_encode($data);
 
     // 2) Pagina informacio fitxa Represaliat
     // ruta GET => "https://memoriaterrassa.cat/api/represaliats/get/?type=fitxa&id=35"

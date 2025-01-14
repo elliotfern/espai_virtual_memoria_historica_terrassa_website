@@ -44,9 +44,11 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       cargarTabla(pageType, 1);
     }
-  } else if (pageType === 'afusellats') {
+  } else if (pageType === 'represaliats') {
     cargarTabla(pageType, 2); // También cargar para afusellats
-  } else if (pageType === 'exili-deportacio') {
+  } else if (pageType === 'exiliats') {
+    cargarTabla(pageType, 2); // También cargar para exiliats
+  } else if (pageType === 'cost-huma') {
     cargarTabla(pageType, 2); // También cargar para exiliats
   } else if (pathArray[pathArray.length - 2] === 'fitxa') {
     const id = pathArray[pathArray.length - 1];

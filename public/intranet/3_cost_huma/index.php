@@ -1,7 +1,7 @@
 <?php require_once APP_ROOT . '/public/intranet/includes/header.php'; ?>
 
 <div class="container">
-    <h4>Llistat d'exiliats i deportats</h4>
+    <h4>Cost humà de la Guerra Civil (1936-1939)</h4>
 
     <hr>
 
