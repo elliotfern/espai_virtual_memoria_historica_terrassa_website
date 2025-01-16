@@ -141,7 +141,7 @@ $btnModificar = 2;
         // Convertir los datos del formulario a JSON
         const jsonData = JSON.stringify(formData);
         const devDirectory = `https://${window.location.hostname}`;
-        let urlAjax = devDirectory + "/api/auxiliars/put/?type=municipi";
+        let urlAjax = devDirectory + "/api/auxiliars/put/?type=estat";
 
         try {
             // Hacer la solicitud con fetch y await
@@ -213,7 +213,7 @@ $btnModificar = 2;
         // Convertir los datos del formulario a JSON
         const jsonData = JSON.stringify(formData);
         const devDirectory = `https://${window.location.hostname}`;
-        let urlAjax = devDirectory + "/api/auxiliars/post/?type=municipi";
+        let urlAjax = devDirectory + "/api/auxiliars/post/?type=estat";
 
         try {
             // Hacer la solicitud con fetch y await

@@ -14,7 +14,7 @@ $btnModificar = 2;
     <form id="municipiForm">
         <div class="container">
             <div class="row">
-                <h2>Inserció dades nova Provincia</h2>
+                <h2>Inserció dades nova Provincia/Departament</h2>
 
                 <div class="alert alert-success" role="alert" id="okMessage" style="display:none">
                     <h4 class="alert-heading"><strong>Modificació correcte!</strong></h4>
