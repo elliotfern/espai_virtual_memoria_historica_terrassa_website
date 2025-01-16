@@ -1,8 +1,12 @@
 <?php require_once APP_ROOT . '/public/intranet/includes/header.php'; ?>
 
 <div class="container">
-    <h4>Cost humà de la Guerra Civil (1936-1939)</h4>
-
+    <h2>Cost humà de la Guerra Civil (1936-1939):</h2>
+    <ul>
+        <li>Cost humà de desapareguts i morts al front</li>
+        <li>Cost humà de civils</li>
+        <li>Represàlia republicana</li>
+    </ul>
     <hr>
 
     <input type="text" id="searchInput" placeholder="Cercar...">

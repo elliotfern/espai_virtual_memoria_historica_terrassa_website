@@ -1,8 +1,11 @@
 <?php require_once APP_ROOT . '/public/intranet/includes/header.php'; ?>
 
 <div class="container">
-    <h4>Llistat d'exiliats i deportats</h4>
-
+    <h2>Llistat d'exiliats i deportats:</h2>
+    <ul>
+        <li>Exiliats</li>
+        <li>Deportats</li>
+    </ul>
     <hr>
 
     <input type="text" id="searchInput" placeholder="Cercar...">

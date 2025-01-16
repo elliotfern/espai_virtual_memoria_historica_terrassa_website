@@ -18,6 +18,74 @@ if (isset($_GET['type']) && $_GET['type'] == 'municipis') {
     }
     echo json_encode($data);
 
+    // 1) Llistat comarques
+    // ruta GET => "/api/auxiliars/get/?type=comarques"
+} elseif (isset($_GET['type']) && $_GET['type'] == 'comarques') {
+    global $conn;
+    $data = array();
+    $stmt = $conn->prepare(
+        "SELECT c.id, c.comarca
+        FROM aux_dades_municipis_comarca AS c
+        ORDER BY c.comarca ASC"
+    );
+    $stmt->execute();
+    if ($stmt->rowCount() === 0) echo ('No rows');
+    while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $data[] = $users;
+    }
+    echo json_encode($data);
+
+    // 1) Llistat provincies
+    // ruta GET => "/api/auxiliars/get/?type=provincies"
+} elseif (isset($_GET['type']) && $_GET['type'] == 'provincies') {
+    global $conn;
+    $data = array();
+    $stmt = $conn->prepare(
+        "SELECT p.id, p.provincia
+        FROM aux_dades_municipis_provincia AS p
+        ORDER BY p.provincia ASC"
+    );
+    $stmt->execute();
+    if ($stmt->rowCount() === 0) echo ('No rows');
+    while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $data[] = $users;
+    }
+    echo json_encode($data);
+
+    // 1) Llistat comunitats autonomes
+    // ruta GET => "/api/auxiliars/get/?type=comunitats"
+} elseif (isset($_GET['type']) && $_GET['type'] == 'comunitats') {
+    global $conn;
+    $data = array();
+    $stmt = $conn->prepare(
+        "SELECT c.id, c.comunitat
+        FROM aux_dades_municipis_comunitat AS c
+        ORDER BY c.comunitat ASC"
+    );
+    $stmt->execute();
+    if ($stmt->rowCount() === 0) echo ('No rows');
+    while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $data[] = $users;
+    }
+    echo json_encode($data);
+
+    // 1) Llistat estats
+    // ruta GET => "/api/auxiliars/get/?type=estats"
+} elseif (isset($_GET['type']) && $_GET['type'] == 'estats') {
+    global $conn;
+    $data = array();
+    $stmt = $conn->prepare(
+        "SELECT e.id, e.estat
+        FROM aux_dades_municipis_estat AS e
+        ORDER BY e.estat ASC"
+    );
+    $stmt->execute();
+    if ($stmt->rowCount() === 0) echo ('No rows');
+    while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $data[] = $users;
+    }
+    echo json_encode($data);
+
     // 2) Llistat estudis
     // ruta GET => "/api/auxiliars/get/?type=estudis"
 } elseif (isset($_GET['type']) && $_GET['type'] == 'estudis') {

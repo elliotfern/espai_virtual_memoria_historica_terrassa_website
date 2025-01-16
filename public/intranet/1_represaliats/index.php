@@ -1,7 +1,12 @@
 <?php require_once APP_ROOT . '/public/intranet/includes/header.php'; ?>
 
 <div class="container">
-    <h4>Llistat de represaliats (1939-1979)</h4>
+    <h2>Llistat de represaliats (1939-1979):</h2>
+    <ul>
+        <li>Processats / Empresonats</li>
+        <li>Afusellats</li>
+        <li>Depurats</li>
+    </ul>
 
     <hr>
 

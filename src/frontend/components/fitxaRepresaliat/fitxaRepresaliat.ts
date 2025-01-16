@@ -254,7 +254,7 @@ async function mostrarInformacion(tab: string, idPersona: string, label: string)
   const fechaNacimiento = convertirFecha(fitxa.data_naixement);
   const fechaDefuncion = convertirFecha(fitxa.data_defuncio);
 
-  let edatAlMorir = '';
+  let edatAlMorir = 'Desconeguda';
   if (fechaNacimiento && fechaDefuncion) {
     const edat = calcularEdadAlMorir(fechaNacimiento, fechaDefuncion);
     if (edat !== null) {
@@ -269,21 +269,44 @@ async function mostrarInformacion(tab: string, idPersona: string, label: string)
   const dataCreacio = fitxa.data_creacio;
   const dataActualitzacio = fitxa.data_actualitzacio;
 
+  // variables tab1
+  const dataNaixement = fitxa.data_naixement === '' ? '?' : fitxa.data_naixement;
+  const dataDefuncio = fitxa.data_defuncio === '' || null ? '?' : fitxa.data_defuncio;
+  const ciutatNaixement = fitxa.ciutat_naixement === '' || null ? 'Desconegut' : fitxa.ciutat_naixement;
+  const comarcaNaixement = fitxa.comarca_naixement === '' || null ? 'Desconegut' : fitxa.comarca_naixement;
+  const provinciaNaixement = fitxa.provincia_naixement === '' || null ? 'Desconegut' : fitxa.provincia_naixement;
+  const comunitatNaixement = fitxa.comunitat_naixement === '' || null ? 'Desconegut' : fitxa.comunitat_naixement;
+  const paisNaixement = fitxa.pais_naixement === '' || null ? 'Desconegut' : fitxa.pais_naixement;
+  const adreca = fitxa.adreca === '' || null ? 'Desconeguda' : fitxa.adreca;
+  const ciutatResidencia = fitxa.ciutat_residencia === '' || null ? 'Desconeguda' : fitxa.ciutat_residencia;
+  const comarcaResidencia = fitxa.comarca_residencia === '' || null ? 'Desconeguda' : fitxa.comarca_residencia;
+  const provinciaResidencia = fitxa.provincia_residencia === '' || null ? 'Desconeguda' : fitxa.provincia_residencia;
+  const comunitatResidencia = fitxa.comunitat_residencia === '' || null ? 'Desconeguda' : fitxa.comunitat_residencia;
+  const paisResidencia = fitxa.pais_residencia === '' || null ? 'Desconegut' : fitxa.pais_residencia;
+  const ciutatDefuncio = fitxa.ciutat_defuncio === '' || fitxa.ciutat_defuncio === null || fitxa.ciutat_defuncio === undefined ? 'Desconeguda' : fitxa.ciutat_defuncio;
+  const comarcaDefuncio = fitxa.comarca_defuncio === '' || null ? 'Desconeguda' : fitxa.comarca_defuncio;
+  const provinciaDefuncio = fitxa.provincia_defuncio === '' || null ? 'Desconeguda' : fitxa.provincia_defuncio;
+  const comunitatDefuncio = fitxa.comunitat_defuncio === '' || null ? 'Desconeguda' : fitxa.comunitat_defuncio;
+  const paisDefuncio = fitxa.pais_defuncio === '' || null ? 'Desconegut' : fitxa.pais_defuncio;
+  const tipologiaEspaiDefuncio = fitxa.tipologia_espai === '' || null ? 'Desconeguda' : fitxa.tipologia_espai;
+  const observacionsTipologiaEspacioDefuncio = fitxa.observacions_espai === '' || null ? 'Desconeguda' : fitxa.observacions_espai;
+  const causaDefuncio = fitxa.causa_defuncio === '' || null ? 'Desconeguda' : fitxa.causa_defuncio;
+
   // Dependiendo del tab, generar el contenido
   switch (tab) {
     case 'tab1':
       divInfo.innerHTML = `
         <h3 class="titolSeccio">${label}</h3>
         <p><span class='negreta'>Sexe:</span> ${sexeText}</p>
-        <p><span class='negreta'>Data de naixement:</span> ${fitxa.data_naixement}</p>
-        <p><span class='negreta'>Data de defunció:</span> ${fitxa.data_defuncio}</p>
+        <p><span class='negreta'>Data de naixement:</span> ${dataNaixement}</p>
+        <p><span class='negreta'>Data de defunció:</span> ${dataDefuncio}</p>
         <p><span class='negreta'>Edat:</span> ${edatAlMorir}</p>
-        <p><span class='negreta'>Ciutat de naixement:</span> ${fitxa.ciutat_naixement} (${fitxa.comarca_naixement}, ${fitxa.provincia_naixement}, ${fitxa.comunitat_naixement}, ${fitxa.pais_naixement})</p>
-        <p><span class='negreta'>Lloc de residència:</span> ${fitxa.adreca}, ${fitxa.ciutat_residencia} (${fitxa.comarca_residencia}, ${fitxa.provincia_residencia}, ${fitxa.comunitat_residencia}, ${fitxa.pais_residencia})</p>
-        <p><span class='negreta'>Ciutat de defunció:</span> ${fitxa.ciutat_defuncio} (${fitxa.comarca_defuncio}, ${fitxa.provincia_defuncio}, ${fitxa.comunitat_defuncio}, ${fitxa.pais_defuncio})</p>
-        <p><span class='negreta'Tipologia espai de defunció:</span> ${fitxa.tipologia_espai}</p>
-        <p><span class='negreta'Observacions espai de defunció:</span> ${fitxa.observacions_espai}</p>
-        <p><span class='negreta'Causa de la defunció:</span> ${fitxa.causa_defuncio}</p>
+        <p><span class='negreta'>Ciutat de naixement:</span> ${ciutatNaixement} (${comarcaNaixement}, ${provinciaNaixement}, ${comunitatNaixement}, ${paisNaixement})</p>
+        <p><span class='negreta'>Lloc de residència:</span> ${adreca}, ${ciutatResidencia} (${comarcaResidencia}, ${provinciaResidencia}, ${comunitatResidencia}, ${paisResidencia})</p>
+        <p><span class='negreta'>Ciutat de defunció:</span> ${ciutatDefuncio} (${comarcaDefuncio}, ${provinciaDefuncio}, ${comunitatDefuncio}, ${paisDefuncio})</p>
+        <p><span class='negreta'>Tipologia espai de defunció:</span> ${tipologiaEspaiDefuncio}</p>
+        <p><span class='negreta'>Observacions espai de defunció:</span> ${observacionsTipologiaEspacioDefuncio}</p>
+        <p><span class='negreta'>Causa de la defunció:</span> ${causaDefuncio}</p>
       `;
       break;
     case 'tab2':

@@ -1,69 +1,20 @@
 <?php
 require_once APP_ROOT . '/public/intranet/includes/header.php';
 
-// Obtener la URL completa
-$url = $_SERVER['REQUEST_URI'];
-
-// Dividir la URL en partes usando '/' como delimitador
-$urlParts = explode('/', $url);
-
-// Obtener la parte deseada (en este caso, la cuarta parte)
-$categoriaId = $urlParts[3] ?? '';
-
 $id_old = "";
 $ciutat_old = "";
 $comarca_old = "";
 $provincia_old = "";
 $comunitat_old = "";
 $estat_old = "";
-
-if ($categoriaId === "modifica") {
-    $modificaBtn = 1;
-    $btnModificar = 1;
-    $idMunicipi = $routeParams[0];
-
-    // Verificar si la ID existe en la base de datos
-    $query = "SELECT 
-    m.id,
-    m.ciutat,
-    m.comarca,
-    m.provincia,
-    m.comunitat,
-    m.estat
-    FROM aux_dades_municipis AS m
-    WHERE m.id = :id";
-    $stmt = $conn->prepare($query);
-    $stmt->bindParam(':id', $idMunicipi, PDO::PARAM_INT);
-    $stmt->execute();
-
-    if ($stmt->rowCount() > 0) {
-        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            // Acceder a las variables de la consulta
-            $ciutat_old = $row['ciutat'] ?? "";
-            $comarca_old = $row['comarca'] ?? "";
-            $provincia_old = $row['provincia'] ?? "";
-            $comunitat_old = $row['comunitat'] ?? "";
-            $estat_old = $row['estat'] ?? "";
-            $id_old = $row['id'] ?? "";
-        }
-    }
-} else {
-    $modificaBtn = 2;
-    $btnModificar = 2;
-    // Pàgina inserció dades
-}
+$btnModificar = 2;
 ?>
 
 <div class="container" style="margin-bottom:50px;border: 1px solid gray;border-radius: 10px;padding:25px;background-color:#eaeaea">
     <form id="municipiForm">
         <div class="container">
             <div class="row">
-                <?php if ($modificaBtn === 1) { ?>
-                    <h2>Modificació dades municipi</h2>
-                    <h4 id="fitxaMunicipi">Municipi: <?php echo $ciutat_old; ?></h4>
-                <?php } else { ?>
-                    <h2>Inserció dades nou municipi</h2>
-                <?php } ?>
+                <h2>Inserció dades nova comarca</h2>
 
                 <div class="alert alert-success" role="alert" id="okMessage" style="display:none">
                     <h4 class="alert-heading"><strong>Modificació correcte!</strong></h4>
@@ -75,51 +26,9 @@ if ($categoriaId === "modifica") {
                     <div id="errText"></div>
                 </div>
 
-                <input type="hidden" id="id" name="id" value="<?php echo $id_old; ?>">
-
                 <div class="col-md-4">
-                    <label for="ciutat" class="form-label negreta">Nom municipi:</label>
-                    <input type="text" class="form-control" id="ciutat" name="ciutat" value="<?php echo $ciutat_old; ?>">
-                </div>
-
-                <div class="col-md-4">
-                    <label for="comarca" class="form-label negreta">Comarca:</label>
-                    <select class="form-select" id="comarca" value="" name="comarca">
-                    </select>
-                    <div class="mt-2">
-                        <a href="https://memoriaterrassa.cat/gestio/comarca/nou" target="_blank" class="btn btn-secondary btn-sm" id="afegirComarca">Afegir comarca</a>
-                        <button id="refreshButtonComarca" class="btn btn-primary btn-sm">Actualitzar llistat comarques</button>
-                    </div>
-                </div>
-
-                <div class="col-md-4">
-                    <label for="provincia" class="form-label negreta">Provincia/Departament:</label>
-                    <select class="form-select" id="provincia" value="" name="provincia">
-                    </select>
-                    <div class="mt-2">
-                        <a href="https://memoriaterrassa.cat/gestio/provincia/nou" target="_blank" class="btn btn-secondary btn-sm" id="afegirProvincia">Afegir provincia</a>
-                        <button id="refreshButtonProvincia" class="btn btn-primary btn-sm">Actualitzar llistat provincies</button>
-                    </div>
-                </div>
-
-                <div class="col-md-4">
-                    <label for="comunitat" class="form-label negreta">Comunitat autònoma / Regió:</label>
-                    <select class="form-select" id="comunitat" value="" name="comunitat">
-                    </select>
-                    <div class="mt-2">
-                        <a href="https://memoriaterrassa.cat/gestio/comunitat/nou" target="_blank" class="btn btn-secondary btn-sm" id="afegirComunitat">Afegir comunitat</a>
-                        <button id="refreshButtonComunitat" class="btn btn-primary btn-sm">Actualitzar llistat comunitats</button>
-                    </div>
-                </div>
-
-                <div class="col-md-4">
-                    <label for="estat" class="form-label negreta">Estat:</label>
-                    <select class="form-select" id="estat" value="" name="estat">
-                    </select>
-                    <div class="mt-2">
-                        <a href="https://memoriaterrassa.cat/gestio/estat/nou" target="_blank" class="btn btn-secondary btn-sm" id="afegirEstat">Afegir estat</a>
-                        <button id="refreshButtonEstat" class="btn btn-primary btn-sm">Actualitzar llistat estats</button>
-                    </div>
+                    <label for="comarca" class="form-label negreta">Nom comarca (en el cas francès, comarca històrica):</label>
+                    <input type="text" class="form-control" id="comarca" name="comarca" value="">
                 </div>
 
                 <div class="row espai-superior" style="border-top: 1px solid black;padding-top:25px">
@@ -210,31 +119,6 @@ if ($categoriaId === "modifica") {
         }
     }
 
-    auxiliarSelect("<?php echo $comarca_old; ?>", "comarques", "comarca", "comarca");
-    document.getElementById('refreshButtonComarca').addEventListener('click', function(event) {
-        event.preventDefault();
-        auxiliarSelect("<?php echo $comarca_old; ?>", "comarques", "comarca", "comarca");
-    });
-
-    auxiliarSelect("<?php echo $provincia_old; ?>", "provincies", "provincia", "provincia");
-    document.getElementById('refreshButtonProvincia').addEventListener('click', function(event) {
-        event.preventDefault();
-        auxiliarSelect("<?php echo $provincia_old; ?>", "provincies", "provincia", "provincia");
-    });
-
-    auxiliarSelect("<?php echo $comunitat_old; ?>", "comunitats", "comunitat", "comunitat");
-    document.getElementById('refreshButtonComunitat').addEventListener('click', function(event) {
-        event.preventDefault();
-        auxiliarSelect("<?php echo $comunitat_old; ?>", "comunitats", "comunitat", "comunitat");
-    });
-
-    auxiliarSelect("<?php echo $estat_old; ?>", "estats", "estat", "estat");
-    document.getElementById('refreshButtonEstat').addEventListener('click', function(event) {
-        event.preventDefault();
-        auxiliarSelect("<?php echo $estat_old; ?>", "estats", "estat", "estat");
-    });
-
-
     // Función para manejar el envío del formulario
     async function enviarFormulario(event) {
         event.preventDefault(); // Prevenir el envío por defecto
@@ -257,7 +141,7 @@ if ($categoriaId === "modifica") {
         // Convertir los datos del formulario a JSON
         const jsonData = JSON.stringify(formData);
         const devDirectory = `https://${window.location.hostname}`;
-        let urlAjax = devDirectory + "/api/auxiliars/put/?type=municipi";
+        let urlAjax = devDirectory + "/api/auxiliars/put/?type=comarca";
 
         try {
             // Hacer la solicitud con fetch y await
@@ -329,7 +213,7 @@ if ($categoriaId === "modifica") {
         // Convertir los datos del formulario a JSON
         const jsonData = JSON.stringify(formData);
         const devDirectory = `https://${window.location.hostname}`;
-        let urlAjax = devDirectory + "/api/auxiliars/post/?type=municipi";
+        let urlAjax = devDirectory + "/api/auxiliars/post/?type=comarca";
 
         try {
             // Hacer la solicitud con fetch y await

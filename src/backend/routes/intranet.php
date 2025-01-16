@@ -2,19 +2,27 @@
 
 // Define las rutas base que quieres traducir
 $base_routes = [
-    // API INTRANET
+    // 0. Entrada Pàgina login i homepage
     '/gestio/entrada' => 'public/intranet/00_homepage/login.php',
-
-    //intranet
     '/gestio' => 'public/intranet/00_homepage/admin.php',
     '/gestio/admin' => 'public/intranet/00_homepage/admin.php',
 
-    // 0. Llistats pàgines
+    // 1. Llistats pàgines grups represaliats
     '/gestio/tots' => 'public/intranet/0_tots/index.php',
     '/gestio/exiliats' => 'public/intranet/2_exili/index.php',
     '/gestio/represaliats' => 'public/intranet/1_represaliats/index.php',
     '/gestio/cost-huma' => 'public/pages/3_cost_huma/index.php',
 
+    // 2. Pàgines de control canvis i usuaris intranet
+    '/gestio/registre-canvis' => 'public/intranet/control_registre_canvis/index.php',
+    '/gestio/control-acces' => 'public/intranet/control_registre_canvis/control-acces.php',
+
+    // 3. Pàgines taules auxiliars
+    '/gestio/taules-auxiliars' => 'public/intranet/aux_taules_auxiliars/index.php',
+    '/gestio/taules-auxiliars/municipis' => 'public/intranet/aux_taules_auxiliars/municipis.php',
+
+
+    // LÒGICA DE MODIFICACIONS DE LES DADES A LA INTRANET:
     // MODIFICA FITXA PERSONA
     '/gestio/tots/fitxa/modifica/{id}' => 'public/intranet/0_tots/modifica-fitxa-persona.php',
 
@@ -27,9 +35,6 @@ $base_routes = [
     // INSEREIX NOVA FITXA PERSONA
     '/gestio/tots/fitxa-nova' => 'public/intranet/0_tots/nova-fitxa-persona.php',
 
-    // PÀGINES DE CONTROL DE CANVIS
-    '/gestio/registre-canvis' => 'public/intranet/control_registre_canvis/index.php',
-    '/gestio/control-acces' => 'public/intranet/control_registre_canvis/control-acces.php',
 
     // MODIFICA REPRESSIO
     '/gestio/tots/fitxa/categoria/modifica/{categoriaId}/{id}' => 'public/intranet/0_tots/modifica-fitxa-repressio.php',
@@ -48,6 +53,12 @@ $base_routes = [
 
     // AUXILIARS
     '/gestio/municipi/nou' => 'public/intranet/db_auxiliars/nou-municipi.php',
+    '/gestio/municipi/modifica/{id}' => 'public/intranet/db_auxiliars/nou-municipi.php',
+    '/gestio/comarca/nou' => 'public/intranet/db_auxiliars/nou-comarca.php',
+    '/gestio/provincia/nou' => 'public/intranet/db_auxiliars/nou-provincia.php',
+    '/gestio/comunitat/nou' => 'public/intranet/db_auxiliars/nou-comunitat.php',
+    '/gestio/estat/nou' => 'public/intranet/db_auxiliars/nou-estat.php',
+
     '/gestio/ofici/nou' => 'public/intranet/db_auxiliars/nou-ofici.php',
     '/gestio/tipologia-espai/nou' => 'public/intranet/db_auxiliars/nou-tipologia-espai.php',
     '/gestio/causa-mort/nou' => 'public/intranet/db_auxiliars/nou-causa-mort.php',
@@ -85,6 +96,11 @@ $routes = [
 
     '/gestio/cost-huma' => ['view' => 'public/intranet/3_cost_huma/index.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
 
+    // 3. Gestió taules auxiliars
+    '/gestio/taules-auxiliars' => ['view' => 'public/intranet/aux_taules_auxiliars/index.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
+
+    '/gestio/taules-auxiliars/municipis' => ['view' =>  'public/intranet/aux_taules_auxiliars/municipis.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
+
     // BASE DE DADES PERSONALS
 
     '/gestio/tots/fitxa/modifica/{id}' => ['view' => 'public/intranet/0_tots/modifica-fitxa-persona.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
@@ -121,8 +137,19 @@ $routes = [
     '/gestio/tots/fitxa/fonts-documentals/crear-arxiu' => ['view' => 'public/intranet/db_fonts_documentals/afegir-nou-arxiu.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
 
     // AUXILIARS
+    // municipis
     '/gestio/municipi/nou' => ['view' => 'public/intranet/db_auxiliars/nou-municipi.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
+    '/gestio/municipi/modifica/{id}' => ['view' => 'public/intranet/db_auxiliars/nou-municipi.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
 
+    '/gestio/comarca/nou' => ['view' => 'public/intranet/db_auxiliars/nou-comarca.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
+
+    '/gestio/provincia/nou' => ['view' => 'public/intranet/db_auxiliars/nou-provincia.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
+
+    '/gestio/comunitat/nou' => ['view' => 'public/intranet/db_auxiliars/nou-comunitat.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
+
+    '/gestio/estat/nou' => ['view' => 'public/intranet/db_auxiliars/nou-estat.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
+
+    // ALtres pagines auxiliars
     '/gestio/ofici/nou' => ['view' => 'public/intranet/db_auxiliars/nou-ofici.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
 
     '/gestio/tipologia-espai/nou' => ['view' => 'public/intranet/db_auxiliars/nou-tipologia-espai.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],

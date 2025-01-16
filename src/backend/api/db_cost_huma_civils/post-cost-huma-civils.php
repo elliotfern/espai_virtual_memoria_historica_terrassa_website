@@ -102,7 +102,7 @@ try {
     $stmt->execute();
 
     // Recuperar el ID del registro creado
-    $lastInsertId = $conn->lastInsertId();
+    $lastInsertId = $idPersona;
 
     // Si la inserció té èxit, cal registrar la inserció en la base de control de canvis
 
