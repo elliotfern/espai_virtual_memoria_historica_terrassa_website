@@ -188,9 +188,6 @@ $btnModificar = 2;
         }
     }
 
-    // Asignar la función al botón del formulario
-    //document.getElementById("btnModificarDadesCombat").addEventListener("click", enviarFormulario);
-
     // Función para manejar el envío del formulario
     async function enviarFormularioPost(event) {
         event.preventDefault(); // Prevenir el envío por defecto
@@ -225,17 +222,6 @@ $btnModificar = 2;
                 body: jsonData, // Enviar los datos en formato JSON
             });
 
-            // Verificar si la solicitud fue exitosa
-            if (!response.ok) {
-
-                const errMessageDiv = document.getElementById("errMessage");
-                const errTextDiv = document.getElementById("errText");
-                if (errMessageDiv && errTextDiv) {
-                    errMessageDiv.style.display = "block";
-                    errTextDiv.textContent = data.message || "S'ha produit un error a la base de dades.";
-                }
-                throw new Error("Error al enviar el formulario.");
-            }
 
             // Procesar la respuesta como texto o JSON
             const data = await response.json();
@@ -260,7 +246,7 @@ $btnModificar = 2;
                 const errTextDiv = document.getElementById("errText");
                 if (errMessageDiv && errTextDiv) {
                     errMessageDiv.style.display = "block";
-                    errTextDiv.textContent = data.message || "S'ha produit un error a la base de dades.";
+                    errTextDiv.innerHTML = data.message || "S'ha produit un error a la base de dades.";
                 }
             }
         } catch (error) {

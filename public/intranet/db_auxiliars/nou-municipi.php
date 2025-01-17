@@ -341,18 +341,6 @@ if ($categoriaId === "modifica") {
                 body: jsonData, // Enviar los datos en formato JSON
             });
 
-            // Verificar si la solicitud fue exitosa
-            if (!response.ok) {
-
-                const errMessageDiv = document.getElementById("errMessage");
-                const errTextDiv = document.getElementById("errText");
-                if (errMessageDiv && errTextDiv) {
-                    errMessageDiv.style.display = "block";
-                    errTextDiv.textContent = data.message || "S'ha produit un error a la base de dades.";
-                }
-                throw new Error("Error al enviar el formulario.");
-            }
-
             // Procesar la respuesta como texto o JSON
             const data = await response.json();
 
@@ -376,7 +364,7 @@ if ($categoriaId === "modifica") {
                 const errTextDiv = document.getElementById("errText");
                 if (errMessageDiv && errTextDiv) {
                     errMessageDiv.style.display = "block";
-                    errTextDiv.textContent = data.message || "S'ha produit un error a la base de dades.";
+                    errTextDiv.innerHTML = data.message || "S'ha produit un error a la base de dades.";
                 }
             }
         } catch (error) {

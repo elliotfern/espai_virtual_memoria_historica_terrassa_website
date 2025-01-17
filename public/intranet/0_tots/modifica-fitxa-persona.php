@@ -575,7 +575,7 @@ $id = $routeParams[0];
         });
 
         // 02. dades familiars:
-        auxiliarSelect(fitxa[0].estat_civil_id, "estats", "estat_civil", "estat_cat");
+        auxiliarSelect(fitxa[0].estat_civil_id, "estats_civils", "estat_civil", "estat_cat");
 
         // cridar a funcio per carregar API amb les dades familiars
 

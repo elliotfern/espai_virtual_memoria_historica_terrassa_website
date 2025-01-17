@@ -173,8 +173,8 @@ if (isset($_GET['type']) && $_GET['type'] == 'municipis') {
     echo json_encode($data);
 
     // 4) Llistat estat civil
-    // ruta GET => "/api/auxiliars/get/?type=estats"
-} elseif (isset($_GET['type']) && $_GET['type'] == 'estats') {
+    // ruta GET => "/api/auxiliars/get/?type=estats_civils"
+} elseif (isset($_GET['type']) && $_GET['type'] == 'estats_civils') {
     global $conn;
     $data = array();
     $stmt = $conn->prepare(

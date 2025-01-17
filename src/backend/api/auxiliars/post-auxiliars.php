@@ -46,6 +46,21 @@ if (isset($_GET['type']) && $_GET['type'] == 'municipi') {
         exit;
     }
 
+    // Verificar si el municipi ya existe en la base de datos
+    global $conn;
+    /** @var PDO $conn */
+    $sql = "SELECT COUNT(*) FROM aux_dades_municipis WHERE ciutat = :ciutat";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':ciutat', $data['ciutat'], PDO::PARAM_STR);
+    $stmt->execute();
+    $municipiExists = $stmt->fetchColumn();
+
+    if ($municipiExists > 0) {
+        http_response_code(409); // Conflict
+        echo json_encode(["status" => "error", "message" => "El municipi ja existeix a la base de dades."]);
+        exit;
+    }
+
     // Si no hay errores, crear las variables PHP y preparar la consulta PDO
     $ciutat = !empty($data['ciutat']) ? $data['ciutat'] : NULL;
     $comarca = !empty($data['comarca']) ? $data['comarca'] : NULL;
@@ -732,6 +747,21 @@ if (isset($_GET['type']) && $_GET['type'] == 'municipi') {
         exit;
     }
 
+    // Verificar si la comarca ya existe en la base de datos
+    global $conn;
+    /** @var PDO $conn */
+    $sql = "SELECT COUNT(*) FROM aux_dades_municipis_comarca WHERE comarca = :comarca";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':comarca', $data['comarca'], PDO::PARAM_STR);
+    $stmt->execute();
+    $comarcaExists = $stmt->fetchColumn();
+
+    if ($comarcaExists > 0) {
+        http_response_code(409); // Conflict
+        echo json_encode(["status" => "error", "message" => "La comarca ja existeix a la base de dades."]);
+        exit;
+    }
+
     // Si no hay errores, crear las variables PHP y preparar la consulta PDO
     $comarca = !empty($data['comarca']) ? $data['comarca'] : NULL;
 
@@ -812,6 +842,21 @@ if (isset($_GET['type']) && $_GET['type'] == 'municipi') {
     if (!empty($errors)) {
         http_response_code(400); // Bad Request
         echo json_encode(["status" => "error", "message" => "S'han produït errors en la validació", "errors" => $errors]);
+        exit;
+    }
+
+    // Verificar si la provincia ya existe en la base de datos
+    global $conn;
+    /** @var PDO $conn */
+    $sql = "SELECT COUNT(*) FROM aux_dades_municipis_provincia WHERE provincia = :provincia";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':provincia', $data['provincia'], PDO::PARAM_STR);
+    $stmt->execute();
+    $provinciaExists = $stmt->fetchColumn();
+
+    if ($provinciaExists > 0) {
+        http_response_code(409); // Conflict
+        echo json_encode(["status" => "error", "message" => "La provincia ja existeix a la base de dades."]);
         exit;
     }
 
@@ -898,6 +943,21 @@ if (isset($_GET['type']) && $_GET['type'] == 'municipi') {
         exit;
     }
 
+    // Verificar si la comunitat ya existe en la base de datos
+    global $conn;
+    /** @var PDO $conn */
+    $sql = "SELECT COUNT(*) FROM aux_dades_municipis_comunitat WHERE comunitat = :comunitat";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':comunitat', $data['comunitat'], PDO::PARAM_STR);
+    $stmt->execute();
+    $comunitatExists = $stmt->fetchColumn();
+
+    if ($comunitatExists > 0) {
+        http_response_code(409); // Conflict
+        echo json_encode(["status" => "error", "message" => "La comunitat ja existeix a la base de dades."]);
+        exit;
+    }
+
     // Si no hay errores, crear las variables PHP y preparar la consulta PDO
     $comunitat = !empty($data['comunitat']) ? $data['comunitat'] : NULL;
 
@@ -978,6 +1038,21 @@ if (isset($_GET['type']) && $_GET['type'] == 'municipi') {
     if (!empty($errors)) {
         http_response_code(400); // Bad Request
         echo json_encode(["status" => "error", "message" => "S'han produït errors en la validació", "errors" => $errors]);
+        exit;
+    }
+
+    // Verificar si l'estat ja existeix a la base de dades
+    global $conn;
+    /** @var PDO $conn */
+    $sql = "SELECT COUNT(*) FROM aux_dades_municipis_estat WHERE estat = :estat";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':estat', $data['estat'], PDO::PARAM_STR);
+    $stmt->execute();
+    $estatExists = $stmt->fetchColumn();
+
+    if ($estatExists > 0) {
+        http_response_code(409); // Conflict
+        echo json_encode(["status" => "error", "message" => "L'estat ja existeix a la base de dades."]);
         exit;
     }
 
