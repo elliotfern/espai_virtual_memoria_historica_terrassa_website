@@ -411,6 +411,24 @@ $id = $routeParams[0];
           <div id="data_actualitzacio"></div>
         </div>
 
+        <hr style="margin-top:25px">
+
+        <div class="form-group">
+          <label for="completat" class="form-label negreta">Estat de la fitxa:</label><br>
+
+          <!-- Botón de opción "Sí" -->
+          <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" id="completat_si" name="completat" value="2" class="custom-control-input">
+            <label class="custom-control-label" for="completat_si">Completada</label>
+          </div>
+
+          <!-- Botón de opción "No" -->
+          <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" id="completat_no" name="completat" value="1" class="custom-control-input">
+            <label class="custom-control-label" for="completat_no">No completada</label>
+          </div>
+        </div>
+
       </div>
     </div> <!-- Fi tab7 -->
 
@@ -638,6 +656,15 @@ $id = $routeParams[0];
 
         document.getElementById('data_creacio').innerText = dataCreacio;
         document.getElementById('data_actualitzacio').innerText = dataActualitzacio;
+
+        let completatValue = fitxa[0].completat; // Este valor puede venir de la API
+
+        // Seleccionamos los botones de radio y les asignamos el valor correspondiente
+        if (completatValue == 1) {
+          document.getElementById('completat_no').checked = true;
+        } else if (completatValue == 2) {
+          document.getElementById('completat_si').checked = true;
+        }
 
         /* document.getElementById("authorPhoto").src = `../../public/img/library-author/${data.nameImg}.jpg`;*/
       } catch (error) {

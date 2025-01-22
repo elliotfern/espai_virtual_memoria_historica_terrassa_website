@@ -2,11 +2,56 @@ import { fetchData } from '../../services/api/api';
 import { Represeliat } from '../../types/types';
 import { categorias } from '../../config';
 
-export async function cargarTabla(pag: string, context: number) {
+// Función para crear los botones
+function crearBotones() {
+  const divBotones = document.getElementById('botonsFiltres');
+
+  if (divBotones) {
+    // Crear botón "Completado"
+    const botonCompletado = document.createElement('button');
+    botonCompletado.innerText = 'Completats';
+    botonCompletado.classList.add('btn', 'btn-success', 'mr-2'); // Clases de Bootstrap
+    botonCompletado.onclick = function () {
+      cargarTabla('tots', 1, 2); // Filtrar por completado (2)
+    };
+
+    // Crear botón "No Completado"
+    const botonNoCompletado = document.createElement('button');
+    botonNoCompletado.innerText = 'Pendents';
+    botonNoCompletado.classList.add('btn', 'btn-primary', 'mr-2'); // Clases de Bootstrap
+    botonNoCompletado.onclick = function () {
+      cargarTabla('tots', 1, 1); // Filtrar por no completado (1)
+    };
+
+    // Crear botón "Mostrar Todos"
+    const botonMostrarTodos = document.createElement('button');
+    botonMostrarTodos.innerText = 'Mostrar tots';
+    botonMostrarTodos.classList.add('btn', 'btn-secondary'); // Clases de Bootstrap
+    botonMostrarTodos.onclick = function () {
+      cargarTabla('tots', 1, null); // Mostrar todos (sin filtrar)
+    };
+
+    // Agregar los botones al contenedor
+    divBotones.appendChild(botonCompletado);
+    divBotones.appendChild(botonNoCompletado);
+    divBotones.appendChild(botonMostrarTodos);
+  }
+}
+
+// Llamamos a la función para crear los botones al cargar la página
+crearBotones();
+
+export async function cargarTabla(pag: string, context: number, completat: number | null = null) {
   let urlAjax = '';
   const devDirectory = `https://${window.location.hostname}`;
+
+  // Validar el parámetro 'completat': si no es 1 o 2, asignar 3
+  if (completat !== 1 && completat !== 2) {
+    completat = 3;
+  }
+
   if (pag === 'tots' || pag === 'base-dades-global') {
-    urlAjax = `${devDirectory}/api/dades_personals/get/?type=tots`;
+    urlAjax = `${devDirectory}/api/dades_personals/get/?type=tots&completat=${completat}`;
   } else {
     urlAjax = `${devDirectory}/api/dades_personals/get/?type=totesCategories&categoria=${pag}`;
   }
@@ -80,6 +125,32 @@ export async function cargarTabla(pag: string, context: number) {
 
       // Obtener el user_id de localStorage
       const userId = localStorage.getItem('user_id');
+
+      // COLUMNA ESTAT FITXA NOMES PELS USUARIS REGISTRATS
+      // Verificar si el usuario es el admin con id 1
+      if (userId === '1' || userId === '3' || userId === '4' || userId === '6') {
+        // Botó estat
+        const estatFitxa = row.completat;
+        if (estatFitxa === 1) {
+          const tdModificar = document.createElement('td');
+          const btnModificar = document.createElement('button');
+          btnModificar.textContent = 'PENDENT';
+          btnModificar.classList.add('btn', 'btn-sm', 'btn-primary');
+          tdModificar.appendChild(btnModificar);
+          tr.appendChild(tdModificar);
+        } else {
+          const tdModificar = document.createElement('td');
+          const btnModificar = document.createElement('button');
+          btnModificar.textContent = 'COMPLETADA';
+          btnModificar.classList.add('btn', 'btn-sm', 'btn-success');
+          tdModificar.appendChild(btnModificar);
+          tr.appendChild(tdModificar);
+        }
+      } else if (context === 1) {
+        // nada
+      } else {
+        // Crear la fila vacía
+      }
 
       // Verificar si el usuario es el admin con id 1
       if (userId === '1' || userId === '3' || userId === '4' || userId === '6') {
@@ -207,6 +278,32 @@ export async function cargarTabla(pag: string, context: number) {
 
       // Obtener el user_id de localStorage
       const userId = localStorage.getItem('user_id');
+
+      // COLUMNA ESTAT FITXA NOMES PELS USUARIS REGISTRATS
+      // Verificar si el usuario es el admin con id 1
+      if (userId === '1' || userId === '3' || userId === '4' || userId === '6') {
+        // Botó estat
+        const estatFitxa = row.completat;
+        if (estatFitxa === 1) {
+          const tdModificar = document.createElement('td');
+          const btnModificar = document.createElement('button');
+          btnModificar.textContent = 'PENDENT';
+          btnModificar.classList.add('btn', 'btn-sm', 'btn-primary');
+          tdModificar.appendChild(btnModificar);
+          tr.appendChild(tdModificar);
+        } else {
+          const tdModificar = document.createElement('td');
+          const btnModificar = document.createElement('button');
+          btnModificar.textContent = 'COMPLETADA';
+          btnModificar.classList.add('btn', 'btn-sm', 'btn-success');
+          tdModificar.appendChild(btnModificar);
+          tr.appendChild(tdModificar);
+        }
+      } else if (context === 1) {
+        // nada
+      } else {
+        // Crear la fila vacía
+      }
 
       // Botón Modificar
       if (userId === '1' || userId === '3' || userId === '4' || userId === '6') {

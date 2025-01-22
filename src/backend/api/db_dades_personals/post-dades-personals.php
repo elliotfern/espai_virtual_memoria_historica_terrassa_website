@@ -86,6 +86,10 @@ if (empty($data['autor'])) {
     $errors[] = 'El camp autor és obligatori.';
 }
 
+if (empty($data['completat'])) {
+    $errors[] = 'El camp completat és obligatori.';
+}
+
 // Si hay errores, devolver una respuesta con los errores
 if (!empty($errors)) {
     http_response_code(400); // Bad Request
@@ -121,6 +125,7 @@ $observacions = $data['observacions'] ?? null;
 $autor = $data['autor'] ?? null;
 $data_creacio =  date('Y-m-d');
 $data_actualitzacio = date('Y-m-d');
+$completat = $data['completat'] ?? 1;
 
 // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
 try {
@@ -134,13 +139,13 @@ try {
     municipi_naixement, municipi_defuncio, tipologia_lloc_defuncio, causa_defuncio,
     municipi_residencia, adreca, estat_civil, estudis, ofici, empresa, sector,
     sub_sector, carrec_empresa, filiacio_politica, filiacio_sindical, activitat_durant_guerra,
-    observacions, autor, data_creacio, data_actualitzacio
+    observacions, autor, data_creacio, data_actualitzacio, completat
     ) VALUES (
     :nom, :cognom1, :cognom2, :categoria, :sexe, :data_naixement, :data_defuncio,
     :municipi_naixement, :municipi_defuncio, :tipologia_lloc_defuncio, :causa_defuncio,
     :municipi_residencia, :adreca, :estat_civil, :estudis, :ofici, :empresa, :sector,
     :sub_sector, :carrec_empresa, :filiacio_politica, :filiacio_sindical, :activitat_durant_guerra,
-    :observacions, :autor, :data_creacio, :data_actualitzacio
+    :observacions, :autor, :data_creacio, :data_actualitzacio, :completat
     )";
 
     // Preparar la consulta
@@ -174,6 +179,7 @@ try {
     $stmt->bindParam(':autor', $autor, PDO::PARAM_INT);
     $stmt->bindParam(':data_creacio', $data_creacio, PDO::PARAM_STR);
     $stmt->bindParam(':data_actualitzacio', $data_actualitzacio, PDO::PARAM_STR);
+    $stmt->bindParam(':completat', $comnpletat, PDO::PARAM_INT);
 
     // Ejecutar la consulta
     $stmt->execute();

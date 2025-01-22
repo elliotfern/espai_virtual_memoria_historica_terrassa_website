@@ -329,6 +329,21 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
                     </select>
                 </div>
 
+                <div class="form-group">
+                    <label>Vols indicar que la fitxa està completada?</label><br>
+
+                    <!-- Botón de opción "Sí" -->
+                    <div class="custom-control custom-radio custom-control-inline">
+                        <input type="radio" id="completat_si" name="completat" value="2" class="custom-control-input">
+                        <label class="custom-control-label" for="completat_si">Si</label>
+                    </div>
+
+                    <!-- Botón de opción "No" -->
+                    <div class="custom-control custom-radio custom-control-inline">
+                        <input type="radio" id="completat_no" name="completat" value="1" class="custom-control-input">
+                        <label class="custom-control-label" for="completat_no">No</label>
+                    </div>
+                </div>
             </div>
         </div> <!-- Fi tab7 -->
 

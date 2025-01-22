@@ -6,27 +6,50 @@ header("Access-Control-Allow-Origin: https://memoriaterrassa.cat");
 header("Access-Control-Allow-Methods: GET");
 
 // 1) Llistat complet represaliats
-// ruta GET => "https://memoriaterrassa.cat/api/represaliats/get/?type=tots"
-if (isset($_GET['type']) && $_GET['type'] == 'tots') {
-    global $conn;
-    /** @var PDO $conn */
-    $query = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2
-            FROM db_dades_personals AS a
-            LEFT JOIN aux_dades_municipis AS e1 ON a.municipi_naixement = e1.id
-            LEFT JOIN aux_dades_municipis AS e2 ON a.municipi_defuncio = e2.id
-            ORDER BY a.cognom1 ASC";
-    $stmt = $conn->prepare($query);
-    $stmt->execute();
+// ruta GET => "https://memoriaterrassa.cat/api/represaliats/get/?type=tots&completat=1"
+if (isset($_GET['type']) && $_GET['type'] == 'tots' && isset($_GET['completat'])) {
+    // Verificamos si el parámetro 'completat' está presente
+    $completat = isset($_GET['completat']) ? $_GET['completat'] : null;
+    if ($completat == 3) {
+        global $conn;
+        /** @var PDO $conn */
+        $query = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat
+                FROM db_dades_personals AS a
+                LEFT JOIN aux_dades_municipis AS e1 ON a.municipi_naixement = e1.id
+                LEFT JOIN aux_dades_municipis AS e2 ON a.municipi_defuncio = e2.id
+                WHERE a.completat IN (1, 2)
+                ORDER BY a.cognom1 ASC";
+        $stmt = $conn->prepare($query);
+        $stmt->execute();
 
-    if ($stmt->rowCount() === 0) {
-        header("Content-Type: application/json");
-        echo json_encode(null);  // Devuelve un objeto JSON nulo si no hay resultados
-    } else {
-        // Solo obtenemos la primera fila ya que parece ser una búsqueda por ID
         $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
         header("Content-Type: application/json");
         echo json_encode($row);  // Codifica la fila como un objeto JSON
+
+    } else {
+        global $conn;
+        /** @var PDO $conn */
+        $query = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat
+            FROM db_dades_personals AS a
+            LEFT JOIN aux_dades_municipis AS e1 ON a.municipi_naixement = e1.id
+            LEFT JOIN aux_dades_municipis AS e2 ON a.municipi_defuncio = e2.id
+            WHERE a.completat = :completat
+            ORDER BY a.cognom1 ASC";
+        $stmt = $conn->prepare($query);
+        $stmt->bindParam(':completat', $completat, PDO::PARAM_INT);
+        $stmt->execute();
+
+        if ($stmt->rowCount() === 0) {
+            header("Content-Type: application/json");
+            echo json_encode(null);  // Devuelve un objeto JSON nulo si no hay resultados
+        } else {
+            // Solo obtenemos la primera fila ya que parece ser una búsqueda por ID
+            $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            header("Content-Type: application/json");
+            echo json_encode($row);  // Codifica la fila como un objeto JSON
+        }
     }
+
 
     // 2) Llistat tots per categories
     // ruta GET => "https://memoriaterrassa.cat/api/represaliats/get/?type=totesCategories&categoria=afusellats"
@@ -40,7 +63,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'tots') {
         $catNum2 = 4;
         $catNum3 = 5;
 
-        $sql = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2
+        $sql = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat
             FROM db_dades_personals AS a
             LEFT JOIN aux_dades_municipis AS e1 ON a.municipi_naixement = e1.id
             LEFT JOIN aux_dades_municipis AS e2 ON a.municipi_defuncio = e2.id
@@ -65,7 +88,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'tots') {
     } else if ($cat === "exiliats") {
         $catNum1 = 10;
         $catNum2 = 2;
-        $sql = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2
+        $sql = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat
             FROM db_dades_personals AS a
             LEFT JOIN aux_dades_municipis AS e1 ON a.municipi_naixement = e1.id
             LEFT JOIN aux_dades_municipis AS e2 ON a.municipi_defuncio = e2.id
@@ -89,7 +112,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'tots') {
         $catNum1 = 1;
         $catNum2 = 6;
         $catNum3 = 7;
-        $sql = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2
+        $sql = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat
             FROM db_dades_personals AS a
             LEFT JOIN aux_dades_municipis AS e1 ON a.municipi_naixement = e1.id
             LEFT JOIN aux_dades_municipis AS e2 ON a.municipi_defuncio = e2.id
@@ -181,7 +204,8 @@ if (isset($_GET['type']) && $_GET['type'] == 'tots') {
             u.biografia_cat,
             dp.data_creacio,
             dp.data_actualitzacio,
-            dp.observacions
+            dp.observacions,
+            dp.completat
             FROM db_dades_personals AS dp
             LEFT JOIN aux_dades_municipis AS m1 ON dp.municipi_naixement = m1.id
             LEFT JOIN aux_dades_municipis_comarca AS m1a ON m1.comarca = m1a.id

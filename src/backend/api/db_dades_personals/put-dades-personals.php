@@ -86,6 +86,10 @@ if (empty($data['autor'])) {
     $errors[] = 'El camp autor és obligatori.';
 }
 
+if (empty($data['completat'])) {
+    $errors[] = 'El camp completat és obligatori.';
+}
+
 // Si hay errores, devolver una respuesta con los errores
 if (!empty($errors)) {
     http_response_code(400); // Bad Request
@@ -120,9 +124,9 @@ $filiacio_sindical = $data['filiacio_sindical'] ?? null;
 $activitat_durant_guerra = $data['activitat_durant_guerra'] ?? null;
 $observacions = $data['observacions'] ?? null;
 $autor = $data['autor'] ?? null;
+$completat = $data['completat'] ?? 1;
 
 $data_actualitzacio = date('Y-m-d');
-
 $id = $data['id'];
 
 // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
@@ -158,7 +162,8 @@ try {
         activitat_durant_guerra = :activitat_durant_guerra,
         observacions = :observacions,
         autor = :autor,
-        data_actualitzacio = :data_actualitzacio
+        data_actualitzacio = :data_actualitzacio,
+        completat = :completat
     WHERE id = :id";
 
     // Preparar la consulta
@@ -191,6 +196,7 @@ try {
     $stmt->bindParam(':observacions', $observacions, PDO::PARAM_STR);
     $stmt->bindParam(':autor', $autor, PDO::PARAM_INT);
     $stmt->bindParam(':data_actualitzacio', $data_actualitzacio, PDO::PARAM_STR);
+    $stmt->bindParam(':completat', $completat, PDO::PARAM_INT);
     $stmt->bindParam(':id', $id, PDO::PARAM_INT);
 
     // Supón que el ID a modificar lo pasas en el JSON también

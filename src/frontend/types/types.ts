@@ -92,4 +92,5 @@ export interface Represeliat {
   categoria: string;
   data_naixement: string;
   data_defuncio: string;
+  completat: number;
 }
