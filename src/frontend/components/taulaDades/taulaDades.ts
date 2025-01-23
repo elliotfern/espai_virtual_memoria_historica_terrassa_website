@@ -2,45 +2,6 @@ import { fetchData } from '../../services/api/api';
 import { Represeliat } from '../../types/types';
 import { categorias } from '../../config';
 
-// Función para crear los botones
-function crearBotones() {
-  const divBotones = document.getElementById('botonsFiltres');
-
-  if (divBotones) {
-    // Crear botón "Completado"
-    const botonCompletado = document.createElement('button');
-    botonCompletado.innerText = 'Completats';
-    botonCompletado.classList.add('btn', 'btn-success', 'mr-2'); // Clases de Bootstrap
-    botonCompletado.onclick = function () {
-      cargarTabla('tots', 1, 2); // Filtrar por completado (2)
-    };
-
-    // Crear botón "No Completado"
-    const botonNoCompletado = document.createElement('button');
-    botonNoCompletado.innerText = 'Pendents';
-    botonNoCompletado.classList.add('btn', 'btn-primary', 'mr-2'); // Clases de Bootstrap
-    botonNoCompletado.onclick = function () {
-      cargarTabla('tots', 1, 1); // Filtrar por no completado (1)
-    };
-
-    // Crear botón "Mostrar Todos"
-    const botonMostrarTodos = document.createElement('button');
-    botonMostrarTodos.innerText = 'Mostrar tots';
-    botonMostrarTodos.classList.add('btn', 'btn-secondary'); // Clases de Bootstrap
-    botonMostrarTodos.onclick = function () {
-      cargarTabla('tots', 1, null); // Mostrar todos (sin filtrar)
-    };
-
-    // Agregar los botones al contenedor
-    divBotones.appendChild(botonCompletado);
-    divBotones.appendChild(botonNoCompletado);
-    divBotones.appendChild(botonMostrarTodos);
-  }
-}
-
-// Llamamos a la función para crear los botones al cargar la página
-crearBotones();
-
 export async function cargarTabla(pag: string, context: number, completat: number | null = null) {
   let urlAjax = '';
   const devDirectory = `https://${window.location.hostname}`;
@@ -53,7 +14,7 @@ export async function cargarTabla(pag: string, context: number, completat: numbe
   if (pag === 'tots' || pag === 'base-dades-global') {
     urlAjax = `${devDirectory}/api/dades_personals/get/?type=tots&completat=${completat}`;
   } else {
-    urlAjax = `${devDirectory}/api/dades_personals/get/?type=totesCategories&categoria=${pag}`;
+    urlAjax = `${devDirectory}/api/dades_personals/get/?type=totesCategories&categoria=${pag}&completat=${completat}`;
   }
 
   let currentPage = 1;

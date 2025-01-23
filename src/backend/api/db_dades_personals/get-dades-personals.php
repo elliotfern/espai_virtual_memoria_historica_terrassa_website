@@ -52,88 +52,182 @@ if (isset($_GET['type']) && $_GET['type'] == 'tots' && isset($_GET['completat'])
 
 
     // 2) Llistat tots per categories
-    // ruta GET => "https://memoriaterrassa.cat/api/represaliats/get/?type=totesCategories&categoria=afusellats"
-} elseif (isset($_GET['type']) && $_GET['type'] == 'totesCategories' && isset($_GET['categoria'])) {
+    // ruta GET => "https://memoriaterrassa.cat/api/represaliats/get/?type=totesCategories&categoria=afusellats&completat=1"
+} elseif (isset($_GET['type']) && $_GET['type'] == 'totesCategories' && isset($_GET['categoria']) && isset($_GET['completat'])) {
+
+    // Verificamos si el parámetro 'completat' está presente
+    $completat = isset($_GET['completat']) ? $_GET['completat'] : null;
 
     // Obtener y sanitizar la entrada
     $cat = filter_input(INPUT_GET, 'categoria', FILTER_DEFAULT);
 
     if ($cat === "cost-huma") {
-        $catNum1 = 3;
-        $catNum2 = 4;
-        $catNum3 = 5;
+        if ($completat == 3) {
+            $catNum1 = 3;
+            $catNum2 = 4;
+            $catNum3 = 5;
 
-        $sql = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat
+            $sql = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat
+                FROM db_dades_personals AS a
+                LEFT JOIN aux_dades_municipis AS e1 ON a.municipi_naixement = e1.id
+                LEFT JOIN aux_dades_municipis AS e2 ON a.municipi_defuncio = e2.id
+                WHERE 
+                (FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
+                    OR FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
+                    OR FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0)
+                    AND a.completat IN (1, 2)
+                ORDER BY a.cognom1 ASC;";
+            global $conn;
+            $data = array();
+            /** @var PDO $conn */
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(1, $catNum1, PDO::PARAM_STR);
+            $stmt->bindParam(2, $catNum2, PDO::PARAM_STR);
+            $stmt->bindParam(3, $catNum3, PDO::PARAM_STR);
+            $stmt->execute();
+            if ($stmt->rowCount() === 0) echo ('No rows');
+            while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $data[] = $users;
+            }
+            echo json_encode($data);
+        } else {
+            $catNum1 = 3;
+            $catNum2 = 4;
+            $catNum3 = 5;
+
+            $sql = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat
             FROM db_dades_personals AS a
             LEFT JOIN aux_dades_municipis AS e1 ON a.municipi_naixement = e1.id
             LEFT JOIN aux_dades_municipis AS e2 ON a.municipi_defuncio = e2.id
             WHERE 
-            FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
+            (FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
                 OR FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
-                OR FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
+                OR FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0)
+                AND a.completat = ?
             ORDER BY a.cognom1 ASC;";
-        global $conn;
-        $data = array();
-        /** @var PDO $conn */
-        $stmt = $conn->prepare($sql);
-        $stmt->bindParam(1, $catNum1, PDO::PARAM_STR);
-        $stmt->bindParam(2, $catNum2, PDO::PARAM_STR);
-        $stmt->bindParam(3, $catNum3, PDO::PARAM_STR);
-        $stmt->execute();
-        if ($stmt->rowCount() === 0) echo ('No rows');
-        while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $data[] = $users;
+            global $conn;
+            $data = array();
+            /** @var PDO $conn */
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(1, $catNum1, PDO::PARAM_STR);
+            $stmt->bindParam(2, $catNum2, PDO::PARAM_STR);
+            $stmt->bindParam(3, $catNum3, PDO::PARAM_STR);
+            $stmt->bindParam(4, $completat, PDO::PARAM_INT);
+            $stmt->execute();
+            if ($stmt->rowCount() === 0) echo ('No rows');
+            while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $data[] = $users;
+            }
+            echo json_encode($data);
         }
-        echo json_encode($data);
     } else if ($cat === "exiliats") {
-        $catNum1 = 10;
-        $catNum2 = 2;
-        $sql = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat
-            FROM db_dades_personals AS a
-            LEFT JOIN aux_dades_municipis AS e1 ON a.municipi_naixement = e1.id
-            LEFT JOIN aux_dades_municipis AS e2 ON a.municipi_defuncio = e2.id
-            WHERE 
-                FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
-                OR FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
-            ORDER BY a.cognom1 ASC;";
-        global $conn;
-        $data = array();
-        /** @var PDO $conn */
-        $stmt = $conn->prepare($sql);
-        $stmt->bindParam(1, $catNum1, PDO::PARAM_STR);
-        $stmt->bindParam(2, $catNum2, PDO::PARAM_STR);
-        $stmt->execute();
-        if ($stmt->rowCount() === 0) echo ('No rows');
-        while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $data[] = $users;
+        if ($completat == 3) {
+            $catNum1 = 10;
+            $catNum2 = 2;
+            $sql = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat
+                FROM db_dades_personals AS a
+                LEFT JOIN aux_dades_municipis AS e1 ON a.municipi_naixement = e1.id
+                LEFT JOIN aux_dades_municipis AS e2 ON a.municipi_defuncio = e2.id
+                WHERE 
+                    (FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
+                    OR FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0)
+                    AND a.completat IN (1, 2)
+                ORDER BY a.cognom1 ASC;";
+            global $conn;
+            $data = array();
+            /** @var PDO $conn */
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(1, $catNum1, PDO::PARAM_STR);
+            $stmt->bindParam(2, $catNum2, PDO::PARAM_STR);
+            $stmt->execute();
+            if ($stmt->rowCount() === 0) echo ('No rows');
+            while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $data[] = $users;
+            }
+            echo json_encode($data);
+        } else {
+            $catNum1 = 10;
+            $catNum2 = 2;
+            $sql = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat
+                FROM db_dades_personals AS a
+                LEFT JOIN aux_dades_municipis AS e1 ON a.municipi_naixement = e1.id
+                LEFT JOIN aux_dades_municipis AS e2 ON a.municipi_defuncio = e2.id
+                WHERE 
+                    (FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
+                    OR FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0)
+                    AND a.completat = ?
+                ORDER BY a.cognom1 ASC;";
+            global $conn;
+            $data = array();
+            /** @var PDO $conn */
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(1, $catNum1, PDO::PARAM_STR);
+            $stmt->bindParam(2, $catNum2, PDO::PARAM_STR);
+            $stmt->bindParam(3, $completat, PDO::PARAM_INT);
+            $stmt->execute();
+            if ($stmt->rowCount() === 0) echo ('No rows');
+            while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $data[] = $users;
+            }
+            echo json_encode($data);
         }
-        echo json_encode($data);
     } else if ($cat === "represaliats") {
-        $catNum1 = 1;
-        $catNum2 = 6;
-        $catNum3 = 7;
-        $sql = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat
-            FROM db_dades_personals AS a
-            LEFT JOIN aux_dades_municipis AS e1 ON a.municipi_naixement = e1.id
-            LEFT JOIN aux_dades_municipis AS e2 ON a.municipi_defuncio = e2.id
-            WHERE 
-                FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
-                OR FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
-                OR FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
-            ORDER BY a.cognom1 ASC;";
-        global $conn;
-        $data = array();
-        /** @var PDO $conn */
-        $stmt = $conn->prepare($sql);
-        $stmt->bindParam(1, $catNum1, PDO::PARAM_STR);
-        $stmt->bindParam(2, $catNum2, PDO::PARAM_STR);
-        $stmt->bindParam(3, $catNum3, PDO::PARAM_STR);
-        $stmt->execute();
-        if ($stmt->rowCount() === 0) echo ('No rows');
-        while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $data[] = $users;
+        if ($completat == 3) {
+            $catNum1 = 1;
+            $catNum2 = 6;
+            $catNum3 = 7;
+            $sql = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat
+                FROM db_dades_personals AS a
+                LEFT JOIN aux_dades_municipis AS e1 ON a.municipi_naixement = e1.id
+                LEFT JOIN aux_dades_municipis AS e2 ON a.municipi_defuncio = e2.id
+                WHERE 
+                    (FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
+                    OR FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
+                    OR FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0)
+                    AND a.completat IN (1, 2)
+                ORDER BY a.cognom1 ASC;";
+            global $conn;
+            $data = array();
+            /** @var PDO $conn */
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(1, $catNum1, PDO::PARAM_STR);
+            $stmt->bindParam(2, $catNum2, PDO::PARAM_STR);
+            $stmt->bindParam(3, $catNum3, PDO::PARAM_STR);
+            $stmt->execute();
+            if ($stmt->rowCount() === 0) echo ('No rows');
+            while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $data[] = $users;
+            }
+            echo json_encode($data);
+        } else {
+            $catNum1 = 1;
+            $catNum2 = 6;
+            $catNum3 = 7;
+            $sql = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat
+                FROM db_dades_personals AS a
+                LEFT JOIN aux_dades_municipis AS e1 ON a.municipi_naixement = e1.id
+                LEFT JOIN aux_dades_municipis AS e2 ON a.municipi_defuncio = e2.id
+                WHERE 
+                    (FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
+                    OR FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
+                    OR FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0)
+                    AND a.completat = ?
+                ORDER BY a.cognom1 ASC;";
+            global $conn;
+            $data = array();
+            /** @var PDO $conn */
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(1, $catNum1, PDO::PARAM_STR);
+            $stmt->bindParam(2, $catNum2, PDO::PARAM_STR);
+            $stmt->bindParam(3, $catNum3, PDO::PARAM_STR);
+            $stmt->bindParam(4, $completat, PDO::PARAM_INT);
+            $stmt->execute();
+            if ($stmt->rowCount() === 0) echo ('No rows');
+            while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $data[] = $users;
+            }
+            echo json_encode($data);
         }
-        echo json_encode($data);
     }
 
     // 2) Pagina informacio fitxa Represaliat

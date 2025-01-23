@@ -12,6 +12,8 @@
 
     <input type="text" id="searchInput" placeholder="Cercar...">
 
+    <div id="botonsFiltres" class="mb-3 d-flex gap-3" style="margin-top:25px;margin-bottom:25px"></div>
+
     <div class="table-responsive" style="margin-top:30px">
         <table class="table table-striped table-hover" id="represaliatsTable">
             <thead class="table-dark">

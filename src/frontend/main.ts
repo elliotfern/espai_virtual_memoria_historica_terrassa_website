@@ -3,6 +3,7 @@ import { logout } from './services/cookies/cookiesUtils';
 import { nameUser } from './components/userName/userName';
 import { initButtons } from './components/fitxaRepresaliat/fitxaRepresaliat';
 import { cargarTabla } from './components/taulaDades/taulaDades';
+import { botonsEstat } from './components/taulaDades/botonsEstat';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './style.css';
 import 'bootstrap';
@@ -40,15 +41,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (pageType === 'tots' || pageType === 'base-dades-global') {
     if (pageType === 'tots') {
+      botonsEstat(pageType);
       cargarTabla(pageType, 2);
     } else {
+      botonsEstat(pageType);
       cargarTabla(pageType, 1);
     }
   } else if (pageType === 'represaliats') {
+    botonsEstat(pageType);
     cargarTabla(pageType, 2); // También cargar para afusellats
   } else if (pageType === 'exiliats') {
+    botonsEstat(pageType);
     cargarTabla(pageType, 2); // También cargar para exiliats
   } else if (pageType === 'cost-huma') {
+    botonsEstat(pageType);
     cargarTabla(pageType, 2); // También cargar para exiliats
   } else if (pathArray[pathArray.length - 2] === 'fitxa') {
     const id = pathArray[pathArray.length - 1];
