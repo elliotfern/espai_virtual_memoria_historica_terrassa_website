@@ -6,6 +6,13 @@
         <li>Processats / Empresonats</li>
         <li>Afusellats</li>
         <li>Depurats</li>
+        <li>Represaliats pendents de classificar (llistat Ajuntament)</li>
+        <li>Detinguts Presó Model</li>
+        <li>Detinguts Guàrdia Urbana Terrassa</li>
+        <li>Detinguts Comitè Solidaritat</li>
+        <li>Responsabilitats polítiques</li>
+        <li>Funcionaris depurats</li>
+        <li>Tribunal Orden Público</li>
     </ul>
 
     <hr>
@@ -22,6 +29,7 @@
                     <th>Municipi naixement</th>
                     <th>Municipi defunció</th>
                     <th>Col·lectiu</th>
+                    <th>Origen dades</th>
                     <th>Estat fitxa</th>
                     <th>Modificar</th>
                     <th>Eliminar</th>

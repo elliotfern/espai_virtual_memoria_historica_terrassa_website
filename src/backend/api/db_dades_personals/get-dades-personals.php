@@ -13,7 +13,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'tots' && isset($_GET['completat'])
     if ($completat == 3) {
         global $conn;
         /** @var PDO $conn */
-        $query = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat
+        $query = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat, a.font_intern
                 FROM db_dades_personals AS a
                 LEFT JOIN aux_dades_municipis AS e1 ON a.municipi_naixement = e1.id
                 LEFT JOIN aux_dades_municipis AS e2 ON a.municipi_defuncio = e2.id
@@ -29,7 +29,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'tots' && isset($_GET['completat'])
     } else {
         global $conn;
         /** @var PDO $conn */
-        $query = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat
+        $query = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat, a.font_intern
             FROM db_dades_personals AS a
             LEFT JOIN aux_dades_municipis AS e1 ON a.municipi_naixement = e1.id
             LEFT JOIN aux_dades_municipis AS e2 ON a.municipi_defuncio = e2.id
@@ -67,7 +67,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'tots' && isset($_GET['completat'])
             $catNum2 = 4;
             $catNum3 = 5;
 
-            $sql = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat
+            $sql = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat, a.font_intern
                 FROM db_dades_personals AS a
                 LEFT JOIN aux_dades_municipis AS e1 ON a.municipi_naixement = e1.id
                 LEFT JOIN aux_dades_municipis AS e2 ON a.municipi_defuncio = e2.id
@@ -95,7 +95,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'tots' && isset($_GET['completat'])
             $catNum2 = 4;
             $catNum3 = 5;
 
-            $sql = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat
+            $sql = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat, a.font_intern
             FROM db_dades_personals AS a
             LEFT JOIN aux_dades_municipis AS e1 ON a.municipi_naixement = e1.id
             LEFT JOIN aux_dades_municipis AS e2 ON a.municipi_defuncio = e2.id
@@ -124,7 +124,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'tots' && isset($_GET['completat'])
         if ($completat == 3) {
             $catNum1 = 10;
             $catNum2 = 2;
-            $sql = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat
+            $sql = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat, a.font_intern
                 FROM db_dades_personals AS a
                 LEFT JOIN aux_dades_municipis AS e1 ON a.municipi_naixement = e1.id
                 LEFT JOIN aux_dades_municipis AS e2 ON a.municipi_defuncio = e2.id
@@ -148,7 +148,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'tots' && isset($_GET['completat'])
         } else {
             $catNum1 = 10;
             $catNum2 = 2;
-            $sql = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat
+            $sql = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat, a.font_intern
                 FROM db_dades_personals AS a
                 LEFT JOIN aux_dades_municipis AS e1 ON a.municipi_naixement = e1.id
                 LEFT JOIN aux_dades_municipis AS e2 ON a.municipi_defuncio = e2.id
@@ -176,12 +176,14 @@ if (isset($_GET['type']) && $_GET['type'] == 'tots' && isset($_GET['completat'])
             $catNum1 = 1;
             $catNum2 = 6;
             $catNum3 = 7;
-            $sql = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat
+            $catNum4 = 11;
+            $sql = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat, a.font_intern
                 FROM db_dades_personals AS a
                 LEFT JOIN aux_dades_municipis AS e1 ON a.municipi_naixement = e1.id
                 LEFT JOIN aux_dades_municipis AS e2 ON a.municipi_defuncio = e2.id
                 WHERE 
                     (FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
+                    OR FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
                     OR FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
                     OR FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0)
                     AND a.completat IN (1, 2)
@@ -193,6 +195,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'tots' && isset($_GET['completat'])
             $stmt->bindParam(1, $catNum1, PDO::PARAM_STR);
             $stmt->bindParam(2, $catNum2, PDO::PARAM_STR);
             $stmt->bindParam(3, $catNum3, PDO::PARAM_STR);
+            $stmt->bindParam(4, $catNum4, PDO::PARAM_STR);
             $stmt->execute();
             if ($stmt->rowCount() === 0) echo ('No rows');
             while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -203,12 +206,14 @@ if (isset($_GET['type']) && $_GET['type'] == 'tots' && isset($_GET['completat'])
             $catNum1 = 1;
             $catNum2 = 6;
             $catNum3 = 7;
-            $sql = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat
+            $catNum4 = 11;
+            $sql = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat, a.font_intern
                 FROM db_dades_personals AS a
                 LEFT JOIN aux_dades_municipis AS e1 ON a.municipi_naixement = e1.id
                 LEFT JOIN aux_dades_municipis AS e2 ON a.municipi_defuncio = e2.id
                 WHERE 
                     (FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
+                    OR FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
                     OR FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
                     OR FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0)
                     AND a.completat = ?
@@ -220,7 +225,8 @@ if (isset($_GET['type']) && $_GET['type'] == 'tots' && isset($_GET['completat'])
             $stmt->bindParam(1, $catNum1, PDO::PARAM_STR);
             $stmt->bindParam(2, $catNum2, PDO::PARAM_STR);
             $stmt->bindParam(3, $catNum3, PDO::PARAM_STR);
-            $stmt->bindParam(4, $completat, PDO::PARAM_INT);
+            $stmt->bindParam(4, $catNum4, PDO::PARAM_STR);
+            $stmt->bindParam(5, $completat, PDO::PARAM_INT);
             $stmt->execute();
             if ($stmt->rowCount() === 0) echo ('No rows');
             while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {

@@ -21,6 +21,7 @@ export async function cargarTabla(pag: string, context: number, completat: numbe
   const rowsPerPage = 10; // Número de filas por página
   let totalPages = 1;
   let datos: Represeliat[] = [];
+  let filteredData: Represeliat[] = [];
 
   let webFitxa = '';
   let webTarget = '';
@@ -51,14 +52,17 @@ export async function cargarTabla(pag: string, context: number, completat: numbe
     tbody.innerHTML = ''; // Limpiar el contenido actual
     const start = (page - 1) * rowsPerPage;
     const end = start + rowsPerPage;
-    const datosPaginados = datos.slice(start, end); // Obtener el rango de datos para esta página
+    const datosPaginados = filteredData.length > 0 ? filteredData.slice(start, end) : datos.slice(start, end); // Obtener el rango de datos para esta página
 
     datosPaginados.forEach((row) => {
       const tr = document.createElement('tr');
 
       // Nombre completo
       const tdNombre = document.createElement('td');
-      const nombreCompleto = `${row.cognom1} ${row.cognom2 ?? ''}, ${row.nom}`;
+      const nom = row.nom !== null ? row.nom : '';
+      const cognom1 = row.cognom1 !== null ? row.cognom1 : '';
+      const cognom2 = row.cognom2 !== null ? row.cognom2 : '';
+      const nombreCompleto = `${cognom1} ${cognom2 ?? ''}, ${nom}`;
       tdNombre.innerHTML = `<strong><a href="${webFitxa}${row.id}" target="${webTarget}">${nombreCompleto}</a></strong>`;
       tr.appendChild(tdNombre);
 
@@ -88,6 +92,29 @@ export async function cargarTabla(pag: string, context: number, completat: numbe
       const userId = localStorage.getItem('user_id');
 
       // COLUMNA ESTAT FITXA NOMES PELS USUARIS REGISTRATS
+
+      // COLUMNA FONT DADES, NOMES USUARIS REGISTRATS
+      // Verificar si el usuario es el admin con id 1
+      if (userId === '1' || userId === '3' || userId === '4' || userId === '6') {
+        // Botó estat
+        const fontInterna: number = row.font_intern;
+
+        const fontTextMap: { [key: number]: string } = {
+          0: 'Manel/Juan Antonio/José Luís',
+          1: 'Llistat Represaliats Ajuntament',
+          2: 'Manel: base dades antifranquista',
+          3: 'Arxiu',
+        };
+
+        const tdModificar = document.createElement('td');
+        tdModificar.textContent = fontTextMap[fontInterna] || 'Altres'; // Busca el valor en el objeto
+        tr.appendChild(tdModificar);
+      } else if (context === 1) {
+        // nada
+      } else {
+        // Crear la fila vacía
+      }
+
       // Verificar si el usuario es el admin con id 1
       if (userId === '1' || userId === '3' || userId === '4' || userId === '6') {
         // Botó estat
@@ -175,143 +202,40 @@ export async function cargarTabla(pag: string, context: number, completat: numbe
   // Función para buscar en todos los datos
   function buscarEnTodosLosDatos() {
     const input = document.getElementById('searchInput') as HTMLInputElement;
-    const tbody = document.getElementById('represaliatsBody')!;
-    tbody.innerHTML = ''; // Limpiar el contenido actual
-    const query = input.value.toLowerCase();
+    const query = input.value.toLowerCase().trim();
 
-    // Filtrar los datos que coincidan con la búsqueda
-    const resultadosFiltrados = datos.filter((row) => {
-      const nombreCompleto = `${row.cognom1} ${row.cognom2 ?? ''}, ${row.nom}`.toLowerCase();
-      const municipiNaixement = `${row.data_naixement ?? 'Desconegut'} (${row.ciutat ?? 'Desconegut'})`.toLowerCase();
-      const municipiDefuncio = `${row.data_defuncio ?? 'Desconegut'} (${row.ciutat2 ?? 'Desconegut'})`.toLowerCase();
-      const categoriasIds = row.categoria ? row.categoria.replace(/[{}]/g, '').split(',').map(Number) : [];
-      const collectiuTexto = categoriasIds
-        .map((num) => categorias[num] || '') // Usar la constante categorias
-        .filter(Boolean)
-        .join(', ')
-        .toLowerCase();
+    if (query === '') {
+      // Si el campo de búsqueda está vacío, renderizar la tabla con paginación
+      filteredData = [];
+      currentPage = 1;
+      totalPages = Math.ceil(datos.length / rowsPerPage);
+      document.getElementById('totalPages')!.textContent = totalPages.toString();
+      renderizarTabla(currentPage);
+    } else {
+      // Filtrar los datos que coincidan con la búsqueda
+      filteredData = datos.filter((row) => {
+        const nombreCompleto = `${row.cognom1} ${row.cognom2 ?? ''}, ${row.nom}`.toLowerCase();
+        const municipiNaixement = `${row.data_naixement ?? 'Desconegut'} (${row.ciutat ?? 'Desconegut'})`.toLowerCase();
+        const municipiDefuncio = `${row.data_defuncio ?? 'Desconegut'} (${row.ciutat2 ?? 'Desconegut'})`.toLowerCase();
+        const categoriasIds = row.categoria ? row.categoria.replace(/[{}]/g, '').split(',').map(Number) : [];
+        const collectiuTexto = categoriasIds
+          .map((num) => categorias[num] || '') // Usar la constante categorias
+          .filter(Boolean)
+          .join(', ')
+          .toLowerCase();
 
-      // Verifica si alguno de los campos coincide con la búsqueda
-      return nombreCompleto.includes(query) || municipiNaixement.includes(query) || municipiDefuncio.includes(query) || collectiuTexto.includes(query);
-    });
+        // Verifica si alguno de los campos coincide con la búsqueda
+        return nombreCompleto.includes(query) || municipiNaixement.includes(query) || municipiDefuncio.includes(query) || collectiuTexto.includes(query);
+      });
 
-    // Renderiza los resultados filtrados
-    if (resultadosFiltrados.length === 0) {
-      const tr = document.createElement('tr');
-      const td = document.createElement('td');
-      td.colSpan = 6; // Asegúrate de que coincida con el número de columnas
-      td.textContent = 'No se encontraron resultados.';
-      tr.appendChild(td);
-      tbody.appendChild(tr);
-      return; // Salir si no hay resultados
+      // Calcular el número total de páginas para los resultados filtrados
+      totalPages = Math.ceil(filteredData.length / rowsPerPage);
+      document.getElementById('totalPages')!.textContent = totalPages.toString();
+
+      // Renderizar la primera página de los resultados filtrados
+      currentPage = 1;
+      renderizarTabla(currentPage);
     }
-
-    resultadosFiltrados.forEach((row) => {
-      const tr = document.createElement('tr');
-
-      // Nombre completo
-      const tdNombre = document.createElement('td');
-      const nombreCompleto = `${row.cognom1} ${row.cognom2 ?? ''}, ${row.nom}`;
-      tdNombre.innerHTML = `<strong><a href="${window.location.origin}${webFitxa}${row.id}" target="${webTarget}">${nombreCompleto}</a></strong>`;
-      tr.appendChild(tdNombre);
-
-      // Municipio nacimiento
-      const tdMunicipiNaixement = document.createElement('td');
-      const municipiNaixement = `${row.data_naixement ?? 'Desconegut'} (${row.ciutat ?? 'Desconegut'})`;
-      tdMunicipiNaixement.textContent = municipiNaixement;
-      tr.appendChild(tdMunicipiNaixement);
-
-      // Municipio defunció
-      const tdMunicipiDefuncio = document.createElement('td');
-      const municipiDefuncio = `${row.data_defuncio ?? 'Desconegut'} (${row.ciutat2 ?? 'Desconegut'})`;
-      tdMunicipiDefuncio.textContent = municipiDefuncio;
-      tr.appendChild(tdMunicipiDefuncio);
-
-      // Col·lectiu
-      const tdCollectiu = document.createElement('td');
-      const categoriasIds = row.categoria ? row.categoria.replace(/[{}]/g, '').split(',').map(Number) : [];
-      const collectiuTexto = categoriasIds
-        .map((num) => categorias[num] || '') // Usar la constante categorias
-        .filter(Boolean)
-        .join(', ');
-      tdCollectiu.textContent = collectiuTexto;
-      tr.appendChild(tdCollectiu);
-
-      // Obtener el user_id de localStorage
-      const userId = localStorage.getItem('user_id');
-
-      // COLUMNA ESTAT FITXA NOMES PELS USUARIS REGISTRATS
-      // Verificar si el usuario es el admin con id 1
-      if (userId === '1' || userId === '3' || userId === '4' || userId === '6') {
-        // Botó estat
-        const estatFitxa = row.completat;
-        if (estatFitxa === 1) {
-          const tdModificar = document.createElement('td');
-          const btnModificar = document.createElement('button');
-          btnModificar.textContent = 'PENDENT';
-          btnModificar.classList.add('btn', 'btn-sm', 'btn-primary');
-          tdModificar.appendChild(btnModificar);
-          tr.appendChild(tdModificar);
-        } else {
-          const tdModificar = document.createElement('td');
-          const btnModificar = document.createElement('button');
-          btnModificar.textContent = 'COMPLETADA';
-          btnModificar.classList.add('btn', 'btn-sm', 'btn-success');
-          tdModificar.appendChild(btnModificar);
-          tr.appendChild(tdModificar);
-        }
-      } else if (context === 1) {
-        // nada
-      } else {
-        // Crear la fila vacía
-      }
-
-      // Botón Modificar
-      if (userId === '1' || userId === '3' || userId === '4' || userId === '6') {
-        const tdModificar = document.createElement('td');
-        const btnModificar = document.createElement('button');
-        btnModificar.textContent = 'Modificar dades';
-        btnModificar.classList.add('btn', 'btn-sm', 'btn-warning');
-        btnModificar.onclick = function () {
-          const link = document.createElement('a');
-          link.href = `/gestio/tots/fitxa/modifica/${row.id}`;
-          link.target = '_blank';
-          link.click();
-        };
-        tdModificar.appendChild(btnModificar);
-        tr.appendChild(tdModificar);
-      } else if (context === 1) {
-        // nada
-      } else {
-        // Crear la fila vacía
-        const tdModificar = document.createElement('td');
-        tr.appendChild(tdModificar);
-      }
-
-      // Botón Eliminar
-      if (userId === '1') {
-        const tdEliminar = document.createElement('td');
-        const btnEliminar = document.createElement('button');
-        btnEliminar.textContent = 'Eliminar';
-        btnEliminar.classList.add('btn', 'btn-sm', 'btn-danger');
-        btnEliminar.onclick = function () {
-          if (confirm('¿Estás seguro de que deseas eliminar este registro?')) {
-            window.location.href = `/gestio/eliminar/${row.id}`;
-          }
-        };
-        tdEliminar.appendChild(btnEliminar);
-        tr.appendChild(tdEliminar);
-      } else if (context === 1) {
-        // nada
-      } else {
-        // Crear la fila vacía
-        const tdModificar = document.createElement('td');
-        tr.appendChild(tdModificar);
-      }
-
-      // Añadir la fila a la tabla
-      tbody.appendChild(tr);
-    });
   }
 
   // Eventos

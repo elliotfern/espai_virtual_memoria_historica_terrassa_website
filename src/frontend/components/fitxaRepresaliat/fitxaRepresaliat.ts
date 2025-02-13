@@ -378,7 +378,13 @@ async function mostrarInformacion(tab: string, idPersona: string, label: string)
   }
 
   // Aquí puedes mantener el contenido de divAdditionalInfo si es necesario
+
+  const nom = fitxa.nom !== null ? fitxa.nom : '';
+  const cognom1 = fitxa.cognom1 !== null ? fitxa.cognom1 : '';
+  const cognom2 = fitxa.cognom2 !== null ? fitxa.cognom2 : '';
+  const nombreCompleto = `${nom} ${cognom1} ${cognom2 ?? ''}`;
+
   divAdditionalInfo.innerHTML = `
-      <h4 class="titolRepresaliat"> ${fitxa.nom} ${fitxa.cognom1} ${fitxa.cognom2}</h4>
+      <h4 class="titolRepresaliat"> ${nombreCompleto}</h4>
     `; // No se limpia el contenido
 }

@@ -67,6 +67,20 @@ $id = $routeParams[0];
                   </label>
                 </div>
 
+                <div class="form-check me-3">
+                  <input class="form-check-input" type="checkbox" id="categoria11" name="categoria" value="categoria11">
+                  <label class="form-check-label" for="categoria11">
+                    Represaliat pendent classificació (llista Ajuntament)
+                  </label>
+                </div>
+
+                <div class="form-check me-3">
+                  <input class="form-check-input" type="checkbox" id="categoria12" name="categoria" value="categoria12">
+                  <label class="form-check-label" for="categoria12">
+                    Detinguts Presó Model
+                  </label>
+                </div>
+
               </div>
             </div> <!-- Fi bloc repressio 1939-79 -->
 

@@ -7,8 +7,15 @@ export const categorias: { [key: string]: string } = {
   6: 'Processat/Empresonat',
   7: 'Depurat',
   8: 'Dona',
-  9: '',
+  9: ' ',
   10: 'Exiliat',
+  11: 'Represaliats pendents classificació',
+  12: 'Detinguts Presó Model',
+  13: 'Detinguts Guàrdia Urbana',
+  14: 'Detinguts Comitè Solidaritat',
+  15: 'Responsabilitats Polítiques',
+  16: 'Funcionaris depurats',
+  17: 'Tribunal Orden Público',
 };
 
 // Función para convertir fecha de formato DD/MM/YYYY a YYYY-MM-DD

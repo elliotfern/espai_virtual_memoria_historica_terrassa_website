@@ -17,6 +17,7 @@
                     <th>Municipi naixement</th>
                     <th>Municipi defunció</th>
                     <th>Col·lectiu</th>
+                    <th>Origen dades</th>
                     <th>Estat fitxa</th>
                     <th>Modificar</th>
                     <th>Eliminar</th>

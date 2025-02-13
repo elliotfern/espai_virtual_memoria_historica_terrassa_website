@@ -93,4 +93,5 @@ export interface Represeliat {
   data_naixement: string;
   data_defuncio: string;
   completat: number;
+  font_intern: number;
 }
