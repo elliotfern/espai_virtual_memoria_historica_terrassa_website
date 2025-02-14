@@ -4,7 +4,7 @@
 function generateLanguageRoutes(array $base_routes, bool $use_languages = true): array
 {
 
-    $languages = ['es', 'fr', 'en', 'ca']; // Idiomas soportados
+    $languages = ['es', 'fr', 'en', 'ca', 'it', 'pt']; // Idiomas soportados
     $default_language = 'ca'; // Idioma por defecto
     $routes = [];
 

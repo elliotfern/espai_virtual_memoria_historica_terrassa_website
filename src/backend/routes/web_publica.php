@@ -26,12 +26,27 @@ $base_routes = [
 // Rutas principales sin idioma explícito (solo para el idioma por defecto)
 $routes = [
     // ACCES SECCIO GESTIO
-    '/' => ['view' => 'public/web-publica/index.php', 'needs_session' => false, 'header_footer' => true, 'header_menu_footer' => false],
+    '/' => [
+        'view' => 'public/web-publica/index.php',
+        'needs_session' => false,
+        'header_footer' => true,
+        'header_menu_footer' => false
+    ],
 
     // HOMEPAGE GESTIO
-    '/benvinguda' => ['view' => 'public/web-publica/index.php', 'needs_session' => false, 'header_footer' => true, 'header_menu_footer' => false],
+    '/benvinguda' => [
+        'view' => 'public/web-publica/index.php',
+        'needs_session' => false,
+        'header_footer' => true,
+        'header_menu_footer' => false
+    ],
 
-    '/inici' => ['view' => 'public/web-publica/inici.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => true],
+    '/inici' => [
+        'view' => 'public/web-publica/inici.php',
+        'needs_session' => false,
+        'header_footer' => false,
+        'header_menu_footer' => true
+    ],
 
     '/represaliats' => ['view' => 'public/web-publica/represaliats.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => true],
 

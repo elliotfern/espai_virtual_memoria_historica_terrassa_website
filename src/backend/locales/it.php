@@ -1,6 +1,6 @@
 <?php
 return [
     'benvinguda' => [
-        'boto' => 'entrer sur le site web',
+        'boto' => 'entra nel sito web',
     ],
 ];

@@ -13,45 +13,43 @@ require_once __DIR__ . '/src/backend/routes/routes.php';
 // Obtener la ruta solicitada
 $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
-// Normalizar la ruta eliminando barras finales, excepto para la raíz
+// Normalizar la ruta eliminando barras finales
 $requestUri = rtrim($requestUri, '/');
+
 if ($requestUri === '') {
     $requestUri = '/';
 }
 
-// Detectar l'idioma de l'usuari des de la URL o la cookie
-$language = 'ca'; // Per defecte, català
+$lang = ltrim($requestUri, '/');
 
-// Verificar si la ruta es solo el idioma, sin "/reserva"
-if (preg_match('#^/(fr|en|ca|es)$#', $requestUri, $matches)) {
-    $language = $matches[1];
-    // Redirigir a la página correspondiente /fr/reserva, /en/reserva, /ca/reserva
-    header("Location: /$language/inici", true, 301);
-    exit();
+if ($lang === '') {
+    $lang = 'ca';
 }
 
-// Detectar el idioma desde la URL (si existe en la ruta)
-preg_match('#^/(fr|en|es)/#', $requestUri, $matches);
-$language = $matches[1] ?? null;  // Si hay un idioma en la URL, lo usamos
+// Obtener la ruta solicitada
+$requestUri2 = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
-// Si no hay idioma en la URL y es la raíz (o idioma por defecto), usamos 'es'
-if (empty($language)) {
-    // Comprobamos si la ruta es la raíz (ejemplo: /reserva) y no incluye idioma
-    if (preg_match('#^/inici$#', $requestUri)) {
-        $language = 'ca';  // Asumimos que si está en la raíz, el idioma es 'es'
-    } else {
-        // Si la cookie 'language' ya existe, usamos ese valor; sino, asignamos 'es' por defecto
-        $language = $_COOKIE['language'] ?? 'ca';
-    }
+// Normalizar la ruta eliminando barras finales
+$requestUri2 = rtrim($requestUri2, '/');
+
+// Detectar el idioma desde la URL (primer segmento después del dominio)
+preg_match('#^/(fr|en|es|pt|it)#', $requestUri, $matches);
+
+// Asignar el idioma detectado o usar un valor predeterminado
+$language2 = $matches[1] ?? 'ca';
+
+if ($language2 === '') {
+    $language2 = 'ca';
 }
 
 // Establecer la cookie del idioma
-setcookie('language', $language, time() + 3600 * 24 * 30, '/');  // 30 días
-$_COOKIE['language'] = $language;
 
+$cookie_name = "language";
+$cookie_value = $language2;
+setcookie($cookie_name, $cookie_value, time() + 3600 * 24 * 30, '/');  // 30 días
 
 // Cargar las traducciones correspondientes al idioma
-$translations = require __DIR__ . "/src/backend/locales/{$language}.php";
+$translations = require __DIR__ . "/src/backend/locales/{$language2}.php";
 
 // Inicializar una variable para los parámetros de la ruta
 $routeParams = [];
@@ -101,24 +99,26 @@ if (!$routeFound) {
     $apiSenseHTML = $routeInfo['apiSenseHTML'] ?? false;
 }
 
-// Incluir encabezado y pie de página si no se especifica que no lo tenga
-if ($noHeaderFooter) {
+// **No hacer redirección**, solo no incluir header y footer si estamos en /es
+if (preg_match('#^/(es|fr|en|pt|it)$#', $requestUri)) {
+    // Si estamos en /es, no hacemos nada más
     include 'public/includes/header.php';
-
-    // Incluir la vista asociada a la ruta
-    include $view;
-
+    include 'public/web-publica/index.php';
     include 'public/includes/footer-end.php';
-} elseif ($headerMenu) {
-    include 'public/includes/header.php';
-    include 'public/includes/header-menu.php';
-
-    // Incluir la vista asociada a la ruta
-    include $view;
-
-    include 'public/includes/footer.php';
-    include 'public/includes/footer-end.php';
-} elseif ($apiSenseHTML) {
-    // Incluir la vista asociada a la ruta
-    include $view;
+} else {
+    // Incluir encabezado y pie de página si no se especifica que no lo tenga
+    if ($noHeaderFooter) {
+        include 'public/includes/header.php';
+        include $view;
+        include 'public/includes/footer-end.php';
+    } elseif ($headerMenu) {
+        include 'public/includes/header.php';
+        include 'public/includes/header-menu.php';
+        include $view;
+        include 'public/includes/footer.php';
+        include 'public/includes/footer-end.php';
+    } elseif ($apiSenseHTML) {
+        // Solo incluir la vista asociada a la ruta
+        include $view;
+    }
 }

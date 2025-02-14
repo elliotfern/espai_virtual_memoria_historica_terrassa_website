@@ -1,6 +1,18 @@
+<?php
+
+// Obtener la ruta solicitada
+$requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+
+// Normalizar la ruta eliminando barras finales
+$lang2 = rtrim($requestUri, '/');
+
+// Obtener traducciones generales
+$translate = $translations['benvinguda'] ?? [];
+?>
+
 <div class="container-fluid full-screen bg-image">
     <img src="../public/img/logo-gran.png" alt="Logo" class="logo">
-    <a href="./inici"><button class="bottom-right-button">entrar al lloc web</button></a>
+    <a href=".<?php echo $lang2; ?>/inici"><button class="bottom-right-button"><?php echo $translate['boto'] ?></button></a>
 </div>
 
 <style>
@@ -17,7 +29,7 @@
 
 
     .bg-image {
-        background-image: url('../public/img/santpere.jpg');
+        background-image: url('../public/img/cartells_republica.jpg');
         /* Cambia 'tu-imagen.jpg' por la URL de tu imagen */
         background-size: cover;
         /* Imagen cubre todo el área */
@@ -45,34 +57,27 @@
     .bottom-right-button {
         font-family: "Raleway", serif;
         font-optical-sizing: auto;
-        font-weight: 200px;
+        font-weight: bold;
         font-style: normal;
         font-size: 1rem;
         position: absolute;
-        /* Posiciona el botón de forma independiente al flujo normal */
         bottom: 60px;
-        /* Distancia desde el borde inferior */
         right: 60px;
-        /* Distancia desde el borde derecho */
         z-index: 3;
-        /* Asegura que el botón esté visible por encima de otras capas */
         padding: 10px 20px;
-        /* Tamaño del botón */
-        background-color: rgb(255, 255, 255);
-        /* Color de fondo */
-        color: #133B7C;
-        /* Color del texto */
+        background-color: #133B7C;
+        color: rgb(255, 255, 255);
         border: none;
-        /* Sin bordes */
         border-top-left-radius: 15px;
-        /* Bordes redondeados */
         cursor: pointer;
-        /* Cambia el cursor al pasar el mouse */
+        transition: transform 0.3s ease, background-color 0.3s ease;
+        /* Transición suave */
+
     }
 
     .bottom-right-button:hover {
         background-color: rgb(0, 0, 0);
         color: rgb(255, 255, 255);
-        /* Efecto hover */
+        transform: scale(1.1);
     }
 </style>
