@@ -10,7 +10,8 @@
     RewriteCond %{REQUEST_URI} ^/ca$
     RewriteRule ^ / [L,R=301]
 
-    # Redirigir "/" a "/reserva"
+    RewriteCond %{REQUEST_URI} /$
+    RewriteRule ^(.*)/$ /$1 [R=301,L]
 
     # Reescribir las rutas dinámicas, asegurándose de que no se trate de archivos o directorios existentes
     RewriteCond %{REQUEST_FILENAME} !-f
@@ -18,8 +19,8 @@
     RewriteRule ^(.+)$ index.php?uri=$1 [QSA,L]
 
     # Redirección de rutas con idiomas (separar rutas por idioma)
-    RewriteCond %{REQUEST_URI} ^/(es|fr|en|ca)(.*)$
-    RewriteRule ^(es|fr|en|ca)(.*)$ index.php?lang=$1&uri=$2 [QSA,L]
+    RewriteCond %{REQUEST_URI} ^/(es|fr|en|ca|it|pt)(.*)$
+    RewriteRule ^(es|fr|en|ca|it|pt)(.*)$ index.php?lang=$1&uri=$2 [QSA,L]
 </IfModule>
 
 <IfModule mod_headers.c>

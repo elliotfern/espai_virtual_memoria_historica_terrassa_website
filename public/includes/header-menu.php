@@ -39,7 +39,6 @@ if ($currentLanguage === 'ca') {
     $baseUri = preg_replace('#^/ca/#', '/', $currentUri);
 }
 
-echo $language;
 ?>
 
 <div class="container-fluid full-screen fonsColorPrimerHeader header1">
@@ -56,11 +55,50 @@ echo $language;
                     <?php endforeach; ?>
                 </ul>
             </div>
+
+            <div class="col-6 float-end">
+                <ul class="d-flex list-unstyled gap-3 m-0 p-0 float-end">
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://bsky.app/profile/terrassamemoria.bsky.social" target="_blank">
+                            <img src="<?php echo APP_WEB; ?>/public/img/bluesky.png" alt="Bluesky" class="logoXarxes">
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://x.com/terrassaMemoria" target="_blank">
+                            <img src="<?php echo APP_WEB; ?>/public/img/x2.png" alt="X" class="logoXarxes">
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://bsky.app/profile/terrassamemoria.bsky.social" target="_blank">
+                            <img src="<?php echo APP_WEB; ?>/public/img/mastodon.png" alt="Mastodon" class="logoXarxes">
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="" target="_blank">
+                            <img src="<?php echo APP_WEB; ?>/public/img/instagram2.png" alt="Instagram" class="logoXarxes">
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="" target="_blank">
+                            <img src="<?php echo APP_WEB; ?>/public/img/linkedin2.png" alt="Linkedin" class="logoXarxes">
+                        </a>
+                    </li>
+
+
+
+                </ul>
+            </div>
+
         </div>
     </div>
 </div>
 
-<div class="container-fluid full-screen fonsColor header2">
+<div class="container-fluid full-screen fonsColorSegonHeader header2">
     <div class="container py-3">
         <div class="row">
             <!-- Logo -->
@@ -88,19 +126,19 @@ echo $language;
                             <ul class="navbar-nav w-100 d-flex justify-content-between">
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" id="submenuEstudis" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        Base de dades
+                                        <?php echo $translate['base-dades']; ?>
                                     </a>
                                     <ul class="dropdown-menu" aria-labelledby="submenuEstudis">
-                                        <li><a class="dropdown-item" href="../<?php echo empty($language) ? '' : $language . '/'; ?>base-dades/general">General</a></li>
-                                        <li><a class="dropdown-item" href="../<?php echo empty($language) ? '' : $language . '/'; ?>base-dades/cost-huma">Cost humà</a></li>
-                                        <li><a class="dropdown-item" href="../<?php echo empty($language) ? '' : $language . '/'; ?>base-dades/exiliats-deportats">Exiliats i deportats</a></li>
-                                        <li><a class="dropdown-item" href="../<?php echo empty($language) ? '' : $language . '/'; ?>base-dades/represaliats">Represaliats</a></li>
+                                        <li><a class="dropdown-item" href="../<?php echo empty($language) ? '' : $language . '/'; ?>base-dades/general"> <?php echo $translate['general']; ?></a></li>
+                                        <li><a class="dropdown-item" href="../<?php echo empty($language) ? '' : $language . '/'; ?>base-dades/cost-huma"> <?php echo $translate['cost-huma']; ?></a></li>
+                                        <li><a class="dropdown-item" href="../<?php echo empty($language) ? '' : $language . '/'; ?>base-dades/exiliats-deportats"> <?php echo $translate['exiliats']; ?></a></li>
+                                        <li><a class="dropdown-item" href="../<?php echo empty($language) ? '' : $language . '/'; ?>base-dades/represaliats"> <?php echo $translate['represaliats']; ?></a></li>
                                     </ul>
                                 </li>
-                                <li class="nav-item"><a class="nav-link" href="../<?php echo empty($language) ? '' : $language . '/'; ?>documents-estudis">Estudis</a></li>
-                                <li class="nav-item"><a class="nav-link" href="../<?php echo empty($language) ? '' : $language . '/'; ?>fonts-documentals">Fonts documentals</a></li>
-                                <li class="nav-item"><a class="nav-link" href="../<?php echo empty($language) ? '' : $language . '/'; ?>que-es-espai-virtual">Espai virtual</a></li>
-                                <li class="nav-item"><a class="nav-link" href="../<?php echo empty($language) ? '' : $language . '/'; ?>contacta">Contacta</a></li>
+                                <li class="nav-item"><a class="nav-link" href="../<?php echo empty($language) ? '' : $language . '/'; ?>documents-estudis"> <?php echo $translate['estudis']; ?></a></li>
+                                <li class="nav-item"><a class="nav-link" href="../<?php echo empty($language) ? '' : $language . '/'; ?>fonts-documentals"> <?php echo $translate['documents']; ?></a></li>
+                                <li class="nav-item"><a class="nav-link" href="../<?php echo empty($language) ? '' : $language . '/'; ?>que-es-espai-virtual"> <?php echo $translate['espai-virtual']; ?></a></li>
+                                <li class="nav-item"><a class="nav-link" href="../<?php echo empty($language) ? '' : $language . '/'; ?>contacta"> <?php echo $translate['contacta']; ?></a></li>
                             </ul>
                         </div>
                     </div>
@@ -115,23 +153,18 @@ echo $language;
         background-color: #B39B7C;
     }
 
-    .fonsColor {
+    .fonsColorSegonHeader {
         background-color: #c5c3c0b2;
     }
 
     .header1 {
-        padding-top: 10px;
-        padding-bottom: 10px;
+        padding-top: 5px;
+        padding-bottom: 5px;
     }
 
     .header2 {
         padding-top: 30px;
         padding-bottom: 30px;
-    }
-
-    .logoPetit {
-        width: 100%;
-        height: auto;
     }
 
     .navbar-nav .nav-link {
@@ -151,18 +184,49 @@ echo $language;
         /* Subrayado al pasar el mouse */
     }
 
+    .logoXarxes {
+        width: 100%;
+        max-width: 25px;
+        height: auto;
+    }
+
     @media (max-width: 777px) {
         .logoPetit {
             width: 100%;
             max-width: 200px;
+            height: auto;
+        }
+
+        .logosFooter {
+            width: 100%;
+            max-width: 200px;
+            height: auto;
+        }
+
+        .logosFooter2 {
+            width: 100%;
+            max-width: 90px;
+            height: auto;
         }
     }
 
     @media (min-width: 992px) {
         .logoPetit {
-            width: 100%;
+            width: 347px !important;
             max-width: 347px !important;
-            /* En escritorio mantiene el tamaño original */
+            height: auto;
+        }
+
+        .logosFooter {
+            width: 100%;
+            max-width: 200px;
+            height: auto;
+        }
+
+        .logosFooter2 {
+            width: 100%;
+            max-width: 90px;
+            height: auto;
         }
     }
 </style>

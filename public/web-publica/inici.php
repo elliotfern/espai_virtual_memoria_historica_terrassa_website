@@ -33,7 +33,7 @@ $translate = $translations['benvinguda'] ?? [];
                 <div class="card d-flex flex-row" style="padding:30px;background-color: #05050545!important">
                     <div class="card-body text-end">
                         <h5 class="card-title" style="color:white;font-size: 1.5rem;font-weight: bold;">
-                            <a href="<?php echo APP_WEB; ?>/<?php echo $language; ?>/base-dades-global">Base de <br>Dades Global</a>
+                            <a href="../<?php echo empty($language) ? '' : $language . '/'; ?>base-dades-global">Base de <br>Dades Global</a>
                         </h5>
                     </div>
                     <!-- Imagen alineada a la derecha -->
