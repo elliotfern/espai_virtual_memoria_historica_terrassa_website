@@ -159,8 +159,6 @@ export async function cargarTabla(pag: string, context: number, completat: numbe
         // nada
       } else {
         // Crear la fila vacía
-        const tdModificar = document.createElement('td');
-        tr.appendChild(tdModificar);
       }
 
       // Botón Eliminar
@@ -180,8 +178,6 @@ export async function cargarTabla(pag: string, context: number, completat: numbe
         // nada
       } else {
         // Crear la fila vacía
-        const tdModificar = document.createElement('td');
-        tr.appendChild(tdModificar);
       }
 
       // Añadir la fila a la tabla

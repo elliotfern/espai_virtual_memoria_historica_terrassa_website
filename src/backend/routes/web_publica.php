@@ -9,6 +9,9 @@ $base_routes = [
 
     // 1. BASE DE DADES
     '/base-dades/general' => 'public/web-publica/base-dades-global.php',
+    '/base-dades/cost-huma' => 'public/web-publica/base-dades-cost-huma.php',
+    '/base-dades/represaliats' => 'public/web-publica/base-dades-represaliats.php',
+    '/base-dades/exiliats-deportats' => 'public/web-publica/base-dades-exiliats.php',
     '/fitxa/{id}' => 'public/web-publica/fitxa-represaliat.php',
 
     // ALTRES PAGINES
@@ -48,6 +51,27 @@ $routes = [
     // 1. Base de dades
     '/base-dades/general' => [
         'view' => 'public/web-publica/base-dades-global.php',
+        'needs_session' => false,
+        'header_footer' => false,
+        'header_menu_footer' => true
+    ],
+
+    '/base-dades/cost-huma' => [
+        'view' => 'public/web-publica/base-dades-cost-huma.php',
+        'needs_session' => false,
+        'header_footer' => false,
+        'header_menu_footer' => true
+    ],
+
+    '/base-dades/represaliats' => [
+        'view' => 'public/web-publica/base-dades-represaliats.php',
+        'needs_session' => false,
+        'header_footer' => false,
+        'header_menu_footer' => true
+    ],
+
+    '/base-dades/exiliats' => [
+        'view' => 'public/web-publica/base-dades-exiliats.php',
         'needs_session' => false,
         'header_footer' => false,
         'header_menu_footer' => true

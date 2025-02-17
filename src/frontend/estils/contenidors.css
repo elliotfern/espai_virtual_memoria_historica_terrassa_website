@@ -18,6 +18,16 @@
   padding: 60px 0;
 }
 
+.background-image-cap {
+  background-image: url('../assets/monument_caidos.jpg');
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  background-color: #133b7cb9 !important;
+  background-blend-mode: overlay;
+  padding: 60px 0;
+}
+
 .bloc1 {
   background-color: #133b7c;
   border: #b39b7c;

@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
   } else if (pageType === 'represaliats') {
     botonsEstat(pageType);
     cargarTabla(pageType, 2); // También cargar para afusellats
-  } else if (pageType === 'exiliats') {
+  } else if (pageType === 'exiliats' || pageType === 'exiliats-deportats') {
     botonsEstat(pageType);
     cargarTabla(pageType, 2); // También cargar para exiliats
   } else if (pageType === 'cost-huma') {

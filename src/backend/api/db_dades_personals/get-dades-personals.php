@@ -120,7 +120,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'tots' && isset($_GET['completat'])
             }
             echo json_encode($data);
         }
-    } else if ($cat === "exiliats") {
+    } else if ($cat === "exiliats" || $cat === "exiliats-deportats") {
         if ($completat == 3) {
             $catNum1 = 10;
             $catNum2 = 2;
