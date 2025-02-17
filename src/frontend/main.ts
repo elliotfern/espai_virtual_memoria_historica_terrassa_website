@@ -5,7 +5,7 @@ import { initButtons } from './components/fitxaRepresaliat/fitxaRepresaliat';
 import { cargarTabla } from './components/taulaDades/taulaDades';
 import { botonsEstat } from './components/taulaDades/botonsEstat';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './style.css';
+import './estils/style.css';
 import 'bootstrap';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -37,9 +37,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Verificar la URL y llamar a las funciones correspondientes
   const pathArray = window.location.pathname.split('/');
-  const pageType = pathArray[pathArray.length - 1]; // Obtenemos el nombre de la página
+  const pageType = pathArray[pathArray.length - 1];
 
-  if (pageType === 'tots' || pageType === 'base-dades-global') {
+  if (pageType === 'tots' || pageType === 'general') {
     if (pageType === 'tots') {
       botonsEstat(pageType);
       cargarTabla(pageType, 2);

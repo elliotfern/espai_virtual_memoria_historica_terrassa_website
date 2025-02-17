@@ -1,0 +1,9 @@
+body {
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, Liberation Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+  line-height: 1.5;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background-color: #f6f4eb;
+}

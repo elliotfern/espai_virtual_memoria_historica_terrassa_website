@@ -1,0 +1,30 @@
+/* HOMEPAGE */
+.bloc1,
+.bloc2 {
+  min-height: 100%;
+  border-radius: 10px;
+  font-family: Lora;
+  line-height: 25px;
+  letter-spacing: 0%;
+}
+
+.bg-image2 {
+  background-image: url('../assets/monument_caidos.jpg');
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  background-color: rgba(0, 0, 0, 0.2) !important;
+  background-blend-mode: overlay;
+  padding: 60px 0;
+}
+
+.bloc1 {
+  background-color: #133b7c;
+  border: #b39b7c;
+}
+
+.bloc2 {
+  background-color: #b39b7c;
+  border: #b39b7c;
+  color: white;
+}

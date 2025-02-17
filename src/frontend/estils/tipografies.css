@@ -1,0 +1,100 @@
+a:link,
+a:visited,
+a:hover {
+  text-decoration: underline;
+}
+
+/* Tipografies generals */
+.lora {
+  font-family: Lora;
+}
+
+.raleway {
+  font-family: Raleway;
+}
+
+.gran {
+  font-size: 25px;
+}
+
+.mitja {
+  font-size: 18px;
+}
+
+.text1 {
+  color: #623d0d;
+}
+
+.text2 {
+  color: #d9cdbd;
+}
+
+.text3 {
+  color: rgb(255, 255, 255);
+}
+
+.titol {
+  color: #133b7c;
+}
+
+.italic-text {
+  font-style: italic;
+}
+
+.negreta {
+  margin-top: 20px;
+  font-weight: 600;
+}
+
+.titular-entrada-centrat {
+  text-align: center;
+}
+
+/* Fitxa persona */
+.fitxa-persona {
+  font-weight: 400;
+  font-family: 'Lora', serif;
+  font-optical-sizing: auto;
+  font-size: 16px;
+}
+
+.titolRepresaliat {
+  font-weight: 700;
+  font-family: 'Lora', serif;
+  font-optical-sizing: auto;
+  font-size: 36px;
+  font-style: italic;
+  color: #133b7c;
+}
+
+.titolSeccio {
+  font-weight: 500;
+  font-family: 'Lora', serif;
+  font-optical-sizing: auto;
+  font-size: 22px;
+  color: #b39b7c;
+}
+
+/* Estils generals */
+
+.espai-superior {
+  margin-top: 25px;
+}
+
+.avis-form {
+  color: red;
+  font-size: 14px;
+}
+
+/* Homepage */
+.bloc1 .titol {
+  color: #c2af96;
+  font-weight: 500;
+  font-size: 25px;
+}
+
+.bloc2 .titol {
+  color: white;
+  font-weight: 500;
+  font-size: 25px;
+}

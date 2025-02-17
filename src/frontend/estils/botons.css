@@ -1,0 +1,31 @@
+.btn-custom-1 {
+  background-color: #133b7c;
+  border: #b39b7c;
+  color: #c2af96;
+  font-size: 20px;
+  text-decoration: none !important;
+  border: 1px solid #133b7c !important;
+  border-radius: 15px;
+}
+
+.btn-custom-1:hover {
+  background-color: rgb(138, 116, 87);
+  color: #133b7c;
+  border: 1px solid rgb(255, 255, 255) !important;
+  border-radius: 15px;
+}
+
+.btn-custom-2 {
+  background-color: #c2af96;
+  border: #b39b7c;
+  color: rgb(0, 0, 0);
+  font-size: 15px;
+  text-decoration: none !important;
+  border: 1px solid #133b7c00 !important;
+}
+
+.btn-custom-2:hover {
+  background-color: rgb(138, 116, 87);
+  color: #133b7c;
+  border: 1px solid #133b7c !important;
+}

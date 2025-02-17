@@ -1,0 +1,80 @@
+.fonsColorPrimerHeader {
+  background-color: #b39b7c;
+}
+
+.fonsColorSegonHeader {
+  background-color: #f6f4eb;
+}
+
+.header1 {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.header2 {
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
+
+.navbar-nav .nav-link {
+  color: #133b7c !important;
+  font-family: 'Raleway';
+  font-size: 18px;
+  text-transform: none;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.3s ease-in-out, text-decoration 0.3s ease-in-out;
+}
+
+.navbar-nav .nav-link:hover {
+  color: #b39b7c !important;
+  /* Cambia el color al pasar el ratón */
+  text-decoration: underline;
+  /* Subrayado al pasar el mouse */
+}
+
+.logoXarxes {
+  width: 100%;
+  max-width: 25px;
+  height: auto;
+}
+
+@media (max-width: 777px) {
+  .logoPetit {
+    width: 100%;
+    max-width: 200px;
+    height: auto;
+  }
+
+  .logosFooter {
+    width: 100%;
+    max-width: 200px;
+    height: auto;
+  }
+
+  .logosFooter2 {
+    width: 100%;
+    max-width: 90px;
+    height: auto;
+  }
+}
+
+@media (min-width: 992px) {
+  .logoPetit {
+    width: 347px !important;
+    max-width: 347px !important;
+    height: auto;
+  }
+
+  .logosFooter {
+    width: 100%;
+    max-width: 200px;
+    height: auto;
+  }
+
+  .logosFooter2 {
+    width: 100%;
+    max-width: 90px;
+    height: auto;
+  }
+}

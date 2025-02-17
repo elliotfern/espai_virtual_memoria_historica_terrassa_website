@@ -39,6 +39,24 @@ if ($currentLanguage === 'ca') {
     $baseUri = preg_replace('#^/ca/#', '/', $currentUri);
 }
 
+
+function getLanguageFromUrl()
+{
+    $uri = $_SERVER['REQUEST_URI']; // Obtiene la URL después del dominio
+    $segments = explode('/', trim($uri, '/')); // Divide la URL en partes
+
+    // Verifica si el primer segmento es un idioma válido
+    $validLanguages = ['en', 'es', 'ca', 'fr', 'it', 'pt']; // Idiomas disponibles
+
+    if (!empty($segments[0]) && in_array($segments[0], $validLanguages)) {
+        return $segments[0]; // Retorna el idioma detectado
+    }
+
+    return 'ca'; // Idioma por defecto si no se detecta
+}
+
+// Uso
+$langCode2 = getLanguageFromUrl();
 ?>
 
 <div class="container-fluid full-screen fonsColorPrimerHeader header1">
@@ -103,7 +121,7 @@ if ($currentLanguage === 'ca') {
         <div class="row">
             <!-- Logo -->
             <div class="col-4">
-                <a href="../<?php echo empty($language) ? '' : $language . '/'; ?>inici">
+                <a class="nav-link" href="<?php echo $langCode2 === 'ca' ? '/inici' : '/' . $langCode2 . '/inici'; ?>">
                     <img src="<?php echo APP_WEB; ?>/public/img/logo_web.png" alt="Logo" class="logoPetit">
                 </a>
             </div>
@@ -129,16 +147,16 @@ if ($currentLanguage === 'ca') {
                                         <?php echo $translate['base-dades']; ?>
                                     </a>
                                     <ul class="dropdown-menu" aria-labelledby="submenuEstudis">
-                                        <li><a class="dropdown-item" href="../<?php echo empty($language) ? '' : $language . '/'; ?>base-dades/general"> <?php echo $translate['general']; ?></a></li>
-                                        <li><a class="dropdown-item" href="../<?php echo empty($language) ? '' : $language . '/'; ?>base-dades/cost-huma"> <?php echo $translate['cost-huma']; ?></a></li>
-                                        <li><a class="dropdown-item" href="../<?php echo empty($language) ? '' : $language . '/'; ?>base-dades/exiliats-deportats"> <?php echo $translate['exiliats']; ?></a></li>
-                                        <li><a class="dropdown-item" href="../<?php echo empty($language) ? '' : $language . '/'; ?>base-dades/represaliats"> <?php echo $translate['represaliats']; ?></a></li>
+                                        <li><a class="dropdown-item" href="<?php echo $langCode2 === 'ca' ? '/' : '/' . $langCode2 . '/'; ?>base-dades/general"> <?php echo $translate['general']; ?></a></li>
+                                        <li><a class="dropdown-item" href="<?php echo $langCode2 === 'ca' ? '/' : '/' . $langCode2 . '/'; ?>base-dades/cost-huma"> <?php echo $translate['cost-huma']; ?></a></li>
+                                        <li><a class="dropdown-item" href="<?php echo $langCode2 === 'ca' ? '/' : '/' . $langCode2 . '/'; ?>base-dades/exiliats-deportats"> <?php echo $translate['exiliats']; ?></a></li>
+                                        <li><a class="dropdown-item" href="<?php echo $langCode2 === 'ca' ? '/' : '/' . $langCode2 . '/'; ?>base-dades/represaliats"> <?php echo $translate['represaliats']; ?></a></li>
                                     </ul>
                                 </li>
-                                <li class="nav-item"><a class="nav-link" href="../<?php echo empty($language) ? '' : $language . '/'; ?>documents-estudis"> <?php echo $translate['estudis']; ?></a></li>
-                                <li class="nav-item"><a class="nav-link" href="../<?php echo empty($language) ? '' : $language . '/'; ?>fonts-documentals"> <?php echo $translate['documents']; ?></a></li>
-                                <li class="nav-item"><a class="nav-link" href="../<?php echo empty($language) ? '' : $language . '/'; ?>que-es-espai-virtual"> <?php echo $translate['espai-virtual']; ?></a></li>
-                                <li class="nav-item"><a class="nav-link" href="../<?php echo empty($language) ? '' : $language . '/'; ?>contacta"> <?php echo $translate['contacta']; ?></a></li>
+                                <li class="nav-item"><a class="nav-link" href="<?php echo $langCode2 === 'ca' ? '/' : '/' . $langCode2 . '/'; ?>documents-estudis"> <?php echo $translate['estudis']; ?></a></li>
+                                <li class="nav-item"><a class="nav-link" href="<?php echo $langCode2 === 'ca' ? '/' : '/' . $langCode2 . '/'; ?>fonts-documentals"> <?php echo $translate['documents']; ?></a></li>
+                                <li class="nav-item"><a class="nav-link" href="<?php echo $langCode2 === 'ca' ? '/' : '/' . $langCode2 . '/'; ?>que-es-espai-virtual"> <?php echo $translate['espai-virtual']; ?></a></li>
+                                <li class="nav-item"><a class="nav-link" href="<?php echo $langCode2 === 'ca' ? '/' : '/' . $langCode2 . '/'; ?>contacta"> <?php echo $translate['contacta']; ?></a></li>
                             </ul>
                         </div>
                     </div>
@@ -147,86 +165,3 @@ if ($currentLanguage === 'ca') {
         </div>
     </div>
 </div>
-
-<style>
-    .fonsColorPrimerHeader {
-        background-color: #B39B7C;
-    }
-
-    .fonsColorSegonHeader {
-        background-color: #c5c3c0b2;
-    }
-
-    .header1 {
-        padding-top: 5px;
-        padding-bottom: 5px;
-    }
-
-    .header2 {
-        padding-top: 30px;
-        padding-bottom: 30px;
-    }
-
-    .navbar-nav .nav-link {
-        color: #133B7C !important;
-        font-family: 'Raleway';
-        font-size: 18px;
-        text-transform: none;
-        font-weight: 500;
-        text-decoration: none;
-        transition: color 0.3s ease-in-out, text-decoration 0.3s ease-in-out;
-    }
-
-    .navbar-nav .nav-link:hover {
-        color: #B39B7C !important;
-        /* Cambia el color al pasar el ratón */
-        text-decoration: underline;
-        /* Subrayado al pasar el mouse */
-    }
-
-    .logoXarxes {
-        width: 100%;
-        max-width: 25px;
-        height: auto;
-    }
-
-    @media (max-width: 777px) {
-        .logoPetit {
-            width: 100%;
-            max-width: 200px;
-            height: auto;
-        }
-
-        .logosFooter {
-            width: 100%;
-            max-width: 200px;
-            height: auto;
-        }
-
-        .logosFooter2 {
-            width: 100%;
-            max-width: 90px;
-            height: auto;
-        }
-    }
-
-    @media (min-width: 992px) {
-        .logoPetit {
-            width: 347px !important;
-            max-width: 347px !important;
-            height: auto;
-        }
-
-        .logosFooter {
-            width: 100%;
-            max-width: 200px;
-            height: auto;
-        }
-
-        .logosFooter2 {
-            width: 100%;
-            max-width: 90px;
-            height: auto;
-        }
-    }
-</style>

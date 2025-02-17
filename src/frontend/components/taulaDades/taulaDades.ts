@@ -11,7 +11,7 @@ export async function cargarTabla(pag: string, context: number, completat: numbe
     completat = 3;
   }
 
-  if (pag === 'tots' || pag === 'base-dades-global') {
+  if (pag === 'tots' || pag === 'general') {
     urlAjax = `${devDirectory}/api/dades_personals/get/?type=tots&completat=${completat}`;
   } else {
     urlAjax = `${devDirectory}/api/dades_personals/get/?type=totesCategories&categoria=${pag}&completat=${completat}`;
