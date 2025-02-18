@@ -8,7 +8,7 @@ $translate2 = $translations['cerca-avan'] ?? [];
 <div class="container-fluid background-image-cap">
 
     <div class="container px-4">
-        <span class="negreta gran italic-text cap">Contacta'ns</span>
+        <span class="negreta gran italic-text cap">Equip investigadors<br>Juan Antonio Olivares</span>
 
     </div>
 </div>

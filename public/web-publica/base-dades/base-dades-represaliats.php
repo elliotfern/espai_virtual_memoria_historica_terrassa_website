@@ -1,18 +1,12 @@
 <!-- Sección con container-fluid -->
-<div class="container-fluid background-image-cap" style="height:280px;display: flex; align-items: center;">
+<div class="container-fluid background-image-cap">
 
     <div class="container px-4">
-        <span class="titol negreta gran italic-text cap">Base de dades<br>cost humà de la guerra civil</span>
+        <span class="negreta gran italic-text cap">Base de dades<br>represaliats i represaliades de la dictadura franquista</span>
 
     </div>
 </div>
 
-<style>
-    .cap {
-        font-size: 45px;
-        color: #b39b7c;
-    }
-</style>
 <div class="container" style="margin-top: 50px;margin-bottom:50px;">
 
     <input type="text" id="searchInput" placeholder="Cercar...">

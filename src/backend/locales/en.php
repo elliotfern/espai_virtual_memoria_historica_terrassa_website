@@ -4,6 +4,10 @@ return [
         'boto' => 'enter the website',
     ],
 
+    'general' => [
+        'no-disponible' => 'Page under construction',
+    ],
+
     'header' => [
         'catala' => 'Catalan',
         'espanyol' => 'Spanish',
@@ -21,4 +25,9 @@ return [
         'espai-virtual' => 'Virtual space',
         'contacta' => 'Contact'
     ],
+
+    'cerca-avan' => [
+        'titol' => 'Advanced search',
+    ],
+
 ];

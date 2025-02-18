@@ -14,6 +14,7 @@ License URI: http://www.gnu.org/licenses/gpl-3.0.html
 @import './botons.css';
 @import './contenidors.css';
 @import './tipografies.css';
+@import './carousel.css';
 
 /* TAULES */
 
@@ -47,4 +48,12 @@ td {
 .tab button:hover {
   background-color: #323232;
   color: white;
+}
+
+.img-petita {
+  width: 130px;
+}
+
+.img-s {
+  width: 25px;
 }

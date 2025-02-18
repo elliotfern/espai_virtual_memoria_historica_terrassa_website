@@ -21,7 +21,14 @@ a:hover {
   font-size: 18px;
 }
 
-.text1 {
+.cap {
+  font-size: 45px;
+  font-family: Lora;
+  color: #c2af96;
+}
+
+.text1,
+.marro1 {
   color: #623d0d;
 }
 
@@ -33,17 +40,18 @@ a:hover {
   color: rgb(255, 255, 255);
 }
 
-.titol {
+.titol,
+.blau1 {
   color: #133b7c;
 }
 
-.italic-text {
+.italic-text,
+.italic {
   font-style: italic;
 }
 
 .negreta {
-  margin-top: 20px;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .titular-entrada-centrat {
@@ -97,4 +105,18 @@ a:hover {
   color: white;
   font-weight: 500;
   font-size: 25px;
+}
+
+/* Asegurar que el enlace cubra todo el div */
+.full-link {
+  text-decoration: none !important;
+}
+
+/* Evita que el texto cambie de color al hacer hover */
+.full-link:hover {
+  text-decoration: none;
+}
+
+.blau2 {
+  color: #426296;
 }

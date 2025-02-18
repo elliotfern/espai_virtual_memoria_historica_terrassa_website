@@ -4,6 +4,10 @@ return [
         'boto' => 'entrar al lloc web',
     ],
 
+    'general' => [
+        'no-disponible' => 'Pàgina en elaboració',
+    ],
+
     'header' => [
         'catala' => 'Català',
         'espanyol' => 'Castellà',
@@ -19,8 +23,13 @@ return [
         'estudis' => 'Estudis',
         'documents' => 'Fonts documentals',
         'espai-virtual' => 'Espai virtual',
-        'contacta' => 'Contacta'
+        'contacta' => 'Contacte'
 
     ],
+
+    'cerca-avan' => [
+        'titol' => 'Cerca avançada<br>represaliats i represaliades',
+    ],
+
 
 ];

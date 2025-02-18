@@ -39,13 +39,29 @@
   height: auto;
 }
 
+/* LOGOS */
+
+/* Mobile */
 @media (max-width: 777px) {
   .logoPetit {
+    max-width: 100%;
     width: 100%;
-    max-width: 200px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+  }
+}
+
+/* Desktop */
+@media (min-width: 992px) {
+  .logoPetit {
+    width: 347px;
+    max-width: 100%; /* Para evitar desbordes */
     height: auto;
   }
+}
 
+@media (max-width: 777px) {
   .logosFooter {
     width: 100%;
     max-width: 200px;
@@ -60,12 +76,6 @@
 }
 
 @media (min-width: 992px) {
-  .logoPetit {
-    width: 347px !important;
-    max-width: 347px !important;
-    height: auto;
-  }
-
   .logosFooter {
     width: 100%;
     max-width: 200px;

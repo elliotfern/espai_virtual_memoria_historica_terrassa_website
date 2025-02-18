@@ -3,6 +3,11 @@ return [
     'benvinguda' => [
         'boto' => 'entrar al sitio web',
     ],
+
+    'general' => [
+        'no-disponible' => 'Página en elaboración',
+    ],
+
     'header' => [
         'catala' => 'Catalán',
         'espanyol' => 'Castellano',
@@ -20,5 +25,10 @@ return [
         'espai-virtual' => 'Espacio virtual',
         'contacta' => 'Contacta'
     ],
+
+    'cerca-avan' => [
+        'titol' => 'Búsqueda avanzada<br>represaliados y represaliadas',
+    ],
+
 
 ];

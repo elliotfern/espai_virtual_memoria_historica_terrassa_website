@@ -4,6 +4,11 @@ return [
         'boto' => 'entrar no site',
     ],
 
+    'general' => [
+        'no-disponible' => 'Página em elaboração',
+    ],
+
+
     'header' => [
         'catala' => 'Catalão',
         'espanyol' => 'Espanhol',
@@ -20,5 +25,9 @@ return [
         'documents' => 'Fontes documentais',
         'espai-virtual' => 'Espaço virtual',
         'contacta' => 'Contactar'
+    ],
+
+    'cerca-avan' => [
+        'titol' => 'Pesquisa avançada<br>reprimidos e reprimidas',
     ],
 ];

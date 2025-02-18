@@ -4,6 +4,10 @@ return [
         'boto' => 'entra nel sito web',
     ],
 
+    'general' => [
+        'no-disponible' => 'Pagina in elaborazione',
+    ],
+
     'header' => [
         'catala' => 'Catalano',
         'espanyol' => 'Spagnolo',
@@ -21,4 +25,9 @@ return [
         'espai-virtual' => 'Spazio virtuale',
         'contacta' => 'Contatta'
     ],
+
+    'cerca-avan' => [
+        'titol' => 'Ricerca avanzata<br>repressi e represse',
+    ],
+
 ];

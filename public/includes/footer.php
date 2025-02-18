@@ -58,27 +58,3 @@
         </div>
     </div>
 </div>
-<style>
-    .fonsColor {
-        background-color: #C2AF96B2;
-    }
-
-    .fonsColor2 {
-        background-color: #133B7C !important;
-        color: white;
-    }
-
-    .fonsColor2 a {
-        color: white;
-    }
-
-    .logoPetit {
-        width: 200px;
-        height: auto;
-    }
-
-    .logoPetit2 {
-        width: 100px;
-        height: auto;
-    }
-</style>

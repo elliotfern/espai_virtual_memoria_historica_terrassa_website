@@ -39,23 +39,31 @@ document.addEventListener('DOMContentLoaded', () => {
   const pathArray = window.location.pathname.split('/');
   const pageType = pathArray[pathArray.length - 1];
 
+  const contieneGestio = window.location.href.includes('gestio');
+  let context: number;
+  if (contieneGestio) {
+    context = 2;
+  } else {
+    context = 1;
+  }
+
   if (pageType === 'tots' || pageType === 'general') {
     if (pageType === 'tots') {
       botonsEstat(pageType);
-      cargarTabla(pageType, 2);
+      cargarTabla(pageType, context);
     } else {
       botonsEstat(pageType);
-      cargarTabla(pageType, 1);
+      cargarTabla(pageType, context);
     }
   } else if (pageType === 'represaliats') {
     botonsEstat(pageType);
-    cargarTabla(pageType, 2); // También cargar para afusellats
+    cargarTabla(pageType, context); // También cargar para afusellats
   } else if (pageType === 'exiliats' || pageType === 'exiliats-deportats') {
     botonsEstat(pageType);
-    cargarTabla(pageType, 2); // También cargar para exiliats
+    cargarTabla(pageType, context); // También cargar para exiliats
   } else if (pageType === 'cost-huma') {
     botonsEstat(pageType);
-    cargarTabla(pageType, 2); // También cargar para exiliats
+    cargarTabla(pageType, context); // También cargar para exiliats
   } else if (pathArray[pathArray.length - 2] === 'fitxa') {
     const id = pathArray[pathArray.length - 1];
     initButtons(id); // Pasar el id

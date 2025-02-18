@@ -18,16 +18,6 @@
   padding: 60px 0;
 }
 
-.background-image-cap {
-  background-image: url('../assets/monument_caidos.jpg');
-  background-size: cover;
-  background-position: center;
-  position: relative;
-  background-color: #133b7cb9 !important;
-  background-blend-mode: overlay;
-  padding: 60px 0;
-}
-
 .bloc1 {
   background-color: #133b7c;
   border: #b39b7c;
@@ -37,4 +27,80 @@
   background-color: #b39b7c;
   border: #b39b7c;
   color: white;
+}
+
+/* Estilo base de las columnas */
+.column-hover {
+  background-color: #b39b7c;
+  height: 460px;
+  /* Altura de las columnas */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+/* La imagen de fondo (inicialmente oculta) */
+.hover-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  /* 🔹 Ocultamos la imagen */
+  transition: opacity 0.3s ease-in-out;
+}
+
+/* Al hacer hover, la imagen aparece suavemente */
+.column-hover:hover .hover-bg {
+  opacity: 1;
+}
+
+/* PÁGINES BASES DE DADES */
+.background-image-cap {
+  position: relative;
+  padding: 60px 0;
+  height: 350px;
+  display: flex;
+  align-items: center;
+  background-color: #133b7cbf !important;
+  background-blend-mode: overlay;
+  overflow: hidden; /* Asegura que el pseudo-elemento no sobresalga */
+}
+
+.background-image-cap::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('../assets/monument_caidos.jpg');
+  background-size: cover;
+  background-position: center;
+  filter: blur(1px); /* Aplica el desenfoque */
+  z-index: -1; /* Coloca la imagen de fondo detrás del contenido */
+}
+
+.fonsColor {
+  background-color: #c2af96b2;
+}
+
+.fonsColor2 {
+  background-color: #133b7c !important;
+  color: white;
+}
+
+.fonsColor2 a {
+  color: white;
+}
+
+.logoPetit2 {
+  width: 100px;
+  height: auto;
 }
