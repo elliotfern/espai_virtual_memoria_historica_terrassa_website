@@ -31,7 +31,7 @@ $base_routes = [
     '/equip/manel-marquez' => 'public/web-publica/equip/manel-marquez.php',
     '/equip/juan-antonio-olivares' => 'public/web-publica/equip/juan-antonio.php',
     '/equip/elliot-fernandez' => 'public/web-publica/equip/elliot-fernandez.php',
-    '/equip/jose-luis-lacueva' => 'public/web-publica/equip/jose-luis.php',
+    '/equip/josep-lluis-lacueva' => 'public/web-publica/equip/jose-luis.php',
 
     // Altres pagines
     '/credits' => 'public/web-publica/legal/credits.php',
@@ -162,7 +162,7 @@ $routes = [
         'header_menu_footer' => true
     ],
 
-    '/equip/jose-luis-lacueva'  =>  [
+    '/equip/josep-lluis-lacueva'  =>  [
         'view' => 'public/web-publica/equip/jose-luis.php',
         'needs_session' => false,
         'header_footer' => false,

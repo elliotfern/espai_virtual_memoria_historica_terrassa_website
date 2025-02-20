@@ -229,7 +229,7 @@ $translate = $translations['benvinguda'] ?? [];
                 <!-- segona fila -->
                 <div class="col-md-6 d-flex align-items-center px-3 border-start">
                     <div class="col-md-6 d-flex flex-column g-3">
-                        <h3 class="fw-bold lora gran blau1">José Antonio <br>Olivares Abad</h3>
+                        <h3 class="fw-bold lora gran blau1">Juan Antonio <br>Olivares Abad</h3>
                         <span class="marro1 lora italic-text">Historiador i<br> divulgador.</span>
                         <a href="../<?php echo empty($language) ? '' : $language . '/'; ?>equip/juan-antonio-olivares" class="btn btn-primary btn-custom-2 w-auto align-self-start" style="margin-top:15px">Veure biografia</a>
                     </div>
@@ -248,13 +248,13 @@ $translate = $translations['benvinguda'] ?? [];
                 <!-- tercera fila -->
                 <div class="col-md-6 d-flex align-items-center px-3">
                     <div class="col-md-6 d-flex flex-column g-3">
-                        <h3 class="fw-bold lora gran blau1">José Luís<br>Lacueva Moreno</h3>
-                        <span class="marro1 lora italic-text">Historiador i<br> divulgador.</span>
-                        <a href="../<?php echo empty($language) ? '' : $language . '/'; ?>equip/jose-luis-lacueva" class="btn btn-primary btn-custom-2 w-auto align-self-start" style="margin-top:15px">Veure biografia</a>
+                        <h3 class="fw-bold lora gran blau1">Josep Lluís<br>Lacueva Moreno</h3>
+                        <span class="marro1 lora italic-text">Historiador i<br> autor de diversos llibres d'història de Terrassa.</span>
+                        <a href="../<?php echo empty($language) ? '' : $language . '/'; ?>equip/josep-lluis-lacueva" class="btn btn-primary btn-custom-2 w-auto align-self-start" style="margin-top:15px">Veure biografia</a>
                     </div>
                     <div class="col-md-4 d-flex align-items-center">
                         <div class="col-md-10">
-                            <img src="<?php echo APP_WEB; ?>/public/img/jose_antonio_olivares2.jpg" class="rounded-circle img-petita" alt="Foto">
+                            <img src="<?php echo APP_WEB; ?>/public/img/josep_lluis_lacueva.jpg" class="rounded-circle img-petita" alt="Foto">
                         </div>
                         <div class="col-md-2">
                             <img src="<?php echo APP_WEB; ?>/public/img/vector.png" class="img-s" alt="Foto">
