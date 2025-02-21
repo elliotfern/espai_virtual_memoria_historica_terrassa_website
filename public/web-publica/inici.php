@@ -203,7 +203,7 @@ $translate = $translations['benvinguda'] ?? [];
 
 <div class="container-fluid" style="margin-top:60px;background-color:#EEEAD9">
     <div class="container px-4 d-flex flex-column d-grid gap-2" style="padding-top:60px;padding-bottom:60px">
-        <span class="titol gran lora negreta">Equip d'investigadors</span>
+        <span class="titol gran lora negreta">Equip d'investigadors i tècnics del web</span>
         <span class="titol italic-text gran lora">Espai Virtual de la Memòria Històrica de Terrassa</span>
         <span class="text1 mitja raleway"><span class="negreta">Qui hi ha darrere del projecte?</span> Aquest projecte és possible gràcies a la col·laboració d'entitats i professionals dedicats a la recuperació de la memòria històrica</span>
 
@@ -249,7 +249,7 @@ $translate = $translations['benvinguda'] ?? [];
                 <div class="col-md-6 d-flex align-items-center px-3">
                     <div class="col-md-6 d-flex flex-column g-3">
                         <h3 class="fw-bold lora gran blau1">Josep Lluís<br>Lacueva Moreno</h3>
-                        <span class="marro1 lora italic-text">Historiador i<br> autor de diversos llibres d'història de Terrassa.</span>
+                        <span class="marro1 lora italic-text">Historiador i<br>arxiver</span>
                         <a href="../<?php echo empty($language) ? '' : $language . '/'; ?>equip/josep-lluis-lacueva" class="btn btn-primary btn-custom-2 w-auto align-self-start" style="margin-top:15px">Veure biografia</a>
                     </div>
                     <div class="col-md-4 d-flex align-items-center">
