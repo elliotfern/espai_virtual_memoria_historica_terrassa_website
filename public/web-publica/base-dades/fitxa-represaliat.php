@@ -3,8 +3,8 @@ $id = $routeParams[0];
 ?>
 
 <div class="container fitxaRepresaliat">
-    <div class="tab row" id="botons1"></div>
-    <div class="container" style="padding: 100px">
+    <div class="row" id="botons1"></div>
+    <div class="container fitxaRepresaliat2" style="padding: 100px">
         <div id="info"> </div>
 
         <div id="fitxa" class="fitxa-persona"> </div>
@@ -16,22 +16,25 @@ $id = $routeParams[0];
 </div>
 
 <style>
+    .button {
+        border: 1px solid #C2AF96 !important;
+    }
+
+    #botons1 {
+        background-color: #f6f4eb !important;
+        display: flex;
+        gap: 0.3rem;
+    }
+
     .tablinks {
-        border-top-left-radius: 10px !important;
+        border-top-left-radius: 30px !important;
+        border-top-right-radius: 30px !important;
         font-size: 16px !important;
+        border: 1px solid #C2AF96 !important;
     }
 
     .colorBtn1 {
-        background-color: #133B7C !important;
-        color: #C2AF96 !important;
-        font-weight: 500;
-        font-style: italic;
-        font-family: "Lora", serif;
-        font-optical-sizing: auto;
-    }
-
-    .colorBtn2 {
-        background-color: #C2AF96 !important;
+        background-color: #F1EEE0 !important;
         color: #133B7C !important;
         font-weight: 500;
         font-style: italic;
@@ -39,10 +42,24 @@ $id = $routeParams[0];
         font-optical-sizing: auto;
     }
 
-    .colorBtn1:active,
-    .colorBtn2:active {
-        background-color: rgb(0, 0, 0) !important;
-        color: #C2AF96 !important;
+    .colorBtn2 {
+        background-color: #F1EEE0 !important;
+        color: #133B7C !important;
+        font-weight: 500;
+        font-style: italic;
+        font-family: "Lora", serif;
+        font-optical-sizing: auto;
+    }
+
+    .colorBtn1:hover,
+    .colorBtn2:hover {
+        background-color: #C2AF96 !important;
+        color: #133B7C !important;
+    }
+
+    .active {
+        background-color: #C2AF96 !important;
+        color: #133B7C !important;
     }
 
     .row {
@@ -56,11 +73,17 @@ $id = $routeParams[0];
         margin-bottom: 50px;
         background-color: #F1EEE0;
         border: none;
-        border-left: 1px solid #133B7C;
-        border-right: 1px solid #133B7C;
-        border-bottom: 1px solid #133B7C;
         padding-right: 0px !important;
         padding-left: 0px !important;
-        border-top-left-radius: 10px;
+        border-top-left-radius: 30px;
+    }
+
+    .fitxaRepresaliat2 {
+
+        background-color: #F1EEE0;
+        border: none;
+        border-left: 1px solid #C2AF96B2;
+        border-right: 1px solid #C2AF96B2;
+        border-bottom: 1px solid #C2AF96B2;
     }
 </style>

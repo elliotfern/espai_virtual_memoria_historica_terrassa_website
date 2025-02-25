@@ -14,6 +14,7 @@ export function initButtons(id: string): void {
     { id: 4, label: 'Dades polítiques i sindicals', category: 'tab4' },
     { id: 5, label: 'Biografia', category: 'tab5' },
     { id: 6, label: 'Fonts documentals', category: 'tab6' },
+    { id: 8, label: 'Multimèdia', category: 'tab8' },
     { id: 7, label: 'Altres dades', category: 'tab7' },
   ];
 
@@ -33,6 +34,11 @@ export function initButtons(id: string): void {
     // Establecer el texto y el dataset del botón
     btn.innerText = button.label;
     btn.dataset.tab = button.category;
+
+    // Agregar la clase 'active' al botón tab1 al inicio
+    if (button.category === 'tab1') {
+      btn.classList.add('active');
+    }
 
     btn.onclick = () => {
       // Eliminar la clase 'active' de todos los botones
