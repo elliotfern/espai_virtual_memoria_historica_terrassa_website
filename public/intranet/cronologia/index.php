@@ -29,12 +29,23 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
 
             </div>
 
-            <!-- Botones de años (se generan dinámicamente) -->
-            <div id="filtroAny"></div>
+            <!-- Botones de períodos históricos -->
+            <div id="filtroPeriodo">
+                <button class="boton" data-periodo="1901-1931">Anys de 1901 a 1931</button>
+                <button class="boton" data-periodo="1931-1939">Anys de 1931 a 1939</button>
+                <button class="boton" data-periodo="1939-1979">Anys de 1939 a 1980</button>
+            </div>
+
+            <!-- Botones de años (ocultos al inicio) -->
+            <div id="filtroAny" class="oculto"></div>
 
 
             <!-- Contenedor de la lista de eventos -->
             <div id="eventos" class="eventos-container"></div>
+
+            <div id="mensaje-no-resultados" style="display: none; color: red;">
+                No tenim registrat cap resultat amb els filtres aplicats.
+            </div>
 
         </div>
     </div>
@@ -164,6 +175,65 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
+
+        const filtroPeriodo = document.getElementById("filtroPeriodo");
+        const filtroAny = document.getElementById("filtroAny");
+        let selectedPeriodo = null;
+
+        // Definir períodos históricos con sus rangos de años
+        const periodos = {
+            "1901-1931": {
+                inicio: 1910,
+                fin: 1931
+            },
+            "1931-1939": {
+                inicio: 1931,
+                fin: 1939
+            },
+            "1939-1979": {
+                inicio: 1939,
+                fin: 1979
+            }
+        };
+
+        // Generar dinámicamente botones de años
+        function generarBotonesAños(inicio, fin) {
+            filtroAny.innerHTML = ""; // Limpiar botones anteriores
+            for (let any = inicio; any <= fin; any++) {
+                const boton = document.createElement("button");
+                boton.textContent = any;
+                boton.classList.add("boton");
+                boton.setAttribute("data-any", any);
+                boton.addEventListener("click", function() {
+                    document.querySelectorAll("#filtroAny .boton").forEach(btn => btn.classList.remove("activo"));
+                    boton.classList.add("activo");
+                    selectedAny = any;
+                    cargarEventos();
+                });
+                filtroAny.appendChild(boton);
+            }
+            filtroAny.classList.remove("oculto"); // Mostrar los botones de años
+        }
+
+        // Manejo de selección de período
+        filtroPeriodo.addEventListener("click", function(e) {
+            if (e.target.classList.contains("boton")) {
+                selectedPeriodo = e.target.getAttribute("data-periodo");
+                const {
+                    inicio,
+                    fin
+                } = periodos[selectedPeriodo];
+
+                // Generar los botones de años para el período seleccionado
+                generarBotonesAños(inicio, fin);
+
+                // Marcar botón activo
+                document.querySelectorAll("#filtroPeriodo .boton").forEach(btn => btn.classList.remove("activo"));
+                e.target.classList.add("activo");
+            }
+        });
+
+
         const eventosContainer = document.getElementById("eventos");
         const paginacionContainer = document.createElement("div");
         eventosContainer.after(paginacionContainer);
@@ -225,11 +295,20 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
                 .then(data => {
                     mostrarEventos(data.eventos);
 
+                    // Limpiar la paginación antes de crear una nueva
+                    paginacionContainer.innerHTML = "";
+
+                    // Mostrar mensaje si no hay eventos
+                    const mensajeNoResultados = document.getElementById("mensaje-no-resultados");
+                    if (data.totalEventos === 0) {
+                        mensajeNoResultados.style.display = "block"; // Mostrar el mensaje
+                    } else {
+                        mensajeNoResultados.style.display = "none"; // Ocultar el mensaje si hay eventos
+                    }
+
                     // Verificar si hay eventos filtrados antes de mostrar la paginación
                     if (data.totalPaginas > 1) {
                         crearPaginacion(data.totalPaginas);
-                    } else {
-                        paginacionContainer.innerHTML = ""; // Oculta la paginación si no es necesaria
                     }
                 })
                 .catch(error => console.error("Error al cargar eventos:", error));
