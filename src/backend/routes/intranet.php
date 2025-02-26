@@ -75,6 +75,10 @@ $base_routes = [
     '/gestio/tots/fitxa/fonts-documentals/crear-llibre' => 'public/intranet/db_fonts_documentals/afegir-nou-llibre.php',
     '/gestio/tots/fitxa/fonts-documentals/crear-arxiu' => 'public/intranet/db_fonts_documentals/afegir-nou-arxiu.php',
 
+    // Cronologia
+    '/gestio/cronologia' => 'public/intranet/cronologia/index.php',
+    '/gestio/cronologia/afegir-esdeveniment' => 'public/intranet/cronologia/afegir-esdeveniment.php',
+
 ];
 
 // Rutas principales sin idioma explícito (solo para el idioma por defecto)
@@ -168,6 +172,11 @@ $routes = [
     '/gestio/registre-canvis' => ['view' => 'public/intranet/control_registre_canvis/index.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
 
     '/gestio/control-acces' => ['view' => 'public/intranet/control_registre_canvis/control-acces.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
+
+    // CRONOLOGIA
+    '/gestio/cronologia' => ['view' => 'public/intranet/cronologia/index.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
+
+    '/gestio/cronologia/afegir-esdeveniment' => ['view' => 'public/intranet/cronologia/afegir-esdeveniment.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
 
 ];
 

@@ -49,6 +49,7 @@
         <p>El cop d’estat franquista va destruir el règim democràtic republicà desencadenant una terrible guerra civil, on es varen desfermar totes les violències pròpies d’un conflicte bèl·lic i, alhora, d’un conflicte molt més gran, la lluita entre la democràcia i el nazi-feixisme, durant la Segona Guerra Mundial. Els homes i dones, que varen viure aquella terrible situació a Espanya, van ser les primeres víctimes del primer acte d’una de les guerres més violentes, inhumanes i terribles que ha patit la humanitat, més de cinquanta milions de morts.</p>
         <p>Per això, recordar el passat és una obligació moral de tots i totes.</p>
         <p><strong>Memòria és democràcia.</strong></p>
+        <p>Manel Márquez Berrocal, dimecres 26 de gener 2025</p>
 
     </span>
 

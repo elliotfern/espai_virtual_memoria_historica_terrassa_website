@@ -168,8 +168,10 @@ $langCode2 = getLanguageFromUrl();
                                     </ul>
                                 </li>
                                 <li class="nav-item"><a class="nav-link" href="<?php echo $langCode2 === 'ca' ? '/' : '/' . $langCode2 . '/'; ?>documents-estudis"> <?php echo $translate['estudis']; ?></a></li>
+                                <li class="nav-item"><a class="nav-link" href="<?php echo $langCode2 === 'ca' ? '/' : '/' . $langCode2 . '/'; ?>cronologia"> <?php echo $translate['cronologia']; ?></a></li>
                                 <li class="nav-item"><a class="nav-link" href="<?php echo $langCode2 === 'ca' ? '/' : '/' . $langCode2 . '/'; ?>fonts-documentals"> <?php echo $translate['documents']; ?></a></li>
                                 <li class="nav-item"><a class="nav-link" href="<?php echo $langCode2 === 'ca' ? '/' : '/' . $langCode2 . '/'; ?>que-es-espai-virtual"> <?php echo $translate['espai-virtual']; ?></a></li>
+                                <li class="nav-item"><a class="nav-link" href="<?php echo $langCode2 === 'ca' ? '/' : '/' . $langCode2 . '/'; ?>links"> <?php echo $translate['links']; ?></a></li>
                                 <li class="nav-item"><a class="nav-link" href="<?php echo $langCode2 === 'ca' ? '/' : '/' . $langCode2 . '/'; ?>contacte"> <?php echo $translate['contacta']; ?></a></li>
                             </ul>
                         </div>

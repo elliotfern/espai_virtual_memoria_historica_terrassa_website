@@ -26,6 +26,8 @@
         <div class="col-12 col-md-12 d-flex flex-column flex-md-row justify-content-md-between gap-3">
             <a href="<?php APP_SERVER; ?>/gestio/tots/fitxa-nova" class="btn btn-secondary menuBtn w-100 w-md-auto" role="button" aria-disabled="false">Creació fitxa</a>
 
+            <a href="<?php APP_SERVER; ?>/gestio/cronologia" class="btn btn-secondary menuBtn w-100 w-md-auto" role="button" aria-disabled="false">Cronologia</a>
+
             <a href="<?php APP_SERVER; ?>/gestio/taules-auxiliars" class="btn btn-secondary menuBtn w-100 w-md-auto" role="button" aria-disabled="false">Taules auxiliars</a>
 
             <a href="<?php APP_SERVER; ?>/gestio/registre-canvis" class="btn btn-secondary menuBtn w-100 w-md-auto" role="button" aria-disabled="false">Registre canvis</a>

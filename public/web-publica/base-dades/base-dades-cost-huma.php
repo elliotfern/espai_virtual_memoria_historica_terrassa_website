@@ -122,6 +122,7 @@
         <p>Dins del context de l'arribada el dia 26 de gener de 1939 de les tropes Nacionals i la retirada dels combatents republicans de pas per la ciutat es registren 4 víctimes i sense que es pugui determinar a hores d’ara la circumstància de la mort en tenim 8 víctimes.</p>
         <p>Sense estendre'ns més, vull agrair a l'Ajuntament el seu programa Terrassa Memòria impulsat amb altres entitats com ara el CEHT, i agrair també la intervenció de l'Arxiu Històric de la ciutat per la gestió i tractament de les dades, gràcies per col·laborar en obrir portes al coneixement històric, possibilitant que la memòria obri expedients que la història moltes vegades dona per arxivats.</p>
         <p>Josep Lluís Lacueva</p>
+        <p>Aquest text correspon a la presentació de l'estudi sobre el Cost Humà a Terrassa - Ajuntament de Terrassa, 26 de gener de 2021</p>
     </span>
 
 

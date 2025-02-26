@@ -21,10 +21,11 @@ return [
         'exiliats' => 'Exiliats i deportats',
         'represaliats' => 'Represaliats',
         'estudis' => 'Estudis',
-        'documents' => 'Fonts documentals',
+        'documents' => 'Fonts',
         'espai-virtual' => 'Espai virtual',
-        'contacta' => 'Contacte'
-
+        'contacta' => 'Contacte',
+        'cronologia' => 'Cronologia',
+        'links' => 'Enllaços'
     ],
 
     'cerca-avan' => [
