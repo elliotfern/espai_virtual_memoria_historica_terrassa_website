@@ -66,7 +66,7 @@ $base_routes = [
     '/api/cronologia/post' => 'src/backend/api/cronologia/post-cronologia.php',
     '/api/cronologia/put' => 'src/backend/api/cronologia/put-cronologia.php',
     '/api/cronologia/get' => 'src/backend/api/cronologia/get-cronologia.php',
-    '/api/cronologia/get/anys' => 'src/backend/api/cronologia/get-cronologia.php',
+    '/api/cronologia/get/esdeveniment' => 'src/backend/api/cronologia/get-esd.php',
 ];
 
 // Rutas principales sin idioma explícito (solo para el idioma por defecto)
@@ -161,7 +161,8 @@ $routes = [
     '/api/cronologia/put' => ['view' => 'src/backend/api/cronologia/put-cronologia.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
 
     '/api/cronologia/get' => ['view' => 'src/backend/api/cronologia/get-cronologia.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
-    '/api/cronologia/get/anys' => ['view' => 'src/backend/api/cronologia/get-cronologia-anys.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+
+    '/api/cronologia/get/esdeveniment' => ['view' => 'src/backend/api/cronologia/get-cronologia-esd.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
 
 ];
 

@@ -78,7 +78,7 @@ $base_routes = [
     // Cronologia
     '/gestio/cronologia' => 'public/intranet/cronologia/index.php',
     '/gestio/cronologia/afegir-esdeveniment' => 'public/intranet/cronologia/afegir-esdeveniment.php',
-
+    '/gestio/cronologia/modifica-esdeveniment/{id}' => 'public/intranet/cronologia/afegir-esdeveniment.php',
 ];
 
 // Rutas principales sin idioma explícito (solo para el idioma por defecto)
@@ -177,6 +177,8 @@ $routes = [
     '/gestio/cronologia' => ['view' => 'public/intranet/cronologia/index.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
 
     '/gestio/cronologia/afegir-esdeveniment' => ['view' => 'public/intranet/cronologia/afegir-esdeveniment.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
+
+    '/gestio/cronologia/modifica-esdeveniment/{id}' => ['view' => 'public/intranet/cronologia/afegir-esdeveniment.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
 
 ];
 

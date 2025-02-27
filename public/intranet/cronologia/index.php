@@ -12,7 +12,7 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
 
             <!-- Botones de áreas -->
             <div id="filtroArea">
-                <button class="boton activo" data-area="tots">Tots</button>
+                <button class="boton activo" data-area="tots">Tots els territoris</button>
                 <button class="boton" data-area="1">Terrassa</button>
                 <button class="boton" data-area="2">Catalunya</button>
                 <button class="boton" data-area="3">Espanya</button>
@@ -22,16 +22,17 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
 
             <!-- Botones de temas (ocultos al inicio) -->
             <div id="filtroTema">
-                <button class="boton activo" data-tema="tots">Tots</button>
-                <button class="boton" data-tema="1">Econòmic</button>
-                <button class="boton" data-tema="2">Polític</button>
-                <button class="boton" data-tema="3">Moviment Social</button>
+                <button class="boton activo" data-tema="tots">Totes les temàtiques</button>
+                <button class="boton" data-tema="1">Fets econòmico-laborals</button>
+                <button class="boton" data-tema="2">Fets polítics i socials</button>
+                <button class="boton" data-tema="3">Esdeveniments del moviment obrer</button>
 
             </div>
 
             <!-- Botones de períodos históricos -->
             <div id="filtroPeriodo">
-                <button class="boton" data-periodo="1901-1931">Anys de 1901 a 1931</button>
+                <button class="boton activo" data-periodo="tots">Tots els anys</button>
+                <button class="boton" data-periodo="1910-1931">Anys de 1910 a 1931</button>
                 <button class="boton" data-periodo="1931-1939">Anys de 1931 a 1939</button>
                 <button class="boton" data-periodo="1939-1979">Anys de 1939 a 1980</button>
             </div>
@@ -175,14 +176,13 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-
         const filtroPeriodo = document.getElementById("filtroPeriodo");
         const filtroAny = document.getElementById("filtroAny");
         let selectedPeriodo = null;
 
         // Definir períodos históricos con sus rangos de años
         const periodos = {
-            "1901-1931": {
+            "1910-1931": {
                 inicio: 1910,
                 fin: 1931
             },
@@ -219,20 +219,22 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
         filtroPeriodo.addEventListener("click", function(e) {
             if (e.target.classList.contains("boton")) {
                 selectedPeriodo = e.target.getAttribute("data-periodo");
-                const {
-                    inicio,
-                    fin
-                } = periodos[selectedPeriodo];
-
-                // Generar los botones de años para el período seleccionado
-                generarBotonesAños(inicio, fin);
-
+                if (selectedPeriodo === "tots") {
+                    selectedAny = "tots";
+                    filtroAny.classList.add("oculto"); // Ocultar los botones de años
+                } else {
+                    const {
+                        inicio,
+                        fin
+                    } = periodos[selectedPeriodo];
+                    generarBotonesAños(inicio, fin);
+                }
                 // Marcar botón activo
                 document.querySelectorAll("#filtroPeriodo .boton").forEach(btn => btn.classList.remove("activo"));
                 e.target.classList.add("activo");
+                cargarEventos();
             }
         });
-
 
         const eventosContainer = document.getElementById("eventos");
         const paginacionContainer = document.createElement("div");
@@ -245,6 +247,7 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
         // Asignar clase "activo" al inicio
         document.querySelector('[data-area="tots"]').classList.add("activo");
         document.querySelector('[data-tema="tots"]').classList.add("activo");
+        document.querySelector('[data-periodo="tots"]').classList.add("activo");
 
         filtroTema.classList.remove("oculto");
 
@@ -314,7 +317,6 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
                 .catch(error => console.error("Error al cargar eventos:", error));
         }
 
-
         function crearPaginacion(totalPaginas) {
             paginacionContainer.innerHTML = ""; // Limpia la paginación previa
 
@@ -355,33 +357,7 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
             paginacionContainer.appendChild(contenedorBotones);
         }
 
-        function cargarBotonesAños() {
-            fetch("/api/cronologia/get/anys")
-                .then(response => response.json())
-                .then(anyos => {
-                    filtroAny.innerHTML = "";
 
-                    // Agregar botón "Tots" al inicio
-                    const botonTots = document.createElement("button");
-                    botonTots.classList.add("boton");
-                    botonTots.setAttribute("data-any", "tots");
-                    botonTots.textContent = "Tots";
-                    botonTots.classList.add("activo");
-                    filtroAny.appendChild(botonTots);
-
-                    anyos.forEach(obj => {
-                        const any = obj.any; // Asegurarse de acceder correctamente al valor del año
-                        if (any) {
-                            const boton = document.createElement("button");
-                            boton.classList.add("boton");
-                            boton.setAttribute("data-any", any);
-                            boton.textContent = any;
-                            filtroAny.appendChild(boton);
-                        }
-                    });
-                })
-                .catch(error => console.error("Error al cargar los años:", error));
-        }
 
         function mostrarEventos(eventos) {
             eventosContainer.innerHTML = "";
@@ -400,7 +376,8 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
                     any,
                     mesOrdre,
                     diaInici,
-                    textCa
+                    textCa,
+                    id
                 } = evento;
 
                 if (any !== ultimoAnyo) {
@@ -424,13 +401,30 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
                 eventoDiv.classList.add("evento");
                 const nombreMes = obtenerNombreMes(mesOrdre);
                 const preposicion = obtenerPreposicion(nombreMes);
+
+                // Verificar si el usuario está registrado
+
+                const userId = localStorage.getItem('user_id');
+                console.log("User ID:", userId); // Depurar el valor del user_id
+
+                const botonEditar = userId ? `<button class="btn btn-primary btn-sm btn-editar" data-id="${id}">Editar</button>` : '';
                 eventoDiv.innerHTML = `
-                    <div class="evento-fecha">${diaInici} ${preposicion} ${nombreMes.toLowerCase()}</div>
-                    <div class="evento-texto">${textCa}</div>
-                `;
+                <div class="evento-fecha">${diaInici} ${preposicion} ${nombreMes.toLowerCase()}</div>
+                <div class="evento-texto">${textCa}</div>
+                ${botonEditar}
+            `;
                 eventosContainer.appendChild(eventoDiv);
             });
+
+            // Añadir manejador de eventos para el botón de editar
+            document.querySelectorAll(".btn-editar").forEach(btn => {
+                btn.addEventListener("click", function() {
+                    const eventoId = btn.getAttribute("data-id");
+                    window.location.href = `/gestio/cronologia/modifica-esdeveniment/${eventoId}`;
+                });
+            });
         }
+
 
         function obtenerNombreMes(mesOrdre) {
             const nombresMeses = ["Gener", "Febrer", "Març", "Abril", "Maig", "Juny", "Juliol", "Agost", "Setembre", "Octubre", "Novembre", "Desembre"];
@@ -442,7 +436,6 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
         }
 
         // Cargar los botones de años al inicio
-        cargarBotonesAños();
         cargarEventos();
     });
 </script>
