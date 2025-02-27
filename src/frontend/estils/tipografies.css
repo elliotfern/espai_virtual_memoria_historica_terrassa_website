@@ -58,16 +58,18 @@ a:hover {
   font-weight: 700;
 }
 
+.normal {
+  font-weight: 400 !important;
+}
+
 .titular-entrada-centrat {
   text-align: center;
 }
 
 /* Fitxa persona */
 .fitxa-persona {
-  font-weight: 400;
-  font-family: 'Lora', serif;
   font-optical-sizing: auto;
-  font-size: 16px;
+  font-size: 17px;
 }
 
 .titolRepresaliat {
@@ -83,8 +85,16 @@ a:hover {
   font-weight: 500;
   font-family: 'Lora', serif;
   font-optical-sizing: auto;
-  font-size: 22px;
-  color: #b39b7c;
+  font-size: 24px;
+  color: #6f4d22;
+}
+
+.titolSeccio2 {
+  font-weight: 500;
+  font-family: 'Lora', serif;
+  font-optical-sizing: auto;
+  font-size: 19px;
+  color: #947c5d;
 }
 
 /* Estils generals */

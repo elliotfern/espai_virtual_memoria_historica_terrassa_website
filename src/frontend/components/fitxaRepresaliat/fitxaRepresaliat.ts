@@ -2,6 +2,7 @@ import { categorias, convertirFecha, calcularEdadAlMorir } from '../../config';
 import { fetchData } from '../../services/api/api';
 import { Fitxa, FitxaJudicial, FitxaFamiliars } from '../../types/types';
 import { fitxaTipusRepressio } from './tab_tipus_repressio';
+import { formatDates } from '../../services/formatDates/dates';
 
 export function initButtons(id: string): void {
   const contenedorBotones = document.getElementById('botons1');
@@ -189,7 +190,7 @@ async function mostrarCategoria(categoriaNumerica: string, idPersona: string): P
         divInfo.style.display = 'block';
 
         // Mostrar la información dependiendo de la categoría
-
+        console.log(categoriaNumerica);
         fitxaTipusRepressio(categoriaNumerica, fitxa2);
       } else {
         throw new Error('La API no devolvió un array.');
@@ -298,36 +299,47 @@ async function mostrarInformacion(tab: string, idPersona: string, label: string)
   const observacionsTipologiaEspacioDefuncio = fitxa.observacions_espai === '' || null ? 'Desconeguda' : fitxa.observacions_espai;
   const causaDefuncio = fitxa.causa_defuncio === '' || null ? 'Desconeguda' : fitxa.causa_defuncio;
 
+  // imatge represaliat
+  // Seleccionamos la imagen con el ID 'imatgeRepresaliat'
+  const imagen = document.getElementById('imatgeRepresaliat') as HTMLImageElement;
+
+  // Comprobamos si la variable fitxa.img tiene un valor válido
+  if (fitxa.img && fitxa.img !== '' && fitxa.img !== null && imagen) {
+    imagen.src = `https://${window.location.hostname}/public/img/represaliats/${fitxa.img}`; // Si es válida, usamos la imagen de la variable
+  } else {
+    imagen.src = `https://${window.location.hostname}/public/img/foto_defecte.jpg`; // Si no, mostramos la imagen por defecto
+  }
+
   // Dependiendo del tab, generar el contenido
   switch (tab) {
     case 'tab1':
       divInfo.innerHTML = `
         <h3 class="titolSeccio">${label}</h3>
-        <p><span class='negreta'>Sexe:</span> ${sexeText}</p>
-        <p><span class='negreta'>Data de naixement:</span> ${dataNaixement}</p>
-        <p><span class='negreta'>Data de defunció:</span> ${dataDefuncio}</p>
-        <p><span class='negreta'>Edat:</span> ${edatAlMorir}</p>
-        <p><span class='negreta'>Ciutat de naixement:</span> ${ciutatNaixement} (${comarcaNaixement}, ${provinciaNaixement}, ${comunitatNaixement}, ${paisNaixement})</p>
-        <p><span class='negreta'>Lloc de residència:</span> ${adreca}, ${ciutatResidencia} (${comarcaResidencia}, ${provinciaResidencia}, ${comunitatResidencia}, ${paisResidencia})</p>
-        <p><span class='negreta'>Ciutat de defunció:</span> ${ciutatDefuncio} (${comarcaDefuncio}, ${provinciaDefuncio}, ${comunitatDefuncio}, ${paisDefuncio})</p>
-        <p><span class='negreta'>Tipologia espai de defunció:</span> ${tipologiaEspaiDefuncio}</p>
-        <p><span class='negreta'>Observacions espai de defunció:</span> ${observacionsTipologiaEspacioDefuncio}</p>
-        <p><span class='negreta'>Causa de la defunció:</span> ${causaDefuncio}</p>
+        <p><span class='marro2'>Sexe:</span> <span class='blau1'>${sexeText}</span></p>
+        <p><span class='marro2'>Data de naixement:</span> <span class='blau1'>${dataNaixement}</span></p>
+        <p><span class='marro2'>Data de defunció:</span> <span class='blau1'>${dataDefuncio}</span></p>
+        <p><span class='marro2'>Edat:</span> <span class='blau1'>${edatAlMorir}</span></p>
+        <p><span class='marro2'>Ciutat de naixement:</span> <span class='blau1'>${ciutatNaixement} <span class='normal'>(${comarcaNaixement}, ${provinciaNaixement}, ${comunitatNaixement}, ${paisNaixement})</span></span></p>
+        <p><span class='marro2'>Lloc de residència:</span> <span class='blau1'>${adreca}, ${ciutatResidencia} <span class='normal'>(${comarcaResidencia}, ${provinciaResidencia}, ${comunitatResidencia}, ${paisResidencia})</span></span></p>
+        <p><span class='marro2'>Ciutat de defunció:</span> <span class='blau1'>${ciutatDefuncio} <span class='normal'>(${comarcaDefuncio}, ${provinciaDefuncio}, ${comunitatDefuncio}, ${paisDefuncio})</span></span></p>
+        <p><span class='marro2'>Tipologia espai de defunció:</span> <span class='blau1'>${tipologiaEspaiDefuncio}</span></p>
+        <p><span class='marro2'>Observacions espai de defunció:</span> <span class='blau1'>${observacionsTipologiaEspacioDefuncio}</span></p>
+        <p><span class='marro2'>Causa de la defunció:</span> <span class='blau1'>${causaDefuncio}</span></p>
       `;
       break;
     case 'tab2':
       divInfo.innerHTML = `
         <h3 class="titolSeccio">${label}</h3>
-        <p><span class='negreta'>Estat civil:</span> ${fitxa.estat_civil}</p>
+        <p><span class='marro2'>Estat civil:</span> <span class='blau1'>${fitxa.estat_civil}</span></p>
       `;
 
       // Recorremos el array de familiares y mostramos la información
       if (fitxaFam) {
-        divInfo.innerHTML += `<div class="familiar"><p><span class='negreta'>Relació de familiars:</span></p>`;
+        divInfo.innerHTML += `<div class="familiar"><p><span class='marro2'>Relació de familiars:</span></p>`;
         fitxaFam.forEach((familiar) => {
           divInfo.innerHTML += `
-        <p><span class='negreta'>${familiar.relacio_parentiu}:</span> ${familiar.nomFamiliar} ${familiar.cognomFamiliar1} 
-        ${familiar.cognomFamiliar2} ${familiar.anyNaixementFamiliar ? `(${familiar.anyNaixementFamiliar})` : ''}</p>
+        <p><span class='marro2'>${familiar.relacio_parentiu}:</span> <span class='blau1'>${familiar.nomFamiliar} ${familiar.cognomFamiliar1} 
+        ${familiar.cognomFamiliar2} ${familiar.anyNaixementFamiliar ? `(${familiar.anyNaixementFamiliar})` : ''}</span></p>
       </div>`;
         });
       }
@@ -336,51 +348,53 @@ async function mostrarInformacion(tab: string, idPersona: string, label: string)
     case 'tab3':
       divInfo.innerHTML = `
         <h3 class="titolSeccio">${label}</h3>
-        <p><span class='negreta'>Estudis:</span> ${fitxa.estudi_cat}</p>
-        <p><span class='negreta'>Ofici:</span> ${fitxa.ofici_cat}</p>
-        <p><span class='negreta'>Empresa:</span> ${fitxa.empresa}</p>
-        <p><span class='negreta'>Càrrec:</span> ${carrecText}</p>
-        <p><span class='negreta'>Sector econòmic:</span> ${fitxa.sector_cat}</p>
-        <p><span class='negreta'>Sub-sector econòmic:</span> ${fitxa.sub_sector_cat}</p>
+        <p><span class='marro2'>Estudis:</span> <span class='blau1'>${fitxa.estudi_cat}</span></p>
+        <p><span class='marro2'>Ofici:</span> <span class='blau1'>${fitxa.ofici_cat}</span></p>
+        <p><span class='marro2'>Empresa:</span> <span class='blau1'>${fitxa.empresa}</span></p>
+        <p><span class='marro2'>Càrrec:</span> <span class='blau1'>${carrecText}</span></p>
+        <p><span class='marro2'>Sector econòmic:</span> <span class='blau1'>${fitxa.sector_cat}</span></p>
+        <p><span class='marro2'>Sub-sector econòmic:</span> <span class='blau1'>${fitxa.sub_sector_cat}</span></p>
       `;
       break;
     case 'tab4':
       divInfo.innerHTML = `
         <h3 class="titolSeccio">${label}</h3>
-        <h5>Activitat política i sindical abans de l'esclat de la guerra:</h5>
-        <p><span class='negreta'>Afiliació política:</span> ${partitPolitic}</p>
-        <p><span class='negreta'>Afiliació sindical:</span> ${sindicat}</p>
-        
-        <h5>Activitat política i sindical durant la guerra:</h5>
-        <p><span class='negreta'>Afiliació política:</span> -</p>
-        <p><span class='negreta'>Afiliació sindical:</span> -</p>
+        <div style="margin-top:30px;margin-bottom:30px">
+        <h5 class="titolSeccio2">Activitat política i sindical abans de l'esclat de la guerra:</h5>
+        <p><span class='marro2'>Afiliació política:</span> <span class='blau1'>${partitPolitic}</span></p>
+        <p><span class='marro2'>Afiliació sindical:</span> <span class='blau1'>${sindicat}</span></p>
+        </div>
+
+        <div style="margin-top:30px;margin-bottom:30px">
+        <h5 class="titolSeccio2">Activitat política i sindical durant la guerra:</h5>
+        <p><span class='marro2'>Afiliació política:</span> <span class='blau1'>-</span></p>
+        <p><span class='marro2'>Afiliació sindical:</span> <span class='blau1'>-</span></p>
+        </div>
       `;
       break;
     case 'tab5':
       divInfo.innerHTML = `
         <h3 class="titolSeccio">${label}</h3>
-        <p><span class='negreta'>Observacions:</span> ${fitxa.observacions}</p>
-        <p><span class='negreta'>Biografia:</span> ${fitxa.biografia}</p>
+        <p><span class='marro2'>Biografia:</span> <span class='blau1'>${fitxa.biografia}</span></p>
       `;
       break;
     case 'tab6':
       divInfo.innerHTML = `
         <h3 class="titolSeccio">${label}</h3>
-        <p><span class='negreta'>Referència arxiu:</span> ${fitxa.ref_num_arxiu}</p>
-        <p><span class='negreta'>Font 1:</span> ${fitxa.font_1}</p>
-        <p><span class='negreta'>Font 2:</span> ${fitxa.font_2}</p>
+
       `;
       break;
     case 'tab7':
       divInfo.innerHTML = `
         <h3 class="titolSeccio">${label}</h3>
-        <span class='negreta'>Fitxa creada per: </span> ${fitxa.autorNom} (${fitxa.biografia_cat})<br>
-        <span class='negreta'>Data de creació: </span>${dataCreacio}<br>
-        <span class='negreta'>Darrera actualització: </span> ${dataActualitzacio}
+          <p><span class='marro2'>Observacions:</span> <span class='blau1'>${fitxa.observacions}</span></p>
+          <p><span class='marro2'>Fitxa creada per: </span> <span class='blau1'>${fitxa.autorNom} (${fitxa.biografia_cat})</span></p>
+          <p><span class='marro2'>Data de creació: </span><span class='blau1'>${formatDates(dataCreacio)}</span></p>
+          <p><span class='marro2'>Darrera actualització: </span><span class='blau1'> ${formatDates(dataActualitzacio)}</span></p>
       `;
       break;
     default:
-      divInfo.innerHTML = `<p>No hay información disponible para esta categoría.</p>`;
+      divInfo.innerHTML = `<p>No hi ha informació disponible.</p>`;
   }
 
   // Aquí puedes mantener el contenido de divAdditionalInfo si es necesario

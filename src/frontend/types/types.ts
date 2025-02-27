@@ -54,6 +54,7 @@ export interface Fitxa {
   tipologia_espai: string;
   observacions_espai: string;
   causa_defuncio: string;
+  img: string;
 }
 
 export interface FitxaJudicial {

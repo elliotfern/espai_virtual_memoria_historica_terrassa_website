@@ -52,7 +52,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistat') {
 } elseif (isset($_GET['type']) && $_GET['type'] == 'fitxa' && isset($_GET['id'])) {
     $id = $_GET['id'];
     global $conn;
-    $data = array();
+
     /** @var PDO $conn */
     $stmt = $conn->prepare(
         "SELECT 
@@ -84,11 +84,15 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistat') {
         WHERE e.idPersona = $id"
     );
     $stmt->execute();
-    if ($stmt->rowCount() === 0) echo ('No rows');
-    while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $data[] = $users;
+
+    $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    if ($stmt->rowCount() === 0) {
+        echo json_encode(null);
+    } else {
+        header("Content-Type: application/json");
+        echo json_encode($row);  // Codifica la fila como un objeto JSON
     }
-    echo json_encode($data);
 } else {
     // Si 'type', 'id' o 'token' están ausentes o 'type' no es 'user' en la URL
     header('HTTP/1.1 403 Forbidden');

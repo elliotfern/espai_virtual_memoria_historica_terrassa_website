@@ -137,6 +137,7 @@ if ($modificaBtn === 1) {
                 <div class="col-md-3">
                     <label for="monthSelect" class="form-label negreta">Selecciona un mes:</label>
                     <select class="form-select" id="mes" name="mes">
+                        <option value="">Selecciona un mes</option>
                         <option value="1" <?php echo ($mes_old == 1) ? 'selected' : ''; ?>>Gener</option>
                         <option value="2" <?php echo ($mes_old == 2) ? 'selected' : ''; ?>>Febrer</option>
                         <option value="3" <?php echo ($mes_old == 3) ? 'selected' : ''; ?>>Març</option>
@@ -161,6 +162,7 @@ if ($modificaBtn === 1) {
                 <div class="col-md-3">
                     <label for="monthSelect" class="form-label negreta">Selecciona un mes final (opcional):</label>
                     <select class="form-select" id="mesFi" name="mesFi">
+                        <option value="">Selecciona un mes</option>
                         <option value="1" <?php echo ($mesFi_old == 1) ? 'selected' : ''; ?>>Gener</option>
                         <option value="2" <?php echo ($mesFi_old == 2) ? 'selected' : ''; ?>>Febrer</option>
                         <option value="3" <?php echo ($mesFi_old == 3) ? 'selected' : ''; ?>>Març</option>

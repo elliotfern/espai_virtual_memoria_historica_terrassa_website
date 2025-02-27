@@ -16,7 +16,8 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
                 <button class="boton" data-area="1">Terrassa</button>
                 <button class="boton" data-area="2">Catalunya</button>
                 <button class="boton" data-area="3">Espanya</button>
-                <button class="boton" data-area="4">Món</button>
+                <button class="boton" data-area="4">Europa</button>
+                <button class="boton" data-area="5">Món</button>
 
             </div>
 

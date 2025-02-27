@@ -7,7 +7,23 @@ $id = $routeParams[0];
     <div class="container fitxaRepresaliat2" style="padding: 100px">
         <div id="info"> </div>
 
-        <div id="fitxa" class="fitxa-persona"> </div>
+        <div class="container mt-5">
+            <div class="row">
+                <!-- Columna izquierda más pequeña (por ejemplo, 4 columnas) -->
+                <div class="col-12 col-md-4">
+                    <div class="p-3 border bg-light">
+                        <img src="" alt="Foto" class="logoPetit" id="imatgeRepresaliat">
+                    </div>
+                </div>
+
+                <!-- Columna derecha más grande (por ejemplo, 8 columnas) -->
+                <div class="col-12 col-md-8">
+                    <div id="fitxa" class="fitxa-persona negreta raleway"> </div>
+                </div>
+            </div>
+        </div>
+
+        <hr>
 
         <h6 class="titolSeccio" style="margin-top:25px"><strong>Tipus de repressió:</strong></h6>
         <div class="tab" id="botons2"></div>
