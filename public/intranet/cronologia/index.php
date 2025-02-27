@@ -376,6 +376,8 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
                     any,
                     mesOrdre,
                     diaInici,
+                    diaFi,
+                    mesFi,
                     textCa,
                     id
                 } = evento;
@@ -400,16 +402,25 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
                 const eventoDiv = document.createElement("div");
                 eventoDiv.classList.add("evento");
                 const nombreMes = obtenerNombreMes(mesOrdre);
+                const nombreMesFi = obtenerNombreMes(mesFi);
                 const preposicion = obtenerPreposicion(nombreMes);
 
                 // Verificar si el usuario está registrado
 
                 const userId = localStorage.getItem('user_id');
-                console.log("User ID:", userId); // Depurar el valor del user_id
+
+                // Crear la fecha de inicio
+                let fechaInicio = `${diaInici} ${preposicion}${nombreMes.toLowerCase()}`;
+
+                // Crear la fecha de fin solo si diaFi y mesFi tienen valores válidos
+                let fechaFin = "";
+                if (diaFi && mesFi) {
+                    fechaFin = ` - ${diaFi} ${preposicion} ${nombreMesFi.toLowerCase()}`;
+                }
 
                 const botonEditar = userId ? `<button class="btn btn-primary btn-sm btn-editar" data-id="${id}">Editar</button>` : '';
                 eventoDiv.innerHTML = `
-                <div class="evento-fecha">${diaInici} ${preposicion} ${nombreMes.toLowerCase()}</div>
+                <div class="evento-fecha">${fechaInicio} ${fechaFin}</div>
                 <div class="evento-texto">${textCa}</div>
                 ${botonEditar}
             `;
@@ -432,7 +443,7 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
         }
 
         function obtenerPreposicion(nombreMes) {
-            return ["Abril", "Agost", "Octubre"].includes(nombreMes) ? "d'" : "de";
+            return ["Abril", "Agost", "Octubre"].includes(nombreMes) ? "d'" : "de ";
         }
 
         // Cargar los botones de años al inicio

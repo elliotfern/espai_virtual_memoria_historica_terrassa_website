@@ -67,6 +67,7 @@ $any = !empty($data['any']) ? $data['any'] : NULL;
 $mes = !empty($data['mes']) ? $data['mes'] : NULL;
 $diaInici = !empty($data['diaInici']) ? $data['diaInici'] : NULL;
 $diaFi = !empty($data['diaFi']) ? $data['diaFi'] : NULL;
+$mesFi = !empty($data['mesFi']) ? $data['mesFi'] : NULL;
 $area = !empty($data['area']) ? $data['area'] : NULL;
 $tema = !empty($data['tema']) ? $data['tema'] : NULL;
 $textCa = !empty($data['textCa']) ? $data['textCa'] : NULL;
@@ -84,6 +85,7 @@ try {
         mes = :mes,
         diaInici = :diaInici,
         diaFi = :diaFi,
+        mesFi = :mesFi,
         area = :area,
         tema = :tema,
         textCa = :textCa
@@ -97,6 +99,7 @@ try {
     $stmt->bindParam(':mes', $mes, PDO::PARAM_INT);
     $stmt->bindParam(':diaInici', $diaInici, PDO::PARAM_INT);
     $stmt->bindParam(':diaFi', $diaFi, PDO::PARAM_INT);
+    $stmt->bindParam(':mesFi', $mesFi, PDO::PARAM_INT);
     $stmt->bindParam(':area', $area, PDO::PARAM_STR);
     $stmt->bindParam(':tema', $tema, PDO::PARAM_INT);
     $stmt->bindParam(':textCa', $textCa, PDO::PARAM_STR);

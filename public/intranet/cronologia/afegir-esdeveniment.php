@@ -25,6 +25,7 @@ $any_old = "";
 $mes_old = "";
 $diaInici_old = "";
 $diaFi_old = "";
+$mesFi_old = "";
 $tema_old = "";
 $area_old = "";
 $textCa_old = "";
@@ -36,7 +37,7 @@ $textPt_old = "";
 
 if ($modificaBtn === 1) {
     // Verificar si la ID existe en la base de datos
-    $query = "SELECT c.id, c.any, c.mes, c.diaInici, c.diaFi, c.tema, c.area, c.textCa, c.textEs, c.textEn, c.textFr, c.textIt, c.textPt
+    $query = "SELECT c.id, c.any, c.mes, c.diaInici, c.diaFi, c.mesFi, c.tema, c.area, c.textCa, c.textEs, c.textEn, c.textFr, c.textIt, c.textPt
     FROM db_cronologia AS c
     WHERE c.id = :id";
 
@@ -52,6 +53,7 @@ if ($modificaBtn === 1) {
             $mes_old = $row['mes'] ?? "";
             $diaInici_old = $row['diaInici'] ?? "";
             $diaFi_old = $row['diaFi'] ?? "";
+            $mesFi_old = $row['mesFi'] ?? "";
             $tema_old = $row['tema'] ?? "";
             $area_old = $row['area'] ?? "";
             $textCa_old = $row['textCa'] ?? "";
@@ -154,6 +156,24 @@ if ($modificaBtn === 1) {
                 <div class="col-md-3">
                     <label for="diaInici" class="form-label negreta">Dia inici:</label>
                     <input type="text" class="form-control" name="diaInici" id="diaInici" value="<?php echo $diaInici_old; ?>">
+                </div>
+
+                <div class="col-md-3">
+                    <label for="monthSelect" class="form-label negreta">Selecciona un mes final (opcional):</label>
+                    <select class="form-select" id="mesFi" name="mesFi">
+                        <option value="1" <?php echo ($mesFi_old == 1) ? 'selected' : ''; ?>>Gener</option>
+                        <option value="2" <?php echo ($mesFi_old == 2) ? 'selected' : ''; ?>>Febrer</option>
+                        <option value="3" <?php echo ($mesFi_old == 3) ? 'selected' : ''; ?>>Març</option>
+                        <option value="4" <?php echo ($mesFi_old == 4) ? 'selected' : ''; ?>>Abril</option>
+                        <option value="5" <?php echo ($mesFi_old == 5) ? 'selected' : ''; ?>>Maig</option>
+                        <option value="6" <?php echo ($mesFi_old == 6) ? 'selected' : ''; ?>>Juny</option>
+                        <option value="7" <?php echo ($mesFi_old == 7) ? 'selected' : ''; ?>>Juliol</option>
+                        <option value="8" <?php echo ($mesFi_old == 8) ? 'selected' : ''; ?>>Agost</option>
+                        <option value="9" <?php echo ($mesFi_old == 9) ? 'selected' : ''; ?>>Setembre</option>
+                        <option value="10" <?php echo ($mesFi_old == 10) ? 'selected' : ''; ?>>Octubre</option>
+                        <option value="11" <?php echo ($mesFi_old == 11) ? 'selected' : ''; ?>>Novembre</option>
+                        <option value="12" <?php echo ($mesFi_old == 12) ? 'selected' : ''; ?>>Desembre</option>
+                    </select>
                 </div>
 
                 <div class="col-md-3">

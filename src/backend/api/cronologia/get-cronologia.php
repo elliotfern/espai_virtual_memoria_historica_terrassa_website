@@ -43,7 +43,7 @@ global $conn;
 // Obtener el parámetro del año
 $any = $_GET['any'] ?? 'tots';
 
-$sql = "SELECT c.id, c.any, m.mesCa AS mes, m.ordre AS mesOrdre, c.diaInici, c.diaFi, c.tema, c.area, c.textCa 
+$sql = "SELECT c.id, c.any, m.mesCa AS mes, m.ordre AS mesOrdre, c.diaInici, c.diaFi, c.mesFi, c.tema, c.area, c.textCa 
     FROM db_cronologia AS c
     LEFT JOIN aux_cronologia_mes AS m ON c.mes = m.id
     WHERE 1=1";
