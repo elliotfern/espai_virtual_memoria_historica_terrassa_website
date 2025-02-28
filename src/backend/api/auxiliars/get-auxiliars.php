@@ -195,7 +195,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'municipis') {
     global $conn;
     $data = array();
     $stmt = $conn->prepare(
-        "SELECT p.id, p.partit_politic
+        "SELECT p.id, p.partit_politic, p.sigles
             FROM aux_filiacio_politica AS p
             ORDER BY p.partit_politic ASC"
     );
@@ -212,7 +212,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'municipis') {
     global $conn;
     $data = array();
     $stmt = $conn->prepare(
-        "SELECT s.id, s.sindicat
+        "SELECT s.id, s.sindicat, sigles
             FROM aux_filiacio_sindical AS s
             ORDER BY s.sindicat ASC"
     );

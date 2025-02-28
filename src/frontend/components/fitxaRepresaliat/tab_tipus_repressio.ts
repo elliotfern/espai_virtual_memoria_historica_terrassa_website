@@ -66,8 +66,7 @@ export const fitxaTipusRepressio = (categoriaNumerica: string, fitxa2: FitxaJudi
         `;
   } else if (parseInt(categoriaNumerica) === 10) {
     divInfo.innerHTML += `
-          <h5>En elaboració exiliats:</h5>
-                    <p><strong>EXILIATS</p>
+          <h5>En elaboració</h5>
         `;
   } else {
     console.error('Categoria no válida:', categoriaNumerica);

@@ -5,6 +5,60 @@ import { fitxaTipusRepressio } from './tab_tipus_repressio';
 import { formatDates } from '../../services/formatDates/dates';
 import { carregarTraduccions, getTraducciones } from '../../services/idiomes/traduccio';
 
+interface Partit {
+  id: number;
+  partit_politic: string;
+  sigles: string;
+}
+
+interface Sindicat {
+  id: number;
+  sindicat: string;
+  sigles: string;
+}
+
+async function obtenerNombresPartidos(ids: number[]): Promise<string[]> {
+  try {
+    // Llamada a la API para obtener todos los partidos políticos
+    const devDirectory = `https://${window.location.hostname}`;
+    const url = `${devDirectory}/api/auxiliars/get/?type=partits`;
+
+    const response = await fetch(url);
+    if (!response.ok) throw new Error('Error al obtener los datos de la API');
+
+    const partits: Partit[] = await response.json();
+
+    // Filtrar los partidos que coinciden con los IDs proporcionados
+    const partidosFiltrados = partits.filter((partit) => ids.includes(partit.id)).map((partit) => (partit.id === 10 ? partit.partit_politic : `${partit.partit_politic} (${partit.sigles})`));
+
+    return partidosFiltrados;
+  } catch (error) {
+    console.error('Error al procesar los partidos:', error);
+    return [];
+  }
+}
+
+async function obtenerNombresSindicats(ids: number[]): Promise<string[]> {
+  try {
+    // Llamada a la API para obtener todos los partidos políticos
+    const devDirectory = `https://${window.location.hostname}`;
+    const url = `${devDirectory}/api/auxiliars/get/?type=sindicats`;
+
+    const response = await fetch(url);
+    if (!response.ok) throw new Error('Error al obtener los datos de la API');
+
+    const sindicats: Sindicat[] = await response.json();
+
+    // Filtrar los partidos que coinciden con los IDs proporcionados
+    const sindicatsFiltrados = sindicats.filter((sindicat) => ids.includes(sindicat.id)).map((sindicat) => (sindicat.id === 4 ? sindicat.sindicat : `${sindicat.sindicat} (${sindicat.sigles})`));
+
+    return sindicatsFiltrados;
+  } catch (error) {
+    console.error('Error al procesar los partidos:', error);
+    return [];
+  }
+}
+
 export async function initButtons(id: string): Promise<void> {
   await carregarTraduccions(); // Asegurar que las traducciones están cargadas antes de usarlas
   const traducciones = getTraducciones(); // Obtener la versión actualizada
@@ -274,8 +328,18 @@ async function mostrarInformacion(tab: string, idPersona: string, label: string)
   }
 
   const carrecText = fitxa.carrec_cat === null ? 'Desconegut' : fitxa.carrec_cat;
-  const partitPolitic = fitxa.partit_politic === null ? 'Desconegut' : fitxa.partit_politic;
-  const sindicat = fitxa.sindicat === null ? 'Desconegut' : fitxa.sindicat;
+
+  // partits politics
+  const idsPartidos = fitxa.filiacio_politica
+    .replace(/[{}]/g, '')
+    .split(',')
+    .map((id) => parseInt(id.trim(), 10));
+
+  // Sindicats
+  const idsSindicats = fitxa.filiacio_sindical
+    .replace(/[{}]/g, '')
+    .split(',')
+    .map((id) => parseInt(id.trim(), 10));
 
   const dataCreacio = fitxa.data_creacio;
   const dataActualitzacio = fitxa.data_actualitzacio;
@@ -361,20 +425,25 @@ async function mostrarInformacion(tab: string, idPersona: string, label: string)
       `;
       break;
     case 'tab4':
-      divInfo.innerHTML = `
-        <h3 class="titolSeccio">${label}</h3>
-        <div style="margin-top:30px;margin-bottom:30px">
-        <h5 class="titolSeccio2">Activitat política i sindical abans de l'esclat de la guerra:</h5>
-        <p><span class='marro2'>Afiliació política:</span> <span class='blau1'>${partitPolitic}</span></p>
-        <p><span class='marro2'>Afiliació sindical:</span> <span class='blau1'>${sindicat}</span></p>
-        </div>
+      Promise.all([obtenerNombresPartidos(idsPartidos), obtenerNombresSindicats(idsSindicats)]).then(([nombresPartidos, nombresSindicats]) => {
+        const partitPolitic = nombresPartidos.length === 0 ? 'Desconegut' : nombresPartidos.join(', ');
+        const sindicat = nombresSindicats.length === 0 ? 'Desconegut' : nombresSindicats.join(', ');
 
-        <div style="margin-top:30px;margin-bottom:30px">
-        <h5 class="titolSeccio2">Activitat política i sindical durant la guerra:</h5>
-        <p><span class='marro2'>Afiliació política:</span> <span class='blau1'>-</span></p>
-        <p><span class='marro2'>Afiliació sindical:</span> <span class='blau1'>-</span></p>
-        </div>
-      `;
+        divInfo.innerHTML = `
+          <h3 class="titolSeccio">${label}</h3>
+          <div style="margin-top:30px;margin-bottom:30px">
+            <h5 class="titolSeccio2">Activitat política i sindical abans de l'esclat de la guerra:</h5>
+            <p><span class='marro2'>Afiliació política:</span> <span class='blau1'>${partitPolitic}</span></p>
+            <p><span class='marro2'>Afiliació sindical:</span> <span class='blau1'>${sindicat}</span></p>
+          </div>
+    
+          <div style="margin-top:30px;margin-bottom:30px">
+            <h5 class="titolSeccio2">Activitat política i sindical durant la guerra:</h5>
+            <p><span class='marro2'>Afiliació política:</span> <span class='blau1'>-</span></p>
+            <p><span class='marro2'>Afiliació sindical:</span> <span class='blau1'>-</span></p>
+          </div>
+        `;
+      });
       break;
     case 'tab5':
       divInfo.innerHTML = `

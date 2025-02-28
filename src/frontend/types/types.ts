@@ -55,6 +55,8 @@ export interface Fitxa {
   observacions_espai: string;
   causa_defuncio: string;
   img: string;
+  filiacio_politica: string;
+  filiacio_sindical: string;
 }
 
 export interface FitxaJudicial {
