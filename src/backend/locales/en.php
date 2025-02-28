@@ -21,9 +21,11 @@ return [
         'exiliats' => 'Exiles and deportees',
         'represaliats' => 'Repressed',
         'estudis' => 'Studies',
-        'documents' => 'Documentary sources',
+        'documents' => 'Sources',
         'espai-virtual' => 'Virtual space',
-        'contacta' => 'Contact'
+        'contacta' => 'Contact',
+        'cronologia' => 'Chronology',
+        'links' => 'Links'
     ],
 
     'cerca-avan' => [

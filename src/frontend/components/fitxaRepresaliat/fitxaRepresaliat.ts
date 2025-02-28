@@ -3,20 +3,24 @@ import { fetchData } from '../../services/api/api';
 import { Fitxa, FitxaJudicial, FitxaFamiliars } from '../../types/types';
 import { fitxaTipusRepressio } from './tab_tipus_repressio';
 import { formatDates } from '../../services/formatDates/dates';
+import { carregarTraduccions, getTraducciones } from '../../services/idiomes/traduccio';
 
-export function initButtons(id: string): void {
+export async function initButtons(id: string): Promise<void> {
+  await carregarTraduccions(); // Asegurar que las traducciones están cargadas antes de usarlas
+  const traducciones = getTraducciones(); // Obtener la versión actualizada
+
   const contenedorBotones = document.getElementById('botons1');
   if (!contenedorBotones) return; // Asegurarse de que el contenedor de botones existe
 
   const buttons: { id: number; label: string; category: string }[] = [
-    { id: 1, label: 'Dades personals', category: 'tab1' },
-    { id: 2, label: 'Dades familiars', category: 'tab2' },
-    { id: 3, label: 'Dades acadèmiques i laborals', category: 'tab3' },
-    { id: 4, label: 'Dades polítiques i sindicals', category: 'tab4' },
-    { id: 5, label: 'Biografia', category: 'tab5' },
-    { id: 6, label: 'Fonts documentals', category: 'tab6' },
-    { id: 8, label: 'Multimèdia', category: 'tab8' },
-    { id: 7, label: 'Altres dades', category: 'tab7' },
+    { id: 1, label: traducciones['tab1'] || 'Dades personals', category: 'tab1' },
+    { id: 2, label: traducciones['tab2'] || 'Dades familiars', category: 'tab2' },
+    { id: 3, label: traducciones['tab3'] || 'Dades acadèmiques i laborals', category: 'tab3' },
+    { id: 4, label: traducciones['tab4'] || 'Dades polítiques i sindicals', category: 'tab4' },
+    { id: 5, label: traducciones['tab5'] || 'Biografia', category: 'tab5' },
+    { id: 6, label: traducciones['tab6'] || 'Fonts documentals', category: 'tab6' },
+    { id: 8, label: traducciones['tab8'] || 'Multimèdia', category: 'tab8' },
+    { id: 7, label: traducciones['tab7'] || 'Altres dades', category: 'tab7' },
   ];
 
   buttons.forEach((button, index) => {
@@ -84,7 +88,7 @@ async function generarBotonesCategoria(idPersona: string): Promise<void> {
         if (catTitle) {
           // Solo crear botón si la categoría tiene un título definido
           const btn = document.createElement('button');
-          btn.className = 'tablinks';
+          btn.className = 'botoCategoriaRepresio';
           btn.innerText = catTitle;
           btn.dataset.tab = `categoria${catNum}`;
 

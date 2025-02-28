@@ -32,52 +32,6 @@ $id = $routeParams[0];
 </div>
 
 <style>
-    .button {
-        border: 1px solid #C2AF96 !important;
-    }
-
-    #botons1 {
-        background-color: #f6f4eb !important;
-        display: flex;
-        gap: 0.3rem;
-    }
-
-    .tablinks {
-        border-top-left-radius: 30px !important;
-        border-top-right-radius: 30px !important;
-        font-size: 16px !important;
-        border: 1px solid #C2AF96 !important;
-    }
-
-    .colorBtn1 {
-        background-color: #F1EEE0 !important;
-        color: #133B7C !important;
-        font-weight: 500;
-        font-style: italic;
-        font-family: "Lora", serif;
-        font-optical-sizing: auto;
-    }
-
-    .colorBtn2 {
-        background-color: #F1EEE0 !important;
-        color: #133B7C !important;
-        font-weight: 500;
-        font-style: italic;
-        font-family: "Lora", serif;
-        font-optical-sizing: auto;
-    }
-
-    .colorBtn1:hover,
-    .colorBtn2:hover {
-        background-color: #C2AF96 !important;
-        color: #133B7C !important;
-    }
-
-    .active {
-        background-color: #C2AF96 !important;
-        color: #133B7C !important;
-    }
-
     .row {
         margin-top: 0px !important;
         margin-right: 0px !important;

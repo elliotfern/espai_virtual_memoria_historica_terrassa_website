@@ -24,7 +24,9 @@ return [
         'estudis' => 'Estudos',
         'documents' => 'Fontes documentais',
         'espai-virtual' => 'Espaço virtual',
-        'contacta' => 'Contactar'
+        'contacta' => 'Contactar',
+        'cronologia' => 'Cronologia',
+        'links' => 'Links'
     ],
 
     'cerca-avan' => [

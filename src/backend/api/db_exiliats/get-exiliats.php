@@ -88,7 +88,8 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistat') {
     $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     if ($stmt->rowCount() === 0) {
-        echo json_encode(null);
+        echo json_encode([]);
+        exit;
     } else {
         header("Content-Type: application/json");
         echo json_encode($row);  // Codifica la fila como un objeto JSON
