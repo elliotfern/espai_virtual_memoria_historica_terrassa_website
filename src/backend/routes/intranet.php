@@ -82,11 +82,8 @@ $base_routes = [
 
     // Biografia
     '/gestio/tots/fitxa/biografia/fitxa/{id}' => 'public/intranet/biografia/fitxa-biografia.php',
-    '/gestio/tots/fitxa/biografia/nova-biografia-catala/{id}' => 'public/intranet/biografia/modifica-nova-biografia-catala.php',
-    '/gestio/tots/fitxa/biografia/nova-biografia-castella/{id}' => 'public/intranet/biografia/modifica-nova-biografia-castella.php',
-
-    '/gestio/tots/fitxa/biografia/modifica-biografia-catala/{id}/{id}' => 'public/intranet/biografia/modifica-nova-biografia-catala.php',
-    '/gestio/tots/fitxa/biografia/modifica-biografia-castella/{id}/{id}' => 'public/intranet/biografia/modifica-nova-biografia-castella.php',
+    '/gestio/tots/fitxa/biografia/nova-biografia/{id}' => 'public/intranet/biografia/modifica-nova-biografia.php',
+    '/gestio/tots/fitxa/biografia/modifica-biografia/{id}/{id}' => 'public/intranet/biografia/modifica-nova-biografia.php',
 ];
 
 // Rutas principales sin idioma explícito (solo para el idioma por defecto)
@@ -191,13 +188,10 @@ $routes = [
     // Biografia
     '/gestio/tots/fitxa/biografia/fitxa/{id}' => ['view' => 'public/intranet/biografia/fitxa-biografia.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
 
-    '/gestio/tots/fitxa/biografia/nova-biografia-catala/{id}' => ['view' => 'public/intranet/biografia/modifica-nova-biografia-catala.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
+    '/gestio/tots/fitxa/biografia/nova-biografia/{id}' => ['view' => 'public/intranet/biografia/modifica-nova-biografia.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
 
-    '/gestio/tots/fitxa/biografia/nova-biografia-castella/{id}' => ['view' => 'public/intranet/biografia/modifica-nova-biografia-castella.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
+    '/gestio/tots/fitxa/biografia/modifica-biografia/{id}/{id}' => ['view' => 'public/intranet/biografia/modifica-nova-biografia.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
 
-    '/gestio/tots/fitxa/biografia/modifica-biografia-catala/{id}/{id}' => ['view' => 'public/intranet/biografia/modifica-nova-biografia-catala.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
-
-    '/gestio/tots/fitxa/biografia/modifica-biografia-castella/{id}/{id}' => ['view' => 'public/intranet/biografia/modifica-nova-biografia-castella.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
 
 ];
 

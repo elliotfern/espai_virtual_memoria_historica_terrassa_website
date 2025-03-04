@@ -2,6 +2,9 @@
 
 $idPersona = $routeParams[0]; // Segundo, por ejemplo, 2
 $idPersona = (int) $idPersona;
+$biografiaCa = "";
+$biografiaEs = "";
+$biografiaEn = "";
 
 // Verificar si es un número entero válido
 if (!is_int($idPersona)) {
@@ -41,8 +44,8 @@ $stmt->execute();
 if ($stmt->rowCount() > 0) {
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         $biografiaCa = $row['biografiaCa'] ?? null;
-        $biografiaEs = htmlspecialchars($row['biografiaEs'] ?? "", ENT_QUOTES, 'UTF-8') ?? null;
-        $biografiaEn = htmlspecialchars($row['biografiaEn'] ?? "", ENT_QUOTES, 'UTF-8') ?? null;
+        $biografiaEs =  $row['biografiaEs'] ?? null;
+        $biografiaEn =  $row['biografiaEn'] ?? null;
         $idBiografia = $row['id'] ?? null;
     }
 }
@@ -52,52 +55,46 @@ if ($stmt->rowCount() > 0) {
 <div class="container" style="margin-bottom:50px;border: 1px solid gray;border-radius: 10px;padding:25px;background-color:#eaeaea">
     <div class="container">
         <div class="row d-flex flex-column">
-            <h2>Gestió biografies</h2>
+            <h2>Gestió biografia</h2>
             <h4 id="fitxaNomCognoms">Fitxa: <a href="https://memoriaterrassa.cat/fitxa/<?php echo $idPersona; ?>" target="_blank"><?php echo $nom . " " . $cognom1 . " " . $cognom2; ?></a></h4>
-
             <hr>
-            <h4>Biografia en català:</h4>
-
             <?php
             if (!$biografiaCa) {
-            ?> <div class="col-md-12 " style="margin-top:20px;margin-bottom:20px">
-                    <a href="https://memoriaterrassa.cat/gestio/tots/fitxa/biografia/nova-biografia-catala/<?php echo $idPersona; ?>" class="btn btn-success">Afegir biografia en català</a>
+            ?>
+                <div class="col-md-12 " style="margin-top:20px;margin-bottom:20px">
+                    <a href="https://memoriaterrassa.cat/gestio/tots/fitxa/biografia/nova-biografia/<?php echo $idPersona; ?>" class="btn btn-success">Afegir biografia</a>
                 </div>
+                <p>Biografia sense publicar en català</p>
+
             <?php
             } else {
-            ?> <div class="col-md-12" style="margin-top:20px;margin-bottom:20px">
-                    <a href="https://memoriaterrassa.cat/gestio/tots/fitxa/biografia/modifica-biografia-catala/<?php echo $idBiografia; ?>/<?php echo $idPersona; ?>" class="btn btn-success">Modificar biografia en català</a>
+            ?>
+                <div class="col-md-12" style="margin-top:20px;margin-bottom:20px">
+                    <a href="https://memoriaterrassa.cat/gestio/tots/fitxa/biografia/modifica-biografia/<?php echo $idBiografia; ?>/<?php echo $idPersona; ?>" class="btn btn-success">Modificar biografia</a>
                 </div>
-
+                <hr>
+                <h4>Biografia en català:</h4>
                 <div class="col-md-12" style="margin-top:20px;margin-bottom:20px">
                     <?php echo $biografiaCa; ?>
                 </div>
-
 
             <?php
             }
 
             ?>
 
-            <hr>
-            <h4>Biografia en castellà:</h4>
-
             <?php
             if (!$biografiaEs) {
-            ?> <div class="col-md-4 " style="margin-top:20px;margin-bottom:20px">
-                    <a href="https://memoriaterrassa.cat/gestio/tots/fitxa/biografia/nova-biografia-castella/<?php echo $idPersona; ?>" class="btn btn-success">Afegir biografia en castellà</a>
-                </div>
+            ?>
+                <p>Biografia sense publicar en castellà</p>
             <?php
             } else {
-            ?> <div class="col-md-4" style="margin-top:20px;margin-bottom:20px">
-                    <a href="https://memoriaterrassa.cat/gestio/tots/fitxa/biografia/modifica-biografia-castellà/<?php echo $idBiografia; ?>/<?php echo $idPersona; ?>" class="btn btn-success">Modificar biografia en castellà</a>
-                </div>
-
-                <div class="col-md-4" style="margin-top:20px;margin-bottom:20px">
+            ?>
+                <hr>
+                <h4>Biografia en castellà:</h4>
+                <div class="col-md-12" style="margin-top:20px;margin-bottom:20px">
                     <?php echo $biografiaEs; ?>
                 </div>
-
-
             <?php
             }
 

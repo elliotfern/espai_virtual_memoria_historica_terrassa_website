@@ -13,15 +13,17 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
 
 $modificaBtn = "";
 $idPersona = "";
+$idBiografia_old = "";
+$biografiaCa_old = "";
+$biografiaEs_old = "";
 
-if ($categoriaId === "modifica-biografia-catala") {
+if ($categoriaId === "modifica-biografia") {
     $modificaBtn = 1;
     $idPersona = $routeParams[1];
 } else {
     $modificaBtn = 2;
+    $idPersona = $routeParams[0];
 }
-
-$idBiografia_old = "";
 
 if ($modificaBtn === 1) {
     // Verificar si la ID existe en la base de datos
@@ -30,6 +32,8 @@ if ($modificaBtn === 1) {
     d.cognom1,
     d.cognom2,
     b.biografiaCa,
+    b.biografiaEs,
+    b.biografiaEn,
     b.id AS idBiografia
     FROM db_dades_personals AS d
     LEFT JOIN db_biografies AS b ON d.id = b.idRepresaliat
@@ -47,6 +51,8 @@ if ($modificaBtn === 1) {
             $cognom1 = $row['cognom1'] ?? "";
             $cognom2 = $row['cognom2'] ?? "";
             $biografiaCa_old = $row['biografiaCa'] ?? "";
+            $biografiaEs_old = $row['biografiaEs'] ?? "";
+            $biografiaEn_old = $row['biografiaEn'] ?? "";
         }
     }
 } else {
@@ -80,7 +86,7 @@ if ($modificaBtn === 1) {
     }
 
     trix-editor {
-        min-height: 1000px;
+        min-height: 500px;
         /* Ajusta la altura según tus necesidades */
         max-height: 600px;
         /* Opcional: establece una altura máxima */
@@ -95,10 +101,10 @@ if ($modificaBtn === 1) {
         <div class="container">
             <div class="row">
                 <?php if ($modificaBtn === 1) { ?>
-                    <h2>Modificació biografia en català</h2>
+                    <h2>Modificació biografia</h2>
                     <h4 id="fitxaNomCognoms">Fitxa represaliat: <a href="https://memoriaterrassa.cat/fitxa/<?php echo $idPersona; ?>" target="_blank"><?php echo $nom . " " . $cognom1 . " " . $cognom2; ?></a></h4>
                 <?php } else { ?>
-                    <h2>Inserció biografia en català</h2>
+                    <h2>Inserció biografia</h2>
                     <h4 id="fitxaNomCognoms">Fitxa represaliat: <a href="https://memoriaterrassa.cat/fitxa/<?php echo $idPersona; ?>" target="_blank"><?php echo $nom . " " . $cognom1 . " " . $cognom2; ?></a></h4>
 
                 <?php } ?>
@@ -124,6 +130,16 @@ if ($modificaBtn === 1) {
 
                     <!-- Editor Trix -->
                     <trix-editor input="biografiaCa"></trix-editor>
+                </div>
+
+                <!-- Crear el editor de texto -->
+                <div class="col-md-12">
+                    <label for="tema" class="form-label negreta">Biografia (castellà):</label>
+                    <!-- Campo oculto que almacena el valor de Trix -->
+                    <input id="biografiaEs" type="hidden" name="biografiaEs" value="<?php echo htmlspecialchars($biografiaEs_old); ?>">
+
+                    <!-- Editor Trix -->
+                    <trix-editor input="biografiaEs"></trix-editor>
                 </div>
 
                 <div class="row espai-superior" style="border-top: 1px solid black;padding-top:25px">
@@ -182,10 +198,16 @@ if ($modificaBtn === 1) {
         });
 
         // Obtener el contenido del editor Trix
-        const trixEditor = document.querySelector("trix-editor");
-        if (trixEditor) {
-            formData['biografiaCa'] = trixEditor.innerHTML;
+        const trixEditorCa = document.querySelector("trix-editor[input='biografiaCa']");
+        if (trixEditorCa) {
+            formData['biografiaCa'] = trixEditorCa.innerHTML;
 
+        }
+
+        // Obtener el contenido del editor Trix para la biografía en castellano
+        const trixEditorEs = document.querySelector("trix-editor[input='biografiaEs']");
+        if (trixEditorEs) {
+            formData['biografiaEs'] = trixEditorEs.innerHTML;
         }
 
         // Obtener el user_id de localStorage
@@ -267,10 +289,16 @@ if ($modificaBtn === 1) {
         });
 
         // Obtener el contenido del editor Trix
-        const trixEditor = document.querySelector("trix-editor");
-        if (trixEditor) {
-            formData['biografiaCa'] = trixEditor.innerHTML;
+        const trixEditorCa = document.querySelector("trix-editor[input='biografiaCa']");
+        if (trixEditorCa) {
+            formData['biografiaCa'] = trixEditorCa.innerHTML;
 
+        }
+
+        // Obtener el contenido del editor Trix para la biografía en castellano
+        const trixEditorEs = document.querySelector("trix-editor[input='biografiaEs']");
+        if (trixEditorEs) {
+            formData['biografiaEs'] = trixEditorEs.innerHTML;
         }
 
         // Obtener el user_id de localStorage
