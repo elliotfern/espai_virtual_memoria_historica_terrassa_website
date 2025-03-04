@@ -306,7 +306,9 @@ if (isset($_GET['type']) && $_GET['type'] == 'tots' && isset($_GET['completat'])
             dp.data_actualitzacio,
             dp.observacions,
             dp.completat,
-            img.nomArxiu AS img
+            img.nomArxiu AS img,
+            bio.biografiaCa,
+            bio.biografiaEs
             FROM db_dades_personals AS dp
             LEFT JOIN aux_dades_municipis AS m1 ON dp.municipi_naixement = m1.id
             LEFT JOIN aux_dades_municipis_comarca AS m1a ON m1.comarca = m1a.id
@@ -338,6 +340,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'tots' && isset($_GET['completat'])
             LEFT JOIN aux_ofici_carrec AS oc ON dp.carrec_empresa = oc.id
             LEFT JOIN auth_users AS u ON dp.autor = u.id
             LEFT JOIN aux_imatges AS img ON dp.img = img.id
+            LEFT JOIN db_biografies AS bio ON dp.id = bio.idRepresaliat
             WHERE dp.id = $id";
 
     $stmt = $conn->prepare($query);

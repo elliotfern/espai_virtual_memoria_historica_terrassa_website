@@ -327,7 +327,9 @@ async function mostrarInformacion(tab: string, idPersona: string, label: string)
     }
   }
 
-  const carrecText = fitxa.carrec_cat === null ? 'Desconegut' : fitxa.carrec_cat;
+  const carrecText = fitxa.carrec_cat === '' || fitxa.carrec_cat === null || fitxa.carrec_cat === undefined ? 'Desconegut' : fitxa.carrec_cat;
+  const sectorText = fitxa.sector_cat === '' || fitxa.sector_cat === null || fitxa.sector_cat === undefined ? 'Desconegut' : fitxa.sector_cat;
+  const subsectorText = fitxa.sub_sector_cat === '' || fitxa.sub_sector_cat === null || fitxa.sub_sector_cat === undefined ? 'Desconegut' : fitxa.sub_sector_cat;
 
   // partits politics
   const idsPartidos = fitxa.filiacio_politica
@@ -363,9 +365,10 @@ async function mostrarInformacion(tab: string, idPersona: string, label: string)
   const provinciaDefuncio = fitxa.provincia_defuncio === '' || null ? 'Desconeguda' : fitxa.provincia_defuncio;
   const comunitatDefuncio = fitxa.comunitat_defuncio === '' || null ? 'Desconeguda' : fitxa.comunitat_defuncio;
   const paisDefuncio = fitxa.pais_defuncio === '' || null ? 'Desconegut' : fitxa.pais_defuncio;
-  const tipologiaEspaiDefuncio = fitxa.tipologia_espai === '' || null ? 'Desconeguda' : fitxa.tipologia_espai;
-  const observacionsTipologiaEspacioDefuncio = fitxa.observacions_espai === '' || null ? 'Desconeguda' : fitxa.observacions_espai;
-  const causaDefuncio = fitxa.causa_defuncio === '' || null ? 'Desconeguda' : fitxa.causa_defuncio;
+
+  const tipologiaEspaiDefuncio = fitxa.tipologia_espai_ca === '' || fitxa.tipologia_espai_ca === null || fitxa.tipologia_espai_ca === undefined ? 'Desconeguda' : fitxa.tipologia_espai_ca;
+  const observacionsTipologiaEspacioDefuncio = fitxa.observacions_espai === '' || fitxa.observacions_espai === null || fitxa.observacions_espai === undefined ? 'Desconeguda' : fitxa.observacions_espai;
+  const causaDefuncio = fitxa.causa_defuncio_ca === '' || fitxa.causa_defuncio_ca === null || fitxa.causa_defuncio_ca === undefined ? 'Desconeguda' : fitxa.causa_defuncio_ca;
 
   // imatge represaliat
   // Seleccionamos la imagen con el ID 'imatgeRepresaliat'
@@ -420,8 +423,8 @@ async function mostrarInformacion(tab: string, idPersona: string, label: string)
         <p><span class='marro2'>Ofici:</span> <span class='blau1'>${fitxa.ofici_cat}</span></p>
         <p><span class='marro2'>Empresa:</span> <span class='blau1'>${fitxa.empresa}</span></p>
         <p><span class='marro2'>Càrrec:</span> <span class='blau1'>${carrecText}</span></p>
-        <p><span class='marro2'>Sector econòmic:</span> <span class='blau1'>${fitxa.sector_cat}</span></p>
-        <p><span class='marro2'>Sub-sector econòmic:</span> <span class='blau1'>${fitxa.sub_sector_cat}</span></p>
+        <p><span class='marro2'>Sector econòmic:</span> <span class='blau1'>${sectorText}</span></p>
+        <p><span class='marro2'>Sub-sector econòmic:</span> <span class='blau1'>${subsectorText}</span></p>
       `;
       break;
     case 'tab4':
@@ -448,23 +451,30 @@ async function mostrarInformacion(tab: string, idPersona: string, label: string)
     case 'tab5':
       divInfo.innerHTML = `
         <h3 class="titolSeccio">${label}</h3>
-        <p><span class='marro2'>Biografia:</span> <span class='blau1'>${fitxa.biografia}</span></p>
+        ${fitxa.biografiaCa ? `<span class='blau1 normal'>${fitxa.biografiaCa}</span>` : 'La biografia no està disponible.'}
       `;
       break;
     case 'tab6':
       divInfo.innerHTML = `
         <h3 class="titolSeccio">${label}</h3>
+        <p>En elaboració</p>
 
       `;
       break;
     case 'tab7':
       divInfo.innerHTML = `
         <h3 class="titolSeccio">${label}</h3>
-          <p><span class='marro2'>Observacions:</span> <span class='blau1'>${fitxa.observacions}</span></p>
+        ${fitxa.observacions ? `<p><span class='marro2'>Observacions:</span> <span class='blau1'>${fitxa.observacions}</span></p>` : ''}
           <p><span class='marro2'>Fitxa creada per: </span> <span class='blau1'>${fitxa.autorNom} (${fitxa.biografia_cat})</span></p>
           <p><span class='marro2'>Data de creació: </span><span class='blau1'>${formatDates(dataCreacio)}</span></p>
           <p><span class='marro2'>Darrera actualització: </span><span class='blau1'> ${formatDates(dataActualitzacio)}</span></p>
       `;
+      break;
+    case 'tab8':
+      divInfo.innerHTML = `
+          <h3 class="titolSeccio">${label}</h3>
+          <p>En elaboració</p>
+        `;
       break;
     default:
       divInfo.innerHTML = `<p>No hi ha informació disponible.</p>`;

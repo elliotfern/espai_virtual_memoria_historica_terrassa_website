@@ -51,12 +51,14 @@ export interface Fitxa {
   data_actualitzacio: string;
   autorNom: string;
   biografia_cat: string;
-  tipologia_espai: string;
+  tipologia_espai_ca: string;
   observacions_espai: string;
-  causa_defuncio: string;
+  causa_defuncio_ca: string;
   img: string;
   filiacio_politica: string;
   filiacio_sindical: string;
+  biografiaCa: string;
+  biografiaEs: string;
 }
 
 export interface FitxaJudicial {

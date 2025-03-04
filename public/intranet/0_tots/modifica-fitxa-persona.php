@@ -32,11 +32,11 @@ $id = $routeParams[0];
 
   <form id="personalForm">
     <div id="tab8" class="tabcontent">
-      <div class="row">
+      <div class="row g-4">
         <h3>Categoria repressió</h3>
 
         <div class="container">
-          <div class="row">
+          <div class="row g-4">
 
             <div class="avis-form">
               * Has d'escollir almenys 1 categoria.
@@ -144,7 +144,7 @@ $id = $routeParams[0];
     </div> <!-- Fi tab8 categoria repressio -->
 
     <div id="tab1" class="tabcontent">
-      <div class="row">
+      <div class="row g-4">
         <h3>Dades personals</h3>
 
         <div class="col-md-4">
@@ -380,7 +380,12 @@ $id = $routeParams[0];
     <div id="tab5" class="tabcontent">
       <div class="row">
         <h3>Biografia</h3>
+        <hr style="margin-top:25px">
+        <h4>Introduir / modificar biografia del represaliat</h4>
 
+        <div class="col-md-4">
+          <a href="https://memoriaterrassa.cat/gestio/tots/fitxa/biografia/fitxa/<?php echo $id; ?>" target="_blank" class="btn btn-success">Afegir/modificar biografia</a>
+        </div>
 
       </div>
     </div> <!-- Fi tab5 -->
