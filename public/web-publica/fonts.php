@@ -16,5 +16,9 @@ $translate2 = $translations['cerca-avan'] ?? [];
 
 <div class="container" style="margin-top: 50px;margin-bottom:50px;">
 
-    <?php echo $translate['no-disponible'] ?>
+    <h2>Arxius i bancs de dades digitals:</h2>
+    <div id="tabla1"></div>
+
+    <h2>Bibliografia:</h2>
+    <div id="tabla2"></div>
 </div>

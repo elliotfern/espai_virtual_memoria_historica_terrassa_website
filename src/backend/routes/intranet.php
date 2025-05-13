@@ -75,7 +75,7 @@ $base_routes = [
     '/gestio/tots/fitxa/fonts-documentals/crear-llibre' => 'public/intranet/db_fonts_documentals/afegir-nou-llibre.php',
     '/gestio/tots/fitxa/fonts-documentals/crear-arxiu' => 'public/intranet/db_fonts_documentals/afegir-nou-arxiu.php',
 
-    // Cronologia
+    // Cronologia 
     '/gestio/cronologia' => 'public/intranet/cronologia/index.php',
     '/gestio/cronologia/afegir-esdeveniment' => 'public/intranet/cronologia/afegir-esdeveniment.php',
     '/gestio/cronologia/modifica-esdeveniment/{id}' => 'public/intranet/cronologia/afegir-esdeveniment.php',

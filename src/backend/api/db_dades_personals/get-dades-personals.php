@@ -379,6 +379,28 @@ if (isset($_GET['type']) && $_GET['type'] == 'tots' && isset($_GET['completat'])
         header("Content-Type: application/json");
         echo json_encode($row);  // Codifica la fila como un objeto JSON
     }
+
+    // 4) Per obtenir nom, cognom1 i cognom2 al cercador homepage Texts complets
+    // ruta GET => "https://memoriaterrassa.cat/api/dades_personals/get/?llistatPersonesCercador"
+} elseif (isset($_GET['llistatPersonesCercador'])) {
+
+    global $conn;
+    /** @var PDO $conn */
+    $query = "SELECT d.id, d.nom, d.cognom1, d.cognom2
+        FROM db_dades_personals AS d";
+
+    $stmt = $conn->prepare($query);
+    $stmt->execute();
+
+    if ($stmt->rowCount() === 0) {
+        header("Content-Type: application/json");
+        echo json_encode(null);  // Devuelve un objeto JSON nulo si no hay resultados
+    } else {
+        // Solo obtenemos la primera fila ya que parece ser una búsqueda por ID
+        $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        header("Content-Type: application/json");
+        echo json_encode($row);  // Codifica la fila como un objeto JSON
+    }
 } else {
     // Si 'type', 'id' o 'token' están ausentes o 'type' no es 'user' en la URL
     header('HTTP/1.1 403 Forbidden');

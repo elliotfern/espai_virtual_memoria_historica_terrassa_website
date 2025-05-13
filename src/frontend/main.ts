@@ -4,6 +4,10 @@ import { nameUser } from './components/userName/userName';
 import { initButtons } from './components/fitxaRepresaliat/fitxaRepresaliat';
 import { cargarTabla } from './components/taulaDades/taulaDades';
 import { botonsEstat } from './components/taulaDades/botonsEstat';
+import { initBuscador } from './components/cercadorHomepage/cercadorPaginaInici';
+import { TaulaDadesFonts } from './components/fontsDocumentals/taulaDadesFonts';
+import { transmissioDadesDB } from './services/fetchData/transmissioDades';
+
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './estils/style.css';
 import 'bootstrap';
@@ -67,5 +71,17 @@ document.addEventListener('DOMContentLoaded', () => {
   } else if (pathArray[pathArray.length - 2] === 'fitxa') {
     const id = pathArray[pathArray.length - 1];
     initButtons(id); // Pasar el id
+  } else if (pageType === 'inici') {
+    initBuscador();
+  } else if (pageType === 'fonts-documentals') {
+    TaulaDadesFonts();
+  } else if (pageType === 'crear-arxiu') {
+    const llibre = document.getElementById('arxiuForm');
+    if (llibre) {
+      // Lanzar actualizador de datos
+      llibre.addEventListener('submit', function (event) {
+        transmissioDadesDB(event, 'POST', 'arxiuForm', '/api/fonts_documentals/post/arxiu');
+      });
+    }
   }
 });

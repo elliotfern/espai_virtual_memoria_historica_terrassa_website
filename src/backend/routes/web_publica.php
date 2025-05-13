@@ -33,6 +33,9 @@ $base_routes = [
     '/equip/elliot-fernandez' => 'public/web-publica/equip/elliot-fernandez.php',
     '/equip/josep-lluis-lacueva' => 'public/web-publica/equip/jose-luis.php',
 
+    // 7. Cronologia
+    '/cronologia' => 'public/web-publica/cronologia.php',
+
     // Altres pagines
     '/credits' => 'public/web-publica/legal/credits.php',
     '/avis-legal' => 'public/web-publica/legal/avis-legal.php',
@@ -164,6 +167,14 @@ $routes = [
 
     '/equip/josep-lluis-lacueva'  =>  [
         'view' => 'public/web-publica/equip/jose-luis.php',
+        'needs_session' => false,
+        'header_footer' => false,
+        'header_menu_footer' => true
+    ],
+
+    // Cronologia
+    '/cronologia'  =>  [
+        'view' => 'public/web-publica/cronologia.php',
         'needs_session' => false,
         'header_footer' => false,
         'header_menu_footer' => true

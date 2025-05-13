@@ -23,13 +23,15 @@ $translate = $translations['benvinguda'] ?? [];
                     <span class="titol">Cerca bàsica de <br> <span class="italic-text">represaliats i represaliades</span></span>
                     <div class="d-flex flex-column d-grid gap-3" style="margin-top:20px;margin-bottom:20px">
 
-                        <div class="container mt-4 ">
-                            <div class="d-flex flex-column align-items-start d-grid gap-3">
-                                <span class="text2">Utilitza el cercador per trobar informació sobre una persona introduint el seu nom i cognoms</span>
-                                <input type="text" class="form-control mb-2" placeholder="Nom i cognoms...">
-                                <button class="btn btn-primary btn-custom-2 w-auto align-self-start">Cercar</button>
+                        <div class="container mt-4">
+                            <div class="position-relative">
+                                <input id="searchInput" type="text" class="form-control mb-2" placeholder="Nom i cognoms...">
+                                <div id="results" class="search-results"></div>
                             </div>
+
+
                         </div>
+
 
                         <span class="text2" style="margin-top:30px;">Si vols fer una cerca avançada, aplicant filtres per lloc de naixement,
                             sexe, afiliació sindical i/o política, entre d'altres, clica al següent botó.</span>
@@ -307,3 +309,37 @@ $translate = $translations['benvinguda'] ?? [];
         });
     });
 </script>
+
+<style>
+    #results {
+        font-family: Lora;
+        font-size: 15px;
+    }
+
+    #results a:link,
+    #results a:visited,
+    #results a:hover {
+        text-decoration: underline !important;
+    }
+
+    #results .avis {
+        color: #d9cdbd !important;
+        font-family: Lora;
+    }
+
+    .search-results {
+        position: absolute;
+        top: 100%;
+        /* justo debajo del input */
+        left: 0;
+        width: 100%;
+        max-height: 300px;
+        overflow-y: auto;
+        background: #fff;
+        border: 1px solid #ccc;
+        z-index: 1050;
+        /* Asegúrate de que esté por encima del resto del contenido */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 4px;
+    }
+</style>

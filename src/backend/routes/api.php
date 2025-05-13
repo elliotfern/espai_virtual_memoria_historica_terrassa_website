@@ -62,6 +62,8 @@ $base_routes = [
     '/api/fonts_documentals/post' => 'src/backend/api/db_fonts_documentals/post-fonts-documentals.php',
     '/api/fonts_documentals/put' => 'src/backend/api/db_fonts_documentals/put-fonts-documentals.php',
 
+    '/api/fonts_documentals/post/arxiu' => 'src/backend/api/db_fonts_documentals/post-arxiu-fonts-documentals.php',
+
     // API db_cronologia
     '/api/cronologia/post' => 'src/backend/api/cronologia/post-cronologia.php',
     '/api/cronologia/put' => 'src/backend/api/cronologia/put-cronologia.php',
@@ -157,6 +159,9 @@ $routes = [
 
     // API fonts documentals
     '/api/fonts_documentals/post' => ['view' => 'src/backend/api/db_fonts_documentals/post-fonts-documentals.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+
+    '/api/fonts_documentals/post/arxiu' => ['view' => 'src/backend/api/db_fonts_documentals/post-arxiu-fonts-documentals.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+
 
     '/api/fonts_documentals/put' => ['view' => 'src/backend/api/db_fonts_documentals/put-fonts-documentals.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
 
