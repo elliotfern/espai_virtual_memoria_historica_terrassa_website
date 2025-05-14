@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initButtons(id); // Pasar el id
   } else if (pageType[0] === 'inici') {
     initBuscador();
-  } else if (pageType[1] === 'fonts-documentals') {
+  } else if (pageType[0] === 'fonts-documentals') {
     TaulaDadesFonts();
   } else if (pageType[1] === 'crear-arxiu') {
     const llibre = document.getElementById('arxiuForm');

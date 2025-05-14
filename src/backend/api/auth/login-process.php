@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id = $row['id'];
     $userType = $row['user_type'];
 
-    if (password_verify($password, $hash) && in_array($id, [1, 2, 3, 4, 6])) {
+    if (password_verify($password, $hash) && in_array($userType, [1, 2, 3])) {
       session_start();
       $_SESSION['user']['id'] = $row['id'];
       $_SESSION['user']['username'] = $row['email'];

@@ -1,3 +1,9 @@
+<?php
+
+$isAdmin = isUserAdmin();
+$isAutor = isUserAutor();
+?>
+
 <div class="container" style="margin-top:10px;margin-bottom:25px">
     <span class="d-flex align-items-center text-decoration-none">
         <strong>
@@ -9,10 +15,16 @@
 
 <div class="container text-center">
     <div class="row">
-        <div class="col-12 col-md-12 d-flex flex-column flex-md-row justify-content-md-between gap-3">
-            <a href="<?php APP_SERVER; ?>/gestio/tots" class="btn btn-success menuBtn w-100 w-md-auto" role="button" aria-disabled="false">Tots</a>
 
-            <a href="<?php APP_SERVER; ?>/gestio/represaliats" class="btn btn-success menuBtn w-100 w-md-auto" role="button" aria-disabled="false">Represaliats 1939-79</a>
+
+
+        <div class="col-12 col-md-12 d-flex flex-column flex-md-row justify-content-md-between gap-3">
+
+            <?php if ($isAdmin || $isAutor): ?>
+                <a href="<?php APP_SERVER; ?>/gestio/tots" class="btn btn-success menuBtn w-100 w-md-auto" role="button" aria-disabled="false">Tots</a>
+
+                <a href="<?php APP_SERVER; ?>/gestio/represaliats" class="btn btn-success menuBtn w-100 w-md-auto" role="button" aria-disabled="false">Represaliats 1939-79</a>
+            <?php endif; ?>
 
             <a href="<?php APP_SERVER; ?>/gestio/exiliats" class="btn btn-success menuBtn w-100 w-md-auto" role="button" aria-disabled="false">Exiliats</a>
 
@@ -24,14 +36,15 @@
 <div class="container text-center" style="margin-top:10px;margin-bottom:20px">
     <div class="row">
         <div class="col-12 col-md-12 d-flex flex-column flex-md-row justify-content-md-between gap-3">
-            <a href="<?php APP_SERVER; ?>/gestio/tots/fitxa-nova" class="btn btn-secondary menuBtn w-100 w-md-auto" role="button" aria-disabled="false">Creació fitxa</a>
+            <a href="<?php APP_SERVER; ?>/gestio/tots/fitxa-nova" class="btn btn-secondary menuBtn w-100 w-md-auto" role="button" aria-disabled="false">Creació nova fitxa</a>
 
-            <a href="<?php APP_SERVER; ?>/gestio/cronologia" class="btn btn-secondary menuBtn w-100 w-md-auto" role="button" aria-disabled="false">Cronologia</a>
+            <?php if ($isAdmin || $isAutor): ?>
+                <a href="<?php APP_SERVER; ?>/gestio/cronologia" class="btn btn-secondary menuBtn w-100 w-md-auto" role="button" aria-disabled="false">Cronologia</a>
 
-            <a href="<?php APP_SERVER; ?>/gestio/auxiliars" class="btn btn-secondary menuBtn w-100 w-md-auto" role="button" aria-disabled="false">Taules auxiliars</a>
+                <a href="<?php APP_SERVER; ?>/gestio/auxiliars" class="btn btn-secondary menuBtn w-100 w-md-auto" role="button" aria-disabled="false">Taules auxiliars</a>
 
-            <a href="<?php APP_SERVER; ?>/gestio/registre-canvis" class="btn btn-secondary menuBtn w-100 w-md-auto" role="button" aria-disabled="false">Registre canvis</a>
-
+                <a href="<?php APP_SERVER; ?>/gestio/registre-canvis" class="btn btn-secondary menuBtn w-100 w-md-auto" role="button" aria-disabled="false">Registre canvis</a>
+            <?php endif; ?>
         </div>
     </div>
 </div>
