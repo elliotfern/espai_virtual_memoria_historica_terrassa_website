@@ -4,25 +4,6 @@ header("Content-Type: application/json");
 header("Access-Control-Allow-Origin: https://memoriaterrassa.cat");
 header("Access-Control-Allow-Methods: POST");
 
-// Dominio permitido (modifica con tu dominio)
-$allowed_origin = "https://memoriaterrassa.cat";
-
-// Verificar el encabezado 'Origin'
-if (isset($_SERVER['HTTP_ORIGIN'])) {
-    if ($_SERVER['HTTP_ORIGIN'] !== $allowed_origin) {
-        http_response_code(403); // Respuesta 403 Forbidden
-        echo json_encode(["error" => "Acceso denegado. Origen no permitido."]);
-        exit;
-    }
-}
-
-// Verificar que el método HTTP sea PUT
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    http_response_code(405); // Método no permitido
-    echo json_encode(["error" => "Método no permitido. Se requiere PUT."]);
-    exit;
-}
-
 // DB_DADES PERSONALS
 // 1) POST municipi
 // ruta POST => "/api/auxiliars/post/?type=municipi"

@@ -1,10 +1,13 @@
 import { fetchData } from '../../services/api/api';
 import { Represeliat } from '../../types/types';
 import { categorias } from '../../config';
+import { getIsAdmin } from '../../services/auth/getIsAdmin';
 
 export async function cargarTabla(pag: string, context: number, completat: number | null = null) {
   let urlAjax = '';
   const devDirectory = `https://${window.location.hostname}`;
+
+  const isAdmin = await getIsAdmin();
 
   // Validar el parámetro 'completat': si no es 1 o 2, asignar 3
   if (completat !== 1 && completat !== 2) {
@@ -88,14 +91,11 @@ export async function cargarTabla(pag: string, context: number, completat: numbe
       tdCollectiu.textContent = collectiuTexto;
       tr.appendChild(tdCollectiu);
 
-      // Obtener el user_id de localStorage
-      const userId = localStorage.getItem('user_id');
-
       // COLUMNA ESTAT FITXA NOMES PELS USUARIS REGISTRATS
 
       // COLUMNA FONT DADES, NOMES USUARIS REGISTRATS
       // Verificar si el usuario es el admin con id 1
-      if (userId === '1' || userId === '3' || userId === '4' || userId === '6') {
+      if (isAdmin) {
         // Botó estat
         const fontInterna: number = row.font_intern;
 
@@ -116,7 +116,7 @@ export async function cargarTabla(pag: string, context: number, completat: numbe
       }
 
       // Verificar si el usuario es el admin con id 1
-      if (userId === '1' || userId === '3' || userId === '4' || userId === '6') {
+      if (isAdmin) {
         // Botó estat
         const estatFitxa = row.completat;
         if (estatFitxa === 1) {
@@ -141,7 +141,7 @@ export async function cargarTabla(pag: string, context: number, completat: numbe
       }
 
       // Verificar si el usuario es el admin con id 1
-      if (userId === '1' || userId === '3' || userId === '4' || userId === '6') {
+      if (isAdmin) {
         // Botón Modificar
         const tdModificar = document.createElement('td');
         const btnModificar = document.createElement('button');
@@ -162,7 +162,7 @@ export async function cargarTabla(pag: string, context: number, completat: numbe
       }
 
       // Botón Eliminar
-      if (userId === '1') {
+      if (isAdmin) {
         const tdEliminar = document.createElement('td');
         const btnEliminar = document.createElement('button');
         btnEliminar.textContent = 'Eliminar';

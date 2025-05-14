@@ -6,6 +6,7 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 // Incluir configuraciones y rutas
+require_once __DIR__ . '/src/backend/config/funcions.php';
 require_once __DIR__ . '/src/backend/config/config.php';
 require_once __DIR__ . '/src/backend/utils/verificacioSessio.php';
 require_once __DIR__ . '/src/backend/routes/routes.php';
@@ -82,12 +83,6 @@ if (!$routeFound) {
     $needsSession = $routeInfo['needs_session'] ?? false;
     if ($needsSession) {
         verificarSesion(); // Llamada a la función de verificación de sesión
-    }
-
-    // Verificar si la ruta necesita verificación adicional
-    $needsVerification = $routeInfo['needs_verification'] ?? false;
-    if ($needsVerification) {
-        verificarAcceso(); // Llamada al middleware para verificar la verificación
     }
 
     // Determinar si la vista necesita encabezado y pie de página

@@ -1,8 +1,26 @@
 <?php
 $base_routes = [
     // API INTRANET
-    '/api/auth/get' => 'src/backend/api/auth/auth.php',
-    '/api/auth/login' => 'src/backend/api/auth/login-process.php',
+
+    // 01. Auth
+    // URL: https://memoriaterrassa.cat/api/auth/
+    APP_API . $url['auth'] . '/get' => BACKEND_API . $url['auth'] . '/auth.php',
+    APP_API . $url['auth'] . '/login' => BACKEND_API . $url['auth'] . '/login-process.php',
+    APP_API . $url['auth'] . '/isAdmin' => BACKEND_API . $url['auth'] . '/isAdmin.php',
+
+    // 02. Taules auxiliars
+    // URL: https://memoriaterrassa.cat/api/auxiliars/
+    APP_API . $url['auxiliars'] . '/get/usuaris' => BACKEND_API . $url['auxiliars'] . '/get/get-usuaris.php',
+    APP_API . $url['auxiliars'] . '/get/usuari/{id}' => BACKEND_API . $url['auxiliars'] . '/get/get-usuari.php',
+    APP_API . $url['auxiliars'] . '/post/usuari' => BACKEND_API . $url['auxiliars'] . '/post/post-usuari.php',
+    APP_API . $url['auxiliars'] . '/put/usuari' => BACKEND_API . $url['auxiliars'] . '/put/put-usuari.php',
+    APP_API . $url['auxiliars'] . '/get/tipusUsuaris' => BACKEND_API . $url['auxiliars'] . '/get/get-tipus-usuaris.php',
+
+    APP_API . $url['auxiliars'] . '/get/municipis' => BACKEND_API . $url['auxiliars'] . '/get/get-municipis.php',
+
+    '/api/auxiliars/get' => 'src/backend/api/auxiliars/get-auxiliars.php',
+    '/api/auxiliars/post' => 'src/backend/api/auxiliars/post-auxiliars.php',
+    '/api/auxiliars/put' => 'src/backend/api/auxiliars/put-auxiliars.php',
 
     // API INTRANET OPERACIONS CRUD
     // API db_dades_personals
@@ -53,16 +71,14 @@ $base_routes = [
     '/api/depurats/put' => 'src/backend/api/db_depurats/put-depurats.php',
     '/api/depurats/post' => 'src/backend/api/db_depurats/post-depurats.php',
 
-    // API taules auxiliars
-    '/api/auxiliars/get' => 'src/backend/api/auxiliars/get-auxiliars.php',
-    '/api/auxiliars/post' => 'src/backend/api/auxiliars/post-auxiliars.php',
-    '/api/auxiliars/put' => 'src/backend/api/auxiliars/put-auxiliars.php',
+
 
     // API db_fonts documentals (aux_bibliografia_llibre_detalls)
     '/api/fonts_documentals/post' => 'src/backend/api/db_fonts_documentals/post-fonts-documentals.php',
     '/api/fonts_documentals/put' => 'src/backend/api/db_fonts_documentals/put-fonts-documentals.php',
 
     '/api/fonts_documentals/post/arxiu' => 'src/backend/api/db_fonts_documentals/post-arxiu-fonts-documentals.php',
+    '/api/fonts_documentals/post/llibre' => 'src/backend/api/db_fonts_documentals/post-llibre-fonts-documentals.php',
 
     // API db_cronologia
     '/api/cronologia/post' => 'src/backend/api/cronologia/post-cronologia.php',
@@ -79,9 +95,86 @@ $base_routes = [
 // Rutas principales sin idioma explícito (solo para el idioma por defecto)
 $routes = [
     // API INTRANET
-    '/api/auth/get' => ['view' => 'src/backend/api/auth/auth.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false, 'apiSenseHTML' => true],
 
-    '/api/auth/login' => ['view' => 'src/backend/api/auth/login-process.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+    // 01. Auth
+    APP_API . $url['auth'] . '/isAdmin' => [
+        'view' => BACKEND_API . $url['auth'] . '/isAdmin.php',
+        'needs_session' => false,
+        'header_footer' => false,
+        'header_menu_footer' => false,
+        'apiSenseHTML' => true
+    ],
+
+    APP_API . $url['auth'] . '/get' => [
+        'view' => BACKEND_API . $url['auth'] . '/auth.php',
+        'needs_session' => false,
+        'header_footer' => false,
+        'header_menu_footer' => false,
+        'apiSenseHTML' => true
+    ],
+
+    APP_API . $url['auth'] . '/login' => [
+        'view' => BACKEND_API . $url['auth'] . '/login-process.php',
+        'needs_session' => false,
+        'header_footer' => false,
+        'header_menu_footer' => false,
+        'apiSenseHTML' => true
+    ],
+
+    // 02. Taules auxiliars
+    APP_API . $url['auxiliars'] . '/get/usuaris' => [
+        'view' => BACKEND_API . $url['auxiliars'] . '/get/get-usuaris.php',
+        'needs_session' => false,
+        'header_footer' => false,
+        'header_menu_footer' => false,
+        'apiSenseHTML' => true
+    ],
+
+    APP_API . $url['auxiliars'] . '/get/usuari/{id}' => [
+        'view' => BACKEND_API . $url['auxiliars'] . '/get/get-usuari.php',
+        'needs_session' => false,
+        'header_footer' => false,
+        'header_menu_footer' => false,
+        'apiSenseHTML' => true
+    ],
+
+    APP_API . $url['auxiliars'] . '/put/usuari' => [
+        'view' => BACKEND_API . $url['auxiliars'] . '/put/put-usuari.php',
+        'needs_session' => false,
+        'header_footer' => false,
+        'header_menu_footer' => false,
+        'apiSenseHTML' => true
+    ],
+
+    APP_API . $url['auxiliars'] . '/post/usuari' => [
+        'view' => BACKEND_API . $url['auxiliars'] . '/post/post-usuari.php',
+        'needs_session' => false,
+        'header_footer' => false,
+        'header_menu_footer' => false,
+        'apiSenseHTML' => true
+    ],
+
+    APP_API . $url['auxiliars'] . '/get/municipis' => [
+        'view' => BACKEND_API . $url['auxiliars'] . '/get/get-municipis.php',
+        'needs_session' => false,
+        'header_footer' => false,
+        'header_menu_footer' => false,
+        'apiSenseHTML' => true
+    ],
+
+    APP_API . $url['auxiliars'] . '/get/tipusUsuaris' => [
+        'view' => BACKEND_API . $url['auxiliars'] . '/get/get-tipus-usuaris.php',
+        'needs_session' => false,
+        'header_footer' => false,
+        'header_menu_footer' => false,
+        'apiSenseHTML' => true
+    ],
+
+    '/api/auxiliars/get' => ['view' => 'src/backend/api/auxiliars/get-auxiliars.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+
+    '/api/auxiliars/post' => ['view' => 'src/backend/api/auxiliars/post-auxiliars.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+
+    '/api/auxiliars/put' => ['view' => 'src/backend/api/auxiliars/put-auxiliars.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
 
     // API INTRANET OPERACIONS CRUD
     // API db_cost_huma_morts_front
@@ -150,18 +243,14 @@ $routes = [
 
     '/api/depurats/post' => ['view' => 'src/backend/api/db_depurats/post-depurats.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
 
-    // API taules auxiliars
-    '/api/auxiliars/get' => ['view' => 'src/backend/api/auxiliars/get-auxiliars.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
 
-    '/api/auxiliars/post' => ['view' => 'src/backend/api/auxiliars/post-auxiliars.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
-
-    '/api/auxiliars/put' => ['view' => 'src/backend/api/auxiliars/put-auxiliars.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
 
     // API fonts documentals
     '/api/fonts_documentals/post' => ['view' => 'src/backend/api/db_fonts_documentals/post-fonts-documentals.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
 
     '/api/fonts_documentals/post/arxiu' => ['view' => 'src/backend/api/db_fonts_documentals/post-arxiu-fonts-documentals.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
 
+    '/api/fonts_documentals/post/llibre' => ['view' => 'src/backend/api/db_fonts_documentals/post-llibre-fonts-documentals.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
 
     '/api/fonts_documentals/put' => ['view' => 'src/backend/api/db_fonts_documentals/put-fonts-documentals.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
 

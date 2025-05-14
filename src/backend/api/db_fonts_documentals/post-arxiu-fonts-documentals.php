@@ -30,9 +30,7 @@ if (empty($data['codi'])) {
 if (empty($data['ciutat'])) {
     $errors['ciutat'] = 'El campo ciutat es obligatorio.';
 }
-if (empty($data['descripcio'])) {
-    $errors['descripcio'] = 'El campo descripcio es obligatorio.';
-}
+
 if (empty($data['web'])) {
     $errors['web'] = 'El campo web es obligatorio.';
 }

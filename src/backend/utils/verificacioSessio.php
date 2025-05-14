@@ -19,50 +19,33 @@ function verificarSesion()
         session_start();
     }
 
-    $ids_permitidos = [1, 2, 3, 4, 5];
+    // Cargar variables de entorno desde .env
+    $jwtSecret = $_ENV['TOKEN'];
 
     // Verifica si la cookie del token existe y es válida
-    if (!isset($_COOKIE['token']) || !validarToken($_COOKIE['token']) || !isset($_COOKIE['user_id']) || !in_array((int)$_COOKIE['user_id'], $ids_permitidos, true)) {
-        header('Location: /gestio/entrada'); // Redirige a login si no hay token válido
+    if (!isset($_COOKIE['token'])) {
+        header('Location: /gestio/entrada'); // Redirige a login si no existe el token
         exit();
     }
-}
 
-// Función que verifica si el usuario tiene acceso al area de cliente
-function verificarAcceso()
-{
-    // Inicia la sesión si no está ya iniciada
-    if (session_status() === PHP_SESSION_NONE) {
-        session_start();
-    }
-
-    // Verifica si la cookie del token existe y es válida
-    if (!isset($_COOKIE['user_id']) || $_COOKIE['acceso'] != "si") {
-        header('Location: /area-cliente/login'); // Redirige a login si no hay token válido
-        exit();
-    }
-}
-
-function validarToken($jwt)
-{
-
-    $jwtSecret = $_ENV['TOKEN'];  // Tu clave secreta
-    $decoded = null;
+    $token = trim($_COOKIE['token']);
 
     try {
+        // Decodificar el token JWT
+        $decoded = JWT::decode($token, new Key($jwtSecret, 'HS256'));
 
-        $decoded = JWT::decode($jwt, new key($jwtSecret, 'HS256'));
+        // Obtener user_id y user_type del payload
+        $userType = $decoded->user_type ?? null;
 
-        // Verifica si el token ha expirado
-        if (isset($decoded->exp) && $decoded->exp < time()) {
-            return false;  // Token expirado
+        // Verificar si user_type es 1 (admin) o 2 (usuario regular)
+        if (!in_array($userType, [1, 2, 3])) {
+            header('Location: /gestio/entrada'); // Redirige si el user_type no es válido (no es admin ni usuario regular)
+            exit();
         }
     } catch (Exception $e) {
-        // Manejo del error
-        error_log('Error al validar el token: ' . $e->getMessage());  // Log del error para depuración
-        return false;
+        // Si el token es inválido, ha expirado o no es manipulable
+        error_log("Error al verificar sesión: " . $e->getMessage());
+        header('Location: /gestio/entrada'); // Redirige a login si el token no es válido
+        exit();
     }
-
-    // Si la decodificación es exitosa y el token es válido, se devuelve el payload
-    return $decoded;
 }

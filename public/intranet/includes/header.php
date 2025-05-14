@@ -28,7 +28,7 @@
 
             <a href="<?php APP_SERVER; ?>/gestio/cronologia" class="btn btn-secondary menuBtn w-100 w-md-auto" role="button" aria-disabled="false">Cronologia</a>
 
-            <a href="<?php APP_SERVER; ?>/gestio/taules-auxiliars" class="btn btn-secondary menuBtn w-100 w-md-auto" role="button" aria-disabled="false">Taules auxiliars</a>
+            <a href="<?php APP_SERVER; ?>/gestio/auxiliars" class="btn btn-secondary menuBtn w-100 w-md-auto" role="button" aria-disabled="false">Taules auxiliars</a>
 
             <a href="<?php APP_SERVER; ?>/gestio/registre-canvis" class="btn btn-secondary menuBtn w-100 w-md-auto" role="button" aria-disabled="false">Registre canvis</a>
 

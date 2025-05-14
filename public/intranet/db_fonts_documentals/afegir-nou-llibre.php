@@ -161,7 +161,7 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
         // Convertir los datos del formulario a JSON
         const jsonData = JSON.stringify(formData);
         const devDirectory = `https://${window.location.hostname}`;
-        let urlAjax = devDirectory + "/api/fonts_documentals/post/?type=llibre";
+        let urlAjax = devDirectory + "/api/fonts_documentals/post/llibre";
 
         try {
             // Hacer la solicitud con fetch y await

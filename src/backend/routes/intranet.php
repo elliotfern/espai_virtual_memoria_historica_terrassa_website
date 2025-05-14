@@ -17,10 +17,6 @@ $base_routes = [
     '/gestio/registre-canvis' => 'public/intranet/control_registre_canvis/index.php',
     '/gestio/control-acces' => 'public/intranet/control_registre_canvis/control-acces.php',
 
-    // 3. Pàgines taules auxiliars
-    '/gestio/taules-auxiliars' => 'public/intranet/aux_taules_auxiliars/index.php',
-    '/gestio/taules-auxiliars/municipis' => 'public/intranet/aux_taules_auxiliars/municipis.php',
-
 
     // LÒGICA DE MODIFICACIONS DE LES DADES A LA INTRANET:
     // MODIFICA FITXA PERSONA
@@ -34,7 +30,6 @@ $base_routes = [
 
     // INSEREIX NOVA FITXA PERSONA
     '/gestio/tots/fitxa-nova' => 'public/intranet/0_tots/nova-fitxa-persona.php',
-
 
     // MODIFICA REPRESSIO
     '/gestio/tots/fitxa/categoria/modifica/{categoriaId}/{id}' => 'public/intranet/0_tots/modifica-fitxa-repressio.php',
@@ -51,7 +46,16 @@ $base_routes = [
     // 3. Cost huma
     '/gestio/cost-huma' => 'public/pages/3_cost_huma/index.php',
 
-    // AUXILIARS
+    // 3. Pàgines taules auxiliars
+    APP_INTRANET . $url['auxiliars'] => BACKEND_URL . $url['auxiliars'] . '/index.php',
+
+    APP_INTRANET . $url['auxiliars'] . '/llistat-usuaris' => BACKEND_URL . $url['auxiliars'] . '/usuaris.php',
+    APP_INTRANET . $url['auxiliars'] . '/fitxa-usuari/{slug}' => BACKEND_URL . $url['auxiliars'] . '/fitxa-usuari.php',
+    APP_INTRANET . $url['auxiliars'] . '/modifica-usuari/{slug}' => BACKEND_URL . $url['auxiliars'] . '/form-usuari.php',
+    APP_INTRANET . $url['auxiliars'] . '/nou-usuari' => BACKEND_URL . $url['auxiliars'] . '/form-usuari.php',
+
+    APP_INTRANET . $url['auxiliars'] . '/llistat-municipis' => BACKEND_URL . $url['auxiliars'] . '/municipis.php',
+
     '/gestio/municipi/nou' => 'public/intranet/db_auxiliars/nou-municipi.php',
     '/gestio/municipi/modifica/{id}' => 'public/intranet/db_auxiliars/nou-municipi.php',
     '/gestio/comarca/nou' => 'public/intranet/db_auxiliars/nou-comarca.php',
@@ -105,10 +109,55 @@ $routes = [
 
     '/gestio/cost-huma' => ['view' => 'public/intranet/3_cost_huma/index.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
 
-    // 3. Gestió taules auxiliars
-    '/gestio/taules-auxiliars' => ['view' => 'public/intranet/aux_taules_auxiliars/index.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
+    // 3. Pàgines taules auxiliars
+    APP_INTRANET . $url['auxiliars'] => [
+        'view' => BACKEND_URL . $url['auxiliars'] . '/index.php',
+        'needs_session' => true,
+        'header_footer' => false,
+        'header_menu_footer' => true,
+        'apiSenseHTML' => false
+    ],
 
-    '/gestio/taules-auxiliars/municipis' => ['view' =>  'public/intranet/aux_taules_auxiliars/municipis.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
+    APP_INTRANET . $url['auxiliars'] . '/llistat-municipis' => [
+        'view' =>  BACKEND_URL . $url['auxiliars'] . '/municipis.php',
+        'needs_session' => true,
+        'header_footer' => false,
+        'header_menu_footer' => true,
+        'apiSenseHTML' => false
+    ],
+
+    APP_INTRANET . $url['auxiliars'] . '/llistat-usuaris' => [
+        'view' => BACKEND_URL . $url['auxiliars'] .  '/usuaris.php',
+        'needs_session' => true,
+        'header_footer' => false,
+        'header_menu_footer' => true,
+        'apiSenseHTML' => false
+    ],
+
+    APP_INTRANET . $url['auxiliars'] . '/fitxa-usuari/{slug}' => [
+        'view' => BACKEND_URL . $url['auxiliars'] .  '/fitxa-usuari.php',
+        'needs_session' => true,
+        'header_footer' => false,
+        'header_menu_footer' => true,
+        'apiSenseHTML' => false
+    ],
+
+    APP_INTRANET . $url['auxiliars'] . '/modifica-usuari/{slug}' => [
+        'view' => BACKEND_URL . $url['auxiliars'] .  '/form-usuari.php',
+        'needs_session' => true,
+        'header_footer' => false,
+        'header_menu_footer' => true,
+        'apiSenseHTML' => false
+    ],
+
+    APP_INTRANET . $url['auxiliars'] . '/nou-usuari' => [
+        'view' => BACKEND_URL . $url['auxiliars'] .  '/form-usuari.php',
+        'needs_session' => true,
+        'header_footer' => false,
+        'header_menu_footer' => true,
+        'apiSenseHTML' => false
+    ],
+
 
     // BASE DE DADES PERSONALS
 

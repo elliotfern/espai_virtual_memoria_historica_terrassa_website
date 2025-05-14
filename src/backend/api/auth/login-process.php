@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   global $conn;
   /** @var PDO $conn */
-  $query = "SELECT u.id, u.email, u.password
+  $query = "SELECT u.id, u.email, u.password, u.user_type
               FROM auth_users AS u
               WHERE u.email = :email";
   $stmt = $conn->prepare($query);
@@ -42,6 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
     $hash = $row['password'];
     $id = $row['id'];
+    $userType = $row['user_type'];
 
     if (password_verify($password, $hash) && in_array($id, [1, 2, 3, 4, 6])) {
       session_start();
@@ -54,6 +55,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       $payload = array(
         "user_id" =>  $row['id'],
         "username" => $row['email'],
+        "user_type" => $row['user_type'],
+        'iat' => time(),
+        'exp' => time() + 604800,
         "kid" => "key_api"
       );
 
@@ -62,18 +66,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
       // Preparar la respuesta
       $response = array(
-        "token" => $jwt,
-        "idUser" => $idUser,
         "status" => "success"
       );
 
       // Opciones de configuración de la cookie
       $cookie_options = [
-        'expires' => time() + (60 * 60 * 24), // 1 día
-        'path' => '/',                       // Disponible en todo el dominio
-        'secure' => true,                    // Solo enviar por HTTPS
-        'httponly' => true,                  // No accesible por JavaScript
-        'samesite' => 'Strict',              // Protección CSRF
+        'expires' => time() + 604800,           // 1 semana
+        'path' => '/',                         // Disponible en todo el dominio
+        'secure' => true,                      // Solo se enviará por HTTPS
+        'httponly' => true,                    // No accesible por JavaScript
+        'samesite' => 'Strict',                // Protección CSRF
       ];
 
       // Establecer las cookies

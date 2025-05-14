@@ -7,12 +7,21 @@ import { botonsEstat } from './components/taulaDades/botonsEstat';
 import { initBuscador } from './components/cercadorHomepage/cercadorPaginaInici';
 import { TaulaDadesFonts } from './components/fontsDocumentals/taulaDadesFonts';
 import { transmissioDadesDB } from './services/fetchData/transmissioDades';
+import { mostrarBotonsNomesAdmin } from './components/mostrarBotoAdmin/mostrarBotoAdmin';
+import { auxiliars } from './pages/auxiliars/auxiliars';
+import { getPageType } from './services/url/splitUrl';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './estils/style.css';
 import 'bootstrap';
 
+const url = window.location.href;
+const pageType = getPageType(url);
+console.log(pageType);
+
 document.addEventListener('DOMContentLoaded', () => {
+  mostrarBotonsNomesAdmin();
+
   const btnLogin = document.querySelector('#btnLogin') as HTMLButtonElement;
 
   btnLogin?.addEventListener('click', (event: Event) => {
@@ -39,10 +48,6 @@ document.addEventListener('DOMContentLoaded', () => {
     logout();
   });
 
-  // Verificar la URL y llamar a las funciones correspondientes
-  const pathArray = window.location.pathname.split('/');
-  const pageType = pathArray[pathArray.length - 1];
-
   const contieneGestio = window.location.href.includes('gestio');
   let context: number;
   if (contieneGestio) {
@@ -51,31 +56,31 @@ document.addEventListener('DOMContentLoaded', () => {
     context = 1;
   }
 
-  if (pageType === 'tots' || pageType === 'general') {
-    if (pageType === 'tots') {
-      botonsEstat(pageType);
-      cargarTabla(pageType, context);
+  if (pageType[1] === 'tots' || pageType[1] === 'general') {
+    if (pageType[1] === 'tots') {
+      botonsEstat(pageType[1]);
+      cargarTabla(pageType[1], context);
     } else {
-      botonsEstat(pageType);
-      cargarTabla(pageType, context);
+      botonsEstat(pageType[1]);
+      cargarTabla(pageType[1], context);
     }
-  } else if (pageType === 'represaliats') {
-    botonsEstat(pageType);
-    cargarTabla(pageType, context); // También cargar para afusellats
-  } else if (pageType === 'exiliats' || pageType === 'exiliats-deportats') {
-    botonsEstat(pageType);
-    cargarTabla(pageType, context); // También cargar para exiliats
-  } else if (pageType === 'cost-huma') {
-    botonsEstat(pageType);
-    cargarTabla(pageType, context); // También cargar para exiliats
-  } else if (pathArray[pathArray.length - 2] === 'fitxa') {
-    const id = pathArray[pathArray.length - 1];
+  } else if (pageType[1] === 'represaliats') {
+    botonsEstat(pageType[1]);
+    cargarTabla(pageType[1], context); // También cargar para afusellats
+  } else if (pageType[1] === 'exiliats' || pageType[1] === 'exiliats-deportats') {
+    botonsEstat(pageType[1]);
+    cargarTabla(pageType[1], context); // También cargar para exiliats
+  } else if (pageType[1] === 'cost-huma') {
+    botonsEstat(pageType[1]);
+    cargarTabla(pageType[1], context); // También cargar para exiliats
+  } else if (pageType[0] === 'fitxa') {
+    const id = pageType[1];
     initButtons(id); // Pasar el id
-  } else if (pageType === 'inici') {
+  } else if (pageType[0] === 'inici') {
     initBuscador();
-  } else if (pageType === 'fonts-documentals') {
+  } else if (pageType[1] === 'fonts-documentals') {
     TaulaDadesFonts();
-  } else if (pageType === 'crear-arxiu') {
+  } else if (pageType[1] === 'crear-arxiu') {
     const llibre = document.getElementById('arxiuForm');
     if (llibre) {
       // Lanzar actualizador de datos
@@ -83,5 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
         transmissioDadesDB(event, 'POST', 'arxiuForm', '/api/fonts_documentals/post/arxiu');
       });
     }
+  } else if (pageType[1] === 'auxiliars') {
+    auxiliars();
   }
 });
