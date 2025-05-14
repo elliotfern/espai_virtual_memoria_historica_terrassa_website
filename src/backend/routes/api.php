@@ -7,6 +7,7 @@ $base_routes = [
     APP_API . $url['auth'] . '/get' => BACKEND_API . $url['auth'] . '/auth.php',
     APP_API . $url['auth'] . '/login' => BACKEND_API . $url['auth'] . '/login-process.php',
     APP_API . $url['auth'] . '/isAdmin' => BACKEND_API . $url['auth'] . '/isAdmin.php',
+    APP_API . $url['auth'] . '/isAutor' => BACKEND_API . $url['auth'] . '/isAutor.php',
 
     // 02. Taules auxiliars
     // URL: https://memoriaterrassa.cat/api/auxiliars/
@@ -99,6 +100,14 @@ $routes = [
     // 01. Auth
     APP_API . $url['auth'] . '/isAdmin' => [
         'view' => BACKEND_API . $url['auth'] . '/isAdmin.php',
+        'needs_session' => false,
+        'header_footer' => false,
+        'header_menu_footer' => false,
+        'apiSenseHTML' => true
+    ],
+
+    APP_API . $url['auth'] . '/isAutor' => [
+        'view' => BACKEND_API . $url['auth'] . '/isAutor.php',
         'needs_session' => false,
         'header_footer' => false,
         'header_menu_footer' => false,

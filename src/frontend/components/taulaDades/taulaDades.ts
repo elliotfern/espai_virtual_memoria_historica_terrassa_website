@@ -2,12 +2,14 @@ import { fetchData } from '../../services/api/api';
 import { Represeliat } from '../../types/types';
 import { categorias } from '../../config';
 import { getIsAdmin } from '../../services/auth/getIsAdmin';
+import { getIsAutor } from '../../services/auth/getIsAutor';
 
 export async function cargarTabla(pag: string, context: number, completat: number | null = null) {
   let urlAjax = '';
   const devDirectory = `https://${window.location.hostname}`;
 
   const isAdmin = await getIsAdmin();
+  const isAutor = await getIsAutor();
 
   // Validar el parámetro 'completat': si no es 1 o 2, asignar 3
   if (completat !== 1 && completat !== 2) {
@@ -95,7 +97,7 @@ export async function cargarTabla(pag: string, context: number, completat: numbe
 
       // COLUMNA FONT DADES, NOMES USUARIS REGISTRATS
       // Verificar si el usuario es el admin con id 1
-      if (isAdmin) {
+      if (isAdmin || isAutor) {
         // Botó estat
         const fontInterna: number = row.font_intern;
 
@@ -116,7 +118,7 @@ export async function cargarTabla(pag: string, context: number, completat: numbe
       }
 
       // Verificar si el usuario es el admin con id 1
-      if (isAdmin) {
+      if (isAdmin || isAutor) {
         // Botó estat
         const estatFitxa = row.completat;
         if (estatFitxa === 1) {
@@ -141,7 +143,7 @@ export async function cargarTabla(pag: string, context: number, completat: numbe
       }
 
       // Verificar si el usuario es el admin con id 1
-      if (isAdmin) {
+      if (isAdmin || isAutor) {
         // Botón Modificar
         const tdModificar = document.createElement('td');
         const btnModificar = document.createElement('button');
