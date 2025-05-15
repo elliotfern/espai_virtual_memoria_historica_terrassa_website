@@ -1,6 +1,9 @@
 import { taulaDadesUsuaris } from './taulaUsuaris';
-import { transmissioDadesDB } from '../../services/fetchData/transmissioDades';
-import { getPageType } from '../../services/url/splitUrl';
+import { transmissioDadesDB } from '../../../services/fetchData/transmissioDades';
+import { getPageType } from '../../../services/url/splitUrl';
+import { taulaMunicipis } from './taulaMunicipis';
+import { taulaPartits } from './taulaPartits';
+import { taulaSindicats } from './taulaSindicats';
 
 export function auxiliars() {
   const url = window.location.href;
@@ -22,5 +25,11 @@ export function auxiliars() {
         transmissioDadesDB(event, 'PUT', 'usuariForm', '/api/auxiliars/put/usuari');
       });
     }
+  } else if (pageType[2] === 'llistat-municipis') {
+    taulaMunicipis();
+  } else if (pageType[2] === 'llistat-partits-politics') {
+    taulaPartits();
+  } else if (pageType[2] === 'llistat-sindicats') {
+    taulaSindicats();
   }
 }

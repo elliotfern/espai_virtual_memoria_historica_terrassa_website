@@ -131,3 +131,37 @@
   background-color: #c2af96 !important;
   color: #133b7c !important;
 }
+
+/* Botons filtre */
+.filter-buttons {
+  text-align: center;
+  margin-bottom: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.filter-btn {
+  padding: 10px 20px;
+  font-size: 16px;
+  border: 1px solid #007bff;
+  background-color: #fff;
+  color: #007bff;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.filter-btn:hover {
+  background-color: #007bff;
+  color: white;
+}
+
+.filter-btn:active {
+  transform: scale(0.95);
+}
+
+.filter-btn.active {
+  background-color: #007bff;
+  color: white;
+}

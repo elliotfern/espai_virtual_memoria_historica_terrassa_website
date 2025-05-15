@@ -1,32 +1,27 @@
-export async function nameUser(idUser: string): Promise<void> {
-    const devDirectory =  `https://${window.location.hostname}`;
-    const urlAjax = `${devDirectory}/api/auth/get/?type=user&id=${idUser}`;
-    const token = localStorage.getItem('token');
+export async function nameUser(): Promise<void> {
+  const devDirectory = `https://${window.location.hostname}`;
+  const urlAjax = `${devDirectory}/api/auth/usuari`;
 
+  const userDiv = document.getElementById('userDiv');
+  if (userDiv) {
     try {
-        const response = await fetch(urlAjax, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            }
-        });
+      const res = await fetch(urlAjax, {
+        credentials: 'include', // importante si la cookie "token" es HttpOnly
+      });
 
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
+      if (!res.ok) {
+        console.warn('No se pudo obtener el usuario');
+        return;
+      }
 
-        const data: { nom?: string; id: string } = await response.json(); // Devuelve la respuesta como JSON
-        
-        // Modifica el contenido de un div con el resultado de la API
-        const welcomeMessage = data.nom ? `Hola, ${data.nom}` : 'Usuari desconegut';
-        const userDiv = document.getElementById('userDiv');
-        
-        if (userDiv) {
-            userDiv.innerHTML = welcomeMessage; // Muestra el mensaje en tu página
-        }
+      const data = await res.json();
 
-    } catch (error) {
-        console.error('Error:', error);
+      const welcomeMessage = data.username ? `Hola, ${data.username}` : 'Usuari desconegut';
+      userDiv.textContent = welcomeMessage;
+    } catch (err) {
+      console.error('Error al obtener el usuario:', err);
     }
+  } else {
+    console.warn('Elemento #userDiv no encontrado');
+  }
 }

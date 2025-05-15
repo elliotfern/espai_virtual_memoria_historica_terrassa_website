@@ -8,6 +8,9 @@ export async function login(userName: string, password: string): Promise<void> {
   const devDirectory = `https://${window.location.hostname}`;
   const urlAjax = `${devDirectory}/api/auth/login`;
 
+  localStorage.removeItem('isAdmin');
+  localStorage.removeItem('isAutor');
+
   try {
     const response = await fetch(urlAjax, {
       method: 'POST',

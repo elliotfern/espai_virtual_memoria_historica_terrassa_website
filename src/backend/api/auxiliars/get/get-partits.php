@@ -20,18 +20,9 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
 global $conn;
 /** @var PDO $conn */
 $query = "SELECT 
-            m.id,
-            m.ciutat,
-            c.comarca,
-            p.provincia,
-            co.comunitat,
-            e.estat
-            FROM  aux_dades_municipis AS m
-            LEFT JOIN aux_dades_municipis_comarca AS c ON m.comarca = c.id
-            LEFT JOIN aux_dades_municipis_provincia AS p ON m.provincia = p.id
-            LEFT JOIN aux_dades_municipis_comunitat AS co ON m.comunitat = co.id
-            LEFT JOIN aux_dades_municipis_estat AS e ON m.estat = e.id
-            ORDER BY m.ciutat ASC";
+	        p.id, p.partit_politic, p.sigles
+            FROM aux_filiacio_politica AS p
+            ORDER BY p.partit_politic ASC";
 try {
     // Preparar la consulta
     $stmt = $conn->prepare($query);

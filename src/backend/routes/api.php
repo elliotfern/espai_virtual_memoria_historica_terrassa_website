@@ -4,10 +4,11 @@ $base_routes = [
 
     // 01. Auth
     // URL: https://memoriaterrassa.cat/api/auth/
-    APP_API . $url['auth'] . '/get' => BACKEND_API . $url['auth'] . '/auth.php',
-    APP_API . $url['auth'] . '/login' => BACKEND_API . $url['auth'] . '/login-process.php',
+    APP_API . $url['auth'] . '/login' => BACKEND_API . $url['auth'] . '/login.php',
+    APP_API . $url['auth'] . '/logout' => BACKEND_API . $url['auth'] . '/logout.php',
     APP_API . $url['auth'] . '/isAdmin' => BACKEND_API . $url['auth'] . '/isAdmin.php',
     APP_API . $url['auth'] . '/isAutor' => BACKEND_API . $url['auth'] . '/isAutor.php',
+    APP_API . $url['auth'] . '/usuari' => BACKEND_API . $url['auth'] . '/nomUsuari.php',
 
     // 02. Taules auxiliars
     // URL: https://memoriaterrassa.cat/api/auxiliars/
@@ -18,6 +19,8 @@ $base_routes = [
     APP_API . $url['auxiliars'] . '/get/tipusUsuaris' => BACKEND_API . $url['auxiliars'] . '/get/get-tipus-usuaris.php',
 
     APP_API . $url['auxiliars'] . '/get/municipis' => BACKEND_API . $url['auxiliars'] . '/get/get-municipis.php',
+    APP_API . $url['auxiliars'] . '/get/partits' => BACKEND_API . $url['auxiliars'] . '/get/get-partits.php',
+    APP_API . $url['auxiliars'] . '/get/sindicats' => BACKEND_API . $url['auxiliars'] . '/get/get-sindicats.php',
 
     '/api/auxiliars/get' => 'src/backend/api/auxiliars/get-auxiliars.php',
     '/api/auxiliars/post' => 'src/backend/api/auxiliars/post-auxiliars.php',
@@ -114,8 +117,8 @@ $routes = [
         'apiSenseHTML' => true
     ],
 
-    APP_API . $url['auth'] . '/get' => [
-        'view' => BACKEND_API . $url['auth'] . '/auth.php',
+    APP_API . $url['auth'] . '/logout' => [
+        'view' => BACKEND_API . $url['auth'] . '/logout.php',
         'needs_session' => false,
         'header_footer' => false,
         'header_menu_footer' => false,
@@ -123,7 +126,15 @@ $routes = [
     ],
 
     APP_API . $url['auth'] . '/login' => [
-        'view' => BACKEND_API . $url['auth'] . '/login-process.php',
+        'view' => BACKEND_API . $url['auth'] . '/login.php',
+        'needs_session' => false,
+        'header_footer' => false,
+        'header_menu_footer' => false,
+        'apiSenseHTML' => true
+    ],
+
+    APP_API . $url['auth'] . '/usuari' => [
+        'view' => BACKEND_API . $url['auth'] . '/nomUsuari.php',
         'needs_session' => false,
         'header_footer' => false,
         'header_menu_footer' => false,
@@ -163,6 +174,14 @@ $routes = [
         'apiSenseHTML' => true
     ],
 
+    APP_API . $url['auxiliars'] . '/get/tipusUsuaris' => [
+        'view' => BACKEND_API . $url['auxiliars'] . '/get/get-tipus-usuaris.php',
+        'needs_session' => false,
+        'header_footer' => false,
+        'header_menu_footer' => false,
+        'apiSenseHTML' => true
+    ],
+
     APP_API . $url['auxiliars'] . '/get/municipis' => [
         'view' => BACKEND_API . $url['auxiliars'] . '/get/get-municipis.php',
         'needs_session' => false,
@@ -171,8 +190,16 @@ $routes = [
         'apiSenseHTML' => true
     ],
 
-    APP_API . $url['auxiliars'] . '/get/tipusUsuaris' => [
-        'view' => BACKEND_API . $url['auxiliars'] . '/get/get-tipus-usuaris.php',
+    APP_API . $url['auxiliars'] . '/get/partits' => [
+        'view' => BACKEND_API . $url['auxiliars'] . '/get/get-partits.php',
+        'needs_session' => false,
+        'header_footer' => false,
+        'header_menu_footer' => false,
+        'apiSenseHTML' => true
+    ],
+
+    APP_API . $url['auxiliars'] . '/get/sindicats' => [
+        'view' => BACKEND_API . $url['auxiliars'] . '/get/get-sindicats.php',
         'needs_session' => false,
         'header_footer' => false,
         'header_menu_footer' => false,

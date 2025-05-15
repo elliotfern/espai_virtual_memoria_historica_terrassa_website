@@ -54,7 +54,9 @@ $base_routes = [
     APP_INTRANET . $url['auxiliars'] . '/modifica-usuari/{slug}' => BACKEND_URL . $url['auxiliars'] . '/form-usuari.php',
     APP_INTRANET . $url['auxiliars'] . '/nou-usuari' => BACKEND_URL . $url['auxiliars'] . '/form-usuari.php',
 
-    APP_INTRANET . $url['auxiliars'] . '/llistat-municipis' => BACKEND_URL . $url['auxiliars'] . '/municipis.php',
+    APP_INTRANET . $url['auxiliars'] . '/llistat-municipis' => BACKEND_URL . $url['auxiliars'] . '/llistat-municipis.php',
+    APP_INTRANET . $url['auxiliars'] . '/llistat-partits-politics' => BACKEND_URL . $url['auxiliars'] . '/llistat-partits-politics.php',
+    APP_INTRANET . $url['auxiliars'] . '/llistat-sindicats' => BACKEND_URL . $url['auxiliars'] . '/llistat-sindicats.php',
 
     '/gestio/municipi/nou' => 'public/intranet/db_auxiliars/nou-municipi.php',
     '/gestio/municipi/modifica/{id}' => 'public/intranet/db_auxiliars/nou-municipi.php',
@@ -119,7 +121,23 @@ $routes = [
     ],
 
     APP_INTRANET . $url['auxiliars'] . '/llistat-municipis' => [
-        'view' =>  BACKEND_URL . $url['auxiliars'] . '/municipis.php',
+        'view' =>  BACKEND_URL . $url['auxiliars'] . '/llistat-municipis.php',
+        'needs_session' => true,
+        'header_footer' => false,
+        'header_menu_footer' => true,
+        'apiSenseHTML' => false
+    ],
+
+    APP_INTRANET . $url['auxiliars'] . '/llistat-partits-politics' => [
+        'view' =>  BACKEND_URL . $url['auxiliars'] . '/llistat-partits-politics.php',
+        'needs_session' => true,
+        'header_footer' => false,
+        'header_menu_footer' => true,
+        'apiSenseHTML' => false
+    ],
+
+    APP_INTRANET . $url['auxiliars'] . '/llistat-sindicats' => [
+        'view' =>  BACKEND_URL . $url['auxiliars'] . '/llistat-sindicats.php',
         'needs_session' => true,
         'header_footer' => false,
         'header_menu_footer' => true,

@@ -23,7 +23,13 @@ async function obtenerNombresPartidos(ids: number[]): Promise<string[]> {
     const devDirectory = `https://${window.location.hostname}`;
     const url = `${devDirectory}/api/auxiliars/get/?type=partits`;
 
-    const response = await fetch(url);
+    const response = await fetch(url, {
+      method: 'GET', // O cualquier otro método que necesites (POST, PUT, etc.)
+      headers: {
+        'Content-Type': 'application/json', // Opcional, dependiendo de lo que espera el backend
+      },
+      credentials: 'include', // Esto asegura que la cookie se envíe con la solicitud
+    });
     if (!response.ok) throw new Error('Error al obtener los datos de la API');
 
     const partits: Partit[] = await response.json();

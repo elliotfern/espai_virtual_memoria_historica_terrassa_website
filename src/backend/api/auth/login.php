@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   global $conn;
   /** @var PDO $conn */
-  $query = "SELECT u.id, u.email, u.password, u.user_type
+  $query = "SELECT u.id, u.email, u.password, u.user_type, u.nom
               FROM auth_users AS u
               WHERE u.email = :email";
   $stmt = $conn->prepare($query);
@@ -43,19 +43,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $hash = $row['password'];
     $id = $row['id'];
     $userType = $row['user_type'];
+    $nom = $row['nom'];
 
     if (password_verify($password, $hash) && in_array($userType, [1, 2, 3])) {
       session_start();
-      $_SESSION['user']['id'] = $row['id'];
-      $_SESSION['user']['username'] = $row['email'];
-      $idUser = $row['id'];
+      $idUser = $id;
 
       $key = $jwtSecret;
       $algorithm = "HS256";  // Elige el algoritmo adecuado para tu aplicación
       $payload = array(
-        "user_id" =>  $row['id'],
-        "username" => $row['email'],
-        "user_type" => $row['user_type'],
+        "user_id" =>  $id,
+        "username" => $nom,
+        "user_type" => $userType,
         'iat' => time(),
         'exp' => time() + 604800,
         "kid" => "key_api"
@@ -69,18 +68,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         "status" => "success"
       );
 
-      // Opciones de configuración de la cookie
-      $cookie_options = [
-        'expires' => time() + 604800,           // 1 semana
-        'path' => '/',                         // Disponible en todo el dominio
-        'secure' => true,                      // Solo se enviará por HTTPS
-        'httponly' => true,                    // No accesible por JavaScript
-        'samesite' => 'Strict',                // Protección CSRF
-      ];
+      $cookie_options = array(
+        'expires' => time() + 604800,
+        'path' => '/',
+        'domain' => 'memoriaterrassa.cat',
+        'secure' => true,
+        'httponly' => true,
+        'samesite' => 'Strict'
+      );
 
       // Establecer las cookies
       setcookie('token', $jwt, $cookie_options);
-      setcookie('user_id', $idUser, $cookie_options);
 
       // Si la inserció té èxit, cal registrar acces usuari en la base de control de acces
       $dataAcces = date('Y-m-d H:i:s');

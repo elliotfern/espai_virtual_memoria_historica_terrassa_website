@@ -1,4 +1,4 @@
-import { renderTaula } from '../../services/renderTaula/renderTaula';
+import { renderTaula } from '../../../services/renderTaula/renderTaula';
 
 export async function taulaDadesUsuaris() {
   const url = 'https://memoriaterrassa.cat/api/auxiliars/get/usuaris';

@@ -10,7 +10,7 @@ $isAutor = isUserAutor();
             <div id="userDiv" class="white"> </div>
         </strong>
     </span>
-    <a href="#" class="links-sidebar link-sortir" onclick="logout()">Sortir de la intranet</a>
+    <a href="#" class="links-sidebar link-sortir" id="btnSortir">Sortir de la intranet</a>
 </div>
 
 <div class="container text-center">
