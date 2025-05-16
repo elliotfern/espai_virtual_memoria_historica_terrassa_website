@@ -30,7 +30,7 @@ export async function taulaPartits() {
   }
 
   renderTaulaCercadorFiltres<EspaiRow>({
-    url: `https://${window.location.host}/api/auxiliars/get/partits`,
+    url: `https://${window.location.host}/api/auxiliars/get/partitsPolitics`,
     containerId: 'taulaLlistatPartits',
     columns,
     filterKeys: ['partit_politic'],

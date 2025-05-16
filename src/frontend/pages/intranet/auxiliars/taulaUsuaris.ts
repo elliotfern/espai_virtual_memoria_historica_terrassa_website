@@ -1,7 +1,7 @@
 import { renderTaula } from '../../../services/renderTaula/renderTaula';
 
 export async function taulaDadesUsuaris() {
-  const url = 'https://memoriaterrassa.cat/api/auxiliars/get/usuaris';
+  const url = 'https://memoriaterrassa.cat/api/auth/get/llistatUsuaris';
 
   const data1 = await fetch(url).then((r) => r.json());
 

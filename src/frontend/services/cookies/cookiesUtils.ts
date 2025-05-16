@@ -44,7 +44,7 @@ export function deleteAllCookies(): void {
 export async function logout() {
   try {
     // Llamar al backend para realizar el logout
-    const url = `https://${window.location.host}/api/auth/logout`;
+    const url = `https://${window.location.host}/api/auth/get/logOut`;
 
     const response = await fetch(url, {
       method: 'GET',

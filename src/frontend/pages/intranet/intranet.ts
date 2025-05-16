@@ -1,7 +1,7 @@
 import { mostrarBotonsNomesAdmin } from '../../components/mostrarBotoAdmin/mostrarBotoAdmin';
 import { nameUser } from '../../components/userName/userName';
 import { getPageType } from '../../services/url/splitUrl';
-import { login } from '../../services/auth/auth';
+import { login } from '../../services/auth/login';
 import { logout } from '../../services/cookies/cookiesUtils';
 import { auxiliars } from './auxiliars/auxiliars';
 import { cargarTabla } from '../../components/taulaDades/taulaDades';

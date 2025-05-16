@@ -6,7 +6,7 @@ interface LoginResponse {
 
 export async function login(userName: string, password: string): Promise<void> {
   const devDirectory = `https://${window.location.hostname}`;
-  const urlAjax = `${devDirectory}/api/auth/login`;
+  const urlAjax = `${devDirectory}/api/auth/post/login`;
 
   localStorage.removeItem('isAdmin');
   localStorage.removeItem('isAutor');

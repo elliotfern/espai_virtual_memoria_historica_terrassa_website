@@ -21,7 +21,7 @@ export async function getIsAdmin() {
 export async function isAdminUser(): Promise<boolean> {
   try {
     // Cridem a l'endpoint que verifica si l'usuari és admin
-    const url = `https://${window.location.host}/api/auth/isAdmin`;
+    const url = `https://${window.location.host}/api/auth/get/isAdmin`;
     const response = await fetch(url, {
       method: 'GET', // o 'POST' según el caso
       credentials: 'include', // Necessari per enviar les cookies amb la petició

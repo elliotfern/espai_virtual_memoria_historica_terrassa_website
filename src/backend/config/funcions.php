@@ -81,3 +81,41 @@ function checkReferer($allowedOrigin)
         exit();
     }
 }
+
+function getData($query, $params = [], $single = false)
+{
+    global $conn;
+    /** @var PDO $conn */
+
+    try {
+        // Preparar la consulta
+        $stmt = $conn->prepare($query);
+
+        // Si hay parámetros, los vinculamos
+        if (!empty($params)) {
+            foreach ($params as $key => $value) {
+                $stmt->bindValue($key, $value);
+            }
+        }
+
+        // Ejecutar la consulta
+        $stmt->execute();
+
+        // Si esperamos un solo resultado, usamos fetch()
+        if ($single) {
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        } else {
+            // Si esperamos varios resultados, usamos fetchAll()
+            $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
+
+        // Verificar si hay resultados
+        if ($row) {
+            return $row;
+        } else {
+            return ['status' => 'error', 'message' => 'No hi ha cap registre disponible.'];
+        }
+    } catch (PDOException $e) {
+        return ['status' => 'error', 'message' => 'Error a la consulta'];
+    }
+}

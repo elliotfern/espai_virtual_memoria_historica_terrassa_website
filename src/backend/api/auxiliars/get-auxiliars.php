@@ -1,596 +1,366 @@
 <?php
 
-// DB_DADES PERSONALS
-// 1) Llistat municipis
-// ruta GET => "/api/auxiliars/get/?type=municipis"
-if (isset($_GET['type']) && $_GET['type'] == 'municipis') {
-    global $conn;
-    $data = array();
-    $stmt = $conn->prepare(
-        "SELECT m.id, m.ciutat
-        FROM aux_dades_municipis AS m
-        ORDER BY m.ciutat ASC"
-    );
-    $stmt->execute();
-    if ($stmt->rowCount() === 0) echo ('No rows');
-    while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $data[] = $users;
-    }
-    echo json_encode($data);
+$slug = $routeParams[0];
 
-    // 1) Llistat comarques
-    // ruta GET => "/api/auxiliars/get/?type=comarques"
-} elseif (isset($_GET['type']) && $_GET['type'] == 'comarques') {
-    global $conn;
-    $data = array();
-    $stmt = $conn->prepare(
-        "SELECT c.id, c.comarca
-        FROM aux_dades_municipis_comarca AS c
-        ORDER BY c.comarca ASC"
-    );
-    $stmt->execute();
-    if ($stmt->rowCount() === 0) echo ('No rows');
-    while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $data[] = $users;
-    }
-    echo json_encode($data);
+// Configuración de cabeceras para aceptar JSON y responder JSON
+header("Content-Type: application/json");
+header("Access-Control-Allow-Methods: GET");
 
-    // 1) Llistat provincies
-    // ruta GET => "/api/auxiliars/get/?type=provincies"
-} elseif (isset($_GET['type']) && $_GET['type'] == 'provincies') {
-    global $conn;
-    $data = array();
-    $stmt = $conn->prepare(
-        "SELECT p.id, p.provincia
-        FROM aux_dades_municipis_provincia AS p
-        ORDER BY p.provincia ASC"
-    );
-    $stmt->execute();
-    if ($stmt->rowCount() === 0) echo ('No rows');
-    while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $data[] = $users;
-    }
-    echo json_encode($data);
+// Definir el dominio permitido
+$allowedOrigin = DOMAIN;
 
-    // 1) Llistat comunitats autonomes
-    // ruta GET => "/api/auxiliars/get/?type=comunitats"
-} elseif (isset($_GET['type']) && $_GET['type'] == 'comunitats') {
-    global $conn;
-    $data = array();
-    $stmt = $conn->prepare(
-        "SELECT c.id, c.comunitat
-        FROM aux_dades_municipis_comunitat AS c
-        ORDER BY c.comunitat ASC"
-    );
-    $stmt->execute();
-    if ($stmt->rowCount() === 0) echo ('No rows');
-    while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $data[] = $users;
-    }
-    echo json_encode($data);
+// Llamar a la función para verificar el referer
+checkReferer($allowedOrigin);
 
-    // 1) Llistat estats
-    // ruta GET => "/api/auxiliars/get/?type=estats"
-} elseif (isset($_GET['type']) && $_GET['type'] == 'estats') {
-    global $conn;
-    $data = array();
-    $stmt = $conn->prepare(
-        "SELECT e.id, e.estat
-        FROM aux_dades_municipis_estat AS e
-        ORDER BY e.estat ASC"
-    );
-    $stmt->execute();
-    if ($stmt->rowCount() === 0) echo ('No rows');
-    while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $data[] = $users;
-    }
-    echo json_encode($data);
-
-    // 2) Llistat estudis
-    // ruta GET => "/api/auxiliars/get/?type=estudis"
-} elseif (isset($_GET['type']) && $_GET['type'] == 'estudis') {
-    global $conn;
-    $data = array();
-    $stmt = $conn->prepare(
-        "SELECT e.id, e.estudi_cat
-        FROM aux_estudis AS e
-        ORDER BY e.estudi_cat ASC"
-    );
-    $stmt->execute();
-    if ($stmt->rowCount() === 0) echo ('No rows');
-    while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $data[] = $users;
-    }
-    echo json_encode($data);
-
-    // 3) Llistat oficis
-    // ruta GET => "/api/auxiliars/get/?type=oficis"
-} elseif (isset($_GET['type']) && $_GET['type'] == 'oficis') {
-    global $conn;
-    $data = array();
-    $stmt = $conn->prepare(
-        "SELECT o.id, o.ofici_cat
-            FROM aux_oficis AS o
-            ORDER BY o.ofici_cat ASC"
-    );
-    $stmt->execute();
-    if ($stmt->rowCount() === 0) echo ('No rows');
-    while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $data[] = $users;
-    }
-    echo json_encode($data);
+// Verificar que el método de la solicitud sea GET
+if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
+    header('HTTP/1.1 405 Method Not Allowed');
+    echo json_encode(['error' => 'Method not allowed']);
+    exit();
+}
 
 
-    // 3-b) Llistat sectors
-    // ruta GET => "/api/auxiliars/get/?type=sectors_economics"
-} elseif (isset($_GET['type']) && $_GET['type'] == 'sectors_economics') {
-    global $conn;
-    $data = array();
-    $stmt = $conn->prepare(
-        "SELECT se.id, se.sector_cat
-            FROM aux_sector_economic AS se
-            ORDER BY se.sector_cat ASC"
-    );
-    $stmt->execute();
-    if ($stmt->rowCount() === 0) echo ('No rows');
-    while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $data[] = $users;
-    }
-    echo json_encode($data);
+// GET : llistat de municipis
+// URL: https://memoriaterrassa.cat/api/auxiliars/get/municipis
+if ($slug === "municipis") {
 
-    // 3-c) Llistat sub-sectors economics
-    // ruta GET => "/api/auxiliars/get/?type=sub_sectors_economics"
-} elseif (isset($_GET['type']) && $_GET['type'] == 'sub_sectors_economics') {
-    global $conn;
-    $data = array();
-    $stmt = $conn->prepare(
-        "SELECT sse.id, sse.sub_sector_cat
-            FROM aux_sub_sector_economic AS sse
-            ORDER BY sse.sub_sector_cat ASC"
-    );
-    $stmt->execute();
-    if ($stmt->rowCount() === 0) echo ('No rows');
-    while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $data[] = $users;
-    }
-    echo json_encode($data);
+    $query = "SELECT m.id, m.ciutat, c.comarca, p.provincia, co.comunitat, e.estat
+            FROM  aux_dades_municipis AS m
+            LEFT JOIN aux_dades_municipis_comarca AS c ON m.comarca = c.id
+            LEFT JOIN aux_dades_municipis_provincia AS p ON m.provincia = p.id
+            LEFT JOIN aux_dades_municipis_comunitat AS co ON m.comunitat = co.id
+            LEFT JOIN aux_dades_municipis_estat AS e ON m.estat = e.id
+            ORDER BY m.ciutat ASC";
 
-    // 3-d) Llistat càrrecs empresa
-    // ruta GET => "/api/auxiliars/get/?type=carrecs_empresa"
-} elseif (isset($_GET['type']) && $_GET['type'] == 'carrecs_empresa') {
-    global $conn;
-    $data = array();
-    $stmt = $conn->prepare(
-        "SELECT ce.id, ce.carrec_cat
-            FROM aux_ofici_carrec AS ce
-            ORDER BY ce.carrec_cat ASC"
-    );
-    $stmt->execute();
-    if ($stmt->rowCount() === 0) echo ('No rows');
-    while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $data[] = $users;
-    }
-    echo json_encode($data);
+    $result = getData($query);
+    echo json_encode($result);
 
-    // 4) Llistat estat civil
-    // ruta GET => "/api/auxiliars/get/?type=estats_civils"
-} elseif (isset($_GET['type']) && $_GET['type'] == 'estats_civils') {
-    global $conn;
-    $data = array();
-    $stmt = $conn->prepare(
-        "SELECT ec.id, ec.estat_cat
-            FROM aux_estat_civil AS ec
-            ORDER BY ec.estat_cat ASC"
-    );
-    $stmt->execute();
-    if ($stmt->rowCount() === 0) echo ('No rows');
-    while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $data[] = $users;
-    }
-    echo json_encode($data);
+    // GET : llistat de partits polítics
+    // URL: https://memoriaterrassa.cat/api/auxiliars/get/partitsPolitics
+} else if ($slug === "partitsPolitics") {
 
-    // 5) Llistat partits politics
-    // ruta GET => "/api/auxiliars/get/?type=partits"
-} elseif (isset($_GET['type']) && $_GET['type'] == 'partits') {
-    global $conn;
-    $data = array();
-    $stmt = $conn->prepare(
-        "SELECT p.id, p.partit_politic, p.sigles
+    $query = "SELECT 
+	        p.id, p.partit_politic, p.sigles
             FROM aux_filiacio_politica AS p
-            ORDER BY p.partit_politic ASC"
-    );
-    $stmt->execute();
-    if ($stmt->rowCount() === 0) echo ('No rows');
-    while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $data[] = $users;
-    }
-    echo json_encode($data);
+            ORDER BY p.partit_politic ASC";
 
-    // 6) Llistat sindicats
-    // ruta GET => "/api/auxiliars/get/?type=sindicats"
-} elseif (isset($_GET['type']) && $_GET['type'] == 'sindicats') {
-    global $conn;
-    $data = array();
-    $stmt = $conn->prepare(
-        "SELECT s.id, s.sindicat, sigles
+    $result = getData($query);
+    echo json_encode($result);
+
+    // GET : llistat de sindicats
+    // URL: https://memoriaterrassa.cat/api/auxiliars/get/sindicats
+} else if ($slug === "sindicats") {
+
+    $query = "SELECT 
+	        s.id, s.sindicat, s.sigles
             FROM aux_filiacio_sindical AS s
-            ORDER BY s.sindicat ASC"
-    );
-    $stmt->execute();
-    if ($stmt->rowCount() === 0) echo ('No rows');
-    while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $data[] = $users;
-    }
-    echo json_encode($data);
+            ORDER BY s.sindicat ASC";
 
-    // 7) Llistat espais
-    // ruta GET => "/api/auxiliars/get/?type=espais"
-} elseif (isset($_GET['type']) && $_GET['type'] == 'espais') {
-    global $conn;
-    $data = array();
-    $stmt = $conn->prepare(
-        "SELECT esp.id, esp.espai_cat
-                FROM aux_espai AS esp
-                ORDER BY esp.espai_cat ASC"
-    );
-    $stmt->execute();
-    if ($stmt->rowCount() === 0) echo ('No rows');
-    while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $data[] = $users;
-    }
-    echo json_encode($data);
+    $result = getData($query);
+    echo json_encode($result);
 
-    // 10) Tipologia espais
-    // ruta GET => "/api/auxiliars/get/?type=tipologia_espais"
-} elseif (isset($_GET['type']) && $_GET['type'] == 'tipologia_espais') {
-    global $conn;
-    $data = array();
-    $stmt = $conn->prepare(
-        "SELECT tipologia.id, tipologia.tipologia_espai_ca
-                FROM aux_tipologia_espais AS tipologia
-                ORDER BY tipologia.tipologia_espai_ca ASC"
-    );
-    $stmt->execute();
-    if ($stmt->rowCount() === 0) echo ('No rows');
-    while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $data[] = $users;
-    }
-    echo json_encode($data);
+    // GET : llistat de provincies
+    // URL: https://memoriaterrassa.cat/api/auxiliars/get/provincies
+} else if ($slug === "provincies") {
 
-    // 11) Causa defuncio
-    // ruta GET => "/api/auxiliars/get/?type=causa_defuncio"
-} elseif (isset($_GET['type']) && $_GET['type'] == 'causa_defuncio') {
-    global $conn;
-    $data = array();
-    $stmt = $conn->prepare(
-        "SELECT c.id, c.causa_defuncio_ca
-                FROM aux_causa_defuncio AS c
-                ORDER BY c.causa_defuncio_ca ASC"
-    );
-    $stmt->execute();
-    if ($stmt->rowCount() === 0) echo ('No rows');
-    while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $data[] = $users;
-    }
-    echo json_encode($data);
+    $query = "SELECT p.id, p.provincia
+        FROM aux_dades_municipis_provincia AS p
+        ORDER BY p.provincia ASC";
 
-    // 12) Autors fitxes
-    // ruta GET => "/api/auxiliars/get/?type=autors_fitxa"
-} elseif (isset($_GET['type']) && $_GET['type'] == 'autors_fitxa') {
-    global $conn;
-    $data = array();
-    $stmt = $conn->prepare(
-        "SELECT u.id, u.nom
-                FROM auth_users AS u
-                ORDER BY u.nom ASC"
-    );
-    $stmt->execute();
-    if ($stmt->rowCount() === 0) echo ('No rows');
-    while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $data[] = $users;
-    }
-    echo json_encode($data);
+    $result = getData($query);
+    echo json_encode($result);
 
-    // DB_AFUSELLATS
-    // 7) Llistat procediments judicials
-    // ruta GET => "/api/auxiliars/get/?type=procediments"
-} elseif (isset($_GET['type']) && $_GET['type'] == 'procediments') {
-    global $conn;
-    $data = array();
-    $stmt = $conn->prepare(
-        "SELECT pj.id, pj.procediment_cat
-                    FROM aux_procediment_judicial AS pj
-                    ORDER BY pj.procediment_cat ASC"
-    );
-    $stmt->execute();
-    if ($stmt->rowCount() === 0) echo ('No rows');
-    while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $data[] = $users;
-    }
-    echo json_encode($data);
+    // GET : llistat de comunitats autonomes
+    // URL: https://memoriaterrassa.cat/api/auxiliars/get/comunitats
+} else if ($slug === "comunitats") {
 
-    // 7) Llistat jutjats
-    // ruta GET => "/api/auxiliars/get/?type=jutjats"
-} elseif (isset($_GET['type']) && $_GET['type'] == 'jutjats') {
-    global $conn;
-    $data = array();
-    $stmt = $conn->prepare(
-        "SELECT j.id, j.jutjat_cat
-                    FROM aux_jutjats AS j
-                    ORDER BY j.jutjat_cat ASC"
-    );
-    $stmt->execute();
-    if ($stmt->rowCount() === 0) echo ('No rows');
-    while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $data[] = $users;
-    }
-    echo json_encode($data);
+    $query = "SELECT c.id, c.comunitat
+        FROM aux_dades_municipis_comunitat AS c
+        ORDER BY c.comunitat ASC";
 
-    // 8) Llistat tipus acusacions
-    // ruta GET => "/api/auxiliars/get/?type=acusacions"
-} elseif (isset($_GET['type']) && $_GET['type'] == 'acusacions') {
-    global $conn;
-    $data = array();
-    $stmt = $conn->prepare(
-        "SELECT sa.id, sa.acusacio_cat
-                    FROM aux_acusacions AS sa
-                    ORDER BY sa.acusacio_cat ASC"
-    );
-    $stmt->execute();
-    if ($stmt->rowCount() === 0) echo ('No rows');
-    while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $data[] = $users;
-    }
-    echo json_encode($data);
+    $result = getData($query);
+    echo json_encode($result);
 
-    // 9) Llistat sentencies
-    // ruta GET => "/api/auxiliars/get/?type=sentencies"
-} elseif (isset($_GET['type']) && $_GET['type'] == 'sentencies') {
-    global $conn;
-    $data = array();
-    $stmt = $conn->prepare(
-        "SELECT sen.id, sen.sentencia_cat
-                    FROM aux_sentencies AS sen
-                    ORDER BY sen.sentencia_cat ASC"
-    );
-    $stmt->execute();
-    if ($stmt->rowCount() === 0) echo ('No rows');
-    while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $data[] = $users;
-    }
-    echo json_encode($data);
+    // GET : llistat de països
+    // URL: https://memoriaterrassa.cat/api/auxiliars/get/estats
+} else if ($slug === "estats") {
 
-    // DB COST HUMA
-    // 1) LListat condició civil/militar
-    // ruta GET => "/api/auxiliars/get/?type=condicio_civil_militar"
-} elseif (isset($_GET['type']) && $_GET['type'] == 'condicio_civil_militar') {
-    global $conn;
-    $data = array();
-    $stmt = $conn->prepare(
-        "SELECT c.id, c.condicio_ca
-        FROM aux_condicio AS c
-        ORDER BY c.condicio_ca ASC"
-    );
-    $stmt->execute();
-    if ($stmt->rowCount() === 0) echo ('No rows');
-    while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $data[] = $users;
-    }
-    echo json_encode($data);
+    $query = "SELECT e.id, e.estat
+        FROM aux_dades_municipis_estat AS e
+        ORDER BY e.estat ASC";
 
-    // 2) Llistat bàndols guerra
-    // ruta GET => "/api/auxiliars/get/?type=bandols_guerra"
-} elseif (isset($_GET['type']) && $_GET['type'] == 'bandols_guerra') {
-    global $conn;
-    $data = array();
-    $stmt = $conn->prepare(
-        "SELECT b.id, b.bandol_ca
-        FROM aux_bandol AS b
-        ORDER BY b.bandol_ca ASC"
-    );
-    $stmt->execute();
-    if ($stmt->rowCount() === 0) echo ('No rows');
-    while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $data[] = $users;
-    }
-    echo json_encode($data);
+    $result = getData($query);
+    echo json_encode($result);
 
-    // 2) Llistat cossos militats
-    // ruta GET => "/api/auxiliars/get/?type=cossos_militars"
-} elseif (isset($_GET['type']) && $_GET['type'] == 'cossos_militars') {
-    global $conn;
-    $data = array();
-    $stmt = $conn->prepare(
-        "SELECT c.id, c.cos_militar_ca 
-        FROM aux_cossos_militars AS c
-        ORDER BY c.cos_militar_ca ASC"
-    );
-    $stmt->execute();
-    if ($stmt->rowCount() === 0) echo ('No rows');
-    while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $data[] = $users;
-    }
-    echo json_encode($data);
+    // GET : llistat d'estudis (analfabet, alfabetitzat...)
+    // URL: https://memoriaterrassa.cat/api/auxiliars/get/estudis
+} else if ($slug === "estudis") {
 
-    // DB_DEPORTATS AUXILIARS
-    // 1) Llistat situacions deportats
-    // ruta GET => "/api/auxiliars/get/?type=situacions_deportats"
-} elseif (isset($_GET['type']) && $_GET['type'] == 'situacions_deportats') {
-    global $conn;
-    $data = array();
-    $stmt = $conn->prepare(
-        "SELECT s.id, s.situacio_ca 
-        FROM aux_situacions_deportats AS s
-        ORDER BY s.situacio_ca ASC"
-    );
-    $stmt->execute();
-    if ($stmt->rowCount() === 0) echo ('No rows');
-    while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $data[] = $users;
-    }
-    echo json_encode($data);
+    $query = "SELECT e.id, e.estudi_cat
+        FROM aux_estudis AS e
+        ORDER BY e.estudi_cat ASC";
 
-    // 2) Llistat tipus de presons deportats
-    // ruta GET => "/api/auxiliars/get/?type=tipus_presons"
-} elseif (isset($_GET['type']) && $_GET['type'] == 'tipus_presons') {
-    global $conn;
-    $data = array();
-    $stmt = $conn->prepare(
-        "SELECT t.id, t.tipus_preso_ca
-        FROM aux_tipus_presons AS t
-        ORDER BY t.tipus_preso_ca ASC"
-    );
-    $stmt->execute();
-    if ($stmt->rowCount() === 0) echo ('No rows');
-    while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $data[] = $users;
-    }
-    echo json_encode($data);
+    $result = getData($query);
+    echo json_encode($result);
 
-    // DB_FAMILIARS
-    // 1) Llistat relacions de parentiu
-    // ruta GET => "/api/auxiliars/get/?type=relacions_parentiu"
-} elseif (isset($_GET['type']) && $_GET['type'] == 'relacions_parentiu') {
-    global $conn;
-    $data = array();
-    $stmt = $conn->prepare(
-        "SELECT r.id, r.relacio_parentiu
-        FROM aux_familiars_relacio AS r
-        ORDER BY r.relacio_parentiu ASC"
-    );
-    $stmt->execute();
-    if ($stmt->rowCount() === 0) echo ('No rows');
-    while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $data[] = $users;
-    }
-    echo json_encode($data);
+    // GET : Llistat oficis
+    // URL: /api/auxiliars/get/oficis
+} else if ($slug === "oficis") {
+    $query = "SELECT o.id, o.ofici_cat
+              FROM aux_oficis AS o
+              ORDER BY o.ofici_cat ASC";
 
-    // 2) Llistat complert represaliats 
-    // ruta GET => "/api/auxiliars/get/?type=llistat_complert_represaliats"
-} elseif (isset($_GET['type']) && $_GET['type'] == 'llistat_complert_represaliats') {
-    global $conn;
-    $data = array();
-    $stmt = $conn->prepare(
-        "SELECT dp.id, 
+    $result = getData($query);
+    echo json_encode($result);
+
+    // GET : Llistat sectors
+    // URL: /api/auxiliars/get/sectors_economics
+} elseif ($slug === "sectors_economics") {
+    $query = "SELECT se.id, se.sector_cat
+              FROM aux_sector_economic AS se
+              ORDER BY se.sector_cat ASC";
+
+    $result = getData($query);
+    echo json_encode($result);
+
+    // GET : Llistat sub-sectors economics
+    // URL: /api/auxiliars/get/sub_sectors_economics
+} elseif ($slug === "sub_sectors_economics") {
+    $query = "SELECT sse.id, sse.sub_sector_cat
+              FROM aux_sub_sector_economic AS sse
+              ORDER BY sse.sub_sector_cat ASC";
+
+    $result = getData($query);
+    echo json_encode($result);
+
+    // GET : Llistat càrrecs empresa
+    // URL: /api/auxiliars/get/carrecs_empresa
+} elseif ($slug === "carrecs_empresa") {
+    $query = "SELECT ce.id, ce.carrec_cat
+              FROM aux_ofici_carrec AS ce
+              ORDER BY ce.carrec_cat ASC";
+
+    $result = getData($query);
+    echo json_encode($result);
+
+    // GET : Llistat estat civil
+    // URL: /api/auxiliars/get/?type=estats_civils
+} elseif ($slug === "estats_civils") {
+    $query = "SELECT ec.id, ec.estat_cat
+              FROM aux_estat_civil AS ec
+              ORDER BY ec.estat_cat ASC";
+
+    $result = getData($query);
+    echo json_encode($result);
+
+    // GET : Llistat espais
+    // URL: /api/auxiliars/get/espais
+} elseif ($slug === "espais") {
+    $query = "SELECT esp.id, esp.espai_cat
+              FROM aux_espai AS esp
+              ORDER BY esp.espai_cat ASC";
+
+    $result = getData($query);
+    echo json_encode($result);
+
+    // GET : Tipologia espais
+    // URL: /api/auxiliars/get/tipologia_espais
+} elseif ($slug === "tipologia_espais") {
+    $query = "SELECT tipologia.id, tipologia.tipologia_espai_ca
+              FROM aux_tipologia_espais AS tipologia
+              ORDER BY tipologia.tipologia_espai_ca ASC";
+
+    $result = getData($query);
+    echo json_encode($result);
+
+    // GET : Causa defuncio
+    // URL: /api/auxiliars/get/causa_defuncio
+} elseif ($slug === "causa_defuncio") {
+    $query = "SELECT c.id, c.causa_defuncio_ca
+              FROM aux_causa_defuncio AS c
+              ORDER BY c.causa_defuncio_ca ASC";
+
+    $result = getData($query);
+    echo json_encode($result);
+
+    // GET : Autors fitxes
+    // URL: /api/auxiliars/get/autors_fitxa
+} elseif ($slug === "autors_fitxa") {
+    $query = "SELECT u.id, u.nom
+              FROM auth_users AS u
+              ORDER BY u.nom ASC";
+
+    $result = getData($query);
+    echo json_encode($result);
+
+    // GET : Procediments judicials
+    // URL: /api/auxiliars/get/procediments
+} elseif ($slug === "procediments") {
+    $query = "SELECT pj.id, pj.procediment_cat
+              FROM aux_procediment_judicial AS pj
+              ORDER BY pj.procediment_cat ASC";
+
+    $result = getData($query);
+    echo json_encode($result);
+
+    // GET : Llistat jutjats
+    // URL: /api/auxiliars/get/jutjats
+} elseif ($slug === "jutjats") {
+    $query = "SELECT j.id, j.jutjat_cat
+              FROM aux_jutjats AS j
+              ORDER BY j.jutjat_cat ASC";
+
+    $result = getData($query);
+    echo json_encode($result);
+
+    // GET : Llistat tipus acusacions
+    // URL: /api/auxiliars/get/acusacions
+} elseif ($slug === "acusacions") {
+    $query = "SELECT sa.id, sa.acusacio_cat
+              FROM aux_acusacions AS sa
+              ORDER BY sa.acusacio_cat ASC";
+
+    $result = getData($query);
+    echo json_encode($result);
+
+    // GET : Llistat sentencies
+    // URL: /api/auxiliars/get/sentencies
+} elseif ($slug === "sentencies") {
+    $query = "SELECT sen.id, sen.sentencia_cat
+              FROM aux_sentencies AS sen
+              ORDER BY sen.sentencia_cat ASC";
+
+    $result = getData($query);
+    echo json_encode($result);
+
+    // GET : Condició civil/militar
+    // URL: /api/auxiliars/get/condicio_civil_militar
+} elseif ($slug === "condicio_civil_militar") {
+    $query = "SELECT c.id, c.condicio_ca
+              FROM aux_condicio AS c
+              ORDER BY c.condicio_ca ASC";
+
+    $result = getData($query);
+    echo json_encode($result);
+
+    // GET : Llistat bàndols guerra
+    // URL: /api/auxiliars/get/=bandols_guerra
+} elseif ($slug === "bandols_guerra") {
+    $query = "SELECT b.id, b.bandol_ca
+              FROM aux_bandol AS b
+              ORDER BY b.bandol_ca ASC";
+
+    $result = getData($query);
+    echo json_encode($result);
+
+    // GET : Llistat cossos militats
+    // URL: /api/auxiliars/get/cossos_militars
+} elseif ($slug === "cossos_militars") {
+    $query = "SELECT c.id, c.cos_militar_ca
+              FROM aux_cossos_militars AS c
+              ORDER BY c.cos_militar_ca ASC";
+
+    $result = getData($query);
+    echo json_encode($result);
+
+    // GET : Situacions deportats
+    // URL: /api/auxiliars/get/situacions_deportats
+} elseif ($slug === "situacions_deportats") {
+    $query = "SELECT s.id, s.situacio_ca
+              FROM aux_situacions_deportats AS s
+              ORDER BY s.situacio_ca ASC";
+
+    $result = getData($query);
+    echo json_encode($result);
+
+    // GET : Tipus presons deportats
+    // URL: /api/auxiliars/get/tipus_presons
+} elseif ($slug === "tipus_presons") {
+    $query = "SELECT t.id, t.tipus_preso_ca
+              FROM aux_tipus_presons AS t
+              ORDER BY t.tipus_preso_ca ASC";
+
+    $result = getData($query);
+    echo json_encode($result);
+
+    // GET : Relacions parentiu
+    // URL: /api/auxiliars/get/relacions_parentiu
+} elseif ($slug === "relacions_parentiu") {
+    $query = "SELECT r.id, r.relacio_parentiu
+              FROM aux_familiars_relacio AS r
+              ORDER BY r.relacio_parentiu ASC";
+
+    $result = getData($query);
+    echo json_encode($result);
+
+    // GET : Llistat completo represaliats
+    // URL: /api/auxiliars/get/llistat_complert_represaliats
+} else if ($slug === "llistat_complert_represaliats") {
+    $query = "SELECT dp.id, 
        dp.nom, 
        dp.cognom1, 
        dp.cognom2, 
        CONCAT(dp.cognom1, ' ', dp.cognom2, ', ', dp.nom) AS nom_complert
         FROM db_dades_personals AS dp
-        ORDER BY dp.cognom1 ASC"
-    );
-    $stmt->execute();
-    if ($stmt->rowCount() === 0) echo ('No rows');
-    while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $data[] = $users;
-    }
-    echo json_encode($data);
+        ORDER BY dp.cognom1 ASC";
 
-    // DB_MORTS CIVILS
-    // 1) Llistat relacions de parentiu
-    // ruta GET => "/api/auxiliars/get/?type=llocs_bombardeig"
-} elseif (isset($_GET['type']) && $_GET['type'] == 'llocs_bombardeig') {
-    global $conn;
-    $data = array();
-    $stmt = $conn->prepare(
-        "SELECT l.id, l.lloc_bombardeig_ca
-        FROM aux_llocs_bombardeig AS l
-        ORDER BY l.lloc_bombardeig_ca ASC"
-    );
-    $stmt->execute();
-    if ($stmt->rowCount() === 0) echo ('No rows');
-    while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $data[] = $users;
-    }
-    echo json_encode($data);
+    $result = getData($query);
+    echo json_encode($result);
 
-    // DB_FONTS DOCUMENTALS
-    // BIBLIOGRAFIA
-    // 1) Llistat relacions de parentiu
-    // ruta GET => "/api/auxiliars/get/?type=llistat_llibres_bibliografia"
-} elseif (isset($_GET['type']) && $_GET['type'] == 'llistat_llibres_bibliografia') {
-    global $conn;
-    $data = array();
-    $stmt = $conn->prepare(
-        "SELECT l.id, l.llibre, l.autor, l.any,
-       CONCAT(l.autor, ', ', SUBSTRING(l.llibre, 1, 40), '...', ', ', l.any) AS llibre
-        FROM aux_bibliografia_llibre_detalls AS l
-        ORDER BY l.llibre ASC"
-    );
-    $stmt->execute();
-    if ($stmt->rowCount() === 0) echo ('No rows');
-    while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $data[] = $users;
-    }
-    echo json_encode($data);
 
-    // 1) Llistat relacions de parentiu
-    // ruta GET => "/api/auxiliars/get/?type=llistat_arxivistica"
-} elseif (isset($_GET['type']) && $_GET['type'] == 'llistat_arxivistica') {
-    global $conn;
-    $data = array();
-    $stmt = $conn->prepare(
-        "SELECT l.id, 
-           CONCAT(l.codi, ', ', SUBSTRING(l.arxiu, 1, 40), '...') AS arxiu
-        FROM aux_bibliografia_arxius_codis AS l
-        ORDER BY l.arxiu ASC"
-    );
-    $stmt->execute();
-    if ($stmt->rowCount() === 0) echo ('No rows');
-    while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $data[] = $users;
-    }
-    echo json_encode($data);
+    // GET : Llistat llocs bombardeig
+    // URL: /api/auxiliars/get/llocs_bombardeig
+} else if ($slug === 'llocs_bombardeig') {
+    $query = "SELECT l.id, l.lloc_bombardeig_ca
+              FROM aux_llocs_bombardeig AS l
+              ORDER BY l.lloc_bombardeig_ca ASC";
 
-    // 10) Llistat arxius i fonts documentals
-    // ruta GET => "/api/auxiliars/get/?llistatArxiusFonts"
-} elseif (isset($_GET['llistatArxiusFonts'])) {
-    global $conn;
+    $result = getData($query);
+    echo json_encode($result);
 
-    /** @var PDO $conn */
+    // GET : Llistat llibres bibliografia
+    // URL: /api/auxiliars/get/llistat_llibres_bibliografia
+} elseif ($slug === 'llistat_llibres_bibliografia') {
+    $query = "SELECT l.id, l.llibre, l.autor, l.any,
+                     CONCAT(l.autor, ', ', SUBSTRING(l.llibre, 1, 40), '...', ', ', l.any) AS llibre
+              FROM aux_bibliografia_llibre_detalls AS l
+              ORDER BY l.llibre ASC";
+
+    $result = getData($query);
+    echo json_encode($result);
+
+    // GET : Llistat arxius bibliografia
+    // URL: /api/auxiliars/get/llistat_arxivistica
+} elseif ($slug === 'llistat_arxivistica') {
+    $query = "SELECT l.id, 
+                     CONCAT(l.codi, ', ', SUBSTRING(l.arxiu, 1, 40), '...') AS arxiu
+              FROM aux_bibliografia_arxius_codis AS l
+              ORDER BY l.arxiu ASC";
+
+    $result = getData($query);
+    echo json_encode($result);
+
+    // GET : Llistat arxius i fonts documentals
+    // URL: /api/auxiliars/get/llistat_arxius_fonts
+} elseif ($slug === 'llistat_arxius_fonts') {
     $query = "SELECT l.id, l.arxiu, l.codi, l.descripcio, l.web
-        FROM aux_bibliografia_arxius_codis AS l
-        ORDER BY l.arxiu ASC";
+              FROM aux_bibliografia_arxius_codis AS l
+              ORDER BY l.arxiu ASC";
 
-    $stmt = $conn->prepare($query);
-    $stmt->execute();
+    $result = getData($query);
+    echo json_encode($result);
 
-    if ($stmt->rowCount() === 0) {
-        header("Content-Type: application/json");
-        echo json_encode(null);  // Devuelve un objeto JSON nulo si no hay resultados
-    } else {
-        // Solo obtenemos la primera fila ya que parece ser una búsqueda por ID
-        $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        header("Content-Type: application/json");
-        echo json_encode($row);  // Codifica la fila como un objeto JSON
-    }
+    // GET : Llistat bibliografia
+    // URL: /api/auxiliars/get/llistat_bibliografia
+} elseif ($slug === 'llistat_bibliografia') {
+    $query = "SELECT l.id, l.llibre, l.autor, l.editorial, m.ciutat, l.any, l.volum
+              FROM aux_bibliografia_llibre_detalls AS l
+              LEFT JOIN aux_dades_municipis AS m ON l.ciutat = m.id
+              ORDER BY l.llibre";
 
-    // 11) Llistat bibliografia
-    // ruta GET => "/api/auxiliars/get/?llistatBibliografia"
-} elseif (isset($_GET['llistatBibliografia'])) {
-    global $conn;
-
-    /** @var PDO $conn */
-    $query = "SELECT l.id, l.llibre, l.autor, l.editorial, m.ciutat, l.any, l.volum 	
-        FROM aux_bibliografia_llibre_detalls AS l
-        LEFT JOIN aux_dades_municipis AS m ON l.ciutat = m.id
-        ORDER BY l.llibre";
-
-    $stmt = $conn->prepare($query);
-    $stmt->execute();
-
-    if ($stmt->rowCount() === 0) {
-        header("Content-Type: application/json");
-        echo json_encode(null);  // Devuelve un objeto JSON nulo si no hay resultados
-    } else {
-        // Solo obtenemos la primera fila ya que parece ser una búsqueda por ID
-        $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        header("Content-Type: application/json");
-        echo json_encode($row);  // Codifica la fila como un objeto JSON
-    }
+    $result = getData($query);
+    echo json_encode($result);
 } else {
-    // Si 'type', 'id' o 'token' están ausentes o 'type' no es 'user' en la URL
-    header('HTTP/1.1 403 Forbidden');
-    echo json_encode(['error' => 'Something get wrong']);
-    exit();
+    // Si el parámetro 'type' no coincide con ninguno de los casos anteriores, mostramos un error
+    echo json_encode(["error" => "Tipo no válido"]);
 }

@@ -279,16 +279,12 @@ if ($stmt->rowCount() > 0) {
     async function auxiliarSelect(idAux, api, elementId, valorText) {
 
         const devDirectory = `https://${window.location.hostname}`;
-        let urlAjax = devDirectory + "/api/auxiliars/get/?type=" + api;
-
-        // Obtener el token del localStorage
-        let token = localStorage.getItem('token');
+        let urlAjax = devDirectory + "/api/auxiliars/get/" + api;
 
         // Configurar las opciones de la solicitud
         const options = {
             method: 'GET',
             headers: {
-                'Authorization': 'Bearer ' + token,
                 'Content-Type': 'application/json'
             }
         };

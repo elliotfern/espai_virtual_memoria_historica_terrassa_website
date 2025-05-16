@@ -1,140 +1,20 @@
 <?php
-$base_routes = [
-    // API INTRANET
-
-    // 01. Auth
-    // URL: https://memoriaterrassa.cat/api/auth/
-    APP_API . $url['auth'] . '/login' => BACKEND_API . $url['auth'] . '/login.php',
-    APP_API . $url['auth'] . '/logout' => BACKEND_API . $url['auth'] . '/logout.php',
-    APP_API . $url['auth'] . '/isAdmin' => BACKEND_API . $url['auth'] . '/isAdmin.php',
-    APP_API . $url['auth'] . '/isAutor' => BACKEND_API . $url['auth'] . '/isAutor.php',
-    APP_API . $url['auth'] . '/usuari' => BACKEND_API . $url['auth'] . '/nomUsuari.php',
-
-    // 02. Taules auxiliars
-    // URL: https://memoriaterrassa.cat/api/auxiliars/
-    APP_API . $url['auxiliars'] . '/get/usuaris' => BACKEND_API . $url['auxiliars'] . '/get/get-usuaris.php',
-    APP_API . $url['auxiliars'] . '/get/usuari/{id}' => BACKEND_API . $url['auxiliars'] . '/get/get-usuari.php',
-    APP_API . $url['auxiliars'] . '/post/usuari' => BACKEND_API . $url['auxiliars'] . '/post/post-usuari.php',
-    APP_API . $url['auxiliars'] . '/put/usuari' => BACKEND_API . $url['auxiliars'] . '/put/put-usuari.php',
-    APP_API . $url['auxiliars'] . '/get/tipusUsuaris' => BACKEND_API . $url['auxiliars'] . '/get/get-tipus-usuaris.php',
-
-    APP_API . $url['auxiliars'] . '/get/municipis' => BACKEND_API . $url['auxiliars'] . '/get/get-municipis.php',
-    APP_API . $url['auxiliars'] . '/get/partits' => BACKEND_API . $url['auxiliars'] . '/get/get-partits.php',
-    APP_API . $url['auxiliars'] . '/get/sindicats' => BACKEND_API . $url['auxiliars'] . '/get/get-sindicats.php',
-
-    '/api/auxiliars/get' => 'src/backend/api/auxiliars/get-auxiliars.php',
-    '/api/auxiliars/post' => 'src/backend/api/auxiliars/post-auxiliars.php',
-    '/api/auxiliars/put' => 'src/backend/api/auxiliars/put-auxiliars.php',
-
-    // API INTRANET OPERACIONS CRUD
-    // API db_dades_personals
-    '/api/dades_personals/get' => 'src/backend/api/db_dades_personals/get-dades-personals.php',
-    '/api/dades_personals/put' => 'src/backend/api/db_dades_personals/put-dades-personals.php',
-    '/api/dades_personals/post' => 'src/backend/api/db_dades_personals/post-dades-personals.php',
-
-    // API db_cost_huma_morts_front
-    '/api/cost_huma_front/get' => 'src/backend/api/db_cost_huma_front/get-cost-huma-front.php',
-    '/api/cost_huma_front/put' => 'src/backend/api/db_cost_huma_front/put-cost-huma-front.php',
-    '/api/cost_huma_front/post' => 'src/backend/api/db_cost_huma_front/post-cost-huma-front.php',
-
-    // API db_cost_huma_morts_civils
-    '/api/cost_huma_civils/get' => 'src/backend/api/db_cost_huma_civils/get-cost-huma-civils.php',
-    '/api/cost_huma_civils/put' => 'src/backend/api/db_cost_huma_civils/put-cost-huma-civils.php',
-    '/api/cost_huma_civils/post' => 'src/backend/api/db_cost_huma_civils/post-cost-huma-civils.php',
-
-    // API db_represalia_republicana
-    '/api/represalia_republicana/get' => 'src/backend/api/db_represalia_republicana/get-represalia-republicana.php',
-    '/api/represalia_republicana/put' => 'src/backend/api/db_represalia_republicana/put-represalia-republicana.php',
-    '/api/represalia_republicana/post' => 'src/backend/api/db_represalia_republicana/post-represalia-republicana.php',
-
-    // API db_exiliats
-    '/api/exiliats/get' => 'src/backend/api/db_exiliats/get-exiliats.php',
-    '/api/exiliats/put' => 'src/backend/api/db_exiliats/put-exiliats.php',
-    '/api/exiliats/post' => 'src/backend/api/db_exiliats/post-exiliats.php',
-
-    // API db_deportats
-    '/api/deportats/get' => 'src/backend/api/db_deportats/get-deportats.php',
-    '/api/deportats/put' => 'src/backend/api/db_deportats/put-deportats.php',
-    '/api/exiliats/post' => 'src/backend/api/db_deportats/post-deportats.php',
-
-    // API db_familiars
-    '/api/familiars/get' => 'src/backend/api/db_familiars/get-familiars.php',
-    '/api/familiars/put' => 'src/backend/api/db_familiars/put-familiars.php',
-    '/api/familiars/post' => 'src/backend/api/db_familiars/post-familiars.php',
-
-    // API db_afusellats
-    '/api/afusellats/get' => 'src/backend/api/afusellats/get-afusellats.php',
-
-    // API db_processats
-    '/api/processats/get' => 'src/backend/api/db_processats/get-processats.php',
-    '/api/processats/put' => 'src/backend/api/db_processats/put-processats.php',
-    '/api/processats/post' => 'src/backend/api/db_processats/post-processats.php',
-
-    // API db_depurats
-    '/api/depurats/get' => 'src/backend/api/db_depurats/get-depurats.php',
-    '/api/depurats/put' => 'src/backend/api/db_depurats/put-depurats.php',
-    '/api/depurats/post' => 'src/backend/api/db_depurats/post-depurats.php',
-
-
-
-    // API db_fonts documentals (aux_bibliografia_llibre_detalls)
-    '/api/fonts_documentals/post' => 'src/backend/api/db_fonts_documentals/post-fonts-documentals.php',
-    '/api/fonts_documentals/put' => 'src/backend/api/db_fonts_documentals/put-fonts-documentals.php',
-
-    '/api/fonts_documentals/post/arxiu' => 'src/backend/api/db_fonts_documentals/post-arxiu-fonts-documentals.php',
-    '/api/fonts_documentals/post/llibre' => 'src/backend/api/db_fonts_documentals/post-llibre-fonts-documentals.php',
-
-    // API db_cronologia
-    '/api/cronologia/post' => 'src/backend/api/cronologia/post-cronologia.php',
-    '/api/cronologia/put' => 'src/backend/api/cronologia/put-cronologia.php',
-    '/api/cronologia/get' => 'src/backend/api/cronologia/get-cronologia.php',
-    '/api/cronologia/get/esdeveniment' => 'src/backend/api/cronologia/get-esd.php',
-
-    // API db_biografies
-    '/api/biografia/post' => 'src/backend/api/db_biografies/post-biografia.php',
-    '/api/biografia/put' => 'src/backend/api/db_biografies/put-biografia.php',
-    '/api/biografia/get' => 'src/backend/api/db_biografies/put-biografia.php',
-];
+// API
 
 // Rutas principales sin idioma explícito (solo para el idioma por defecto)
 $routes = [
-    // API INTRANET
 
     // 01. Auth
-    APP_API . $url['auth'] . '/isAdmin' => [
-        'view' => BACKEND_API . $url['auth'] . '/isAdmin.php',
+    APP_API . $url['auth'] . '/get/{slug}' => [
+        'view' => BACKEND_API . $url['auth'] . '/get-auth.php',
         'needs_session' => false,
         'header_footer' => false,
         'header_menu_footer' => false,
         'apiSenseHTML' => true
     ],
 
-    APP_API . $url['auth'] . '/isAutor' => [
-        'view' => BACKEND_API . $url['auth'] . '/isAutor.php',
-        'needs_session' => false,
-        'header_footer' => false,
-        'header_menu_footer' => false,
-        'apiSenseHTML' => true
-    ],
-
-    APP_API . $url['auth'] . '/logout' => [
-        'view' => BACKEND_API . $url['auth'] . '/logout.php',
-        'needs_session' => false,
-        'header_footer' => false,
-        'header_menu_footer' => false,
-        'apiSenseHTML' => true
-    ],
-
-    APP_API . $url['auth'] . '/login' => [
-        'view' => BACKEND_API . $url['auth'] . '/login.php',
-        'needs_session' => false,
-        'header_footer' => false,
-        'header_menu_footer' => false,
-        'apiSenseHTML' => true
-    ],
-
-    APP_API . $url['auth'] . '/usuari' => [
-        'view' => BACKEND_API . $url['auth'] . '/nomUsuari.php',
+    APP_API . $url['auth'] . '/post/{slug}' => [
+        'view' => BACKEND_API . $url['auth'] . '/post-auth.php',
         'needs_session' => false,
         'header_footer' => false,
         'header_menu_footer' => false,
@@ -142,71 +22,14 @@ $routes = [
     ],
 
     // 02. Taules auxiliars
-    APP_API . $url['auxiliars'] . '/get/usuaris' => [
-        'view' => BACKEND_API . $url['auxiliars'] . '/get/get-usuaris.php',
+    APP_API . $url['auxiliars'] . '/get/{slug}' => [
+        'view' => BACKEND_API . $url['auxiliars'] . '/get-auxiliars.php',
         'needs_session' => false,
         'header_footer' => false,
         'header_menu_footer' => false,
         'apiSenseHTML' => true
     ],
 
-    APP_API . $url['auxiliars'] . '/get/usuari/{id}' => [
-        'view' => BACKEND_API . $url['auxiliars'] . '/get/get-usuari.php',
-        'needs_session' => false,
-        'header_footer' => false,
-        'header_menu_footer' => false,
-        'apiSenseHTML' => true
-    ],
-
-    APP_API . $url['auxiliars'] . '/put/usuari' => [
-        'view' => BACKEND_API . $url['auxiliars'] . '/put/put-usuari.php',
-        'needs_session' => false,
-        'header_footer' => false,
-        'header_menu_footer' => false,
-        'apiSenseHTML' => true
-    ],
-
-    APP_API . $url['auxiliars'] . '/post/usuari' => [
-        'view' => BACKEND_API . $url['auxiliars'] . '/post/post-usuari.php',
-        'needs_session' => false,
-        'header_footer' => false,
-        'header_menu_footer' => false,
-        'apiSenseHTML' => true
-    ],
-
-    APP_API . $url['auxiliars'] . '/get/tipusUsuaris' => [
-        'view' => BACKEND_API . $url['auxiliars'] . '/get/get-tipus-usuaris.php',
-        'needs_session' => false,
-        'header_footer' => false,
-        'header_menu_footer' => false,
-        'apiSenseHTML' => true
-    ],
-
-    APP_API . $url['auxiliars'] . '/get/municipis' => [
-        'view' => BACKEND_API . $url['auxiliars'] . '/get/get-municipis.php',
-        'needs_session' => false,
-        'header_footer' => false,
-        'header_menu_footer' => false,
-        'apiSenseHTML' => true
-    ],
-
-    APP_API . $url['auxiliars'] . '/get/partits' => [
-        'view' => BACKEND_API . $url['auxiliars'] . '/get/get-partits.php',
-        'needs_session' => false,
-        'header_footer' => false,
-        'header_menu_footer' => false,
-        'apiSenseHTML' => true
-    ],
-
-    APP_API . $url['auxiliars'] . '/get/sindicats' => [
-        'view' => BACKEND_API . $url['auxiliars'] . '/get/get-sindicats.php',
-        'needs_session' => false,
-        'header_footer' => false,
-        'header_menu_footer' => false,
-        'apiSenseHTML' => true
-    ],
-
-    '/api/auxiliars/get' => ['view' => 'src/backend/api/auxiliars/get-auxiliars.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
 
     '/api/auxiliars/post' => ['view' => 'src/backend/api/auxiliars/post-auxiliars.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
 
@@ -307,8 +130,5 @@ $routes = [
     '/api/biografia/get' => ['view' => 'src/backend/api/db_biografies/put-biografia.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
 
 ];
-
-// Unir rutas base con rutas específicas de idioma
-$routes = $routes + generateLanguageRoutes($base_routes, false);
 
 return $routes;

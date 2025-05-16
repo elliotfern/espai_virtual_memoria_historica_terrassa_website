@@ -502,14 +502,10 @@ $id = $routeParams[0];
 
       let urlAjax = devDirectory + "/api/dades_personals/get/?type=fitxa&id=" + slug;
 
-      // Obtener el token del localStorage
-      let token = localStorage.getItem('token');
-
       // Configurar las opciones de la solicitud
       const options = {
         method: 'GET',
         headers: {
-          'Authorization': 'Bearer ' + token,
           'Content-Type': 'application/json'
         }
       };
@@ -700,16 +696,12 @@ $id = $routeParams[0];
     async function auxiliarSelect(idAux, api, elementId, valorText) {
 
       const devDirectory = `https://${window.location.hostname}`;
-      let urlAjax = devDirectory + "/api/auxiliars/get/?type=" + api;
-
-      // Obtener el token del localStorage
-      let token = localStorage.getItem('token');
+      let urlAjax = devDirectory + "/api/auxiliars/get/" + api;
 
       // Configurar las opciones de la solicitud
       const options = {
         method: 'GET',
         headers: {
-          'Authorization': 'Bearer ' + token,
           'Content-Type': 'application/json'
         }
       };
@@ -797,7 +789,7 @@ $id = $routeParams[0];
       try {
         // Simulamos una llamada a la API
         const devDirectory = `https://${window.location.hostname}`;
-        let urlAjax = devDirectory + "/api/auxiliars/get/?type=" + apiUrl;
+        let urlAjax = devDirectory + "/api/auxiliars/get/" + apiUrl;
 
         const response = await fetch(urlAjax); // Cambia la URL a tu API real
         const data = await response.json(); // Convertimos la respuesta en JSON

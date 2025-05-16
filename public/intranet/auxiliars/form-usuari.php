@@ -25,7 +25,7 @@ if ($categoriaId === "modifica-usuari") {
 ?>
     <script type="module">
         // Llenar selects con opciones
-        selectOmplirDades("/api/auxiliars/get/tipusUsuaris", "", "user_type", "tipus");
+        selectOmplirDades("/api/auth/get/tipusUsuaris", "", "user_type", "tipus");
     </script>
 <?php
 }
@@ -103,7 +103,7 @@ if ($categoriaId === "modifica-usuari") {
 
 <script>
     function formUpdate(id) {
-        let urlAjax = "/api/auxiliars/get/usuari/" + id;
+        let urlAjax = "/api/auth/get/usuari?id=" + id;
 
         fetch(urlAjax, {
                 method: "GET",
@@ -117,7 +117,7 @@ if ($categoriaId === "modifica-usuari") {
                 document.getElementById('biografia_cat').value = data.biografia_cat;
 
                 // Llenar selects con opciones
-                selectOmplirDades("/api/auxiliars/get/tipusUsuaris", data.user_type, "user_type", "tipus");
+                selectOmplirDades("/api/auth/get/tipusUsuaris", data.user_type, "user_type", "tipus");
             })
             .catch(error => console.error("Error al obtener los datos:", error));
     }

@@ -43,12 +43,6 @@ if ($language2 === '') {
     $language2 = 'ca';
 }
 
-// Establecer la cookie del idioma
-
-$cookie_name = "language";
-$cookie_value = $language2;
-setcookie($cookie_name, $cookie_value, time() + 3600 * 24 * 30, '/');  // 30 días
-
 // Cargar las traducciones correspondientes al idioma
 $translations = require __DIR__ . "/src/backend/locales/{$language2}.php";
 
