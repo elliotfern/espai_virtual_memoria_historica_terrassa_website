@@ -36,8 +36,8 @@ if ($slug === "municipis") {
     echo json_encode($result);
 
     // GET : llistat de partits polítics
-    // URL: https://memoriaterrassa.cat/api/auxiliars/get/partitsPolitics
-} else if ($slug === "partitsPolitics") {
+    // URL: https://memoriaterrassa.cat/api/auxiliars/get/partits
+} else if ($slug === "partits") {
 
     $query = "SELECT 
 	        p.id, p.partit_politic, p.sigles
@@ -66,6 +66,18 @@ if ($slug === "municipis") {
     $query = "SELECT p.id, p.provincia
         FROM aux_dades_municipis_provincia AS p
         ORDER BY p.provincia ASC";
+
+    $result = getData($query);
+    echo json_encode($result);
+
+
+    // GET : llistat de comarques
+    // URL: https://memoriaterrassa.cat/api/auxiliars/get/comarques
+} else if ($slug === "comarques") {
+
+    $query = "SELECT c.id, c.comarca
+        FROM aux_dades_municipis_comarca AS c
+        ORDER BY c.comarca ASC";
 
     $result = getData($query);
     echo json_encode($result);

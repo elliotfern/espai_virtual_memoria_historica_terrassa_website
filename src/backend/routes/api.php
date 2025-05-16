@@ -1,35 +1,37 @@
 <?php
-// API
+
+// Configuración por defecto para rutas que requieren sesión, sin header_footer, con header_menu_footer
+$defaultApiConfig = [
+    'needs_session' => false,
+    'header_footer' => false,
+    'header_menu_footer' => false,
+    'apiSenseHTML' => true
+];
 
 // Rutas principales sin idioma explícito (solo para el idioma por defecto)
 $routes = [
 
     // 01. Auth
-    APP_API . $url['auth'] . '/get/{slug}' => [
+    APP_API . $url['auth'] . '/get/{slug}' => array_merge($defaultApiConfig, [
         'view' => BACKEND_API . $url['auth'] . '/get-auth.php',
-        'needs_session' => false,
-        'header_footer' => false,
-        'header_menu_footer' => false,
-        'apiSenseHTML' => true
-    ],
+    ]),
 
-    APP_API . $url['auth'] . '/post/{slug}' => [
+    APP_API . $url['auth'] . '/post/{slug}' => array_merge($defaultApiConfig, [
         'view' => BACKEND_API . $url['auth'] . '/post-auth.php',
-        'needs_session' => false,
-        'header_footer' => false,
-        'header_menu_footer' => false,
-        'apiSenseHTML' => true
-    ],
+    ]),
+
+    APP_API . $url['auth'] . '/put/{slug}' => array_merge($defaultApiConfig, [
+        'view' => BACKEND_API . $url['auth'] . '/put-auth.php',
+    ]),
 
     // 02. Taules auxiliars
-    APP_API . $url['auxiliars'] . '/get/{slug}' => [
+    APP_API . $url['auxiliars'] . '/get/{slug}' => array_merge($defaultApiConfig, [
         'view' => BACKEND_API . $url['auxiliars'] . '/get-auxiliars.php',
-        'needs_session' => false,
-        'header_footer' => false,
-        'header_menu_footer' => false,
-        'apiSenseHTML' => true
-    ],
+    ]),
 
+    APP_API . $url['auxiliars'] . '/put/{slug}' => array_merge($defaultApiConfig, [
+        'view' => BACKEND_API . $url['auxiliars'] . '/put-auxiliars.php',
+    ]),
 
     '/api/auxiliars/post' => ['view' => 'src/backend/api/auxiliars/post-auxiliars.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
 

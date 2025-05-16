@@ -198,8 +198,8 @@ $id = $routeParams[0];
           <select class="form-select" name="municipi_naixement" id="municipi_naixement" value="">
           </select>
           <div class="mt-2">
-            <a href="https://memoriaterrassa.cat/gestio/municipi/nou" target="_blank" class="btn btn-secondary btn-sm" id="afegirMunicipi1">Afegir municipi</a>
-            <button id="refreshButton1" class="btn btn-primary btn-sm">Actualitzar llistat Municipis</button>
+            <a href="<?php echo APP_WEB . APP_INTRANET . $url['auxiliars'] ?>/nou-municipi/" target="_blank" class="btn btn-secondary btn-sm" id="afegirMunicipi1">Afegir municipi</a>
+            <button id="refreshButton1" class="btn btn-primary btn-sm">Actualitzar llistat</button>
           </div>
 
         </div>
@@ -210,8 +210,8 @@ $id = $routeParams[0];
           </select>
 
           <div class="mt-2">
-            <a href="https://memoriaterrassa.cat/gestio/municipi/nou" target="_blank" class="btn btn-secondary btn-sm" id="afegirMunicipi2">Afegir municipi</a>
-            <button id="refreshButton2" class="btn btn-primary btn-sm">Actualitzar llistat Municipis</button>
+            <a href="<?php echo APP_WEB . APP_INTRANET . $url['auxiliars'] ?>/nou-municipi" target="_blank" class="btn btn-secondary btn-sm" id="afegirMunicipi2">Afegir municipi</a>
+            <button id="refreshButton2" class="btn btn-primary btn-sm">Actualitzar llistat</button>
           </div>
         </div>
 
@@ -221,8 +221,8 @@ $id = $routeParams[0];
           </select>
 
           <div class="mt-2">
-            <a href="https://memoriaterrassa.cat/gestio/municipi/nou" target="_blank" class="btn btn-secondary btn-sm" id="afegirMunicipi3">Afegir municipi</a>
-            <button id="refreshButton3" class="btn btn-primary btn-sm">Actualitzar llistat Municipis</button>
+            <a href="<?php echo APP_WEB . APP_INTRANET . $url['auxiliars'] ?>/nou-municipi" target="_blank" class="btn btn-secondary btn-sm" id="afegirMunicipi3">Afegir municipi</a>
+            <button id="refreshButton3" class="btn btn-primary btn-sm">Actualitzar llistat</button>
           </div>
 
         </div>
@@ -237,8 +237,8 @@ $id = $routeParams[0];
           <select class="form-select" id="tipologia_lloc_defuncio" value="" name="tipologia_lloc_defuncio">
           </select>
           <div class="mt-2">
-            <a href="https://memoriaterrassa.cat/gestio/tipologia-espai/nou" target="_blank" class="btn btn-secondary btn-sm" id="afegirMunicipi4">Afegir tipologia espai</a>
-            <button id="refreshButton4" class="btn btn-primary btn-sm">Actualitzar llistat espais</button>
+            <a href="<?php echo APP_WEB . APP_INTRANET . $url['auxiliars'] ?>/nova-tipologia-espai" target="_blank" class="btn btn-secondary btn-sm" id="afegirMunicipi4">Afegir tipologia espai</a>
+            <button id="refreshButton4" class="btn btn-primary btn-sm">Actualitzar llistat</button>
           </div>
 
         </div>
@@ -248,8 +248,8 @@ $id = $routeParams[0];
           <select class="form-select" id="causa_defuncio" value="" name="causa_defuncio">
           </select>
           <div class="mt-2">
-            <a href="https://memoriaterrassa.cat/gestio/causa-mort/nou" target="_blank" class="btn btn-secondary btn-sm" id="afegirMunicipi5">Afegir causa de mort</a>
-            <button id="refreshButton5" class="btn btn-primary btn-sm">Actualitzar llistat causa mort</button>
+            <a href="<?php echo APP_WEB . APP_INTRANET . $url['auxiliars'] ?>/nova-causa-mort" target="_blank" class="btn btn-secondary btn-sm" id="afegirMunicipi5">Afegir causa de mort</a>
+            <button id="refreshButton5" class="btn btn-primary btn-sm">Actualitzar llistat</button>
           </div>
         </div>
 
@@ -290,8 +290,8 @@ $id = $routeParams[0];
           <select class="form-select" id="ofici" value="" name="ofici">
           </select>
           <div class="mt-2">
-            <a href="https://memoriaterrassa.cat/gestio/ofici/nou" target="_blank" class="btn btn-secondary btn-sm" id="afegirMunicipi1">Afegir ofici</a>
-            <button id="refreshButtonOfici" class="btn btn-primary btn-sm">Actualitzar llistat oficis</button>
+            <a href="<?php echo APP_WEB . APP_INTRANET . $url['auxiliars'] ?>/nou-ofici" target="_blank" class="btn btn-secondary btn-sm" id="afegirMunicipi1">Afegir ofici</a>
+            <button id="refreshButtonOfici" class="btn btn-primary btn-sm">Actualitzar llistat</button>
           </div>
         </div>
 
@@ -306,8 +306,8 @@ $id = $routeParams[0];
           </select>
 
           <div class="mt-2">
-            <a href="https://memoriaterrassa.cat/gestio/carrec-empresa/nou" target="_blank" class="btn btn-secondary btn-sm" id="afegirMunicipi6">Afegir càrrec empresa</a>
-            <button id="refreshButtonCarrec" class="btn btn-primary btn-sm">Actualitzar llistat càrrecs</button>
+            <a href="<?php echo APP_WEB . APP_INTRANET . $url['auxiliars'] ?>/nou-carrec-empresa" target="_blank" class="btn btn-secondary btn-sm" id="afegirMunicipi6">Afegir càrrec empresa</a>
+            <button id="refreshButtonCarrec" class="btn btn-primary btn-sm">Actualitzar llistat</button>
           </div>
         </div>
 
@@ -322,8 +322,8 @@ $id = $routeParams[0];
           <select class="form-select" id="sub_sector" value="" name="sub_sector">
           </select>
           <div class="mt-2">
-            <a href="https://memoriaterrassa.cat/gestio/sub-sector-economic/nou" target="_blank" class="btn btn-secondary btn-sm" id="afegirMunicipi6">Afegir sub-sector econòmic</a>
-            <button id="refreshButtonSubSector" class="btn btn-primary btn-sm">Actualitzar llistat sub-sectors</button>
+            <a href="<?php echo APP_WEB . APP_INTRANET . $url['auxiliars'] ?>/nou-sub-sector-economic" target="_blank" class="btn btn-secondary btn-sm" id="afegirMunicipi6">Afegir sub-sector econòmic</a>
+            <button id="refreshButtonSubSector" class="btn btn-primary btn-sm">Actualitzar llistat</button>
           </div>
         </div>
 
@@ -346,8 +346,8 @@ $id = $routeParams[0];
           </div>
 
           <div class="mt-2">
-            <a href="https://memoriaterrassa.cat/gestio/partit-politic/nou" target="_blank" class="btn btn-secondary btn-sm" id="afegirMunicipi7">Afegir partit polític</a>
-            <button id="refreshButtonPartits" class="btn btn-primary btn-sm">Actualitzar llistat partits</button>
+            <a href="<?php echo APP_WEB . APP_INTRANET . $url['auxiliars'] ?>/nou-partit-politic" target="_blank" class="btn btn-secondary btn-sm" id="afegirMunicipi7">Afegir partit polític</a>
+            <button id="refreshButtonPartits" class="btn btn-primary btn-sm">Actualitzar llistat</button>
           </div>
         </div>
 
@@ -363,14 +363,14 @@ $id = $routeParams[0];
           </div>
 
           <div class="mt-2">
-            <a href="https://memoriaterrassa.cat/gestio/sindicat/nou" target="_blank" class="btn btn-secondary btn-sm" id="afegirMunicipi8">Afegir sindicat</a>
-            <button id="refreshButtonSindicats" class="btn btn-primary btn-sm">Actualitzar llistat sindicats</button>
+            <a href="<?php echo APP_WEB . APP_INTRANET . $url['auxiliars'] ?>/nou-sindicat" target="_blank" class="btn btn-secondary btn-sm" id="afegirMunicipi8">Afegir sindicat</a>
+            <button id="refreshButtonSindicats" class="btn btn-primary btn-sm">Actualitzar llistat</button>
           </div>
 
         </div>
 
         <div class="col-md-12">
-          <label for="activitat_durant_guerra" class="form-label negreta">Activitat política/sindical durant la guerra:</label>
+          <label for="activitat_durant_guerra" class="form-label negreta">Activitat política/sindical durant la guerra (especificar en format text, opcional):</label>
           <textarea class="form-control" id="activitat_durant_guerra" name="activitat_durant_guerra" value="" rows="3"></textarea>
         </div>
 

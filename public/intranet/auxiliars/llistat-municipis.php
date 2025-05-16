@@ -8,7 +8,7 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
         <h4>Llistat de municipis</h4>
 
         <div class="text-start">
-            <p><button class="btn btn-primary" onclick="window.location.href='<?php echo APP_INTRANET; ?>/municipi/nou'">
+            <p><button class="btn btn-primary" onclick="window.location.href='<?php echo APP_INTRANET . $url['auxiliars']; ?>/nou-municipi'">
                     Crear nou municipi
                 </button></p>
         </div>

@@ -2,10 +2,10 @@
 require_once APP_ROOT . '/public/intranet/includes/header.php';
 
 // Obtener la URL completa
-$url = $_SERVER['REQUEST_URI'];
+$url2 = $_SERVER['REQUEST_URI'];
 
 // Dividir la URL en partes usando '/' como delimitador
-$urlParts = explode('/', $url);
+$urlParts = explode('/', $url2);
 
 // Obtener la parte deseada (en este caso, la cuarta parte)
 $categoriaId = $urlParts[3] ?? '';
@@ -52,12 +52,13 @@ if ($categoriaId === "modifica") {
     $btnModificar = 2;
     // Pàgina inserció dades
 }
+
 ?>
 
 <div class="container" style="margin-bottom:50px;border: 1px solid gray;border-radius: 10px;padding:25px;background-color:#eaeaea">
     <form id="municipiForm">
         <div class="container">
-            <div class="row">
+            <div class="row g-5">
                 <?php if ($modificaBtn === 1) { ?>
                     <h2>Modificació dades municipi</h2>
                     <h4 id="fitxaMunicipi">Municipi: <?php echo $ciutat_old; ?></h4>
@@ -87,8 +88,8 @@ if ($categoriaId === "modifica") {
                     <select class="form-select" id="comarca" value="" name="comarca">
                     </select>
                     <div class="mt-2">
-                        <a href="https://memoriaterrassa.cat/gestio/comarca/nou" target="_blank" class="btn btn-secondary btn-sm" id="afegirComarca">Afegir comarca</a>
-                        <button id="refreshButtonComarca" class="btn btn-primary btn-sm">Actualitzar llistat comarques</button>
+                        <a href="<?php echo APP_WEB . APP_INTRANET . $url['auxiliars'] ?>/nova-comarca" target="_blank" class="btn btn-secondary btn-sm" id="afegirComarca">Afegir comarca</a>
+                        <button id="refreshButtonComarca" class="btn btn-primary btn-sm">Actualitzar llistat</button>
                     </div>
                 </div>
 
@@ -97,8 +98,8 @@ if ($categoriaId === "modifica") {
                     <select class="form-select" id="provincia" value="" name="provincia">
                     </select>
                     <div class="mt-2">
-                        <a href="https://memoriaterrassa.cat/gestio/provincia/nou" target="_blank" class="btn btn-secondary btn-sm" id="afegirProvincia">Afegir provincia</a>
-                        <button id="refreshButtonProvincia" class="btn btn-primary btn-sm">Actualitzar llistat provincies</button>
+                        <a href="<?php echo APP_WEB . APP_INTRANET . $url['auxiliars'] ?>/nova-provincia" target="_blank" class="btn btn-secondary btn-sm" id="afegirProvincia">Afegir provincia</a>
+                        <button id="refreshButtonProvincia" class="btn btn-primary btn-sm">Actualitzar llistat</button>
                     </div>
                 </div>
 
@@ -107,8 +108,8 @@ if ($categoriaId === "modifica") {
                     <select class="form-select" id="comunitat" value="" name="comunitat">
                     </select>
                     <div class="mt-2">
-                        <a href="https://memoriaterrassa.cat/gestio/comunitat/nou" target="_blank" class="btn btn-secondary btn-sm" id="afegirComunitat">Afegir comunitat</a>
-                        <button id="refreshButtonComunitat" class="btn btn-primary btn-sm">Actualitzar llistat comunitats</button>
+                        <a href="<?php echo APP_WEB . APP_INTRANET . $url['auxiliars'] ?>/nova-comunitat" target="_blank" class="btn btn-secondary btn-sm" id="afegirComunitat">Afegir comunitat</a>
+                        <button id="refreshButtonComunitat" class="btn btn-primary btn-sm">Actualitzar llistat</button>
                     </div>
                 </div>
 
@@ -117,8 +118,8 @@ if ($categoriaId === "modifica") {
                     <select class="form-select" id="estat" value="" name="estat">
                     </select>
                     <div class="mt-2">
-                        <a href="https://memoriaterrassa.cat/gestio/estat/nou" target="_blank" class="btn btn-secondary btn-sm" id="afegirEstat">Afegir estat</a>
-                        <button id="refreshButtonEstat" class="btn btn-primary btn-sm">Actualitzar llistat estats</button>
+                        <a href="<?php echo APP_WEB . APP_INTRANET . $url['auxiliars'] ?>/nou-estat/" target="_blank" class="btn btn-secondary btn-sm" id="afegirEstat">Afegir estat</a>
+                        <button id="refreshButtonEstat" class="btn btn-primary btn-sm">Actualitzar llistat</button>
                     </div>
                 </div>
 
@@ -151,16 +152,12 @@ if ($categoriaId === "modifica") {
     async function auxiliarSelect(idAux, api, elementId, valorText) {
 
         const devDirectory = `https://${window.location.hostname}`;
-        let urlAjax = devDirectory + "/api/auxiliars/get/?type=" + api;
-
-        // Obtener el token del localStorage
-        let token = localStorage.getItem('token');
+        let urlAjax = devDirectory + "/api/auxiliars/get/" + api;
 
         // Configurar las opciones de la solicitud
         const options = {
             method: 'GET',
             headers: {
-                'Authorization': 'Bearer ' + token,
                 'Content-Type': 'application/json'
             }
         };

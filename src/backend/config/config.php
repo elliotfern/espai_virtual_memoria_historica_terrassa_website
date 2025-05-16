@@ -26,6 +26,7 @@ define("BACKEND_URL", 'public/intranet');
 
 // definicio de url
 $url = [
+    'homepage' => '/00_homepage',
     'auth' => '/auth',
     'auxiliars' => '/auxiliars',
 ];

@@ -9,7 +9,7 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
             <h4>Llistat d'usuaris</h4>
             <?php if (isUserAdmin()) : ?>
 
-                <p><button onclick="window.location.href='<?php echo APP_INTRANET; ?>/auxiliars/nou-usuari'" class="btn btn-success">Nou usuari</button></p>
+                <p><button onclick="window.location.href='<?php echo APP_INTRANET . $url['auxiliars']; ?>/nou-usuari'" class="btn btn-success">Nou usuari</button></p>
 
                 <div id="tabla1"></div>
 

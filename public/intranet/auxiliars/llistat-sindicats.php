@@ -8,7 +8,7 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
         <h4>Llistat de sindicats</h4>
 
         <div class="text-start">
-            <p><button class="btn btn-primary" onclick="window.location.href='<?php echo APP_INTRANET; ?>/sindicat/nou'">
+            <p><button class="btn btn-primary" onclick="window.location.href='<?php echo APP_INTRANET . $url['auxiliars']; ?>/nou-sindicat'">
                     Crear nou sindicat
                 </button></p>
         </div>
