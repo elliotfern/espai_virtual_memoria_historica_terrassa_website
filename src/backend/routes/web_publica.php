@@ -8,7 +8,7 @@ $base_routes = [
     '/inici' => 'public/web-publica/inici.php',
 
     // Accés àrea privada
-    '/entrada' => 'public/intranet/00_homepage/login.php',
+    '/acces' => 'public/intranet/00_homepage/login.php',
 
     // 1. Base de dades
     '/base-dades/general' => 'public/web-publica/base-dades/base-dades-global.php',
@@ -70,7 +70,7 @@ $routes = [
         'header_menu_footer' => true
     ],
 
-    '/entrada' => [
+    '/acces' => [
         'view' => 'public/intranet/00_homepage/login.php',
         'needs_session' => false,
         'header_footer' => false,

@@ -33,9 +33,9 @@ $routes = [
         'view' => BACKEND_API . $url['auxiliars'] . '/put-auxiliars.php',
     ]),
 
-    '/api/auxiliars/post' => ['view' => 'src/backend/api/auxiliars/post-auxiliars.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
-
-    '/api/auxiliars/put' => ['view' => 'src/backend/api/auxiliars/put-auxiliars.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+    APP_API . $url['auxiliars'] . '/post/{slug}' => array_merge($defaultApiConfig, [
+        'view' => BACKEND_API . $url['auxiliars'] . '/post-auxiliars.php',
+    ]),
 
     // API INTRANET OPERACIONS CRUD
     // API db_cost_huma_morts_front

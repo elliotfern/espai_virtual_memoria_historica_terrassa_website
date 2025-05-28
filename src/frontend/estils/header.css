@@ -88,3 +88,12 @@
     height: auto;
   }
 }
+
+#userLogged {
+  background-color: #133b7c !important;
+  padding: 5px;
+  color: white !important;
+  font-family: 'Raleway';
+  font-size: 17px;
+  border-radius: 10px;
+}

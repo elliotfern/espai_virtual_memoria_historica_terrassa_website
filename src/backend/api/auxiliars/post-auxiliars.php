@@ -1,13 +1,29 @@
 <?php
+
+$slug = $routeParams[0];
+
 // Configuración de cabeceras para aceptar JSON y responder JSON
 header("Content-Type: application/json");
-header("Access-Control-Allow-Origin: https://memoriaterrassa.cat");
 header("Access-Control-Allow-Methods: POST");
+
+// Definir el dominio permitido
+$allowedOrigin = DOMAIN;
+
+// Llamar a la función para verificar el referer
+checkReferer($allowedOrigin);
+
+// Verificar que el método de la solicitud sea GET
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header('HTTP/1.1 405 Method Not Allowed');
+    echo json_encode(['error' => 'Method not allowed']);
+    exit();
+}
+
 
 // DB_DADES PERSONALS
 // 1) POST municipi
-// ruta POST => "/api/auxiliars/post/?type=municipi"
-if (isset($_GET['type']) && $_GET['type'] == 'municipi') {
+// ruta POST => "/api/auxiliars/post/municipi"
+if ($slug === "municipi") {
     $inputData = file_get_contents('php://input');
     $data = json_decode($inputData, true);
 
@@ -116,8 +132,8 @@ if (isset($_GET['type']) && $_GET['type'] == 'municipi') {
         echo json_encode(["status" => "error", "message" => "S'ha produit un error a la base de dades: " . $e->getMessage()]);
     }
     // 2) POST ofici
-    // ruta POST => "/api/auxiliars/post/?type=ofici"
-} elseif (isset($_GET['type']) && $_GET['type'] == 'ofici') {
+    // ruta POST => "/api/auxiliars/post/ofici"
+} else if ($slug === "ofici") {
     $inputData = file_get_contents('php://input');
     $data = json_decode($inputData, true);
 
@@ -126,7 +142,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'municipi') {
 
     // Validación de los datos recibidos
     if (empty($data['ofici_cat'])) {
-        $errors[] = 'El camp ciutat és obligatori.';
+        $errors[] = 'El camp ofici és obligatori.';
     }
 
 
@@ -199,8 +215,8 @@ if (isset($_GET['type']) && $_GET['type'] == 'municipi') {
         echo json_encode(["status" => "error", "message" => "S'ha produit un error a la base de dades: " . $e->getMessage()]);
     }
     // 3) POST tipologia_espai
-    // ruta POST => "/api/auxiliars/post/?type=tipologia_espai"
-} elseif (isset($_GET['type']) && $_GET['type'] == 'tipologia_espai') {
+    // ruta POST => "/api/auxiliars/post/tipologia_espai"
+} else if ($slug === "tipologia_espai") {
     $inputData = file_get_contents('php://input');
     $data = json_decode($inputData, true);
 
@@ -282,8 +298,8 @@ if (isset($_GET['type']) && $_GET['type'] == 'municipi') {
         echo json_encode(["status" => "error", "message" => "S'ha produit un error a la base de dades: " . $e->getMessage()]);
     }
     // 4) POST causa_mort
-    // ruta POST => "/api/auxiliars/post/?type=causa_mort"
-} elseif (isset($_GET['type']) && $_GET['type'] == 'causa_mort') {
+    // ruta POST => "/api/auxiliars/post/causa_mort"
+} else if ($slug === "causa_mort") {
     $inputData = file_get_contents('php://input');
     $data = json_decode($inputData, true);
 
@@ -292,7 +308,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'municipi') {
 
     // Validación de los datos recibidos
     if (empty($data['causa_defuncio_ca'])) {
-        $errors[] = 'El camp ciutat és obligatori.';
+        $errors[] = 'El camp causa_defuncio és obligatori.';
     }
 
 
@@ -448,8 +464,8 @@ if (isset($_GET['type']) && $_GET['type'] == 'municipi') {
         echo json_encode(["status" => "error", "message" => "S'ha produit un error a la base de dades: " . $e->getMessage()]);
     }
     // 6) POST SUB-SECTOR ECONOMIC
-    // ruta POST => "/api/auxiliars/post/?type=sub_sector_economic"
-} elseif (isset($_GET['type']) && $_GET['type'] == 'sub_sector_economic') {
+    // ruta POST => "/api/auxiliars/post/sub_sector_economic"
+} else if ($slug === "sub_sector_economic") {
     $inputData = file_get_contents('php://input');
     $data = json_decode($inputData, true);
 
@@ -458,9 +474,8 @@ if (isset($_GET['type']) && $_GET['type'] == 'municipi') {
 
     // Validación de los datos recibidos
     if (empty($data['sub_sector_cat'])) {
-        $errors[] = 'El camp ciutat és obligatori.';
+        $errors[] = 'El camp sub_sector és obligatori.';
     }
-
 
     // Si hay errores, devolver una respuesta con los errores
     if (!empty($errors)) {
@@ -531,8 +546,8 @@ if (isset($_GET['type']) && $_GET['type'] == 'municipi') {
         echo json_encode(["status" => "error", "message" => "S'ha produit un error a la base de dades: " . $e->getMessage()]);
     }
     // 6) POST PARTIT POLITIC
-    // ruta POST => "/api/auxiliars/post/?type=partit_politic"
-} elseif (isset($_GET['type']) && $_GET['type'] == 'partit_politic') {
+    // ruta POST => "/api/auxiliars/post/partit_politic"
+} elseif ($slug === "partit_politic") {
     $inputData = file_get_contents('php://input');
     $data = json_decode($inputData, true);
 
@@ -541,11 +556,11 @@ if (isset($_GET['type']) && $_GET['type'] == 'municipi') {
 
     // Validación de los datos recibidos
     if (empty($data['partit_politic'])) {
-        $errors[] = 'El camp ciutat és obligatori.';
+        $errors[] = 'El camp partit polític és obligatori.';
     }
 
     if (empty($data['sigles'])) {
-        $errors[] = 'El camp ciutat és obligatori.';
+        $errors[] = 'El camp sigles és obligatori.';
     }
 
     // Si hay errores, devolver una respuesta con los errores
@@ -618,8 +633,8 @@ if (isset($_GET['type']) && $_GET['type'] == 'municipi') {
         echo json_encode(["status" => "error", "message" => "S'ha produit un error a la base de dades: " . $e->getMessage()]);
     }
     // 6) POST SINDICAT
-    // ruta POST => "/api/auxiliars/post/?type=sindicat"
-} elseif (isset($_GET['type']) && $_GET['type'] == 'sindicat') {
+    // ruta POST => "/api/auxiliars/post/sindicat"
+} elseif ($slug === "sindicat") {
     $inputData = file_get_contents('php://input');
     $data = json_decode($inputData, true);
 
@@ -628,13 +643,12 @@ if (isset($_GET['type']) && $_GET['type'] == 'municipi') {
 
     // Validación de los datos recibidos
     if (empty($data['sindicat'])) {
-        $errors[] = 'El camp ciutat és obligatori.';
+        $errors[] = 'El camp sindicat és obligatori.';
     }
 
     if (empty($data['sigles'])) {
-        $errors[] = 'El camp ciutat és obligatori.';
+        $errors[] = 'El camp sigles és obligatori.';
     }
-
 
     // Si hay errores, devolver una respuesta con los errores
     if (!empty($errors)) {
@@ -708,8 +722,8 @@ if (isset($_GET['type']) && $_GET['type'] == 'municipi') {
     }
 
     // 7) POST COMARCA
-    // ruta POST => "/api/auxiliars/post/?type=comarca"
-} elseif (isset($_GET['type']) && $_GET['type'] == 'comarca') {
+    // ruta POST => "/api/auxiliars/post/comarca"
+} else if ($slug === "comarca") {
     $inputData = file_get_contents('php://input');
     $data = json_decode($inputData, true);
 
@@ -806,8 +820,8 @@ if (isset($_GET['type']) && $_GET['type'] == 'municipi') {
     }
 
     // 7) POST PROVINCIA
-    // ruta POST => "/api/auxiliars/post/?type=provincia"
-} elseif (isset($_GET['type']) && $_GET['type'] == 'provincia') {
+    // ruta POST => "/api/auxiliars/post/provincia"
+} else if ($slug === "provincia") {
     $inputData = file_get_contents('php://input');
     $data = json_decode($inputData, true);
 
@@ -904,8 +918,8 @@ if (isset($_GET['type']) && $_GET['type'] == 'municipi') {
     }
 
     // 7) POST COMUNITAT AUTONOMA
-    // ruta POST => "/api/auxiliars/post/?type=comunitat"
-} elseif (isset($_GET['type']) && $_GET['type'] == 'comunitat') {
+    // ruta POST => "/api/auxiliars/post/comunitat"
+} else if ($slug === "comunitat") {
     $inputData = file_get_contents('php://input');
     $data = json_decode($inputData, true);
 
@@ -1002,8 +1016,8 @@ if (isset($_GET['type']) && $_GET['type'] == 'municipi') {
     }
 
     // 8) POST ESTAT
-    // ruta POST => "/api/auxiliars/post/?type=estat"
-} elseif (isset($_GET['type']) && $_GET['type'] == 'estat') {
+    // ruta POST => "/api/auxiliars/post/estat"
+} else if ($slug === "estat") {
     $inputData = file_get_contents('php://input');
     $data = json_decode($inputData, true);
 
@@ -1097,5 +1111,165 @@ if (isset($_GET['type']) && $_GET['type'] == 'municipi') {
         // En caso de error en la conexión o ejecución de la consulta
         http_response_code(500); // Internal Server Error
         echo json_encode(["status" => "error", "message" => "S'ha produit un error a la base de dades: " . $e->getMessage()]);
+    }
+    // 8) POST AVATAR USUARI
+    // ruta POST => "/api/auxiliars/post/usuariAvatar"
+} else if ($slug === "usuariAvatar") {
+
+    // Verificar si se recibió un archivo
+    if (empty($_FILES['fileToUpload']) || $_FILES['fileToUpload']['error'] !== UPLOAD_ERR_OK) {
+        http_response_code(400);
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'No se subió ningún archivo o hubo un error en la carga.',
+            'error_code' => $_FILES['fileToUpload']['error'] ?? 'Sin información'
+        ]);
+        exit();
+    }
+
+    // Configuración de rutas
+    $servidorMedia = '/home/epgylzqu/memoriaterrassa.cat/public/img/';
+    $servidorTemp = '/home/epgylzqu/memoriaterrassa.cat/public/tmp/';
+
+    // Verificar y sanitizar el tipo de imagen
+    $tipus = isset($_POST['tipus']) ? (int)$_POST['tipus'] : 0;
+    $allowed_types = [
+        2 => 'usuaris-avatars',
+    ];
+    $typeName = $allowed_types[$tipus] ?? 'tmp';
+
+    // Crear el directorio de destino si no existe
+    $target_dir = rtrim($servidorMedia, '/') . '/' . $typeName . '/';
+    if (!file_exists($target_dir)) {
+        if (!mkdir($target_dir, 0777, true)) {
+            echo json_encode(['error' => "No se pudo crear el directorio $target_dir."]);
+            exit();
+        }
+    }
+
+    // Verificar permisos de escritura
+    if (!is_writable($target_dir)) {
+        echo json_encode(['error' => "El directorio $target_dir no tiene permisos de escritura."]);
+        exit();
+    }
+
+    // Validar el archivo
+    $file = $_FILES['fileToUpload'];
+    $allowed_mime_types = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+    $max_file_size = 2 * 1024 * 1024; // 2 MB
+
+    if ($file['size'] > $max_file_size || !in_array($file['type'], $allowed_mime_types)) {
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'El archivo es demasiado grande o no es un tipo de imagen permitido.',
+        ]);
+        exit();
+    }
+
+    // Generar un nombre único para el archivo
+    $uniqueName = basename($file['name']);
+    $targetFile = $target_dir . $uniqueName;
+
+    // Mover el archivo al servidor
+    if (!move_uploaded_file($file['tmp_name'], $targetFile)) {
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'Hubo un problema al mover el archivo al servidor.',
+        ]);
+        exit();
+    }
+
+    // Insertar datos en la base de datos
+    // id 	nomArxiu 	nomImatge 	tipus 	dateCreated 	dateModified 	
+    try {
+        $nomArxiu = pathinfo($uniqueName, PATHINFO_FILENAME);
+
+        $nom = !empty($_POST['nom']) ? data_input($_POST['nom']) : ($hasError = true);
+        $nomImatge = !empty($_POST['nomImatge']) ? data_input($_POST['nomImatge']) : ($hasError = true);
+        $dateCreated = date('Y-m-d');
+
+        // Usar una conexión global para PDO
+        global $conn;
+        /** @var PDO $conn */
+        $sql = "INSERT INTO aux_imatges (nomArxiu, tipus, nomImatge, dateCreated) 
+            VALUES (:nomArxiu, :tipus, :nomImatge, :dateCreated)";
+
+        $stmt = $conn->prepare($sql);
+
+        $stmt->bindParam(":nomArxiu", $nomArxiu, PDO::PARAM_STR);
+        $stmt->bindParam(":tipus", $tipus, PDO::PARAM_INT);
+        $stmt->bindParam(":nomImatge", $nomImatge, PDO::PARAM_STR);
+        $stmt->bindParam(":dateCreated", $dateCreated, PDO::PARAM_STR);
+
+        if ($stmt->execute()) {
+            echo json_encode([
+                'status' => 'success',
+                'message' => 'El archivo se ha subido y registrado correctamente.',
+            ]);
+        } else {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Hubo un problema al insertar en la base de datos.',
+            ]);
+        }
+    } catch (Exception $e) {
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'Error al interactuar con la base de datos.',
+            'error' => $e->getMessage(),
+        ]);
+    }
+} else if ($slug === "usuari") {
+    $inputData = file_get_contents('php://input');
+    $data = json_decode($inputData, true);
+
+    // Verificar si se recibieron datos
+    if ($data === null) {
+        // Error al decodificar JSON
+        header('HTTP/1.1 400 Bad Request');
+        echo json_encode(['error' => 'Error decoding JSON data']);
+        exit();
+    }
+
+    $nom = isset($data['nom']) && trim($data['nom']) !== '' ? data_input($data['nom']) : null;
+    $email = isset($data['email']) && trim($data['email']) !== '' ? data_input($data['email']) : null;
+    $biografia_cat = isset($data['biografia_cat']) ? data_input($data['biografia_cat']) : null;
+    $user_type = isset($data['user_type']) && trim($data['user_type']) !== '' ? (int) $data['user_type'] : null;
+    $password = isset($data['password']) && trim($data['password']) !== '' ? data_input($data['password']) : null;
+    $avatar = isset($data['avatar']) ? (int) $data['avatar'] : null;
+
+    // Verificar campos obligatorios
+    if ($nom === null || $email === null || $user_type === null || $password === null) {
+        http_response_code(400);
+        echo json_encode(['status' => 'error', 'message' => 'Falten dades obligatòries']);
+        exit();
+    }
+
+    // Hashear el password
+    $hashedPassword = password_hash($password, PASSWORD_DEFAULT, ['cost' => 10]);
+
+    global $conn;
+    /** @var PDO $conn */
+    $query = "INSERT INTO auth_users (nom, email, biografia_cat, user_type, password, avatar)
+          VALUES (:nom, :email, :biografia_cat, :user_type, :password, :avatar)";
+
+    try {
+        $stmt = $conn->prepare($query);
+        $stmt->bindParam(':nom', $nom, PDO::PARAM_STR);
+        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+        $stmt->bindParam(':biografia_cat', $biografia_cat, PDO::PARAM_STR);
+        $stmt->bindParam(':user_type', $user_type, PDO::PARAM_INT);
+        $stmt->bindParam(':password', $hashedPassword, PDO::PARAM_STR);
+        $stmt->bindParam(':avatar', $avatar, PDO::PARAM_INT);
+
+        $stmt->execute();
+
+        header("Content-Type: application/json");
+        echo json_encode(['status' => 'success', 'message' => 'Usuari creat correctament']);
+    } catch (PDOException $e) {
+
+        // Si no hay resultados, devolver un mensaje de error
+        header("Content-Type: application/json");
+        echo json_encode(['status' => 'error', 'message' => 'Error en la transmissió de les dades.']);
     }
 }

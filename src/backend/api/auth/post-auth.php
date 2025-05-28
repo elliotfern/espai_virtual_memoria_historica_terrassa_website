@@ -45,8 +45,9 @@ if ($slug === "login") {
 
     global $conn;
     /** @var PDO $conn */
-    $query = "SELECT u.id, u.email, u.password, u.user_type, u.nom
+    $query = "SELECT u.id, u.email, u.password, u.user_type, u.nom, i.nomArxiu
               FROM auth_users AS u
+              INNER JOIN aux_imatges AS i ON u.avatar = i.id
               WHERE u.email = :email";
     $stmt = $conn->prepare($query);
     $stmt->execute(['email' => $username]);
@@ -64,6 +65,7 @@ if ($slug === "login") {
     $id = $row['id'];
     $userType = $row['user_type'];
     $nom = $row['nom'];
+    $avatar = $row['nomArxiu'];
 
     if (password_verify($password, $hash) && in_array($userType, [1, 2, 3])) {
         session_start();
@@ -75,6 +77,7 @@ if ($slug === "login") {
             "user_id" =>  $id,
             "username" => $nom,
             "user_type" => $userType,
+            "avatar" => $avatar,
             'iat' => time(),
             'exp' => time() + 604800,
             "kid" => "key_api"

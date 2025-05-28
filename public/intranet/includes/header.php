@@ -4,19 +4,8 @@ $isAdmin = isUserAdmin();
 $isAutor = isUserAutor();
 ?>
 
-<div class="container" style="margin-top:10px;margin-bottom:25px">
-    <span class="d-flex align-items-center text-decoration-none">
-        <strong>
-            <div id="userDiv" class="white"> </div>
-        </strong>
-    </span>
-    <a href="#" class="links-sidebar link-sortir" id="btnSortir">Sortir de la intranet</a>
-</div>
-
 <div class="container text-center">
     <div class="row">
-
-
 
         <div class="col-12 col-md-12 d-flex flex-column flex-md-row justify-content-md-between gap-3">
 

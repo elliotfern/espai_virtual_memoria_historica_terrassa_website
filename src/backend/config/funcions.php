@@ -9,6 +9,32 @@ function getSanitizedCookie($name)
     return isset($_COOKIE[$name]) ? trim(htmlspecialchars($_COOKIE[$name], ENT_QUOTES, 'UTF-8')) : null;
 }
 
+function isUserLogged(): bool
+{
+    // Cargar variables de entorno desde .env
+    $jwtSecret = $_ENV['TOKEN'];
+
+    if (!isset($_COOKIE['token'])) {
+        return false;
+    }
+
+    $token = trim($_COOKIE['token']);
+
+    try {
+        $decoded = JWT::decode($token, new Key($jwtSecret, 'HS256'));
+
+        // Comprobamos si el usuario es admin (user_type = 1)
+        if (isset($decoded->user_type) && in_array($decoded->user_type, [1, 2, 3, 4])) {
+            return true;
+        }
+    } catch (Exception $e) {
+        // Token inválido, expirado o manipulado
+        error_log("Error en isUserLogged(): " . $e->getMessage());
+    }
+
+    return false;
+}
+
 
 function isUserAdmin(): bool
 {

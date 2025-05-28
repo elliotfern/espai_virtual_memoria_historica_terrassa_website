@@ -60,15 +60,14 @@ $langCode2 = getLanguageFromUrl();
 ?>
 
 <div class="container-fluid full-screen fonsColorPrimerHeader header1">
-    <div class="container">
-        <div class="row align-items-center g-3 g-md-0 m-0 p-0">
+    <div class="container py-2">
+        <div class="d-flex flex-column flex-md-row align-items-center justify-content-between">
 
-            <!-- Bloque de idiomas -->
-            <div class="col-4 col-md-6 d-flex justify-content-center justify-content-md-start order-1 order-md-1">
-
+            <!-- Idiomas -->
+            <div class="d-flex align-items-center">
                 <!-- Dropdown solo en móviles -->
                 <div class="dropdown d-md-none">
-                    <button class="btn btn-primary btn-custom-3 w-auto align-self-start dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                    <button class="btn btn-primary btn-custom-3 dropdown-toggle" type="button" data-bs-toggle="dropdown">
                         Idioma
                     </button>
                     <ul class="dropdown-menu">
@@ -85,51 +84,50 @@ $langCode2 = getLanguageFromUrl();
                 <!-- Lista normal en desktop -->
                 <ul class="list-unstyled d-none d-md-flex flex-row gap-3 m-0 p-0">
                     <?php foreach ($languages as $langCode => $langName): ?>
-                        <li class="nav-item">
+                        <li>
                             <a class="nav-link" href="<?php echo $langCode === 'ca' ? $baseUri : '/' . $langCode . $baseUri ?>">
                                 <?php echo $langName; ?>
                             </a>
                         </li>
                     <?php endforeach; ?>
                 </ul>
+            </div>
+
+            <!-- Botón login o nombre usuario -->
+            <div class="my-2 my-md-0 text-center">
+
+                <?php if (isUserLogged()): ?>
+                    <div id="userLogged"></div>
+                <?php else: ?>
+                    <a class="btn btn-primary btn-custom-3" href="<?php echo $langCode2 === 'ca' ? '/acces' : '/' . $langCode2 . '/acces'; ?>">
+                        Accés intranet
+                    </a>
+                <?php endif; ?>
 
             </div>
 
-            <!-- Bloque de redes sociales -->
-            <div class="col-8 col-md-6 d-flex justify-content-center justify-content-md-end order-1 order-md-2 mt-2 mt-md-0">
-                <ul class="list-unstyled d-flex flex-row gap-3 m-0 p-0">
-                    <li class="nav-item">
-                        <a class="nav-link" href="https://bsky.app/profile/terrassamemoria.bsky.social" target="_blank">
-                            <img src="<?php echo APP_WEB; ?>/public/img/bluesky.png" alt="Bluesky" class="logoXarxes">
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="https://x.com/terrassaMemoria" target="_blank">
-                            <img src="<?php echo APP_WEB; ?>/public/img/x2.png" alt="X" class="logoXarxes">
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="https://bsky.app/profile/terrassamemoria.bsky.social" target="_blank">
-                            <img src="<?php echo APP_WEB; ?>/public/img/mastodon.png" alt="Mastodon" class="logoXarxes">
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="" target="_blank">
-                            <img src="<?php echo APP_WEB; ?>/public/img/instagram2.png" alt="Instagram" class="logoXarxes">
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="" target="_blank">
-                            <img src="<?php echo APP_WEB; ?>/public/img/linkedin2.png" alt="Linkedin" class="logoXarxes">
-                        </a>
-                    </li>
-                </ul>
+            <!-- Redes sociales -->
+            <div class="d-flex align-items-center gap-2">
+                <a class="nav-link" href="https://bsky.app/profile/terrassamemoria.bsky.social" target="_blank">
+                    <img src="<?php echo APP_WEB; ?>/public/img/bluesky.png" alt="Bluesky" class="logoXarxes">
+                </a>
+                <a class="nav-link" href="https://x.com/terrassaMemoria" target="_blank">
+                    <img src="<?php echo APP_WEB; ?>/public/img/x2.png" alt="X" class="logoXarxes">
+                </a>
+                <a class="nav-link" href="https://bsky.app/profile/terrassamemoria.bsky.social" target="_blank">
+                    <img src="<?php echo APP_WEB; ?>/public/img/mastodon.png" alt="Mastodon" class="logoXarxes">
+                </a>
+                <a class="nav-link" href="#" target="_blank">
+                    <img src="<?php echo APP_WEB; ?>/public/img/instagram2.png" alt="Instagram" class="logoXarxes">
+                </a>
+                <a class="nav-link" href="#" target="_blank">
+                    <img src="<?php echo APP_WEB; ?>/public/img/linkedin2.png" alt="Linkedin" class="logoXarxes">
+                </a>
             </div>
 
         </div>
     </div>
 </div>
-
 
 <div class="container-fluid full-screen fonsColorSegonHeader header2">
     <div class="container py-3">

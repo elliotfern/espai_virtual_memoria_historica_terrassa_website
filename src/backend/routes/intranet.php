@@ -58,6 +58,16 @@ $routes = [
         'view' => BACKEND_URL . $url['auxiliars'] . '/form-usuari.php'
     ]),
 
+
+    APP_INTRANET . $url['auxiliars'] . '/modifica-avatar-usuari/{slug}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $url['auxiliars'] . '/form-usuari-avatar.php'
+    ]),
+
+    APP_INTRANET . $url['auxiliars'] . '/nou-avatar-usuari' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $url['auxiliars'] . '/form-usuari-avatar.php'
+    ]),
+
+
     APP_INTRANET . $url['auxiliars'] . '/nou-municipi' => array_merge($defaultProtectedConfig, [
         'view' => BACKEND_URL . $url['auxiliars'] . '/form-municipi.php'
     ]),

@@ -19,7 +19,6 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
     exit();
 }
 
-
 // GET : llistat de municipis
 // URL: https://memoriaterrassa.cat/api/auxiliars/get/municipis
 if ($slug === "municipis") {
@@ -369,6 +368,18 @@ if ($slug === "municipis") {
               FROM aux_bibliografia_llibre_detalls AS l
               LEFT JOIN aux_dades_municipis AS m ON l.ciutat = m.id
               ORDER BY l.llibre";
+
+    $result = getData($query);
+    echo json_encode($result);
+
+    // GET : llistat d'avatars usuaris
+    // URL: https://memoriaterrassa.cat/api/auxiliars/get/avatarsUsuaris
+} else if ($slug === "avatarsUsuaris") {
+
+    $query = "SELECT i.id, i.nomImatge
+            FROM aux_imatges AS i
+            WHERE i.tipus = 2
+            ORDER BY i.nomImatge ASC";
 
     $result = getData($query);
     echo json_encode($result);

@@ -1,32 +1,28 @@
 <?php
+$slug = $routeParams[0];
+
+
 // Configuración de cabeceras para aceptar JSON y responder JSON
 header("Content-Type: application/json");
-header("Access-Control-Allow-Origin: https://memoriaterrassa.cat");
 header("Access-Control-Allow-Methods: PUT");
 
-// Dominio permitido (modifica con tu dominio)
-$allowed_origin = "https://memoriaterrassa.cat";
+// Definir el dominio permitido
+$allowedOrigin = DOMAIN;
 
-// Verificar el encabezado 'Origin'
-if (isset($_SERVER['HTTP_ORIGIN'])) {
-    if ($_SERVER['HTTP_ORIGIN'] !== $allowed_origin) {
-        http_response_code(403); // Respuesta 403 Forbidden
-        echo json_encode(["error" => "Acceso denegado. Origen no permitido."]);
-        exit;
-    }
-}
+// Llamar a la función para verificar el referer
+checkReferer($allowedOrigin);
 
-// Verificar que el método HTTP sea PUT
+// Verificar que el método de la solicitud sea GET
 if ($_SERVER['REQUEST_METHOD'] !== 'PUT') {
-    http_response_code(405); // Método no permitido
-    echo json_encode(["error" => "Método no permitido. Se requiere PUT."]);
-    exit;
+    header('HTTP/1.1 405 Method Not Allowed');
+    echo json_encode(['error' => 'Method not allowed']);
+    exit();
 }
 
 // DB_DADES PERSONALS
 // 1) PUT municipi
-// ruta PUT => "/api/auxiliars/put/?type=municipi"
-if (isset($_GET['type']) && $_GET['type'] == 'municipi') {
+// ruta PUT => "/api/auxiliars/put/municipi"
+if ($slug === "municipi") {
     $inputData = file_get_contents('php://input');
     $data = json_decode($inputData, true);
 
@@ -118,5 +114,65 @@ if (isset($_GET['type']) && $_GET['type'] == 'municipi') {
         // En caso de error en la conexión o ejecución de la consulta
         http_response_code(500); // Internal Server Error
         echo json_encode(["status" => "error", "message" => "S'ha produit un error a la base de dades: " . $e->getMessage()]);
+    }
+} else if ($slug === "usuari") {
+    $inputData = file_get_contents('php://input');
+    $data = json_decode($inputData, true);
+
+    // Verificar si se recibieron datos
+    if ($data === null) {
+        // Error al decodificar JSON
+        header('HTTP/1.1 400 Bad Request');
+        echo json_encode(['error' => 'Error decoding JSON data']);
+        exit();
+    }
+
+    // Ahora puedes acceder a los datos como un array asociativo
+    $hasError = false; // Inicializamos la variable $hasError como false
+
+    $nom               = !empty($data['nom']) ? data_input($data['nom']) : ($hasError = true);
+    $email        = !empty($data['email']) ? data_input($data['email']) : ($hasError = true);
+    $biografia_cat         = !empty($data['biografia_cat']) ? data_input($data['biografia_cat']) : ($hasError = false);
+    $user_type          = !empty($data['user_type']) ? data_input($data['user_type']) : ($hasError = true);
+    $avatar            = !empty($data['avatar']) ? data_input($data['avatar']) : ($hasError = false);
+    $id                  = !empty($data['id']) ? data_input($data['id']) : ($hasError = true);
+
+    // Si hay algún error de validación
+    if ($hasError) {
+        header('HTTP/1.1 400 Bad Request');
+        echo json_encode(['status' => 'error', 'message' => 'Falten dades obligatòries']);
+        exit();
+    }
+
+    global $conn;
+    /** @var PDO $conn */
+
+    // Construcción dinámica del query dependiendo de si se actualiza la contraseña o no
+    $query = "UPDATE auth_users SET nom = :nom, email = :email, biografia_cat = :biografia_cat, user_type = :user_type, avatar = :avatar";
+    $params = [
+        ':nom' => $nom,
+        ':email' => $email,
+        ':biografia_cat' => $biografia_cat,
+        ':user_type' => $user_type,
+        ':avatar' => $avatar,
+    ];
+
+    // Si el password viene lleno, lo incluimos
+    if (!empty($data['password'])) {
+        $hashedPassword = password_hash($data['password'], PASSWORD_DEFAULT, ['cost' => 10]);
+        $query .= ", password = :password";
+        $params[':password'] = $hashedPassword;
+    }
+
+    $query .= " WHERE id = :id";
+    $params[':id'] = $id;
+
+    try {
+        $stmt = $conn->prepare($query);
+        $stmt->execute($params);
+
+        echo json_encode(['status' => 'success', 'message' => 'Usuari actualitzat correctament']);
+    } catch (PDOException $e) {
+        echo json_encode(['status' => 'error', 'message' => 'Error en l\'actualització de les dades.']);
     }
 }

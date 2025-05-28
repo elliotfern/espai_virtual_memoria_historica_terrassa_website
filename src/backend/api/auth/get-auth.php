@@ -138,7 +138,10 @@ if ($slug === "isAdmin") {
 
     try {
         $decoded = JWT::decode($token, new Key($jwtSecret, 'HS256'));
-        echo json_encode(['username' => $decoded->username]);
+        echo json_encode([
+            'username' => $decoded->username,
+            'avatar' => $decoded->avatar
+        ]);
     } catch (Exception $e) {
         http_response_code(401);
         echo json_encode(['error' => 'Token inválido']);
@@ -171,7 +174,7 @@ if ($slug === "isAdmin") {
     // URL: https://memoriaterrassa.cat/api/auth/get/usuari
 } else if ($slug === "usuari") {
 
-    $query = "SELECT u.nom, u.email, u.biografia_cat, u.user_type, u.id
+    $query = "SELECT u.nom, u.email, u.biografia_cat, u.user_type, u.id, u.avatar
                 FROM auth_users AS u
                 WHERE u.id = :id";
 

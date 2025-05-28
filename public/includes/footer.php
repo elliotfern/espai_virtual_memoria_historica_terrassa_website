@@ -25,7 +25,7 @@
                     <a href="https://www.consellvallesoccidental.cat/" target="_blank"><img src="<?php echo APP_WEB; ?>/public/img/logo-ccvoc.svg" alt="Logo" class="logosFooter"></a>
                 </div>
                 <div class="col-12 col-md-4 col-lg-3">
-                    <a href="https://xac.gencat.cat/ca/llista_arxius_comarcals/valles_occ/" target="_blank"><img src="<?php echo APP_WEB; ?>/public/img/logo-ahct.png" alt="Logo" class="logosFooter2"></a>
+                    <a href="https://xac.gencat.cat/ca/llista_arxius_comarcals/valles_occ/" target="_blank"><img src="<?php echo APP_WEB; ?>/public/img/logo-ahct.jpg" alt="Logo" class="logosFooter"></a>
                 </div>
             </div>
 

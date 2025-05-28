@@ -26,6 +26,7 @@ if ($categoriaId === "modifica-usuari") {
     <script type="module">
         // Llenar selects con opciones
         selectOmplirDades("/api/auth/get/tipusUsuaris", "", "user_type", "tipus");
+        selectOmplirDades("/api/auxiliars/get/avatarsUsuaris", "", "avatar", "nomImatge");
     </script>
 <?php
 }
@@ -50,7 +51,7 @@ if ($categoriaId === "modifica-usuari") {
                             <div id="errText"></div>
                         </div>
 
-                        <input type="hidden" name="id" id="id" value="<?php echo $idBiografia_old; ?>">
+                        <input type="hidden" name="id" id="id" value="">
 
                         <div class="col-md-4">
                             <label for="nom" class="form-label negreta">Nom usuari:</label>
@@ -69,8 +70,18 @@ if ($categoriaId === "modifica-usuari") {
 
                         <div class="col-md-4">
                             <label for="user_type" class="form-label negreta">Tipus d'usuari:</label>
-                            <select class="form-select" id="user_type" value="" name="user_type">
+                            <select class="form-select" id="user_type" name="user_type" value="">
                             </select>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="avatar" class="form-label negreta">Avatar:</label>
+                            <select class="form-select" id="avatar" name="avatar" value="">
+                            </select>
+                            <div class="mt-2">
+                                <a href="https://memoriaterrassa.cat/gestio/auxiliars/nou-avatar-usuari" target="_blank" class="btn btn-secondary btn-sm" id="afegirAvatar">Afegir avatar</a>
+                                <button type="button" id="refreshButtonAvatar" class="btn btn-primary btn-sm">Actualitzar llistat</button>
+                            </div>
                         </div>
 
                         <div class="col-md-12">
@@ -118,6 +129,7 @@ if ($categoriaId === "modifica-usuari") {
 
                 // Llenar selects con opciones
                 selectOmplirDades("/api/auth/get/tipusUsuaris", data.user_type, "user_type", "tipus");
+                selectOmplirDades("/api/auxiliars/get/avatarsUsuaris", data.avatar, "avatar", "nomImatge");
             })
             .catch(error => console.error("Error al obtener los datos:", error));
     }

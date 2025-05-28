@@ -1,8 +1,8 @@
-<div class="container" style="margin-top:50px">
+<div class="container" style="margin-top:30px;margin-bottom:60px">
   <div class="card mx-auto" style="max-width: 400px;">
     <div class="card-body">
       <div class="container">
-        <h3>Espai Virtual de la Memòria Històrica de Terrassa - EVMHT</h3>
+        <h3>Accés gestió interna</h3>
         <?php
         echo '<div class="alert alert-success" id="loginMessageOk" style="display:none" role="alert">
                   <h4 class="alert-heading"><strong>Dades correctes!</strong></h4>

@@ -24,7 +24,7 @@ function verificarSesion()
 
     // Verifica si la cookie del token existe y es válida
     if (!isset($_COOKIE['token'])) {
-        header('Location: /gestio/entrada'); // Redirige a login si no existe el token
+        header('Location: /acces'); // Redirige a login si no existe el token
         exit();
     }
 
@@ -39,13 +39,13 @@ function verificarSesion()
 
         // Verificar si user_type es 1 (admin) o 2 (usuario regular)
         if (!in_array($userType, [1, 2, 3])) {
-            header('Location: /gestio/entrada'); // Redirige si el user_type no es válido (no es admin ni usuario regular)
+            header('Location: /acces'); // Redirige si el user_type no es válido (no es admin ni usuario regular)
             exit();
         }
     } catch (Exception $e) {
         // Si el token es inválido, ha expirado o no es manipulable
         error_log("Error al verificar sesión: " . $e->getMessage());
-        header('Location: /gestio/entrada'); // Redirige a login si el token no es válido
+        header('Location: /acces'); // Redirige a login si el token no es válido
         exit();
     }
 }

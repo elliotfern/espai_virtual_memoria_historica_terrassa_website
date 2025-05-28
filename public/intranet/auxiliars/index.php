@@ -13,6 +13,7 @@
             <p><strong>Només visible per usuaris administratius:</strong></p>
             <ul>
                 <li><a href="<?php echo APP_SERVER; ?>/gestio/auxiliars/llistat-usuaris">Taula usuaris registrats</a></li>
+                <li><a href="<?php echo APP_SERVER; ?>/gestio/auxiliars/llistat-imatges">Taula llistat imatges</a></li>
             </ul>
         <?php endif; ?>
     </div>
