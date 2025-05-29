@@ -1,18 +1,19 @@
 <?php
 
-$condicio_id = "";
-$bandol_id = "";
-$any_lleva = "";
-$unitat_inicial = "";
-$cos_id = "";
-$unitat_final = "";
-$graduacio_final = "";
-$periple_militar = "";
-$circumstancia_mort_id = "";
-$desaparegut_data = "";
-$desaparegut_lloc_id = "";
-$desaparegut_data_aparicio = "";
-$desaparegut_lloc_aparicio_id = "";
+$situacio_id = "";
+$data_alliberament = "";
+$lloc_mort_alliberament_id = "";
+$preso_tipus_id = "";
+$preso_nom = "";
+$preso_data_sortida = "";
+$preso_localitat_id = "";
+$preso_num_matricula = "";
+$deportacio_nom_camp = "";
+$deportacio_data_entrada = "";
+$deportacio_num_matricula = "";
+$deportacio_nom_subcamp = "";
+$deportacio_data_entrada_subcamp = "";
+$deportacio_nom_matricula_subcamp = "";
 $idPersona;
 $nom = "";
 $cognom1 = "";
@@ -21,26 +22,27 @@ $id = "";
 
 // Verificar si la ID existe en la base de datos
 $query = "SELECT 
-f.id, 
-f.condicio,
-f.bandol,
-f.any_lleva,
-f.unitat_inicial,
-f.cos,
-f.unitat_final ,
-f.graduacio_final,
-f.periple_militar,
-f.circumstancia_mort,
-f.desaparegut_data,
-f.desaparegut_lloc,
-f.desaparegut_data_aparicio,
-f.desaparegut_lloc_aparicio,
-d.nom,
-d.cognom1,
-d.cognom2
-FROM db_cost_huma_morts_front AS f
-LEFT JOIN db_dades_personals AS d ON f.idPersona = d.id
-WHERE f.idPersona = :idPersona";
+d.id,
+d.situacio,
+d.data_alliberament,
+d.lloc_mort_alliberament,
+d.preso_tipus,
+d.preso_nom,
+d.preso_data_sortida,
+d.preso_localitat,
+d.preso_num_matricula,
+d.deportacio_nom_camp,
+d.deportacio_data_entrada,
+d.deportacio_num_matricula,
+d.deportacio_nom_subcamp,
+d.deportacio_data_entrada_subcamp,
+d.deportacio_nom_matricula_subcamp,
+dp.nom,
+dp.cognom1,
+dp.cognom2
+FROM db_deportats AS d
+LEFT JOIN db_dades_personals AS dp ON d.idPersona = dp.id
+WHERE d.idPersona = :idPersona";
 $stmt = $conn->prepare($query);
 $stmt->bindParam(':idPersona', $idPersona, PDO::PARAM_INT);
 $stmt->execute();
@@ -49,19 +51,20 @@ $btnModificar = "";
 if ($stmt->rowCount() > 0) {
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         // Acceder a las variables de la consulta
-        $condicio_id = $row['condicio'] ?? "";
-        $bandol_id = $row['bandol'] ?? "";
-        $any_lleva = $row['any_lleva'] ?? "";
-        $unitat_inicial = $row['unitat_inicial'] ?? "";
-        $cos_id = $row['cos'] ?? "";
-        $unitat_final = $row['unitat_final'] ?? "";
-        $graduacio_final = $row['graduacio_final'] ?? "";
-        $periple_militar = $row['periple_militar'] ?? "";
-        $circumstancia_mort_id = $row['circumstancia_mort'] ?? "";
-        $desaparegut_data = $row['desaparegut_data'] ?? "";
-        $desaparegut_lloc_id = $row['desaparegut_lloc'] ?? "";
-        $desaparegut_data_aparicio = $row['desaparegut_data_aparicio'] ?? "";
-        $desaparegut_lloc_aparicio_id = $row['desaparegut_lloc_aparicio'] ?? "";
+        $situacio_id = $row['situacio'] ?? "";
+        $data_alliberament = $row['data_alliberament'] ?? "";
+        $lloc_mort_alliberament_id = $row['lloc_mort_alliberament'] ?? "";
+        $preso_tipus_id = $row['preso_tipus'] ?? "";
+        $preso_nom = $row['preso_nom'] ?? "";
+        $preso_data_sortida = $row['preso_data_sortida'] ?? "";
+        $preso_localitat_id = $row['preso_localitat'] ?? "";
+        $preso_num_matricula = $row['preso_num_matricula'] ?? "";
+        $deportacio_nom_camp = $row['deportacio_nom_camp'] ?? "";
+        $deportacio_data_entrada = $row['deportacio_data_entrada'] ?? "";
+        $deportacio_num_matricula = $row['deportacio_num_matricula'] ?? "";
+        $deportacio_nom_subcamp = $row['deportacio_nom_subcamp'] ?? "";
+        $deportacio_data_entrada_subcamp = $row['deportacio_data_entrada_subcamp'] ?? "";
+        $deportacio_nom_matricula_subcamp = $row['deportacio_nom_matricula_subcamp'] ?? "";
         $nom = $row['nom'] ?? "";
         $cognom1 = $row['cognom1'] ?? "";
         $cognom2 = $row['cognom2'] ?? "";
@@ -96,10 +99,10 @@ if ($stmt->rowCount() > 0) {
 ?>
 
 <div class="container" style="margin-bottom:50px;border: 1px solid gray;border-radius: 10px;padding:25px;background-color:#eaeaea">
-    <form id="mortCombatForm">
+    <form id="deportatForm">
         <div class="container">
             <div class="row">
-                <h2>Tipus de repressió: Morts en combat</h2>
+                <h2>Tipus de repressió: Deportat</h2>
                 <h4 id="fitxaNomCognoms">Fitxa: <a href="https://memoriaterrassa.cat/fitxa/<?php echo $idPersona; ?>" target="_blank"><?php echo $nom . " " . $cognom1 . " " . $cognom2; ?></a></h4>
 
                 <div class="alert alert-success" role="alert" id="okMessage" style="display:none">
@@ -116,97 +119,104 @@ if ($stmt->rowCount() > 0) {
                 <input type="hidden" name="id" id="id" value="<?php echo $idPersona; ?>">
 
                 <div class="col-md-4">
-                    <label for="condicio" class="form-label negreta">Condició:</label>
-                    <select class="form-select" name="condicio" id="condicio" value="">
+                    <label for="situacio" class="form-label negreta">Situació del deportat:</label>
+                    <select class="form-select" name="situacio" id="situacio" value="">
                     </select>
                 </div>
 
                 <div class="col-md-4">
-                    <label for="bandol" class="form-label negreta">Bàndol durant la guerra:</label>
-                    <select class="form-select" name="bandol" id="bandol" value="">
+                    <label for="data_alliberament" class="form-label negreta">Data alliberament:</label>
+                    <input type="text" class="form-control" id="data_alliberament" name="data_alliberament" value="<?php echo $data_alliberament; ?>">
+                </div>
+
+                <div class="col-md-4">
+                    <label for="lloc_mort_alliberament" class="form-label negreta">Municipi de mort o alliberament:</label>
+                    <select class="form-select" name="lloc_mort_alliberament" id="lloc_mort_alliberament" value="">
                     </select>
-                </div>
-
-                <div class="col-md-4">
-                    <label for="any_lleva" class="form-label negreta">Any lleva:</label>
-                    <input type="text" class="form-control" id="any_lleva" name="any_lleva" value="<?php echo $any_lleva; ?>">
-                </div>
-
-                <div class="col-md-4">
-                    <label for="unitat_inicial" class="form-label negreta">Unitat inicial:</label>
-                    <input type="text" class="form-control" id="unitat_inicial" name="unitat_inicial" value="<?php echo $unitat_inicial; ?>">
-                </div>
-
-                <div class="col-md-4">
-                    <label for="cos" class="form-label negreta">Cos militar:</label>
-                    <select class="form-select" name="cos" id="cos" value="">
-                    </select>
-                </div>
-
-                <div class="col-md-4">
-                    <label for="unitat_final" class="form-label negreta">Unitat final:</label>
-                    <input type="text" class="form-control" id="unitat_final" name="unitat_final" value="<?php echo $unitat_final; ?>">
-                </div>
-
-                <div class="col-md-4">
-                    <label for="graduacio_final" class="form-label negreta">Graduació final:</label>
-                    <input type="text" class="form-control" id="graduacio_final" name="graduacio_final" value="<?php echo $graduacio_final; ?>">
-                </div>
-
-                <div class="col-md-12">
-                    <label for="periple_militar" class="form-label negreta">Periple militar:</label>
-                    <textarea class="form-control" id="periple_militar" name="periple_militar" rows="3"><?php echo $periple_militar; ?></textarea>
-                </div>
-
-                <div class="col-md-4">
-                    <label for="circumstancia_mort" class="form-label negreta">Circumstància mort:</label>
-                    <select class="form-select" name="circumstancia_mort" id="circumstancia_mort" value="">
-                    </select>
-                </div>
-
-                <div class="col-md-4">
-                    <label for="desaparegut_data" class="form-label negreta">Data de la desaparació:</label>
-                    <input type="text" class="form-control" id="desaparegut_data" name="desaparegut_data" value="<?php echo $desaparegut_data; ?>">
-                </div>
-
-                <div class="col-md-4">
-                    <label for="desaparegut_lloc" class="form-label negreta">Lloc de desaparació:</label>
-                    <select class="form-select" name="desaparegut_lloc" id="desaparegut_lloc" value="">
-                    </select>
-
                     <div class="mt-2">
-                        <a href="https://memoriaterrassa.cat/gestio/municipi/nou" target="_blank" class="btn btn-secondary btn-sm" id="afegirMunicipi1">Afegir municipi</a>
+                        <a href="https://memoriaterrassa.cat/gestio/auxiliars/nou-municipi" target="_blank" class="btn btn-secondary btn-sm" id="afegirMunicipi1">Afegir municipi</a>
                         <button id="refreshButton1" class="btn btn-primary btn-sm">Actualitzar llistat Municipis</button>
                     </div>
                 </div>
 
+                <hr style="margin-top:25px">
+                <h4>Empresonament:</h4>
+
                 <div class="col-md-4">
-                    <label for="desaparegut_data_aparicio" class="form-label negreta">Data d'aparació del desaparegut:</label>
-                    <input type="text" class="form-control" id="desaparegut_data_aparicio" name="desaparegut_data_aparicio" value="<?php echo $desaparegut_data_aparicio; ?>">
+                    <label for="preso_tipus" class="form-label negreta">Tipus de presó:</label>
+                    <select class="form-select" name="preso_tipus" id="preso_tipus" value="">
+                    </select>
                 </div>
 
                 <div class="col-md-4">
-                    <label for="desaparegut_lloc_aparicio" class="form-label negreta">Lloc d'aparació del desaparegut:</label>
-                    <select class="form-select" name="desaparegut_lloc_aparicio" id="desaparegut_lloc_aparicio" value="">
-                    </select>
+                    <label for="preso_nom" class="form-label negreta">Nom de la presó:</label>
+                    <input type="text" class="form-control" id="preso_nom" name="preso_nom" value="<?php echo $preso_nom; ?>">
+                </div>
 
+                <div class="col-md-4">
+                    <label for="preso_data_sortida" class="form-label negreta">Data de la sortida de la presó:</label>
+                    <input type="text" class="form-control" id="preso_data_sortida" name="preso_data_sortida" value="<?php echo $preso_data_sortida; ?>">
+                </div>
+
+                <div class="col-md-4">
+                    <label for="preso_localitat" class="form-label negreta">Municipi de la presó:</label>
+                    <select class="form-select" name="preso_localitat" id="preso_localitat" value="">
+                    </select>
                     <div class="mt-2">
-                        <a href="https://memoriaterrassa.cat/gestio/municipi/nou" target="_blank" class="btn btn-secondary btn-sm" id="afegirMunicipi1">Afegir municipi</a>
+                        <a href="https://memoriaterrassa.cat/gestio/auxiliars/nou-municipi" target="_blank" class="btn btn-secondary btn-sm" id="afegirMunicipi2">Afegir municipi</a>
                         <button id="refreshButton2" class="btn btn-primary btn-sm">Actualitzar llistat Municipis</button>
                     </div>
+                </div>
 
+                <div class="col-md-4">
+                    <label for="preso_num_matricula" class="form-label negreta">Número de matrícula presó:</label>
+                    <input type="text" class="form-control" id="preso_num_matricula" name="preso_num_matricula" value="<?php echo $preso_num_matricula; ?>">
+                </div>
+
+                <hr style="margin-top:25px">
+                <h4>Deportació:</h4>
+
+
+                <div class="col-md-4">
+                    <label for="deportacio_nom_camp" class="form-label negreta">Nom cap de deportació</label>
+                    <input type="text" class="form-control" id="deportacio_nom_camp" name="deportacio_nom_camp" value="<?php echo $deportacio_nom_camp; ?>">
+                </div>
+
+                <div class="col-md-4">
+                    <label for="deportacio_data_entrada" class="form-label negreta">Data d'entrada</label>
+                    <input type="text" class="form-control" id="deportacio_data_entrada" name="deportacio_data_entrada" value="<?php echo $deportacio_data_entrada; ?>">
+                </div>
+
+
+                <div class="col-md-4">
+                    <label for="deportacio_num_matricula" class="form-label negreta">Número de matrícula</label>
+                    <input type="text" class="form-control" id="deportacio_num_matricula" name="deportacio_num_matricula" value="<?php echo $deportacio_num_matricula; ?>">
+                </div>
+
+                <div class="col-md-4">
+                    <label for="deportacio_nom_subcamp" class="form-label negreta">Nom del subcamp</label>
+                    <input type="text" class="form-control" id="deportacio_nom_subcamp" name="deportacio_nom_subcamp" value="<?php echo $deportacio_nom_subcamp; ?>">
+                </div>
+
+                <div class="col-md-4">
+                    <label for="deportacio_data_entrada_subcamp" class="form-label negreta">Data d'entrada al subcamp</label>
+                    <input type="text" class="form-control" id="deportacio_data_entrada_subcamp" name="deportacio_data_entrada_subcamp" value="<?php echo $deportacio_data_entrada_subcamp; ?>">
+                </div>
+
+                <div class="col-md-4">
+                    <label for="deportacio_nom_matricula_subcamp" class="form-label negreta">Número de matrícula del subcamp</label>
+                    <input type="text" class="form-control" id="deportacio_nom_matricula_subcamp" name="deportacio_nom_matricula_subcamp" value="<?php echo $deportacio_nom_matricula_subcamp; ?>">
                 </div>
 
                 <div class="row espai-superior" style="border-top: 1px solid black;padding-top:25px">
                     <div class="col"></div>
-
                     <div class="col d-flex justify-content-end align-items-center">
 
                         <?php
                         if ($btnModificar === 1) {
-                            echo '<a class="btn btn-primary" role="button" aria-disabled="true" id="btnModificarDadesCombat" onclick="enviarFormulario(event)">Modificar dades</a>';
+                            echo '<a class="btn btn-primary" role="button" aria-disabled="true" id="btnModificarDadesDeportat" onclick="enviarFormulario(event)">Modificar dades</a>';
                         } else {
-                            echo '<a class="btn btn-primary" role="button" aria-disabled="true" id="btnInserirDadesCombat" onclick="enviarFormularioPost(event)">Inserir dades</a>';
+                            echo '<a class="btn btn-primary" role="button" aria-disabled="true" id="btnInserirDadesDeportat" onclick="enviarFormularioPost(event)">Inserir dades</a>';
                         }
                         ?>
                     </div>
@@ -276,29 +286,31 @@ if ($stmt->rowCount() > 0) {
         }
     }
 
-    auxiliarSelect("<?php echo $condicio_id; ?>", "condicio_civil_militar", "condicio", "condicio_ca");
-    auxiliarSelect("<?php echo $bandol_id; ?>", "bandols_guerra", "bandol", "bandol_ca");
-    auxiliarSelect("<?php echo $cos_id; ?>", "cossos_militars", "cos", "cos_militar_ca");
-    auxiliarSelect("<?php echo $circumstancia_mort_id; ?>", "causa_defuncio", "circumstancia_mort", "causa_defuncio_ca");
-    auxiliarSelect("<?php echo $desaparegut_lloc_id; ?>", "municipis", "desaparegut_lloc", "ciutat");
-    auxiliarSelect("<?php echo $desaparegut_lloc_aparicio_id; ?>", "municipis", "desaparegut_lloc_aparicio", "ciutat");
-
-    document.getElementById('refreshButton2').addEventListener('click', function(event) {
-        event.preventDefault();
-        auxiliarSelect("<?php echo $desaparegut_lloc_aparicio_id; ?>", "municipis", "desaparegut_lloc_aparicio", "ciutat");
-    });
+    auxiliarSelect("<?php echo $situacio_id; ?>", "situacions_deportats", "situacio", "situacio_ca");
+    auxiliarSelect("<?php echo $lloc_mort_alliberament_id; ?>", "municipis", "lloc_mort_alliberament", "ciutat");
 
     document.getElementById('refreshButton1').addEventListener('click', function(event) {
         event.preventDefault();
-        auxiliarSelect("<?php echo $desaparegut_lloc_id; ?>", "municipis", "desaparegut_lloc", "ciutat");
+        auxiliarSelect("<?php echo $lloc_mort_alliberament_id; ?>", "municipis", "lloc_mort_alliberament", "ciutat");
     });
+
+
+
+    auxiliarSelect("<?php echo $preso_tipus_id; ?>", "tipus_presons", "preso_tipus", "tipus_preso_ca");
+    auxiliarSelect("<?php echo $preso_localitat_id; ?>", "municipis", "preso_localitat", "ciutat");
+
+    document.getElementById('refreshButton1').addEventListener('click', function(event) {
+        event.preventDefault();
+        auxiliarSelect("<?php echo $preso_localitat_id; ?>", "municipis", "preso_localitat", "ciutat");
+    });
+
 
     // Función para manejar el envío del formulario
     async function enviarFormulario(event) {
         event.preventDefault(); // Prevenir el envío por defecto
 
         // Obtener el formulario
-        const form = document.getElementById("mortCombatForm");
+        const form = document.getElementById("deportatForm");
 
         // Crear un objeto para almacenar los datos del formulario
         const formData = {};
@@ -315,7 +327,7 @@ if ($stmt->rowCount() > 0) {
         // Convertir los datos del formulario a JSON
         const jsonData = JSON.stringify(formData);
         const devDirectory = `https://${window.location.hostname}`;
-        let urlAjax = devDirectory + "/api/cost_huma_front/put";
+        let urlAjax = devDirectory + "/api/deportats/put";
 
         try {
             // Hacer la solicitud con fetch y await
@@ -329,84 +341,12 @@ if ($stmt->rowCount() > 0) {
 
             // Verificar si la solicitud fue exitosa
             if (!response.ok) {
-                throw new Error("Error al enviar el formulario.");
-            }
-
-            // Procesar la respuesta como texto o JSON
-            const data = await response.json();
-
-            // Verificar si el status es success
-            if (data.status === "success") {
-                // Cambiar el display del div con id 'OkMessage' a 'block'
-                const okMessageDiv = document.getElementById("okMessage");
-                const okTextDiv = document.getElementById("okText");
-
-                if (okMessageDiv && okTextDiv) {
-                    okMessageDiv.style.display = "block";
-                    okTextDiv.textContent = data.message || "Les dades s'han actualitzat correctament!";
-                }
-
-            } else {
-                // Si el status no es success, puedes manejar el error aquí
-                // Cambiar el display del div con id 'OkMessage' a 'block'
-                const errMessageDiv = document.getElementById("errMessage");
-                const errTextDiv = document.getElementById("errText");
-                if (errMessageDiv && errTextDiv) {
-                    errMessageDiv.style.display = "block";
-                    errTextDiv.textContent = data.message || "S'ha produit un error a la base de dades.";
-                }
-            }
-        } catch (error) {
-            // Manejar errores
-            console.error("Error:", error);
-        }
-    }
-
-    // Asignar la función al botón del formulario
-    //document.getElementById("btnModificarDadesCombat").addEventListener("click", enviarFormulario);
-
-    // Función para manejar el envío del formulario
-    async function enviarFormularioPost(event) {
-        event.preventDefault(); // Prevenir el envío por defecto
-
-        // Obtener el formulario
-        const form = document.getElementById("mortCombatForm");
-
-        // Crear un objeto para almacenar los datos del formulario
-        const formData = {};
-        new FormData(form).forEach((value, key) => {
-            formData[key] = value; // Agregar cada campo al objeto formData
-        });
-
-        // Obtener el user_id de localStorage
-        const userId = localStorage.getItem('user_id');
-        if (userId) {
-            formData['userId'] = userId;
-        }
-
-        // Convertir los datos del formulario a JSON
-        const jsonData = JSON.stringify(formData);
-        const devDirectory = `https://${window.location.hostname}`;
-        let urlAjax = devDirectory + "/api/cost_huma_front/post";
-
-        try {
-            // Hacer la solicitud con fetch y await
-            const response = await fetch(urlAjax, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json", // Indicar que se envía JSON
-                },
-                body: jsonData, // Enviar los datos en formato JSON
-            });
-
-            // Verificar si la solicitud fue exitosa
-            if (!response.ok) {
 
                 const errMessageDiv = document.getElementById("errMessage");
                 const errTextDiv = document.getElementById("errText");
                 if (errMessageDiv && errTextDiv) {
                     errMessageDiv.style.display = "block";
-                    errTextDiv.textContent = data.message || "S'ha produit un error a la base de dades.";
+                    errTextDiv.textContent = response.errors || "S'ha produit un error a la base de dades.";
                 }
                 throw new Error("Error al enviar el formulario.");
             }
@@ -443,6 +383,82 @@ if ($stmt->rowCount() > 0) {
         }
     }
 
-    // Asignar la función al botón del formulario
-    // document.getElementById("btnInserirDadesCombat").addEventListener("click", enviarFormularioPost);
+
+    // Función para manejar el envío del formulario
+    async function enviarFormularioPost(event) {
+        event.preventDefault(); // Prevenir el envío por defecto
+
+        // Obtener el formulario
+        const form = document.getElementById("deportatForm");
+
+        // Crear un objeto para almacenar los datos del formulario
+        const formData = {};
+        new FormData(form).forEach((value, key) => {
+            formData[key] = value; // Agregar cada campo al objeto formData
+        });
+
+        // Convertir los datos del formulario a JSON
+        const jsonData = JSON.stringify(formData);
+        const devDirectory = `https://${window.location.hostname}`;
+        let urlAjax = devDirectory + "/api/deportats/post";
+
+        // Obtener el user_id de localStorage
+        const userId = localStorage.getItem('user_id');
+        if (userId) {
+            formData['userId'] = userId;
+        }
+
+        try {
+            // Hacer la solicitud con fetch y await
+            const response = await fetch(urlAjax, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json", // Indicar que se envía JSON
+                },
+                body: jsonData, // Enviar los datos en formato JSON
+            });
+
+            // Procesar la respuesta como texto o JSON
+            const data = await response.json();
+
+            // Verificar si la solicitud fue exitosa
+            if (!response.ok) {
+                const errMessageDiv = document.getElementById("errMessage");
+                const errTextDiv = document.getElementById("errText");
+                if (errMessageDiv && errTextDiv) {
+                    errMessageDiv.style.display = "block";
+                    errTextDiv.textContent = data.errors || "S'ha produit un error a la base de dades.";
+                }
+                throw new Error("Error al enviar el formulario.");
+            }
+
+            // Verificar si el status es success
+            if (data.status === "success") {
+                // Cambiar el display del div con id 'OkMessage' a 'block'
+                const okMessageDiv = document.getElementById("okMessage");
+                const okTextDiv = document.getElementById("okText");
+                const errMessageDiv = document.getElementById("errMessage");
+
+                if (okMessageDiv && okTextDiv && errMessageDiv) {
+                    okMessageDiv.style.display = "block";
+                    okTextDiv.textContent = "Les dades s'han desat correctament!";
+                    errMessageDiv.style.display = "none";
+                }
+
+            } else {
+                // Si el status no es success, puedes manejar el error aquí
+                // Cambiar el display del div con id 'OkMessage' a 'block'
+                const errMessageDiv = document.getElementById("errMessage");
+                const errTextDiv = document.getElementById("errText");
+                if (errMessageDiv && errTextDiv) {
+                    errMessageDiv.style.display = "block";
+                    errTextDiv.textContent = data.errors || "S'ha produit un error a la base de dades.";
+                }
+            }
+        } catch (error) {
+            console.log(data);
+            // Manejar errores
+            console.error("Error:", error);
+        }
+    }
 </script>

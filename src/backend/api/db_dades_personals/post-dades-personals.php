@@ -23,6 +23,13 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
+$userId = getAuthenticatedUserId();
+if (!$userId) {
+    http_response_code(401);
+    echo json_encode(['error' => 'No autenticado']);
+    exit;
+}
+
 $inputData = file_get_contents('php://input');
 $data = json_decode($inputData, true);
 
@@ -191,7 +198,7 @@ try {
 
     $dataHoraCanvi = date('Y-m-d H:i:s');
     $tipusOperacio = "Insert Fitxa persona";
-    $idUser = $data['userId'] ?? null;
+    $idUser = $userId;
 
     // Crear la consulta SQL
     $sql2 = "INSERT INTO control_registre_canvis (

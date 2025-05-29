@@ -15,11 +15,11 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
 if ($categoriaId === 1) {
     echo "afusellat";
 } else if ($categoriaId === 2) {
-    require_once APP_ROOT . '/public/intranet/0_tots/modifica/deportats.php';
+    require_once APP_ROOT . '/public/intranet/01_base_dades/tipus_repressio/deportats.php';
 } else if ($categoriaId === 3) {
-    require_once APP_ROOT . '/public/intranet/0_tots/modifica/morts_combat.php';
+    require_once APP_ROOT . '/public/intranet/01_base_dades/tipus_repressio/morts_combat.php';
 } else if ($categoriaId === 4) {
-    require_once APP_ROOT . '/public/intranet/0_tots/modifica/morts_civils.php';
+    require_once APP_ROOT . '/public/intranet/01_base_dades/tipus_repressio/morts_civils.php';
 } else if ($categoriaId === 5) {
     echo "Represàlia republicana";
 } else if ($categoriaId === 6) {
@@ -31,5 +31,5 @@ if ($categoriaId === 1) {
 } else if ($categoriaId === 9) {
     echo "";
 } else if ($categoriaId === 10) {
-    require_once APP_ROOT . '/public/intranet/0_tots/modifica/exiliats.php';
+    require_once APP_ROOT . '/public/intranet/01_base_dades/tipus_repressio/exiliats.php';
 }

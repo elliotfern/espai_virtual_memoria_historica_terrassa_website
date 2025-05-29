@@ -21,7 +21,7 @@ async function obtenerNombresPartidos(ids: number[]): Promise<string[]> {
   try {
     // Llamada a la API para obtener todos los partidos políticos
     const devDirectory = `https://${window.location.hostname}`;
-    const url = `${devDirectory}/api/auxiliars/get/?type=partits`;
+    const url = `${devDirectory}/api/auxiliars/get/partits`;
 
     const response = await fetch(url, {
       method: 'GET', // O cualquier otro método que necesites (POST, PUT, etc.)
@@ -48,7 +48,7 @@ async function obtenerNombresSindicats(ids: number[]): Promise<string[]> {
   try {
     // Llamada a la API para obtener todos los partidos políticos
     const devDirectory = `https://${window.location.hostname}`;
-    const url = `${devDirectory}/api/auxiliars/get/?type=sindicats`;
+    const url = `${devDirectory}/api/auxiliars/get/sindicats`;
 
     const response = await fetch(url);
     if (!response.ok) throw new Error('Error al obtener los datos de la API');
@@ -382,7 +382,7 @@ async function mostrarInformacion(tab: string, idPersona: string, label: string)
 
   // Comprobamos si la variable fitxa.img tiene un valor válido
   if (fitxa.img && fitxa.img !== '' && fitxa.img !== null && imagen) {
-    imagen.src = `https://${window.location.hostname}/public/img/represaliats/${fitxa.img}`; // Si es válida, usamos la imagen de la variable
+    imagen.src = `https://${window.location.hostname}/public/img/represaliats/${fitxa.img}.jpg`; // Si es válida, usamos la imagen de la variable
   } else {
     imagen.src = `https://${window.location.hostname}/public/img/foto_defecte.jpg`; // Si no, mostramos la imagen por defecto
   }

@@ -19,6 +19,13 @@ if ($_SERVER['REQUEST_METHOD'] !== 'PUT') {
     exit();
 }
 
+$userId = getAuthenticatedUserId();
+if (!$userId) {
+    http_response_code(401);
+    echo json_encode(['error' => 'No autenticado']);
+    exit;
+}
+
 // DB_DADES PERSONALS
 // 1) PUT municipi
 // ruta PUT => "/api/auxiliars/put/municipi"
@@ -87,7 +94,7 @@ if ($slug === "municipi") {
 
         $dataHoraCanvi = date('Y-m-d H:i:s');
         $tipusOperacio = "Update municipi";
-        $idUser = $data['userId'] ?? null;
+        $idUser = $userId;
 
         // Crear la consulta SQL
         $sql2 = "INSERT INTO control_registre_canvis (

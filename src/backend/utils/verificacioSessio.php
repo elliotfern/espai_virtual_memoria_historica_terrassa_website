@@ -14,11 +14,6 @@ function data_input($data)
 // Función que verifica si el usuario tiene un token válido
 function verificarSesion()
 {
-    // Inicia la sesión si no está ya iniciada
-    if (session_status() === PHP_SESSION_NONE) {
-        session_start();
-    }
-
     // Cargar variables de entorno desde .env
     $jwtSecret = $_ENV['TOKEN'];
 
@@ -37,8 +32,8 @@ function verificarSesion()
         // Obtener user_id y user_type del payload
         $userType = $decoded->user_type ?? null;
 
-        // Verificar si user_type es 1 (admin) o 2 (usuario regular)
-        if (!in_array($userType, [1, 2, 3])) {
+        // Verificar si user_type es 1 (admin) o 2 (usuario regular) o 3/4 (usuari col·laborador) o 5 (usuari logged)
+        if (!in_array($userType, [1, 2, 3, 4, 5])) {
             header('Location: /acces'); // Redirige si el user_type no es válido (no es admin ni usuario regular)
             exit();
         }
@@ -47,5 +42,27 @@ function verificarSesion()
         error_log("Error al verificar sesión: " . $e->getMessage());
         header('Location: /acces'); // Redirige a login si el token no es válido
         exit();
+    }
+}
+function getAuthenticatedUserId(): ?int
+{
+
+    $jwtSecret = $_ENV['TOKEN'];
+    $cookieName = 'token';
+
+    if (!isset($_COOKIE[$cookieName])) {
+        return null; // No hay cookie
+    }
+
+    $token = $_COOKIE[$cookieName];
+
+    try {
+        $decoded = JWT::decode($token, new Key($jwtSecret, 'HS256'));
+
+        // Supongamos que el payload tiene: { "sub": 123 }
+        return $decoded->user_id ?? null;
+    } catch (Exception $e) {
+        // Token inválido, expirado, etc.
+        return null;
     }
 }

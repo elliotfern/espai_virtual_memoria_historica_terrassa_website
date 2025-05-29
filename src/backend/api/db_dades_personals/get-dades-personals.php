@@ -10,20 +10,24 @@ header("Access-Control-Allow-Methods: GET");
 header('Access-Control-Allow-Credentials: true');
 
 // 1) Llistat complet represaliats
-// ruta GET => "https://memoriaterrassa.cat/api/represaliats/get/?type=tots&completat=1"
-if (isset($_GET['type']) && $_GET['type'] == 'tots' && isset($_GET['completat'])) {
+// ruta GET => "https://memoriaterrassa.cat/api/dades_personals/get/?type=tots&completat=1&visibilitat=1"
+if (isset($_GET['type']) && $_GET['type'] == 'tots' && isset($_GET['completat']) && isset($_GET['visibilitat'])) {
     // Verificamos si el parámetro 'completat' está presente
     $completat = isset($_GET['completat']) ? $_GET['completat'] : null;
+    $visibilitat = in_array((int) ($_GET['visibilitat'] ?? 1), [1, 2]) ? (int) $_GET['visibilitat'] : 1;
+
     if ($completat == 3) {
         global $conn;
         /** @var PDO $conn */
-        $query = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat, a.font_intern
+        $query = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat, a.font_intern, a.visibilitat
                 FROM db_dades_personals AS a
                 LEFT JOIN aux_dades_municipis AS e1 ON a.municipi_naixement = e1.id
                 LEFT JOIN aux_dades_municipis AS e2 ON a.municipi_defuncio = e2.id
                 WHERE a.completat IN (1, 2)
+                    AND a.visibilitat = :visibilitat
                 ORDER BY a.cognom1 ASC";
         $stmt = $conn->prepare($query);
+        $stmt->execute(['visibilitat' => $visibilitat]);
         $stmt->execute();
 
         $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -33,14 +37,16 @@ if (isset($_GET['type']) && $_GET['type'] == 'tots' && isset($_GET['completat'])
     } else {
         global $conn;
         /** @var PDO $conn */
-        $query = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat, a.font_intern
+        $query = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat, a.font_intern, a.visibilitat
             FROM db_dades_personals AS a
             LEFT JOIN aux_dades_municipis AS e1 ON a.municipi_naixement = e1.id
             LEFT JOIN aux_dades_municipis AS e2 ON a.municipi_defuncio = e2.id
             WHERE a.completat = :completat
+            AND a.visibilitat = :visibilitat
             ORDER BY a.cognom1 ASC";
         $stmt = $conn->prepare($query);
         $stmt->bindParam(':completat', $completat, PDO::PARAM_INT);
+        $stmt->bindParam(':visibilitat', $visibilitat, PDO::PARAM_INT);
         $stmt->execute();
 
         if ($stmt->rowCount() === 0) {
@@ -56,11 +62,12 @@ if (isset($_GET['type']) && $_GET['type'] == 'tots' && isset($_GET['completat'])
 
 
     // 2) Llistat tots per categories
-    // ruta GET => "https://memoriaterrassa.cat/api/represaliats/get/?type=totesCategories&categoria=afusellats&completat=1"
-} elseif (isset($_GET['type']) && $_GET['type'] == 'totesCategories' && isset($_GET['categoria']) && isset($_GET['completat'])) {
+    // ruta GET => "https://memoriaterrassa.cat/api/dades_personals/get/?type=totesCategories&categoria=afusellats&completat=1&visibilitat=1"
+} elseif (isset($_GET['type']) && $_GET['type'] == 'totesCategories' && isset($_GET['categoria']) && isset($_GET['completat']) && isset($_GET['visibilitat'])) {
 
     // Verificamos si el parámetro 'completat' está presente
     $completat = isset($_GET['completat']) ? $_GET['completat'] : null;
+    $visibilitat = in_array((int) ($_GET['visibilitat'] ?? 1), [1, 2]) ? (int) $_GET['visibilitat'] : 1;
 
     // Obtener y sanitizar la entrada
     $cat = filter_input(INPUT_GET, 'categoria', FILTER_DEFAULT);
@@ -71,7 +78,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'tots' && isset($_GET['completat'])
             $catNum2 = 4;
             $catNum3 = 5;
 
-            $sql = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat, a.font_intern
+            $sql = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat, a.font_intern, a.visibilitat
                 FROM db_dades_personals AS a
                 LEFT JOIN aux_dades_municipis AS e1 ON a.municipi_naixement = e1.id
                 LEFT JOIN aux_dades_municipis AS e2 ON a.municipi_defuncio = e2.id
@@ -80,6 +87,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'tots' && isset($_GET['completat'])
                     OR FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
                     OR FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0)
                     AND a.completat IN (1, 2)
+                AND a.visibilitat = ?
                 ORDER BY a.cognom1 ASC;";
             global $conn;
             $data = array();
@@ -88,6 +96,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'tots' && isset($_GET['completat'])
             $stmt->bindParam(1, $catNum1, PDO::PARAM_STR);
             $stmt->bindParam(2, $catNum2, PDO::PARAM_STR);
             $stmt->bindParam(3, $catNum3, PDO::PARAM_STR);
+            $stmt->bindParam(4, $visibilitat, PDO::PARAM_INT);
             $stmt->execute();
             if ($stmt->rowCount() === 0) echo ('No rows');
             while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -99,7 +108,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'tots' && isset($_GET['completat'])
             $catNum2 = 4;
             $catNum3 = 5;
 
-            $sql = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat, a.font_intern
+            $sql = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat, a.font_intern, a.visibilitat
             FROM db_dades_personals AS a
             LEFT JOIN aux_dades_municipis AS e1 ON a.municipi_naixement = e1.id
             LEFT JOIN aux_dades_municipis AS e2 ON a.municipi_defuncio = e2.id
@@ -108,6 +117,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'tots' && isset($_GET['completat'])
                 OR FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
                 OR FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0)
                 AND a.completat = ?
+                AND a.visibilitat = ?
             ORDER BY a.cognom1 ASC;";
             global $conn;
             $data = array();
@@ -117,6 +127,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'tots' && isset($_GET['completat'])
             $stmt->bindParam(2, $catNum2, PDO::PARAM_STR);
             $stmt->bindParam(3, $catNum3, PDO::PARAM_STR);
             $stmt->bindParam(4, $completat, PDO::PARAM_INT);
+            $stmt->bindParam(5, $visibilitat, PDO::PARAM_INT);
             $stmt->execute();
             if ($stmt->rowCount() === 0) echo ('No rows');
             while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -124,11 +135,11 @@ if (isset($_GET['type']) && $_GET['type'] == 'tots' && isset($_GET['completat'])
             }
             echo json_encode($data);
         }
-    } else if ($cat === "exiliats" || $cat === "exiliats-deportats") {
+    } else if ($cat === "exiliats-deportats") {
         if ($completat == 3) {
             $catNum1 = 10;
             $catNum2 = 2;
-            $sql = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat, a.font_intern
+            $sql = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat, a.font_intern, a.visibilitat
                 FROM db_dades_personals AS a
                 LEFT JOIN aux_dades_municipis AS e1 ON a.municipi_naixement = e1.id
                 LEFT JOIN aux_dades_municipis AS e2 ON a.municipi_defuncio = e2.id
@@ -136,6 +147,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'tots' && isset($_GET['completat'])
                     (FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
                     OR FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0)
                     AND a.completat IN (1, 2)
+                AND a.visibilitat = ?
                 ORDER BY a.cognom1 ASC;";
             global $conn;
             $data = array();
@@ -143,6 +155,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'tots' && isset($_GET['completat'])
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(1, $catNum1, PDO::PARAM_STR);
             $stmt->bindParam(2, $catNum2, PDO::PARAM_STR);
+            $stmt->bindParam(3, $visibilitat, PDO::PARAM_INT);
             $stmt->execute();
             if ($stmt->rowCount() === 0) echo ('No rows');
             while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -152,7 +165,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'tots' && isset($_GET['completat'])
         } else {
             $catNum1 = 10;
             $catNum2 = 2;
-            $sql = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat, a.font_intern
+            $sql = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat, a.font_intern, a.visibilitat
                 FROM db_dades_personals AS a
                 LEFT JOIN aux_dades_municipis AS e1 ON a.municipi_naixement = e1.id
                 LEFT JOIN aux_dades_municipis AS e2 ON a.municipi_defuncio = e2.id
@@ -160,6 +173,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'tots' && isset($_GET['completat'])
                     (FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
                     OR FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0)
                     AND a.completat = ?
+                    AND a.visibilitat = ?
                 ORDER BY a.cognom1 ASC;";
             global $conn;
             $data = array();
@@ -168,6 +182,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'tots' && isset($_GET['completat'])
             $stmt->bindParam(1, $catNum1, PDO::PARAM_STR);
             $stmt->bindParam(2, $catNum2, PDO::PARAM_STR);
             $stmt->bindParam(3, $completat, PDO::PARAM_INT);
+            $stmt->bindParam(4, $visibilitat, PDO::PARAM_INT);
             $stmt->execute();
             if ($stmt->rowCount() === 0) echo ('No rows');
             while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -181,7 +196,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'tots' && isset($_GET['completat'])
             $catNum2 = 6;
             $catNum3 = 7;
             $catNum4 = 11;
-            $sql = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat, a.font_intern
+            $sql = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat, a.font_intern, a.visibilitat
                 FROM db_dades_personals AS a
                 LEFT JOIN aux_dades_municipis AS e1 ON a.municipi_naixement = e1.id
                 LEFT JOIN aux_dades_municipis AS e2 ON a.municipi_defuncio = e2.id
@@ -191,6 +206,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'tots' && isset($_GET['completat'])
                     OR FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
                     OR FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0)
                     AND a.completat IN (1, 2)
+                    AND a.visibilitat = ?
                 ORDER BY a.cognom1 ASC;";
             global $conn;
             $data = array();
@@ -200,6 +216,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'tots' && isset($_GET['completat'])
             $stmt->bindParam(2, $catNum2, PDO::PARAM_STR);
             $stmt->bindParam(3, $catNum3, PDO::PARAM_STR);
             $stmt->bindParam(4, $catNum4, PDO::PARAM_STR);
+            $stmt->bindParam(5, $visibilitat, PDO::PARAM_INT);
             $stmt->execute();
             if ($stmt->rowCount() === 0) echo ('No rows');
             while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -211,7 +228,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'tots' && isset($_GET['completat'])
             $catNum2 = 6;
             $catNum3 = 7;
             $catNum4 = 11;
-            $sql = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat, a.font_intern
+            $sql = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat, a.font_intern, a.visibilitat
                 FROM db_dades_personals AS a
                 LEFT JOIN aux_dades_municipis AS e1 ON a.municipi_naixement = e1.id
                 LEFT JOIN aux_dades_municipis AS e2 ON a.municipi_defuncio = e2.id
@@ -221,6 +238,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'tots' && isset($_GET['completat'])
                     OR FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
                     OR FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0)
                     AND a.completat = ?
+                    AND a.visibilitat = ?
                 ORDER BY a.cognom1 ASC;";
             global $conn;
             $data = array();
@@ -231,6 +249,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'tots' && isset($_GET['completat'])
             $stmt->bindParam(3, $catNum3, PDO::PARAM_STR);
             $stmt->bindParam(4, $catNum4, PDO::PARAM_STR);
             $stmt->bindParam(5, $completat, PDO::PARAM_INT);
+            $stmt->bindParam(6, $visibilitat, PDO::PARAM_INT);
             $stmt->execute();
             if ($stmt->rowCount() === 0) echo ('No rows');
             while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -313,7 +332,8 @@ if (isset($_GET['type']) && $_GET['type'] == 'tots' && isset($_GET['completat'])
             dp.completat,
             img.nomArxiu AS img,
             bio.biografiaCa,
-            bio.biografiaEs
+            bio.biografiaEs,
+            dp.visibilitat
             FROM db_dades_personals AS dp
             LEFT JOIN aux_dades_municipis AS m1 ON dp.municipi_naixement = m1.id
             LEFT JOIN aux_dades_municipis_comarca AS m1a ON m1.comarca = m1a.id
@@ -454,7 +474,8 @@ if (isset($_GET['type']) && $_GET['type'] == 'tots' && isset($_GET['completat'])
             dp.completat,
             img.nomArxiu AS img,
             bio.biografiaCa,
-            bio.biografiaEs
+            bio.biografiaEs,
+            dp.visibilitat
             FROM db_dades_personals AS dp
             LEFT JOIN aux_dades_municipis AS m1 ON dp.municipi_naixement = m1.id
             LEFT JOIN aux_dades_municipis_comarca AS m1a ON m1.comarca = m1a.id

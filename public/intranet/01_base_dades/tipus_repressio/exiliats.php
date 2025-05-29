@@ -138,7 +138,7 @@ if ($stmt->rowCount() > 0) {
                     </select>
 
                     <div class="mt-2">
-                        <a href="https://memoriaterrassa.cat/gestio/municipi/nou" target="_blank" class="btn btn-secondary btn-sm" id="afegirMunicipi1">Afegir municipi</a>
+                        <a href="https://memoriaterrassa.cat/gestio/auxiliars/nou-municipi" target="_blank" class="btn btn-secondary btn-sm" id="afegirMunicipi1">Afegir municipi</a>
                         <button id="refreshButton1" class="btn btn-primary btn-sm">Actualitzar llistat Municipis</button>
                     </div>
                 </div>
@@ -149,7 +149,7 @@ if ($stmt->rowCount() > 0) {
                     </select>
 
                     <div class="mt-2">
-                        <a href="https://memoriaterrassa.cat/gestio/municipi/nou" target="_blank" class="btn btn-secondary btn-sm" id="afegirMunicipi1">Afegir municipi</a>
+                        <a href="https://memoriaterrassa.cat/gestio/auxiliars/nou-municipi" target="_blank" class="btn btn-secondary btn-sm" id="afegirMunicipi1">Afegir municipi</a>
                         <button id="refreshButton2" class="btn btn-primary btn-sm">Actualitzar llistat Municipis</button>
                     </div>
                 </div>
@@ -165,7 +165,7 @@ if ($stmt->rowCount() > 0) {
                     </select>
 
                     <div class="mt-2">
-                        <a href="https://memoriaterrassa.cat/gestio/municipi/nou" target="_blank" class="btn btn-secondary btn-sm" id="afegirMunicipi3">Afegir municipi</a>
+                        <a href="https://memoriaterrassa.cat/gestio/auxiliars/nou-municipi" target="_blank" class="btn btn-secondary btn-sm" id="afegirMunicipi3">Afegir municipi</a>
                         <button id="refreshButton3" class="btn btn-primary btn-sm">Actualitzar llistat Municipis</button>
                     </div>
                 </div>

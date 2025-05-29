@@ -2,7 +2,19 @@
 
 <div class="container">
     <?php if ($isAdmin || $isAutor): ?>
-        <h2>Llistat complert de víctimes i represaliats</h2>
+        <h2>Llistat de represaliats (1939-1979):</h2>
+        <ul>
+            <li>Processats / Empresonats</li>
+            <li>Afusellats</li>
+            <li>Depurats</li>
+            <li>Represaliats pendents de classificar (llistat Ajuntament)</li>
+            <li>Detinguts Presó Model</li>
+            <li>Detinguts Guàrdia Urbana Terrassa</li>
+            <li>Detinguts Comitè Solidaritat</li>
+            <li>Responsabilitats polítiques</li>
+            <li>Funcionaris depurats</li>
+            <li>Tribunal Orden Público</li>
+        </ul>
 
         <hr>
 
@@ -20,6 +32,7 @@
                         <th>Col·lectiu</th>
                         <th>Origen dades</th>
                         <th>Estat fitxa</th>
+                        <th>Visibilitat</th>
                         <th>Modificar</th>
                         <th>Eliminar</th>
                     </tr>
@@ -34,7 +47,6 @@
                 <button id="nextPage">Següent</button>
             </div>
         </div>
-
     <?php else: ?>
         <p><strong>L'accés a aquesta pàgina està restringit només a usuaris administratius.</strong></p>
     <?php endif; ?>

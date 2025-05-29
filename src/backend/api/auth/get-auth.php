@@ -71,7 +71,7 @@ if ($slug === "isAdmin") {
     // Si no cumple, no es admin
     echo json_encode(['isAdmin' => false]);
 
-    // GET : Consulta si l'usuari és autor
+    // GET : Consulta si l'usuari és autor (grup 2)
     // URL: https://memoriaterrassa.cat/api/auth/get/isAutor
 } else if ($slug === "isAutor") {
 
@@ -103,6 +103,41 @@ if ($slug === "isAdmin") {
 
     // Si no cumple, no es admin
     echo json_encode(['isAutor' => false]);
+
+
+    // GET : Consulta si l'usuari és Logged (grup 3 o 4)
+    // URL: https://memoriaterrassa.cat/api/auth/get/isLogged
+} else if ($slug === "isLogged") {
+
+    if (!isset($_COOKIE['token'])) {
+        echo json_encode(['isLogged' => false]);
+        exit;
+    }
+
+    $token = trim($_COOKIE['token']); // Obtener y limpiar el token de la cookie
+
+    if (!empty($token)) {
+        try {
+            // Verifica y decodifica el token
+            $decoded = JWT::decode($token, new Key($jwtSecret, 'HS256'));
+
+            // Verifica si el usuario tiene permisos de administrador
+            if (
+                isset($decoded->user_type) &&
+                in_array($decoded->user_type, [3, 4]) // Grupos 3 y 4
+            ) {
+                echo json_encode(['isLogged' => true]);
+                exit;
+            }
+        } catch (Exception $e) {
+            // Token inválido, expirado o manipulado
+            error_log("JWT inválido: " . $e->getMessage());
+        }
+    }
+
+    // Si no cumple, no es logged
+    echo json_encode(['isLogged' => false]);
+
 
     // GET: tancar la sessió d'usuari
     // URL: https://memoriaterrassa.cat/api/auth/get/logOut

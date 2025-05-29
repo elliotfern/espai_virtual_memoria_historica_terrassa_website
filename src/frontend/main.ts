@@ -34,18 +34,18 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   } else if (pageType[0] === 'gestio') {
     intranet();
-  } else if (pageType[1] === 'general') {
+  } else if (pageType[1] === 'general' || pageType[1] === 'general#filtre') {
     botonsEstat(pageType[1]);
     cargarTabla(pageType[1], 1);
-  } else if (pageType[1] === 'represaliats') {
+  } else if (pageType[1] === 'represaliats' || pageType[1] === 'represaliats#filtre') {
     botonsEstat(pageType[1]);
-    cargarTabla(pageType[1], 1); // También cargar para afusellats
-  } else if (pageType[1] === 'exiliats-deportats') {
+    cargarTabla(pageType[1], 1);
+  } else if (pageType[1] === 'exiliats-deportats' || pageType[1] === 'exiliats-deportats#filtre') {
     botonsEstat(pageType[1]);
-    cargarTabla(pageType[1], 1); // También cargar para exiliats
-  } else if (pageType[1] === 'cost-huma') {
+    cargarTabla(pageType[1], 1);
+  } else if (pageType[1] === 'cost-huma' || pageType[1] === 'cost-huma#filtre') {
     botonsEstat(pageType[1]);
-    cargarTabla(pageType[1], 1); // También cargar para exiliats
+    cargarTabla(pageType[1], 1);
   } else if (pageType[0] === 'fitxa') {
     const id = pageType[1];
     initButtons(id); // Pasar el id

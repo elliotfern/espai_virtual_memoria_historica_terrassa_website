@@ -19,6 +19,12 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit();
 }
 
+$userId = getAuthenticatedUserId();
+if (!$userId) {
+    http_response_code(401);
+    echo json_encode(['error' => 'No autenticado']);
+    exit;
+}
 
 // DB_DADES PERSONALS
 // 1) POST municipi
@@ -103,7 +109,7 @@ if ($slug === "municipi") {
 
         $dataHoraCanvi = date('Y-m-d H:i:s');
         $tipusOperacio = "Insert Nou municipi";
-        $idUser = $data['userId'] ?? null;
+        $idUser = $userId;
 
         // Crear la consulta SQL
         $sql2 = "INSERT INTO control_registre_canvis (
@@ -185,7 +191,7 @@ if ($slug === "municipi") {
 
         $dataHoraCanvi = date('Y-m-d H:i:s');
         $tipusOperacio = "Insert Nou ofici";
-        $idUser = $data['userId'] ?? null;
+        $idUser = $userId;
 
         // Crear la consulta SQL
         $sql2 = "INSERT INTO control_registre_canvis (
@@ -268,7 +274,7 @@ if ($slug === "municipi") {
 
         $dataHoraCanvi = date('Y-m-d H:i:s');
         $tipusOperacio = "Insert Nova tipologia espai";
-        $idUser = $data['userId'] ?? null;
+        $idUser = $userId;
 
         // Crear la consulta SQL
         $sql2 = "INSERT INTO control_registre_canvis (
@@ -351,7 +357,7 @@ if ($slug === "municipi") {
 
         $dataHoraCanvi = date('Y-m-d H:i:s');
         $tipusOperacio = "Insert Nova causa defunció";
-        $idUser = $data['userId'] ?? null;
+        $idUser = $userId;
 
         // Crear la consulta SQL
         $sql2 = "INSERT INTO control_registre_canvis (
@@ -434,7 +440,7 @@ if ($slug === "municipi") {
 
         $dataHoraCanvi = date('Y-m-d H:i:s');
         $tipusOperacio = "Insert Nou càrrec-ofici";
-        $idUser = $data['userId'] ?? null;
+        $idUser = $userId;
 
         // Crear la consulta SQL
         $sql2 = "INSERT INTO control_registre_canvis (
@@ -516,7 +522,7 @@ if ($slug === "municipi") {
 
         $dataHoraCanvi = date('Y-m-d H:i:s');
         $tipusOperacio = "Insert Nou sub-sector ecònòmic";
-        $idUser = $data['userId'] ?? null;
+        $idUser = $userId;
 
         // Crear la consulta SQL
         $sql2 = "INSERT INTO control_registre_canvis (
@@ -603,7 +609,7 @@ if ($slug === "municipi") {
 
         $dataHoraCanvi = date('Y-m-d H:i:s');
         $tipusOperacio = "Insert Nou partit polític";
-        $idUser = $data['userId'] ?? null;
+        $idUser = $userId;
 
         // Crear la consulta SQL
         $sql2 = "INSERT INTO control_registre_canvis (
@@ -691,7 +697,7 @@ if ($slug === "municipi") {
 
         $dataHoraCanvi = date('Y-m-d H:i:s');
         $tipusOperacio = "Insert Nou sindicat";
-        $idUser = $data['userId'] ?? null;
+        $idUser = $userId;
 
         // Crear la consulta SQL
         $sql2 = "INSERT INTO control_registre_canvis (
@@ -789,7 +795,7 @@ if ($slug === "municipi") {
 
         $dataHoraCanvi = date('Y-m-d H:i:s');
         $tipusOperacio = "Insert Nova comarca";
-        $idUser = $data['userId'] ?? null;
+        $idUser = $userId;
 
         // Crear la consulta SQL
         $sql2 = "INSERT INTO control_registre_canvis (
@@ -887,7 +893,7 @@ if ($slug === "municipi") {
 
         $dataHoraCanvi = date('Y-m-d H:i:s');
         $tipusOperacio = "Insert Nova provincia";
-        $idUser = $data['userId'] ?? null;
+        $idUser = $userId;
 
         // Crear la consulta SQL
         $sql2 = "INSERT INTO control_registre_canvis (
@@ -985,7 +991,7 @@ if ($slug === "municipi") {
 
         $dataHoraCanvi = date('Y-m-d H:i:s');
         $tipusOperacio = "Insert Nova Comunitat autonoma";
-        $idUser = $data['userId'] ?? null;
+        $idUser = $userId;
 
         // Crear la consulta SQL
         $sql2 = "INSERT INTO control_registre_canvis (
@@ -1083,7 +1089,7 @@ if ($slug === "municipi") {
 
         $dataHoraCanvi = date('Y-m-d H:i:s');
         $tipusOperacio = "Insert Nou estat";
-        $idUser = $data['userId'] ?? null;
+        $idUser = $userId;
 
         // Crear la consulta SQL
         $sql2 = "INSERT INTO control_registre_canvis (

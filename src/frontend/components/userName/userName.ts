@@ -1,4 +1,4 @@
-import { logout } from '../../services/cookies/cookiesUtils';
+import { logout } from '../../services/auth/logOut';
 
 export async function nameUser(): Promise<void> {
   const devDirectory = `https://${window.location.hostname}`;

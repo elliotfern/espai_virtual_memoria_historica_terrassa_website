@@ -10,6 +10,7 @@ export async function login(userName: string, password: string): Promise<void> {
 
   localStorage.removeItem('isAdmin');
   localStorage.removeItem('isAutor');
+  localStorage.removeItem('isLogged');
 
   try {
     const response = await fetch(urlAjax, {

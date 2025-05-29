@@ -3,23 +3,52 @@ import { Represeliat } from '../../types/types';
 import { categorias } from '../../config';
 import { getIsAdmin } from '../../services/auth/getIsAdmin';
 import { getIsAutor } from '../../services/auth/getIsAutor';
+import { getIsLogged } from '../../services/auth/getIsLogged';
 
 export async function cargarTabla(pag: string, context: number, completat: number | null = null) {
-  let urlAjax = '';
   const devDirectory = `https://${window.location.hostname}`;
 
   const isAdmin = await getIsAdmin();
   const isAutor = await getIsAutor();
+  const isLogged = await getIsLogged();
 
   // Validar el parámetro 'completat': si no es 1 o 2, asignar 3
+  // completat 1 = PENDENT > visibilitat = 1
+  // completat 2 = COMPLETADA > visibilitat = 2
+  // completat 3 = TOTES
   if (completat !== 1 && completat !== 2) {
     completat = 3;
   }
 
-  if (pag === 'tots' || pag === 'general') {
-    urlAjax = `${devDirectory}/api/dades_personals/get/?type=tots&completat=${completat}`;
+  let webFitxa: string = '';
+  let webTarget: string = '';
+  let urlAjax: string = '';
+  let visibilitat: number = 0;
+
+  const pagNet = pag.split('#')[0];
+
+  // context:
+  // context = 1 > es per la web publica
+  // context = 2 > es per la intranet
+  if (context === 1) {
+    webFitxa = `/fitxa/`;
+    webTarget = '_self';
+    visibilitat = 2;
+
+    if (pagNet === 'general') {
+      urlAjax = `${devDirectory}/api/dades_personals/get/?type=tots&completat=${completat}&visibilitat=${visibilitat}`;
+    } else if (pagNet === 'represaliats' || pagNet === 'exiliats-deportats' || pagNet === 'cost-huma') {
+      urlAjax = `${devDirectory}/api/dades_personals/get/?type=totesCategories&categoria=${pagNet}&completat=${completat}&visibilitat=${visibilitat}`;
+    }
   } else {
-    urlAjax = `${devDirectory}/api/dades_personals/get/?type=totesCategories&categoria=${pag}&completat=${completat}`;
+    webFitxa = `/fitxa/`;
+    webTarget = '_blank';
+    visibilitat = 1;
+    if (pagNet === 'general') {
+      urlAjax = `${devDirectory}/api/dades_personals/get/?type=tots&completat=${completat}&visibilitat=${visibilitat}`;
+    } else if (pagNet === 'represaliats' || pagNet === 'exiliats-deportats' || pagNet === 'cost-huma') {
+      urlAjax = `${devDirectory}/api/dades_personals/get/?type=totesCategories&categoria=${pagNet}&completat=${completat}&visibilitat=${visibilitat}`;
+    }
   }
 
   let currentPage = 1;
@@ -27,17 +56,6 @@ export async function cargarTabla(pag: string, context: number, completat: numbe
   let totalPages = 1;
   let datos: Represeliat[] = [];
   let filteredData: Represeliat[] = [];
-
-  let webFitxa = '';
-  let webTarget = '';
-
-  if (context === 1) {
-    webFitxa = `/fitxa/`;
-    webTarget = '_self';
-  } else {
-    webFitxa = `/fitxa/`;
-    webTarget = '_blank';
-  }
 
   // Función para obtener los datos
   async function obtenerDatos() {
@@ -97,7 +115,8 @@ export async function cargarTabla(pag: string, context: number, completat: numbe
 
       // COLUMNA FONT DADES, NOMES USUARIS REGISTRATS
       // Verificar si el usuario es el admin con id 1
-      if (isAdmin || isAutor) {
+      // mostrar nomes a la intranet context === 2
+      if (context === 2 && (isAdmin || isAutor || isLogged)) {
         // Botó estat
         const fontInterna: number = row.font_intern;
 
@@ -118,7 +137,7 @@ export async function cargarTabla(pag: string, context: number, completat: numbe
       }
 
       // Verificar si el usuario es el admin con id 1
-      if (isAdmin || isAutor) {
+      if (context === 2 && (isAdmin || isAutor || isLogged)) {
         // Botó estat
         const estatFitxa = row.completat;
         if (estatFitxa === 1) {
@@ -143,7 +162,32 @@ export async function cargarTabla(pag: string, context: number, completat: numbe
       }
 
       // Verificar si el usuario es el admin con id 1
-      if (isAdmin || isAutor) {
+      if (context === 2 && (isAdmin || isAutor || isLogged)) {
+        // Botó VISIBILITAT FITXA
+        const visibilitatFitxa = row.visibilitat;
+        if (visibilitatFitxa === 2) {
+          const tdvisibilitat = document.createElement('td');
+          const btnVisibilitat = document.createElement('button');
+          btnVisibilitat.textContent = 'VISIBLE';
+          btnVisibilitat.classList.add('btn', 'btn-sm', 'btn-success');
+          tdvisibilitat.appendChild(btnVisibilitat);
+          tr.appendChild(tdvisibilitat);
+        } else {
+          const tdvisibilitat = document.createElement('td');
+          const btnVisibilitat = document.createElement('button');
+          btnVisibilitat.textContent = 'NO VISIBLE';
+          btnVisibilitat.classList.add('btn', 'btn-sm', 'btn-primary');
+          tdvisibilitat.appendChild(btnVisibilitat);
+          tr.appendChild(tdvisibilitat);
+        }
+      } else if (context === 1) {
+        // nada
+      } else {
+        // Crear la fila vacía
+      }
+
+      // Verificar si el usuario es el admin con id 1
+      if (context === 2 && (isAdmin || isAutor || isLogged)) {
         // Botón Modificar
         const tdModificar = document.createElement('td');
         const btnModificar = document.createElement('button');
@@ -151,7 +195,7 @@ export async function cargarTabla(pag: string, context: number, completat: numbe
         btnModificar.classList.add('btn', 'btn-sm', 'btn-warning');
         btnModificar.onclick = function () {
           const link = document.createElement('a');
-          link.href = `/gestio/tots/fitxa/modifica/${row.id}`;
+          link.href = `/gestio/base-dades/modifica-fitxa/${row.id}`;
           link.target = '_blank';
           link.click();
         };
@@ -164,7 +208,7 @@ export async function cargarTabla(pag: string, context: number, completat: numbe
       }
 
       // Botón Eliminar
-      if (isAdmin) {
+      if (context === 2 && isAdmin) {
         const tdEliminar = document.createElement('td');
         const btnEliminar = document.createElement('button');
         btnEliminar.textContent = 'Eliminar';

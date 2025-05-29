@@ -154,6 +154,11 @@ $langCode2 = getLanguageFromUrl();
                         </div>
                         <div class="offcanvas-body">
                             <ul class="navbar-nav w-100 d-flex justify-content-between">
+
+                                <?php if (isUserLogged()): ?>
+                                    <li class="nav-item"><a class="nav-link" href="<?php echo APP_WEB; ?>/gestio">Intranet</a></li>
+                                <?php endif; ?>
+
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" id="submenuEstudis" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                         <?php echo $translate['base-dades']; ?>

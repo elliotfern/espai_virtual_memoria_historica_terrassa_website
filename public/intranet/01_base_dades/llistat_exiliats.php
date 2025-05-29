@@ -1,11 +1,10 @@
 <?php require_once APP_ROOT . '/public/intranet/includes/header.php'; ?>
 
 <div class="container">
-    <h2>Cost humà de la Guerra Civil (1936-1939):</h2>
+    <h2>Llistat d'exiliats i deportats:</h2>
     <ul>
-        <li>Cost humà de desapareguts i morts al front</li>
-        <li>Cost humà de civils</li>
-        <li>Represàlia republicana</li>
+        <li>Exiliats</li>
+        <li>Deportats</li>
     </ul>
     <hr>
 
@@ -23,6 +22,7 @@
                     <th>Col·lectiu</th>
                     <th>Origen dades</th>
                     <th>Estat fitxa</th>
+                    <th>Visibilitat</th>
                     <th>Modificar</th>
                     <th>Eliminar</th>
                 </tr>

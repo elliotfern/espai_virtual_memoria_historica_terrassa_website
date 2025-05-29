@@ -773,7 +773,7 @@ $id = $routeParams[0];
           // Crear enlace
           const link = document.createElement("a");
           const devDirectory = `https://${window.location.hostname}`;
-          link.href = `${devDirectory}/gestio/tots/fitxa/categoria/modifica/${categoriaId}/${userId}`;
+          link.href = `${devDirectory}/gestio/base-dades/modifica-repressio/${categoriaId}/${userId}`;
           link.className = "btn btn-success m-2"; // Clases Bootstrap para estilo
           link.textContent = titulo; // Asignar texto del enlace
           link.target = "_blank"; // Abrir en una nueva pestaña o ventana
