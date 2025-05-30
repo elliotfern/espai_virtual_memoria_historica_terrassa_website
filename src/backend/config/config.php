@@ -23,6 +23,7 @@ define("APP_INTRANET", '/gestio');
 define("APP_API", '/api');
 define("BACKEND_API", 'src/backend/api');
 define("BACKEND_URL", 'public/intranet');
+define("FRONTEND_URL", 'public/web-publica/');
 
 // definicio de url
 $url = [

@@ -1,5 +1,22 @@
 <?php
 
+
+// Configuración por defecto para rutas que requieren sesión, sin header_footer, con header_menu_footer
+
+$defaultRoutesSenseHeaderConfig = [
+    'needs_session' => false,
+    'header_footer' => true,
+    'header_menu_footer' => false,
+    'apiSenseHTML' => false
+];
+
+$defaultRoutesConfig = [
+    'needs_session' => false,
+    'header_footer' => false,
+    'header_menu_footer' => true,
+    'apiSenseHTML' => false
+];
+
 // Define las rutas base que quieres traducir
 $base_routes = [
     // 00. Homepage
@@ -7,8 +24,10 @@ $base_routes = [
     '/benvinguda' => 'public/web-publica/index.php',
     '/inici' => 'public/web-publica/inici.php',
 
-    // Accés àrea privada
-    '/acces' => 'public/intranet/00_homepage/login.php',
+    // Accés intranet i recuperació contrasenya
+    '/acces' => 'public/web-publica/auth/login.php',
+
+    'recuperacio-contrasenya' => 'public/web-publica/auth/recuperacio-contrasenya.php',
 
     // 1. Base de dades
     '/base-dades/general' => 'public/web-publica/base-dades/base-dades-global.php',
@@ -49,35 +68,32 @@ $base_routes = [
 // Rutas principales sin idioma explícito (solo para el idioma por defecto)
 $routes = [
     // 00. Homepage
-    '/' => [
-        'view' => 'public/web-publica/index.php',
-        'needs_session' => false,
-        'header_footer' => true,
-        'header_menu_footer' => false
-    ],
+    '/' => array_merge($defaultRoutesSenseHeaderConfig, [
+        'view' => FRONTEND_URL . '/index.php'
+    ]),
 
-    '/benvinguda' => [
-        'view' => 'public/web-publica/index.php',
-        'needs_session' => false,
-        'header_footer' => true,
-        'header_menu_footer' => false
-    ],
+    '/benvinguda' => array_merge($defaultRoutesSenseHeaderConfig, [
+        'view' => FRONTEND_URL . '/index.php'
+    ]),
 
-    '/inici' => [
-        'view' => 'public/web-publica/inici.php',
-        'needs_session' => false,
-        'header_footer' => false,
-        'header_menu_footer' => true
-    ],
+    '/inici' => array_merge($defaultRoutesConfig, [
+        'view' => FRONTEND_URL . '/inici.php'
+    ]),
 
-    '/acces' => [
-        'view' => 'public/intranet/00_homepage/login.php',
-        'needs_session' => false,
-        'header_footer' => false,
-        'header_menu_footer' => true
-    ],
+    // 01. Accés intranet i recuperacio password
+    '/acces' => array_merge($defaultRoutesConfig, [
+        'view' => FRONTEND_URL . '/auth/login.php'
+    ]),
 
-    // 1. Base de dades
+    '/recuperacio-contrasenya' => array_merge($defaultRoutesConfig, [
+        'view' => FRONTEND_URL . '/auth/recuperacio-contrasenya.php'
+    ]),
+
+    '/restabliment-contrasenya' => array_merge($defaultRoutesConfig, [
+        'view' => FRONTEND_URL . '/auth/restabliment-contrasenya.php'
+    ]),
+
+    // 02. Base de dades
     '/base-dades/general' => [
         'view' => 'public/web-publica/base-dades/base-dades-global.php',
         'needs_session' => false,
