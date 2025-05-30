@@ -17,6 +17,14 @@ $defaultRoutesConfig = [
     'apiSenseHTML' => false
 ];
 
+$defaultRoutesUserLoggedConfig = [
+    'needs_session' => false,
+    'userLogged' => true,
+    'header_footer' => false,
+    'header_menu_footer' => true,
+    'apiSenseHTML' => false
+];
+
 // Define las rutas base que quieres traducir
 $base_routes = [
     // 00. Homepage
@@ -81,7 +89,7 @@ $routes = [
     ]),
 
     // 01. Accés intranet i recuperacio password
-    '/acces' => array_merge($defaultRoutesConfig, [
+    '/acces' => array_merge($defaultRoutesUserLoggedConfig, [
         'view' => FRONTEND_URL . '/auth/login.php'
     ]),
 

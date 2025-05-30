@@ -79,6 +79,12 @@ if (!$routeFound) {
         verificarSesion(); // Llamada a la función de verificación de sesión
     }
 
+    // Verificar si la ruta ha de tenir redirecció per usuari ja registrat
+    $userLogged = $routeInfo['userLogged'] ?? false;
+    if ($userLogged) {
+        validarTokenJWT(); // Llamada a la función de verificación de sesión
+    }
+
     // Determinar si la vista necesita encabezado y pie de página
     $noHeaderFooter = $routeInfo['header_footer'] ?? false;
 

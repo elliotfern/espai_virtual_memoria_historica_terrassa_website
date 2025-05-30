@@ -10,15 +10,15 @@ export function botonsEstat(pag: string) {
     botonMostrarTodos.innerText = 'Tots';
     botonMostrarTodos.classList.add('btn', 'btn-secondary'); // Clases de Bootstrap
     botonMostrarTodos.onclick = function () {
-      cargarTabla(pag, 1, null); // Mostrar todos (sin filtrar)
+      cargarTabla(pag, 2, 3); // Mostrar todos (sin filtrar)
     };
 
     // Crear botón "Completado"
     const botonCompletado = document.createElement('button');
-    botonCompletado.innerText = 'Completats';
+    botonCompletado.innerText = 'Completats (visibles al web)';
     botonCompletado.classList.add('btn', 'btn-success', 'mr-2'); // Clases de Bootstrap
     botonCompletado.onclick = function () {
-      cargarTabla(pag, 1, 2); // Filtrar por completado (2)
+      cargarTabla(pag, 2, 2); // Filtrar por completado (2)
     };
 
     // Crear botón "No Completado"
@@ -26,7 +26,7 @@ export function botonsEstat(pag: string) {
     botonNoCompletado.innerText = 'Pendents';
     botonNoCompletado.classList.add('btn', 'btn-primary', 'mr-2'); // Clases de Bootstrap
     botonNoCompletado.onclick = function () {
-      cargarTabla(pag, 1, 1); // Filtrar por no completado (1)
+      cargarTabla(pag, 2, 1); // Filtrar por no completado (1)
     };
 
     // Agregar los botones al contenedor

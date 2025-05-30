@@ -44,6 +44,34 @@ function verificarSesion()
         exit();
     }
 }
+
+function validarTokenJWT()
+{
+
+    if (!isset($_COOKIE['token'])) {
+        return false; // No hay token, dejar que el flujo continúe (por ejemplo, mostrar login)
+    }
+
+    $token = $_COOKIE['token'];
+    $jwtSecret = $_ENV['TOKEN'];
+
+    try {
+        $decoded = JWT::decode($token, new Key($jwtSecret, 'HS256'));
+
+        $userType = $decoded->user_type ?? null;
+
+        // Asegurarse de que el userType es válido
+        if (in_array($userType, [1, 2, 3, 4, 5])) {
+            header('Location: /gestio');
+            exit;
+        }
+
+        return false; // user_type no permitido
+    } catch (Exception $e) {
+        return false; // Token inválido, expirado, etc.
+    }
+}
+
 function getAuthenticatedUserId(): ?int
 {
 

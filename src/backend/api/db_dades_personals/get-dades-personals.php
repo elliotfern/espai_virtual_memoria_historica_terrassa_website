@@ -9,65 +9,170 @@ header("Access-Control-Allow-Origin: https://memoriaterrassa.cat");
 header("Access-Control-Allow-Methods: GET");
 header('Access-Control-Allow-Credentials: true');
 
-// 1) Llistat complet represaliats
-// ruta GET => "https://memoriaterrassa.cat/api/dades_personals/get/?type=tots&completat=1&visibilitat=1"
-if (isset($_GET['type']) && $_GET['type'] == 'tots' && isset($_GET['completat']) && isset($_GET['visibilitat'])) {
-    // Verificamos si el parámetro 'completat' está presente
-    $completat = isset($_GET['completat']) ? $_GET['completat'] : null;
-    $visibilitat = in_array((int) ($_GET['visibilitat'] ?? 1), [1, 2]) ? (int) $_GET['visibilitat'] : 1;
+// 1) Llistat complet represaliats (web pública) completades 2 / visibilitat 2
+// ruta GET => "https://memoriaterrassa.cat/api/dades_personals/get/?type=llistatComplertWeb"
+if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
 
-    if ($completat == 3) {
-        global $conn;
-        /** @var PDO $conn */
-        $query = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat, a.font_intern, a.visibilitat
+    global $conn;
+    /** @var PDO $conn */
+    $query = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat, a.font_intern, a.visibilitat
                 FROM db_dades_personals AS a
                 LEFT JOIN aux_dades_municipis AS e1 ON a.municipi_naixement = e1.id
                 LEFT JOIN aux_dades_municipis AS e2 ON a.municipi_defuncio = e2.id
-                WHERE a.completat IN (1, 2)
-                    AND a.visibilitat = :visibilitat
+                WHERE a.completat = 2
+                    AND a.visibilitat = 2
                 ORDER BY a.cognom1 ASC";
-        $stmt = $conn->prepare($query);
-        $stmt->execute(['visibilitat' => $visibilitat]);
-        $stmt->execute();
+    $stmt = $conn->prepare($query);
+    $stmt->execute();
 
-        $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        header("Content-Type: application/json");
-        echo json_encode($row);  // Codifica la fila como un objeto JSON
+    $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    header("Content-Type: application/json");
+    echo json_encode($row);  // Codifica la fila como un objeto JSON
 
-    } else {
-        global $conn;
-        /** @var PDO $conn */
-        $query = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat, a.font_intern, a.visibilitat
-            FROM db_dades_personals AS a
-            LEFT JOIN aux_dades_municipis AS e1 ON a.municipi_naixement = e1.id
-            LEFT JOIN aux_dades_municipis AS e2 ON a.municipi_defuncio = e2.id
-            WHERE a.completat = :completat
-            AND a.visibilitat = :visibilitat
-            ORDER BY a.cognom1 ASC";
-        $stmt = $conn->prepare($query);
-        $stmt->bindParam(':completat', $completat, PDO::PARAM_INT);
-        $stmt->bindParam(':visibilitat', $visibilitat, PDO::PARAM_INT);
-        $stmt->execute();
-
-        if ($stmt->rowCount() === 0) {
-            header("Content-Type: application/json");
-            echo json_encode(null);  // Devuelve un objeto JSON nulo si no hay resultados
-        } else {
-            // Solo obtenemos la primera fila ya que parece ser una búsqueda por ID
-            $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            header("Content-Type: application/json");
-            echo json_encode($row);  // Codifica la fila como un objeto JSON
-        }
-    }
-
-
-    // 2) Llistat tots per categories
-    // ruta GET => "https://memoriaterrassa.cat/api/dades_personals/get/?type=totesCategories&categoria=afusellats&completat=1&visibilitat=1"
-} elseif (isset($_GET['type']) && $_GET['type'] == 'totesCategories' && isset($_GET['categoria']) && isset($_GET['completat']) && isset($_GET['visibilitat'])) {
+    // 2) Llistat complet represaliats (intranet) completades :dinamic
+    // ruta GET => "https://memoriaterrassa.cat/api/dades_personals/get/?type=llistatComplertIntranet&completat=3"
+} else if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertIntranet' && isset($_GET['completat'])) {
 
     // Verificamos si el parámetro 'completat' está presente
     $completat = isset($_GET['completat']) ? $_GET['completat'] : null;
-    $visibilitat = in_array((int) ($_GET['visibilitat'] ?? 1), [1, 2]) ? (int) $_GET['visibilitat'] : 1;
+
+    global $conn;
+    /** @var PDO $conn */
+
+    if ($completat === '3') {
+        // Caso especial: completat=3 significa completat IN (1, 2)
+        $query = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat, a.font_intern, a.visibilitat
+              FROM db_dades_personals AS a
+              LEFT JOIN aux_dades_municipis AS e1 ON a.municipi_naixement = e1.id
+              LEFT JOIN aux_dades_municipis AS e2 ON a.municipi_defuncio = e2.id
+              WHERE a.completat IN (1, 2)
+              ORDER BY a.cognom1 ASC";
+        $stmt = $conn->prepare($query);
+        $stmt->execute();
+    } else {
+        // Caso normal: filtro por un solo valor
+        $query = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat, a.font_intern, a.visibilitat
+              FROM db_dades_personals AS a
+              LEFT JOIN aux_dades_municipis AS e1 ON a.municipi_naixement = e1.id
+              LEFT JOIN aux_dades_municipis AS e2 ON a.municipi_defuncio = e2.id
+              WHERE a.completat = :completat
+              ORDER BY a.cognom1 ASC";
+        $stmt = $conn->prepare($query);
+        $stmt->bindParam(':completat', $completat, PDO::PARAM_INT);
+        $stmt->execute();
+    }
+
+    if ($stmt->rowCount() === 0) {
+        header("Content-Type: application/json");
+        echo json_encode(null);  // Devuelve un objeto JSON nulo si no hay resultados
+    } else {
+        $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        header("Content-Type: application/json");
+        echo json_encode($row);  // Codifica la fila como un objeto JSON
+    }
+
+    // 2) Llistat per categories de repressio (web publica, només mostrarem les fitxes completades 2 i amb visibilitat completada 2)
+    // ruta GET => "https://memoriaterrassa.cat/api/dades_personals/get/?type=totesCategoriesWeb&categoria=afusellats"
+} elseif (isset($_GET['type']) && $_GET['type'] == 'totesCategoriesWeb' && isset($_GET['categoria'])) {
+
+    // Obtener y sanitizar la entrada
+    $cat = filter_input(INPUT_GET, 'categoria', FILTER_DEFAULT);
+
+    if ($cat === "cost-huma") {
+        $catNum1 = 3;
+        $catNum2 = 4;
+        $catNum3 = 5;
+
+        $sql = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat, a.font_intern, a.visibilitat
+                FROM db_dades_personals AS a
+                LEFT JOIN aux_dades_municipis AS e1 ON a.municipi_naixement = e1.id
+                LEFT JOIN aux_dades_municipis AS e2 ON a.municipi_defuncio = e2.id
+                WHERE 
+                (FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
+                    OR FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
+                    OR FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0)
+                    AND a.completat = 2
+                AND a.visibilitat = 2
+                ORDER BY a.cognom1 ASC;";
+        global $conn;
+        $data = array();
+        /** @var PDO $conn */
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(1, $catNum1, PDO::PARAM_STR);
+        $stmt->bindParam(2, $catNum2, PDO::PARAM_STR);
+        $stmt->bindParam(3, $catNum3, PDO::PARAM_STR);
+        $stmt->execute();
+        if ($stmt->rowCount() === 0) echo ('No rows');
+        while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $data[] = $users;
+        }
+        echo json_encode($data);
+    } else if ($cat === "exiliats-deportats") {
+        $catNum1 = 10;
+        $catNum2 = 2;
+        $sql = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat, a.font_intern, a.visibilitat
+                FROM db_dades_personals AS a
+                LEFT JOIN aux_dades_municipis AS e1 ON a.municipi_naixement = e1.id
+                LEFT JOIN aux_dades_municipis AS e2 ON a.municipi_defuncio = e2.id
+                WHERE 
+                    (FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
+                    OR FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0)
+                    AND a.completat =  2
+                    AND a.visibilitat = 2
+                ORDER BY a.cognom1 ASC;";
+        global $conn;
+        $data = array();
+        /** @var PDO $conn */
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(1, $catNum1, PDO::PARAM_STR);
+        $stmt->bindParam(2, $catNum2, PDO::PARAM_STR);
+
+        $stmt->execute();
+        if ($stmt->rowCount() === 0) echo ('No rows');
+        while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $data[] = $users;
+        }
+        echo json_encode($data);
+    } else if ($cat === "represaliats") {
+        $catNum1 = 1;
+        $catNum2 = 6;
+        $catNum3 = 7;
+        $catNum4 = 11;
+        $sql = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat, a.font_intern, a.visibilitat
+                FROM db_dades_personals AS a
+                LEFT JOIN aux_dades_municipis AS e1 ON a.municipi_naixement = e1.id
+                LEFT JOIN aux_dades_municipis AS e2 ON a.municipi_defuncio = e2.id
+                WHERE 
+                    (FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
+                    OR FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
+                    OR FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
+                    OR FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0)
+                    AND a.completat = 2
+                    AND a.visibilitat = 2
+                ORDER BY a.cognom1 ASC;";
+        global $conn;
+        $data = array();
+        /** @var PDO $conn */
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(1, $catNum1, PDO::PARAM_STR);
+        $stmt->bindParam(2, $catNum2, PDO::PARAM_STR);
+        $stmt->bindParam(3, $catNum3, PDO::PARAM_STR);
+        $stmt->bindParam(4, $catNum4, PDO::PARAM_STR);
+
+        $stmt->execute();
+        if ($stmt->rowCount() === 0) echo ('No rows');
+        while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $data[] = $users;
+        }
+        echo json_encode($data);
+    }
+
+    // 3) Llistat per categories de repressio (intranet, completades :dinamic)
+    // ruta GET => "https://memoriaterrassa.cat/api/dades_personals/get/?type=totesCategoriesIntranet&categoria=afusellats"
+} elseif (isset($_GET['type']) && $_GET['type'] == 'totesCategoriesIntranet' && isset($_GET['categoria']) && isset($_GET['completat'])) {
+
+    // Verificamos si el parámetro 'completat' está presente
+    $completat = isset($_GET['completat']) ? $_GET['completat'] : null;
 
     // Obtener y sanitizar la entrada
     $cat = filter_input(INPUT_GET, 'categoria', FILTER_DEFAULT);
@@ -87,7 +192,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'tots' && isset($_GET['completat'])
                     OR FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
                     OR FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0)
                     AND a.completat IN (1, 2)
-                AND a.visibilitat = ?
+                    AND a.visibilitat IN (1, 2)
                 ORDER BY a.cognom1 ASC;";
             global $conn;
             $data = array();
@@ -96,7 +201,6 @@ if (isset($_GET['type']) && $_GET['type'] == 'tots' && isset($_GET['completat'])
             $stmt->bindParam(1, $catNum1, PDO::PARAM_STR);
             $stmt->bindParam(2, $catNum2, PDO::PARAM_STR);
             $stmt->bindParam(3, $catNum3, PDO::PARAM_STR);
-            $stmt->bindParam(4, $visibilitat, PDO::PARAM_INT);
             $stmt->execute();
             if ($stmt->rowCount() === 0) echo ('No rows');
             while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -117,7 +221,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'tots' && isset($_GET['completat'])
                 OR FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
                 OR FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0)
                 AND a.completat = ?
-                AND a.visibilitat = ?
+                AND a.visibilitat IN (1,2)
             ORDER BY a.cognom1 ASC;";
             global $conn;
             $data = array();
@@ -127,7 +231,6 @@ if (isset($_GET['type']) && $_GET['type'] == 'tots' && isset($_GET['completat'])
             $stmt->bindParam(2, $catNum2, PDO::PARAM_STR);
             $stmt->bindParam(3, $catNum3, PDO::PARAM_STR);
             $stmt->bindParam(4, $completat, PDO::PARAM_INT);
-            $stmt->bindParam(5, $visibilitat, PDO::PARAM_INT);
             $stmt->execute();
             if ($stmt->rowCount() === 0) echo ('No rows');
             while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -147,7 +250,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'tots' && isset($_GET['completat'])
                     (FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
                     OR FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0)
                     AND a.completat IN (1, 2)
-                AND a.visibilitat = ?
+                    AND a.visibilitat IN (1, 2)
                 ORDER BY a.cognom1 ASC;";
             global $conn;
             $data = array();
@@ -155,7 +258,6 @@ if (isset($_GET['type']) && $_GET['type'] == 'tots' && isset($_GET['completat'])
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(1, $catNum1, PDO::PARAM_STR);
             $stmt->bindParam(2, $catNum2, PDO::PARAM_STR);
-            $stmt->bindParam(3, $visibilitat, PDO::PARAM_INT);
             $stmt->execute();
             if ($stmt->rowCount() === 0) echo ('No rows');
             while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -173,7 +275,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'tots' && isset($_GET['completat'])
                     (FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
                     OR FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0)
                     AND a.completat = ?
-                    AND a.visibilitat = ?
+                    AND a.visibilitat IN (1,2)
                 ORDER BY a.cognom1 ASC;";
             global $conn;
             $data = array();
@@ -182,7 +284,6 @@ if (isset($_GET['type']) && $_GET['type'] == 'tots' && isset($_GET['completat'])
             $stmt->bindParam(1, $catNum1, PDO::PARAM_STR);
             $stmt->bindParam(2, $catNum2, PDO::PARAM_STR);
             $stmt->bindParam(3, $completat, PDO::PARAM_INT);
-            $stmt->bindParam(4, $visibilitat, PDO::PARAM_INT);
             $stmt->execute();
             if ($stmt->rowCount() === 0) echo ('No rows');
             while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -206,7 +307,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'tots' && isset($_GET['completat'])
                     OR FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
                     OR FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0)
                     AND a.completat IN (1, 2)
-                    AND a.visibilitat = ?
+                    AND a.visibilitat IN (1, 2)
                 ORDER BY a.cognom1 ASC;";
             global $conn;
             $data = array();
@@ -216,7 +317,6 @@ if (isset($_GET['type']) && $_GET['type'] == 'tots' && isset($_GET['completat'])
             $stmt->bindParam(2, $catNum2, PDO::PARAM_STR);
             $stmt->bindParam(3, $catNum3, PDO::PARAM_STR);
             $stmt->bindParam(4, $catNum4, PDO::PARAM_STR);
-            $stmt->bindParam(5, $visibilitat, PDO::PARAM_INT);
             $stmt->execute();
             if ($stmt->rowCount() === 0) echo ('No rows');
             while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -238,7 +338,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'tots' && isset($_GET['completat'])
                     OR FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
                     OR FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0)
                     AND a.completat = ?
-                    AND a.visibilitat = ?
+                    AND a.visibilitat IN (1,2)
                 ORDER BY a.cognom1 ASC;";
             global $conn;
             $data = array();
@@ -249,7 +349,6 @@ if (isset($_GET['type']) && $_GET['type'] == 'tots' && isset($_GET['completat'])
             $stmt->bindParam(3, $catNum3, PDO::PARAM_STR);
             $stmt->bindParam(4, $catNum4, PDO::PARAM_STR);
             $stmt->bindParam(5, $completat, PDO::PARAM_INT);
-            $stmt->bindParam(6, $visibilitat, PDO::PARAM_INT);
             $stmt->execute();
             if ($stmt->rowCount() === 0) echo ('No rows');
             while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -259,7 +358,8 @@ if (isset($_GET['type']) && $_GET['type'] == 'tots' && isset($_GET['completat'])
         }
     }
 
-    // 2) Pagina informacio fitxa Represaliat
+
+    // 4) Pagina informacio fitxa Represaliat
     // ruta GET => "https://memoriaterrassa.cat/api/represaliats/get/?type=fitxa&id=35"
 } elseif (isset($_GET['type']) && $_GET['type'] == 'fitxa' && isset($_GET['id'])) {
     $id = $_GET['id'];

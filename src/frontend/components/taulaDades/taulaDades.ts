@@ -16,38 +16,39 @@ export async function cargarTabla(pag: string, context: number, completat: numbe
   // completat 1 = PENDENT > visibilitat = 1
   // completat 2 = COMPLETADA > visibilitat = 2
   // completat 3 = TOTES
-  if (completat !== 1 && completat !== 2) {
-    completat = 3;
-  }
+  // error: completat 1 > visibilitat 2
+  // cal fer un endpoint independent per web publica i intranet
 
   let webFitxa: string = '';
   let webTarget: string = '';
   let urlAjax: string = '';
-  let visibilitat: number = 0;
 
   const pagNet = pag.split('#')[0];
 
   // context:
-  // context = 1 > es per la web publica
-  // context = 2 > es per la intranet
+  // context = 1 > es per la web publica (mostrar només fitxes amb visibilitat 2 i completat 2)
+  // context = 2 > es per la intranet (mostrar només fitxes amb visibilitat 1 i completat 1)
   if (context === 1) {
     webFitxa = `/fitxa/`;
     webTarget = '_self';
-    visibilitat = 2;
 
     if (pagNet === 'general') {
-      urlAjax = `${devDirectory}/api/dades_personals/get/?type=tots&completat=${completat}&visibilitat=${visibilitat}`;
+      urlAjax = `${devDirectory}/api/dades_personals/get/?type=llistatComplertWeb`;
     } else if (pagNet === 'represaliats' || pagNet === 'exiliats-deportats' || pagNet === 'cost-huma') {
-      urlAjax = `${devDirectory}/api/dades_personals/get/?type=totesCategories&categoria=${pagNet}&completat=${completat}&visibilitat=${visibilitat}`;
+      urlAjax = `${devDirectory}/api/dades_personals/get/?type=totesCategoriesWeb&categoria=${pagNet}`;
     }
-  } else {
+  } else if (context === 2) {
     webFitxa = `/fitxa/`;
     webTarget = '_blank';
-    visibilitat = 1;
+
+    if (completat !== 1 && completat !== 2) {
+      completat = 3;
+    }
+
     if (pagNet === 'general') {
-      urlAjax = `${devDirectory}/api/dades_personals/get/?type=tots&completat=${completat}&visibilitat=${visibilitat}`;
+      urlAjax = `${devDirectory}/api/dades_personals/get/?type=llistatComplertIntranet&completat=${completat}`;
     } else if (pagNet === 'represaliats' || pagNet === 'exiliats-deportats' || pagNet === 'cost-huma') {
-      urlAjax = `${devDirectory}/api/dades_personals/get/?type=totesCategories&categoria=${pagNet}&completat=${completat}&visibilitat=${visibilitat}`;
+      urlAjax = `${devDirectory}/api/dades_personals/get/?type=totesCategoriesIntranet&categoria=${pagNet}&completat=${completat}`;
     }
   }
 
