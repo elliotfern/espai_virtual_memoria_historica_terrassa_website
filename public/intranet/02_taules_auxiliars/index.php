@@ -15,6 +15,75 @@
                 <li><a href="<?php echo APP_SERVER; ?>/gestio/auxiliars/llistat-usuaris">Taula usuaris registrats</a></li>
                 <li><a href="<?php echo APP_SERVER; ?>/gestio/auxiliars/llistat-imatges">Taula llistat imatges</a></li>
             </ul>
+
+            <h2>1. Autenticació i control d'accés</h2>
+            <ul>
+                <li>auth_users</li>
+                <li>auth_users_control_acces</li>
+                <li>auth_users_password_resets</li>
+                <li>auth_users_tipus</li>
+            </ul>
+
+            <h2>2. Taules auxiliars (catàlegs i opcions)</h2>
+            <ul>
+                <li>aux_activitat_guerra</li>
+                <li>aux_acusacions</li>
+                <li>aux_bandol</li>
+                <li>aux_bibliografia_arxius</li>
+                <li>aux_bibliografia_arxius_codis</li>
+                <li>aux_bibliografia_llibres</li>
+                <li>aux_bibliografia_llibre_detalls</li>
+                <li>aux_biografies</li>
+                <li>aux_categoria</li>
+                <li>aux_causa_defuncio</li>
+                <li>aux_condicio</li>
+                <li>aux_cossos_militars</li>
+                <li>aux_cronologia_area</li>
+                <li>aux_cronologia_mes</li>
+                <li>aux_cronologia_tema</li>
+                <li>aux_dades_municipis</li>
+                <li>aux_dades_municipis_comarca</li>
+                <li>aux_dades_municipis_comunitat</li>
+                <li>aux_dades_municipis_estat</li>
+                <li>aux_dades_municipis_provincia</li>
+                <li>aux_espai</li>
+                <li>aux_estat_civil</li>
+                <li>aux_estudis</li>
+                <li>aux_familiars</li>
+                <li>aux_familiars_relacio</li>
+                <li>aux_filiacio_politica</li>
+                <li>aux_filiacio_sindical</li>
+                <li>aux_imatges</li>
+                <li>aux_jutjats</li>
+                <li>aux_llocs_bombardeig</li>
+                <li>aux_oficis</li>
+                <li>aux_ofici_carrec</li>
+                <li>aux_procediment_judicial</li>
+                <li>aux_sector_economic</li>
+                <li>aux_sentencies</li>
+                <li>aux_situacions_deportats</li>
+                <li>aux_sub_sector_economic</li>
+                <li>aux_tipologia_espais</li>
+                <li>aux_tipus_presons</li>
+            </ul>
+
+            <h2>3. Control de canvis</h2>
+            <ul>
+                <li>control_registre_canvis</li>
+            </ul>
+
+            <h2>4. Dades principals i biogràfiques</h2>
+            <ul>
+                <li>db_afusellats</li>
+                <li>db_biografies</li>
+                <li>db_cost_huma_morts_civils</li>
+                <li>db_cost_huma_morts_front</li>
+                <li>db_cronologia</li>
+                <li>db_dades_personals</li>
+                <li>db_deportats</li>
+                <li>db_depurats</li>
+                <li>db_exiliats</li>
+            </ul>
         <?php endif; ?>
     </div>
 </div>

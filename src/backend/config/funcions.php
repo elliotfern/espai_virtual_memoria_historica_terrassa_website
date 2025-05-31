@@ -88,6 +88,33 @@ function isUserAutor(): bool
     return false;
 }
 
+function isUserCategoria($userType): bool
+{
+    // Cargar variables de entorno desde .env
+    $jwtSecret = $_ENV['TOKEN'];
+
+    if (!isset($_COOKIE['token'])) {
+        return false;
+    }
+
+    $token = trim($_COOKIE['token']);
+
+    try {
+        $decoded = JWT::decode($token, new Key($jwtSecret, 'HS256'));
+
+        // Comprobamos si el usuario es autor (user_type = 2)
+        if (isset($decoded->user_type) && in_array($decoded->user_type, [$userType])) {
+            return true;
+        }
+    } catch (Exception $e) {
+        // Token inválido, expirado o manipulado
+        error_log("Error en isUserAutor(): " . $e->getMessage());
+    }
+
+    return false;
+}
+
+
 /**
  * Verifica que la solicitud provenga del dominio permitido.
  *

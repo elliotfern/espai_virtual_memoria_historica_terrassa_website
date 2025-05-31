@@ -1,5 +1,7 @@
 import { renderTaulaCercadorFiltres } from '../../../services/renderTaula/renderTaulaCercadorFiltres';
+import { initDeleteHandlers } from '../../../services/fetchData/handleDelete';
 import { getIsAdmin } from '../../../services/auth/getIsAdmin';
+import { getIsAutor } from '../../../services/auth/getIsAutor';
 
 interface EspaiRow {
   id: number;
@@ -18,6 +20,7 @@ type Column<T> = {
 
 export async function taulaMunicipis() {
   const isAdmin = await getIsAdmin();
+  const isAutor = await getIsAutor();
 
   const columns: Column<EspaiRow>[] = [
     { header: 'Municipi', field: 'ciutat' },
@@ -27,11 +30,27 @@ export async function taulaMunicipis() {
     { header: 'Estat', field: 'estat' },
   ];
 
-  if (isAdmin) {
+  if (isAdmin || isAutor) {
     columns.push({
       header: 'Accions',
       field: 'id',
-      render: (_: unknown, row: EspaiRow) => `<a id="${row.id}" title="Modifica" href="https://${window.location.hostname}/gestio/municipi/modifica/${row.id}"><button type="button" class="btn btn-primary">Modifica</button></a>`,
+      render: (_: unknown, row: EspaiRow) => `<a id="${row.id}" title="Modifica" href="https://${window.location.hostname}/gestio/auxiliars/modifica-municipi/${row.id}"><button type="button" class="btn btn-warning btn-sm">Modifica</button></a>`,
+    });
+  }
+
+  if (isAdmin) {
+    columns.push({
+      header: '',
+      field: 'id',
+      render: (_: unknown, row: EspaiRow) => `
+    <button 
+      type="button"
+      class="btn btn-danger btn-sm delete-button"
+      data-id="${row.id}" 
+      data-url="/api/auxiliars/delete/municipi/${row.id}"
+    >
+      Elimina
+    </button>`,
     });
   }
 
@@ -42,4 +61,7 @@ export async function taulaMunicipis() {
     filterKeys: ['ciutat'],
     filterByField: 'provincia',
   });
+
+  // Iniciar los listeners de borrado
+  initDeleteHandlers(() => taulaMunicipis()); // Recargar tabla después de eliminar
 }

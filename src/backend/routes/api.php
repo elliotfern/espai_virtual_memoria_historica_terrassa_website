@@ -37,6 +37,10 @@ $routes = [
         'view' => BACKEND_API . $url['auxiliars'] . '/post-auxiliars.php',
     ]),
 
+    APP_API . $url['auxiliars'] . '/delete/{slug}/{id}' => array_merge($defaultApiConfig, [
+        'view' => BACKEND_API . $url['auxiliars'] . '/delete-auxiliars.php',
+    ]),
+
     // API INTRANET OPERACIONS CRUD
     // API db_cost_huma_morts_front
     '/api/cost_huma_front/get' => ['view' => 'src/backend/api/db_cost_huma_front/get-cost-huma-front.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],

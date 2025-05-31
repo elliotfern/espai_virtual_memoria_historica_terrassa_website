@@ -19,8 +19,8 @@ export async function logout() {
 
       sessionStorage.clear();
 
-      // Redirige al usuario a la página "elliot.cat"
-      window.location.href = 'https://memoriaterrassa.cat';
+      // Redirige al usuario a la página inici
+      window.location.href = 'https://memoriaterrassa.cat/inici';
     } else {
       console.error('Error al hacer logout:', data);
     }

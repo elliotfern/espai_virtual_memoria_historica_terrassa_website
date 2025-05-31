@@ -17,7 +17,7 @@ $provincia_old = "";
 $comunitat_old = "";
 $estat_old = "";
 
-if ($categoriaId === "modifica") {
+if ($categoriaId === "modifica-municipi") {
     $modificaBtn = 1;
     $btnModificar = 1;
     $idMunicipi = $routeParams[0];
@@ -58,14 +58,13 @@ if ($categoriaId === "modifica") {
 <div class="container" style="margin-bottom:50px;border: 1px solid gray;border-radius: 10px;padding:25px;background-color:#eaeaea">
     <form id="municipiForm">
         <div class="container">
+            <?php if ($modificaBtn === 1) { ?>
+                <h2>Modificació dades municipi</h2>
+                <h4 id="fitxaMunicipi">Municipi: <?php echo $ciutat_old; ?></h4>
+            <?php } else { ?>
+                <h2>Inserció dades nou municipi</h2>
+            <?php } ?>
             <div class="row g-5">
-                <?php if ($modificaBtn === 1) { ?>
-                    <h2>Modificació dades municipi</h2>
-                    <h4 id="fitxaMunicipi">Municipi: <?php echo $ciutat_old; ?></h4>
-                <?php } else { ?>
-                    <h2>Inserció dades nou municipi</h2>
-                <?php } ?>
-
                 <div class="alert alert-success" role="alert" id="okMessage" style="display:none">
                     <h4 class="alert-heading"><strong>Modificació correcte!</strong></h4>
                     <div id="okText"></div>
@@ -254,7 +253,7 @@ if ($categoriaId === "modifica") {
         // Convertir los datos del formulario a JSON
         const jsonData = JSON.stringify(formData);
         const devDirectory = `https://${window.location.hostname}`;
-        let urlAjax = devDirectory + "/api/auxiliars/put/?type=municipi";
+        let urlAjax = devDirectory + "/api/auxiliars/put/municipi";
 
         try {
             // Hacer la solicitud con fetch y await
@@ -326,7 +325,7 @@ if ($categoriaId === "modifica") {
         // Convertir los datos del formulario a JSON
         const jsonData = JSON.stringify(formData);
         const devDirectory = `https://${window.location.hostname}`;
-        let urlAjax = devDirectory + "/api/auxiliars/post/?type=municipi";
+        let urlAjax = devDirectory + "/api/auxiliars/post/municipi";
 
         try {
             // Hacer la solicitud con fetch y await

@@ -8,7 +8,7 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
         <h4>Llistat de partits polítics</h4>
 
         <div class="text-start">
-            <p><button class="btn btn-primary" onclick="window.location.href='<?php echo APP_INTRANET . $url['auxiliars']; ?>/nou-partit'">
+            <p><button class="btn btn-primary" onclick="window.location.href='<?php echo APP_INTRANET . $url['auxiliars']; ?>/nou-partit-politic'">
                     Crear nou partit polític
                 </button></p>
         </div>

@@ -55,13 +55,33 @@ $routes = [
         'view' => BACKEND_URL . $urlIntranet['auxiliars'] . '/index.php'
     ]),
 
+    // 2.1 Municipis
     APP_INTRANET . $url['auxiliars'] . '/llistat-municipis' => array_merge($defaultProtectedConfig, [
         'view' => BACKEND_URL . $urlIntranet['auxiliars'] . '/llistat-municipis.php'
     ]),
 
+    APP_INTRANET . $url['auxiliars'] . '/nou-municipi' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranet['auxiliars'] . '/form-municipi.php'
+    ]),
+
+    APP_INTRANET . $url['auxiliars'] . '/modifica-municipi/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranet['auxiliars'] . '/form-municipi.php'
+    ]),
+
+    // 2.1 Partits politics
     APP_INTRANET . $url['auxiliars'] . '/llistat-partits-politics' => array_merge($defaultProtectedConfig, [
         'view' => BACKEND_URL . $urlIntranet['auxiliars'] . '/llistat-partits-politics.php'
     ]),
+
+    APP_INTRANET . $url['auxiliars'] . '/nou-partit-politic' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranet['auxiliars'] . '/form-partit-politic.php'
+    ]),
+
+    APP_INTRANET . $url['auxiliars'] . '/modifica-partit-politic/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranet['auxiliars'] . '/form-partit-politic.php'
+    ]),
+
+
 
     APP_INTRANET . $url['auxiliars'] . '/llistat-sindicats' => array_merge($defaultProtectedConfig, [
         'view' => BACKEND_URL . $urlIntranet['auxiliars'] . '/llistat-sindicats.php'
@@ -88,13 +108,7 @@ $routes = [
     ]),
 
 
-    APP_INTRANET . $url['auxiliars'] . '/nou-municipi' => array_merge($defaultProtectedConfig, [
-        'view' => BACKEND_URL . $urlIntranet['auxiliars'] . '/form-municipi.php'
-    ]),
 
-    APP_INTRANET . $url['auxiliars'] . '/modifica-municipi/{id}' => array_merge($defaultProtectedConfig, [
-        'view' => BACKEND_URL . $urlIntranet['auxiliars'] . '/form-municipi.php'
-    ]),
 
     APP_INTRANET . $url['auxiliars'] . '/nova-comarca' => array_merge($defaultProtectedConfig, [
         'view' => BACKEND_URL . $urlIntranet['auxiliars'] . '/form-comarca.php'
@@ -168,13 +182,7 @@ $routes = [
         'view' => BACKEND_URL . $urlIntranet['auxiliars'] . '/form-sub-sector-economic.php'
     ]),
 
-    APP_INTRANET . $url['auxiliars'] . '/nou-partit-politic' => array_merge($defaultProtectedConfig, [
-        'view' => BACKEND_URL . $urlIntranet['auxiliars'] . '/form-partit-politic.php'
-    ]),
 
-    APP_INTRANET . $url['auxiliars'] . '/modifica-partit-politic/{id}' => array_merge($defaultProtectedConfig, [
-        'view' => BACKEND_URL . $urlIntranet['auxiliars'] . '/form-partit-politic.php'
-    ]),
 
     APP_INTRANET . $url['auxiliars'] . '/nou-sindicat' => array_merge($defaultProtectedConfig, [
         'view' => BACKEND_URL . $urlIntranet['auxiliars'] . '/form-sindicat.php'

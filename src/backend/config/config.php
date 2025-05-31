@@ -7,6 +7,10 @@ $dotenv->load();
 require_once __DIR__ . '/../config/connection.php';
 
 $isAdmin = isUserAdmin();
+$isAutor = isUserAutor();
+$isLogged = isUserLogged();
+$isUserExili = isUserCategoria(3);
+$isUserCostHuma = isUserCategoria(4);
 
 // Definir constantes de configuración
 define('BASE_URL', $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST']);

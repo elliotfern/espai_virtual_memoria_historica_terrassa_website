@@ -1,93 +1,56 @@
 <?php
 require_once APP_ROOT . '/public/intranet/includes/header.php';
 
-$sub_sector_cat_old = "";
+// Obtener la URL completa
+$url2 = $_SERVER['REQUEST_URI'];
+
+// Dividir la URL en partes usando '/' como delimitador
+$urlParts = explode('/', $url2);
+
+// Obtener la parte deseada (en este caso, la cuarta parte)
+$categoriaId = $urlParts[3] ?? '';
+
+$id_old = "";
 $sindicat_old = "";
 $sigles_old = "";
+$modificaBtn = "";
 
-$btnModificar = 2;
+if ($categoriaId === "modifica-sindicat") {
+    $modificaBtn = 1;
+    $id_old = $routeParams[0];
 
-// Verificar si la ID existe en la base de datos
-$query = "SELECT 
-f.id, 
-f.condicio,
-f.bandol,
-f.any_lleva,
-f.unitat_inicial,
-f.cos,
-f.unitat_final ,
-f.graduacio_final,
-f.periple_militar,
-f.circumstancia_mort,
-f.desaparegut_data,
-f.desaparegut_lloc,
-f.desaparegut_data_aparicio,
-f.desaparegut_lloc_aparicio,
-d.nom,
-d.cognom1,
-d.cognom2
-FROM db_cost_huma_morts_front AS f
-LEFT JOIN db_dades_personals AS d ON f.idPersona = d.id
-WHERE f.idPersona = :idPersona";
-$stmt = $conn->prepare($query);
-$stmt->bindParam(':idPersona', $idPersona, PDO::PARAM_INT);
-$stmt->execute();
-
-
-if ($stmt->rowCount() > 0) {
-    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        // Acceder a las variables de la consulta
-        $condicio_id = $row['condicio'] ?? "";
-        $bandol_id = $row['bandol'] ?? "";
-        $any_lleva = $row['any_lleva'] ?? "";
-        $unitat_inicial = $row['unitat_inicial'] ?? "";
-        $cos_id = $row['cos'] ?? "";
-        $unitat_final = $row['unitat_final'] ?? "";
-        $graduacio_final = $row['graduacio_final'] ?? "";
-        $periple_militar = $row['periple_militar'] ?? "";
-        $circumstancia_mort_id = $row['circumstancia_mort'] ?? "";
-        $desaparegut_data = $row['desaparegut_data'] ?? "";
-        $desaparegut_lloc_id = $row['desaparegut_lloc'] ?? "";
-        $desaparegut_data_aparicio = $row['desaparegut_data_aparicio'] ?? "";
-        $desaparegut_lloc_aparicio_id = $row['desaparegut_lloc_aparicio'] ?? "";
-        $nom = $row['nom'] ?? "";
-        $cognom1 = $row['cognom1'] ?? "";
-        $cognom2 = $row['cognom2'] ?? "";
-
-        // Crear el botón o usar los datos (TIPO PUT)
-        $btnModificar = 1;
-    }
-} else {
-    // La ID no existe, realizamos un POST (INSERT)
-    $btnModificar = 2;
-
-    $query = "SELECT 
-    d.nom,
-    d.cognom1,
-    d.cognom2
-    FROM db_dades_personals AS d
-    WHERE d.id = :id";
+    // Verificar si la ID existe en la base de datos
+    $query = "SELECT s.sindicat, s.sigles, s.id
+        FROM aux_filiacio_sindical AS s
+        WHERE s.id = :id";
     $stmt = $conn->prepare($query);
-    $stmt->bindParam(':id', $idPersona, PDO::PARAM_INT);
+    $stmt->bindParam(':id', $id_old, PDO::PARAM_INT);
     $stmt->execute();
 
     if ($stmt->rowCount() > 0) {
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $nom = $row['nom'] ?? "";
-            $cognom1 = $row['cognom1'] ?? "";
-            $cognom2 = $row['cognom2'] ?? "";
+            // Acceder a las variables de la consulta
+            $sindicat_old = $row['sindicat'] ?? "";
+            $sigles_old = $row['sigles'] ?? "";
+            $id_old = $row['id'] ?? "";
         }
     }
+} else {
+    $modificaBtn = 2;
 }
-
 ?>
 
 <div class="container" style="margin-bottom:50px;border: 1px solid gray;border-radius: 10px;padding:25px;background-color:#eaeaea">
-    <form id="causaMortForm">
+    <form id="form">
         <div class="container">
-            <div class="row">
-                <h2>Crear nou sindicat</h2>
+            <?php if ($modificaBtn === 1) { ?>
+                <h2>Modificació dades Sindicat</h2>
+                <h4 id="fitxaTitol">Sindicat: <?php echo $sindicat_old; ?></h4>
+            <?php } else { ?>
+                <h2>Inserció dades nou Sindicat</h2>
+            <?php } ?>
 
+            <div class="row g-3">
                 <div class="alert alert-success" role="alert" id="okMessage" style="display:none">
                     <h4 class="alert-heading"><strong>Modificació correcte!</strong></h4>
                     <div id="okText"></div>
@@ -97,6 +60,8 @@ if ($stmt->rowCount() > 0) {
                     <h4 class="alert-heading"><strong>Error en les dades!</strong></h4>
                     <div id="errText"></div>
                 </div>
+
+                <input type="hidden" id="id" name="id" value="<?php echo $id_old; ?>">
 
                 <div class="col-md-4">
                     <label for="sindicat" class="form-label negreta">Sindicat (català):</label>
@@ -109,95 +74,37 @@ if ($stmt->rowCount() > 0) {
                 </div>
 
                 <div class="row espai-superior" style="border-top: 1px solid black;padding-top:25px">
-                    <div class="col"></div>
+                    <div class="col">
+                        <a class="btn btn-secondary" role="button" aria-disabled="true" onclick="goBack()">Tornar enrere</a>
+                    </div>
 
                     <div class="col d-flex justify-content-end align-items-center">
 
                         <?php
-                        if ($btnModificar === 1) {
-                            echo '<a class="btn btn-primary" role="button" aria-disabled="true" id="btnModificarDadesCombat" onclick="enviarFormulario(event)">Modificar dades</a>';
+                        if ($modificaBtn === 1) {
+                            echo '<a class="btn btn-primary" role="button" aria-disabled="true" id="btnModificar" onclick="enviarFormulario(event)">Modificar dades</a>';
                         } else {
-                            echo '<a class="btn btn-primary" role="button" aria-disabled="true" id="btnInserirDadesCombat" onclick="enviarFormularioPost(event)">Inserir dades</a>';
+                            echo '<a class="btn btn-primary" role="button" aria-disabled="true" id="btnInserirDades" onclick="enviarFormularioPost(event)">Inserir dades</a>';
                         }
                         ?>
                     </div>
                 </div>
+            </div>
+        </div>
     </form>
-</div>
-</div>
 </div>
 
 <script>
-    // Carregar el select
-    async function auxiliarSelect(idAux, api, elementId, valorText) {
-
-        const devDirectory = `https://${window.location.hostname}`;
-        let urlAjax = devDirectory + "/api/auxiliars/get/?type=" + api;
-
-        // Obtener el token del localStorage
-        let token = localStorage.getItem('token');
-
-        // Configurar las opciones de la solicitud
-        const options = {
-            method: 'GET',
-            headers: {
-                'Authorization': 'Bearer ' + token,
-                'Content-Type': 'application/json'
-            }
-        };
-
-        try {
-            // Hacer la solicitud fetch y esperar la respuesta
-            const response = await fetch(urlAjax, options);
-
-            // Verificar si la respuesta es correcta
-            if (!response.ok) {
-                throw new Error('Error en la solicitud');
-            }
-
-            // Parsear los datos JSON
-            const data = await response.json();
-
-
-            // Obtener la referencia al elemento select
-            var selectElement = document.getElementById(elementId);
-
-            // Limpiar el select por si ya tenía opciones anteriores
-            selectElement.innerHTML = "";
-
-            // Agregar una opción predeterminada "Selecciona una opción"
-            var defaultOption = document.createElement("option");
-            defaultOption.text = "Selecciona una opció:";
-            defaultOption.value = ""; // Valor vacío
-            selectElement.appendChild(defaultOption);
-
-            // Iterar sobre los datos obtenidos de la API
-            data.forEach(function(item) {
-                // Crear una opción y agregarla al select
-                // console.log(item.ciutat)
-                var option = document.createElement("option");
-                option.value = item.id; // Establecer el valor de la opción
-                option.text = item[valorText]; // Establecer el texto visible de la opción
-                selectElement.appendChild(option);
-            });
-
-            // Seleccionar automáticamente el valor
-            if (idAux) {
-                selectElement.value = idAux;
-            }
-
-        } catch (error) {
-            console.error('Error al parsear JSON:', error); // Muestra el error de parsing
-        }
+    function goBack() {
+        window.history.back();
     }
-
 
     // Función para manejar el envío del formulario
     async function enviarFormulario(event) {
         event.preventDefault(); // Prevenir el envío por defecto
 
         // Obtener el formulario
-        const form = document.getElementById("causaMortForm");
+        const form = document.getElementById("form");
 
         // Crear un objeto para almacenar los datos del formulario
         const formData = {};
@@ -205,16 +112,10 @@ if ($stmt->rowCount() > 0) {
             formData[key] = value; // Agregar cada campo al objeto formData
         });
 
-        // Obtener el user_id de localStorage
-        const userId = localStorage.getItem('user_id');
-        if (userId) {
-            formData['userId'] = userId;
-        }
-
         // Convertir los datos del formulario a JSON
         const jsonData = JSON.stringify(formData);
         const devDirectory = `https://${window.location.hostname}`;
-        let urlAjax = devDirectory + "/api/auxiliars/put/type=sindicat";
+        let urlAjax = devDirectory + "/api/auxiliars/put/sindicat";
 
         try {
             // Hacer la solicitud con fetch y await
@@ -267,7 +168,7 @@ if ($stmt->rowCount() > 0) {
         event.preventDefault(); // Prevenir el envío por defecto
 
         // Obtener el formulario
-        const form = document.getElementById("causaMortForm");
+        const form = document.getElementById("form");
 
         // Crear un objeto para almacenar los datos del formulario
         const formData = {};
@@ -275,16 +176,10 @@ if ($stmt->rowCount() > 0) {
             formData[key] = value; // Agregar cada campo al objeto formData
         });
 
-        // Obtener el user_id de localStorage
-        const userId = localStorage.getItem('user_id');
-        if (userId) {
-            formData['userId'] = userId;
-        }
-
         // Convertir los datos del formulario a JSON
         const jsonData = JSON.stringify(formData);
         const devDirectory = `https://${window.location.hostname}`;
-        let urlAjax = devDirectory + "/api/auxiliars/post/?type=sindicat";
+        let urlAjax = devDirectory + "/api/auxiliars/post/sindicat";
 
         try {
             // Hacer la solicitud con fetch y await
@@ -339,7 +234,4 @@ if ($stmt->rowCount() > 0) {
             console.error("Error:", error);
         }
     }
-
-    // Asignar la función al botón del formulario
-    // document.getElementById("btnInserirDadesCombat").addEventListener("click", enviarFormularioPost);
 </script>

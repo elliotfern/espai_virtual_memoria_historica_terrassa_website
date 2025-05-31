@@ -35,8 +35,8 @@ if ($slug === "municipis") {
     echo json_encode($result);
 
     // GET : llistat de partits polítics
-    // URL: https://memoriaterrassa.cat/api/auxiliars/get/partits
-} else if ($slug === "partits") {
+    // URL: https://memoriaterrassa.cat/api/auxiliars/get/partitsPolitics
+} else if ($slug === "partitsPolitics") {
 
     $query = "SELECT 
 	        p.id, p.partit_politic, p.sigles

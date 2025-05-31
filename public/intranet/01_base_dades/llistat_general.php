@@ -22,7 +22,9 @@
                         <th>Estat fitxa</th>
                         <th>Visibilitat</th>
                         <th>Modificar</th>
-                        <th>Eliminar</th>
+                        <?php if ($isAdmin): ?>
+                            <th>Eliminar</th>
+                        <?php endif; ?>
                     </tr>
                 </thead>
                 <tbody id="represaliatsBody">
