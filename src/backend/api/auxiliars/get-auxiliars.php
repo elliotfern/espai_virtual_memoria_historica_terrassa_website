@@ -351,27 +351,6 @@ if ($slug === "municipis") {
     $result = getData($query);
     echo json_encode($result);
 
-    // GET : Llistat arxius i fonts documentals
-    // URL: /api/auxiliars/get/llistat_arxius_fonts
-} elseif ($slug === 'llistat_arxius_fonts') {
-    $query = "SELECT l.id, l.arxiu, l.codi, l.descripcio, l.web
-              FROM aux_bibliografia_arxius_codis AS l
-              ORDER BY l.arxiu ASC";
-
-    $result = getData($query);
-    echo json_encode($result);
-
-    // GET : Llistat bibliografia
-    // URL: /api/auxiliars/get/llistat_bibliografia
-} elseif ($slug === 'llistat_bibliografia') {
-    $query = "SELECT l.id, l.llibre, l.autor, l.editorial, m.ciutat, l.any, l.volum
-              FROM aux_bibliografia_llibre_detalls AS l
-              LEFT JOIN aux_dades_municipis AS m ON l.ciutat = m.id
-              ORDER BY l.llibre";
-
-    $result = getData($query);
-    echo json_encode($result);
-
     // GET : llistat d'avatars usuaris
     // URL: https://memoriaterrassa.cat/api/auxiliars/get/avatarsUsuaris
 } else if ($slug === "avatarsUsuaris") {

@@ -1,8 +1,8 @@
 import { renderTaula } from '../../services/renderTaula/renderTaula';
 
 export async function TaulaDadesFonts() {
-  const data1 = await fetch('/api/auxiliars/get/?llistatArxiusFonts').then((r) => r.json());
-  const data2 = await fetch('api/auxiliars/get/?llistatBibliografia').then((r) => r.json());
+  const data1 = await fetch('/api/fonts/get/llistatArxiusFonts').then((r) => r.json());
+  const data2 = await fetch('api/fonts/get/llistatBibliografia').then((r) => r.json());
 
   renderTaula(data1, document.getElementById('tabla1')!, {
     excludeFields: ['id'],

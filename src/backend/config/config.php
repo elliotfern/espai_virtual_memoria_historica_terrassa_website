@@ -36,8 +36,22 @@ $url = [
     'auxiliars' => '/auxiliars',
 ];
 
-$urlIntranet = [
+$urlIntranetDir = [
     'homepage' => '/00_homepage',
     'base_dades' => '/01_base_dades',
     'auxiliars' => '/02_taules_auxiliars',
+    'fonts' => '/03_fonts_documentals',
+];
+
+$urlIntranet = [
+    'homepage' => '/admin',
+    'base_dades' => '/base-dades',
+    'auxiliars' => '/auxiliars',
+    'fonts' => '/fonts-documentals',
+    'cronologia' => '/cronologia'
+];
+
+$urlApi = [
+    'fonts' => '/fonts',
+
 ];

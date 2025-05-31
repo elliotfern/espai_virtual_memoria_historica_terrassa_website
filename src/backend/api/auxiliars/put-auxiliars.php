@@ -324,12 +324,348 @@ if ($slug === "municipi") {
         $stmt->execute();
 
         // Recuperar el ID del registro creado
-        $lastInsertId = $conn->lastInsertId();
+        $lastInsertId = $id;
 
         // Si la inserció té èxit, cal registrar la inserció en la base de control de canvis
 
         $dataHoraCanvi = date('Y-m-d H:i:s');
         $tipusOperacio = "Update sindicat: " . $sindicat;
+        $idUser = $userId;
+
+        // Crear la consulta SQL
+        $sql2 = "INSERT INTO control_registre_canvis (
+        idUser, idPersonaFitxa, tipusOperacio, dataHoraCanvi
+        ) VALUES (
+        :idUser, :idPersonaFitxa, :tipusOperacio, :dataHoraCanvi
+        )";
+
+        // Preparar la consulta
+        $stmt = $conn->prepare($sql2);
+
+        // Enlazar los parámetros con los valores de las variables PHP
+        $stmt->bindParam(':idUser', $idUser, PDO::PARAM_INT);
+        $stmt->bindParam(':idPersonaFitxa', $lastInsertId, PDO::PARAM_INT);
+        $stmt->bindParam(':dataHoraCanvi', $dataHoraCanvi, PDO::PARAM_STR);
+        $stmt->bindParam(':tipusOperacio', $tipusOperacio, PDO::PARAM_STR);
+
+        // Ejecutar la consulta
+        $stmt->execute();
+
+        // Respuesta de éxito
+        echo json_encode(["status" => "success", "message" => "Les dades s'han actualitzat correctament a la base de dades."]);
+    } catch (PDOException $e) {
+        // En caso de error en la conexión o ejecución de la consulta
+        http_response_code(500); // Internal Server Error
+        echo json_encode(["status" => "error", "message" => "S'ha produit un error a la base de dades: " . $e->getMessage()]);
+    }
+
+    // 6) PUT Comarca
+    // ruta PUT => "/api/auxiliars/put/comarca"
+} else if ($slug === "comarca") {
+
+    $inputData = file_get_contents('php://input');
+    $data = json_decode($inputData, true);
+
+    // Inicializar un array para los errores
+    $errors = [];
+
+    // Validación de los datos recibidos
+    if (empty($data['comarca'])) {
+        $errors[] = 'El camp comarca és obligatori.';
+    }
+
+
+    // Si hay errores, devolver una respuesta con los errores
+    if (!empty($errors)) {
+        http_response_code(400); // Bad Request
+        echo json_encode(["status" => "error", "message" => "S'han produït errors en la validació", "errors" => $errors]);
+        exit;
+    }
+
+    // Si no hay errores, crear las variables PHP y preparar la consulta PDO
+    $comarca = !empty($data['comarca']) ? $data['comarca'] : NULL;
+    $id = !empty($data['id']) ? $data['id'] : NULL;
+
+    // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
+    try {
+
+        global $conn;
+        /** @var PDO $conn */
+
+        // Crear la consulta SQL
+        $sql = "UPDATE aux_dades_municipis_comarca SET
+            comarca = :comarca
+        WHERE id = :id";
+
+        // Preparar la consulta
+        $stmt = $conn->prepare($sql);
+
+        // Enlazar los parámetros con los valores de las variables PHP
+        $stmt->bindParam(':comarca', $comarca, PDO::PARAM_STR);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+
+        // Ejecutar la consulta
+        $stmt->execute();
+
+        // Recuperar el ID del registro creado
+        $lastInsertId = $id;
+
+        // Si la inserció té èxit, cal registrar la inserció en la base de control de canvis
+
+        $dataHoraCanvi = date('Y-m-d H:i:s');
+        $tipusOperacio = "Update Comarca: " . $comarca;
+        $idUser = $userId;
+
+        // Crear la consulta SQL
+        $sql2 = "INSERT INTO control_registre_canvis (
+        idUser, idPersonaFitxa, tipusOperacio, dataHoraCanvi
+        ) VALUES (
+        :idUser, :idPersonaFitxa, :tipusOperacio, :dataHoraCanvi
+        )";
+
+        // Preparar la consulta
+        $stmt = $conn->prepare($sql2);
+
+        // Enlazar los parámetros con los valores de las variables PHP
+        $stmt->bindParam(':idUser', $idUser, PDO::PARAM_INT);
+        $stmt->bindParam(':idPersonaFitxa', $lastInsertId, PDO::PARAM_INT);
+        $stmt->bindParam(':dataHoraCanvi', $dataHoraCanvi, PDO::PARAM_STR);
+        $stmt->bindParam(':tipusOperacio', $tipusOperacio, PDO::PARAM_STR);
+
+        // Ejecutar la consulta
+        $stmt->execute();
+
+        // Respuesta de éxito
+        echo json_encode(["status" => "success", "message" => "Les dades s'han actualitzat correctament a la base de dades."]);
+    } catch (PDOException $e) {
+        // En caso de error en la conexión o ejecución de la consulta
+        http_response_code(500); // Internal Server Error
+        echo json_encode(["status" => "error", "message" => "S'ha produit un error a la base de dades: " . $e->getMessage()]);
+    }
+
+    // 6) PUT Provincia
+    // ruta PUT => "/api/auxiliars/put/provincia"
+} else if ($slug === "provincia") {
+
+    $inputData = file_get_contents('php://input');
+    $data = json_decode($inputData, true);
+
+    // Inicializar un array para los errores
+    $errors = [];
+
+    // Validación de los datos recibidos
+    if (empty($data['provincia'])) {
+        $errors[] = 'El camp provincia és obligatori.';
+    }
+
+
+    // Si hay errores, devolver una respuesta con los errores
+    if (!empty($errors)) {
+        http_response_code(400); // Bad Request
+        echo json_encode(["status" => "error", "message" => "S'han produït errors en la validació", "errors" => $errors]);
+        exit;
+    }
+
+    // Si no hay errores, crear las variables PHP y preparar la consulta PDO
+    $provincia = !empty($data['provincia']) ? $data['provincia'] : NULL;
+    $id = !empty($data['id']) ? $data['id'] : NULL;
+
+    // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
+    try {
+
+        global $conn;
+        /** @var PDO $conn */
+
+        // Crear la consulta SQL
+        $sql = "UPDATE aux_dades_municipis_provincia SET
+            provincia = :provincia
+        WHERE id = :id";
+
+        // Preparar la consulta
+        $stmt = $conn->prepare($sql);
+
+        // Enlazar los parámetros con los valores de las variables PHP
+        $stmt->bindParam(':provincia', $provincia, PDO::PARAM_STR);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+
+        // Ejecutar la consulta
+        $stmt->execute();
+
+        // Recuperar el ID del registro creado
+        $lastInsertId = $id;
+
+        // Si la inserció té èxit, cal registrar la inserció en la base de control de canvis
+
+        $dataHoraCanvi = date('Y-m-d H:i:s');
+        $tipusOperacio = "Update Provincia: " . $provincia;
+        $idUser = $userId;
+
+        // Crear la consulta SQL
+        $sql2 = "INSERT INTO control_registre_canvis (
+        idUser, idPersonaFitxa, tipusOperacio, dataHoraCanvi
+        ) VALUES (
+        :idUser, :idPersonaFitxa, :tipusOperacio, :dataHoraCanvi
+        )";
+
+        // Preparar la consulta
+        $stmt = $conn->prepare($sql2);
+
+        // Enlazar los parámetros con los valores de las variables PHP
+        $stmt->bindParam(':idUser', $idUser, PDO::PARAM_INT);
+        $stmt->bindParam(':idPersonaFitxa', $lastInsertId, PDO::PARAM_INT);
+        $stmt->bindParam(':dataHoraCanvi', $dataHoraCanvi, PDO::PARAM_STR);
+        $stmt->bindParam(':tipusOperacio', $tipusOperacio, PDO::PARAM_STR);
+
+        // Ejecutar la consulta
+        $stmt->execute();
+
+        // Respuesta de éxito
+        echo json_encode(["status" => "success", "message" => "Les dades s'han actualitzat correctament a la base de dades."]);
+    } catch (PDOException $e) {
+        // En caso de error en la conexión o ejecución de la consulta
+        http_response_code(500); // Internal Server Error
+        echo json_encode(["status" => "error", "message" => "S'ha produit un error a la base de dades: " . $e->getMessage()]);
+    }
+
+    // 6) PUT Comunitat autonoma - regio
+    // ruta PUT => "/api/auxiliars/put/comunitat"
+} else if ($slug === "comunitat") {
+
+    $inputData = file_get_contents('php://input');
+    $data = json_decode($inputData, true);
+
+    // Inicializar un array para los errores
+    $errors = [];
+
+    // Validación de los datos recibidos
+    if (empty($data['comunitat'])) {
+        $errors[] = 'El camp comunitat és obligatori.';
+    }
+
+
+    // Si hay errores, devolver una respuesta con los errores
+    if (!empty($errors)) {
+        http_response_code(400); // Bad Request
+        echo json_encode(["status" => "error", "message" => "S'han produït errors en la validació", "errors" => $errors]);
+        exit;
+    }
+
+    // Si no hay errores, crear las variables PHP y preparar la consulta PDO
+    $comunitat = !empty($data['comunitat']) ? $data['comunitat'] : NULL;
+    $id = !empty($data['id']) ? $data['id'] : NULL;
+
+    // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
+    try {
+
+        global $conn;
+        /** @var PDO $conn */
+
+        // Crear la consulta SQL
+        $sql = "UPDATE aux_dades_municipis_comunitat SET
+            comunitat = :comunitat
+        WHERE id = :id";
+
+        // Preparar la consulta
+        $stmt = $conn->prepare($sql);
+
+        // Enlazar los parámetros con los valores de las variables PHP
+        $stmt->bindParam(':comunitat', $comunitat, PDO::PARAM_STR);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+
+        // Ejecutar la consulta
+        $stmt->execute();
+
+        // Recuperar el ID del registro creado
+        $lastInsertId = $id;
+
+        // Si la inserció té èxit, cal registrar la inserció en la base de control de canvis
+
+        $dataHoraCanvi = date('Y-m-d H:i:s');
+        $tipusOperacio = "Update Comunitat: " . $comunitat;
+        $idUser = $userId;
+
+        // Crear la consulta SQL
+        $sql2 = "INSERT INTO control_registre_canvis (
+        idUser, idPersonaFitxa, tipusOperacio, dataHoraCanvi
+        ) VALUES (
+        :idUser, :idPersonaFitxa, :tipusOperacio, :dataHoraCanvi
+        )";
+
+        // Preparar la consulta
+        $stmt = $conn->prepare($sql2);
+
+        // Enlazar los parámetros con los valores de las variables PHP
+        $stmt->bindParam(':idUser', $idUser, PDO::PARAM_INT);
+        $stmt->bindParam(':idPersonaFitxa', $lastInsertId, PDO::PARAM_INT);
+        $stmt->bindParam(':dataHoraCanvi', $dataHoraCanvi, PDO::PARAM_STR);
+        $stmt->bindParam(':tipusOperacio', $tipusOperacio, PDO::PARAM_STR);
+
+        // Ejecutar la consulta
+        $stmt->execute();
+
+        // Respuesta de éxito
+        echo json_encode(["status" => "success", "message" => "Les dades s'han actualitzat correctament a la base de dades."]);
+    } catch (PDOException $e) {
+        // En caso de error en la conexión o ejecución de la consulta
+        http_response_code(500); // Internal Server Error
+        echo json_encode(["status" => "error", "message" => "S'ha produit un error a la base de dades: " . $e->getMessage()]);
+    }
+
+    // 7) PUT Estat
+    // ruta PUT => "/api/auxiliars/put/estat"
+} else if ($slug === "estat") {
+
+    $inputData = file_get_contents('php://input');
+    $data = json_decode($inputData, true);
+
+    // Inicializar un array para los errores
+    $errors = [];
+
+    // Validación de los datos recibidos
+    if (empty($data['estat'])) {
+        $errors[] = 'El camp estat és obligatori.';
+    }
+
+
+    // Si hay errores, devolver una respuesta con los errores
+    if (!empty($errors)) {
+        http_response_code(400); // Bad Request
+        echo json_encode(["status" => "error", "message" => "S'han produït errors en la validació", "errors" => $errors]);
+        exit;
+    }
+
+    // Si no hay errores, crear las variables PHP y preparar la consulta PDO
+    $estat = !empty($data['estat']) ? $data['estat'] : NULL;
+    $id = !empty($data['id']) ? $data['id'] : NULL;
+
+    // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
+    try {
+
+        global $conn;
+        /** @var PDO $conn */
+
+        // Crear la consulta SQL
+        $sql = "UPDATE aux_dades_municipis_estat SET
+            estat = :estat
+        WHERE id = :id";
+
+        // Preparar la consulta
+        $stmt = $conn->prepare($sql);
+
+        // Enlazar los parámetros con los valores de las variables PHP
+        $stmt->bindParam(':estat', $estat, PDO::PARAM_STR);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+
+        // Ejecutar la consulta
+        $stmt->execute();
+
+        // Recuperar el ID del registro creado
+        $lastInsertId = $id;
+
+        // Si la inserció té èxit, cal registrar la inserció en la base de control de canvis
+
+        $dataHoraCanvi = date('Y-m-d H:i:s');
+        $tipusOperacio = "Update Estat: " . $estat;
         $idUser = $userId;
 
         // Crear la consulta SQL

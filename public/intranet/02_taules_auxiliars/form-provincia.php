@@ -1,21 +1,51 @@
 <?php
 require_once APP_ROOT . '/public/intranet/includes/header.php';
 
+// Obtener la URL completa
+$url2 = $_SERVER['REQUEST_URI'];
+
+// Dividir la URL en partes usando '/' como delimitador
+$urlParts = explode('/', $url2);
+
+// Obtener la parte deseada (en este caso, la cuarta parte)
+$categoriaId = $urlParts[3] ?? '';
+
 $id_old = "";
-$ciutat_old = "";
-$comarca_old = "";
 $provincia_old = "";
-$comunitat_old = "";
-$estat_old = "";
-$btnModificar = 2;
+
+if ($categoriaId === "modifica-provincia") {
+    $id_old = $routeParams[0];
+    $modificaBtn = 1;
+
+    $query = "SELECT p.id, p.provincia
+    FROM aux_dades_municipis_provincia AS p
+    WHERE p.id = :id";
+    $stmt = $conn->prepare($query);
+    $stmt->bindParam(':id', $id_old, PDO::PARAM_INT);
+    $stmt->execute();
+
+    if ($stmt->rowCount() > 0) {
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $provincia_old = $row['provincia'] ?? "";
+            $id_old = $row['id'] ?? "";
+        }
+    }
+} else {
+    $modificaBtn = 2;
+}
 ?>
 
 <div class="container" style="margin-bottom:50px;border: 1px solid gray;border-radius: 10px;padding:25px;background-color:#eaeaea">
-    <form id="municipiForm">
+    <form id="form">
         <div class="container">
-            <div class="row">
-                <h2>Inserció dades nova Provincia/Departament</h2>
+            <?php if ($modificaBtn === 1) { ?>
+                <h2>Modificació dades Província</h2>
+                <h4 id="fitxa">Província: <?php echo $provincia_old; ?></h4>
+            <?php } else { ?>
+                <h2>Inserció dades nova Província/Departament</h2>
+            <?php } ?>
 
+            <div class="row g3">
                 <div class="alert alert-success" role="alert" id="okMessage" style="display:none">
                     <h4 class="alert-heading"><strong>Modificació correcte!</strong></h4>
                     <div id="okText"></div>
@@ -26,9 +56,11 @@ $btnModificar = 2;
                     <div id="errText"></div>
                 </div>
 
+                <input type="hidden" id="id" name="id" value="<?php echo $id_old; ?>">
+
                 <div class="col-md-4">
-                    <label for="provincia" class="form-label negreta">Nom provincia (en el cas francès, Departament):</label>
-                    <input type="text" class="form-control" id="provincia" name="provincia" value="">
+                    <label for="provincia" class="form-label negreta">Nom Província (en el cas francès, Departament):</label>
+                    <input type="text" class="form-control" id="provincia" name="provincia" value="<?php echo $provincia_old; ?>">
                 </div>
 
                 <div class="row espai-superior" style="border-top: 1px solid black;padding-top:25px">
@@ -39,84 +71,22 @@ $btnModificar = 2;
                     <div class="col d-flex justify-content-end align-items-center">
 
                         <?php
-                        if ($btnModificar === 1) {
-                            echo '<a class="btn btn-primary" role="button" aria-disabled="true" id="btnModificarDadesCombat" onclick="enviarFormulario(event)">Modificar dades</a>';
+                        if ($modificaBtn === 1) {
+                            echo '<a class="btn btn-primary" role="button" aria-disabled="true" id="btnModificarDades" onclick="enviarFormulario(event)">Modificar dades</a>';
                         } else {
-                            echo '<a class="btn btn-primary" role="button" aria-disabled="true" id="btnInserirDadesCombat" onclick="enviarFormularioPost(event)">Inserir dades</a>';
+                            echo '<a class="btn btn-primary" role="button" aria-disabled="true" id="btnInserirDades" onclick="enviarFormularioPost(event)">Inserir dades</a>';
                         }
                         ?>
                     </div>
                 </div>
+            </div>
+        </div>
     </form>
-</div>
-</div>
 </div>
 
 <script>
     function goBack() {
         window.history.back();
-    }
-    // Carregar el select
-    async function auxiliarSelect(idAux, api, elementId, valorText) {
-
-        const devDirectory = `https://${window.location.hostname}`;
-        let urlAjax = devDirectory + "/api/auxiliars/get/?type=" + api;
-
-        // Obtener el token del localStorage
-        let token = localStorage.getItem('token');
-
-        // Configurar las opciones de la solicitud
-        const options = {
-            method: 'GET',
-            headers: {
-                'Authorization': 'Bearer ' + token,
-                'Content-Type': 'application/json'
-            }
-        };
-
-        try {
-            // Hacer la solicitud fetch y esperar la respuesta
-            const response = await fetch(urlAjax, options);
-
-            // Verificar si la respuesta es correcta
-            if (!response.ok) {
-                throw new Error('Error en la solicitud');
-            }
-
-            // Parsear los datos JSON
-            const data = await response.json();
-
-
-            // Obtener la referencia al elemento select
-            var selectElement = document.getElementById(elementId);
-
-            // Limpiar el select por si ya tenía opciones anteriores
-            selectElement.innerHTML = "";
-
-            // Agregar una opción predeterminada "Selecciona una opción"
-            var defaultOption = document.createElement("option");
-            defaultOption.text = "Selecciona una opció:";
-            defaultOption.value = ""; // Valor vacío
-            selectElement.appendChild(defaultOption);
-
-            // Iterar sobre los datos obtenidos de la API
-            data.forEach(function(item) {
-                // Crear una opción y agregarla al select
-                // console.log(item.ciutat)
-                var option = document.createElement("option");
-                option.value = item.id; // Establecer el valor de la opción
-                option.text = item[valorText]; // Establecer el texto visible de la opción
-                selectElement.appendChild(option);
-            });
-
-            // Seleccionar automáticamente el valor
-            if (idAux) {
-                selectElement.value = idAux;
-            }
-
-        } catch (error) {
-            console.error('Error al parsear JSON:', error); // Muestra el error de parsing
-        }
     }
 
     // Función para manejar el envío del formulario
@@ -124,7 +94,7 @@ $btnModificar = 2;
         event.preventDefault(); // Prevenir el envío por defecto
 
         // Obtener el formulario
-        const form = document.getElementById("municipiForm");
+        const form = document.getElementById("form");
 
         // Crear un objeto para almacenar los datos del formulario
         const formData = {};
@@ -132,16 +102,10 @@ $btnModificar = 2;
             formData[key] = value; // Agregar cada campo al objeto formData
         });
 
-        // Obtener el user_id de localStorage
-        const userId = localStorage.getItem('user_id');
-        if (userId) {
-            formData['userId'] = userId;
-        }
-
         // Convertir los datos del formulario a JSON
         const jsonData = JSON.stringify(formData);
         const devDirectory = `https://${window.location.hostname}`;
-        let urlAjax = devDirectory + "/api/auxiliars/put/?type=provincia";
+        let urlAjax = devDirectory + "/api/auxiliars/put/provincia";
 
         try {
             // Hacer la solicitud con fetch y await
@@ -196,7 +160,7 @@ $btnModificar = 2;
         event.preventDefault(); // Prevenir el envío por defecto
 
         // Obtener el formulario
-        const form = document.getElementById("municipiForm");
+        const form = document.getElementById("form");
 
         // Crear un objeto para almacenar los datos del formulario
         const formData = {};
@@ -204,16 +168,10 @@ $btnModificar = 2;
             formData[key] = value; // Agregar cada campo al objeto formData
         });
 
-        // Obtener el user_id de localStorage
-        const userId = localStorage.getItem('user_id');
-        if (userId) {
-            formData['userId'] = userId;
-        }
-
         // Convertir los datos del formulario a JSON
         const jsonData = JSON.stringify(formData);
         const devDirectory = `https://${window.location.hostname}`;
-        let urlAjax = devDirectory + "/api/auxiliars/post/?type=provincia";
+        let urlAjax = devDirectory + "/api/auxiliars/post/provincia";
 
         try {
             // Hacer la solicitud con fetch y await

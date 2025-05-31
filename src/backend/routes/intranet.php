@@ -13,185 +13,205 @@ $routes = [
 
     // 00. Intranet Homepage
     APP_INTRANET => array_merge($defaultProtectedConfig, [
-        'view' => BACKEND_URL . $urlIntranet['homepage'] . '/admin.php'
+        'view' => BACKEND_URL . $urlIntranetDir['homepage'] . '/admin.php'
     ]),
 
     APP_INTRANET . '/admin' => array_merge($defaultProtectedConfig, [
-        'view' => BACKEND_URL . $urlIntranet['homepage'] . '/admin.php'
+        'view' => BACKEND_URL . $urlIntranetDir['homepage'] . '/admin.php'
     ]),
 
     // 01. Pàgines base de dades
     APP_INTRANET . '/base-dades/general' => array_merge($defaultProtectedConfig, [
-        'view' => BACKEND_URL . $urlIntranet['base_dades'] . '/llistat_general.php'
+        'view' => BACKEND_URL . $urlIntranetDir['base_dades'] . '/llistat_general.php'
     ]),
 
     APP_INTRANET . '/base-dades/represaliats' => array_merge($defaultProtectedConfig, [
-        'view' => BACKEND_URL . $urlIntranet['base_dades'] . '/llistat_represaliats.php'
+        'view' => BACKEND_URL . $urlIntranetDir['base_dades'] . '/llistat_represaliats.php'
     ]),
 
     APP_INTRANET . '/base-dades/exiliats-deportats' => array_merge($defaultProtectedConfig, [
-        'view' => BACKEND_URL . $urlIntranet['base_dades'] . '/llistat_exiliats.php'
+        'view' => BACKEND_URL . $urlIntranetDir['base_dades'] . '/llistat_exiliats.php'
     ]),
 
     APP_INTRANET . '/base-dades/cost-huma' => array_merge($defaultProtectedConfig, [
-        'view' => BACKEND_URL . $urlIntranet['base_dades'] . '/llistat_cost_huma.php'
+        'view' => BACKEND_URL . $urlIntranetDir['base_dades'] . '/llistat_cost_huma.php'
     ]),
 
     // 01. Modificació dades de les fitxes
     APP_INTRANET . '/base-dades/modifica-fitxa/{id}' => array_merge($defaultProtectedConfig, [
-        'view' => BACKEND_URL . $urlIntranet['base_dades'] . '/modifica_fitxa_persona.php'
+        'view' => BACKEND_URL . $urlIntranetDir['base_dades'] . '/modifica_fitxa_persona.php'
     ]),
 
     APP_INTRANET . '/base-dades/nova-fitxa' => array_merge($defaultProtectedConfig, [
-        'view' => BACKEND_URL . $urlIntranet['base_dades'] . '/modifica_fitxa_persona.php'
+        'view' => BACKEND_URL . $urlIntranetDir['base_dades'] . '/modifica_fitxa_persona.php'
     ]),
 
     APP_INTRANET . '/base-dades/modifica-repressio/{categoriaId}/{id}' => array_merge($defaultProtectedConfig, [
-        'view' => BACKEND_URL . $urlIntranet['base_dades'] . '/modifica_fitxa_tipus_repressio.php'
+        'view' => BACKEND_URL . $urlIntranetDir['base_dades'] . '/modifica_fitxa_tipus_repressio.php'
     ]),
 
     // 2. Pàgines taules auxiliars
-    APP_INTRANET . $url['auxiliars'] => array_merge($defaultProtectedConfig, [
-        'view' => BACKEND_URL . $urlIntranet['auxiliars'] . '/index.php'
+    APP_INTRANET . $urlIntranet['auxiliars'] => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/index.php'
     ]),
 
     // 2.1 Municipis
-    APP_INTRANET . $url['auxiliars'] . '/llistat-municipis' => array_merge($defaultProtectedConfig, [
-        'view' => BACKEND_URL . $urlIntranet['auxiliars'] . '/llistat-municipis.php'
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/llistat-municipis' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/llistat-municipis.php'
     ]),
 
-    APP_INTRANET . $url['auxiliars'] . '/nou-municipi' => array_merge($defaultProtectedConfig, [
-        'view' => BACKEND_URL . $urlIntranet['auxiliars'] . '/form-municipi.php'
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/nou-municipi' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-municipi.php'
     ]),
 
-    APP_INTRANET . $url['auxiliars'] . '/modifica-municipi/{id}' => array_merge($defaultProtectedConfig, [
-        'view' => BACKEND_URL . $urlIntranet['auxiliars'] . '/form-municipi.php'
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/modifica-municipi/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-municipi.php'
     ]),
 
-    // 2.1 Partits politics
-    APP_INTRANET . $url['auxiliars'] . '/llistat-partits-politics' => array_merge($defaultProtectedConfig, [
-        'view' => BACKEND_URL . $urlIntranet['auxiliars'] . '/llistat-partits-politics.php'
+    // 2.2 Partits politics
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/llistat-partits-politics' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/llistat-partits-politics.php'
     ]),
 
-    APP_INTRANET . $url['auxiliars'] . '/nou-partit-politic' => array_merge($defaultProtectedConfig, [
-        'view' => BACKEND_URL . $urlIntranet['auxiliars'] . '/form-partit-politic.php'
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/nou-partit-politic' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-partit-politic.php'
     ]),
 
-    APP_INTRANET . $url['auxiliars'] . '/modifica-partit-politic/{id}' => array_merge($defaultProtectedConfig, [
-        'view' => BACKEND_URL . $urlIntranet['auxiliars'] . '/form-partit-politic.php'
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/modifica-partit-politic/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-partit-politic.php'
     ]),
 
-
-
-    APP_INTRANET . $url['auxiliars'] . '/llistat-sindicats' => array_merge($defaultProtectedConfig, [
-        'view' => BACKEND_URL . $urlIntranet['auxiliars'] . '/llistat-sindicats.php'
+    // 2.3 Sindicats
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/llistat-sindicats' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/llistat-sindicats.php'
     ]),
 
-    APP_INTRANET . $url['auxiliars'] . '/llistat-usuaris' => array_merge($defaultProtectedConfig, [
-        'view' => BACKEND_URL . $urlIntranet['auxiliars'] . '/llistat-usuaris.php'
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/nou-sindicat' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-sindicat.php'
     ]),
 
-    APP_INTRANET . $url['auxiliars'] . '/modifica-usuari/{slug}' => array_merge($defaultProtectedConfig, [
-        'view' => BACKEND_URL . $urlIntranet['auxiliars'] . '/form-usuari.php'
-    ]),
-
-    APP_INTRANET . $url['auxiliars'] . '/nou-usuari' => array_merge($defaultProtectedConfig, [
-        'view' => BACKEND_URL . $urlIntranet['auxiliars'] . '/form-usuari.php'
-    ]),
-
-    APP_INTRANET . $url['auxiliars'] . '/modifica-avatar-usuari/{slug}' => array_merge($defaultProtectedConfig, [
-        'view' => BACKEND_URL . $urlIntranet['auxiliars'] . '/form-usuari-avatar.php'
-    ]),
-
-    APP_INTRANET . $url['auxiliars'] . '/nou-avatar-usuari' => array_merge($defaultProtectedConfig, [
-        'view' => BACKEND_URL . $urlIntranet['auxiliars'] . '/form-usuari-avatar.php'
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/modifica-sindicat/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-sindicat.php'
     ]),
 
 
-
-
-    APP_INTRANET . $url['auxiliars'] . '/nova-comarca' => array_merge($defaultProtectedConfig, [
-        'view' => BACKEND_URL . $urlIntranet['auxiliars'] . '/form-comarca.php'
+    // 2.4 Llistat taula usuaris i avatars
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/llistat-usuaris' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/llistat-usuaris.php'
     ]),
 
-    APP_INTRANET . $url['auxiliars'] . '/modifica-comarca/{id}' => array_merge($defaultProtectedConfig, [
-        'view' => BACKEND_URL . $urlIntranet['auxiliars'] . '/form-comarca.php'
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/modifica-usuari/{slug}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-usuari.php'
     ]),
 
-    APP_INTRANET . $url['auxiliars'] . '/nova-provincia' => array_merge($defaultProtectedConfig, [
-        'view' => BACKEND_URL . $urlIntranet['auxiliars'] . '/form-provincia.php'
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/nou-usuari' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-usuari.php'
     ]),
 
-    APP_INTRANET . $url['auxiliars'] . '/modifica-provincia/{id}' => array_merge($defaultProtectedConfig, [
-        'view' => BACKEND_URL . $urlIntranet['auxiliars'] . '/form-provincia.php'
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/modifica-avatar-usuari/{slug}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-usuari-avatar.php'
     ]),
 
-    APP_INTRANET . $url['auxiliars'] . '/nova-comunitat' => array_merge($defaultProtectedConfig, [
-        'view' => BACKEND_URL . $urlIntranet['auxiliars'] . '/form-comunitat.php'
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/nou-avatar-usuari' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-usuari-avatar.php'
     ]),
 
-    APP_INTRANET . $url['auxiliars'] . '/modifica-comunitat/{id}' => array_merge($defaultProtectedConfig, [
-        'view' => BACKEND_URL . $urlIntranet['auxiliars'] . '/form-comunitat.php'
+    // 2.5 Llistat comarques
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/llistat-comarques' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/llistat-comarques.php'
     ]),
 
-    APP_INTRANET . $url['auxiliars'] . '/nou-estat' => array_merge($defaultProtectedConfig, [
-        'view' => BACKEND_URL . $urlIntranet['auxiliars'] . '/form-estat.php'
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/nova-comarca' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-comarca.php'
     ]),
 
-    APP_INTRANET . $url['auxiliars'] . '/modifica-estat/{id}' => array_merge($defaultProtectedConfig, [
-        'view' => BACKEND_URL . $urlIntranet['auxiliars'] . '/form-estat.php'
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/modifica-comarca/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-comarca.php'
     ]),
 
-    APP_INTRANET . $url['auxiliars'] . '/nou-ofici' => array_merge($defaultProtectedConfig, [
-        'view' => BACKEND_URL . $urlIntranet['auxiliars'] . '/form-ofici.php'
+    // 2.6 Llistat províncies
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/llistat-provincies' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/llistat-provincies.php'
     ]),
 
-    APP_INTRANET . $url['auxiliars'] . '/modifica-ofici/{id}' => array_merge($defaultProtectedConfig, [
-        'view' => BACKEND_URL . $urlIntranet['auxiliars'] . '/form-ofici.php'
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/nova-provincia' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-provincia.php'
     ]),
 
-    APP_INTRANET . $url['auxiliars'] . '/nova-tipologia-espai' => array_merge($defaultProtectedConfig, [
-        'view' => BACKEND_URL . $urlIntranet['auxiliars'] . '/form-tipologia-espai.php'
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/modifica-provincia/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-provincia.php'
     ]),
 
-    APP_INTRANET . $url['auxiliars'] . '/modifica-tipologia-espai/{id}' => array_merge($defaultProtectedConfig, [
-        'view' => BACKEND_URL . $urlIntranet['auxiliars'] . '/form-tipologia-espai.php'
+    // 2.7 Llistat comunitats autònomes
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/llistat-comunitats' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/llistat-comunitats.php'
     ]),
 
-    APP_INTRANET . $url['auxiliars'] . '/nova-causa-mort' => array_merge($defaultProtectedConfig, [
-        'view' => BACKEND_URL . $urlIntranet['auxiliars'] . '/form-causa-mort.php'
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/nova-comunitat' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-comunitat.php'
     ]),
 
-    APP_INTRANET . $url['auxiliars'] . '/modifica-causa-mort/{id}' => array_merge($defaultProtectedConfig, [
-        'view' => BACKEND_URL . $urlIntranet['auxiliars'] . '/form-causa-mort.php'
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/modifica-comunitat/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-comunitat.php'
     ]),
 
-    APP_INTRANET . $url['auxiliars'] . '/nou-carrec-empresa' => array_merge($defaultProtectedConfig, [
-        'view' => BACKEND_URL . $urlIntranet['auxiliars'] . '/form-carrec-empresa.php'
+    // 2.8 Llistat països - estats
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/llistat-estats' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/llistat-estats.php'
     ]),
 
-    APP_INTRANET . $url['auxiliars'] . '/modifica-carrec-empresa/{id}' => array_merge($defaultProtectedConfig, [
-        'view' => BACKEND_URL . $urlIntranet['auxiliars'] . '/form-carrec-empresa.php'
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/nou-estat' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-estat.php'
     ]),
 
-    APP_INTRANET . $url['auxiliars'] . '/nou-sub-sector-economic' => array_merge($defaultProtectedConfig, [
-        'view' => BACKEND_URL . $urlIntranet['auxiliars'] . '/form-sub-sector-economic.php'
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/modifica-estat/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-estat.php'
     ]),
 
-    APP_INTRANET . $url['auxiliars'] . '/modifica-sub-sector-economic/{id}' => array_merge($defaultProtectedConfig, [
-        'view' => BACKEND_URL . $urlIntranet['auxiliars'] . '/form-sub-sector-economic.php'
+    // 2.9 Llistat oficis
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/llistat-oficis' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/llistat-oficis.php'
     ]),
 
-
-
-    APP_INTRANET . $url['auxiliars'] . '/nou-sindicat' => array_merge($defaultProtectedConfig, [
-        'view' => BACKEND_URL . $urlIntranet['auxiliars'] . '/form-sindicat.php'
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/nou-ofici' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-ofici.php'
     ]),
 
-    APP_INTRANET . $url['auxiliars'] . '/modifica-sindicat/{id}' => array_merge($defaultProtectedConfig, [
-        'view' => BACKEND_URL . $urlIntranet['auxiliars'] . '/form-sindicat.php'
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/modifica-ofici/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-ofici.php'
     ]),
 
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/nova-tipologia-espai' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-tipologia-espai.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/modifica-tipologia-espai/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-tipologia-espai.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/nova-causa-mort' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-causa-mort.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/modifica-causa-mort/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-causa-mort.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/nou-carrec-empresa' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-carrec-empresa.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/modifica-carrec-empresa/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-carrec-empresa.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/nou-sub-sector-economic' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-sub-sector-economic.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/modifica-sub-sector-economic/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-sub-sector-economic.php'
+    ]),
 
 
     // Gestió familiars
@@ -203,22 +223,54 @@ $routes = [
 
     '/gestio/tots/fitxa/familiar/nou/{id}' => ['view' => 'public/intranet/db_familiars/modifica-nou-familiar.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
 
-    // Gestió fonts documentals (bibliografia i arxius)
-    '/gestio/tots/fitxa/fonts-documentals/fitxa/{id}' => ['view' => 'public/intranet/db_fonts_documentals/fitxa-fonts-documentals.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
+    // GESTIÓ FONTS DOCUMENTALS (bibliografia i arxius)
+    // Bibliografia / llibres > fitxa represaliat (llistat de tots els fonts vinculats a una fitxa)
+    APP_INTRANET . $urlIntranet['fonts'] . '/fonts-fitxa/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['fonts'] . '/fitxa-fonts-documentals.php'
+    ]),
 
-    // llibres
-    '/gestio/tots/fitxa/fonts-documentals/nou-llibre/{id}' => ['view' => 'public/intranet/db_fonts_documentals/modifica-nou-llibre.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
+    APP_INTRANET . $urlIntranet['fonts'] . '/fonts-fitxa/afegir-bibliografia/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['fonts'] . '/form-fitxa-llibre.php'
+    ]),
 
-    '/gestio/tots/fitxa/fonts-documentals/modifica-llibre/{id}/{id}' => ['view' => 'public/intranet/db_fonts_documentals/modifica-nou-llibre.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
+    APP_INTRANET . $urlIntranet['fonts'] . '/fonts-fitxa/modifica-bibliografia/{id}/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['fonts'] . '/form-fitxa-llibre.php'
+    ]),
 
-    '/gestio/tots/fitxa/fonts-documentals/crear-llibre' => ['view' => 'public/intranet/db_fonts_documentals/afegir-nou-llibre.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
+    APP_INTRANET . $urlIntranet['fonts'] . '/fonts-fitxa/afegir-arxiu/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['fonts'] . '/form-fitxa-arxiu.php'
+    ]),
 
-    // arxius
-    '/gestio/tots/fitxa/fonts-documentals/nou-arxiu/{id}' => ['view' => 'public/intranet/db_fonts_documentals/modifica-nou-arxiu.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
+    APP_INTRANET . $urlIntranet['fonts'] . '/fonts-fitxa/modifica-arxiu/{id}/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['fonts'] . '/form-fitxa-arxiu.php'
+    ]),
 
-    '/gestio/tots/fitxa/fonts-documentals/modifica-arxiu/{id}/{id}' => ['view' => 'public/intranet/db_fonts_documentals/modifica-nou-arxiu.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
+    // Bibliografia
+    APP_INTRANET . $urlIntranet['fonts'] . '/llistat-llibres' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['fonts'] . '/llistat-llibres.php'
+    ]),
 
-    '/gestio/tots/fitxa/fonts-documentals/crear-arxiu' => ['view' => 'public/intranet/db_fonts_documentals/afegir-nou-arxiu.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
+    APP_INTRANET . $urlIntranet['fonts'] . '/nou-llibre' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['fonts'] . '/form-llibre.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['fonts'] . '/modifica-llibre/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['fonts'] . '/form-llibre.php'
+    ]),
+
+    // Arxius
+    APP_INTRANET . $urlIntranet['fonts'] . '/llistat-arxius' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['fonts'] . '/llistat-arxius.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['fonts'] . '/nou-arxiu' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['fonts'] . '/form-arxiu.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['fonts'] . '/modifica-arxiu/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['fonts'] . '/form-arxiu.php'
+    ]),
+
 
     // REGISTRE CANVIS
     '/gestio/registre-canvis' => ['view' => 'public/intranet/control_registre_canvis/index.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],

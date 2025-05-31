@@ -84,13 +84,6 @@ $routes = [
 
     '/api/familiars/post' => ['view' => 'src/backend/api/db_familiars/post-familiars.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
 
-    // API db_represalia_republicana
-    '/api/represalia_republicana/get' => ['view' => 'src/backend/api/db_represalia_republicana/get-represalia-republicana.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
-
-    '/api/represalia_republicana/put' => ['view' => 'src/backend/api/db_represalia_republicana/put-represalia-republicana.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
-
-    '/api/represalia_republicana/post' => ['view' => 'src/backend/api/db_represalia_republicana/post-represalia-republicana.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
-
     // API db_afusellats
     '/api/afusellats/get' => ['view' => 'src/backend/api/afusellats/get-afusellats.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
 
@@ -109,8 +102,11 @@ $routes = [
     '/api/depurats/post' => ['view' => 'src/backend/api/db_depurats/post-depurats.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
 
 
-
     // API fonts documentals
+    APP_API . $urlApi['fonts'] . '/get/{slug}' => array_merge($defaultApiConfig, [
+        'view' => BACKEND_API . '/db_fonts_documentals/get-fonts-bibliografia.php',
+    ]),
+
     '/api/fonts_documentals/post' => ['view' => 'src/backend/api/db_fonts_documentals/post-fonts-documentals.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
 
     '/api/fonts_documentals/post/arxiu' => ['view' => 'src/backend/api/db_fonts_documentals/post-arxiu-fonts-documentals.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],

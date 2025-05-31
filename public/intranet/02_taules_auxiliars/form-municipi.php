@@ -64,7 +64,7 @@ if ($categoriaId === "modifica-municipi") {
             <?php } else { ?>
                 <h2>Inserció dades nou municipi</h2>
             <?php } ?>
-            <div class="row g-5">
+            <div class="row g-3">
                 <div class="alert alert-success" role="alert" id="okMessage" style="display:none">
                     <h4 class="alert-heading"><strong>Modificació correcte!</strong></h4>
                     <div id="okText"></div>

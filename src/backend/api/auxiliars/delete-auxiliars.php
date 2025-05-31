@@ -191,4 +191,204 @@ if ($slug === "municipi") {
         http_response_code(500);
         echo json_encode(['status' => 'error', 'message' => 'Error del servidor']);
     }
+
+    // 4) DELETE comarca
+    // ruta DELETE => "/api/auxiliars/delete/comarca/{id}"
+} else if ($slug === "comarca") {
+    global $conn;
+    /** @var PDO $conn */
+
+    $id = $id ?? null;
+    if (!$id) {
+        http_response_code(400);
+        echo json_encode(['status' => 'error', 'message' => 'ID no proporcionat']);
+        exit;
+    }
+
+    // Opcional: evitar eliminar si el municipi no existe
+    $stmtCheck = $conn->prepare("SELECT id, comarca FROM aux_dades_municipis_comarca WHERE id = :id");
+    $stmtCheck->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmtCheck->execute();
+
+    $partit = $stmtCheck->fetch(PDO::FETCH_ASSOC);
+
+    if (!$partit) {
+        http_response_code(404);
+        echo json_encode(['status' => 'error', 'message' => 'Registre no trobat']);
+        exit;
+    }
+
+    $partit = "Delete comarca: " . $partit['comarca'];
+    $dataHora = date('Y-m-d H:i:s');
+    $idPersonaFitxa = NULL;
+
+
+    try {
+        $stmt = $conn->prepare("DELETE FROM aux_dades_municipis_comarca WHERE id = :id");
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $stmtLog = $conn->prepare("INSERT INTO control_registre_canvis (idUser, idPersonaFitxa, tipusOperacio, dataHoraCanvi)
+  VALUES (:idUser, :idPersonaFitxa, :tipusOperacio, :dataHoraCanvi)");
+        $stmtLog->bindParam(':idUser', $userId);
+        $stmtLog->bindParam(':idPersonaFitxa', $idPersonaFitxa);
+        $stmtLog->bindParam(':tipusOperacio', $partit);
+        $stmtLog->bindParam(':dataHoraCanvi', $dataHora);
+        $stmtLog->execute();
+
+        echo json_encode(['status' => 'success', 'message' => 'Comarca eliminada']);
+    } catch (PDOException $e) {
+        http_response_code(500);
+        echo json_encode(['status' => 'error', 'message' => 'Error del servidor']);
+    }
+
+    // 4) DELETE provincia
+    // ruta DELETE => "/api/auxiliars/delete/provincia/{id}"
+} else if ($slug === "provincia") {
+    global $conn;
+    /** @var PDO $conn */
+
+    $id = $id ?? null;
+    if (!$id) {
+        http_response_code(400);
+        echo json_encode(['status' => 'error', 'message' => 'ID no proporcionat']);
+        exit;
+    }
+
+    // Opcional: evitar eliminar si el municipi no existe
+    $stmtCheck = $conn->prepare("SELECT id, provincia FROM aux_dades_municipis_provincia WHERE id = :id");
+    $stmtCheck->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmtCheck->execute();
+
+    $partit = $stmtCheck->fetch(PDO::FETCH_ASSOC);
+
+    if (!$partit) {
+        http_response_code(404);
+        echo json_encode(['status' => 'error', 'message' => 'Registre no trobat']);
+        exit;
+    }
+
+    $partit = "Delete provincia: " . $partit['provincia'];
+    $dataHora = date('Y-m-d H:i:s');
+    $idPersonaFitxa = NULL;
+
+
+    try {
+        $stmt = $conn->prepare("DELETE FROM aux_dades_municipis_provincia WHERE id = :id");
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $stmtLog = $conn->prepare("INSERT INTO control_registre_canvis (idUser, idPersonaFitxa, tipusOperacio, dataHoraCanvi)
+  VALUES (:idUser, :idPersonaFitxa, :tipusOperacio, :dataHoraCanvi)");
+        $stmtLog->bindParam(':idUser', $userId);
+        $stmtLog->bindParam(':idPersonaFitxa', $idPersonaFitxa);
+        $stmtLog->bindParam(':tipusOperacio', $partit);
+        $stmtLog->bindParam(':dataHoraCanvi', $dataHora);
+        $stmtLog->execute();
+
+        echo json_encode(['status' => 'success', 'message' => 'Provincia eliminada']);
+    } catch (PDOException $e) {
+        http_response_code(500);
+        echo json_encode(['status' => 'error', 'message' => 'Error del servidor']);
+    }
+
+    // 5) DELETE Comunitat autonoma / regió
+    // ruta DELETE => "/api/auxiliars/delete/comunitat/{id}"
+} else if ($slug === "comunitat") {
+    global $conn;
+    /** @var PDO $conn */
+
+    $id = $id ?? null;
+    if (!$id) {
+        http_response_code(400);
+        echo json_encode(['status' => 'error', 'message' => 'ID no proporcionat']);
+        exit;
+    }
+
+    // Opcional: evitar eliminar si el municipi no existe
+    $stmtCheck = $conn->prepare("SELECT id, comunitat FROM aux_dades_municipis_comunitat WHERE id = :id");
+    $stmtCheck->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmtCheck->execute();
+
+    $partit = $stmtCheck->fetch(PDO::FETCH_ASSOC);
+
+    if (!$partit) {
+        http_response_code(404);
+        echo json_encode(['status' => 'error', 'message' => 'Registre no trobat']);
+        exit;
+    }
+
+    $partit = "Delete comunitat: " . $partit['comunitat'];
+    $dataHora = date('Y-m-d H:i:s');
+    $idPersonaFitxa = NULL;
+
+
+    try {
+        $stmt = $conn->prepare("DELETE FROM aux_dades_municipis_comunitat WHERE id = :id");
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $stmtLog = $conn->prepare("INSERT INTO control_registre_canvis (idUser, idPersonaFitxa, tipusOperacio, dataHoraCanvi)
+  VALUES (:idUser, :idPersonaFitxa, :tipusOperacio, :dataHoraCanvi)");
+        $stmtLog->bindParam(':idUser', $userId);
+        $stmtLog->bindParam(':idPersonaFitxa', $idPersonaFitxa);
+        $stmtLog->bindParam(':tipusOperacio', $partit);
+        $stmtLog->bindParam(':dataHoraCanvi', $dataHora);
+        $stmtLog->execute();
+
+        echo json_encode(['status' => 'success', 'message' => 'Comunitat eliminada']);
+    } catch (PDOException $e) {
+        http_response_code(500);
+        echo json_encode(['status' => 'error', 'message' => 'Error del servidor']);
+    }
+
+    // 6) DELETE Estat
+    // ruta DELETE => "/api/auxiliars/delete/estat/{id}"
+} else if ($slug === "estat") {
+    global $conn;
+    /** @var PDO $conn */
+
+    $id = $id ?? null;
+    if (!$id) {
+        http_response_code(400);
+        echo json_encode(['status' => 'error', 'message' => 'ID no proporcionat']);
+        exit;
+    }
+
+    // Opcional: evitar eliminar si el municipi no existe
+    $stmtCheck = $conn->prepare("SELECT id, estat FROM aux_dades_municipis_estat WHERE id = :id");
+    $stmtCheck->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmtCheck->execute();
+
+    $partit = $stmtCheck->fetch(PDO::FETCH_ASSOC);
+
+    if (!$partit) {
+        http_response_code(404);
+        echo json_encode(['status' => 'error', 'message' => 'Registre no trobat']);
+        exit;
+    }
+
+    $partit = "Delete Estat: " . $partit['estat'];
+    $dataHora = date('Y-m-d H:i:s');
+    $idPersonaFitxa = NULL;
+
+
+    try {
+        $stmt = $conn->prepare("DELETE FROM aux_dades_municipis_estat WHERE id = :id");
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $stmtLog = $conn->prepare("INSERT INTO control_registre_canvis (idUser, idPersonaFitxa, tipusOperacio, dataHoraCanvi)
+  VALUES (:idUser, :idPersonaFitxa, :tipusOperacio, :dataHoraCanvi)");
+        $stmtLog->bindParam(':idUser', $userId);
+        $stmtLog->bindParam(':idPersonaFitxa', $idPersonaFitxa);
+        $stmtLog->bindParam(':tipusOperacio', $partit);
+        $stmtLog->bindParam(':dataHoraCanvi', $dataHora);
+        $stmtLog->execute();
+
+        echo json_encode(['status' => 'success', 'message' => 'Estat eliminat']);
+    } catch (PDOException $e) {
+        http_response_code(500);
+        echo json_encode(['status' => 'error', 'message' => 'Error del servidor']);
+    }
 }
