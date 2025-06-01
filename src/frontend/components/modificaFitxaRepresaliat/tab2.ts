@@ -23,9 +23,9 @@ export async function tab2(fitxa: Fitxa) {
   const dataDefuncioInput = document.getElementById('data_defuncio') as HTMLInputElement;
   if (dataDefuncioInput) dataDefuncioInput.value = fitxa.data_defuncio;
 
-  await auxiliarSelect(fitxa.ciutat_naixement_id, 'municipis', 'municipi_naixement', 'ciutat');
-  await auxiliarSelect(fitxa.ciutat_defuncio_id, 'municipis', 'municipi_defuncio', 'ciutat');
-  await auxiliarSelect(fitxa.ciutat_residencia_id, 'municipis', 'municipi_residencia', 'ciutat');
+  await auxiliarSelect(fitxa.ciutat_naixement_id, 'municipis', 'municipi_naixement', 'ciutat', '252');
+  await auxiliarSelect(fitxa.ciutat_defuncio_id, 'municipis', 'municipi_defuncio', 'ciutat', '252');
+  await auxiliarSelect(fitxa.ciutat_residencia_id, 'municipis', 'municipi_residencia', 'ciutat', '252');
 
   const adrecaInput = document.getElementById('adreca') as HTMLInputElement;
   if (adrecaInput) adrecaInput.value = fitxa.adreca;
@@ -35,7 +35,7 @@ export async function tab2(fitxa: Fitxa) {
   if (refreshButton1) {
     refreshButton1.addEventListener('click', async (event) => {
       event.preventDefault();
-      await auxiliarSelect(fitxa.ciutat_naixement_id, 'municipis', 'municipi_naixement', 'ciutat');
+      await auxiliarSelect(fitxa.ciutat_naixement_id, 'municipis', 'municipi_naixement', 'ciutat', '252');
     });
   }
 
@@ -43,7 +43,7 @@ export async function tab2(fitxa: Fitxa) {
   if (refreshButton2) {
     refreshButton2.addEventListener('click', (event: Event) => {
       event.preventDefault();
-      auxiliarSelect(fitxa.ciutat_defuncio_id, 'municipis', 'municipi_defuncio', 'ciutat');
+      auxiliarSelect(fitxa.ciutat_defuncio_id, 'municipis', 'municipi_defuncio', 'ciutat', '252');
     });
   }
 
@@ -51,11 +51,11 @@ export async function tab2(fitxa: Fitxa) {
   if (refreshButton3) {
     refreshButton3.addEventListener('click', (event: Event) => {
       event.preventDefault();
-      auxiliarSelect(fitxa.ciutat_residencia_id, 'municipis', 'municipi_residencia', 'ciutat');
+      auxiliarSelect(fitxa.ciutat_residencia_id, 'municipis', 'municipi_residencia', 'ciutat', '252');
     });
   }
 
-  auxiliarSelect(fitxa.tipologia_lloc_defuncio_id, 'tipologia_espais', 'tipologia_lloc_defuncio', 'tipologia_espai_ca');
+  auxiliarSelect(fitxa.tipologia_lloc_defuncio_id, 'tipologia_espais', 'tipologia_lloc_defuncio', 'tipologia_espai_ca', '2');
 
   const refreshButton4 = document.getElementById('refreshButton4');
   if (refreshButton4) {
@@ -65,7 +65,7 @@ export async function tab2(fitxa: Fitxa) {
     });
   }
 
-  auxiliarSelect(fitxa.causa_defuncio_id, 'causa_defuncio', 'causa_defuncio', 'causa_defuncio_ca');
+  auxiliarSelect(fitxa.causa_defuncio_id, 'causa_defuncio', 'causa_defuncio', 'causa_defuncio_ca', '2');
 
   const refreshButton5 = document.getElementById('refreshButton5');
   if (refreshButton5) {

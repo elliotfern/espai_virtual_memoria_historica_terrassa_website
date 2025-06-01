@@ -3,7 +3,6 @@ import { auxiliarSelect } from '../../services/fetchData/auxiliarSelect';
 import { taulaFamiliars } from './taulaFamiliars';
 
 export function tab3(fitxa: Fitxa) {
-  // 02. dades familiars:
   auxiliarSelect(fitxa.estat_civil_id, 'estats_civils', 'estat_civil', 'estat_cat', '4');
   crearBotoAfegirFamiliar(fitxa.id);
 

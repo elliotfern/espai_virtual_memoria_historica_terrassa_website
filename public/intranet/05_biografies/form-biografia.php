@@ -7,7 +7,7 @@ $url = $_SERVER['REQUEST_URI'];
 $urlParts = explode('/', $url);
 
 // Obtener la parte deseada (en este caso, la cuarta parte)
-$categoriaId = $urlParts[5] ?? '';
+$categoriaId = $urlParts[3] ?? '';
 
 require_once APP_ROOT . '/public/intranet/includes/header.php';
 
@@ -19,7 +19,7 @@ $biografiaEs_old = "";
 
 if ($categoriaId === "modifica-biografia") {
     $modificaBtn = 1;
-    $idPersona = $routeParams[1];
+    $idPersona = $routeParams[0];
 } else {
     $modificaBtn = 2;
     $idPersona = $routeParams[0];

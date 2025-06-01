@@ -285,12 +285,13 @@ $routes = [
     '/gestio/cronologia/modifica-esdeveniment/{id}' => ['view' => 'public/intranet/cronologia/afegir-esdeveniment.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
 
     // Biografia
-    '/gestio/tots/fitxa/biografia/fitxa/{id}' => ['view' => 'public/intranet/biografia/fitxa-biografia.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
+    APP_INTRANET . $urlIntranet['biografies'] . '/modifica-biografia/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['biografies'] . '/form-biografia.php'
+    ]),
 
-    '/gestio/tots/fitxa/biografia/nova-biografia/{id}' => ['view' => 'public/intranet/biografia/modifica-nova-biografia.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
-
-    '/gestio/tots/fitxa/biografia/modifica-biografia/{id}/{id}' => ['view' => 'public/intranet/biografia/modifica-nova-biografia.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
-
+    APP_INTRANET . $urlIntranet['biografies'] . '/nova-biografia/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['biografies'] . '/form-biografia.php'
+    ]),
 
 ];
 

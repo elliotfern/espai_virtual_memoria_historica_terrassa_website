@@ -379,12 +379,9 @@ $id = $routeParams[0];
     <div id="tab6" class="tabcontent">
       <div class="row">
         <h3>Biografia</h3>
-        <hr style="margin-top:25px">
-        <h4>Introduir / modificar biografia del represaliat</h4>
 
-        <div class="col-md-4">
-          <a href="https://memoriaterrassa.cat/gestio/tots/fitxa/biografia/fitxa/<?php echo $id; ?>" target="_blank" class="btn btn-success">Afegir/modificar biografia</a>
-        </div>
+        <div id="botonsBiografies" style="margin-top:5px;margin-bottom:5px"></div>
+        <div id="quadreBiografies"></div>
 
       </div>
     </div> <!-- Fi tab5 -->
@@ -393,13 +390,17 @@ $id = $routeParams[0];
       <div class="row">
         <h3>Fonts documentals</h3>
 
+        <h4>Llistat de bibliografia</h4>
+
+        <div id="botonsFonts1" style="margin-top:5px;margin-bottom:5px"></div>
+        <div id="quadreFontsBibliografia"></div>
+
         <hr style="margin-top:25px">
-        <h4>Modificar llistat de fonts documentals (bibliografia i arxius)</h4>
 
-        <div class="col-md-4">
-          <a href="https://memoriaterrassa.cat/gestio/tots/fitxa/fonts-documentals/fitxa/<?php echo $id; ?>" target="_blank" class="btn btn-success">Afegir/veure fonts</a>
-        </div>
+        <h4>Llistat d'arxius</h4>
 
+        <div id="botonsFonts2" style="margin-top:5px;margin-bottom:5px"></div>
+        <div id="quadreFontsArxius"></div>
 
       </div>
     </div> <!-- Fi tab6 -->

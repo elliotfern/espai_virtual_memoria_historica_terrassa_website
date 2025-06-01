@@ -42,6 +42,7 @@ $urlIntranetDir = [
     'auxiliars' => '/02_taules_auxiliars',
     'fonts' => '/03_fonts_documentals',
     'familiars' => '/04_familiars',
+    'biografies' => '/05_biografies',
 ];
 
 $urlIntranet = [
@@ -50,10 +51,12 @@ $urlIntranet = [
     'auxiliars' => '/auxiliars',
     'fonts' => '/fonts-documentals',
     'cronologia' => '/cronologia',
-    'familiars' => '/familiars'
+    'familiars' => '/familiars',
+    'biografies' => '/biografies',
 ];
 
 $urlApi = [
     'fonts' => '/fonts',
+    'biografies' => '/biografies'
 
 ];

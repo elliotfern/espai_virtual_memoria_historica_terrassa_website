@@ -39,4 +39,45 @@ if ($slug === 'llistatArxiusFonts') {
 
     $result = getData($query);
     echo json_encode($result);
+
+    // GET : Fitxa repressaliat > llistat bibliografia
+    // URL: /api/fonts/get/fitxaRepressaliatBibliografia?id=${id}
+} elseif ($slug === 'fitxaRepressaliatBibliografia') {
+    $id = $_GET['id'] ?? null;
+    $query = "SELECT 
+            l.id,
+            l.pagina,
+            m.ciutat,
+            ld.id AS idLlibre,
+            ld.llibre,
+            ld.autor,
+            ld.editorial,
+            ld.any,
+            ld.volum
+            FROM aux_bibliografia_llibres AS l
+            LEFT JOIN aux_bibliografia_llibre_detalls AS ld ON l.llibre = ld.id
+            LEFT JOIN aux_dades_municipis AS m ON ld.ciutat = m.id
+            WHERE l.idRepresaliat = :idRepresaliat";
+
+    $result = getData($query, ['idRepresaliat' => $id], false);
+    echo json_encode($result);
+
+    // GET : Fitxa repressaliat > llistat arxius
+    // URL: /api/fonts/get/fitxaRepressaliatArxius?id=${id}
+} elseif ($slug === 'fitxaRepressaliatArxius') {
+    $id = $_GET['id'] ?? null;
+    $query = "SELECT 
+            a.id,
+            a.referencia,
+            a.idRepresaliat,
+            m.ciutat,
+            c.arxiu,
+            c.codi
+            FROM aux_bibliografia_arxius AS a
+            LEFT JOIN aux_bibliografia_arxius_codis AS c ON a.codi = c.id
+            LEFT JOIN aux_dades_municipis AS m ON c.ciutat = m.id
+            WHERE a.idRepresaliat = :idRepresaliat";
+
+    $result = getData($query, ['idRepresaliat' => $id], false);
+    echo json_encode($result);
 }

@@ -129,7 +129,10 @@ $routes = [
 
     '/api/biografia/put' => ['view' => 'src/backend/api/db_biografies/put-biografia.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
 
-    '/api/biografia/get' => ['view' => 'src/backend/api/db_biografies/put-biografia.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+    // API fonts documentals
+    APP_API . $urlApi['biografies'] . '/get/{slug}' => array_merge($defaultApiConfig, [
+        'view' => BACKEND_API . '/db_biografies/get-biografia.php',
+    ]),
 
 ];
 
