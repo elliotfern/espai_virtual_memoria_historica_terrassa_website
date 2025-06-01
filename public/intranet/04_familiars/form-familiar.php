@@ -7,16 +7,16 @@ $url = $_SERVER['REQUEST_URI'];
 $urlParts = explode('/', $url);
 
 // Obtener la parte deseada (en este caso, la cuarta parte)
-$categoriaId = $urlParts[5] ?? '';
-
+$pagina = $urlParts[3] ?? '';
 $idPersona = $routeParams[0];
 
+//modifica-familiar/56/3
 require_once APP_ROOT . '/public/intranet/includes/header.php';
 
 $modificaBtn = "";
 $idRepresaliat = "";
 
-if ($categoriaId === "modifica") {
+if ($pagina === "modifica-familiar") {
     $modificaBtn = 1;
     $idRepresaliat = $routeParams[1];
 } else {

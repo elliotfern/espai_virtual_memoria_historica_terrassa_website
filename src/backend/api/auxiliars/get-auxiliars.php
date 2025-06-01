@@ -362,6 +362,35 @@ if ($slug === "municipis") {
 
     $result = getData($query);
     echo json_encode($result);
+
+    // GET : llistat de categories de repressió (col·lectius)
+    // URL: https://memoriaterrassa.cat/api/auxiliars/get/categoriesRepressio?lang=ca
+} else if ($slug === "categoriesRepressio") {
+    // Lista de idiomas permitidos y sus columnas
+    $allowedLanguages = [
+        'ca' => 'categoria_cat',
+        'es' => 'categoria_cast',
+        'en' => 'categoria_eng',
+        'fr' => 'categoria_fr',
+        'it' => 'categoria_it',
+        'pt' => 'categoria_pt',
+    ];
+
+    // Obtener idioma de la query string (default: 'ca')
+    $lang = $_GET['lang'] ?? 'ca';
+
+    // Validar idioma
+    if (!array_key_exists($lang, $allowedLanguages)) {
+        http_response_code(400);
+        echo json_encode(['error' => 'Idioma no soportado']);
+        exit;
+    }
+
+    $column = $allowedLanguages[$lang];
+    $query = "SELECT id, {$column} AS name FROM aux_categoria ORDER BY id";
+
+    $result = getData($query);
+    echo json_encode($result);
 } else {
     // Si el parámetro 'type' no coincide con ninguno de los casos anteriores, mostramos un error
     echo json_encode(["error" => "Tipo no válido"]);

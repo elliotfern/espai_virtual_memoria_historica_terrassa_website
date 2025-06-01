@@ -215,13 +215,13 @@ $routes = [
 
 
     // Gestió familiars
-    '/gestio/tots/fitxa/familiars/{id}' => ['view' => 'public/intranet/db_familiars/fitxa-familiar.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
+    APP_INTRANET . $urlIntranet['familiars'] . '/modifica-familiar/{id}/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['familiars'] . '/form-familiar.php'
+    ]),
 
-    '/gestio/tots/fitxa/familiar/modifica/{id}/{id}' => ['view' => 'public/intranet/db_familiars/modifica-nou-familiar.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
-
-    '/gestio/tots/fitxa/familiar/elimina/{id}' => ['view' => 'public/intranet/db_familiars/elimina-familiar.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
-
-    '/gestio/tots/fitxa/familiar/nou/{id}' => ['view' => 'public/intranet/db_familiars/modifica-nou-familiar.php', 'needs_session' => true, 'header_footer' => false, 'header_menu_footer' => true, 'apiSenseHTML' => false],
+    APP_INTRANET . $urlIntranet['familiars'] . '/nou-familiar/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['familiars'] . '/form-familiar.php'
+    ]),
 
     // GESTIÓ FONTS DOCUMENTALS (bibliografia i arxius)
     // Bibliografia / llibres > fitxa represaliat (llistat de tots els fonts vinculats a una fitxa)

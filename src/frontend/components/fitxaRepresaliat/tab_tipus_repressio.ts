@@ -1,13 +1,21 @@
-import { categorias } from '../../config';
+import { categoriesRepressio } from '../taulaDades/categoriesRepressio';
 import { FitxaJudicial } from '../../types/types';
 
 // Mostrar la información dependiendo de la categoría
-export const fitxaTipusRepressio = (categoriaNumerica: string, fitxa2: FitxaJudicial): void => {
+export const fitxaTipusRepressio = async (categoriaNumerica: string, fitxa2: FitxaJudicial): Promise<void> => {
+  const colectiusArray = await categoriesRepressio('ca');
+
+  // Convertimos el array en un objeto tipo diccionario
+  const colectiusRepressio = colectiusArray.reduce((acc, categoria) => {
+    acc[categoria.id] = categoria.name;
+    return acc;
+  }, {} as { [key: string]: string });
+
   const divInfo = document.getElementById('fitxa-categoria');
   if (!divInfo) return;
 
   divInfo.innerHTML += `
-      <h3>${categorias[categoriaNumerica]}</h3>
+      <h3>${colectiusRepressio[categoriaNumerica]}</h3>
     `;
 
   if (parseInt(categoriaNumerica) === 1) {

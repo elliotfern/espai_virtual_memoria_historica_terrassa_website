@@ -1,0 +1,49 @@
+import { Fitxa } from '../../types/types';
+import { auxiliarSelect } from '../../services/fetchData/auxiliarSelect';
+import { taulaFamiliars } from './taulaFamiliars';
+
+export function tab3(fitxa: Fitxa) {
+  // 02. dades familiars:
+  auxiliarSelect(fitxa.estat_civil_id, 'estats_civils', 'estat_civil', 'estat_cat', '4');
+  crearBotoAfegirFamiliar(fitxa.id);
+
+  taulaFamiliars(fitxa.id);
+}
+
+function crearBotoAfegirFamiliar(idPersona: number | string) {
+  // Crear el contenedor div
+  const div = document.createElement('div');
+  div.className = 'col-md-4';
+  div.style.marginTop = '20px';
+  div.style.marginBottom = '20px';
+
+  // Crear el enlace <a>
+  const link = document.createElement('a');
+  link.href = `https://memoriaterrassa.cat/gestio/familiars/nou-familiar/${idPersona}`;
+  link.className = 'btn btn-success';
+  link.textContent = 'Afegir familiar';
+  link.target = '_blank';
+
+  // Botón "Actualitza"
+  const updateBtn = document.createElement('button');
+  updateBtn.className = 'btn btn-secondary';
+  updateBtn.textContent = 'Actualitza taula';
+  updateBtn.style.marginRight = '10px';
+  updateBtn.onclick = (event) => {
+    event.preventDefault(); // Evita recargar la página
+    taulaFamiliars(Number(idPersona));
+  };
+
+  // Añadir ambos botones al div
+  div.appendChild(link);
+  div.appendChild(updateBtn);
+
+  // Añadir el link al div
+  div.appendChild(link);
+
+  // Insertar el div en el DOM, por ejemplo en un contenedor con id "botonsFamiliars"
+  const container = document.getElementById('botonsFamiliars');
+  if (container) {
+    container.appendChild(div);
+  }
+}

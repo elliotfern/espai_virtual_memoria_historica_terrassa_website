@@ -2,7 +2,7 @@ import { mostrarBotonsNomesAdmin } from '../../../components/mostrarBotoAdmin/mo
 import { getPageType } from '../../../services/url/splitUrl';
 import { cargarTabla } from '../../../components/taulaDades/taulaDades';
 import { botonsEstat } from '../../../components/taulaDades/botonsEstat';
-//import { transmissioDadesDB } from '../../../services/fetchData/transmissioDades';
+import { modificaFitxa } from '../../../components/modificaFitxaRepresaliat/modificaFitxa';
 
 export function baseDadesIntranet() {
   const url = window.location.href;
@@ -22,5 +22,7 @@ export function baseDadesIntranet() {
   } else if (pageType[2] === 'cost-huma') {
     botonsEstat(pageType[2]);
     cargarTabla(pageType[2], 2);
+  } else if (pageType[2] === 'modifica-fitxa') {
+    modificaFitxa(Number(pageType[3]));
   }
 }

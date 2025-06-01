@@ -8,6 +8,7 @@ export interface FitxaFamiliars {
 }
 
 export interface Fitxa {
+  id: number;
   nom: string;
   cognom1: string;
   cognom2: string;
@@ -55,10 +56,25 @@ export interface Fitxa {
   observacions_espai: string;
   causa_defuncio_ca: string;
   img: string;
-  filiacio_politica: string;
-  filiacio_sindical: string;
   biografiaCa: string;
   biografiaEs: string;
+  categoria: string;
+  ciutat_naixement_id: number;
+  ciutat_defuncio_id: number;
+  ciutat_residencia_id: number;
+  tipologia_lloc_defuncio_id: number;
+  causa_defuncio_id: number;
+  estat_civil_id: number;
+  estudis_id: number;
+  ofici_id: number;
+  sector_id: number;
+  sub_sector_id: number;
+  carrecs_empresa_id: number;
+  filiacio_politica: string;
+  filiacio_sindical: string;
+  activitat_durant_guerra: string;
+  autor_id: number;
+  completat: number;
 }
 
 export interface FitxaJudicial {

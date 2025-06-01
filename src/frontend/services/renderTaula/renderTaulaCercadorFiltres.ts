@@ -18,7 +18,14 @@ export async function renderTaulaCercadorFiltres<T>({ url, columns, containerId,
   if (!container) return console.error(`Contenedor #${containerId} no encontrado`);
 
   const response = await fetch(url);
-  const data: T[] = await response.json();
+  const result = await response.json();
+
+  if (result.status === 'error') {
+    container.innerHTML = `<div class="alert alert-info">${result.message || 'No hi ha dades.'}</div>`;
+    return;
+  }
+
+  const data: T[] = result;
 
   let currentPage = 1;
   let filteredData = [...data];

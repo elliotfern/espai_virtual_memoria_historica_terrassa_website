@@ -10,7 +10,7 @@
             <?php endif; ?>
 
             <?php if ($isAdmin || $isAutor || $isUserExili): ?>
-                <a href="<?php echo APP_WEB . APP_INTRANET . $urlIntranet['base_dades']; ?>/exiliats-deportats" class="btn btn-success menuBtn w-100 w-md-auto" role="button" aria-disabled="false">Exiliats</a>
+                <a href="<?php echo APP_WEB . APP_INTRANET . $urlIntranet['base_dades']; ?>/exiliats-deportats" class="btn btn-success menuBtn w-100 w-md-auto" role="button" aria-disabled="false">Exiliats i deportats</a>
             <?php endif; ?>
 
             <?php if ($isAdmin || $isAutor || $isUserCostHuma): ?>

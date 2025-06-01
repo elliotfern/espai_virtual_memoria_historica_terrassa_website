@@ -1,6 +1,7 @@
 import { fetchData } from '../../services/api/api';
 import { Represeliat } from '../../types/types';
-import { categorias } from '../../config';
+import { categoriesRepressio } from './categoriesRepressio';
+import { traduirCategoriesRepressio } from './traduirCategoriesRepressio';
 import { getIsAdmin } from '../../services/auth/getIsAdmin';
 import { getIsAutor } from '../../services/auth/getIsAutor';
 import { getIsLogged } from '../../services/auth/getIsLogged';
@@ -11,6 +12,7 @@ export async function cargarTabla(pag: string, context: number, completat: numbe
   const isAdmin = await getIsAdmin();
   const isAutor = await getIsAutor();
   const isLogged = await getIsLogged();
+  const colectiusRepressio = await categoriesRepressio('ca');
 
   // Validar el parámetro 'completat': si no es 1 o 2, asignar 3
   // completat 1 = PENDENT > visibilitat = 1
@@ -104,12 +106,7 @@ export async function cargarTabla(pag: string, context: number, completat: numbe
 
       // Col·lectiu
       const tdCollectiu = document.createElement('td');
-      const categoriasIds = row.categoria ? row.categoria.replace(/[{}]/g, '').split(',').map(Number) : [];
-      const collectiuTexto = categoriasIds
-        .map((num) => categorias[num] || '') // Usar la constante categorias
-        .filter(Boolean)
-        .join(', ');
-      tdCollectiu.textContent = collectiuTexto;
+      tdCollectiu.textContent = traduirCategoriesRepressio(row.categoria, colectiusRepressio);
       tr.appendChild(tdCollectiu);
 
       // COLUMNA ESTAT FITXA NOMES PELS USUARIS REGISTRATS
@@ -262,7 +259,7 @@ export async function cargarTabla(pag: string, context: number, completat: numbe
         const municipiDefuncio = `${row.data_defuncio ?? 'Desconegut'} (${row.ciutat2 ?? 'Desconegut'})`.toLowerCase();
         const categoriasIds = row.categoria ? row.categoria.replace(/[{}]/g, '').split(',').map(Number) : [];
         const collectiuTexto = categoriasIds
-          .map((num) => categorias[num] || '') // Usar la constante categorias
+          .map((num) => colectiusRepressio[num] || '')
           .filter(Boolean)
           .join(', ')
           .toLowerCase();

@@ -1,23 +1,3 @@
-export const categorias: { [key: string]: string } = {
-  1: 'Afusellat',
-  2: 'Deportat',
-  3: 'Mort en combat',
-  4: 'Mort civil',
-  5: 'Represàlia republicana',
-  6: 'Processat/Empresonat',
-  7: 'Depurat',
-  8: 'Dona',
-  9: ' ',
-  10: 'Exiliat',
-  11: 'Represaliats pendents classificació',
-  12: 'Detinguts Presó Model',
-  13: 'Detinguts Guàrdia Urbana',
-  14: 'Detinguts Comitè Solidaritat',
-  15: 'Responsabilitats Polítiques',
-  16: 'Funcionaris depurats',
-  17: 'Tribunal Orden Público',
-};
-
 // Función para convertir fecha de formato DD/MM/YYYY a YYYY-MM-DD
 export function convertirFecha(fecha: string): string | null {
   if (!fecha) return null;

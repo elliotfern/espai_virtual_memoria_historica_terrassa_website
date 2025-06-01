@@ -12,6 +12,9 @@
         <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['auxiliars']; ?>/llistat-partits-politics">Taula llistat de partits polítics</a></li>
         <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['auxiliars']; ?>/llistat-sindicats">Taula llistat de sindicats</a></li>
     </ul>
+
+    <hr>
+
     <div id="isAdminButton" style="display: none;margin-top:25px">
         <?php if (isUserAdmin()) : ?>
             <p><strong>Només visible per usuaris administratius:</strong></p>
@@ -23,49 +26,65 @@
                 <li>auth_users_tipus</li>
             </ul>
 
+            <hr>
+
             <h2>2. Auxiliars</h2>
             <ul>
                 <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['auxiliars']; ?>/llistat-imatges">Taula llistat imatges</a></li>
             </ul>
 
-            <h2>3. Taules auxiliars (catàlegs i opcions)</h2>
+            <h4>1. General</h4>
             <ul>
-                <li>aux_activitat_guerra</li>
-                <li>aux_acusacions</li>
-                <li>aux_bandol</li>
                 <li>aux_categoria</li>
-                <li>aux_causa_defuncio</li>
-                <li>aux_condicio</li>
-                <li>aux_cossos_militars</li>
-                <li>aux_cronologia_area</li>
-                <li>aux_cronologia_mes</li>
-                <li>aux_cronologia_tema</li>
-
                 <li>aux_espai</li>
                 <li>aux_estat_civil</li>
                 <li>aux_estudis</li>
-                <li>aux_familiars</li>
-                <li>aux_familiars_relacio</li>
-                <li>aux_imatges</li>
-                <li>aux_jutjats</li>
-                <li>aux_llocs_bombardeig</li>
                 <li>aux_oficis</li>
                 <li>aux_ofici_carrec</li>
-                <li>aux_procediment_judicial</li>
                 <li>aux_sector_economic</li>
-                <li>aux_sentencies</li>
-                <li>aux_situacions_deportats</li>
                 <li>aux_sub_sector_economic</li>
                 <li>aux_tipologia_espais</li>
+            </ul>
+
+            <h4>2. Represaliats 1939-1979</h4>
+            <h6>Processats</h6>
+            <ul>
+                <li>aux_acusacions</li>
+                <li>aux_jutjats</li>
+                <li>aux_procediment_judicial</li>
+                <li>aux_sentencies</li>
                 <li>aux_tipus_presons</li>
             </ul>
 
-            <h2>3. Control de canvis</h2>
+            <h4>3. Exiliats / Deportats</h4>
             <ul>
-                <li>control_registre_canvis</li>
+                <li>aux_situacions_deportats</li>
             </ul>
 
-            <h2>4.Fonts bibliogràfiques i arxius</h2>
+            <h4>4. Cost humà guerra civil</h4>
+            <ul>
+                <li>aux_bandol</li>
+                <li>aux_causa_defuncio</li>
+                <li>aux_condicio</li>
+                <li>aux_cossos_militars</li>
+                <li>aux_llocs_bombardeig</li>
+            </ul>
+
+            <h4>5. Cronologia</h4>
+            <ul>
+                <li>db_cronologia</li>
+                <li>aux_cronologia_area</li>
+                <li>aux_cronologia_mes</li>
+                <li>aux_cronologia_tema</li>
+            </ul>
+
+            <h4>6. Relacions familiars</h4>
+            <ul>
+                <li>aux_familiars</li>
+                <li>aux_familiars_relacio</li>
+            </ul>
+
+            <h4>7.Fonts bibliogràfiques i arxius</h4>
             <ul>
                 <li>aux_bibliografia_arxius</li>
                 <li>aux_bibliografia_arxius_codis</li>
@@ -73,18 +92,23 @@
                 <li>aux_bibliografia_llibre_detalls</li>
             </ul>
 
-            <h2>4. Dades principals i biogràfiques</h2>
+            <h4>8. Bases de dades col·lectius repressió</h4>
             <ul>
+                <li>db_dades_personals</li>
                 <li>db_afusellats</li>
-                <li>db_biografies</li>
                 <li>db_cost_huma_morts_civils</li>
                 <li>db_cost_huma_morts_front</li>
-                <li>db_cronologia</li>
-                <li>db_dades_personals</li>
                 <li>db_deportats</li>
                 <li>db_depurats</li>
                 <li>db_exiliats</li>
+                <li>db_biografies</li>
             </ul>
+
+            <h4>9. Registre i Control de canvis</h4>
+            <ul>
+                <li>control_registre_canvis</li>
+            </ul>
+
         <?php endif; ?>
     </div>
 </div>

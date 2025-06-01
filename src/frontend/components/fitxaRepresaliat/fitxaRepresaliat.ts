@@ -1,9 +1,11 @@
-import { categorias, convertirFecha, calcularEdadAlMorir } from '../../config';
+import { convertirFecha, calcularEdadAlMorir } from '../../config';
+import { categoriesRepressio } from '../taulaDades/categoriesRepressio';
 import { fetchData } from '../../services/api/api';
 import { Fitxa, FitxaJudicial, FitxaFamiliars } from '../../types/types';
 import { fitxaTipusRepressio } from './tab_tipus_repressio';
 import { formatDates } from '../../services/formatDates/dates';
 import { carregarTraduccions, getTraducciones } from '../../services/idiomes/traduccio';
+import { traduirCategoriesRepressioArray } from '../taulaDades/traduirCategoriesRepressio';
 
 interface Partit {
   id: number;
@@ -21,7 +23,7 @@ async function obtenerNombresPartidos(ids: number[]): Promise<string[]> {
   try {
     // Llamada a la API para obtener todos los partidos políticos
     const devDirectory = `https://${window.location.hostname}`;
-    const url = `${devDirectory}/api/auxiliars/get/partits`;
+    const url = `${devDirectory}/api/auxiliars/get/partitsPolitics`;
 
     const response = await fetch(url, {
       method: 'GET', // O cualquier otro método que necesites (POST, PUT, etc.)
@@ -127,65 +129,65 @@ export async function initButtons(id: string): Promise<void> {
   generarBotonesCategoria(id);
 }
 
-// Función para generar los botones según la categoría obtenida de la API
+// Función principal para generar botones según categorías de la ficha
 async function generarBotonesCategoria(idPersona: string): Promise<void> {
   const devDirectory = `https://${window.location.hostname}`;
   const url = `${devDirectory}/api/dades_personals/get/?type=fitxa&id=${idPersona}`;
 
   try {
-    const data = await fetchData(url); // Llamada a la API para obtener la ficha
-    if (Array.isArray(data)) {
-      const fitxa = data[0]; // Ahora TypeScript sabe que 'data' es un array
-      const categoriasNumericas = fitxa.categoria.replace(/[{}]/g, '').split(','); // Obtener las categorías en formato de array
+    // Obtener categorías (array de objetos {id, name}) para el idioma catalán
+    const colectiusRepressio = await categoriesRepressio('ca');
 
-      const contenedorCategorias = document.getElementById('botons2');
-      if (!contenedorCategorias) return;
+    const data = await fetchData(url); // Obtener ficha persona
+    if (!Array.isArray(data)) throw new Error('La API no devolvió un array.');
 
-      // Iterar sobre las categorías numéricas y crear botones dinámicamente
-      categoriasNumericas.forEach((catNum: string) => {
-        const catTitle = categorias[catNum]; // Obtener el título de la categoría desde la constante
+    const fitxa = data[0];
+    const categoriasNumericasString = fitxa.categoria || ''; // Ej: "{11,4,6}"
 
-        if (catTitle) {
-          // Solo crear botón si la categoría tiene un título definido
-          const btn = document.createElement('button');
-          btn.className = 'botoCategoriaRepresio';
-          btn.innerText = catTitle;
-          btn.dataset.tab = `categoria${catNum}`;
+    // Obtener array de nombres para esas categorías
+    const nombresCategorias = traduirCategoriesRepressioArray(categoriasNumericasString, colectiusRepressio);
 
-          // Asignar la función que mostrará información al hacer clic en el botón
-          btn.onclick = () => {
-            const divInfo = document.getElementById('fitxa-categoria');
-            if (!divInfo) return; // Verifica si el div existe
+    const contenedorCategorias = document.getElementById('botons2');
+    if (!contenedorCategorias) return;
 
-            // Si el contenido ya está visible, ocultarlo y eliminar la clase 'active'
-            if (divInfo.style.display === 'block' && divInfo.dataset.categoria === String(catNum)) {
-              divInfo.style.display = 'none';
-              btn.classList.remove('active');
-            } else {
-              // Limpiar el contenido previo y actualizar el dataset
-              divInfo.innerHTML = '';
-              divInfo.dataset.categoria = String(catNum);
+    contenedorCategorias.innerHTML = ''; // Limpiar contenedor
 
-              // Eliminar la clase 'active' de todos los botones
-              const allButtons = contenedorCategorias.getElementsByClassName('tablinks');
-              Array.from(allButtons).forEach((b) => b.classList.remove('active'));
+    // Obtener array de ids de las categorías (para saber qué id corresponde a cada nombre)
+    const categoriaIds = categoriasNumericasString.replace(/[{}]/g, '').split(',').map(Number);
 
-              // Agregar la clase 'active' al botón actual
-              btn.classList.add('active');
+    // Crear botones dinámicamente con el nombre y el id correspondientes
+    nombresCategorias.forEach((nombre, index) => {
+      const catNum = categoriaIds[index]; // El id numérico de la categoría
 
-              // Mostrar información de la categoría
-              mostrarCategoria(catNum, idPersona);
-              divInfo.style.display = 'block'; // Asegúrate de mostrar el div
-            }
-          };
+      const btn = document.createElement('button');
+      btn.className = 'botoCategoriaRepresio';
+      btn.innerText = nombre;
+      btn.dataset.tab = `categoria${catNum}`;
 
-          // Agregar el botón al contenedor de categorías
-          contenedorCategorias.appendChild(btn);
+      btn.onclick = () => {
+        const divInfo = document.getElementById('fitxa-categoria');
+        if (!divInfo) return;
+
+        if (divInfo.style.display === 'block' && divInfo.dataset.categoria === String(catNum)) {
+          divInfo.style.display = 'none';
+          btn.classList.remove('active');
+        } else {
+          divInfo.innerHTML = '';
+          divInfo.dataset.categoria = String(catNum);
+
+          // Quitar active a todos los botones y poner al actual
+          const allButtons = contenedorCategorias.getElementsByClassName('botoCategoriaRepresio');
+          Array.from(allButtons).forEach((b) => b.classList.remove('active'));
+
+          btn.classList.add('active');
+
+          mostrarCategoria(catNum, idPersona);
+          divInfo.style.display = 'block';
         }
-      });
-    } else {
-      throw new Error('La API no devolvió un array.');
-    }
+      };
+
+      contenedorCategorias.appendChild(btn);
+    });
   } catch (error) {
     console.error('Error al generar botones de categoría:', error);
   }
