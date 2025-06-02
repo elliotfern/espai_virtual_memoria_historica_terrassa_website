@@ -42,7 +42,7 @@ function crearBotoAfegirBibliografia(idPersona: number | string) {
 
   // Crear el enlace <a>
   const link = document.createElement('a');
-  link.href = `https://memoriaterrassa.cat/gestio/familiars/nou-familiar/${idPersona}`;
+  link.href = `https://memoriaterrassa.cat/gestio/fonts-documentals/fitxa/afegir-bibliografia/${idPersona}`;
   link.className = 'btn btn-success';
   link.textContent = 'Afegir bibliografia a la fitxa del repressaliat';
   link.target = '_blank';
@@ -80,7 +80,7 @@ function crearBotoAfegirArxiu(idPersona: number | string) {
 
   // Crear el enlace <a>
   const link = document.createElement('a');
-  link.href = `https://memoriaterrassa.cat/gestio/familiars/nou-familiar/${idPersona}`;
+  link.href = `https://memoriaterrassa.cat/gestio/fonts-documentals/fitxa/afegir-arxiu/${idPersona}`;
   link.className = 'btn btn-success';
   link.textContent = 'Afegir font arxivística a la fitxa del repressaliat';
   link.target = '_blank';

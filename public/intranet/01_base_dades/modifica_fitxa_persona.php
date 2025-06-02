@@ -63,19 +63,19 @@ if ($pagina === "modifica-fitxa") {
 
             <div class="col-md-12" style="margin-top:20px;margin-bottom:20px">
               <h6><strong>Represaliats 1939/1979:</strong></h6>
-
               <div id="categoria" class="d-flex flex-wrap">
-                <div class="form-check me-3">
-                  <input class="form-check-input" type="checkbox" id="categoria6" name="categoria" value="categoria6">
-                  <label class="form-check-label" for="categoria6">
-                    Processat/Empresonat
-                  </label>
-                </div>
 
                 <div class="form-check me-3">
                   <input class="form-check-input" type="checkbox" id="categoria1" name="categoria" value="categoria1">
                   <label class="form-check-label" for="categoria1">
                     Afusellat
+                  </label>
+                </div>
+
+                <div class="form-check me-3">
+                  <input class="form-check-input" type="checkbox" id="categoria6" name="categoria" value="categoria6">
+                  <label class="form-check-label" for="categoria6">
+                    Processat/Empresonat
                   </label>
                 </div>
 
@@ -97,6 +97,41 @@ if ($pagina === "modifica-fitxa") {
                   <input class="form-check-input" type="checkbox" id="categoria12" name="categoria" value="categoria12">
                   <label class="form-check-label" for="categoria12">
                     Detinguts Presó Model
+                  </label>
+                </div>
+
+                <div class="form-check me-3">
+                  <input class="form-check-input" type="checkbox" id="categoria13" name="categoria" value="categoria13">
+                  <label class="form-check-label" for="categoria13">
+                    Detinguts Guàrdia Urbana
+                  </label>
+                </div>
+
+                <div class="form-check me-3">
+                  <input class="form-check-input" type="checkbox" id="categoria14" name="categoria" value="categoria14">
+                  <label class="form-check-label" for="categoria14">
+                    Detinguts Comitè de Solidaritat
+                  </label>
+                </div>
+
+                <div class="form-check me-3">
+                  <input class="form-check-input" type="checkbox" id="categoria15" name="categoria" value="categoria15">
+                  <label class="form-check-label" for="categoria15">
+                    Responsabilitats polítiques
+                  </label>
+                </div>
+
+                <div class="form-check me-3">
+                  <input class="form-check-input" type="checkbox" id="categoria16" name="categoria" value="categoria16">
+                  <label class="form-check-label" for="categoria16">
+                    Funcionaris depurats
+                  </label>
+                </div>
+
+                <div class="form-check me-3">
+                  <input class="form-check-input" type="checkbox" id="categoria17" name="categoria" value="categoria17">
+                  <label class="form-check-label" for="categoria17">
+                    Tribunal Orden Público
                   </label>
                 </div>
 
@@ -150,6 +185,20 @@ if ($pagina === "modifica-fitxa") {
                 </div>
               </div>
             </div> <!-- Fi bloc cost huma -->
+
+            <div class="col-md-12" style="margin-bottom:20px;margin-top:20px">
+              <h6><strong>Dones:</strong></h6>
+
+              <div id="categoria" class="d-flex flex-wrap">
+                <div class="form-check me-3">
+                  <input class="form-check-input" type="checkbox" id="categoria8" name="categoria" value="categoria8">
+                  <label class="form-check-label" for="categoria8">
+                    Dona
+                  </label>
+                </div>
+
+              </div>
+            </div> <!-- Fi bloc dones -->
 
           </div> <!-- Fi bloc row -->
         </div> <!-- Fi bloc container -->

@@ -1,5 +1,5 @@
 import { renderTaulaCercadorFiltres } from '../../services/renderTaula/renderTaulaCercadorFiltres';
-import { initDeleteHandlers } from '../../services/fetchData/handleDelete';
+import { initDeleteHandlers, registerDeleteCallback } from '../../services/fetchData/handleDelete';
 import { getIsAdmin } from '../../services/auth/getIsAdmin';
 import { getIsAutor } from '../../services/auth/getIsAutor';
 import { getIsLogged } from '../../services/auth/getIsLogged';
@@ -22,6 +22,7 @@ export async function taulaFamiliars(idRepressaliat: number) {
   const isAdmin = await getIsAdmin();
   const isAutor = await getIsAutor();
   const isLogged = await getIsLogged();
+  const reloadKey = `reload-familiar-${idRepressaliat}`;
 
   const columns: Column<EspaiRow>[] = [
     { header: 'Nom i cognoms', field: 'nom_complet' },
@@ -51,7 +52,8 @@ export async function taulaFamiliars(idRepressaliat: number) {
       type="button"
       class="btn btn-danger btn-sm delete-button"
       data-id="${row.id}" 
-      data-url="/api/familiars/delete/familiar/${row.id}"
+      data-url="/api/familiars/delete/${row.id}"
+      data-reload-callback="${reloadKey}"
     >
       Elimina
     </button>`,
@@ -66,6 +68,9 @@ export async function taulaFamiliars(idRepressaliat: number) {
     //filterByField: 'provincia',
   });
 
-  // Iniciar los listeners de borrado
-  initDeleteHandlers(() => taulaFamiliars(idRepressaliat));
+  // Registra el callback con una clave única
+  registerDeleteCallback(reloadKey, () => taulaFamiliars(idRepressaliat));
+
+  // Inicia el listener una sola vez
+  initDeleteHandlers();
 }

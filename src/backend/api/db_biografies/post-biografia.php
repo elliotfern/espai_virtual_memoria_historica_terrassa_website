@@ -23,6 +23,13 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
+$userId = getAuthenticatedUserId();
+if (!$userId) {
+    http_response_code(401);
+    echo json_encode(['error' => 'No autenticado']);
+    exit;
+}
+
 // BIOGRAFIA
 
 // 1) POST Biografia
@@ -79,7 +86,7 @@ try {
 
     $dataHoraCanvi = date('Y-m-d H:i:s');
     $tipusOperacio = "Creació biografia";
-    $idUser = $data['userId'] ?? null;
+    $idUser = $userId;
     $lastInsertId = $idRepresaliat;
 
     // Crear la consulta SQL

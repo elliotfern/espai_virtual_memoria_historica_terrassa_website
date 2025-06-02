@@ -1,5 +1,5 @@
 import { renderTaulaCercadorFiltres } from '../../../services/renderTaula/renderTaulaCercadorFiltres';
-import { initDeleteHandlers } from '../../../services/fetchData/handleDelete';
+import { initDeleteHandlers, registerDeleteCallback } from '../../../services/fetchData/handleDelete';
 import { getIsAdmin } from '../../../services/auth/getIsAdmin';
 import { getIsAutor } from '../../../services/auth/getIsAutor';
 
@@ -21,6 +21,7 @@ type Column<T> = {
 export async function taulaComarques() {
   const isAdmin = await getIsAdmin();
   const isAutor = await getIsAutor();
+  const reloadKey = 'reload-taula-comarques';
 
   const columns: Column<EspaiRow>[] = [{ header: 'Comarca', field: 'comarca' }];
 
@@ -37,11 +38,13 @@ export async function taulaComarques() {
       header: '',
       field: 'id',
       render: (_: unknown, row: EspaiRow) => `
+      
     <button 
       type="button"
       class="btn btn-danger btn-sm delete-button"
       data-id="${row.id}" 
       data-url="/api/auxiliars/delete/comarca/${row.id}"
+      data-reload-callback="${reloadKey}"
     >
       Elimina
     </button>`,
@@ -56,6 +59,9 @@ export async function taulaComarques() {
     //filterByField: 'provincia',
   });
 
-  // Iniciar los listeners de borrado
-  initDeleteHandlers(() => taulaComarques()); // Recargar tabla después de eliminar
+  // Registra el callback con una clave única
+  registerDeleteCallback(reloadKey, () => taulaComarques());
+
+  // Inicia el listener una sola vez
+  initDeleteHandlers();
 }

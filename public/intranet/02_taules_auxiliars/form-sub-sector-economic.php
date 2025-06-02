@@ -120,70 +120,6 @@ if ($stmt->rowCount() > 0) {
 </div>
 
 <script>
-    // Carregar el select
-    async function auxiliarSelect(idAux, api, elementId, valorText) {
-
-        const devDirectory = `https://${window.location.hostname}`;
-        let urlAjax = devDirectory + "/api/auxiliars/get/?type=" + api;
-
-        // Obtener el token del localStorage
-        let token = localStorage.getItem('token');
-
-        // Configurar las opciones de la solicitud
-        const options = {
-            method: 'GET',
-            headers: {
-                'Authorization': 'Bearer ' + token,
-                'Content-Type': 'application/json'
-            }
-        };
-
-        try {
-            // Hacer la solicitud fetch y esperar la respuesta
-            const response = await fetch(urlAjax, options);
-
-            // Verificar si la respuesta es correcta
-            if (!response.ok) {
-                throw new Error('Error en la solicitud');
-            }
-
-            // Parsear los datos JSON
-            const data = await response.json();
-
-
-            // Obtener la referencia al elemento select
-            var selectElement = document.getElementById(elementId);
-
-            // Limpiar el select por si ya tenía opciones anteriores
-            selectElement.innerHTML = "";
-
-            // Agregar una opción predeterminada "Selecciona una opción"
-            var defaultOption = document.createElement("option");
-            defaultOption.text = "Selecciona una opció:";
-            defaultOption.value = ""; // Valor vacío
-            selectElement.appendChild(defaultOption);
-
-            // Iterar sobre los datos obtenidos de la API
-            data.forEach(function(item) {
-                // Crear una opción y agregarla al select
-                // console.log(item.ciutat)
-                var option = document.createElement("option");
-                option.value = item.id; // Establecer el valor de la opción
-                option.text = item[valorText]; // Establecer el texto visible de la opción
-                selectElement.appendChild(option);
-            });
-
-            // Seleccionar automáticamente el valor
-            if (idAux) {
-                selectElement.value = idAux;
-            }
-
-        } catch (error) {
-            console.error('Error al parsear JSON:', error); // Muestra el error de parsing
-        }
-    }
-
-
     // Función para manejar el envío del formulario
     async function enviarFormulario(event) {
         event.preventDefault(); // Prevenir el envío por defecto
@@ -197,16 +133,10 @@ if ($stmt->rowCount() > 0) {
             formData[key] = value; // Agregar cada campo al objeto formData
         });
 
-        // Obtener el user_id de localStorage
-        const userId = localStorage.getItem('user_id');
-        if (userId) {
-            formData['userId'] = userId;
-        }
-
         // Convertir los datos del formulario a JSON
         const jsonData = JSON.stringify(formData);
         const devDirectory = `https://${window.location.hostname}`;
-        let urlAjax = devDirectory + "/api/auxiliars/put/type=sub_sector_economic";
+        let urlAjax = devDirectory + "/api/auxiliars/put/sub_sector_economic";
 
         try {
             // Hacer la solicitud con fetch y await
@@ -253,9 +183,6 @@ if ($stmt->rowCount() > 0) {
         }
     }
 
-    // Asignar la función al botón del formulario
-    //document.getElementById("btnModificarDadesCombat").addEventListener("click", enviarFormulario);
-
     // Función para manejar el envío del formulario
     async function enviarFormularioPost(event) {
         event.preventDefault(); // Prevenir el envío por defecto
@@ -269,16 +196,11 @@ if ($stmt->rowCount() > 0) {
             formData[key] = value; // Agregar cada campo al objeto formData
         });
 
-        // Obtener el user_id de localStorage
-        const userId = localStorage.getItem('user_id');
-        if (userId) {
-            formData['userId'] = userId;
-        }
 
         // Convertir los datos del formulario a JSON
         const jsonData = JSON.stringify(formData);
         const devDirectory = `https://${window.location.hostname}`;
-        let urlAjax = devDirectory + "/api/auxiliars/post/?type=sub_sector_economic";
+        let urlAjax = devDirectory + "/api/auxiliars/post/sub_sector_economic";
 
         try {
             // Hacer la solicitud con fetch y await

@@ -1,5 +1,4 @@
 <?php
-
 $slug = $routeParams[0];
 
 // Configuración de cabeceras para aceptar JSON y responder JSON
@@ -231,7 +230,7 @@ if ($slug === "municipi") {
 
     // Validación de los datos recibidos
     if (empty($data['tipologia_espai_ca'])) {
-        $errors[] = 'El camp ciutat és obligatori.';
+        $errors[] = 'El camp tipologia és obligatori.';
     }
 
 
@@ -387,8 +386,8 @@ if ($slug === "municipi") {
         echo json_encode(["status" => "error", "message" => "S'ha produit un error a la base de dades: " . $e->getMessage()]);
     }
     // 5) POST CARREC EMPRESA
-    // ruta POST => "/api/auxiliars/post/?type=carrec_empresa"
-} elseif (isset($_GET['type']) && $_GET['type'] == 'carrec_empresa') {
+    // ruta POST => "/api/auxiliars/post/carrec_empresa" 
+} else if ($slug === "carrec_empresa") {
     $inputData = file_get_contents('php://input');
     $data = json_decode($inputData, true);
 

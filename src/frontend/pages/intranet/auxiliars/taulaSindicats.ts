@@ -1,5 +1,5 @@
 import { renderTaulaCercadorFiltres } from '../../../services/renderTaula/renderTaulaCercadorFiltres';
-import { initDeleteHandlers } from '../../../services/fetchData/handleDelete';
+import { initDeleteHandlers, registerDeleteCallback } from '../../../services/fetchData/handleDelete';
 import { getIsAdmin } from '../../../services/auth/getIsAdmin';
 import { getIsAutor } from '../../../services/auth/getIsAutor';
 
@@ -18,6 +18,7 @@ type Column<T> = {
 export async function taulaSindicats() {
   const isAdmin = await getIsAdmin();
   const isAutor = await getIsAutor();
+  const reloadKey = 'reload-taula-sindicats';
 
   const columns: Column<EspaiRow>[] = [
     { header: 'Sindicat', field: 'sindicat' },
@@ -42,6 +43,7 @@ export async function taulaSindicats() {
       class="btn btn-danger btn-sm delete-button"
       data-id="${row.id}" 
       data-url="/api/auxiliars/delete/sindicat/${row.id}"
+      data-reload-callback="${reloadKey}"
     >
       Elimina
     </button>`,
@@ -56,6 +58,9 @@ export async function taulaSindicats() {
     //filterByField: 'provincia',
   });
 
-  // Iniciar los listeners de borrado
-  initDeleteHandlers(() => taulaSindicats()); // Recargar tabla después de eliminar
+  // Registra el callback con una clave única
+  registerDeleteCallback(reloadKey, () => taulaSindicats());
+
+  // Inicia el listener una sola vez
+  initDeleteHandlers();
 }

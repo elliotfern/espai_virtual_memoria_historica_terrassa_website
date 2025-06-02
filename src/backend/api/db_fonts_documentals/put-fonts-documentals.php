@@ -4,7 +4,7 @@ $slug = $routeParams[0];
 // Configuración de cabeceras para aceptar JSON y responder JSON
 header("Content-Type: application/json");
 header("Access-Control-Allow-Origin: https://memoriaterrassa.cat");
-header("Access-Control-Allow-Methods: POST");
+header("Access-Control-Allow-Methods: PUT");
 
 // Dominio permitido (modifica con tu dominio)
 $allowed_origin = "https://memoriaterrassa.cat";
@@ -18,10 +18,10 @@ if (isset($_SERVER['HTTP_ORIGIN'])) {
     }
 }
 
-// Verificar que el método HTTP sea POST
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+// Verificar que el método HTTP sea PUT
+if ($_SERVER['REQUEST_METHOD'] !== 'PUT') {
     http_response_code(405); // Método no permitido
-    echo json_encode(["error" => "Método no permitido. Se requiere POST."]);
+    echo json_encode(["error" => "Método no permitido. Se requiere PUT."]);
     exit;
 }
 
@@ -33,8 +33,8 @@ if (!$userId) {
 }
 
 // DB_FONTS DOCUMENTALS
-// 1) POST ref_bibliografica > serveix per desar una referencia bibliografica de fitxa
-// ruta POST => "/api/fonts_documentals/post/ref_bibliografica"
+// 1) PUT ref_bibliografica > serveix per desar una referencia bibliografica de fitxa
+// Ruta PUT => "/api/fonts_documentals/put/ref_bibliografica"
 if ($slug === 'ref_bibliografica') {
     $inputData = file_get_contents('php://input');
     $data = json_decode($inputData, true);
@@ -58,6 +58,7 @@ if ($slug === 'ref_bibliografica') {
     $llibre = !empty($data['llibre']) ? $data['llibre'] : NULL;
     $idRepresaliat = !empty($data['idRepresaliat']) ? $data['idRepresaliat'] : NULL;
     $pagina = !empty($data['pagina']) ? $data['pagina'] : NULL;
+    $id = !empty($data['id']) ? $data['id'] : NULL;
 
     // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
     try {
@@ -66,11 +67,12 @@ if ($slug === 'ref_bibliografica') {
         /** @var PDO $conn */
 
         // Crear la consulta SQL
-        $sql = "INSERT INTO aux_bibliografia_llibres (
-            llibre, idRepresaliat, pagina
-        ) VALUES (
-            :llibre, :idRepresaliat, :pagina
-        )";
+        $sql = "UPDATE aux_bibliografia_llibres
+        SET 
+            llibre = :llibre,
+            idRepresaliat = :idRepresaliat,
+            pagina = :pagina
+        WHERE id = :id";
 
         // Preparar la consulta
         $stmt = $conn->prepare($sql);
@@ -79,6 +81,8 @@ if ($slug === 'ref_bibliografica') {
         $stmt->bindParam(':llibre', $llibre, PDO::PARAM_INT);
         $stmt->bindParam(':idRepresaliat', $idRepresaliat, PDO::PARAM_INT);
         $stmt->bindParam(':pagina', $pagina, PDO::PARAM_STR);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+
 
         // Ejecutar la consulta
         $stmt->execute();
@@ -89,7 +93,7 @@ if ($slug === 'ref_bibliografica') {
         // Si la inserció té èxit, cal registrar la inserció en la base de control de canvis
 
         $dataHoraCanvi = date('Y-m-d H:i:s');
-        $tipusOperacio = "Insert Nova bibliografia";
+        $tipusOperacio = "Update bibliografia";
         $idUser = $userId;
 
         // Crear la consulta SQL
@@ -119,9 +123,10 @@ if ($slug === 'ref_bibliografica') {
         echo json_encode(["status" => "error", "message" => "S'ha produit un error a la base de dades: "]);
     }
 
-    // 3) POST arxivistica
-    // ruta POST => "/api/fonts_documentals/post/ref_arxivistica"
-} elseif ($slug === 'ref_arxivistica') {
+    // 3) PUT ref_arxivistica fitxa represaliat
+    // ruta PUT => "/api/fonts_documentals/post/ref_arxivistica"
+} else if ($slug === 'ref_arxivistica') {
+
     $inputData = file_get_contents('php://input');
     $data = json_decode($inputData, true);
 
@@ -144,6 +149,7 @@ if ($slug === 'ref_bibliografica') {
     $referencia = !empty($data['referencia']) ? $data['referencia'] : NULL;
     $idRepresaliat = !empty($data['idRepresaliat']) ? $data['idRepresaliat'] : NULL;
     $codi = !empty($data['codi']) ? $data['codi'] : NULL;
+    $id  = !empty($data['id']) ? $data['id'] : NULL;
 
     // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
     try {
@@ -152,11 +158,12 @@ if ($slug === 'ref_bibliografica') {
         /** @var PDO $conn */
 
         // Crear la consulta SQL
-        $sql = "INSERT INTO aux_bibliografia_arxius (
-            referencia, codi, idRepresaliat
-        ) VALUES (
-            :referencia, :codi, :idRepresaliat 
-        )";
+        $sql = "UPDATE aux_bibliografia_arxius SET
+            referencia = :referencia,
+            codi = :codi,
+            idRepresaliat = :idRepresaliat
+        WHERE id = :id";
+
 
         // Preparar la consulta
         $stmt = $conn->prepare($sql);
@@ -165,6 +172,7 @@ if ($slug === 'ref_bibliografica') {
         $stmt->bindParam(':referencia', $referencia, PDO::PARAM_STR);
         $stmt->bindParam(':codi', $codi, PDO::PARAM_INT);
         $stmt->bindParam(':idRepresaliat', $idRepresaliat, PDO::PARAM_INT);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
 
         // Ejecutar la consulta
         $stmt->execute();
@@ -172,7 +180,7 @@ if ($slug === 'ref_bibliografica') {
         // Si la inserció té èxit, cal registrar la inserció en la base de control de canvis
 
         $dataHoraCanvi = date('Y-m-d H:i:s');
-        $tipusOperacio = "Insert Nova ref_arxivistica";
+        $tipusOperacio = "Update ref_arxivistica";
         $idUser = $userId;
 
         // Crear la consulta SQL
@@ -201,93 +209,8 @@ if ($slug === 'ref_bibliografica') {
         http_response_code(500); // Internal Server Error
         echo json_encode(["status" => "error", "message" => "S'ha produit un error a la base de dades"]);
     }
-
-    // POST creació nou arxiu i codis arxiu
-} elseif ($slug === 'arxiu') {
-
-    // Leer los datos de entrada
-    $input = file_get_contents('php://input');
-
-    // Verificar si los datos están vacíos
-    if (empty($input)) {
-        http_response_code(400); // Bad Request
-        echo json_encode(["status" => "error", "message" => "No se recibieron datos"]);
-        exit;
-    }
-
-    // Decodificar los datos JSON
-    $data = json_decode($input, true);
-
-    // Verificar si los datos se decodificaron correctamente
-    if (json_last_error() !== JSON_ERROR_NONE) {
-        http_response_code(400); // Bad Request
-        echo json_encode(["status" => "error", "message" => "Error al decodificar los datos JSON: " . json_last_error_msg()]);
-        exit;
-    }
-
-    $errors = [];
-    if (empty($data['arxiu'])) {
-        $errors['arxiu'] = 'El campo arxiu es obligatorio.';
-    }
-    if (empty($data['codi'])) {
-        $errors['codi'] = 'El campo codi es obligatorio.';
-    }
-    if (empty($data['ciutat'])) {
-        $errors['ciutat'] = 'El campo ciutat es obligatorio.';
-    }
-    if (empty($data['descripcio'])) {
-        $errors['descripcio'] = 'El campo descripcio es obligatorio.';
-    }
-    if (empty($data['web'])) {
-        $errors['web'] = 'El campo web es obligatorio.';
-    }
-
-    if (!empty($errors)) {
-        http_response_code(400); // Bad Request
-        echo json_encode(["status" => "error", "message" => "S'han produït errors en la validació", "errors" => $errors]);
-        exit;
-    }
-
-    // Si no hay errores, crear las variables PHP y preparar la consulta PDO
-    $arxiu = $data['arxiu'];
-    $codi = $data['codi'];
-    $ciutat = $data['ciutat'];
-    $descripcio = $data['descripcio'];
-    $web = $data['web'];
-
-    // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
-    try {
-
-        global $conn;
-        /** @var PDO $conn */
-
-        // Crear la consulta SQL
-        $sql = "INSERT INTO aux_bibliografia_arxius_codis (
-            arxiu, codi, ciutat, descripcio, web
-        ) VALUES (
-            :arxiu, :codi, :ciutat, :descripcio, :web
-        )";
-
-        // Preparar la consulta
-        $stmt = $conn->prepare($sql);
-
-        // Enlazar los parámetros con los valores de las variables PHP
-        $stmt->bindParam(':arxiu', $arxiu, PDO::PARAM_STR);
-        $stmt->bindParam(':codi', $codi, PDO::PARAM_STR);
-        $stmt->bindParam(':ciutat', $ciutat, PDO::PARAM_INT);
-        $stmt->bindParam(':descripcio', $descripcio, PDO::PARAM_STR);
-        $stmt->bindParam(':web', $web, PDO::PARAM_STR);
-
-        // Ejecutar la consulta
-        $stmt->execute();
-
-        // Respuesta de éxito
-        echo json_encode(["status" => "success", "message" => "Les dades s'han actualitzat correctament a la base de dades."]);
-    } catch (PDOException $e) {
-        // En caso de error en la conexión o ejecución de la consulta
-        http_response_code(500); // Internal Server Error
-        echo json_encode(["status" => "error", "message" => "S'ha produit un error a la base de dades: "]);
-    }
+    // 4) PUT modificació llibre
+    // ruta POST => "/api/fonts_documentals/put/llibre"
 } else if ($slug === 'llibre') {
     $inputData = file_get_contents('php://input');
     $data = json_decode($inputData, true);
@@ -318,6 +241,7 @@ if ($slug === 'ref_bibliografica') {
     $ciutat = !empty($data['ciutat']) ? $data['ciutat'] : NULL;
     $any = !empty($data['any']) ? $data['any'] : NULL;
     $volum = !empty($data['volum']) ? $data['volum'] : NULL;
+    $id = !empty($data['id']) ? $data['id'] : NULL;
 
     // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
     try {
@@ -326,11 +250,14 @@ if ($slug === 'ref_bibliografica') {
         /** @var PDO $conn */
 
         // Crear la consulta SQL
-        $sql = "INSERT INTO aux_bibliografia_llibre_detalls (
-            llibre, autor, editorial, ciutat, any, volum
-        ) VALUES (
-            :llibre, :autor, :editorial, :ciutat, :any, :volum
-        )";
+        $sql = "UPDATE aux_bibliografia_llibre_detalls SET
+            llibre = :llibre,
+            autor = :autor,
+            editorial = :editorial,
+            ciutat = :ciutat,
+            any = :any,
+            volum = :volum
+        WHERE id = :id";
 
         // Preparar la consulta
         $stmt = $conn->prepare($sql);
@@ -342,6 +269,7 @@ if ($slug === 'ref_bibliografica') {
         $stmt->bindParam(':ciutat', $ciutat, PDO::PARAM_INT);
         $stmt->bindParam(':any', $any, PDO::PARAM_STR);
         $stmt->bindParam(':volum', $volum, PDO::PARAM_STR);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
 
         // Ejecutar la consulta
         $stmt->execute();
@@ -349,7 +277,7 @@ if ($slug === 'ref_bibliografica') {
         // Si la inserció té èxit, cal registrar la inserció en la base de control de canvis
 
         $dataHoraCanvi = date('Y-m-d H:i:s');
-        $tipusOperacio = "Insert Nou llibre";
+        $tipusOperacio = "Update llibre";
         $idUser = $userId;
         $lastInsertId = NULL;
 
@@ -379,8 +307,4 @@ if ($slug === 'ref_bibliografica') {
         http_response_code(500); // Internal Server Error
         echo json_encode(["status" => "error", "message" => "S'ha produit un error a la base de dades"]);
     }
-} else {
-    // En caso de error en la conexión o ejecución de la consulta
-    http_response_code(500); // Internal Server Error
-    echo json_encode(["status" => "error", "message" => "S'ha produit un error a la base de dades: "]);
 }

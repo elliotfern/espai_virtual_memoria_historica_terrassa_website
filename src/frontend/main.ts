@@ -7,6 +7,7 @@ import { nameUser } from './components/userName/userName';
 import { getPageType } from './services/url/splitUrl';
 import { intranet } from './pages/intranet/intranet';
 import { loginPage } from './services/auth/login';
+import { initCookieConsent } from './components/bannerCookies/cookie';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './estils/style.css';
 import 'bootstrap';
@@ -18,6 +19,8 @@ const pageType = getPageType(url);
 console.log(pageType);
 
 document.addEventListener('DOMContentLoaded', () => {
+  initCookieConsent();
+
   if (pageType[0] === 'acces') {
     loginPage();
   } else if (pageType[0] === 'gestio') {

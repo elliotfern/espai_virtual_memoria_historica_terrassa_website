@@ -1,46 +1,55 @@
-export function initDeleteHandlers(reloadTableCallback?: () => void) {
+let deleteListenerAdded = false;
+const reloadCallbacks: Record<string, () => void> = {};
+
+export function registerDeleteCallback(key: string, callback: () => void) {
+  reloadCallbacks[key] = callback;
+}
+
+export function initDeleteHandlers() {
+  if (deleteListenerAdded) return;
+  deleteListenerAdded = true;
+
   document.addEventListener('click', async (event: Event) => {
     const target = event.target as HTMLElement;
+    const button = target.closest('.delete-button') as HTMLElement | null;
+    if (!button) return;
 
-    if (target.classList.contains('delete-button')) {
-      event.preventDefault();
+    event.preventDefault();
 
-      const id = target.dataset.id;
-      const url = target.dataset.url;
+    const id = button.dataset.id;
+    const url = button.dataset.url;
+    const reloadKey = button.dataset.reloadCallback;
 
-      if (!id || !url) return;
+    if (!id || !url) return;
 
-      const confirmed = confirm('Segur que vols eliminar aquest registre?');
+    const confirmed = confirm('Segur que vols eliminar aquest registre?');
+    if (!confirmed) return;
 
-      if (!confirmed) return;
+    try {
+      const response = await fetch(url, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
 
-      try {
-        const response = await fetch(url, {
-          method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
+      const data = await response.json();
 
-        const data = await response.json();
+      if (response.ok && data.status === 'success') {
+        alert('Registre eliminat correctament.');
 
-        if (response.ok && data.status === 'success') {
-          alert('Registre eliminat correctament.');
-
-          if (reloadTableCallback) {
-            reloadTableCallback(); // Recargar tabla si se pasó un callback
-          } else {
-            // Alternativa: eliminar la fila directamente
-            const rowElement = target.closest('tr');
-            if (rowElement) rowElement.remove();
-          }
+        if (reloadKey && reloadCallbacks[reloadKey]) {
+          reloadCallbacks[reloadKey]();
         } else {
-          alert(data.message || 'Error en eliminar el registre.');
+          const rowElement = button.closest('tr');
+          if (rowElement) rowElement.remove();
         }
-      } catch (error) {
-        console.error('Error al eliminar:', error);
-        alert('Error de xarxa en eliminar el registre.');
+      } else {
+        alert(data.message || 'Error en eliminar el registre.');
       }
+    } catch (error) {
+      console.error('Error al eliminar:', error);
+      alert('Error de xarxa en eliminar el registre.');
     }
   });
 }

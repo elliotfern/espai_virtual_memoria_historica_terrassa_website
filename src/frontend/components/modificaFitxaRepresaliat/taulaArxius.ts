@@ -1,5 +1,5 @@
 import { renderTaulaCercadorFiltres } from '../../services/renderTaula/renderTaulaCercadorFiltres';
-import { initDeleteHandlers } from '../../services/fetchData/handleDelete';
+import { initDeleteHandlers, registerDeleteCallback } from '../../services/fetchData/handleDelete';
 import { getIsAdmin } from '../../services/auth/getIsAdmin';
 import { getIsAutor } from '../../services/auth/getIsAutor';
 import { getIsLogged } from '../../services/auth/getIsLogged';
@@ -23,6 +23,7 @@ export async function taulaArxius(idRepressaliat: number) {
   const isAdmin = await getIsAdmin();
   const isAutor = await getIsAutor();
   const isLogged = await getIsLogged();
+  const reloadKey = `reload-arxiu-${idRepressaliat}`;
 
   const columns: Column<EntradaBibliografica>[] = [
     { header: 'Referència', field: 'referencia' },
@@ -35,7 +36,7 @@ export async function taulaArxius(idRepressaliat: number) {
     columns.push({
       header: 'Accions',
       field: 'id',
-      render: (_: unknown, row: EntradaBibliografica) => `<a id="${row.id}" title="Modifica" href="https://${window.location.hostname}/gestio/familiars/modifica-familiar/${row.idParent}/${row.id}/" target="_blank"><button type="button" class="btn btn-warning btn-sm">Modifica</button></a>`,
+      render: (_: unknown, row: EntradaBibliografica) => `<a id="${row.id}" title="Modifica" href="https://${window.location.hostname}/gestio/fonts-documentals/fitxa/modifica-arxiu/${idRepressaliat}/${row.id}/" target="_blank"><button type="button" class="btn btn-warning btn-sm">Modifica</button></a>`,
     });
   }
 
@@ -48,7 +49,8 @@ export async function taulaArxius(idRepressaliat: number) {
       type="button"
       class="btn btn-danger btn-sm delete-button"
       data-id="${row.id}" 
-      data-url="/api/familiars/delete/familiar/${row.id}"
+      data-url="/api/fonts_documentals/delete/ref_arxiu/${row.id}"
+      data-reload-callback="${reloadKey}"
     >
       Elimina
     </button>`,
@@ -63,6 +65,9 @@ export async function taulaArxius(idRepressaliat: number) {
     //filterByField: 'provincia',
   });
 
-  // Iniciar los listeners de borrado
-  initDeleteHandlers(() => taulaArxius(idRepressaliat));
+  // Registra el callback con una clave única
+  registerDeleteCallback(reloadKey, () => taulaArxius(idRepressaliat));
+
+  // Inicia el listener una sola vez
+  initDeleteHandlers();
 }

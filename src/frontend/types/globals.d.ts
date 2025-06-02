@@ -1,4 +1,7 @@
-
-interface Window {
-    dayjs: typeof import('dayjs');
+declare global {
+  interface Window {
+    dataLayer: unknown[];
+    gtag: GtagFunction;
+  }
 }
+export {};

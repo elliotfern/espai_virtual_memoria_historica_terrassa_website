@@ -4,7 +4,7 @@ $idPersona = $routeParams[1]; // Segundo, por ejemplo, 2
 $categoriaId = (int) $categoriaId;
 
 // Verificar si es un número entero válido
-if (!is_int($categoriaId) || $categoriaId >= 11) {
+if (!is_int($categoriaId) || $categoriaId >= 17) {
     // Si no es un número entero o es menor o igual a cero, detener la ejecución
     header("Location: /404");
     exit();
@@ -12,24 +12,54 @@ if (!is_int($categoriaId) || $categoriaId >= 11) {
 
 require_once APP_ROOT . '/public/intranet/includes/header.php';
 
-if ($categoriaId === 1) {
-    echo "afusellat";
-} else if ($categoriaId === 2) {
-    require_once APP_ROOT . '/public/intranet/01_base_dades/tipus_repressio/deportats.php';
-} else if ($categoriaId === 3) {
-    require_once APP_ROOT . '/public/intranet/01_base_dades/tipus_repressio/morts_combat.php';
-} else if ($categoriaId === 4) {
-    require_once APP_ROOT . '/public/intranet/01_base_dades/tipus_repressio/morts_civils.php';
-} else if ($categoriaId === 5) {
-    echo "Represàlia republicana";
-} else if ($categoriaId === 6) {
-    echo "Processat/Empresonat";
-} else if ($categoriaId === 7) {
-    echo "Depurat";
-} else if ($categoriaId === 8) {
-    echo "Dona";
-} else if ($categoriaId === 9) {
-    echo "";
-} else if ($categoriaId === 10) {
-    require_once APP_ROOT . '/public/intranet/01_base_dades/tipus_repressio/exiliats.php';
+switch ($categoriaId) {
+    case 1:
+        require_once APP_ROOT . '/public/intranet/01_base_dades/tipus_repressio/1_represaliats/afusellats.php';
+        break;
+    case 2:
+        require_once APP_ROOT . '/public/intranet/01_base_dades/tipus_repressio/2_exiliats/deportats.php';
+        break;
+    case 3:
+        require_once APP_ROOT . '/public/intranet/01_base_dades/tipus_repressio/3_cost_huma/morts_combat.php';
+        break;
+    case 4:
+        require_once APP_ROOT . '/public/intranet/01_base_dades/tipus_repressio/3_cost_huma/morts_civils.php';
+        break;
+    case 5:
+        break;
+    case 6:
+        require_once APP_ROOT . '/public/intranet/01_base_dades/tipus_repressio/1_represaliats/processats.php';
+        break;
+    case 7:
+        require_once APP_ROOT . '/public/intranet/01_base_dades/tipus_repressio/1_represaliats/depurats.php';
+        break;
+    case 8:
+        break;
+    case 9:
+        // dona
+        break;
+    case 10:
+        require_once APP_ROOT . '/public/intranet/01_base_dades/tipus_repressio/2_exiliats/exiliats.php';
+        break;
+    case 11:
+        require_once APP_ROOT . '/public/intranet/01_base_dades/tipus_repressio/1_represaliats/pendents.php';
+        break;
+    case 12:
+        require_once APP_ROOT . '/public/intranet/01_base_dades/tipus_repressio/1_represaliats/detinguts_preso_model.php';
+        break;
+    case 13:
+        require_once APP_ROOT . '/public/intranet/01_base_dades/tipus_repressio/1_represaliats/detinguts_guardia_urbana.php';
+        break;
+    case 14:
+        require_once APP_ROOT . '/public/intranet/01_base_dades/tipus_repressio/1_represaliats/detinguts_comite_solidaritat.php';
+        break;
+    case 15:
+        require_once APP_ROOT . '/public/intranet/01_base_dades/tipus_repressio/1_represaliats/responsabilitats_politiques.php';
+        break;
+    case 16:
+        require_once APP_ROOT . '/public/intranet/01_base_dades/tipus_repressio/1_represaliats/funcionaris_depurats.php';
+        break;
+    case 17:
+        require_once APP_ROOT . '/public/intranet/01_base_dades/tipus_repressio/1_represaliats/tribunal_orden_publico.php';
+        break;
 }

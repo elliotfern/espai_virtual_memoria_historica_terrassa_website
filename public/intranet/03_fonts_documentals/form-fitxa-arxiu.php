@@ -7,16 +7,15 @@ $url = $_SERVER['REQUEST_URI'];
 $urlParts = explode('/', $url);
 
 // Obtener la parte deseada (en este caso, la cuarta parte)
-$pagina = $urlParts[3] ?? '';
+$categoriaId = $urlParts[4] ?? '';
 $idPersona = $routeParams[0];
 
-//modifica-familiar/56/3
 require_once APP_ROOT . '/public/intranet/includes/header.php';
 
 $modificaBtn = "";
 $idRepresaliat = "";
 
-if ($pagina === "modifica-familiar") {
+if ($categoriaId === "modifica-arxiu") {
     $modificaBtn = 1;
     $idRepresaliat = $routeParams[1];
 } else {
@@ -24,20 +23,20 @@ if ($pagina === "modifica-familiar") {
 }
 
 $id_old = "";
-$nom_old = "";
-$cognom1_old = "";
-$cognom2_old = "";
-$anyNaixement_old = "";
-$relacio_parentiu_old = "";
+$codi_old = "";
+$referencia_old = "";
 $idPersona;
 $idParent_old = "";
 
 if ($modificaBtn === 1) {
     // Verificar si la ID existe en la base de datos
-    $query = "SELECT f.id, f.nom, f.cognom1, f.cognom2, f.anyNaixement, f.relacio_parentiu, f.idParent, d.nom AS nom_represaliat, d.cognom1 AS cognom1_represaliat, d.cognom2 AS cognom2_represaliat
-    FROM aux_familiars AS f
-    LEFT JOIN db_dades_personals AS d ON f.idParent = d.id
-    WHERE f.id = :id";
+    $query = "SELECT a.id, a.referencia, a.codi, a.idRepresaliat,
+    d.nom,
+    d.cognom1,
+    d.cognom2
+    FROM aux_bibliografia_arxius AS a
+    LEFT JOIN db_dades_personals AS d ON a.idRepresaliat = d.id
+    WHERE a.id = :id";
 
     $stmt = $conn->prepare($query);
     $stmt->bindParam(':id', $idRepresaliat, PDO::PARAM_INT);
@@ -47,15 +46,12 @@ if ($modificaBtn === 1) {
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             // Acceder a las variables de la consulta
             $id_old = $row['id'] ?? "";
-            $nom_old = $row['nom'] ?? "";
-            $cognom1_old = $row['cognom1'] ?? "";
-            $cognom2_old = $row['cognom2'] ?? "";
-            $anyNaixement_old = $row['anyNaixement'] ?? "";
-            $relacio_parentiu_old = $row['relacio_parentiu'] ?? "";
-            $nom_represaliat = $row['nom_represaliat'] ?? "";
-            $cognom1_represaliat = $row['cognom1_represaliat'] ?? "";
-            $cognom2_represaliat = $row['cognom2_represaliat'] ?? "";
-            $idParent_old = $row['idParent'] ?? "";
+            $referencia_old = $row['referencia'] ?? "";
+            $codi_old = $row['codi'] ?? "";
+            $idParent_old = $row['idRepresaliat'] ?? "";
+            $nom = $row['nom'] ?? "";
+            $cognom1 = $row['cognom1'] ?? "";
+            $cognom2 = $row['cognom2'] ?? "";
         }
     }
 } else {
@@ -85,11 +81,10 @@ if ($modificaBtn === 1) {
         <div class="container">
             <div class="row g-4">
                 <?php if ($modificaBtn === 1) { ?>
-                    <h2>Modificació dades familiar</h2>
-                    <h4 id="fitxaNomCognoms">Fitxa represaliat: <a href="https://memoriaterrassa.cat/fitxa/<?php echo $idParent_old; ?>" target="_blank"><?php echo $nom_represaliat . " " . $cognom1_represaliat . " " . $cognom2_represaliat; ?></a></h4>
-                    <h6 id="fitxaNomCognoms2">Modificació dades de: <?php echo $nom_old . " " . $cognom1_old . " " . $cognom2_old; ?></h6>
+                    <h2>Modificació dades arxivístiques</h2>
+                    <h4 id="fitxaNomCognoms">Fitxa represaliat: <a href="https://memoriaterrassa.cat/fitxa/<?php echo $idParent_old; ?>" target="_blank"><?php echo $nom . " " . $cognom1 . " " . $cognom2; ?></a></h4>
                 <?php } else { ?>
-                    <h2>Inserció dades familiar</h2>
+                    <h2>Inserció dades arxivístiques</h2>
                     <h4 id="fitxaNomCognoms">Fitxa represaliat: <a href="https://memoriaterrassa.cat/fitxa/<?php echo $idPersona; ?>" target="_blank"><?php echo $nom . " " . $cognom1 . " " . $cognom2; ?></a></h4>
 
                 <?php } ?>
@@ -107,34 +102,25 @@ if ($modificaBtn === 1) {
                 <input type="hidden" name="id" id="id" value="<?php echo $id_old; ?>">
 
                 <div class="col-md-4">
-                    <label for="nom" class="form-label negreta">Nom:</label>
-                    <input type="text" class="form-control" id="nom" name="nom" value="<?php echo $nom_old; ?>">
+                    <label for="referencia" class="form-label negreta">Referència documentació:</label>
+                    <input type="text" class="form-control" name="referencia" id="referencia" value="<?php echo $referencia_old; ?>">
                 </div>
 
-                <div class="col-md-4">
-                    <label for="cognom1" class="form-label negreta">Primer cognom:</label>
-                    <input type="text" class="form-control" id="cognom1" name="cognom1" value="<?php echo $cognom1_old; ?>">
-                </div>
 
                 <div class="col-md-4">
-                    <label for="cognom2" class="form-label negreta">Segon cognom:</label>
-                    <input type="text" class="form-control" id="cognom2" name="cognom2" value="<?php echo $cognom2_old; ?>">
-                </div>
-
-                <div class="col-md-4">
-                    <label for="anyNaixement" class="form-label negreta">Any de naixement:</label>
-                    <input type="text" class="form-control" id="anyNaixement" name="anyNaixement" value="<?php echo $anyNaixement_old; ?>">
-                </div>
-
-                <div class="col-md-4">
-                    <label for="relacio_parentiu" class="form-label negreta">Relació de parentiu:</label>
-                    <select class="form-select" name="relacio_parentiu" id="relacio_parentiu" value="">
+                    <label for="codi" class="form-label negreta">Codi arxiu:</label>
+                    <select class="form-select" name="codi" id="codi" value="<?php echo $codi_old; ?>">
                     </select>
+
+                    <div class="mt-2">
+                        <a href="https://memoriaterrassa.cat/gestio/fonts-documentals/nou-arxiu" target="_blank" class="btn btn-secondary btn-sm" id="afegirArxiu1">Afegir codi arxiu</a>
+                        <button id="refreshButtonArxius" class="btn btn-primary btn-sm">Actualitzar llistat arxius</button>
+                    </div>
                 </div>
 
                 <div class="col-md-4">
-                    <label for="idParent" class="form-label negreta">Familiar represaliat:</label>
-                    <select class="form-select" name="idParent" id="idParent" value="">
+                    <label for="idRepresaliat" class="form-label negreta">Represaliat:</label>
+                    <select class="form-select" name="idRepresaliat" id="idRepresaliat" value="">
                     </select>
                 </div>
 
@@ -221,8 +207,13 @@ if ($modificaBtn === 1) {
         }
     }
 
-    auxiliarSelect("<?php echo $relacio_parentiu_old; ?>", "relacions_parentiu", "relacio_parentiu", "relacio_parentiu");
-    auxiliarSelect("<?php echo $idParent_old; ?>", "llistat_complert_represaliats", "idParent", "nom_complert");
+    auxiliarSelect("<?php echo $codi_old; ?>", "llistat_arxivistica", "codi", "arxiu");
+    auxiliarSelect("<?php echo $idParent_old; ?>", "llistat_complert_represaliats", "idRepresaliat", "nom_complert");
+
+    document.getElementById('refreshButtonArxius').addEventListener('click', function(event) {
+        event.preventDefault();
+        auxiliarSelect("<?php echo $codi_old; ?>", "llistat_arxivistica", "codi", "arxiu");
+    });
 
     // Función para manejar el envío del formulario
     async function enviarFormulario(event) {
@@ -237,11 +228,10 @@ if ($modificaBtn === 1) {
             formData[key] = value; // Agregar cada campo al objeto formData
         });
 
-
         // Convertir los datos del formulario a JSON
         const jsonData = JSON.stringify(formData);
         const devDirectory = `https://${window.location.hostname}`;
-        let urlAjax = devDirectory + "/api/familiars/put";
+        let urlAjax = devDirectory + "/api/fonts_documentals/put/ref_arxivistica";
 
         try {
             // Hacer la solicitud con fetch y await
@@ -314,7 +304,7 @@ if ($modificaBtn === 1) {
         // Convertir los datos del formulario a JSON
         const jsonData = JSON.stringify(formData);
         const devDirectory = `https://${window.location.hostname}`;
-        let urlAjax = devDirectory + "/api/familiars/post";
+        let urlAjax = devDirectory + "/api/fonts_documentals/post/ref_arxivistica";
 
         try {
             // Hacer la solicitud con fetch y await

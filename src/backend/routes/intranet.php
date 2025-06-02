@@ -225,23 +225,19 @@ $routes = [
 
     // GESTIÓ FONTS DOCUMENTALS (bibliografia i arxius)
     // Bibliografia / llibres > fitxa represaliat (llistat de tots els fonts vinculats a una fitxa)
-    APP_INTRANET . $urlIntranet['fonts'] . '/fonts-fitxa/{id}' => array_merge($defaultProtectedConfig, [
-        'view' => BACKEND_URL . $urlIntranetDir['fonts'] . '/fitxa-fonts-documentals.php'
-    ]),
-
-    APP_INTRANET . $urlIntranet['fonts'] . '/fonts-fitxa/afegir-bibliografia/{id}' => array_merge($defaultProtectedConfig, [
+    APP_INTRANET . $urlIntranet['fonts'] . '/fitxa/afegir-bibliografia/{id}' => array_merge($defaultProtectedConfig, [
         'view' => BACKEND_URL . $urlIntranetDir['fonts'] . '/form-fitxa-llibre.php'
     ]),
 
-    APP_INTRANET . $urlIntranet['fonts'] . '/fonts-fitxa/modifica-bibliografia/{id}/{id}' => array_merge($defaultProtectedConfig, [
+    APP_INTRANET . $urlIntranet['fonts'] . '/fitxa/modifica-bibliografia/{id}/{id}' => array_merge($defaultProtectedConfig, [
         'view' => BACKEND_URL . $urlIntranetDir['fonts'] . '/form-fitxa-llibre.php'
     ]),
 
-    APP_INTRANET . $urlIntranet['fonts'] . '/fonts-fitxa/afegir-arxiu/{id}' => array_merge($defaultProtectedConfig, [
+    APP_INTRANET . $urlIntranet['fonts'] . '/fitxa/afegir-arxiu/{id}' => array_merge($defaultProtectedConfig, [
         'view' => BACKEND_URL . $urlIntranetDir['fonts'] . '/form-fitxa-arxiu.php'
     ]),
 
-    APP_INTRANET . $urlIntranet['fonts'] . '/fonts-fitxa/modifica-arxiu/{id}/{id}' => array_merge($defaultProtectedConfig, [
+    APP_INTRANET . $urlIntranet['fonts'] . '/fitxa/modifica-arxiu/{id}/{id}' => array_merge($defaultProtectedConfig, [
         'view' => BACKEND_URL . $urlIntranetDir['fonts'] . '/form-fitxa-arxiu.php'
     ]),
 

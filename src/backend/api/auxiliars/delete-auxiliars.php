@@ -2,7 +2,6 @@
 $id = $routeParams[1];
 $slug = $routeParams[0];
 
-
 // Configuración de cabeceras para aceptar JSON y responder JSON
 header("Content-Type: application/json");
 header("Access-Control-Allow-Methods: DELETE");
