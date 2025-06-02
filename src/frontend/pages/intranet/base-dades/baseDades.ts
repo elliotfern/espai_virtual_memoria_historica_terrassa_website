@@ -24,5 +24,7 @@ export function baseDadesIntranet() {
     cargarTabla(pageType[2], 2);
   } else if (pageType[2] === 'modifica-fitxa') {
     modificaFitxa(Number(pageType[3]));
+  } else if (pageType[2] === 'nova-fitxa') {
+    modificaFitxa();
   }
 }

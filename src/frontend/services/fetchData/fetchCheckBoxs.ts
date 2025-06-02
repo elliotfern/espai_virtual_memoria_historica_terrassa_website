@@ -4,7 +4,7 @@ interface Partido {
   sindicat?: string;
 }
 
-export async function fetchCheckBoxs(elementId: string, apiUrl: string, nodeElement: string, defaultCheckedId?: number): Promise<void> {
+export async function fetchCheckBoxs(apiUrl: string, nodeElement: string, defaultCheckedId?: number, elementId?: string): Promise<void> {
   try {
     const devDirectory = `https://${window.location.hostname}`;
     const urlAjax = `${devDirectory}/api/auxiliars/get/${apiUrl}`;
@@ -12,13 +12,13 @@ export async function fetchCheckBoxs(elementId: string, apiUrl: string, nodeElem
     const response = await fetch(urlAjax);
     const data: Partido[] = await response.json();
 
-    renderCheckboxes(data, elementId, nodeElement, defaultCheckedId);
+    renderCheckboxes(data, nodeElement, defaultCheckedId, elementId);
   } catch (error) {
     console.error(`Error al obtener los datos para ${apiUrl}:`, error);
   }
 }
 
-function renderCheckboxes(data: Partido[], elementId: string, nodeElement: string, defaultCheckedId?: number): void {
+function renderCheckboxes(data: Partido[], nodeElement: string, defaultCheckedId?: number, elementId?: string): void {
   const container = document.getElementById(nodeElement);
   if (!container) {
     console.error(`Contenedor con id '${nodeElement}' no encontrado.`);

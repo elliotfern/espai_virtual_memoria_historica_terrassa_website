@@ -75,6 +75,7 @@ export interface Fitxa {
   activitat_durant_guerra: string;
   autor_id: number;
   completat: number;
+  visibilitat: number;
 }
 
 export interface FitxaJudicial {

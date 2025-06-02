@@ -1,3 +1,5 @@
+import { fetchFitxa } from '../../services/fetchData/fetchFitxa';
+import { enviarDadesFormFitxaRepressaliat } from '../../services/fetchData/updateFormFitxaRepressaliat';
 import { Fitxa } from '../../types/types';
 import { tab1 } from './tab1';
 import { tab2 } from './tab2';
@@ -8,24 +10,14 @@ import { tab6 } from './tab6';
 import { tab7 } from './tab7';
 import { tab8 } from './tab8';
 
-export async function fitxaRepressaliat(idRepressaliat: number): Promise<void> {
-  const devDirectory = `https://${window.location.hostname}`;
-  const urlAjax = `${devDirectory}/api/dades_personals/get/?type=fitxa&id=${idRepressaliat}`;
+export async function fitxaRepressaliat(idRepressaliat?: number): Promise<void> {
+  if (idRepressaliat !== undefined) {
+    const fitxa = (await fetchFitxa(idRepressaliat)) as Fitxa;
 
-  try {
-    const response = await fetch(urlAjax, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error('Error en la solicitud');
+    if (!fitxa) {
+      console.error('Fitxa no trobada per id:', idRepressaliat);
+      return;
     }
-
-    const fitxaData: Fitxa[] = await response.json();
-    const fitxa = fitxaData[0];
 
     // Mostrar nom i cognoms
     const fitxaNomCognoms = document.getElementById('fitxaNomCognoms');
@@ -56,7 +48,45 @@ export async function fitxaRepressaliat(idRepressaliat: number): Promise<void> {
 
     // tab8 - Altres dades
     tab8(fitxa);
-  } catch (error) {
-    console.error('Error al obtener los datos:', error);
+
+    // Escolta event
+    const form = document.getElementById('formFitxaRepressaliat') as HTMLFormElement | null;
+    if (form) {
+      form.addEventListener('submit', (event) => {
+        enviarDadesFormFitxaRepressaliat(event, 'PUT');
+      });
+    }
+  } else {
+    // tab1 - Categories repressió
+    tab1();
+
+    // tab2 - Dades personals
+    tab2();
+
+    // tab3 - Dades familiars
+    tab3();
+
+    // tab4 - Dades acadèmiques i laborals
+    tab4();
+
+    // tab5 - Dades politiques i sindicals
+    tab5();
+
+    // tab6 - Biografia
+    tab6();
+
+    // tab7 - Fonts documentals
+    tab7();
+
+    // tab8 - Altres dades
+    tab8();
+
+    // Escolta event
+    const form = document.getElementById('formFitxaRepressaliat') as HTMLFormElement | null;
+    if (form) {
+      form.addEventListener('submit', (event) => {
+        enviarDadesFormFitxaRepressaliat(event, 'POST');
+      });
+    }
   }
 }

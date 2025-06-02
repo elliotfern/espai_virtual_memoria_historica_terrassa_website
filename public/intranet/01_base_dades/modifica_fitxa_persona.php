@@ -1,7 +1,22 @@
 <?php
 require_once APP_ROOT . '/public/intranet/includes/header.php';
 
-$id = $routeParams[0];
+// Obtener la URL completa
+$url2 = $_SERVER['REQUEST_URI'];
+
+// Dividir la URL en partes usando '/' como delimitador
+$urlParts = explode('/', $url2);
+
+// Obtener la parte deseada (en este caso, la cuarta parte)
+$pagina = $urlParts[3] ?? '';
+
+$modificaBtn = "";
+
+if ($pagina === "modifica-fitxa") {
+  $modificaBtn = 1;
+} else {
+  $modificaBtn = 2;
+}
 ?>
 
 <div class="container" style="margin-bottom:50px;border: 1px solid gray;border-radius: 10px;padding:25px;background-color:#eaeaea">
@@ -16,8 +31,11 @@ $id = $routeParams[0];
     <div id="errText"></div>
   </div>
 
-  <h2 id="fitxaNomCognoms"></h2>
-
+  <?php if ($modificaBtn === 1) { ?>
+    <h2 id="fitxaNomCognoms"></h2>
+  <?php } else { ?>
+    <h2>Creació de fitxa repressaliat</h2>
+  <?php } ?>
 
   <div class="tab">
     <button class="tablinks" data-tab="tab1">Categoria repressió</button>
@@ -30,7 +48,8 @@ $id = $routeParams[0];
     <button class="tablinks" data-tab="tab8">Altres dades</button>
   </div>
 
-  <form id="personalForm">
+  <form id="formFitxaRepressaliat">
+    <input type="hidden" name="id" id="id" value="">
     <div id="tab1" class="tabcontent">
       <div class="row">
         <h3>Categoria repressió</h3>
@@ -132,11 +151,6 @@ $id = $routeParams[0];
               </div>
             </div> <!-- Fi bloc cost huma -->
 
-            <div class="col-md-12" style="margin-top:20px">
-              <h6><strong>Modificació dades repressió:</strong></h6>
-              <div id="btnRepressio" class="d-flex flex-wrap"></div>
-            </div>
-
           </div> <!-- Fi bloc row -->
         </div> <!-- Fi bloc container -->
 
@@ -181,11 +195,17 @@ $id = $routeParams[0];
             <option value="1">Home</option>
             <option value="2">Dona</option>
           </select>
+          <div class="avis-form">
+            * Camp obligatori
+          </div>
         </div>
 
         <div class="col-md-4 mb-4">
           <label for="data_naixement" class="form-label negreta">Data de naixement:</label>
           <input type="text" class="form-control" id="data_naixement" name="data_naixement" value="">
+          <div class="avis-form">
+            * Camp obligatori (si és desconeguda, escriu -)
+          </div>
         </div>
 
         <div class="col-md-4 mb-4">
@@ -257,9 +277,9 @@ $id = $routeParams[0];
     </div> <!-- Fi tab1 -->
 
     <div id="tab3" class="tabcontent">
-      <div class="row">
+      <div class="row g-3">
         <h3>Dades familiars</h3>
-        <div class="col-md-4">
+        <div class="col-md-4 mb-4">
           <label for="estat_civil" class="form-label negreta">Estat civil:</label>
           <select class="form-select" id="estat_civil" name="estat_civil" value="">
           </select>
@@ -267,7 +287,8 @@ $id = $routeParams[0];
 
         <hr style="margin-top:25px">
 
-        <h4>Establir relacions de parantiu</h4>
+        <h4>Establir relacions de parentiu</h4>
+        <div id="avisFamiliars" style="margin-top:5px;margin-bottom:5px;display:none"></div>
         <div id="botonsFamiliars" style="margin-top:5px;margin-bottom:5px"></div>
         <div id="quadreFamiliars"></div>
 
@@ -275,16 +296,16 @@ $id = $routeParams[0];
     </div> <!-- Fi tab2 -->
 
     <div id="tab4" class="tabcontent">
-      <div class="row">
+      <div class="row g-4">
         <h3>Dades laborals i acadèmiques</h3>
 
-        <div class="col-md-4">
+        <div class="col-md-4 mb-4">
           <label for="estudis" class="form-label negreta">Estudis:</label>
           <select class="form-select" id="estudis" value="" name="estudis">
           </select>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-4 mb-4">
           <label for="ofici" class="form-label negreta">Ofici:</label>
           <select class="form-select" id="ofici" value="" name="ofici">
           </select>
@@ -294,12 +315,12 @@ $id = $routeParams[0];
           </div>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-4 mb-4">
           <label for="empresa" class="form-label negreta">Empresa:</label>
           <input type="text" class="form-control" id="empresa" name="empresa" value="">
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-4 mb-4">
           <label for="carrec_empresa" class="form-label negreta">Càrrec empresa:</label>
           <select class="form-select" id="carrec_empresa" value="" name="carrec_empresa">
           </select>
@@ -310,13 +331,13 @@ $id = $routeParams[0];
           </div>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-4 mb-4">
           <label for="sector" class="form-label negreta">Sector econòmic:</label>
           <select class="form-select" id="sector" value="" name="sector">
           </select>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-4 mb-4">
           <label for="sub_sector" class="form-label negreta">Sub-sector econòmic:</label>
           <select class="form-select" id="sub_sector" value="" name="sub_sector">
           </select>
@@ -330,46 +351,39 @@ $id = $routeParams[0];
     </div> <!-- Fi tab3 -->
 
     <div id="tab5" class="tabcontent">
-      <div class="row">
+      <div class="row g-4">
         <h3>Dades polítiques/sindicals</h3>
 
-        <div class="container">
-          <div class="row">
-            <div class="col-md-12" style="margin-top:20px;margin-bottom:20px">
+        <div class="container" style="margin-top:20px;margin-bottom:40px">
+          <div class="row g-4">
+            <div class="col-md-12">
               <h6><strong>Filiació política:</strong></h6>
-
-              <div id="partit_politic" class="d-flex flex-wrap">
-
-              </div>
+              <div id="partit_politic" class="d-flex flex-wrap"> </div>
             </div>
-          </div>
 
-          <div class="mt-2">
-            <a href="<?php echo APP_WEB . APP_INTRANET . $url['auxiliars'] ?>/nou-partit-politic" target="_blank" class="btn btn-secondary btn-sm" id="afegirMunicipi7">Afegir partit polític</a>
-            <button id="refreshButtonPartits" class="btn btn-primary btn-sm">Actualitzar llistat</button>
+            <div class="mt-2">
+              <a href="<?php echo APP_WEB . APP_INTRANET . $url['auxiliars'] ?>/nou-partit-politic" target="_blank" class="btn btn-secondary btn-sm" id="afegirMunicipi7">Afegir partit polític</a>
+              <button id="refreshButtonPartits" class="btn btn-primary btn-sm">Actualitzar llistat</button>
+            </div>
           </div>
         </div>
 
-        <div class="container">
-          <div class="row">
-            <div class="col-md-12" style="margin-top:20px;margin-bottom:20px">
+        <div class="container" style="margin-top:10px;margin-bottom:40px">
+          <div class="row g-4">
+            <div class="col-md-12">
               <h6><strong>Filiació sindical:</strong></h6>
+              <div id="sindicat" class="d-flex flex-wrap"></div>
+            </div>
 
-              <div id="sindicat" class="d-flex flex-wrap">
-
-              </div>
+            <div class="mt-2">
+              <a href="<?php echo APP_WEB . APP_INTRANET . $url['auxiliars'] ?>/nou-sindicat" target="_blank" class="btn btn-secondary btn-sm" id="afegirMunicipi8">Afegir sindicat</a>
+              <button id="refreshButtonSindicats" class="btn btn-primary btn-sm">Actualitzar llistat</button>
             </div>
           </div>
-
-          <div class="mt-2">
-            <a href="<?php echo APP_WEB . APP_INTRANET . $url['auxiliars'] ?>/nou-sindicat" target="_blank" class="btn btn-secondary btn-sm" id="afegirMunicipi8">Afegir sindicat</a>
-            <button id="refreshButtonSindicats" class="btn btn-primary btn-sm">Actualitzar llistat</button>
-          </div>
-
         </div>
 
         <div class="col-md-12">
-          <label for="activitat_durant_guerra" class="form-label negreta">Activitat política/sindical durant la guerra (especificar en format text, opcional):</label>
+          <label for="activitat_durant_guerra" class="form-label negreta">Activitat política/sindical durant la guerra civil i la dictadura (especificar en format text, opcional):</label>
           <textarea class="form-control" id="activitat_durant_guerra" name="activitat_durant_guerra" value="" rows="3"></textarea>
         </div>
 
@@ -380,6 +394,7 @@ $id = $routeParams[0];
       <div class="row">
         <h3>Biografia</h3>
 
+        <div id="avisBiografia" style="margin-top:5px;margin-bottom:5px;display:none"></div>
         <div id="botonsBiografies" style="margin-top:5px;margin-bottom:5px"></div>
         <div id="quadreBiografies"></div>
 
@@ -389,24 +404,22 @@ $id = $routeParams[0];
     <div id="tab7" class="tabcontent">
       <div class="row">
         <h3>Fonts documentals</h3>
+        <div id="avisFonts" style="margin-top:5px;margin-bottom:5px;display:none"></div>
 
-        <h4>Llistat de bibliografia</h4>
+        <div id="quadreFonts1" style="display:none">
+          <div id="botonsFonts1" style="margin-top:5px;margin-bottom:5px"></div>
+          <div id="quadreFontsBibliografia"></div>
+        </div>
 
-        <div id="botonsFonts1" style="margin-top:5px;margin-bottom:5px"></div>
-        <div id="quadreFontsBibliografia"></div>
-
-        <hr style="margin-top:25px">
-
-        <h4>Llistat d'arxius</h4>
-
-        <div id="botonsFonts2" style="margin-top:5px;margin-bottom:5px"></div>
-        <div id="quadreFontsArxius"></div>
-
+        <div id="quadreFonts2" style="display:none">
+          <div id="botonsFonts2" style="margin-top:5px;margin-bottom:5px"></div>
+          <div id="quadreFontsArxius"></div>
+        </div>
       </div>
     </div> <!-- Fi tab6 -->
 
     <div id="tab8" class="tabcontent">
-      <div class="row">
+      <div class="row g-3">
         <h3>Altres dades</h3>
 
         <div class="col-md-12">
@@ -414,18 +427,18 @@ $id = $routeParams[0];
           <textarea class="form-control" id="observacions" name="observacions" value="" rows="3"></textarea>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-4 mb-4">
           <label for="autor" class="form-label negreta">Autor fitxa:</label>
           <select class="form-select" id="autor" value="" name="autor">
           </select>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-4 mb-4">
           <label for="data_creacio" class="form-label negreta">Data de creació de la fitxa:</label>
           <div id="data_creacio"></div>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-4 mb-4">
           <label for="data_actualitzacio" class="form-label negreta">Data d'actualització:</label>
           <div id="data_actualitzacio"></div>
         </div>
@@ -448,10 +461,24 @@ $id = $routeParams[0];
           </div>
         </div>
 
+        <div class="form-group">
+          <label for="visibilitat" class="form-label negreta">Visibilitat de la fitxa:</label><br>
+
+          <!-- Botón de opción "Sí" -->
+          <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" id="visibilitat_si" name="visibilitat" value="2" class="custom-control-input">
+            <label class="custom-control-label" for="visibilitat_si">Visibile</label>
+          </div>
+
+          <!-- Botón de opción "No" -->
+          <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" id="visibilitat_no" name="visibilitat" value="1" class="custom-control-input">
+            <label class="custom-control-label" for="visibilitat_no">No visible</label>
+          </div>
+        </div>
+
       </div>
     </div> <!-- Fi tab7 -->
-
-    <input type="hidden" name="id" id="id" value="<?php echo $id; ?>">
 
     <div class="row espai-superior" style="border-top: 1px solid black;padding-top:25px">
       <div class="col">
@@ -459,120 +486,26 @@ $id = $routeParams[0];
       </div>
 
       <div class="col d-flex justify-content-end align-items-center">
-        <a class="btn btn-primary" role="button" aria-disabled="true" id="btnModificarDadesPersonals" onclick="enviarFormulario(event)">Modificar dades</a>
+
+        <?php
+        if ($modificaBtn === 1) {
+          echo '<button type="submit" class="btn btn-primary" id="btnModificarFitxa">
+          Modificar dades
+        </button>';
+        } else {
+          echo '<button type="submit" class="btn btn-primary" id="btnEnviaFitxa">
+          Envia dades
+        </button>';
+        }
+        ?>
       </div>
     </div>
   </form> <!-- Fi Form -->
 </div>
 
-<script>
-  // Función para manejar el envío del formulario
-  async function enviarFormulario(event) {
-    event.preventDefault(); // Prevenir que el formulario se envíe por defecto
-    // Obtener el formulario
-    const form = document.getElementById("personalForm");
 
-    // Crear un objeto para almacenar los datos del formulario
-    const formData = {};
-    new FormData(form).forEach((value, key) => {
-      formData[key] = value; // Agregar cada campo al objeto formData
-    });
-
-    // Obtener todos los checkboxes seleccionados de la categoría
-    const selectedCategories = [];
-    document.querySelectorAll('input[name="categoria"]:checked').forEach((checkbox) => {
-      selectedCategories.push(checkbox.value.replace('categoria', ''));
-    });
-
-    // Convertir el array de categorías seleccionadas al formato {1,2,3}
-    formData['categoria'] = `{${selectedCategories.join(',')}}`;
-
-    // Obtener todos los checkboxes seleccionados del partit
-    const selectedPartits = [];
-    document.querySelectorAll('input[name="partido"]:checked').forEach((checkbox) => {
-      selectedPartits.push(checkbox.value.replace('partido', ''));
-    });
-
-    // Convertir el array de categorías seleccionadas al formato {1,2,3}
-    formData['filiacio_politica'] = `{${selectedPartits.join(',')}}`;
-
-    // Obtener todos los checkboxes seleccionados del sindicat
-    const selectedSindicats = [];
-    document.querySelectorAll('input[name="sindicat"]:checked').forEach((checkbox) => {
-      selectedSindicats.push(checkbox.value.replace('sindicat', ''));
-    });
-
-    // Convertir el array de categorías seleccionadas al formato {1,2,3}
-    formData['filiacio_sindical'] = `{${selectedSindicats.join(',')}}`;
-
-    // Obtener el user_id de localStorage
-    const userId = localStorage.getItem('user_id');
-    if (userId) {
-      formData['userId'] = userId;
-    }
-
-    // Convertir los datos del formulario a JSON
-    const jsonData = JSON.stringify(formData);
-    const devDirectory = `https://${window.location.hostname}`;
-    let urlAjax = devDirectory + "/api/dades_personals/put";
-
-    try {
-      // Hacer la solicitud con fetch y await
-      const response = await fetch(urlAjax, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json", // Indicar que se envía JSON
-        },
-        body: jsonData, // Enviar los datos en formato JSON
-      });
-
-      // Procesar la respuesta como texto o JSON
-      const data = await response.json();
-
-      // Verificar si la solicitud fue exitosa
-      if (response.ok) {
-        // Verificar si el status es success
-        if (data.status === "success") {
-          // Cambiar el display del div con id 'OkMessage' a 'block'
-          const okMessageDiv = document.getElementById("okMessage");
-          const errMessageDiv = document.getElementById("errMessage");
-          const okTextDiv = document.getElementById("okText");
-
-          if (okMessageDiv && okTextDiv && errMessageDiv) {
-            okMessageDiv.style.display = "block";
-            errMessageDiv.style.display = "none";
-            okTextDiv.textContent = data.message || "Les dades s'han actualitzat correctament!";
-          }
-        } else {
-          // Si el status no es success, manejar el error aquí
-          const errMessageDiv = document.getElementById("errMessage");
-          const okMessageDiv = document.getElementById("okMessage");
-          const errTextDiv = document.getElementById("errText");
-          if (errMessageDiv && errTextDiv && okMessageDiv) {
-            errMessageDiv.style.display = "block";
-            okMessageDiv.style.display = "none";
-            errTextDiv.innerHTML = data.errors.join('<br>') || "S'ha produit un error a la base de dades.";
-          }
-        }
-      } else {
-        // Manejar errores de respuesta del servidor
-        const errMessageDiv = document.getElementById("errMessage");
-        const errTextDiv = document.getElementById("errText");
-        if (errMessageDiv && errTextDiv) {
-          errMessageDiv.style.display = "block";
-          errTextDiv.innerHTML = data.errors.join('<br>') || "S'ha produit un error a la base de dades.";
-        }
-      }
-    } catch (error) {
-      // Manejar errores de red
-      const errMessageDiv = document.getElementById("errMessage");
-      const errTextDiv = document.getElementById("errText");
-      if (errMessageDiv && errTextDiv) {
-        errMessageDiv.style.display = "block";
-        errTextDiv.innerHTML = error.join('<br>') || "S'ha produit un error a la xarxa.";
-      }
-      console.error("Error:", error);
-    }
-
-  }
-</script>
+<div class="container" id="quadreGrupsRepressio" style="display:none">
+  <h2>Modificació dades del grup de repressió</h2>
+  <div class="d-flex flex-wrap" id="btnActualitzarRepressio"></div>
+  <div class="d-flex flex-wrap" id="btnRepressio"></div>
+</div>

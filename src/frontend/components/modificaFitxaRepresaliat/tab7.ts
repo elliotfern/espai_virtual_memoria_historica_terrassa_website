@@ -2,12 +2,35 @@ import { Fitxa } from '../../types/types';
 import { taulaBibliografia } from './taulaBibliografia';
 import { taulaArxius } from './taulaArxius';
 
-export function tab7(fitxa: Fitxa) {
-  crearBotoAfegirBibliografia(fitxa.id);
-  taulaBibliografia(fitxa.id);
+export function tab7(fitxa?: Fitxa) {
+  if (fitxa) {
+    const quadreFonts1 = document.getElementById('quadreFonts1');
+    const quadreFonts2 = document.getElementById('quadreFonts2');
 
-  crearBotoAfegirArxiu(fitxa.id);
-  taulaArxius(fitxa.id);
+    if (quadreFonts1) {
+      quadreFonts1.style.display = 'block';
+      const h4 = document.createElement('h4');
+      h4.textContent = 'Llistat de bibliografia';
+      quadreFonts1.prepend(h4);
+      crearBotoAfegirBibliografia(fitxa.id);
+      taulaBibliografia(fitxa.id);
+    }
+
+    if (quadreFonts2) {
+      quadreFonts2.style.display = 'block';
+      const h4 = document.createElement('h4');
+      h4.textContent = "Llistat d'arxius";
+      quadreFonts2.prepend(h4);
+      crearBotoAfegirArxiu(fitxa.id);
+      taulaArxius(fitxa.id);
+    }
+  } else {
+    const avisFonts = document.getElementById('avisFonts');
+    if (avisFonts) {
+      avisFonts.style.display = 'block';
+      avisFonts.textContent = 'Abans de poder afegir les fonts bibliogràfiques i arxivístiques, primer has de crear la fitxa. Un cop hagis creat la fitxa, modifica-la per continuar amb el procés.';
+    }
+  }
 }
 
 function crearBotoAfegirBibliografia(idPersona: number | string) {

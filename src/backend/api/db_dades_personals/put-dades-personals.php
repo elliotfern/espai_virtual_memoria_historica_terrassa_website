@@ -132,6 +132,7 @@ $activitat_durant_guerra = $data['activitat_durant_guerra'] ?? null;
 $observacions = $data['observacions'] ?? null;
 $autor = $data['autor'] ?? null;
 $completat = $data['completat'] ?? 1;
+$visibilitat = $data['visibilitat'] ?? 1;
 
 $data_actualitzacio = date('Y-m-d');
 $id = $data['id'];
@@ -170,7 +171,8 @@ try {
         observacions = :observacions,
         autor = :autor,
         data_actualitzacio = :data_actualitzacio,
-        completat = :completat
+        completat = :completat,
+        visibilitat = :visibilitat
     WHERE id = :id";
 
     // Preparar la consulta
@@ -204,6 +206,7 @@ try {
     $stmt->bindParam(':autor', $autor, PDO::PARAM_INT);
     $stmt->bindParam(':data_actualitzacio', $data_actualitzacio, PDO::PARAM_STR);
     $stmt->bindParam(':completat', $completat, PDO::PARAM_INT);
+    $stmt->bindParam(':visibilitat', $visibilitat, PDO::PARAM_INT);
     $stmt->bindParam(':id', $id, PDO::PARAM_INT);
 
     // Supón que el ID a modificar lo pasas en el JSON también

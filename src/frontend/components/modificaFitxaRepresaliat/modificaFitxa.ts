@@ -2,9 +2,14 @@ import { mostrarPestanyaPerDefecte } from './pestanyaDefecte';
 import { pestanyesInformacio } from './pestanyesInformacio';
 import { fitxaRepressaliat } from './fitxaRepressaliat';
 
-export function modificaFitxa(id: number) {
+export function modificaFitxa(id?: number) {
   mostrarPestanyaPerDefecte();
-  fitxaRepressaliat(id);
+
+  if (id !== undefined) {
+    fitxaRepressaliat(id);
+  } else {
+    fitxaRepressaliat();
+  }
 
   // Aquí agrega los event listeners para los botones para que llamen a pestanyesInformacio al hacer click
   const tabLinks = document.getElementsByClassName('tablinks');

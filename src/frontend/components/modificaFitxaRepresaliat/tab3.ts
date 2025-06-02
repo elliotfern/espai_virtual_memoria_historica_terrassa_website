@@ -2,11 +2,19 @@ import { Fitxa } from '../../types/types';
 import { auxiliarSelect } from '../../services/fetchData/auxiliarSelect';
 import { taulaFamiliars } from './taulaFamiliars';
 
-export function tab3(fitxa: Fitxa) {
-  auxiliarSelect(fitxa.estat_civil_id, 'estats_civils', 'estat_civil', 'estat_cat', '4');
-  crearBotoAfegirFamiliar(fitxa.id);
+export function tab3(fitxa?: Fitxa) {
+  auxiliarSelect(fitxa?.estat_civil_id ?? 4, 'estats_civils', 'estat_civil', 'estat_cat', '4');
 
-  taulaFamiliars(fitxa.id);
+  if (fitxa) {
+    crearBotoAfegirFamiliar(fitxa.id);
+    taulaFamiliars(fitxa.id);
+  } else {
+    const avisFamiliars = document.getElementById('avisFamiliars');
+    if (avisFamiliars) {
+      avisFamiliars.style.display = 'block';
+      avisFamiliars.textContent = 'Abans de poder afegir els familiars, primer has de crear la fitxa. Un cop hagis creat la fitxa, modifica-la per continuar amb el procés.';
+    }
+  }
 }
 
 function crearBotoAfegirFamiliar(idPersona: number | string) {
