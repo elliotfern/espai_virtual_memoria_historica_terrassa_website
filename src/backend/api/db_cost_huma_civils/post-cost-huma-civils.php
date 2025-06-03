@@ -1,56 +1,114 @@
 <?php
 // Configuración de cabeceras para aceptar JSON y responder JSON
 header("Content-Type: application/json");
-header("Access-Control-Allow-Origin: https://memoriaterrassa.cat");
 header("Access-Control-Allow-Methods: POST");
 
-// Dominio permitido (modifica con tu dominio)
-$allowed_origin = "https://memoriaterrassa.cat";
+// Definir el dominio permitido
+$allowedOrigin = DOMAIN;
 
-// Verificar el encabezado 'Origin'
-if (isset($_SERVER['HTTP_ORIGIN'])) {
-    if ($_SERVER['HTTP_ORIGIN'] !== $allowed_origin) {
-        http_response_code(403); // Respuesta 403 Forbidden
-        echo json_encode(["error" => "Acceso denegado. Origen no permitido."]);
-        exit;
-    }
+// Llamar a la función para verificar el referer
+checkReferer($allowedOrigin);
+
+// Verificar que el método de la solicitud sea GET
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header('HTTP/1.1 405 Method Not Allowed');
+    echo json_encode(['error' => 'Method not allowed']);
+    exit();
 }
 
-// Verificar que el método HTTP sea POST
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    http_response_code(405); // Método no permitido
-    echo json_encode(["error" => "Método no permitido. Se requiere POST."]);
+$userId = getAuthenticatedUserId();
+if (!$userId) {
+    http_response_code(401);
+    echo json_encode(['error' => 'No autenticado']);
     exit;
 }
 
+// inici
 $inputData = file_get_contents('php://input');
 $data = json_decode($inputData, true);
+
+if (!$data['idPersona']) {
+    http_response_code(400); // Bad Request
+    echo json_encode(["status" => 'error', 'message' => 'Falta IDPersona']);
+    exit;
+}
+
+$idPersona = $data['idPersona'];
+
+// Comprobación directa en la misma sección del PUT
+global $conn;
+/** @var PDO $conn */
+$stmtCheck = $conn->prepare("SELECT COUNT(*) FROM db_cost_huma_morts_civils WHERE idPersona = :idPersona");
+$stmtCheck->execute(['idPersona' => $idPersona]);
+$errorDuplicat = $stmtCheck->fetchColumn() > 0;
+
+if ($errorDuplicat) {
+    http_response_code(409); // Conflict
+    echo json_encode(['status' => 'error', 'message' => 'Ja existeix un registre d\'aquest represaliat a la base de dades']);
+    exit;
+}
 
 // Inicializar un array para los errores
 $errors = [];
 
-
 // Validación de los datos recibidos
 
+// Validación de los datos recibidos
+if (empty($data['cirscumstancies_mort'])) {
+    $errors[] = "El camp 'circumstàncies de la mort' és obligatori";
+}
+
+$dataCadaverRaw = $data['data_trobada_cadaver'] ?? '';
+if (!empty($dataCadaverRaw)) {
+    $dataCadaverFormat = convertirDataFormatMysql($dataCadaverRaw, 2);
+
+    if (!$dataCadaverFormat) {
+        $errors[] =  "El format de data no és vàlid. Format esperat: DD/MM/YYYY, amb anys entre 1936 i 1979.";
+    }
+} else {
+    $dataCadaverFormat = null;
+}
+
+$dataDetencioRaw = $data['data_detencio'] ?? '';
+if (!empty($dataDetencioRaw)) {
+    $dataDetencioFormat = convertirDataFormatMysql($dataDetencioRaw, 2);
+
+    if (!$dataDetencioFormat) {
+        $errors[] = "El format de data no és vàlid. Format esperat: DD/MM/YYYY, amb anys entre 1936 i 1979.";
+    }
+} else {
+    $dataDetencioFormat = null;
+}
+
+$dataBombardeigRaw = $data['data_bombardeig'] ?? '';
+if (!empty($dataBombardeigRaw)) {
+    $dataBombardeigFormat = convertirDataFormatMysql($dataBombardeigRaw, 1);
+
+    if (!$dataBombardeigFormat) {
+        $errors[] = "El format de data no és vàlid. Format esperat: DD/MM/YYYY, amb anys entre 1936 i 1939.";
+    }
+} else {
+    $dataBombardeigFormat = null;
+}
 
 // Si hay errores, devolver una respuesta con los errores
 if (!empty($errors)) {
     http_response_code(400); // Bad Request
-    echo json_encode(["errors" => $errors]);
+    header('Content-Type: application/json');
+    echo json_encode(["status" => "error", "message" => $errors]);
     exit;
 }
 
 // Si no hay errores, crear las variables PHP y preparar la consulta PDO
-$idPersona = !empty($data['idPersona']) ? $data['idPersona'] : NULL;
-$cirscumstancies_mort = !empty($data['cirscumstancies_mort']) ? $data['cirscumstancies_mort'] : NULL;
-$data_trobada_cadaver = !empty($data['data_trobada_cadaver']) ? $data['data_trobada_cadaver'] : NULL;
+$cirscumstancies_mort = $data['cirscumstancies_mort'];
 $lloc_trobada_cadaver = !empty($data['lloc_trobada_cadaver']) ? $data['lloc_trobada_cadaver'] : NULL;
-$data_detencio = !empty($data['data_detencio']) ? $data['data_detencio'] : NULL;
 $lloc_detencio = !empty($data['lloc_detencio']) ? $data['lloc_detencio'] : NULL;
-$data_bombardeig = !empty($data['data_bombardeig']) ? $data['data_bombardeig'] : NULL;
 $municipi_bombardeig = !empty($data['municipi_bombardeig']) ? $data['municipi_bombardeig'] : NULL;
 $lloc_bombardeig = !empty($data['lloc_bombardeig']) ? $data['lloc_bombardeig'] : NULL;
 $responsable_bombardeig = !empty($data['responsable_bombardeig']) ? $data['responsable_bombardeig'] : NULL;
+$qui_detencio = !empty($data['qui_detencio']) ? $data['qui_detencio'] : NULL;
+$qui_executa_afusellat = !empty($data['qui_executa_afusellat']) ? $data['qui_executa_afusellat'] : NULL;
+$qui_ordena_afusellat = !empty($data['qui_ordena_afusellat']) ? $data['qui_ordena_afusellat'] : NULL;
 
 // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
 try {
@@ -69,7 +127,11 @@ try {
         data_bombardeig,
         municipi_bombardeig,
         lloc_bombardeig,
-        responsable_bombardeig
+        responsable_bombardeig,
+        qui_detencio,
+        qui_executa_afusellat,
+        qui_ordena_afusellat
+
     ) VALUES (
         :idPersona,
         :cirscumstancies_mort,
@@ -80,7 +142,10 @@ try {
         :data_bombardeig,
         :municipi_bombardeig,
         :lloc_bombardeig,
-        :responsable_bombardeig
+        :responsable_bombardeig,
+        :qui_detencio,
+        :qui_executa_afusellat,
+        :qui_ordena_afusellat
     )";
 
     // Preparar la consulta
@@ -89,14 +154,17 @@ try {
     // Enlazar los parámetros con los valores de las variables PHP
     $stmt->bindParam(':idPersona', $idPersona, PDO::PARAM_INT);
     $stmt->bindParam(':cirscumstancies_mort', $cirscumstancies_mort, PDO::PARAM_INT);
-    $stmt->bindParam(':data_trobada_cadaver', $data_trobada_cadaver, PDO::PARAM_STR);
+    $stmt->bindParam(':data_trobada_cadaver', $dataCadaverFormat, PDO::PARAM_STR);
     $stmt->bindParam(':lloc_trobada_cadaver', $lloc_trobada_cadaver, PDO::PARAM_INT);
-    $stmt->bindParam(':data_detencio', $data_detencio, PDO::PARAM_STR);
+    $stmt->bindParam(':data_detencio', $dataDetencioFormat, PDO::PARAM_STR);
     $stmt->bindParam(':lloc_detencio', $lloc_detencio, PDO::PARAM_INT);
-    $stmt->bindParam(':data_bombardeig', $data_bombardeig, PDO::PARAM_STR);
+    $stmt->bindParam(':data_bombardeig', $dataBombardeigFormat, PDO::PARAM_STR);
     $stmt->bindParam(':municipi_bombardeig', $municipi_bombardeig, PDO::PARAM_INT);
     $stmt->bindParam(':lloc_bombardeig', $lloc_bombardeig, PDO::PARAM_INT);
     $stmt->bindParam(':responsable_bombardeig', $responsable_bombardeig, PDO::PARAM_INT);
+    $stmt->bindParam(':qui_detencio', $qui_detencio, PDO::PARAM_STR);
+    $stmt->bindParam(':qui_executa_afusellat', $qui_executa_afusellat, PDO::PARAM_STR);
+    $stmt->bindParam(':qui_ordena_afusellat', $qui_ordena_afusellat, PDO::PARAM_STR);
 
     // Ejecutar la consulta
     $stmt->execute();
@@ -108,7 +176,7 @@ try {
 
     $dataHoraCanvi = date('Y-m-d H:i:s');
     $tipusOperacio = "Insert Dades cost humà civils";
-    $idUser = $data['userId'] ?? null;
+    $idUser = $userId;
 
     // Crear la consulta SQL
     $sql2 = "INSERT INTO control_registre_canvis (

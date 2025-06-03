@@ -3,6 +3,7 @@ import { getPageType } from '../../../services/url/splitUrl';
 import { cargarTabla } from '../../../components/taulaDades/taulaDades';
 import { botonsEstat } from '../../../components/taulaDades/botonsEstat';
 import { modificaFitxa } from '../../../components/modificaFitxaRepresaliat/modificaFitxa';
+import { formTipusRepressio } from './tipusRepressio/formTipusRepressio';
 
 export function baseDadesIntranet() {
   const url = window.location.href;
@@ -26,5 +27,7 @@ export function baseDadesIntranet() {
     modificaFitxa(Number(pageType[3]));
   } else if (pageType[2] === 'nova-fitxa') {
     modificaFitxa();
+  } else if (pageType[2] === 'modifica-repressio') {
+    formTipusRepressio();
   }
 }

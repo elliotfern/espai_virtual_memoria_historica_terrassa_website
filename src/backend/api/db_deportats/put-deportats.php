@@ -1,47 +1,73 @@
 <?php
 // Configuración de cabeceras para aceptar JSON y responder JSON
 header("Content-Type: application/json");
-header("Access-Control-Allow-Origin: https://memoriaterrassa.cat");
 header("Access-Control-Allow-Methods: PUT");
 
-// Dominio permitido (modifica con tu dominio)
-$allowed_origin = "https://memoriaterrassa.cat";
+// Definir el dominio permitido
+$allowedOrigin = DOMAIN;
 
-// Verificar el encabezado 'Origin'
-if (isset($_SERVER['HTTP_ORIGIN'])) {
-    if ($_SERVER['HTTP_ORIGIN'] !== $allowed_origin) {
-        http_response_code(403); // Respuesta 403 Forbidden
-        echo json_encode(["error" => "Acceso denegado. Origen no permitido."]);
-        exit;
-    }
+// Llamar a la función para verificar el referer
+checkReferer($allowedOrigin);
+
+// Verificar que el método de la solicitud sea GET
+if ($_SERVER['REQUEST_METHOD'] !== 'PUT') {
+    header('HTTP/1.1 405 Method Not Allowed');
+    echo json_encode(['error' => 'Method not allowed']);
+    exit();
 }
 
-// Verificar que el método HTTP sea PUT
-if ($_SERVER['REQUEST_METHOD'] !== 'PUT') {
-    http_response_code(405); // Método no permitido
-    echo json_encode(["error" => "Método no permitido. Se requiere PUT."]);
+$userId = getAuthenticatedUserId();
+if (!$userId) {
+    http_response_code(401);
+    echo json_encode(['error' => 'No autenticado']);
     exit;
 }
 
 $inputData = file_get_contents('php://input');
 $data = json_decode($inputData, true);
 
+
 // Inicializar un array para los errores
 $errors = [];
 
 // Validación de los datos recibidos
+if (!$data['idPersona'] || !$data['id']) {
+    $errors[] = 'Falta ID i IDPersona';
+}
 
+// Validación de los datos recibidos
+if (empty($data['situacio'])) {
+    $errors[] = "El camp 'situacio' és obligatori";
+}
+
+if (empty($data['data_alliberament'])) {
+    $errors[] = "El camp 'data de l'alliberament o mort' és obligatori";
+}
+
+if (empty($data['lloc_mort_alliberament'])) {
+    $errors[] = "El camp 'lloc de la mort o alliberament' obligatori";
+}
+
+$data_alliberamentRaw = $data['data_alliberament'] ?? '';
+if (!empty($data_alliberamentRaw)) {
+    $data_alliberamentFormat = convertirDataFormatMysql($data_alliberamentRaw, 1);
+
+    if (!$data_alliberamentFormat) {
+        $errors[] = "El format de data no és vàlid. Format esperat: DD/MM/YYYY, amb anys entre 1936 i 1939";
+    }
+} else {
+    $data_alliberamentFormat = null;
+}
 
 // Si hay errores, devolver una respuesta con los errores
 if (!empty($errors)) {
     http_response_code(400); // Bad Request
-    echo json_encode(["status" => "error", "message" => "S'han produït errors en la validació", "errors" => $errors]);
+    echo json_encode(["status" => "error", "message" => $errors]);
     exit;
 }
 
 // Si no hay errores, crear las variables PHP y preparar la consulta PDO
 $situacio = !empty($data['situacio']) ? $data['situacio'] : NULL;
-$data_alliberament = !empty($data['data_alliberament']) ? $data['data_alliberament'] : NULL;
 $lloc_mort_alliberament = !empty($data['lloc_mort_alliberament']) ? $data['lloc_mort_alliberament'] : NULL;
 $preso_tipus = !empty($data['preso_tipus']) ? $data['preso_tipus'] : NULL;
 $preso_nom = !empty($data['preso_nom']) ? $data['preso_nom'] : NULL;
@@ -54,7 +80,8 @@ $deportacio_num_matricula = !empty($data['deportacio_num_matricula']) ? $data['d
 $deportacio_nom_subcamp = !empty($data['deportacio_nom_subcamp']) ? $data['deportacio_nom_subcamp'] : NULL;
 $deportacio_data_entrada_subcamp = !empty($data['deportacio_data_entrada_subcamp']) ? $data['deportacio_data_entrada_subcamp'] : NULL;
 $deportacio_nom_matricula_subcamp = !empty($data['deportacio_nom_matricula_subcamp']) ? $data['deportacio_nom_matricula_subcamp'] : NULL;
-$idPersona = !empty($data['idPersona']) ? $data['idPersona'] : NULL;
+$idPersona = $data['idPersona'];
+$id = $data['id'];
 
 // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
 try {
@@ -77,15 +104,16 @@ try {
         deportacio_num_matricula = :deportacio_num_matricula,
         deportacio_nom_subcamp = :deportacio_nom_subcamp,
         deportacio_data_entrada_subcamp = :deportacio_data_entrada_subcamp,
-        deportacio_nom_matricula_subcamp = :deportacio_nom_matricula_subcamp
-    WHERE idPersona = :idPersona";
+        deportacio_nom_matricula_subcamp = :deportacio_nom_matricula_subcamp,
+        idPersona = :idPersona
+    WHERE id = :id";
 
     // Preparar la consulta
     $stmt = $conn->prepare($sql);
 
     // Enlazar los parámetros con los valores de las variables PHP
     $stmt->bindParam(':situacio', $situacio, PDO::PARAM_INT);
-    $stmt->bindParam(':data_alliberament', $data_alliberament, PDO::PARAM_STR);
+    $stmt->bindParam(':data_alliberament', $data_alliberamentFormat, PDO::PARAM_STR);
     $stmt->bindParam(':lloc_mort_alliberament', $lloc_mort_alliberament, PDO::PARAM_INT);
     $stmt->bindParam(':preso_tipus', $preso_tipus, PDO::PARAM_INT);
     $stmt->bindParam(':preso_nom', $preso_nom, PDO::PARAM_STR);
@@ -101,21 +129,21 @@ try {
     $stmt->bindParam(':idPersona', $idPersona, PDO::PARAM_INT);
 
     // Supón que el ID a modificar lo pasas en el JSON también
-    if (isset($data['idPersona'])) {
-        $stmt->bindParam(':idPersona', $data['idPersona'], PDO::PARAM_INT);
+    if (isset($id)) {
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
     }
 
     // Ejecutar la consulta
     $stmt->execute();
 
     // Recuperar el ID del registro creado
-    $lastInsertId = !empty($data['id']) ? $data['id'] : NULL;
+    $lastInsertId = $id;
 
     // Si la inserció té èxit, cal registrar la inserció en la base de control de canvis
 
     $dataHoraCanvi = date('Y-m-d H:i:s');
     $tipusOperacio = "Update Dades deportats";
-    $idUser = $data['userId'] ?? null;
+    $idUser = $userId;
 
     // Crear la consulta SQL
     $sql2 = "INSERT INTO control_registre_canvis (

@@ -184,7 +184,7 @@ if ($slug === "municipis") {
     $result = getData($query);
     echo json_encode($result);
 
-    // GET : Causa defuncio
+    // GET : Causa defuncio - tots els casos (per formulari fitxa dades personals)
     // URL: /api/auxiliars/get/causa_defuncio
 } elseif ($slug === "causa_defuncio") {
     $query = "SELECT c.id, c.causa_defuncio_ca
@@ -192,6 +192,21 @@ if ($slug === "municipis") {
               ORDER BY c.causa_defuncio_ca ASC";
 
     $result = getData($query);
+    echo json_encode($result);
+
+    // GET : Causa defuncio - per formulari morts civils
+    // tipus 1 > morts militars / tipus 2 > morts civils / tipus 3 > tots
+    // URL: /api/auxiliars/get/causa_defuncio_repressio?tipus=1
+} elseif ($slug === "causa_defuncio_repressio") {
+
+    $tipus = $_GET['tipus'] ?? 1;
+    $query = "SELECT c.id, c.causa_defuncio_ca
+              FROM aux_causa_defuncio AS c
+             WHERE c.cat = :cat
+             OR c.cat = 3
+             ORDER BY c.causa_defuncio_ca ASC";
+
+    $result = getData($query, ['cat' => $tipus], false);
     echo json_encode($result);
 
     // GET : Autors fitxes

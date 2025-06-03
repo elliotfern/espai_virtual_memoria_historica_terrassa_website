@@ -1,4 +1,4 @@
-export async function transmissioDadesDB(event: Event, tipus: string, formId: string, urlAjax: string): Promise<void> {
+export async function transmissioDadesDB(event: Event, tipus: string, formId: string, urlAjax: string, netejaForm?: boolean): Promise<void> {
   event.preventDefault();
 
   const form = document.getElementById(formId) as HTMLFormElement;
@@ -30,43 +30,61 @@ export async function transmissioDadesDB(event: Event, tipus: string, formId: st
       body: jsonData,
     });
 
-    if (!response.ok) {
-      console.error('Error en la respuesta de la API:', response);
-      throw new Error('Error en la sol·licitud AJAX');
-    }
+    const okMessageDiv = document.getElementById('okMessage');
+    const okTextDiv = document.getElementById('okText');
+    const errMessageDiv = document.getElementById('errMessage');
+    const errTextDiv = document.getElementById('errText');
 
-    const data = await response.json();
+    const responseData = await response.json();
 
-    const missatgeOk = document.getElementById('okMessage');
-    const missatgeErr = document.getElementById('errMessage');
-
-    if (data.status === 'success') {
-      if (missatgeOk && missatgeErr) {
-        missatgeOk.style.display = 'block';
-        missatgeErr.style.display = 'none';
-        missatgeOk.textContent = "L'operació s'ha realizat correctament a la base de dades.";
-
-        limpiarFormulario(formId);
+    if (response.ok && responseData.status === 'success') {
+      if (okMessageDiv && okTextDiv && errMessageDiv) {
+        okMessageDiv.style.display = 'block';
+        okTextDiv.textContent = responseData.message || "Les dades s'han desat correctament!";
+        errMessageDiv.style.display = 'none';
+        okMessageDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
         setTimeout(() => {
-          missatgeOk.style.display = 'none';
-        }, 5000);
+          okMessageDiv.style.display = 'none';
+        }, 15000);
+
+        if (netejaForm) {
+          limpiarFormulario(formId);
+        }
       }
     } else {
-      if (missatgeOk && missatgeErr) {
-        missatgeErr.style.display = 'block';
-        missatgeOk.style.display = 'none';
-        missatgeErr.textContent = "L'operació no s'ha pogut realizar correctament a la base de dades.";
+      if (errMessageDiv && errTextDiv) {
+        errMessageDiv.style.display = 'block';
+        errMessageDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+        // Manejo robusto del mensaje de error
+        if (Array.isArray(responseData.message)) {
+          // Mostrar como lista HTML si hay múltiples errores
+          errTextDiv.innerHTML = `<ul>${responseData.message.map((msg: string) => `<li>${msg}</li>`).join('')}</ul>`;
+        } else if (typeof responseData.message === 'string') {
+          errTextDiv.textContent = responseData.message;
+        } else {
+          errTextDiv.textContent = "S'ha produït un error a la base de dades.";
+        }
+
+        setTimeout(() => {
+          errMessageDiv.style.display = 'none';
+        }, 15000);
       }
     }
   } catch (error) {
-    const missatgeOk = document.getElementById('okMessage');
-    const missatgeErr = document.getElementById('errMessage');
-    if (missatgeOk && missatgeErr) {
-      console.error('Error:', error);
-      missatgeErr.style.display = 'block';
-      missatgeOk.style.display = 'none';
-      missatgeErr.textContent = 'Error: ';
+    console.error('Error:', error);
+    const errMessageDiv = document.getElementById('errMessage');
+    const errTextDiv = document.getElementById('errText');
+
+    if (errMessageDiv && errTextDiv) {
+      errMessageDiv.style.display = 'block';
+      errTextDiv.textContent = 'Error de xarxa o resposta invàlida del servidor.';
+      errMessageDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+      setTimeout(() => {
+        errMessageDiv.style.display = 'none';
+      }, 15000);
     }
   }
 }
@@ -83,14 +101,12 @@ function limpiarFormulario(formId: string) {
       input.selectedIndex = 0; // Limpiar el select (poner el primer valor por defecto)
     }
     if (input instanceof HTMLElement && input.tagName === 'TRIX-EDITOR') {
-      // Limpiar el editor Trix (Type Assertion)
       const trixEditor = input as HTMLTrixEditorElement;
       trixEditor.editor.loadHTML(''); // Limpiar el contenido del editor Trix
     }
   });
 }
 
-// Declara el tipo extendido para TrixEditor
 interface HTMLTrixEditorElement extends HTMLElement {
   editor: {
     loadHTML: (html: string) => void;

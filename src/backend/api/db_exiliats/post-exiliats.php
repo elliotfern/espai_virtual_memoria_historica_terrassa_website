@@ -1,30 +1,52 @@
 <?php
+
 // Configuración de cabeceras para aceptar JSON y responder JSON
 header("Content-Type: application/json");
-header("Access-Control-Allow-Origin: https://memoriaterrassa.cat");
 header("Access-Control-Allow-Methods: POST");
 
-// Dominio permitido (modifica con tu dominio)
-$allowed_origin = "https://memoriaterrassa.cat";
+// Definir el dominio permitido
+$allowedOrigin = DOMAIN;
 
-// Verificar el encabezado 'Origin'
-if (isset($_SERVER['HTTP_ORIGIN'])) {
-    if ($_SERVER['HTTP_ORIGIN'] !== $allowed_origin) {
-        http_response_code(403); // Respuesta 403 Forbidden
-        echo json_encode(["error" => "Acceso denegado. Origen no permitido."]);
-        exit;
-    }
+// Llamar a la función para verificar el referer
+checkReferer($allowedOrigin);
+
+// Verificar que el método de la solicitud sea GET
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header('HTTP/1.1 405 Method Not Allowed');
+    echo json_encode(['error' => 'Method not allowed']);
+    exit();
 }
 
-// Verificar que el método HTTP sea PUT
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    http_response_code(405); // Método no permitido
-    echo json_encode(["error" => "Método no permitido. Se requiere PUT."]);
+$userId = getAuthenticatedUserId();
+if (!$userId) {
+    http_response_code(401);
+    echo json_encode(['error' => 'No autenticado']);
     exit;
 }
 
 $inputData = file_get_contents('php://input');
 $data = json_decode($inputData, true);
+
+if (!$data['idPersona']) {
+    http_response_code(400); // Bad Request
+    echo json_encode(["status" => 'error', 'message' => 'Falta IDPersona']);
+    exit;
+}
+
+$idPersona = $data['idPersona'];
+
+// Comprobación directa en la misma sección del PUT
+global $conn;
+/** @var PDO $conn */
+$stmtCheck = $conn->prepare("SELECT COUNT(*) FROM db_exiliats WHERE idPersona = :idPersona");
+$stmtCheck->execute(['idPersona' => $idPersona]);
+$errorDuplicat = $stmtCheck->fetchColumn() > 0;
+
+if ($errorDuplicat) {
+    http_response_code(409); // Conflict
+    echo json_encode(['status' => 'error', 'message' => 'Ja existeix un registre d\'aquest represaliat a la base de dades']);
+    exit;
+}
 
 // Inicializar un array para los errores
 $errors = [];
@@ -56,7 +78,6 @@ $dades_resistencia = !empty($data['dades_resistencia']) ? $data['dades_resistenc
 $activitat_politica_exili = !empty($data['activitat_politica_exili']) ? $data['activitat_politica_exili'] : NULL;
 $activitat_sindical_exili = !empty($data['activitat_sindical_exili']) ? $data['activitat_sindical_exili'] : NULL;
 $situacio_legal_espanya = !empty($data['situacio_legal_espanya']) ? $data['situacio_legal_espanya'] : NULL;
-$idPersona = !empty($data['idPersona']) ? $data['idPersona'] : NULL;
 
 // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
 try {
@@ -112,7 +133,7 @@ try {
 
     $dataHoraCanvi = date('Y-m-d H:i:s');
     $tipusOperacio = "Insert Dades exiliats";
-    $idUser = $data['userId'] ?? null;
+    $idUser = $userId;
 
     // Crear la consulta SQL
     $sql2 = "INSERT INTO control_registre_canvis (

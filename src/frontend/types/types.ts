@@ -1,4 +1,10 @@
 // Definimos la interfaz Fitxa para tipar los datos devueltos por la API
+export interface ApiResponse<T> {
+  status: 'success' | 'error';
+  data?: T;
+  message?: string;
+}
+
 export interface FitxaFamiliars {
   cognomFamiliar1?: string;
   cognomFamiliar2?: string;

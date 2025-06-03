@@ -1,25 +1,26 @@
 <?php
+
 // Configuración de cabeceras para aceptar JSON y responder JSON
 header("Content-Type: application/json");
-header("Access-Control-Allow-Origin: https://memoriaterrassa.cat");
 header("Access-Control-Allow-Methods: PUT");
 
-// Dominio permitido (modifica con tu dominio)
-$allowed_origin = "https://memoriaterrassa.cat";
+// Definir el dominio permitido
+$allowedOrigin = DOMAIN;
 
-// Verificar el encabezado 'Origin'
-if (isset($_SERVER['HTTP_ORIGIN'])) {
-    if ($_SERVER['HTTP_ORIGIN'] !== $allowed_origin) {
-        http_response_code(403); // Respuesta 403 Forbidden
-        echo json_encode(["error" => "Acceso denegado. Origen no permitido."]);
-        exit;
-    }
+// Llamar a la función para verificar el referer
+checkReferer($allowedOrigin);
+
+// Verificar que el método de la solicitud sea GET
+if ($_SERVER['REQUEST_METHOD'] !== 'PUT') {
+    header('HTTP/1.1 405 Method Not Allowed');
+    echo json_encode(['error' => 'Method not allowed']);
+    exit();
 }
 
-// Verificar que el método HTTP sea PUT
-if ($_SERVER['REQUEST_METHOD'] !== 'PUT') {
-    http_response_code(405); // Método no permitido
-    echo json_encode(["error" => "Método no permitido. Se requiere PUT."]);
+$userId = getAuthenticatedUserId();
+if (!$userId) {
+    http_response_code(401);
+    echo json_encode(['error' => 'No autenticado']);
     exit;
 }
 
@@ -30,12 +31,15 @@ $data = json_decode($inputData, true);
 $errors = [];
 
 // Validación de los datos recibidos
-
+if (!$data['idPersona'] || !$data['id']) {
+    $errors[] = 'Falta ID i IDPersona';
+}
 
 // Si hay errores, devolver una respuesta con los errores
 if (!empty($errors)) {
     http_response_code(400); // Bad Request
-    echo json_encode(["status" => "error", "message" => "S'han produït errors en la validació", "errors" => $errors]);
+    header('Content-Type: application/json');
+    echo json_encode(["status" => "error", "message" => $errors]);
     exit;
 }
 
@@ -57,7 +61,8 @@ $dades_resistencia = !empty($data['dades_resistencia']) ? $data['dades_resistenc
 $activitat_politica_exili = !empty($data['activitat_politica_exili']) ? $data['activitat_politica_exili'] : NULL;
 $activitat_sindical_exili = !empty($data['activitat_sindical_exili']) ? $data['activitat_sindical_exili'] : NULL;
 $situacio_legal_espanya = !empty($data['situacio_legal_espanya']) ? $data['situacio_legal_espanya'] : NULL;
-$idPersona = !empty($data['idPersona']) ? $data['idPersona'] : NULL;
+$idPersona = $data['idPersona'];
+$id = $data['id'];
 
 // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
 try {
@@ -83,8 +88,9 @@ try {
             dades_resistencia = :dades_resistencia,
             activitat_politica_exili = :activitat_politica_exili,
             activitat_sindical_exili = :activitat_sindical_exili,
-            situacio_legal_espanya = :situacio_legal_espanya
-        WHERE idPersona = :idPersona";
+            situacio_legal_espanya = :situacio_legal_espanya,
+            idPersona = :idPersona
+        WHERE id = :id";
 
     // Preparar la consulta
     $stmt = $conn->prepare($sql);
@@ -110,8 +116,8 @@ try {
     $stmt->bindParam(':idPersona', $idPersona, PDO::PARAM_INT);
 
     // Supón que el ID a modificar lo pasas en el JSON también
-    if (isset($data['idPersona'])) {
-        $stmt->bindParam(':idPersona', $data['idPersona'], PDO::PARAM_INT);
+    if (isset($id)) {
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
     }
 
     // Ejecutar la consulta
@@ -124,7 +130,7 @@ try {
 
     $dataHoraCanvi = date('Y-m-d H:i:s');
     $tipusOperacio = "Update Dades exiliats";
-    $idUser = $data['userId'] ?? null;
+    $idUser = $userId;
 
     // Crear la consulta SQL
     $sql2 = "INSERT INTO control_registre_canvis (
