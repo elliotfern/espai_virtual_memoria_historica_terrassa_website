@@ -1,5 +1,6 @@
 import { Fitxa } from '../../types/types';
 import { auxiliarSelect } from '../../services/fetchData/auxiliarSelect';
+import { formatDatesForm } from '../../services/formatDates/dates';
 
 export async function tab2(fitxa?: Fitxa) {
   // Asignar valores a los campos del formulario
@@ -18,10 +19,14 @@ export async function tab2(fitxa?: Fitxa) {
   }
 
   const dataNaixementInput = document.getElementById('data_naixement') as HTMLInputElement;
-  if (dataNaixementInput) dataNaixementInput.value = fitxa?.data_naixement ?? '';
-
   const dataDefuncioInput = document.getElementById('data_defuncio') as HTMLInputElement;
-  if (dataDefuncioInput) dataDefuncioInput.value = fitxa?.data_defuncio ?? '';
+  if (fitxa && dataNaixementInput && dataDefuncioInput) {
+    dataNaixementInput.value = formatDatesForm(fitxa.data_naixement) ?? '';
+    dataDefuncioInput.value = formatDatesForm(fitxa.data_defuncio) ?? '';
+  } else {
+    dataNaixementInput.value = '';
+    dataDefuncioInput.value = '';
+  }
 
   await auxiliarSelect(fitxa?.ciutat_naixement_id ?? 252, 'municipis', 'municipi_naixement', 'ciutat', '252');
   await auxiliarSelect(fitxa?.ciutat_defuncio_id ?? 252, 'municipis', 'municipi_defuncio', 'ciutat', '252');

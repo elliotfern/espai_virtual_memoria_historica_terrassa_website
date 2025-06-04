@@ -42,9 +42,8 @@ $errors = [];
 
 // Validación de los datos recibidos
 if (empty($data['biografiaCa'])) {
-    $errors[] = 'El biografia any és obligatori.';
+    $errors[] = 'El camp biografia és obligatori.';
 }
-
 
 // Si hay errores, devolver una respuesta con los errores
 if (!empty($errors)) {
@@ -55,10 +54,11 @@ if (!empty($errors)) {
 
 // Si no hay errores, crear las variables PHP y preparar la consulta PDO
 
-$biografiaCa = !empty($data['biografiaCa']) ? $data['biografiaCa'] : NULL;
-$biografiaEs = !empty($data['biografiaEs']) ? $data['biografiaEs'] : NULL;
-$biografiaEn = !empty($data['biografiaEn']) ? $data['biografiaEn'] : NULL;
-$idRepresaliat = !empty($data['idRepresaliat']) ? $data['idRepresaliat'] : NULL;
+$biografiaCa = !empty($data['biografiaCa']) ? sanitizeHtml($data['biografiaCa']) : NULL;
+$biografiaEs = !empty($data['biografiaEs']) ? sanitizeHtml($data['biografiaEs']) : NULL;
+$biografiaEn = !empty($data['biografiaEn']) ? sanitizeHtml($data['biografiaEn']) : NULL;
+
+$idRepresaliat = $data['idRepresaliat'];
 
 // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
 try {

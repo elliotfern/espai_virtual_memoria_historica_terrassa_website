@@ -100,10 +100,13 @@ if ($modificaBtn === 1) {
 
                 <input type="hidden" name="id" id="id" value="<?php echo $id_old; ?>">
 
-                <div class="col-md-4">
+                <div class="col-md-4 mb-4">
                     <label for="llibre" class="form-label negreta">Llibre:</label>
                     <select class="form-select" name="llibre" id="llibre" value="">
                     </select>
+                    <div class="avis-form">
+                        * Camp obligatori
+                    </div>
 
                     <div class="mt-2">
                         <a href="https://memoriaterrassa.cat/gestio/fonts-documentals/nou-llibre" target="_blank" class="btn btn-secondary btn-sm" id="afegirLlibre1">Afegir llibre</a>
@@ -111,16 +114,19 @@ if ($modificaBtn === 1) {
                     </div>
                 </div>
 
-                <div class="col-md-4">
+                <div class="col-md-4 mb-4">
                     <label for="pagina" class="form-label negreta">Pàgines (opcional):</label>
                     <input type="text" class="form-control" name="pagina" id="pagina" value="<?php echo $pagina_old; ?>">
                 </div>
 
 
-                <div class="col-md-4">
+                <div class="col-md-4 mb-4">
                     <label for="idRepresaliat" class="form-label negreta">Represaliat:</label>
                     <select class="form-select" name="idRepresaliat" id="idRepresaliat" value="">
                     </select>
+                    <div class="avis-form">
+                        * Camp obligatori . Ja el tindreu seleccionat automàticament, no ho canvieu.
+                    </div>
                 </div>
 
                 <div class="row espai-superior" style="border-top: 1px solid black;padding-top:25px">

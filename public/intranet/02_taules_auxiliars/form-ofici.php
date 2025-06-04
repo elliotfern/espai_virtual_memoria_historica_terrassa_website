@@ -1,88 +1,45 @@
 <?php
 require_once APP_ROOT . '/public/intranet/includes/header.php';
 
+$id_old = "";
 $ofici_cat_old = "";
 $btnModificar = 2;
 
-// Verificar si la ID existe en la base de datos
-$query = "SELECT 
-f.id, 
-f.condicio,
-f.bandol,
-f.any_lleva,
-f.unitat_inicial,
-f.cos,
-f.unitat_final ,
-f.graduacio_final,
-f.periple_militar,
-f.circumstancia_mort,
-f.desaparegut_data,
-f.desaparegut_lloc,
-f.desaparegut_data_aparicio,
-f.desaparegut_lloc_aparicio,
-d.nom,
-d.cognom1,
-d.cognom2
-FROM db_cost_huma_morts_front AS f
-LEFT JOIN db_dades_personals AS d ON f.idPersona = d.id
-WHERE f.idPersona = :idPersona";
-$stmt = $conn->prepare($query);
-$stmt->bindParam(':idPersona', $idPersona, PDO::PARAM_INT);
-$stmt->execute();
-
-
-if ($stmt->rowCount() > 0) {
-    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        // Acceder a las variables de la consulta
-        $condicio_id = $row['condicio'] ?? "";
-        $bandol_id = $row['bandol'] ?? "";
-        $any_lleva = $row['any_lleva'] ?? "";
-        $unitat_inicial = $row['unitat_inicial'] ?? "";
-        $cos_id = $row['cos'] ?? "";
-        $unitat_final = $row['unitat_final'] ?? "";
-        $graduacio_final = $row['graduacio_final'] ?? "";
-        $periple_militar = $row['periple_militar'] ?? "";
-        $circumstancia_mort_id = $row['circumstancia_mort'] ?? "";
-        $desaparegut_data = $row['desaparegut_data'] ?? "";
-        $desaparegut_lloc_id = $row['desaparegut_lloc'] ?? "";
-        $desaparegut_data_aparicio = $row['desaparegut_data_aparicio'] ?? "";
-        $desaparegut_lloc_aparicio_id = $row['desaparegut_lloc_aparicio'] ?? "";
-        $nom = $row['nom'] ?? "";
-        $cognom1 = $row['cognom1'] ?? "";
-        $cognom2 = $row['cognom2'] ?? "";
-
-        // Crear el botón o usar los datos (TIPO PUT)
-        $btnModificar = 1;
-    }
-} else {
-    // La ID no existe, realizamos un POST (INSERT)
-    $btnModificar = 2;
-
-    $query = "SELECT 
-    d.nom,
-    d.cognom1,
-    d.cognom2
-    FROM db_dades_personals AS d
-    WHERE d.id = :id";
+if ($btnModificar === 1) {
+    $btnModificar = 1;
+    $query = "SELECT id, ofici_cat, ofici_es, ofici_en
+FROM aux_oficis";
     $stmt = $conn->prepare($query);
-    $stmt->bindParam(':id', $idPersona, PDO::PARAM_INT);
     $stmt->execute();
 
     if ($stmt->rowCount() > 0) {
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            // Acceder a las variables de la consulta
+            $condicio_id = $row['condicio'] ?? "";
+            $bandol_id = $row['bandol'] ?? "";
+            $any_lleva = $row['any_lleva'] ?? "";
+            $unitat_inicial = $row['unitat_inicial'] ?? "";
+            $cos_id = $row['cos'] ?? "";
+            $unitat_final = $row['unitat_final'] ?? "";
+            $graduacio_final = $row['graduacio_final'] ?? "";
+            $periple_militar = $row['periple_militar'] ?? "";
+            $circumstancia_mort_id = $row['circumstancia_mort'] ?? "";
+            $desaparegut_data = $row['desaparegut_data'] ?? "";
+            $desaparegut_lloc_id = $row['desaparegut_lloc'] ?? "";
+            $desaparegut_data_aparicio = $row['desaparegut_data_aparicio'] ?? "";
+            $desaparegut_lloc_aparicio_id = $row['desaparegut_lloc_aparicio'] ?? "";
             $nom = $row['nom'] ?? "";
             $cognom1 = $row['cognom1'] ?? "";
             $cognom2 = $row['cognom2'] ?? "";
         }
     }
 }
-
 ?>
 
 <div class="container" style="margin-bottom:50px;border: 1px solid gray;border-radius: 10px;padding:25px;background-color:#eaeaea">
     <form id="oficiForm">
         <div class="container">
-            <div class="row">
+            <div class="row g-3">
                 <h2>Nou Ofici</h2>
 
                 <div class="alert alert-success" role="alert" id="okMessage" style="display:none">
@@ -95,9 +52,12 @@ if ($stmt->rowCount() > 0) {
                     <div id="errText"></div>
                 </div>
 
-                <div class="col-md-4">
+                <div class="col-md-4 mb-4">
                     <label for="ofici_cat" class="form-label negreta">Nom ofici (català):</label>
                     <input type="text" class="form-control" id="ofici_cat" name="ofici_cat" value="<?php echo $ofici_cat_old; ?>">
+                    <div class="avis-form">
+                        * Camp obligatori
+                    </div>
                 </div>
 
                 <div class="row espai-superior" style="border-top: 1px solid black;padding-top:25px">

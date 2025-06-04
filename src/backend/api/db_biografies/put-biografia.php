@@ -55,11 +55,12 @@ if (!empty($errors)) {
 
 // Si no hay errores, crear las variables PHP y preparar la consulta PDO
 
-$biografiaCa = !empty($data['biografiaCa']) ? $data['biografiaCa'] : NULL;
-$biografiaEs = !empty($data['biografiaEs']) ? $data['biografiaEs'] : NULL;
-$biografiaEn = !empty($data['biografiaEn']) ? $data['biografiaEn'] : NULL;
-$idRepresaliat = !empty($data['idRepresaliat']) ? $data['idRepresaliat'] : NULL;
-$id = !empty($data['id']) ? $data['id'] : NULL;
+$biografiaCa = !empty($data['biografiaCa']) ? sanitizeHtml($data['biografiaCa']) : NULL;
+$biografiaEs = !empty($data['biografiaEs']) ? sanitizeHtml($data['biografiaEs']) : NULL;
+$biografiaEn = !empty($data['biografiaEn']) ? sanitizeHtml($data['biografiaEn']) : NULL;
+
+$idRepresaliat =  $data['idRepresaliat'];
+$id = $data['id'];
 
 // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
 try {
@@ -71,7 +72,8 @@ try {
     $sql = "UPDATE db_biografies SET 
         biografiaCa = :biografiaCa,
         biografiaEs = :biografiaEs,
-        biografiaEn = :biografiaEn
+        biografiaEn = :biografiaEn,
+        idRepresaliat = :idRepresaliat
         WHERE id = :id";
 
     // Preparar la consulta
@@ -81,6 +83,7 @@ try {
     $stmt->bindParam(':biografiaCa', $biografiaCa, PDO::PARAM_STR);
     $stmt->bindParam(':biografiaEs', $biografiaEs, PDO::PARAM_STR);
     $stmt->bindParam(':biografiaEn', $biografiaEn, PDO::PARAM_STR);
+    $stmt->bindParam(':idRepresaliat', $idRepresaliat, PDO::PARAM_INT);
     $stmt->bindParam(':id', $id, PDO::PARAM_INT);
 
     // Ejecutar la consulta

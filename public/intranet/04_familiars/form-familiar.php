@@ -106,14 +106,20 @@ if ($modificaBtn === 1) {
 
                 <input type="hidden" name="id" id="id" value="<?php echo $id_old; ?>">
 
-                <div class="col-md-4">
+                <div class="col-md-4 mb-4">
                     <label for="nom" class="form-label negreta">Nom:</label>
                     <input type="text" class="form-control" id="nom" name="nom" value="<?php echo $nom_old; ?>">
+                    <div class="avis-form">
+                        * Camp obligatori
+                    </div>
                 </div>
 
-                <div class="col-md-4">
+                <div class="col-md-4 mb-4">
                     <label for="cognom1" class="form-label negreta">Primer cognom:</label>
                     <input type="text" class="form-control" id="cognom1" name="cognom1" value="<?php echo $cognom1_old; ?>">
+                    <div class="avis-form">
+                        * Camp obligatori
+                    </div>
                 </div>
 
                 <div class="col-md-4">
@@ -121,19 +127,19 @@ if ($modificaBtn === 1) {
                     <input type="text" class="form-control" id="cognom2" name="cognom2" value="<?php echo $cognom2_old; ?>">
                 </div>
 
-                <div class="col-md-4">
-                    <label for="anyNaixement" class="form-label negreta">Any de naixement:</label>
+                <div class="col-md-4 mb-4"> <label for="anyNaixement" class="form-label negreta">Any de naixement:</label>
                     <input type="text" class="form-control" id="anyNaixement" name="anyNaixement" value="<?php echo $anyNaixement_old; ?>">
                 </div>
 
-                <div class="col-md-4">
-                    <label for="relacio_parentiu" class="form-label negreta">Relació de parentiu:</label>
+                <div class="col-md-4 mb-4"> <label for="relacio_parentiu" class="form-label negreta">Relació de parentiu:</label>
                     <select class="form-select" name="relacio_parentiu" id="relacio_parentiu" value="">
                     </select>
+                    <div class="avis-form">
+                        * Camp obligatori
+                    </div>
                 </div>
 
-                <div class="col-md-4">
-                    <label for="idParent" class="form-label negreta">Familiar represaliat:</label>
+                <div class="col-md-4 mb-4"> <label for="idParent" class="form-label negreta">Familiar represaliat:</label>
                     <select class="form-select" name="idParent" id="idParent" value="">
                     </select>
                 </div>

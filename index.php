@@ -10,6 +10,7 @@ require_once __DIR__ . '/src/backend/config/funcions.php';
 require_once __DIR__ . '/src/backend/config/config.php';
 require_once __DIR__ . '/src/backend/utils/verificacioSessio.php';
 require_once __DIR__ . '/src/backend/utils/convertirDates.php';
+require_once __DIR__ . '/src/backend/utils/sanitizerHtml.php';
 require_once __DIR__ . '/src/backend/routes/routes.php';
 
 // Obtener la ruta solicitada

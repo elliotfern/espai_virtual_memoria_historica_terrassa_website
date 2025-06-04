@@ -12,6 +12,7 @@ $categoriaId = $urlParts[3] ?? '';
 
 $id_old = "";
 $comarca_old = "";
+$comarca_ca_old = "";
 $modificaBtn = "";
 
 if ($categoriaId === "modifica-comarca") {
@@ -19,7 +20,7 @@ if ($categoriaId === "modifica-comarca") {
     $modificaBtn = 1;
 
     // Verificar si la ID existe en la base de datos
-    $query = "SELECT c.id, c.comarca
+    $query = "SELECT c.id, c.comarca, comarca_ca
     FROM aux_dades_municipis_comarca AS c
     WHERE c.id = :id";
     $stmt = $conn->prepare($query);
@@ -29,6 +30,7 @@ if ($categoriaId === "modifica-comarca") {
     if ($stmt->rowCount() > 0) {
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $comarca_old = $row['comarca'] ?? "";
+            $comarca_ca_old = $row['comarca_ca'] ?? "";
             $id_old = $row['id'] ?? "";
         }
     }
@@ -60,9 +62,31 @@ if ($categoriaId === "modifica-comarca") {
 
                 <input type="hidden" id="id" name="id" value="<?php echo $id_old; ?>">
 
-                <div class="col-md-4">
-                    <label for="comarca" class="form-label negreta">Nom comarca (en el cas francès, comarca històrica):</label>
+                <div class="alert alert-info">
+                    <h5>Sobre l'ús general de topònims en català</h5>
+                    <ul>
+
+                        <li>1. Els topònims de Catalunya s'utilitzen en la seva forma oficial i, sempre que sigui possible, en la seva forma íntegra.</li>
+                        <li>2. Els topònims d'altres territoris de l'àrea lingüística catalana s'utilitzen en la forma en català.</li>
+                        <li>3. Els exotopònims, és a dir, els topònims de fora de l'àrea lingüística catalana s'utilitzen en català quan hi ha una forma establerta amb ús tradicional, sens perjudici que hi pugui figurar també la denominació en altres llengües del territori corresponent.</li>
+                        <li>4. Els topònims de l'àrea lingüística occitana de fora de Catalunya s'utilitzen en la forma tradicional en català o en occità, tret de l'Aran, on s'utilitza la forma tradicional en occità, i sens perjudici que hi pugui figurar també la denominació en altres llengües del territori corresponent.</li>
+                    </ul>
+                </div>
+
+                <div class="col-md-4 mb-4">
+                    <label for="comarca" class="form-label negreta">Nom comarca (forma oficial):</label>
                     <input type="text" class="form-control" id="comarca" name="comarca" value="<?php echo $comarca_old; ?>">
+                    <div class="avis-form">
+                        * Camp obligatori
+                    </div>
+                </div>
+
+                <div class="col-md-4 mb-4">
+                    <label for="comarca" class="form-label negreta">Nom comarca (nom en català):</label>
+                    <input type="text" class="form-control" id="comarca_ca" name="comarca_ca" value="<?php echo $comarca_ca_old; ?>">
+                    <div class="avis-form">
+                        * Omplir en cas que disposem del nom de la comarca en català
+                    </div>
                 </div>
 
                 <div class="row espai-superior" style="border-top: 1px solid black;padding-top:25px">

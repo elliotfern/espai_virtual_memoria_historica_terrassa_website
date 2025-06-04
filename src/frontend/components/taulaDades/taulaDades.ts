@@ -5,6 +5,7 @@ import { traduirCategoriesRepressio } from './traduirCategoriesRepressio';
 import { getIsAdmin } from '../../services/auth/getIsAdmin';
 import { getIsAutor } from '../../services/auth/getIsAutor';
 import { getIsLogged } from '../../services/auth/getIsLogged';
+import { formatDatesForm } from '../../services/formatDates/dates';
 
 export async function cargarTabla(pag: string, context: number, completat: number | null = null) {
   const devDirectory = `https://${window.location.hostname}`;
@@ -94,13 +95,13 @@ export async function cargarTabla(pag: string, context: number, completat: numbe
 
       // Municipio nacimiento
       const tdMunicipiNaixement = document.createElement('td');
-      const municipiNaixement = `${row.data_naixement ?? 'Desconegut'} (${row.ciutat ?? 'Desconegut'})`;
+      const municipiNaixement = `${formatDatesForm(row.data_naixement) ?? 'Desconegut'} (${row.ciutat ?? 'Desconegut'})`;
       tdMunicipiNaixement.textContent = municipiNaixement;
       tr.appendChild(tdMunicipiNaixement);
 
       // Municipio defunció
       const tdMunicipiDefuncio = document.createElement('td');
-      const municipiDefuncio = `${row.data_defuncio ?? 'Desconegut'} (${row.ciutat2 ?? 'Desconegut'})`;
+      const municipiDefuncio = `${formatDatesForm(row.data_defuncio) ?? 'Desconegut'} (${row.ciutat2 ?? 'Desconegut'})`;
       tdMunicipiDefuncio.textContent = municipiDefuncio;
       tr.appendChild(tdMunicipiDefuncio);
 
@@ -255,8 +256,8 @@ export async function cargarTabla(pag: string, context: number, completat: numbe
       // Filtrar los datos que coincidan con la búsqueda
       filteredData = datos.filter((row) => {
         const nombreCompleto = `${row.cognom1} ${row.cognom2 ?? ''}, ${row.nom}`.toLowerCase();
-        const municipiNaixement = `${row.data_naixement ?? 'Desconegut'} (${row.ciutat ?? 'Desconegut'})`.toLowerCase();
-        const municipiDefuncio = `${row.data_defuncio ?? 'Desconegut'} (${row.ciutat2 ?? 'Desconegut'})`.toLowerCase();
+        const municipiNaixement = `${formatDatesForm(row.data_naixement) ?? 'Desconegut'} (${row.ciutat ?? 'Desconegut'})`.toLowerCase();
+        const municipiDefuncio = `${formatDatesForm(row.data_defuncio) ?? 'Desconegut'} (${row.ciutat2 ?? 'Desconegut'})`.toLowerCase();
         const categoriasIds = row.categoria ? row.categoria.replace(/[{}]/g, '').split(',').map(Number) : [];
         const collectiuTexto = categoriasIds
           .map((num) => colectiusRepressio[num] || '')

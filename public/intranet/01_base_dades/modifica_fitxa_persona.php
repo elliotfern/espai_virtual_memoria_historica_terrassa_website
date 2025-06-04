@@ -231,10 +231,6 @@ if ($pagina === "modifica-fitxa") {
         <div class="col-md-4 mb-4">
           <label for="cognom2" class="form-label negreta">Segon cognom:</label>
           <input type="text" class="form-control" id="cognom2" name="cognom2" value="">
-
-          <div class="avis-form">
-            * Camp obligatori
-          </div>
         </div>
 
         <div class="col-md-4 mb-4">
@@ -253,13 +249,16 @@ if ($pagina === "modifica-fitxa") {
           <label for="data_naixement" class="form-label negreta">Data de naixement:</label>
           <input type="text" class="form-control" id="data_naixement" name="data_naixement" value="">
           <div class="avis-form">
-            * Camp obligatori (si és desconeguda, escriu -)
+            * Format vàlid de la data: dia/mes/any. Deixar-ho en blanc si la data és desconeguda
           </div>
         </div>
 
         <div class="col-md-4 mb-4">
           <label for="data_defuncio" class="form-label negreta">Data de defunció:</label>
           <input type="text" class="form-control" id="data_defuncio" name="data_defuncio" value="">
+          <div class="avis-form">
+            * Format vàlid de la data: dia/mes/any. Deixar-ho en blanc si la data és desconeguda
+          </div>
         </div>
 
         <div class="col-md-4 mb-4">
@@ -288,6 +287,9 @@ if ($pagina === "modifica-fitxa") {
           <label for="ciutat_residencia" class="form-label negreta">Ciutat de residència abans de la guerra:</label>
           <select class="form-select" name="municipi_residencia" id="municipi_residencia" value="">
           </select>
+          <div class="avis-form">
+            * Camp obligatori
+          </div>
 
           <div class="mt-2">
             <a href="<?php echo APP_WEB . APP_INTRANET . $url['auxiliars'] ?>/nou-municipi" target="_blank" class="btn btn-secondary btn-sm" id="afegirMunicipi3">Afegir municipi</a>
@@ -305,6 +307,9 @@ if ($pagina === "modifica-fitxa") {
           <label for="tipologia_lloc_defuncio" class="form-label negreta">Tipologia lloc de defunció:</label>
           <select class="form-select" id="tipologia_lloc_defuncio" value="" name="tipologia_lloc_defuncio">
           </select>
+          <div class="avis-form">
+            * Camp obligatori
+          </div>
           <div class="mt-2">
             <a href="<?php echo APP_WEB . APP_INTRANET . $url['auxiliars'] ?>/nova-tipologia-espai" target="_blank" class="btn btn-secondary btn-sm" id="afegirMunicipi4">Afegir tipologia espai</a>
             <button id="refreshButton4" class="btn btn-primary btn-sm">Actualitzar llistat</button>
@@ -316,6 +321,9 @@ if ($pagina === "modifica-fitxa") {
           <label for="causa_defuncio" class="form-label negreta">Causa de la defunció:</label>
           <select class="form-select" id="causa_defuncio" value="" name="causa_defuncio">
           </select>
+          <div class="avis-form">
+            * Camp obligatori
+          </div>
           <div class="mt-2">
             <a href="<?php echo APP_WEB . APP_INTRANET . $url['auxiliars'] ?>/nova-causa-mort" target="_blank" class="btn btn-secondary btn-sm" id="afegirMunicipi5">Afegir causa de mort</a>
             <button id="refreshButton5" class="btn btn-primary btn-sm">Actualitzar llistat</button>
@@ -332,6 +340,9 @@ if ($pagina === "modifica-fitxa") {
           <label for="estat_civil" class="form-label negreta">Estat civil:</label>
           <select class="form-select" id="estat_civil" name="estat_civil" value="">
           </select>
+          <div class="avis-form">
+            * Camp obligatori
+          </div>
         </div>
 
         <hr style="margin-top:25px">
@@ -352,12 +363,18 @@ if ($pagina === "modifica-fitxa") {
           <label for="estudis" class="form-label negreta">Estudis:</label>
           <select class="form-select" id="estudis" value="" name="estudis">
           </select>
+          <div class="avis-form">
+            * Camp obligatori (en cas d'absència d'informació marqueu "Nivell d'estudis desconegut")
+          </div>
         </div>
 
         <div class="col-md-4 mb-4">
           <label for="ofici" class="form-label negreta">Ofici:</label>
           <select class="form-select" id="ofici" value="" name="ofici">
           </select>
+          <div class="avis-form">
+            * Camp obligatori (en cas d'absència d'informació marqueu "Desconegut")
+          </div>
           <div class="mt-2">
             <a href="<?php echo APP_WEB . APP_INTRANET . $url['auxiliars'] ?>/nou-ofici" target="_blank" class="btn btn-secondary btn-sm" id="afegirMunicipi1">Afegir ofici</a>
             <button id="refreshButtonOfici" class="btn btn-primary btn-sm">Actualitzar llistat</button>
@@ -373,6 +390,9 @@ if ($pagina === "modifica-fitxa") {
           <label for="carrec_empresa" class="form-label negreta">Càrrec empresa:</label>
           <select class="form-select" id="carrec_empresa" value="" name="carrec_empresa">
           </select>
+          <div class="avis" style="font-size:14px">
+            * En cas d'absència d'informació marqueu "Càrrec desconegut"
+          </div>
 
           <div class="mt-2">
             <a href="<?php echo APP_WEB . APP_INTRANET . $url['auxiliars'] ?>/nou-carrec-empresa" target="_blank" class="btn btn-secondary btn-sm" id="afegirMunicipi6">Afegir càrrec empresa</a>
@@ -384,12 +404,18 @@ if ($pagina === "modifica-fitxa") {
           <label for="sector" class="form-label negreta">Sector econòmic:</label>
           <select class="form-select" id="sector" value="" name="sector">
           </select>
+          <div class="avis" style="font-size:14px">
+            * En cas d'absència d'informació marqueu "Desconegut"
+          </div>
         </div>
 
         <div class="col-md-4 mb-4">
           <label for="sub_sector" class="form-label negreta">Sub-sector econòmic:</label>
           <select class="form-select" id="sub_sector" value="" name="sub_sector">
           </select>
+          <div class="avis" style="font-size:14px">
+            * En cas d'absència d'informació marqueu "Desconegut"
+          </div>
           <div class="mt-2">
             <a href="<?php echo APP_WEB . APP_INTRANET . $url['auxiliars'] ?>/nou-sub-sector-economic" target="_blank" class="btn btn-secondary btn-sm" id="afegirMunicipi6">Afegir sub-sector econòmic</a>
             <button id="refreshButtonSubSector" class="btn btn-primary btn-sm">Actualitzar llistat</button>
@@ -410,6 +436,10 @@ if ($pagina === "modifica-fitxa") {
               <div id="partit_politic" class="d-flex flex-wrap"> </div>
             </div>
 
+            <div class="avis-form">
+              * Camp obligatori (en cas d'absència d'informació marqueu "Filiació desconeguda")
+            </div>
+
             <div class="mt-2">
               <a href="<?php echo APP_WEB . APP_INTRANET . $url['auxiliars'] ?>/nou-partit-politic" target="_blank" class="btn btn-secondary btn-sm" id="afegirMunicipi7">Afegir partit polític</a>
               <button id="refreshButtonPartits" class="btn btn-primary btn-sm">Actualitzar llistat</button>
@@ -423,6 +453,9 @@ if ($pagina === "modifica-fitxa") {
               <h6><strong>Filiació sindical:</strong></h6>
               <div id="sindicat" class="d-flex flex-wrap"></div>
             </div>
+            <div class="avis-form">
+              * Camp obligatori (en cas d'absència d'informació marqueu "Filiació desconeguda")
+            </div>
 
             <div class="mt-2">
               <a href="<?php echo APP_WEB . APP_INTRANET . $url['auxiliars'] ?>/nou-sindicat" target="_blank" class="btn btn-secondary btn-sm" id="afegirMunicipi8">Afegir sindicat</a>
@@ -432,8 +465,11 @@ if ($pagina === "modifica-fitxa") {
         </div>
 
         <div class="col-md-12">
-          <label for="activitat_durant_guerra" class="form-label negreta">Activitat política/sindical durant la guerra civil i la dictadura (especificar en format text, opcional):</label>
+          <label for="activitat_durant_guerra" class="form-label negreta">Activitat política/sindical durant la guerra civil i la dictadura:</label>
           <textarea class="form-control" id="activitat_durant_guerra" name="activitat_durant_guerra" value="" rows="3"></textarea>
+          <div class="avis" style="font-size:14px">
+            * Camp opcional
+          </div>
         </div>
 
       </div>
@@ -480,6 +516,9 @@ if ($pagina === "modifica-fitxa") {
           <label for="autor" class="form-label negreta">Autor fitxa:</label>
           <select class="form-select" id="autor" value="" name="autor">
           </select>
+          <div class="avis-form">
+            * Camp obligatori
+          </div>
         </div>
 
         <div class="col-md-4 mb-4">
@@ -516,7 +555,7 @@ if ($pagina === "modifica-fitxa") {
           <!-- Botón de opción "Sí" -->
           <div class="custom-control custom-radio custom-control-inline">
             <input type="radio" id="visibilitat_si" name="visibilitat" value="2" class="custom-control-input">
-            <label class="custom-control-label" for="visibilitat_si">Visibile</label>
+            <label class="custom-control-label" for="visibilitat_si">Visible</label>
           </div>
 
           <!-- Botón de opción "No" -->

@@ -50,12 +50,12 @@ if ($slug === 'ref_bibliografica') {
     // Si hay errores, devolver una respuesta con los errores
     if (!empty($errors)) {
         http_response_code(400); // Bad Request
-        echo json_encode(["status" => "error", "message" => "S'han produït errors en la validació", "errors" => $errors]);
+        echo json_encode(["status" => "error", "message" => $errors]);
         exit;
     }
 
     // Si no hay errores, crear las variables PHP y preparar la consulta PDO
-    $llibre = !empty($data['llibre']) ? $data['llibre'] : NULL;
+    $llibre = $data['llibre'];
     $idRepresaliat = !empty($data['idRepresaliat']) ? $data['idRepresaliat'] : NULL;
     $pagina = !empty($data['pagina']) ? $data['pagina'] : NULL;
 
@@ -133,17 +133,25 @@ if ($slug === 'ref_bibliografica') {
         $errors[] = 'El camp referencia és obligatori.';
     }
 
+    if (empty($data['codi'])) {
+        $errors[] = 'El camp codi és obligatori.';
+    }
+
+    if (empty($data['idRepresaliat'])) {
+        $errors[] = 'El camp represaliat és obligatori.';
+    }
+
     // Si hay errores, devolver una respuesta con los errores
     if (!empty($errors)) {
         http_response_code(400); // Bad Request
-        echo json_encode(["status" => "error", "message" => "S'han produït errors en la validació", "errors" => $errors]);
+        echo json_encode(["status" => "error", "message" => $errors]);
         exit;
     }
 
     // Si no hay errores, crear las variables PHP y preparar la consulta PDO
-    $referencia = !empty($data['referencia']) ? $data['referencia'] : NULL;
-    $idRepresaliat = !empty($data['idRepresaliat']) ? $data['idRepresaliat'] : NULL;
-    $codi = !empty($data['codi']) ? $data['codi'] : NULL;
+    $referencia = $data['referencia'];
+    $idRepresaliat = $data['idRepresaliat'];
+    $codi = $data['codi'];
 
     // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
     try {
@@ -227,33 +235,28 @@ if ($slug === 'ref_bibliografica') {
 
     $errors = [];
     if (empty($data['arxiu'])) {
-        $errors['arxiu'] = 'El campo arxiu es obligatorio.';
+        $errors['arxiu'] = 'El camp arxiu és obligatori.';
     }
     if (empty($data['codi'])) {
-        $errors['codi'] = 'El campo codi es obligatorio.';
+        $errors['codi'] = 'El camp codi és obligatori.';
     }
-    if (empty($data['ciutat'])) {
-        $errors['ciutat'] = 'El campo ciutat es obligatorio.';
-    }
+
     if (empty($data['descripcio'])) {
-        $errors['descripcio'] = 'El campo descripcio es obligatorio.';
-    }
-    if (empty($data['web'])) {
-        $errors['web'] = 'El campo web es obligatorio.';
+        $errors['descripcio'] = 'El camp descripcio és obligatori.';
     }
 
     if (!empty($errors)) {
         http_response_code(400); // Bad Request
-        echo json_encode(["status" => "error", "message" => "S'han produït errors en la validació", "errors" => $errors]);
+        echo json_encode(["status" => "error", "message" => $errors]);
         exit;
     }
 
     // Si no hay errores, crear las variables PHP y preparar la consulta PDO
     $arxiu = $data['arxiu'];
     $codi = $data['codi'];
-    $ciutat = $data['ciutat'];
-    $descripcio = $data['descripcio'];
-    $web = $data['web'];
+    $ciutat = !empty($data['ciutat']) ? $data['ciutat'] : NULL;
+    $descripcio = !empty($data['descripcio']) ? $data['descripcio'] : NULL;
+    $web = !empty($data['web']) ? $data['web'] : NULL;
 
     // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
     try {

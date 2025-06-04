@@ -40,16 +40,20 @@ if ($slug === "municipi") {
         $errors[] = 'El camp ciutat és obligatori.';
     }
 
+    if (empty($data['estat'])) {
+        $errors[] = 'El camp Estat és obligatori.';
+    }
 
     // Si hay errores, devolver una respuesta con los errores
     if (!empty($errors)) {
         http_response_code(400); // Bad Request
-        echo json_encode(["status" => "error", "message" => "S'han produït errors en la validació", "errors" => $errors]);
+        echo json_encode(["status" => "error", "message" => $errors]);
         exit;
     }
 
     // Si no hay errores, crear las variables PHP y preparar la consulta PDO
-    $ciutat = !empty($data['ciutat']) ? $data['ciutat'] : NULL;
+    $ciutat = $data['ciutat'];
+    $ciutat_ca = !empty($data['ciutat_ca']) ? $data['ciutat_ca'] : NULL;
     $comarca = !empty($data['comarca']) ? $data['comarca'] : NULL;
     $provincia = !empty($data['provincia']) ? $data['provincia'] : NULL;
     $comunitat = !empty($data['comunitat']) ? $data['comunitat'] : NULL;
@@ -66,6 +70,7 @@ if ($slug === "municipi") {
         // Crear la consulta SQL
         $sql = "UPDATE aux_dades_municipis SET
             ciutat = :ciutat,
+            ciutat_ca = :ciutat_ca,
             comarca = :comarca,
             provincia = :provincia,
             comunitat = :comunitat,
@@ -77,6 +82,7 @@ if ($slug === "municipi") {
 
         // Enlazar los parámetros con los valores de las variables PHP
         $stmt->bindParam(':ciutat', $ciutat, PDO::PARAM_STR);
+        $stmt->bindParam(':ciutat_ca', $ciutat_ca, PDO::PARAM_STR);
         $stmt->bindParam(':comarca', $comarca, PDO::PARAM_INT);
         $stmt->bindParam(':provincia', $provincia, PDO::PARAM_INT);
         $stmt->bindParam(':comunitat', $comunitat, PDO::PARAM_INT);
@@ -374,17 +380,17 @@ if ($slug === "municipi") {
         $errors[] = 'El camp comarca és obligatori.';
     }
 
-
     // Si hay errores, devolver una respuesta con los errores
     if (!empty($errors)) {
         http_response_code(400); // Bad Request
-        echo json_encode(["status" => "error", "message" => "S'han produït errors en la validació", "errors" => $errors]);
+        echo json_encode(["status" => "error", "message" => $errors]);
         exit;
     }
 
     // Si no hay errores, crear las variables PHP y preparar la consulta PDO
-    $comarca = !empty($data['comarca']) ? $data['comarca'] : NULL;
-    $id = !empty($data['id']) ? $data['id'] : NULL;
+    $comarca = $data['comarca'];
+    $comarca_ca = !empty($data['comarca_ca']) ? $data['comarca_ca'] : NULL;
+    $id = $data['id'];
 
     // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
     try {
@@ -394,7 +400,8 @@ if ($slug === "municipi") {
 
         // Crear la consulta SQL
         $sql = "UPDATE aux_dades_municipis_comarca SET
-            comarca = :comarca
+            comarca = :comarca,
+            comarca_ca = :comarca_ca
         WHERE id = :id";
 
         // Preparar la consulta
@@ -402,6 +409,7 @@ if ($slug === "municipi") {
 
         // Enlazar los parámetros con los valores de las variables PHP
         $stmt->bindParam(':comarca', $comarca, PDO::PARAM_STR);
+        $stmt->bindParam(':comarca_ca', $comarca_ca, PDO::PARAM_STR);
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
 
         // Ejecutar la consulta
@@ -462,13 +470,14 @@ if ($slug === "municipi") {
     // Si hay errores, devolver una respuesta con los errores
     if (!empty($errors)) {
         http_response_code(400); // Bad Request
-        echo json_encode(["status" => "error", "message" => "S'han produït errors en la validació", "errors" => $errors]);
+        echo json_encode(["status" => "error", "message" => $errors]);
         exit;
     }
 
     // Si no hay errores, crear las variables PHP y preparar la consulta PDO
-    $provincia = !empty($data['provincia']) ? $data['provincia'] : NULL;
-    $id = !empty($data['id']) ? $data['id'] : NULL;
+    $provincia = $data['provincia'];
+    $provincia_ca = !empty($data['provincia_ca']) ? $data['provincia_ca'] : NULL;
+    $id = $data['id'];
 
     // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
     try {
@@ -478,7 +487,7 @@ if ($slug === "municipi") {
 
         // Crear la consulta SQL
         $sql = "UPDATE aux_dades_municipis_provincia SET
-            provincia = :provincia
+            provincia = :provincia, provincia_ca = :provincia_ca
         WHERE id = :id";
 
         // Preparar la consulta
@@ -486,6 +495,7 @@ if ($slug === "municipi") {
 
         // Enlazar los parámetros con los valores de las variables PHP
         $stmt->bindParam(':provincia', $provincia, PDO::PARAM_STR);
+        $stmt->bindParam(':provincia_ca', $provincia_ca, PDO::PARAM_STR);
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
 
         // Ejecutar la consulta
@@ -542,17 +552,17 @@ if ($slug === "municipi") {
         $errors[] = 'El camp comunitat és obligatori.';
     }
 
-
     // Si hay errores, devolver una respuesta con los errores
     if (!empty($errors)) {
         http_response_code(400); // Bad Request
-        echo json_encode(["status" => "error", "message" => "S'han produït errors en la validació", "errors" => $errors]);
+        echo json_encode(["status" => "error", "message" => $errors]);
         exit;
     }
 
     // Si no hay errores, crear las variables PHP y preparar la consulta PDO
-    $comunitat = !empty($data['comunitat']) ? $data['comunitat'] : NULL;
-    $id = !empty($data['id']) ? $data['id'] : NULL;
+    $comunitat = $data['comunitat'];
+    $comunitat_ca = !empty($data['comunitat_ca']) ? $data['comunitat_ca'] : NULL;
+    $id = $data['id'];
 
     // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
     try {
@@ -562,7 +572,7 @@ if ($slug === "municipi") {
 
         // Crear la consulta SQL
         $sql = "UPDATE aux_dades_municipis_comunitat SET
-            comunitat = :comunitat
+            comunitat = :comunitat, comunitat_ca = :comunitat_ca
         WHERE id = :id";
 
         // Preparar la consulta
@@ -570,6 +580,7 @@ if ($slug === "municipi") {
 
         // Enlazar los parámetros con los valores de las variables PHP
         $stmt->bindParam(':comunitat', $comunitat, PDO::PARAM_STR);
+        $stmt->bindParam(':comunitat_ca', $comunitat_ca, PDO::PARAM_STR);
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
 
         // Ejecutar la consulta
@@ -626,17 +637,17 @@ if ($slug === "municipi") {
         $errors[] = 'El camp estat és obligatori.';
     }
 
-
     // Si hay errores, devolver una respuesta con los errores
     if (!empty($errors)) {
         http_response_code(400); // Bad Request
-        echo json_encode(["status" => "error", "message" => "S'han produït errors en la validació", "errors" => $errors]);
+        echo json_encode(["status" => "error", "message" => $errors]);
         exit;
     }
 
     // Si no hay errores, crear las variables PHP y preparar la consulta PDO
-    $estat = !empty($data['estat']) ? $data['estat'] : NULL;
-    $id = !empty($data['id']) ? $data['id'] : NULL;
+    $estat = $data['estat'];
+    $estat_ca = !empty($data['estat_ca']) ? $data['estat_ca'] : NULL;
+    $id = $data['id'];
 
     // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
     try {
@@ -646,7 +657,7 @@ if ($slug === "municipi") {
 
         // Crear la consulta SQL
         $sql = "UPDATE aux_dades_municipis_estat SET
-            estat = :estat
+            estat = :estat, estat_ca = :estat_ca
         WHERE id = :id";
 
         // Preparar la consulta
@@ -654,6 +665,7 @@ if ($slug === "municipi") {
 
         // Enlazar los parámetros con los valores de las variables PHP
         $stmt->bindParam(':estat', $estat, PDO::PARAM_STR);
+        $stmt->bindParam(':estat_ca', $estat_ca, PDO::PARAM_STR);
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
 
         // Ejecutar la consulta

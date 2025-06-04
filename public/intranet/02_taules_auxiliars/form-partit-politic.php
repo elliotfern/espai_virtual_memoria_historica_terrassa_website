@@ -62,14 +62,20 @@ if ($categoriaId === "modifica-partit-politic") {
 
                 <input type="hidden" id="id" name="id" value="<?php echo $id_old; ?>">
 
-                <div class="col-md-4">
+                <div class="col-md-4 mb-4">
                     <label for="partit_politic" class="form-label negreta">Partit polític (català):</label>
                     <input type="text" class="form-control" id="partit_politic" name="partit_politic" value="<?php echo $partit_politic_old; ?>">
+                    <div class="avis-form">
+                        * Camp obligatori
+                    </div>
                 </div>
 
                 <div class="col-md-4">
                     <label for="sigles" class="form-label negreta">Sigles del partit:</label>
                     <input type="text" class="form-control" id="sigles" name="sigles" value="<?php echo $sigles_old; ?>">
+                    <div class="avis-form">
+                        * Camp obligatori
+                    </div>
                 </div>
 
                 <div class="row espai-superior" style="border-top: 1px solid black;padding-top:25px">

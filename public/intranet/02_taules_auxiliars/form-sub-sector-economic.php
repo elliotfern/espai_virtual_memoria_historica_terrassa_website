@@ -1,88 +1,36 @@
 <?php
 require_once APP_ROOT . '/public/intranet/includes/header.php';
 
+$id_old = "";
 $sub_sector_cat_old = "";
-$btnModificar = 2;
+$sector_cast_old = "";
+$sub_sector_eng_old = "";
+$btnModificar = 1;
 
-// Verificar si la ID existe en la base de datos
-$query = "SELECT 
-f.id, 
-f.condicio,
-f.bandol,
-f.any_lleva,
-f.unitat_inicial,
-f.cos,
-f.unitat_final ,
-f.graduacio_final,
-f.periple_militar,
-f.circumstancia_mort,
-f.desaparegut_data,
-f.desaparegut_lloc,
-f.desaparegut_data_aparicio,
-f.desaparegut_lloc_aparicio,
-d.nom,
-d.cognom1,
-d.cognom2
-FROM db_cost_huma_morts_front AS f
-LEFT JOIN db_dades_personals AS d ON f.idPersona = d.id
-WHERE f.idPersona = :idPersona";
-$stmt = $conn->prepare($query);
-$stmt->bindParam(':idPersona', $idPersona, PDO::PARAM_INT);
-$stmt->execute();
+if ($btnModificar === 2) {
+    // Verificar si la ID existe en la base de datos
+    $query = "SELECT id, sub_sector_cat, sub_sector_cast, sub_sector_eng
+    FROM aux_sub_sector_economic";
 
-
-if ($stmt->rowCount() > 0) {
-    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        // Acceder a las variables de la consulta
-        $condicio_id = $row['condicio'] ?? "";
-        $bandol_id = $row['bandol'] ?? "";
-        $any_lleva = $row['any_lleva'] ?? "";
-        $unitat_inicial = $row['unitat_inicial'] ?? "";
-        $cos_id = $row['cos'] ?? "";
-        $unitat_final = $row['unitat_final'] ?? "";
-        $graduacio_final = $row['graduacio_final'] ?? "";
-        $periple_militar = $row['periple_militar'] ?? "";
-        $circumstancia_mort_id = $row['circumstancia_mort'] ?? "";
-        $desaparegut_data = $row['desaparegut_data'] ?? "";
-        $desaparegut_lloc_id = $row['desaparegut_lloc'] ?? "";
-        $desaparegut_data_aparicio = $row['desaparegut_data_aparicio'] ?? "";
-        $desaparegut_lloc_aparicio_id = $row['desaparegut_lloc_aparicio'] ?? "";
-        $nom = $row['nom'] ?? "";
-        $cognom1 = $row['cognom1'] ?? "";
-        $cognom2 = $row['cognom2'] ?? "";
-
-        // Crear el botón o usar los datos (TIPO PUT)
-        $btnModificar = 1;
-    }
-} else {
-    // La ID no existe, realizamos un POST (INSERT)
-    $btnModificar = 2;
-
-    $query = "SELECT 
-    d.nom,
-    d.cognom1,
-    d.cognom2
-    FROM db_dades_personals AS d
-    WHERE d.id = :id";
     $stmt = $conn->prepare($query);
-    $stmt->bindParam(':id', $idPersona, PDO::PARAM_INT);
     $stmt->execute();
 
     if ($stmt->rowCount() > 0) {
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $nom = $row['nom'] ?? "";
-            $cognom1 = $row['cognom1'] ?? "";
-            $cognom2 = $row['cognom2'] ?? "";
+            // Acceder a las variables de la consulta
+            $id_old = $row['id'] ?? "";
+            $sub_sector_cat_old = $row['sub_sector_cat'] ?? "";
+            $sector_cast_old = $row['sub_sector_cast'] ?? "";
+            $sub_sector_eng_old = $row['sub_sector_eng'] ?? "";
         }
     }
 }
-
 ?>
 
 <div class="container" style="margin-bottom:50px;border: 1px solid gray;border-radius: 10px;padding:25px;background-color:#eaeaea">
     <form id="causaMortForm">
         <div class="container">
-            <div class="row">
+            <div class="row g-3">
                 <h2>Crear nou sub-sector econòmic</h2>
 
                 <div class="alert alert-success" role="alert" id="okMessage" style="display:none">
@@ -95,9 +43,12 @@ if ($stmt->rowCount() > 0) {
                     <div id="errText"></div>
                 </div>
 
-                <div class="col-md-4">
+                <div class="col-md-4 mb-4">
                     <label for="sub_sector_cat" class="form-label negreta">Sub-sector econòmic (català):</label>
                     <input type="text" class="form-control" id="sub_sector_cat" name="sub_sector_cat" value="<?php echo $sub_sector_cat_old; ?>">
+                    <div class="avis-form">
+                        * Camp obligatori
+                    </div>
                 </div>
 
                 <div class="row espai-superior" style="border-top: 1px solid black;padding-top:25px">
@@ -106,7 +57,7 @@ if ($stmt->rowCount() > 0) {
                     <div class="col d-flex justify-content-end align-items-center">
 
                         <?php
-                        if ($btnModificar === 1) {
+                        if ($btnModificar === 2) {
                             echo '<a class="btn btn-primary" role="button" aria-disabled="true" id="btnModificarDadesCombat" onclick="enviarFormulario(event)">Modificar dades</a>';
                         } else {
                             echo '<a class="btn btn-primary" role="button" aria-disabled="true" id="btnInserirDadesCombat" onclick="enviarFormularioPost(event)">Inserir dades</a>';

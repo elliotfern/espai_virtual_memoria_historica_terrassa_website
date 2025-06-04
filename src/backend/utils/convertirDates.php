@@ -25,5 +25,9 @@ function convertirDataFormatMysql(string $fecha, int $tipus): ?string
         return null;
     }
 
+    if ($tipus === 3 && ($any < 1800 || $any > 2025)) {
+        return null;
+    }
+
     return $dt->format('Y-m-d');
 }

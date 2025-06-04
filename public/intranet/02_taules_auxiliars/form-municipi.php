@@ -12,6 +12,7 @@ $categoriaId = $urlParts[3] ?? '';
 
 $id_old = "";
 $ciutat_old = "";
+$ciutat_ca_old = "";
 $comarca_old = "";
 $provincia_old = "";
 $comunitat_old = "";
@@ -26,6 +27,7 @@ if ($categoriaId === "modifica-municipi") {
     $query = "SELECT 
     m.id,
     m.ciutat,
+    m.ciutat_ca,
     m.comarca,
     m.provincia,
     m.comunitat,
@@ -40,6 +42,7 @@ if ($categoriaId === "modifica-municipi") {
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             // Acceder a las variables de la consulta
             $ciutat_old = $row['ciutat'] ?? "";
+            $ciutat_ca_old = $row['ciutat_ca'] ?? "";
             $comarca_old = $row['comarca'] ?? "";
             $provincia_old = $row['provincia'] ?? "";
             $comunitat_old = $row['comunitat'] ?? "";
@@ -77,12 +80,36 @@ if ($categoriaId === "modifica-municipi") {
 
                 <input type="hidden" id="id" name="id" value="<?php echo $id_old; ?>">
 
-                <div class="col-md-4">
-                    <label for="ciutat" class="form-label negreta">Nom municipi:</label>
-                    <input type="text" class="form-control" id="ciutat" name="ciutat" value="<?php echo $ciutat_old; ?>">
+                <div class="alert alert-info">
+                    <h5>Sobre l'ús general de topònims en català</h5>
+                    <ul>
+
+                        <li>1. Els topònims de Catalunya s'utilitzen en la seva forma oficial i, sempre que sigui possible, en la seva forma íntegra.</li>
+                        <li>2. Els topònims d'altres territoris de l'àrea lingüística catalana s'utilitzen en la forma en català.</li>
+                        <li>3. Els exotopònims, és a dir, els topònims de fora de l'àrea lingüística catalana s'utilitzen en català quan hi ha una forma establerta amb ús tradicional, sens perjudici que hi pugui figurar també la denominació en altres llengües del territori corresponent.</li>
+                        <li>4. Els topònims de l'àrea lingüística occitana de fora de Catalunya s'utilitzen en la forma tradicional en català o en occità, tret de l'Aran, on s'utilitza la forma tradicional en occità, i sens perjudici que hi pugui figurar també la denominació en altres llengües del territori corresponent.</li>
+                    </ul>
                 </div>
 
-                <div class="col-md-4">
+                <div class="col-md-4 mb-4">
+                    <label for="ciutat" class="form-label negreta">Nom municipi (forma oficial):</label>
+                    <input type="text" class="form-control" id="ciutat" name="ciutat" value="<?php echo $ciutat_old; ?>">
+                    <div class="avis-form">
+                        * Camp obligatori
+                    </div>
+                </div>
+
+                <div class="col-md-4 mb-4">
+                    <label for="ciutat" class="form-label negreta">Nom municipi (nom en català):</label>
+                    <input type="text" class="form-control" id="ciutat_ca" name="ciutat_ca" value="<?php echo $ciutat_ca_old; ?>">
+                    <div class="avis-form">
+                        * Omplir en cas que disposem del nom del municipi en català
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="col-md-4 mb-4">
                     <label for="comarca" class="form-label negreta">Comarca:</label>
                     <select class="form-select" id="comarca" value="" name="comarca">
                     </select>
@@ -92,7 +119,7 @@ if ($categoriaId === "modifica-municipi") {
                     </div>
                 </div>
 
-                <div class="col-md-4">
+                <div class="col-md-4 mb-4">
                     <label for="provincia" class="form-label negreta">Provincia/Departament:</label>
                     <select class="form-select" id="provincia" value="" name="provincia">
                     </select>
@@ -102,7 +129,7 @@ if ($categoriaId === "modifica-municipi") {
                     </div>
                 </div>
 
-                <div class="col-md-4">
+                <div class="col-md-4 mb-4">
                     <label for="comunitat" class="form-label negreta">Comunitat autònoma / Regió:</label>
                     <select class="form-select" id="comunitat" value="" name="comunitat">
                     </select>
@@ -112,10 +139,13 @@ if ($categoriaId === "modifica-municipi") {
                     </div>
                 </div>
 
-                <div class="col-md-4">
+                <div class="col-md-4 mb-4">
                     <label for="estat" class="form-label negreta">Estat:</label>
                     <select class="form-select" id="estat" value="" name="estat">
                     </select>
+                    <div class="avis-form">
+                        * Camp obligatori
+                    </div>
                     <div class="mt-2">
                         <a href="<?php echo APP_WEB . APP_INTRANET . $url['auxiliars'] ?>/nou-estat/" target="_blank" class="btn btn-secondary btn-sm" id="afegirEstat">Afegir estat</a>
                         <button id="refreshButtonEstat" class="btn btn-primary btn-sm">Actualitzar llistat</button>

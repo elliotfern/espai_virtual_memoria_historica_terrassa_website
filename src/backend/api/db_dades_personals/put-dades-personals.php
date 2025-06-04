@@ -53,10 +53,6 @@ if (empty($data['sexe'])) {
     $errors[] = 'El camp sexe és obligatori.';
 }
 
-if (empty($data['data_naixement'])) {
-    $errors[] = 'El camp data_naixement és obligatori.';
-}
-
 if (empty($data['tipologia_lloc_defuncio'])) {
     $errors[] = 'El camp tipologia_lloc_defuncio és obligatori.';
 }
@@ -97,6 +93,29 @@ if (empty($data['completat'])) {
     $errors[] = 'El camp completat és obligatori.';
 }
 
+
+$data_naixementRaw = $data['data_naixement'] ?? '';
+if (!empty($data_naixementRaw)) {
+    $data_naixementFormat = convertirDataFormatMysql($data_naixementRaw, 3);
+
+    if (!$data_naixementFormat) {
+        $errors[] = "El format de data no és vàlid. Format esperat: DD/MM/YYYY.";
+    }
+} else {
+    $data_naixementFormat = null;
+}
+
+$data_defuncioRaw = $data['data_defuncio'] ?? '';
+if (!empty($data_defuncioRaw)) {
+    $data_defuncioFormat = convertirDataFormatMysql($data_defuncioRaw, 3);
+
+    if (!$data_defuncioFormat) {
+        $errors[] = "El format de data no és vàlid. Format esperat: DD/MM/YYYY.";
+    }
+} else {
+    $data_defuncioFormat = null;
+}
+
 // Si hay errores, devolver una respuesta con los errores
 if (!empty($errors)) {
     http_response_code(400); // Bad Request
@@ -104,15 +123,12 @@ if (!empty($errors)) {
     exit;
 }
 
-
 // Si no hay errores, crear las variables PHP y preparar la consulta PDO
 $nom = $data['nom'] ?? null;
 $cognom1 = $data['cognom1'] ?? null;
 $cognom2 = $data['cognom2'] ?? null;
 $categoria = $data['categoria'] ?? null;
 $sexe = $data['sexe'] ?? null;
-$data_naixement = $data['data_naixement'] ?? null;
-$data_defuncio = $data['data_defuncio'] ?? null;
 $municipi_naixement = $data['municipi_naixement'] ?? null;
 $municipi_defuncio = $data['municipi_defuncio'] ?? null;
 $tipologia_lloc_defuncio = $data['tipologia_lloc_defuncio'] ?? null;
@@ -184,8 +200,8 @@ try {
     $stmt->bindParam(':cognom2', $cognom2, PDO::PARAM_STR);
     $stmt->bindParam(':categoria', $categoria, PDO::PARAM_STR);
     $stmt->bindParam(':sexe', $sexe, PDO::PARAM_INT);
-    $stmt->bindParam(':data_naixement', $data_naixement, PDO::PARAM_STR);
-    $stmt->bindParam(':data_defuncio', $data_defuncio, PDO::PARAM_STR);
+    $stmt->bindParam(':data_naixement', $data_naixementFormat, PDO::PARAM_STR);
+    $stmt->bindParam(':data_defuncio', $data_defuncioFormat, PDO::PARAM_STR);
     $stmt->bindParam(':municipi_naixement', $municipi_naixement, PDO::PARAM_INT);
     $stmt->bindParam(':municipi_defuncio', $municipi_defuncio, PDO::PARAM_INT);
     $stmt->bindParam(':tipologia_lloc_defuncio', $tipologia_lloc_defuncio, PDO::PARAM_INT);

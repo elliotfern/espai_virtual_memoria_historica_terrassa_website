@@ -82,7 +82,7 @@ if ($stmt->rowCount() > 0) {
 <div class="container" style="margin-bottom:50px;border: 1px solid gray;border-radius: 10px;padding:25px;background-color:#eaeaea">
     <form id="tipologiaForm">
         <div class="container">
-            <div class="row">
+            <div class="row g-3">
                 <h2>Crear nova tipologia d'espai</h2>
 
                 <div class="alert alert-success" role="alert" id="okMessage" style="display:none">
@@ -95,9 +95,12 @@ if ($stmt->rowCount() > 0) {
                     <div id="errText"></div>
                 </div>
 
-                <div class="col-md-4">
+                <div class="col-md-4 mb-4">
                     <label for="tipologia_espai_ca" class="form-label negreta">Tipologia espai (català):</label>
                     <input type="text" class="form-control" id="tipologia_espai_ca" name="tipologia_espai_ca" value="<?php echo $tipologia_espai_ca_old; ?>">
+                    <div class="avis-form">
+                        * Camp obligatori
+                    </div>
                 </div>
 
                 <div class="row espai-superior" style="border-top: 1px solid black;padding-top:25px">

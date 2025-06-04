@@ -101,16 +101,22 @@ if ($modificaBtn === 1) {
 
                 <input type="hidden" name="id" id="id" value="<?php echo $id_old; ?>">
 
-                <div class="col-md-4">
+                <div class="col-md-4 mb-4">
                     <label for="referencia" class="form-label negreta">Referència documentació:</label>
                     <input type="text" class="form-control" name="referencia" id="referencia" value="<?php echo $referencia_old; ?>">
+                    <div class="avis-form">
+                        * Camp obligatori
+                    </div>
                 </div>
 
 
-                <div class="col-md-4">
+                <div class="col-md-4 mb-4">
                     <label for="codi" class="form-label negreta">Codi arxiu:</label>
                     <select class="form-select" name="codi" id="codi" value="<?php echo $codi_old; ?>">
                     </select>
+                    <div class="avis-form">
+                        * Camp obligatori
+                    </div>
 
                     <div class="mt-2">
                         <a href="https://memoriaterrassa.cat/gestio/fonts-documentals/nou-arxiu" target="_blank" class="btn btn-secondary btn-sm" id="afegirArxiu1">Afegir codi arxiu</a>
@@ -118,10 +124,13 @@ if ($modificaBtn === 1) {
                     </div>
                 </div>
 
-                <div class="col-md-4">
+                <div class="col-md-4 mb-4">
                     <label for="idRepresaliat" class="form-label negreta">Represaliat:</label>
                     <select class="form-select" name="idRepresaliat" id="idRepresaliat" value="">
                     </select>
+                    <div class="avis-form">
+                        * Camp obligatori (Ja sortirà automàticament, no cal canviar-ho)
+                    </div>
                 </div>
 
                 <div class="row espai-superior" style="border-top: 1px solid black;padding-top:25px">

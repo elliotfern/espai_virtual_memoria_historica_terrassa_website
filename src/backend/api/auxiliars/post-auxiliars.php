@@ -40,11 +40,14 @@ if ($slug === "municipi") {
         $errors[] = 'El camp ciutat és obligatori.';
     }
 
+    if (empty($data['estat'])) {
+        $errors[] = 'El camp Estat és obligatori.';
+    }
 
     // Si hay errores, devolver una respuesta con los errores
     if (!empty($errors)) {
         http_response_code(400); // Bad Request
-        echo json_encode(["status" => "error", "message" => "S'han produït errors en la validació", "errors" => $errors]);
+        echo json_encode(["status" => "error", "message" => $errors]);
         exit;
     }
 
@@ -64,7 +67,8 @@ if ($slug === "municipi") {
     }
 
     // Si no hay errores, crear las variables PHP y preparar la consulta PDO
-    $ciutat = !empty($data['ciutat']) ? $data['ciutat'] : NULL;
+    $ciutat = $data['ciutat'];
+    $ciutat_ca = !empty($data['ciutat_ca']) ? $data['ciutat_ca'] : NULL;
     $comarca = !empty($data['comarca']) ? $data['comarca'] : NULL;
     $provincia = !empty($data['provincia']) ? $data['provincia'] : NULL;
     $comunitat = !empty($data['comunitat']) ? $data['comunitat'] : NULL;
@@ -79,20 +83,17 @@ if ($slug === "municipi") {
 
         // Crear la consulta SQL
         $sql = "INSERT INTO aux_dades_municipis (
-        ciutat, comarca, provincia, comunitat, estat 
+        ciutat, ciutat_ca, comarca, provincia, comunitat, estat 
         ) VALUES (
-            :ciutat, :comarca, :provincia, :comunitat, :estat 
+            :ciutat, :ciutat_ca, :comarca, :provincia, :comunitat, :estat 
         )";
 
         // Preparar la consulta
         $stmt = $conn->prepare($sql);
 
         // Enlazar los parámetros con los valores de las variables PHP
-        $stmt->bindParam(
-            ':ciutat',
-            $ciutat,
-            PDO::PARAM_STR
-        );
+        $stmt->bindParam(':ciutat', $ciutat, PDO::PARAM_STR);
+        $stmt->bindParam(':ciutat_ca', $ciutat_ca, PDO::PARAM_STR);
         $stmt->bindParam(':comarca', $comarca, PDO::PARAM_INT);
         $stmt->bindParam(':provincia', $provincia, PDO::PARAM_INT);
         $stmt->bindParam(':comunitat', $comunitat, PDO::PARAM_INT);
@@ -150,17 +151,17 @@ if ($slug === "municipi") {
         $errors[] = 'El camp ofici és obligatori.';
     }
 
-
     // Si hay errores, devolver una respuesta con los errores
     if (!empty($errors)) {
         http_response_code(400); // Bad Request
-        echo json_encode(["status" => "error", "message" => "S'han produït errors en la validació", "errors" => $errors]);
+        echo json_encode(["status" => "error", "message" => $errors]);
         exit;
     }
 
     // Si no hay errores, crear las variables PHP y preparar la consulta PDO
-    $ofici_cat = !empty($data['ofici_cat']) ? $data['ofici_cat'] : NULL;
-
+    $ofici_cat = $data['ofici_cat'];
+    $ofici_es = !empty($data['ofici_es']) ? $data['ofici_es'] : NULL;
+    $ofici_en = !empty($data['ofici_en']) ? $data['ofici_en'] : NULL;
     // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
     try {
 
@@ -169,9 +170,9 @@ if ($slug === "municipi") {
 
         // Crear la consulta SQL
         $sql = "INSERT INTO aux_oficis (
-        ofici_cat
+        ofici_cat, ofici_es, ofici_en
         ) VALUES (
-            :ofici_cat
+            :ofici_cat, :ofici_es, :ofici_en
         )";
 
         // Preparar la consulta
@@ -179,6 +180,8 @@ if ($slug === "municipi") {
 
         // Enlazar los parámetros con los valores de las variables PHP
         $stmt->bindParam(':ofici_cat', $ofici_cat, PDO::PARAM_STR);
+        $stmt->bindParam(':ofici_es', $ofici_es, PDO::PARAM_STR);
+        $stmt->bindParam(':ofici_en', $ofici_en, PDO::PARAM_STR);
 
         // Ejecutar la consulta
         $stmt->execute();
@@ -233,16 +236,15 @@ if ($slug === "municipi") {
         $errors[] = 'El camp tipologia és obligatori.';
     }
 
-
     // Si hay errores, devolver una respuesta con los errores
     if (!empty($errors)) {
         http_response_code(400); // Bad Request
-        echo json_encode(["status" => "error", "message" => "S'han produït errors en la validació", "errors" => $errors]);
+        echo json_encode(["status" => "error", "message" => $errors]);
         exit;
     }
 
     // Si no hay errores, crear las variables PHP y preparar la consulta PDO
-    $tipologia_espai_ca = !empty($data['tipologia_espai_ca']) ? $data['tipologia_espai_ca'] : NULL;
+    $tipologia_espai_ca = $data['tipologia_espai_ca'];
 
     // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
     try {
@@ -320,12 +322,12 @@ if ($slug === "municipi") {
     // Si hay errores, devolver una respuesta con los errores
     if (!empty($errors)) {
         http_response_code(400); // Bad Request
-        echo json_encode(["status" => "error", "message" => "S'han produït errors en la validació", "errors" => $errors]);
+        echo json_encode(["status" => "error", "message" => $errors]);
         exit;
     }
 
     // Si no hay errores, crear las variables PHP y preparar la consulta PDO
-    $causa_defuncio_ca = !empty($data['causa_defuncio_ca']) ? $data['causa_defuncio_ca'] : NULL;
+    $causa_defuncio_ca = $data['causa_defuncio_ca'];
 
     // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
     try {
@@ -396,19 +398,20 @@ if ($slug === "municipi") {
 
     // Validación de los datos recibidos
     if (empty($data['carrec_cat'])) {
-        $errors[] = 'El camp ciutat és obligatori.';
+        $errors[] = 'El camp carrec_cat és obligatori.';
     }
-
 
     // Si hay errores, devolver una respuesta con los errores
     if (!empty($errors)) {
         http_response_code(400); // Bad Request
-        echo json_encode(["status" => "error", "message" => "S'han produït errors en la validació", "errors" => $errors]);
+        echo json_encode(["status" => "error", "message" => $errors]);
         exit;
     }
 
     // Si no hay errores, crear las variables PHP y preparar la consulta PDO
-    $carrec_cat = !empty($data['carrec_cat']) ? $data['carrec_cat'] : NULL;
+    $carrec_cat = $data['carrec_cat'];
+    $carrec_cast = !empty($data['carrec_cast']) ? $data['carrec_cast'] : NULL;
+    $carrec_eng = !empty($data['carrec_eng']) ? $data['carrec_eng'] : NULL;
 
     // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
     try {
@@ -418,9 +421,9 @@ if ($slug === "municipi") {
 
         // Crear la consulta SQL
         $sql = "INSERT INTO aux_ofici_carrec (
-            carrec_cat
+            carrec_cat, carrec_eng, carrec_cast
         ) VALUES (
-            :carrec_cat
+            :carrec_cat, :carrec_eng, :carrec_cast
         )";
 
         // Preparar la consulta
@@ -428,6 +431,8 @@ if ($slug === "municipi") {
 
         // Enlazar los parámetros con los valores de las variables PHP
         $stmt->bindParam(':carrec_cat', $carrec_cat, PDO::PARAM_STR);
+        $stmt->bindParam(':carrec_eng', $carrec_eng, PDO::PARAM_STR);
+        $stmt->bindParam(':carrec_cast', $carrec_cast, PDO::PARAM_STR);
 
         // Ejecutar la consulta
         $stmt->execute();
@@ -490,7 +495,10 @@ if ($slug === "municipi") {
     }
 
     // Si no hay errores, crear las variables PHP y preparar la consulta PDO
-    $sub_sector_cat = !empty($data['sub_sector_cat']) ? $data['sub_sector_cat'] : NULL;
+    $sub_sector_cat = $data['sub_sector_cat'];
+    $sub_sector_cast = !empty($data['sub_sector_cast']) ? $data['sub_sector_cast'] : NULL;
+    $sub_sector_eng = !empty($data['sub_sector_eng']) ? $data['sub_sector_eng'] : NULL;
+    $idSector = !empty($data['idSector']) ? $data['idSector'] : NULL;
 
     // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
     try {
@@ -500,9 +508,9 @@ if ($slug === "municipi") {
 
         // Crear la consulta SQL
         $sql = "INSERT INTO aux_sub_sector_economic (
-            sub_sector_cat
+            sub_sector_cat, sub_sector_eng, idSector, sub_sector_cast
         ) VALUES (
-            :sub_sector_cat
+            :sub_sector_cat, :sub_sector_eng, :idSector, :sub_sector_cast
         )";
 
         // Preparar la consulta
@@ -510,6 +518,9 @@ if ($slug === "municipi") {
 
         // Enlazar los parámetros con los valores de las variables PHP
         $stmt->bindParam(':sub_sector_cat', $sub_sector_cat, PDO::PARAM_STR);
+        $stmt->bindParam(':sub_sector_eng', $sub_sector_eng, PDO::PARAM_STR);
+        $stmt->bindParam(':sub_sector_cast', $sub_sector_cast, PDO::PARAM_STR);
+        $stmt->bindParam(':idSector', $idSector, PDO::PARAM_INT);
 
         // Ejecutar la consulta
         $stmt->execute();
@@ -571,13 +582,13 @@ if ($slug === "municipi") {
     // Si hay errores, devolver una respuesta con los errores
     if (!empty($errors)) {
         http_response_code(400); // Bad Request
-        echo json_encode(["status" => "error", "message" => "S'han produït errors en la validació", "errors" => $errors]);
+        echo json_encode(["status" => "error", "message" => $errors]);
         exit;
     }
 
     // Si no hay errores, crear las variables PHP y preparar la consulta PDO
-    $partit_politic = !empty($data['partit_politic']) ? $data['partit_politic'] : NULL;
-    $sigles = !empty($data['sigles']) ? $data['sigles'] : NULL;
+    $partit_politic = $data['partit_politic'];
+    $sigles = $data['sigles'];
 
     // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
     try {
@@ -663,8 +674,8 @@ if ($slug === "municipi") {
     }
 
     // Si no hay errores, crear las variables PHP y preparar la consulta PDO
-    $sindicat = !empty($data['sindicat']) ? $data['sindicat'] : NULL;
-    $sigles = !empty($data['sigles']) ? $data['sigles'] : NULL;
+    $sindicat = $data['sindicat'];
+    $sigles = $data['sigles'];
 
     // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
     try {
@@ -743,7 +754,7 @@ if ($slug === "municipi") {
     // Si hay errores, devolver una respuesta con los errores
     if (!empty($errors)) {
         http_response_code(400); // Bad Request
-        echo json_encode(["status" => "error", "message" => "S'han produït errors en la validació", "errors" => $errors]);
+        echo json_encode(["status" => "error", "message" => $errors]);
         exit;
     }
 
@@ -763,7 +774,8 @@ if ($slug === "municipi") {
     }
 
     // Si no hay errores, crear las variables PHP y preparar la consulta PDO
-    $comarca = !empty($data['comarca']) ? $data['comarca'] : NULL;
+    $comarca = $data['comarca'];
+    $comarca_ca = !empty($data['comarca_ca']) ? $data['comarca_ca'] : NULL;
 
     // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
     try {
@@ -773,9 +785,9 @@ if ($slug === "municipi") {
 
         // Crear la consulta SQL
         $sql = "INSERT INTO aux_dades_municipis_comarca (
-            comarca
+            comarca, comarca_ca
         ) VALUES (
-            :comarca
+            :comarca, :comarca_ca
         )";
 
         // Preparar la consulta
@@ -783,6 +795,7 @@ if ($slug === "municipi") {
 
         // Enlazar los parámetros con los valores de las variables PHP
         $stmt->bindParam(':comarca', $comarca, PDO::PARAM_STR);
+        $stmt->bindParam(':comarca_ca', $comarca_ca, PDO::PARAM_STR);
 
         // Ejecutar la consulta
         $stmt->execute();
@@ -841,7 +854,7 @@ if ($slug === "municipi") {
     // Si hay errores, devolver una respuesta con los errores
     if (!empty($errors)) {
         http_response_code(400); // Bad Request
-        echo json_encode(["status" => "error", "message" => "S'han produït errors en la validació", "errors" => $errors]);
+        echo json_encode(["status" => "error", "message" => $errors]);
         exit;
     }
 
@@ -861,7 +874,8 @@ if ($slug === "municipi") {
     }
 
     // Si no hay errores, crear las variables PHP y preparar la consulta PDO
-    $provincia = !empty($data['provincia']) ? $data['provincia'] : NULL;
+    $provincia_ca = !empty($data['provincia_ca']) ? $data['provincia_ca'] : NULL;
+    $provincia = $data['provincia'];
 
     // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
     try {
@@ -871,9 +885,9 @@ if ($slug === "municipi") {
 
         // Crear la consulta SQL
         $sql = "INSERT INTO aux_dades_municipis_provincia (
-            provincia
+            provincia, provincia_ca
         ) VALUES (
-            :provincia
+            :provincia, :provincia_ca
         )";
 
         // Preparar la consulta
@@ -881,6 +895,7 @@ if ($slug === "municipi") {
 
         // Enlazar los parámetros con los valores de las variables PHP
         $stmt->bindParam(':provincia', $provincia, PDO::PARAM_STR);
+        $stmt->bindParam(':provincia_ca', $provincia_ca, PDO::PARAM_STR);
 
         // Ejecutar la consulta
         $stmt->execute();
@@ -939,7 +954,7 @@ if ($slug === "municipi") {
     // Si hay errores, devolver una respuesta con los errores
     if (!empty($errors)) {
         http_response_code(400); // Bad Request
-        echo json_encode(["status" => "error", "message" => "S'han produït errors en la validació", "errors" => $errors]);
+        echo json_encode(["status" => "error", "message" => $errors]);
         exit;
     }
 
@@ -959,7 +974,8 @@ if ($slug === "municipi") {
     }
 
     // Si no hay errores, crear las variables PHP y preparar la consulta PDO
-    $comunitat = !empty($data['comunitat']) ? $data['comunitat'] : NULL;
+    $comunitat = $data['comunitat'];
+    $comunitat_ca = !empty($data['comunitat_ca']) ? $data['comunitat_ca'] : NULL;
 
     // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
     try {
@@ -969,9 +985,9 @@ if ($slug === "municipi") {
 
         // Crear la consulta SQL
         $sql = "INSERT INTO aux_dades_municipis_comunitat (
-            comunitat
+            comunitat, comunitat_ca
         ) VALUES (
-            :comunitat
+            :comunitat, :comunitat_ca
         )";
 
         // Preparar la consulta
@@ -979,6 +995,7 @@ if ($slug === "municipi") {
 
         // Enlazar los parámetros con los valores de las variables PHP
         $stmt->bindParam(':comunitat', $comunitat, PDO::PARAM_STR);
+        $stmt->bindParam(':comunitat_ca', $comunitat_ca, PDO::PARAM_STR);
 
         // Ejecutar la consulta
         $stmt->execute();
@@ -1037,7 +1054,7 @@ if ($slug === "municipi") {
     // Si hay errores, devolver una respuesta con los errores
     if (!empty($errors)) {
         http_response_code(400); // Bad Request
-        echo json_encode(["status" => "error", "message" => "S'han produït errors en la validació", "errors" => $errors]);
+        echo json_encode(["status" => "error", "message" => $errors]);
         exit;
     }
 
@@ -1057,7 +1074,8 @@ if ($slug === "municipi") {
     }
 
     // Si no hay errores, crear las variables PHP y preparar la consulta PDO
-    $estat = !empty($data['estat']) ? $data['estat'] : NULL;
+    $estat = $data['estat'];
+    $estat_ca = !empty($data['estat_ca']) ? $data['estat_ca'] : NULL;
 
     // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
     try {
@@ -1067,9 +1085,9 @@ if ($slug === "municipi") {
 
         // Crear la consulta SQL
         $sql = "INSERT INTO aux_dades_municipis_estat (
-            estat
+            estat, estat_ca
         ) VALUES (
-            :estat
+            :estat, :estat_ca
         )";
 
         // Preparar la consulta
@@ -1077,6 +1095,7 @@ if ($slug === "municipi") {
 
         // Enlazar los parámetros con los valores de las variables PHP
         $stmt->bindParam(':estat', $estat, PDO::PARAM_STR);
+        $stmt->bindParam(':estat_ca', $estat_ca, PDO::PARAM_STR);
 
         // Ejecutar la consulta
         $stmt->execute();

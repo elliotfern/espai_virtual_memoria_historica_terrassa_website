@@ -18,27 +18,36 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
                     <div id="errText"></div>
                 </div>
 
-                <div class="col-md-4">
+                <div class="col-md-4 mb-4">
                     <label for="arxiu" class="form-label negreta">Nom Arxiu:</label>
                     <input type="text" class="form-control" name="arxiu" id="arxiu" value="">
+                    <div class="avis-form">
+                        * Camp obligatori
+                    </div>
                 </div>
 
-                <div class="col-md-4">
+                <div class="col-md-4 mb-4">
                     <label for="codi" class="form-label negreta">Codi arxiu:</label>
                     <input type="text" class="form-control" name="codi" id="codi" value="">
+                    <div class="avis-form">
+                        * Camp obligatori
+                    </div>
                 </div>
 
-                <div class="col-md-4">
+                <div class="col-md-4 mb-4">
                     <label for="descripcio" class="form-label negreta">Descripció arxiu/fonts:</label>
                     <input type="text" class="form-control" name="descripcio" id="descripcio" value="">
+                    <div class="avis-form">
+                        * Camp obligatori
+                    </div>
                 </div>
 
-                <div class="col-md-4">
+                <div class="col-md-4 mb-4">
                     <label for="web" class="form-label negreta">Web:</label>
                     <input type="text" class="form-control" name="web" id="web" value="">
                 </div>
 
-                <div class="col-md-4">
+                <div class="col-md-4 mb-4">
                     <label for="ciutat" class="form-label negreta">Ciutat arxiu:</label>
                     <select class="form-select" name="ciutat" id="ciutat" value="">
                     </select>

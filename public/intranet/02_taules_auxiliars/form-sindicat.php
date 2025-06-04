@@ -66,11 +66,17 @@ if ($categoriaId === "modifica-sindicat") {
                 <div class="col-md-4">
                     <label for="sindicat" class="form-label negreta">Sindicat (català):</label>
                     <input type="text" class="form-control" id="sindicat" name="sindicat" value="<?php echo $sindicat_old; ?>">
+                    <div class="avis-form">
+                        * Camp obligatori
+                    </div>
                 </div>
 
                 <div class="col-md-4">
                     <label for="sigles" class="form-label negreta">Sigles del partit:</label>
                     <input type="text" class="form-control" id="sigles" name="sigles" value="<?php echo $sigles_old; ?>">
+                    <div class="avis-form">
+                        * Camp obligatori
+                    </div>
                 </div>
 
                 <div class="row espai-superior" style="border-top: 1px solid black;padding-top:25px">
