@@ -124,3 +124,9 @@ export interface Represeliat {
   font_intern: number;
   visibilitat: number;
 }
+
+export interface HTMLTrixEditorElement extends HTMLElement {
+  editor: {
+    loadHTML: (html: string) => void;
+  };
+}

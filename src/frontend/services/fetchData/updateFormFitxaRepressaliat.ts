@@ -1,9 +1,13 @@
 import { missatgesBackend } from './missatgesBackend';
+import { resetForm } from './resetForm';
+import { Missatges } from '../textosIdiomes/missatges';
 
-export async function enviarDadesFormFitxaRepressaliat(event: Event, method: 'POST' | 'PUT' = 'PUT'): Promise<void> {
+export async function enviarDadesFormFitxaRepressaliat(event: Event, method: 'POST' | 'PUT' = 'PUT', neteja?: boolean): Promise<void> {
   event.preventDefault();
 
   const form = document.getElementById('formFitxaRepressaliat') as HTMLFormElement | null;
+  const formId = 'formFitxaRepressaliat';
+
   if (!form) return;
 
   const formData: Record<string, string> = {};
@@ -60,24 +64,37 @@ export async function enviarDadesFormFitxaRepressaliat(event: Event, method: 'PO
       if (data.status === 'success') {
         missatgesBackend({
           tipus: 'success',
-          missatge: data.message || "Les dades s'han actualitzat correctament!",
+          missatge: data.message || Missatges.success.default,
           contenidor: okMessageDiv,
           text: okTextDiv,
           altreContenidor: errMessageDiv,
         });
+        if (neteja && formId) {
+          resetForm(formId);
+        }
       } else {
+        const missatge = `
+                  ${data.message ? `<p>${data.message}</p>` : ''}
+                  ${data.errors && data.errors.length > 0 ? `<ul>${data.errors.map((e: string) => `<li>${e}</li>`).join('')}</ul>` : `<p>${Missatges.error.default}</p>`}
+                `;
+
         missatgesBackend({
           tipus: 'error',
-          missatge: (data.errors || ['Error desconegut.']).join('<br>'),
+          missatge,
           contenidor: errMessageDiv,
           text: errTextDiv,
           altreContenidor: okMessageDiv,
         });
       }
     } else {
+      const missatge = `
+                  ${data.message ? `<p>${data.message}</p>` : ''}
+                  ${data.errors && data.errors.length > 0 ? `<ul>${data.errors.map((e: string) => `<li>${e}</li>`).join('')}</ul>` : `<p>${Missatges.error.default}</p>`}
+                `;
+
       missatgesBackend({
         tipus: 'error',
-        missatge: (data.errors || ["S'ha produït un error a la base de dades."]).join('<br>'),
+        missatge,
         contenidor: errMessageDiv,
         text: errTextDiv,
         altreContenidor: okMessageDiv,

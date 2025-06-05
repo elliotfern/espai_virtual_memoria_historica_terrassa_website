@@ -35,7 +35,7 @@ if ($slug === 'llistatArxiusFonts') {
               FROM aux_bibliografia_arxius_codis AS l
               ORDER BY l.arxiu ASC";
 
-    $result = getData($query);
+    $result = getData2($query);
     echo json_encode($result);
 
     // GET : Llistat bibliografia
@@ -46,7 +46,7 @@ if ($slug === 'llistatArxiusFonts') {
               LEFT JOIN aux_dades_municipis AS m ON l.ciutat = m.id
               ORDER BY l.llibre";
 
-    $result = getData($query);
+    $result = getData2($query);
     echo json_encode($result);
 
     // GET : Fitxa repressaliat > llistat bibliografia
@@ -68,7 +68,7 @@ if ($slug === 'llistatArxiusFonts') {
             LEFT JOIN aux_dades_municipis AS m ON ld.ciutat = m.id
             WHERE l.idRepresaliat = :idRepresaliat";
 
-    $result = getData($query, ['idRepresaliat' => $id], false);
+    $result = getData2($query, ['idRepresaliat' => $id], false);
     echo json_encode($result);
 
     // GET : Fitxa repressaliat > llistat arxius
@@ -87,6 +87,6 @@ if ($slug === 'llistatArxiusFonts') {
             LEFT JOIN aux_dades_municipis AS m ON c.ciutat = m.id
             WHERE a.idRepresaliat = :idRepresaliat";
 
-    $result = getData($query, ['idRepresaliat' => $id], false);
+    $result = getData2($query, ['idRepresaliat' => $id], false);
     echo json_encode($result);
 }

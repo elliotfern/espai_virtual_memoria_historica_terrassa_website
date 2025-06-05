@@ -135,7 +135,7 @@ function checkReferer($allowedOrigin)
     }
 }
 
-function getData($query, $params = [], $single = false)
+function getData2($query, $params = [], $single = false)
 {
     global $conn;
     /** @var PDO $conn */

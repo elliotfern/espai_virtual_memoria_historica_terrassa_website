@@ -1,7 +1,8 @@
 interface LoginResponse {
   status: string;
   idUser: string;
-  token?: string; // el token puede estar o no, dependiendo de la respuesta
+  token?: string;
+  message: string;
 }
 
 export function loginPage() {
@@ -82,7 +83,7 @@ export async function login(userName: string, password: string): Promise<void> {
 
     if (response.ok && data.status === 'success') {
       // ✅ Login exitoso
-      loginMessageOk.innerHTML = 'Has iniciat sessió correctament. Redirigint...';
+      loginMessageOk.innerHTML = data.message || 'Has iniciat sessió correctament. Redirigint...';
       loginMessageOk.style.display = 'block';
 
       setTimeout(() => {

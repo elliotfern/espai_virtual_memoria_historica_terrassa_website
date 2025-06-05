@@ -3,13 +3,15 @@
 use App\Config\Tables;
 use App\Config\Audit;
 use App\Config\DatabaseConnection;
+use App\Utils\MissatgesAPI;
+use App\Utils\Response;
+use App\Utils\ValidacioErrors;
 
 $conn = DatabaseConnection::getConnection();
 
 if (!$conn) {
     die("No se pudo establecer conexión a la base de datos.");
 }
-
 
 // Configuración de cabeceras para aceptar JSON y responder JSON
 header("Content-Type: application/json");
@@ -50,79 +52,79 @@ $errors = [];
 
 // Validación de los datos recibidos
 if (empty($data['nom'])) {
-    $errors[] = 'El camp nom és obligatori.';
+    $errors[] =  ValidacioErrors::requerit('nom');
 }
 
 if (empty($data['cognom1'])) {
-    $errors[] = 'El camp cognom1 és obligatori.';
+    $errors[] = ValidacioErrors::requerit('primer cognom');
 }
 
 if (empty($data['categoria'])) {
-    $errors[] = 'El camp categoria és obligatori.';
+    $errors[] = ValidacioErrors::requerit('categoria');
 }
 
 if (empty($data['sexe'])) {
-    $errors[] = 'El camp sexe és obligatori.';
+    $errors[] = ValidacioErrors::requerit('sexe');
 }
 
 if (empty($data['tipologia_lloc_defuncio'])) {
-    $errors[] = 'El camp tipologia_lloc_defuncio és obligatori.';
+    $errors[] = ValidacioErrors::requerit('tipologia del lloc de defunció');
 }
 
 if (empty($data['causa_defuncio'])) {
-    $errors[] = 'El camp causa_defuncio és obligatori.';
+    $errors[] = ValidacioErrors::requerit('causa de defunció');
 }
 
 if (empty($data['municipi_residencia'])) {
-    $errors[] = 'El camp municipi_residencia és obligatori.';
+    $errors[] = ValidacioErrors::requerit('municipi de residència');
 }
 
 if (empty($data['estat_civil'])) {
-    $errors[] = 'El camp estat_civil és obligatori.';
+    $errors[] = ValidacioErrors::requerit('estat civil');
 }
 
 if (empty($data['estudis'])) {
-    $errors[] = 'El camp estudis és obligatori.';
+    $errors[] = ValidacioErrors::requerit('estudis');
 }
 
 if (empty($data['ofici'])) {
-    $errors[] = 'El camp ofici és obligatori.';
+    $errors[] = ValidacioErrors::requerit('ofici');
 }
 
 if (empty($data['filiacio_politica'])) {
-    $errors[] = 'El camp filiacio_politica és obligatori.';
+    $errors[] = ValidacioErrors::requerit('filiació política');
 }
 
 if (empty($data['filiacio_sindical'])) {
-    $errors[] = 'El camp filiacio_sindical és obligatori.';
+    $errors[] = ValidacioErrors::requerit('filiació sindical');
 }
 
 if (empty($data['autor'])) {
-    $errors[] = 'El camp autor és obligatori.';
+    $errors[] = ValidacioErrors::requerit('autor');
 }
 
 if (empty($data['completat'])) {
-    $errors[] = 'El camp completat és obligatori.';
+    $errors[] = ValidacioErrors::requerit('completat');
 }
-
 
 $data_naixementRaw = $data['data_naixement'] ?? '';
 if (!empty($data_naixementRaw)) {
     $data_naixementFormat = convertirDataFormatMysql($data_naixementRaw, 3);
 
     if (!$data_naixementFormat) {
-        $errors[] = "El format de data no és vàlid. Format esperat: DD/MM/YYYY.";
+        $errors[] = ValidacioErrors::dataNoValida('data de naixement');
     }
 } else {
     $data_naixementFormat = null;
 }
+
 
 $data_defuncioRaw = $data['data_defuncio'] ?? '';
 if (!empty($data_defuncioRaw)) {
     $data_defuncioFormat = convertirDataFormatMysql($data_defuncioRaw, 3);
 
     if (!$data_defuncioFormat) {
-        $errors[] = "El format de data no és vàlid. Format esperat: DD/MM/YYYY.";
+        $errors[] = ValidacioErrors::dataNoValida('data de defunció');
     }
 } else {
     $data_defuncioFormat = null;
@@ -130,9 +132,11 @@ if (!empty($data_defuncioRaw)) {
 
 // Si hay errores, devolver una respuesta con los errores
 if (!empty($errors)) {
-    http_response_code(400); // Bad Request
-    echo json_encode(["status" => "error", "message" => "S'ha produit un error a la base de dades", "errors" => $errors]);
-    exit;
+    Response::error(
+        MissatgesAPI::error('validacio'),
+        $errors,
+        400
+    );
 }
 
 // Si no hay errores, crear las variables PHP y preparar la consulta PDO
@@ -259,9 +263,16 @@ try {
     );
 
     // Respuesta de éxito
-    echo json_encode(["status" => "success", "message" => "Les dades s'han actualitzat correctament a la base de dades."]);
+    Response::success(
+        MissatgesAPI::success('update'),
+        ['id' => $id],
+        200
+    );
 } catch (PDOException $e) {
     // En caso de error en la conexión o ejecución de la consulta
-    http_response_code(500); // Internal Server Error
-    echo json_encode(["status" => "error", "message" => "S'ha produit un error a la base de dades: " . $e->getMessage()]);
+    Response::error(
+        MissatgesAPI::error('errorBD'),
+        [$e->getMessage()],
+        500
+    );
 }

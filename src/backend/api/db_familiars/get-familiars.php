@@ -42,6 +42,6 @@ if ($slug === "fitxaFamiliars") {
             LEFT JOIN aux_familiars_relacio AS r ON f.relacio_parentiu = r.id
             WHERE f.idParent = :idParent";
 
-    $result = getData($query, ['idParent' => $id], false);
+    $result = getData2($query, ['idParent' => $id], false);
     echo json_encode($result);
 }

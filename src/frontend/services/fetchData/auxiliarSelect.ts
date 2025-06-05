@@ -15,7 +15,11 @@ export async function auxiliarSelect(idAux: number | null | undefined, api: stri
     }
 
     type Item = { id: number; [key: string]: unknown };
-    const data: Item[] = await response.json();
+
+    const jsonResponse = await response.json();
+
+    // Detectamos si viene dentro de `data` o es el array directamente
+    const data: Item[] = Array.isArray(jsonResponse.data) ? jsonResponse.data : jsonResponse;
 
     const selectElement = document.getElementById(elementId) as HTMLSelectElement;
     if (!selectElement) return;

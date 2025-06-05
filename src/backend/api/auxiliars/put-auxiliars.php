@@ -608,4 +608,231 @@ if ($slug === "municipi") {
         http_response_code(500); // Internal Server Error
         echo json_encode(["status" => "error", "message" => "S'ha produit un error a la base de dades: " . $e->getMessage()]);
     }
+
+    // 5) PUT CARREC EMPRESA
+    // ruta PUT => "/api/auxiliars/pust/carrec_empresa" 
+} else if ($slug === "carrec_empresa") {
+    $inputData = file_get_contents('php://input');
+    $data = json_decode($inputData, true);
+
+    // Inicializar un array para los errores
+    $errors = [];
+
+    // Validación de los datos recibidos
+    if (empty($data['carrec_cat'])) {
+        $errors[] = 'El camp carrec_cat és obligatori.';
+    }
+
+    // Si hay errores, devolver una respuesta con los errores
+    if (!empty($errors)) {
+        http_response_code(400); // Bad Request
+        echo json_encode(["status" => "error", "message" => $errors]);
+        exit;
+    }
+
+    // Si no hay errores, crear las variables PHP y preparar la consulta PDO
+    $carrec_cat = $data['carrec_cat'];
+    $carrec_cast = !empty($data['carrec_cast']) ? $data['carrec_cast'] : NULL;
+    $carrec_eng = !empty($data['carrec_eng']) ? $data['carrec_eng'] : NULL;
+    $id = $data['id'];
+
+    // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
+    try {
+
+        global $conn;
+        /** @var PDO $conn */
+
+        // Crear la consulta SQL
+        $sql = "UPDATE aux_ofici_carrec SET 
+            carrec_cat = :carrec_cat,
+            carrec_eng = :carrec_eng,
+            carrec_cast = :carrec_cast
+        WHERE id = :id";
+
+        // Preparar la consulta
+        $stmt = $conn->prepare($sql);
+
+        // Enlazar los parámetros con los valores de las variables PHP
+        $stmt->bindParam(':carrec_cat', $carrec_cat, PDO::PARAM_STR);
+        $stmt->bindParam(':carrec_eng', $carrec_eng, PDO::PARAM_STR);
+        $stmt->bindParam(':carrec_cast', $carrec_cast, PDO::PARAM_STR);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+
+        // Ejecutar la consulta
+        $stmt->execute();
+
+        // Recuperar el ID del registro creado
+        $tipusOperacio = "UPDATE";
+        $detalls =  "Modificació càrrec: " . $carrec_cat;
+
+        // Si la inserció té èxit, cal registrar la inserció en la base de control de canvis
+
+        Audit::registrarCanvi(
+            $conn,
+            $userId,                      // ID del usuario que hace el cambio
+            $tipusOperacio,             // Tipus operacio
+            $detalls,                       // Descripción de la operación
+            Tables::AUX_OFICI_CARREC,  // Nombre de la tabla afectada
+            $id                           // ID del registro modificado
+        );
+
+        // Respuesta de éxito
+        echo json_encode(["status" => "success", "message" => "Les dades s'han actualitzat correctament a la base de dades."]);
+    } catch (PDOException $e) {
+        // En caso de error en la conexión o ejecución de la consulta
+        http_response_code(500); // Internal Server Error
+        echo json_encode(["status" => "error", "message" => "S'ha produit un error a la base de dades: " . $e->getMessage()]);
+    }
+
+    // 2) PUT ofici
+    // ruta PUT => "/api/auxiliars/put/ofici"
+} else if ($slug === "ofici") {
+    $inputData = file_get_contents('php://input');
+    $data = json_decode($inputData, true);
+
+    // Inicializar un array para los errores
+    $errors = [];
+
+    // Validación de los datos recibidos
+    if (empty($data['ofici_cat'])) {
+        $errors[] = 'El camp ofici és obligatori.';
+    }
+
+    // Si hay errores, devolver una respuesta con los errores
+    if (!empty($errors)) {
+        http_response_code(400); // Bad Request
+        echo json_encode(["status" => "error", "message" => $errors]);
+        exit;
+    }
+
+    // Si no hay errores, crear las variables PHP y preparar la consulta PDO
+    $ofici_cat = $data['ofici_cat'];
+    $ofici_es = !empty($data['ofici_es']) ? $data['ofici_es'] : NULL;
+    $ofici_en = !empty($data['ofici_en']) ? $data['ofici_en'] : NULL;
+    $id = $data['id'];
+
+    // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
+    try {
+
+        global $conn;
+        /** @var PDO $conn */
+
+        // Crear la consulta SQL
+        $sql = "UPDATE aux_oficis SET 
+            ofici_cat = :ofici_cat,
+            ofici_es = :ofici_es,
+            ofici_en = :ofici_en
+        WHERE id = :id";
+
+        // Preparar la consulta
+        $stmt = $conn->prepare($sql);
+
+        // Enlazar los parámetros con los valores de las variables PHP
+        $stmt->bindParam(':ofici_cat', $ofici_cat, PDO::PARAM_STR);
+        $stmt->bindParam(':ofici_es', $ofici_es, PDO::PARAM_STR);
+        $stmt->bindParam(':ofici_en', $ofici_en, PDO::PARAM_STR);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+
+        // Ejecutar la consulta
+        $stmt->execute();
+
+        // Recuperar el ID del registro creado
+        $tipusOperacio = "UPDATR";
+        $detalls =  "Modificació ofici: " . $ofici_cat;
+
+        // Si la inserció té èxit, cal registrar la inserció en la base de control de canvis
+
+        Audit::registrarCanvi(
+            $conn,
+            $userId,                      // ID del usuario que hace el cambio
+            $tipusOperacio,             // Tipus operacio
+            $detalls,                       // Descripción de la operación
+            Tables::AUX_OFICIS,  // Nombre de la tabla afectada
+            $id                           // ID del registro modificado
+        );
+
+        // Respuesta de éxito
+        echo json_encode(["status" => "success", "message" => "Les dades s'han actualitzat correctament a la base de dades."]);
+    } catch (PDOException $e) {
+        // En caso de error en la conexión o ejecución de la consulta
+        http_response_code(500); // Internal Server Error
+        echo json_encode(["status" => "error", "message" => "S'ha produit un error a la base de dades: " . $e->getMessage()]);
+    }
+
+    // 6) PUT SUB-SECTOR ECONOMIC
+    // ruta PUT => "/api/auxiliars/put/sub_sector_economic"
+} else if ($slug === "sub_sector_economic") {
+    $inputData = file_get_contents('php://input');
+    $data = json_decode($inputData, true);
+
+    // Inicializar un array para los errores
+    $errors = [];
+
+    // Validación de los datos recibidos
+    if (empty($data['sub_sector_cat'])) {
+        $errors[] = 'El camp sub_sector és obligatori.';
+    }
+
+    // Si hay errores, devolver una respuesta con los errores
+    if (!empty($errors)) {
+        http_response_code(400); // Bad Request
+        echo json_encode(["status" => "error", "message" => "S'han produït errors en la validació", "errors" => $errors]);
+        exit;
+    }
+
+    // Si no hay errores, crear las variables PHP y preparar la consulta PDO
+    $sub_sector_cat = $data['sub_sector_cat'];
+    $sub_sector_cast = !empty($data['sub_sector_cast']) ? $data['sub_sector_cast'] : NULL;
+    $sub_sector_eng = !empty($data['sub_sector_eng']) ? $data['sub_sector_eng'] : NULL;
+    $idSector = !empty($data['idSector']) ? $data['idSector'] : NULL;
+    $id = $data['id'];
+
+    // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
+    try {
+
+        global $conn;
+        /** @var PDO $conn */
+
+        $sql = "UPDATE aux_sub_sector_economic SET 
+            sub_sector_cat = :sub_sector_cat,
+            sub_sector_eng = :sub_sector_eng,
+            idSector = :idSector,
+            sub_sector_cast = :sub_sector_cast
+        WHERE id = :id";
+
+        // Preparar la consulta
+        $stmt = $conn->prepare($sql);
+
+        // Enlazar los parámetros con los valores de las variables PHP
+        $stmt->bindParam(':sub_sector_cat', $sub_sector_cat, PDO::PARAM_STR);
+        $stmt->bindParam(':sub_sector_eng', $sub_sector_eng, PDO::PARAM_STR);
+        $stmt->bindParam(':sub_sector_cast', $sub_sector_cast, PDO::PARAM_STR);
+        $stmt->bindParam(':idSector', $idSector, PDO::PARAM_INT);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+
+        // Ejecutar la consulta
+        $stmt->execute();
+
+        // Recuperar el ID del registro creado
+        $tipusOperacio = "UPDATE";
+        $detalls =  "Modificació sub-sector econòmic " . $sub_sector_cat;
+
+        // Si la inserció té èxit, cal registrar la inserció en la base de control de canvis
+
+        Audit::registrarCanvi(
+            $conn,
+            $userId,                      // ID del usuario que hace el cambio
+            $tipusOperacio,             // Tipus operacio
+            $detalls,                       // Descripción de la operación
+            Tables::AUX_SUB_SECTOR_ECONOMIC,  // Nombre de la tabla afectada
+            $id                           // ID del registro modificado
+        );
+
+        // Respuesta de éxito
+        echo json_encode(["status" => "success", "message" => "Les dades s'han actualitzat correctament a la base de dades."]);
+    } catch (PDOException $e) {
+        // En caso de error en la conexión o ejecución de la consulta
+        http_response_code(500); // Internal Server Error
+        echo json_encode(["status" => "error", "message" => "S'ha produit un error a la base de dades: " . $e->getMessage()]);
+    }
 }

@@ -1,12 +1,8 @@
 <?php
 
-use App\Config\DatabaseConnection;
-
-$conn = DatabaseConnection::getConnection();
-
-if (!$conn) {
-    die("No se pudo establecer conexión a la base de datos.");
-}
+use App\Config\Database;
+use App\Utils\Response;
+use App\Utils\MissatgesAPI;
 
 $slug = $routeParams[0];
 
@@ -30,6 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
 // GET : llistat de municipis
 // URL: https://memoriaterrassa.cat/api/auxiliars/get/municipis
 if ($slug === "municipis") {
+    $db = new Database();
 
     $query = "SELECT m.id, m.ciutat, c.comarca, p.provincia, co.comunitat, e.estat
             FROM  aux_dades_municipis AS m
@@ -39,8 +36,30 @@ if ($slug === "municipis") {
             LEFT JOIN aux_dades_municipis_estat AS e ON m.estat = e.id
             ORDER BY m.ciutat ASC";
 
-    $result = getData($query);
-    echo json_encode($result);
+    try {
+        $result = $db->getData($query);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;  // o exit; según cómo funcione Response::error
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
 
     // GET : llistat de partits polítics
     // URL: https://memoriaterrassa.cat/api/auxiliars/get/partitsPolitics
@@ -51,7 +70,7 @@ if ($slug === "municipis") {
             FROM aux_filiacio_politica AS p
             ORDER BY p.partit_politic ASC";
 
-    $result = getData($query);
+    $result = getData2($query);
     echo json_encode($result);
 
     // GET : llistat de sindicats
@@ -63,7 +82,7 @@ if ($slug === "municipis") {
             FROM aux_filiacio_sindical AS s
             ORDER BY s.sindicat ASC";
 
-    $result = getData($query);
+    $result = getData2($query);
     echo json_encode($result);
 
     // GET : llistat de provincies
@@ -74,7 +93,7 @@ if ($slug === "municipis") {
         FROM aux_dades_municipis_provincia AS p
         ORDER BY p.provincia ASC";
 
-    $result = getData($query);
+    $result = getData2($query);
     echo json_encode($result);
 
 
@@ -86,7 +105,7 @@ if ($slug === "municipis") {
         FROM aux_dades_municipis_comarca AS c
         ORDER BY c.comarca ASC";
 
-    $result = getData($query);
+    $result = getData2($query);
     echo json_encode($result);
 
     // GET : llistat de comunitats autonomes
@@ -97,7 +116,7 @@ if ($slug === "municipis") {
         FROM aux_dades_municipis_comunitat AS c
         ORDER BY c.comunitat ASC";
 
-    $result = getData($query);
+    $result = getData2($query);
     echo json_encode($result);
 
     // GET : llistat de països
@@ -108,7 +127,7 @@ if ($slug === "municipis") {
         FROM aux_dades_municipis_estat AS e
         ORDER BY e.estat ASC";
 
-    $result = getData($query);
+    $result = getData2($query);
     echo json_encode($result);
 
     // GET : llistat d'estudis (analfabet, alfabetitzat...)
@@ -119,7 +138,7 @@ if ($slug === "municipis") {
         FROM aux_estudis AS e
         ORDER BY e.estudi_cat ASC";
 
-    $result = getData($query);
+    $result = getData2($query);
     echo json_encode($result);
 
     // GET : Llistat oficis
@@ -129,7 +148,7 @@ if ($slug === "municipis") {
               FROM aux_oficis AS o
               ORDER BY o.ofici_cat ASC";
 
-    $result = getData($query);
+    $result = getData2($query);
     echo json_encode($result);
 
     // GET : Llistat sectors
@@ -139,7 +158,7 @@ if ($slug === "municipis") {
               FROM aux_sector_economic AS se
               ORDER BY se.sector_cat ASC";
 
-    $result = getData($query);
+    $result = getData2($query);
     echo json_encode($result);
 
     // GET : Llistat sub-sectors economics
@@ -149,7 +168,7 @@ if ($slug === "municipis") {
               FROM aux_sub_sector_economic AS sse
               ORDER BY sse.sub_sector_cat ASC";
 
-    $result = getData($query);
+    $result = getData2($query);
     echo json_encode($result);
 
     // GET : Llistat càrrecs empresa
@@ -159,7 +178,7 @@ if ($slug === "municipis") {
               FROM aux_ofici_carrec AS ce
               ORDER BY ce.carrec_cat ASC";
 
-    $result = getData($query);
+    $result = getData2($query);
     echo json_encode($result);
 
     // GET : Llistat estat civil
@@ -169,7 +188,7 @@ if ($slug === "municipis") {
               FROM aux_estat_civil AS ec
               ORDER BY ec.estat_cat ASC";
 
-    $result = getData($query);
+    $result = getData2($query);
     echo json_encode($result);
 
     // GET : Llistat espais
@@ -179,7 +198,7 @@ if ($slug === "municipis") {
               FROM aux_espai AS esp
               ORDER BY esp.espai_cat ASC";
 
-    $result = getData($query);
+    $result = getData2($query);
     echo json_encode($result);
 
     // GET : Tipologia espais
@@ -189,7 +208,7 @@ if ($slug === "municipis") {
               FROM aux_tipologia_espais AS tipologia
               ORDER BY tipologia.tipologia_espai_ca ASC";
 
-    $result = getData($query);
+    $result = getData2($query);
     echo json_encode($result);
 
     // GET : Tipologia espais
@@ -200,7 +219,7 @@ if ($slug === "municipis") {
               WHERE cat = 1
               ORDER BY tipologia.tipologia_espai_ca ASC";
 
-    $result = getData($query);
+    $result = getData2($query);
     echo json_encode($result);
 
     // GET : Causa defuncio - tots els casos (per formulari fitxa dades personals)
@@ -210,7 +229,7 @@ if ($slug === "municipis") {
               FROM aux_causa_defuncio AS c
               ORDER BY c.causa_defuncio_ca ASC";
 
-    $result = getData($query);
+    $result = getData2($query);
     echo json_encode($result);
 
     // GET : Causa defuncio - per formulari morts civils
@@ -225,7 +244,7 @@ if ($slug === "municipis") {
              OR c.cat = 3
              ORDER BY c.causa_defuncio_ca ASC";
 
-    $result = getData($query, ['cat' => $tipus], false);
+    $result = getData2($query, ['cat' => $tipus], false);
     echo json_encode($result);
 
     // GET : Autors fitxes
@@ -235,7 +254,7 @@ if ($slug === "municipis") {
               FROM auth_users AS u
               ORDER BY u.nom ASC";
 
-    $result = getData($query);
+    $result = getData2($query);
     echo json_encode($result);
 
     // GET : Procediments judicials
@@ -245,7 +264,7 @@ if ($slug === "municipis") {
               FROM aux_procediment_judicial AS pj
               ORDER BY pj.procediment_cat ASC";
 
-    $result = getData($query);
+    $result = getData2($query);
     echo json_encode($result);
 
     // GET : Llistat jutjats
@@ -255,7 +274,7 @@ if ($slug === "municipis") {
               FROM aux_jutjats AS j
               ORDER BY j.jutjat_cat ASC";
 
-    $result = getData($query);
+    $result = getData2($query);
     echo json_encode($result);
 
     // GET : Llistat tipus acusacions
@@ -265,7 +284,7 @@ if ($slug === "municipis") {
               FROM aux_acusacions AS sa
               ORDER BY sa.acusacio_cat ASC";
 
-    $result = getData($query);
+    $result = getData2($query);
     echo json_encode($result);
 
     // GET : Llistat sentencies
@@ -275,7 +294,7 @@ if ($slug === "municipis") {
               FROM aux_sentencies AS sen
               ORDER BY sen.sentencia_cat ASC";
 
-    $result = getData($query);
+    $result = getData2($query);
     echo json_encode($result);
 
     // GET : Condició civil/militar
@@ -285,7 +304,7 @@ if ($slug === "municipis") {
               FROM aux_condicio AS c
               ORDER BY c.condicio_ca ASC";
 
-    $result = getData($query);
+    $result = getData2($query);
     echo json_encode($result);
 
     // GET : Llistat bàndols guerra
@@ -295,7 +314,7 @@ if ($slug === "municipis") {
               FROM aux_bandol AS b
               ORDER BY b.bandol_ca ASC";
 
-    $result = getData($query);
+    $result = getData2($query);
     echo json_encode($result);
 
     // GET : Llistat cossos militats
@@ -305,7 +324,7 @@ if ($slug === "municipis") {
               FROM aux_cossos_militars AS c
               ORDER BY c.cos_militar_ca ASC";
 
-    $result = getData($query);
+    $result = getData2($query);
     echo json_encode($result);
 
     // GET : Situacions deportats
@@ -315,7 +334,7 @@ if ($slug === "municipis") {
               FROM aux_situacions_deportats AS s
               ORDER BY s.situacio_ca ASC";
 
-    $result = getData($query);
+    $result = getData2($query);
     echo json_encode($result);
 
     // GET : Tipus presons deportats
@@ -325,7 +344,7 @@ if ($slug === "municipis") {
               FROM aux_tipus_presons AS t
               ORDER BY t.tipus_preso_ca ASC";
 
-    $result = getData($query);
+    $result = getData2($query);
     echo json_encode($result);
 
     // GET : Relacions parentiu
@@ -335,7 +354,7 @@ if ($slug === "municipis") {
               FROM aux_familiars_relacio AS r
               ORDER BY r.relacio_parentiu ASC";
 
-    $result = getData($query);
+    $result = getData2($query);
     echo json_encode($result);
 
     // GET : Llistat completo represaliats
@@ -349,7 +368,7 @@ if ($slug === "municipis") {
         FROM db_dades_personals AS dp
         ORDER BY dp.cognom1 ASC";
 
-    $result = getData($query);
+    $result = getData2($query);
     echo json_encode($result);
 
 
@@ -360,7 +379,7 @@ if ($slug === "municipis") {
               FROM aux_llocs_bombardeig AS l
               ORDER BY l.lloc_bombardeig_ca ASC";
 
-    $result = getData($query);
+    $result = getData2($query);
     echo json_encode($result);
 
     // GET : Llistat llibres bibliografia
@@ -371,7 +390,7 @@ if ($slug === "municipis") {
               FROM aux_bibliografia_llibre_detalls AS l
               ORDER BY l.llibre ASC";
 
-    $result = getData($query);
+    $result = getData2($query);
     echo json_encode($result);
 
     // GET : Llistat arxius bibliografia
@@ -382,7 +401,7 @@ if ($slug === "municipis") {
               FROM aux_bibliografia_arxius_codis AS l
               ORDER BY l.arxiu ASC";
 
-    $result = getData($query);
+    $result = getData2($query);
     echo json_encode($result);
 
     // GET : llistat d'avatars usuaris
@@ -394,7 +413,7 @@ if ($slug === "municipis") {
             WHERE i.tipus = 2
             ORDER BY i.nomImatge ASC";
 
-    $result = getData($query);
+    $result = getData2($query);
     echo json_encode($result);
 
     // GET : llistat de categories de repressió (col·lectius)
@@ -423,7 +442,7 @@ if ($slug === "municipis") {
     $column = $allowedLanguages[$lang];
     $query = "SELECT id, {$column} AS name FROM aux_categoria ORDER BY id";
 
-    $result = getData($query);
+    $result = getData2($query);
     echo json_encode($result);
 } else {
     // Si el parámetro 'type' no coincide con ninguno de los casos anteriores, mostramos un error

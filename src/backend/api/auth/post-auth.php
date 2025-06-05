@@ -6,6 +6,7 @@ use Firebase\JWT\JWT;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 use App\Config\DatabaseConnection;
+use App\Utils\MissatgesAPI;
 
 $conn = DatabaseConnection::getConnection();
 
@@ -97,7 +98,8 @@ if ($slug === "login") {
 
         // Preparar la respuesta
         $response = array(
-            "status" => "success"
+            "status" => "success",
+            "message" => MissatgesAPI::success('loginOk'),
         );
 
         $cookie_options = array(

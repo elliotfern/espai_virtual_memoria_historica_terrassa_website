@@ -19,7 +19,7 @@ export function intranet() {
     if (llibre) {
       // Lanzar actualizador de datos
       llibre.addEventListener('submit', function (event) {
-        transmissioDadesDB(event, 'POST', 'arxiuForm', '/api/fonts_documentals/post/arxiu');
+        transmissioDadesDB(event, 'POST', 'arxiuForm', '/api/fonts_documentals/post/arxiu', true);
       });
     }
   }

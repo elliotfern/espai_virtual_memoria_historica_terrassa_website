@@ -37,6 +37,6 @@ if ($slug === "fitxaBiografia") {
             FROM db_biografies AS b
             WHERE b.idRepresaliat = :idRepresaliat";
 
-    $result = getData($query, ['idRepresaliat' => $id], false);
+    $result = getData2($query, ['idRepresaliat' => $id], false);
     echo json_encode($result);
 }

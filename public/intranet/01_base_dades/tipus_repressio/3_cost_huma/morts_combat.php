@@ -5,12 +5,10 @@
         <div id="fitxaNomCognoms"></div>
 
         <div class="alert alert-success" role="alert" id="okMessage" style="display:none">
-            <h4 class="alert-heading"><strong>Modificació correcte!</strong></h4>
             <div id="okText"></div>
         </div>
 
         <div class="alert alert-danger" role="alert" id="errMessage" style="display:none">
-            <h4 class="alert-heading"><strong>Error en les dades!</strong></h4>
             <div id="errText"></div>
         </div>
 

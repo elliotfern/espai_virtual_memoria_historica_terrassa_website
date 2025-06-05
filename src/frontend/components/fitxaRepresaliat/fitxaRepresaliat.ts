@@ -4,7 +4,7 @@ import { fetchData } from '../../services/api/api';
 import { Fitxa, FitxaJudicial, FitxaFamiliars } from '../../types/types';
 import { fitxaTipusRepressio } from './tab_tipus_repressio';
 import { formatDates } from '../../services/formatDates/dates';
-import { carregarTraduccions, getTraducciones } from '../../services/idiomes/traduccio';
+import { carregarTraduccions, getTraducciones } from '../../services/textosIdiomes/traduccio';
 import { traduirCategoriesRepressioArray } from '../taulaDades/traduirCategoriesRepressio';
 
 interface Partit {

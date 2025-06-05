@@ -8,9 +8,10 @@ error_reporting(E_ALL);
 // Incluir configuraciones y rutas
 require_once __DIR__ . '/src/backend/Config/funcions.php';
 require_once __DIR__ . '/src/backend/Config/config.php';
-require_once __DIR__ . '/src/backend/utils/verificacioSessio.php';
-require_once __DIR__ . '/src/backend/utils/convertirDates.php';
-require_once __DIR__ . '/src/backend/utils/sanitizerHtml.php';
+require_once __DIR__ . '/src/backend/Config/connection.php'; // cal eliminar-ho
+require_once __DIR__ . '/src/backend/Utils/verificacioSessio.php';
+require_once __DIR__ . '/src/backend/Utils/convertirDates.php';
+require_once __DIR__ . '/src/backend/Utils/sanitizerHtml.php';
 require_once __DIR__ . '/src/backend/routes/routes.php';
 
 // Obtener la ruta solicitada

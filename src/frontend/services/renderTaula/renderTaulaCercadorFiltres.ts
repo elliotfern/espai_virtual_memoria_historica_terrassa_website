@@ -25,7 +25,8 @@ export async function renderTaulaCercadorFiltres<T>({ url, columns, containerId,
     return;
   }
 
-  const data: T[] = result;
+  // Aquí comprobamos si la propiedad 'data' existe y es un array, si no, usamos directamente 'result'
+  const data: T[] = Array.isArray(result.data) ? result.data : result;
 
   let currentPage = 1;
   let filteredData = [...data];
