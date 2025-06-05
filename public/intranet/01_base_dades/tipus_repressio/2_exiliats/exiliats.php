@@ -18,16 +18,19 @@
                 <input type="hidden" name="idPersona" id="idPersona" value="">
                 <input type="hidden" name="id" id="id" value="">
 
+                <hr>
+
+                <h3>1) Sortida de Catalunya:</h3>
                 <div class="col-md-4 mb-4">
-                    <label for="data_exili" class="form-label negreta">Data exili:</label>
+                    <label for="data_exili" class="form-label negreta">Data d'exili:</label>
                     <input type="text" class="form-control" id="data_exili" name="data_exili" value="">
                     <div class="avis-form">
-                        * Format data pot ser "any" o "dia/mes/any"
+                        * Format data pot ser "any" o "dia/mes/any". (La majoria dels casos es l'any 1939)
                     </div>
                 </div>
 
                 <div class="col-md-4 mb-4">
-                    <label for="lloc_partida" class="form-label negreta">Lloc partida exili:</label>
+                    <label for="lloc_partida" class="form-label negreta">Lloc partida exili (normalment és Terrassa):</label>
                     <select class="form-select" name="lloc_partida" id="lloc_partida" value="">
                     </select>
 
@@ -38,7 +41,7 @@
                 </div>
 
                 <div class="col-md-4 mb-4">
-                    <label for="lloc_pas_frontera" class="form-label negreta">Lloc pas de la frontera:</label>
+                    <label for="lloc_pas_frontera" class="form-label negreta">Lloc pas de la frontera (pot ser Portbou, La Junquera, Coll de Lli, etc.):</label>
                     <select class="form-select" name="lloc_pas_frontera" id="lloc_pas_frontera" value="">
                     </select>
 
@@ -49,12 +52,14 @@
                 </div>
 
                 <div class="col-md-4 mb-4">
-                    <label for="amb_qui_passa_frontera" class="form-label negreta">Amb qui pasa a l'exili:</label>
+                    <label for="amb_qui_passa_frontera" class="form-label negreta">Amb qui pasa a l'exili: (podria ser la parella, fills, germans, companyia militar...):</label>
                     <input type="text" class="form-control" id="amb_qui_passa_frontera" name="amb_qui_passa_frontera" value="">
                 </div>
 
+                <hr>
+                <h3>2) Arribada al lloc d'exili (normalment França):</h3>
                 <div class="col-md-4 mb-4">
-                    <label for="primer_desti_exili" class="form-label negreta">Primer municipi de destí a l'exili:</label>
+                    <label for="primer_desti_exili" class="form-label negreta">Primer municipi de destí a l'exili (primer lloc on s'instal·la l'exiliat):</label>
                     <select class="form-select" name="primer_desti_exili" id="primer_desti_exili" value="">
                     </select>
 
@@ -76,7 +81,6 @@
                     <label for="tipologia_primer_desti" class="form-label negreta">Tipologia del primer destí a l'exili:</label>
                     <select class="form-select" name="tipologia_primer_desti" id="tipologia_primer_desti" value="">
                     </select>
-
                     <div class="mt-2">
                         <a href="https://memoriaterrassa.cat/gestio/auxiliars/nova-tipologia-espai" target="_blank" class="btn btn-secondary btn-sm" id="afegirMunicipi77">Afegir tipologia espai</a>
                         <button id="refreshButtonTipologia22" class="btn btn-primary btn-sm">Actualitzar llistat espais</button>
@@ -87,6 +91,8 @@
                     <label for="dades_lloc_primer_desti" class="form-label negreta">Dades del primer destí de l'exili:</label>
                     <textarea class="form-control" id="dades_lloc_primer_desti" name="dades_lloc_primer_desti" rows="3"></textarea>
                 </div>
+
+                <h3>2) Periple exili:</h3>
 
                 <div class="col-md-12 mb-4">
                     <label for="periple_recorregut" class="form-label negreta">Periple del recorregut a l'exili:</label>
@@ -101,6 +107,8 @@
                         <option value="2">No</option>
                     </select>
                 </div>
+
+                <h3>4) Final del període d'exili:</h3>
 
                 <div class="col-md-4 mb-4">
                     <label for="ultim_desti_exili" class="form-label negreta">Darrer municipi de destí a l'exili:</label>
@@ -123,6 +131,9 @@
                     </div>
 
                 </div>
+
+                <hr>
+                <h3>5) Activitat política i sindical durant l'exili</h3>
 
                 <div class="col-md-4 mb-4">
                     <label for="participacio_resistencia" class="form-label negreta">Participació a la Resistència:</label>

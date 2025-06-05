@@ -1,4 +1,13 @@
 <?php
+
+use App\Config\DatabaseConnection;
+
+$conn = DatabaseConnection::getConnection();
+
+if (!$conn) {
+    die("No se pudo establecer conexión a la base de datos.");
+}
+
 require_once APP_ROOT . '/public/intranet/includes/header.php';
 ?>
 
@@ -11,16 +20,9 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
 
             <?php
             $query = "SELECT 
-            c.id,
-            c.tipusOperacio,
-            c.dataHoraCanvi,
-            u.nom AS nomEditor,
-            r.id AS idFitxa,
-            r.nom,
-            r.cognom1,
-            r.cognom2
+            c.id, detalls, c.taula_afectada, c.registre_id, c.dataHora, c.ip_usuari, c.user_agent, c.operacio,
+            u.nom AS nomEditor
             FROM control_registre_canvis AS c
-            LEFT JOIN db_dades_personals AS r ON c.idPersonaFitxa = r.id
             LEFT JOIN auth_users AS u ON c.idUser = u.id
             ORDER BY c.id DESC";
 
@@ -31,9 +33,14 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
                 echo '<table class="table" style="margin-top:25px;margin-bottom:30px">';
                 echo '<thead>';
                 echo '<tr>';
-                echo '<th>Fitxa represaliat</th>';
-                echo '<th>Editor canvis</th>';
+                echo '<th>Usuari</th>';
+                echo '<th>Taula afectada</th>';
                 echo '<th>Tipus operació</th>';
+                echo '<th>Detalls</th>';
+                if ($isAdmin):
+                    echo '<th>IP usuari</th>';
+                    echo '<th>Navegador</th>';
+                endif;
                 echo '<th>Dia i hora (hora local Barcelona)</th>';
                 echo '</tr>';
                 echo '</thead>';
@@ -44,16 +51,24 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
                     $nom = $row['nom'] ?? "";
                     $cognom1 = $row['cognom1'] ?? "";
                     $cognom2 = $row['cognom2'] ?? "";
-                    $tipusOperacio = $row['tipusOperacio'] ?? "";
+                    $tipusOperacio = $row['operacio'] ?? "";
+                    $taula_afectada = $row['taula_afectada'] ?? "";
+                    $detalls = $row['detalls'] ?? "";
+                    $ip_usuari = $row['ip_usuari'] ?? "";
+                    $user_agent = $row['user_agent'] ?? "";
                     $nomEditor = $row['nomEditor'] ?? "";
-                    $dataHoraCanvi = $row['dataHoraCanvi'] ?? "";
+                    $dataHoraCanvi = $row['dataHora'] ?? "";
                     $dateTime = new DateTime($dataHoraCanvi);
                     $dataHoraCanviFormatada = $dateTime->format('d/m/Y H:i:s');
-
                     echo '<tr>';
-                    echo '<td><a href="https://memoriaterrassa.cat/fitxa/' . $idFitxa . '" target=_blank>' . htmlspecialchars($nom) . ' ' . htmlspecialchars($cognom1 . ' ' . $cognom2) . '</a></td>';
                     echo '<td>' . htmlspecialchars($nomEditor) . '</td>';
+                    echo '<td>' . htmlspecialchars($taula_afectada) . '</td>';
                     echo '<td>' . htmlspecialchars($tipusOperacio) . '</td>';
+                    echo '<td>' . htmlspecialchars($detalls) . '</td>';
+                    if ($isAdmin):
+                        echo '<td>' . htmlspecialchars($ip_usuari) . '</td>';
+                        echo '<td>' . htmlspecialchars($user_agent) . '</td>';
+                    endif;
                     echo '<td>' . htmlspecialchars($dataHoraCanviFormatada) . '</td>';
                     echo '</tr>';
                 }

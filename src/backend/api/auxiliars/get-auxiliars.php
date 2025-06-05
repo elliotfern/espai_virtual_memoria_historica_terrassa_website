@@ -192,6 +192,17 @@ if ($slug === "municipis") {
     $result = getData($query);
     echo json_encode($result);
 
+    // GET : Tipologia espais
+    // URL: /api/auxiliars/get/tipologia_espaisExili
+} elseif ($slug === "tipologia_espaisExili") {
+    $query = "SELECT tipologia.id, tipologia.tipologia_espai_ca
+              FROM aux_tipologia_espais AS tipologia
+              WHERE cat = 1
+              ORDER BY tipologia.tipologia_espai_ca ASC";
+
+    $result = getData($query);
+    echo json_encode($result);
+
     // GET : Causa defuncio - tots els casos (per formulari fitxa dades personals)
     // URL: /api/auxiliars/get/causa_defuncio
 } elseif ($slug === "causa_defuncio") {
