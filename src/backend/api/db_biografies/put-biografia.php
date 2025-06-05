@@ -1,4 +1,16 @@
 <?php
+
+use App\Config\Tables;
+use App\Config\Audit;
+use App\Config\DatabaseConnection;
+
+$conn = DatabaseConnection::getConnection();
+
+if (!$conn) {
+    die("No se pudo establecer conexión a la base de datos.");
+}
+
+
 // Configuración de cabeceras para aceptar JSON y responder JSON
 header("Content-Type: application/json");
 header("Access-Control-Allow-Origin: https://memoriaterrassa.cat");
@@ -40,11 +52,28 @@ $data = json_decode($inputData, true);
 // Inicializar un array para los errores
 $errors = [];
 
-// Validación de los datos recibidos
+/* Validación de los datos recibidos
 if (empty($data['biografiaCa'])) {
     $errors[] = 'El biografia any és obligatori.';
 }
+*/
 
+if (!is_numeric($data['id']) || !is_numeric($data['idRepresaliat'])) {
+    http_response_code(400);
+    echo json_encode(["status" => "error", "message" => "ID invàlid."]);
+    exit;
+}
+
+$sqlCheck = "SELECT COUNT(*) FROM `" . Tables::DB_BIOGRAFIES . "` WHERE id = :id";
+$stmtCheck = $conn->prepare($sqlCheck);
+$stmtCheck->bindParam(':id', $id, PDO::PARAM_INT);
+$stmtCheck->execute();
+
+if ($stmtCheck->fetchColumn() == 0) {
+    http_response_code(404);
+    echo json_encode(["status" => "error", "message" => "No s'ha trobat la biografia amb aquest ID."]);
+    exit;
+}
 
 // Si hay errores, devolver una respuesta con los errores
 if (!empty($errors)) {
@@ -54,7 +83,6 @@ if (!empty($errors)) {
 }
 
 // Si no hay errores, crear las variables PHP y preparar la consulta PDO
-
 $biografiaCa = !empty($data['biografiaCa']) ? sanitizeHtml($data['biografiaCa']) : NULL;
 $biografiaEs = !empty($data['biografiaEs']) ? sanitizeHtml($data['biografiaEs']) : NULL;
 $biografiaEn = !empty($data['biografiaEn']) ? sanitizeHtml($data['biografiaEn']) : NULL;
@@ -69,7 +97,7 @@ try {
     /** @var PDO $conn */
 
     // Crear la consulta SQL
-    $sql = "UPDATE db_biografies SET 
+    $sql = "UPDATE `" . Tables::DB_BIOGRAFIES . "` SET 
         biografiaCa = :biografiaCa,
         biografiaEs = :biografiaEs,
         biografiaEn = :biografiaEn,
@@ -89,36 +117,28 @@ try {
     // Ejecutar la consulta
     $stmt->execute();
 
+    if ($stmt->rowCount() === 0) {
+        echo json_encode(["status" => "error", "message" => "No s'han fet canvis a la base de dades."]);
+        exit;
+    }
+
     // Si la inserció té èxit, cal registrar la inserció en la base de control de canvis
+    $tipusOperacio = "UPDATE";
+    $detalls = "Modificació de biografia";
 
-    $dataHoraCanvi = date('Y-m-d H:i:s');
-    $tipusOperacio = "Modificacio biografia";
-    $idUser = $userId;
-    $lastInsertId = $idRepresaliat;
-
-    // Crear la consulta SQL
-    $sql2 = "INSERT INTO control_registre_canvis (
-        idUser, idPersonaFitxa, tipusOperacio, dataHoraCanvi
-        ) VALUES (
-        :idUser, :idPersonaFitxa, :tipusOperacio, :dataHoraCanvi
-        )";
-
-    // Preparar la consulta
-    $stmt = $conn->prepare($sql2);
-
-    // Enlazar los parámetros con los valores de las variables PHP
-    $stmt->bindParam(':idUser', $idUser, PDO::PARAM_INT);
-    $stmt->bindParam(':idPersonaFitxa', $lastInsertId, PDO::PARAM_INT);
-    $stmt->bindParam(':dataHoraCanvi', $dataHoraCanvi, PDO::PARAM_STR);
-    $stmt->bindParam(':tipusOperacio', $tipusOperacio, PDO::PARAM_STR);
-
-    // Ejecutar la consulta
-    $stmt->execute();
+    Audit::registrarCanvi(
+        $conn,
+        $userId,                      // ID del usuario que hace el cambio
+        $tipusOperacio,             // Tipus operacio
+        $detalls,                       // Descripción de la operación
+        Tables::DB_BIOGRAFIES,  // Nombre de la tabla afectada
+        $id                           // ID del registro modificada
+    );
 
     // Respuesta de éxito
     echo json_encode(["status" => "success", "message" => "Les dades s'han actualitzat correctament a la base de dades."]);
 } catch (PDOException $e) {
     // En caso de error en la conexión o ejecución de la consulta
     http_response_code(500); // Internal Server Error
-    echo json_encode(["status" => "error", "message" => "S'ha produit un error 1 a la base de dades: "]);
+    echo json_encode(["status" => "error", "message" => "S'ha produit un error a la base de dades:" . $e->getMessage()]);
 }

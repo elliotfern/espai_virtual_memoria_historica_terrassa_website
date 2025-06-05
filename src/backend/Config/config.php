@@ -2,9 +2,9 @@
 // Cargar librerías externas
 require_once __DIR__ . '/../../../vendor/autoload.php';
 
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../../');
+$envName = $_ENV['APP_ENV'] ?? 'prod'; // default: prod
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../../', '.env.' . $envName);
 $dotenv->load();
-require_once __DIR__ . '/../config/connection.php';
 
 $isAdmin = isUserAdmin();
 $isAutor = isUserAutor();

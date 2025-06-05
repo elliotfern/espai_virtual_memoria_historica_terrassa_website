@@ -1,4 +1,13 @@
 <?php
+
+use App\Config\DatabaseConnection;
+
+$conn = DatabaseConnection::getConnection();
+
+if (!$conn) {
+    die("No se pudo establecer conexión a la base de datos.");
+}
+
 // Configuración de cabeceras para aceptar JSON y responder JSON
 header("Content-Type: application/json");
 header("Access-Control-Allow-Origin: https://memoriaterrassa.cat");

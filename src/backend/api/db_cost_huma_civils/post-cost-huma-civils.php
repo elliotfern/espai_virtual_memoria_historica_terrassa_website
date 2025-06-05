@@ -1,4 +1,8 @@
 <?php
+
+use App\Config\Tables;
+use App\Config\Audit;
+
 // Configuración de cabeceras para aceptar JSON y responder JSON
 header("Content-Type: application/json");
 header("Access-Control-Allow-Methods: POST");
@@ -170,32 +174,20 @@ try {
     $stmt->execute();
 
     // Recuperar el ID del registro creado
-    $lastInsertId = $idPersona;
+    $id = $conn->lastInsertId();
 
     // Si la inserció té èxit, cal registrar la inserció en la base de control de canvis
+    $detalls = "Creació fitxa repressió cost humà civils";
+    $tipusOperacio = "INSERT";
 
-    $dataHoraCanvi = date('Y-m-d H:i:s');
-    $tipusOperacio = "Insert Dades cost humà civils";
-    $idUser = $userId;
-
-    // Crear la consulta SQL
-    $sql2 = "INSERT INTO control_registre_canvis (
-            idUser, idPersonaFitxa, tipusOperacio, dataHoraCanvi
-            ) VALUES (
-            :idUser, :idPersonaFitxa, :tipusOperacio, :dataHoraCanvi
-            )";
-
-    // Preparar la consulta
-    $stmt = $conn->prepare($sql2);
-
-    // Enlazar los parámetros con los valores de las variables PHP
-    $stmt->bindParam(':idUser', $idUser, PDO::PARAM_INT);
-    $stmt->bindParam(':idPersonaFitxa', $lastInsertId, PDO::PARAM_INT);
-    $stmt->bindParam(':dataHoraCanvi', $dataHoraCanvi, PDO::PARAM_STR);
-    $stmt->bindParam(':tipusOperacio', $tipusOperacio, PDO::PARAM_STR);
-
-    // Ejecutar la consulta
-    $stmt->execute();
+    Audit::registrarCanvi(
+        $conn,
+        $userId,                      // ID del usuario que hace el cambio
+        $tipusOperacio,             // Tipus operacio
+        $detalls,                       // Descripción de la operación
+        Tables::DB_COST_HUMA_MORTS_CIVILS,  // Nombre de la tabla afectada
+        $id                           // ID del registro modificada
+    );
 
     // Respuesta de éxito
     echo json_encode(["status" => "success", "message" => "Les dades s'han desat correctament a la base de dades."]);

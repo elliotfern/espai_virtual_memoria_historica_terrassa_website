@@ -1,4 +1,15 @@
 <?php
+
+use App\Config\Tables;
+use App\Config\Audit;
+use App\Config\DatabaseConnection;
+
+$conn = DatabaseConnection::getConnection();
+
+if (!$conn) {
+    die("No se pudo establecer conexión a la base de datos.");
+}
+
 $id = $routeParams[1];
 $slug = $routeParams[0];
 
@@ -67,23 +78,22 @@ if ($slug === "municipi") {
         exit;
     }
 
-    $ciutat = "Delete Municipi: " . $municipi['ciutat'];
-    $dataHora = date('Y-m-d H:i:s');
-    $idPersonaFitxa = NULL;
-
+    $detalls = "Eliminació de municipi";
+    $tipusOperacio = "DELETE";
 
     try {
         $stmt = $conn->prepare("DELETE FROM aux_dades_municipis WHERE id = :id");
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
 
-        $stmtLog = $conn->prepare("INSERT INTO control_registre_canvis (idUser, idPersonaFitxa, tipusOperacio, dataHoraCanvi)
-  VALUES (:idUser, :idPersonaFitxa, :tipusOperacio, :dataHoraCanvi)");
-        $stmtLog->bindParam(':idUser', $userId);
-        $stmtLog->bindParam(':idPersonaFitxa', $idPersonaFitxa);
-        $stmtLog->bindParam(':tipusOperacio', $ciutat);
-        $stmtLog->bindParam(':dataHoraCanvi', $dataHora);
-        $stmtLog->execute();
+        Audit::registrarCanvi(
+            $conn,
+            $userId,                      // ID del usuario que hace el cambio
+            $tipusOperacio,             // Tipus operacio
+            $detalls,                       // Descripción de la operación
+            Tables::AUX_DADES_MUNICIPIS,  // Nombre de la tabla afectada
+            $id                           // ID del registro modificada
+        );
 
         echo json_encode(['status' => 'success', 'message' => 'Municipi eliminat']);
     } catch (PDOException $e) {
@@ -117,23 +127,22 @@ if ($slug === "municipi") {
         exit;
     }
 
-    $partit = "Delete Partit polític: " . $partit['partit_politic'];
-    $dataHora = date('Y-m-d H:i:s');
-    $idPersonaFitxa = NULL;
-
+    $detalls = "Eliminació Partit polític: " . $partit['partit_politic'];
+    $tipusOperacio = "DELETE";
 
     try {
         $stmt = $conn->prepare("DELETE FROM aux_filiacio_politica WHERE id = :id");
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
 
-        $stmtLog = $conn->prepare("INSERT INTO control_registre_canvis (idUser, idPersonaFitxa, tipusOperacio, dataHoraCanvi)
-  VALUES (:idUser, :idPersonaFitxa, :tipusOperacio, :dataHoraCanvi)");
-        $stmtLog->bindParam(':idUser', $userId);
-        $stmtLog->bindParam(':idPersonaFitxa', $idPersonaFitxa);
-        $stmtLog->bindParam(':tipusOperacio', $partit);
-        $stmtLog->bindParam(':dataHoraCanvi', $dataHora);
-        $stmtLog->execute();
+        Audit::registrarCanvi(
+            $conn,
+            $userId,                      // ID del usuario que hace el cambio
+            $tipusOperacio,             // Tipus operacio
+            $detalls,                       // Descripción de la operación
+            Tables::AUX_FILIACIO_POLITICA,  // Nombre de la tabla afectada
+            $id                           // ID del registro modificada
+        );
 
         echo json_encode(['status' => 'success', 'message' => 'Partit polític eliminat']);
     } catch (PDOException $e) {
@@ -167,23 +176,23 @@ if ($slug === "municipi") {
         exit;
     }
 
-    $partit = "Delete sindicat: " . $partit['sindicat'];
-    $dataHora = date('Y-m-d H:i:s');
-    $idPersonaFitxa = NULL;
-
-
     try {
         $stmt = $conn->prepare("DELETE FROM aux_filiacio_sindical WHERE id = :id");
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
 
-        $stmtLog = $conn->prepare("INSERT INTO control_registre_canvis (idUser, idPersonaFitxa, tipusOperacio, dataHoraCanvi)
-  VALUES (:idUser, :idPersonaFitxa, :tipusOperacio, :dataHoraCanvi)");
-        $stmtLog->bindParam(':idUser', $userId);
-        $stmtLog->bindParam(':idPersonaFitxa', $idPersonaFitxa);
-        $stmtLog->bindParam(':tipusOperacio', $partit);
-        $stmtLog->bindParam(':dataHoraCanvi', $dataHora);
-        $stmtLog->execute();
+        // Si la inserció té èxit, cal registrar la inserció en la base de control de canvis
+        $tipusOperacio = "DELETE";
+        $detalls = "Eliminació sindicat: " . $partit['sindicat'];
+
+        Audit::registrarCanvi(
+            $conn,
+            $userId,                      // ID del usuario que hace el cambio
+            $tipusOperacio,             // Tipus operacio
+            $detalls,                       // Descripción de la operación
+            Tables::AUX_FILIACIO_SINDICAL,  // Nombre de la tabla afectada
+            $id                           // ID del registro modificada
+        );
 
         echo json_encode(['status' => 'success', 'message' => 'Sindicat eliminat']);
     } catch (PDOException $e) {
@@ -217,15 +226,25 @@ if ($slug === "municipi") {
         exit;
     }
 
-    $partit = "Delete comarca: " . $partit['comarca'];
-    $dataHora = date('Y-m-d H:i:s');
-    $idPersonaFitxa = NULL;
-
-
     try {
         $stmt = $conn->prepare("DELETE FROM aux_dades_municipis_comarca WHERE id = :id");
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
+
+        // Si la inserció té èxit, cal registrar la inserció en la base de control de canvis
+        $tipusOperacio = "DELETE";
+        $detalls = "Eliminació de comarca: " . $partit['comarca'];
+
+        Audit::registrarCanvi(
+            $conn,
+            $userId,                      // ID del usuario que hace el cambio
+            $tipusOperacio,             // Tipus operacio
+            $detalls,                       // Descripción de la operación
+            Tables::AUX_DADES_MUNICIPIS_COMARCA,  // Nombre de la tabla afectada
+            $id                           // ID del registro modificada
+        );
+
+
 
         $stmtLog = $conn->prepare("INSERT INTO control_registre_canvis (idUser, idPersonaFitxa, tipusOperacio, dataHoraCanvi)
   VALUES (:idUser, :idPersonaFitxa, :tipusOperacio, :dataHoraCanvi)");
@@ -267,23 +286,22 @@ if ($slug === "municipi") {
         exit;
     }
 
-    $partit = "Delete provincia: " . $partit['provincia'];
-    $dataHora = date('Y-m-d H:i:s');
-    $idPersonaFitxa = NULL;
-
+    $detalls = "Eliminació provincia: " . $partit['provincia'];
+    $tipusOperacio = "DELETE";
 
     try {
         $stmt = $conn->prepare("DELETE FROM aux_dades_municipis_provincia WHERE id = :id");
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
 
-        $stmtLog = $conn->prepare("INSERT INTO control_registre_canvis (idUser, idPersonaFitxa, tipusOperacio, dataHoraCanvi)
-  VALUES (:idUser, :idPersonaFitxa, :tipusOperacio, :dataHoraCanvi)");
-        $stmtLog->bindParam(':idUser', $userId);
-        $stmtLog->bindParam(':idPersonaFitxa', $idPersonaFitxa);
-        $stmtLog->bindParam(':tipusOperacio', $partit);
-        $stmtLog->bindParam(':dataHoraCanvi', $dataHora);
-        $stmtLog->execute();
+        Audit::registrarCanvi(
+            $conn,
+            $userId,                      // ID del usuario que hace el cambio
+            $tipusOperacio,             // Tipus operacio
+            $detalls,                       // Descripción de la operación
+            Tables::AUX_DADES_MUNICIPIS_COMARCA,  // Nombre de la tabla afectada
+            $id                           // ID del registro modificada
+        );
 
         echo json_encode(['status' => 'success', 'message' => 'Provincia eliminada']);
     } catch (PDOException $e) {
@@ -317,23 +335,22 @@ if ($slug === "municipi") {
         exit;
     }
 
-    $partit = "Delete comunitat: " . $partit['comunitat'];
-    $dataHora = date('Y-m-d H:i:s');
-    $idPersonaFitxa = NULL;
-
+    $detalls = "Eliminació comunitat: " . $partit['comunitat'];
+    $tipusOperacio = "DELETE";
 
     try {
         $stmt = $conn->prepare("DELETE FROM aux_dades_municipis_comunitat WHERE id = :id");
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
 
-        $stmtLog = $conn->prepare("INSERT INTO control_registre_canvis (idUser, idPersonaFitxa, tipusOperacio, dataHoraCanvi)
-  VALUES (:idUser, :idPersonaFitxa, :tipusOperacio, :dataHoraCanvi)");
-        $stmtLog->bindParam(':idUser', $userId);
-        $stmtLog->bindParam(':idPersonaFitxa', $idPersonaFitxa);
-        $stmtLog->bindParam(':tipusOperacio', $partit);
-        $stmtLog->bindParam(':dataHoraCanvi', $dataHora);
-        $stmtLog->execute();
+        Audit::registrarCanvi(
+            $conn,
+            $userId,                      // ID del usuario que hace el cambio
+            $tipusOperacio,             // Tipus operacio
+            $detalls,                       // Descripción de la operación
+            Tables::AUX_DADES_MUNICIPIS_COMUNITAT,  // Nombre de la tabla afectada
+            $id                           // ID del registro modificada
+        );
 
         echo json_encode(['status' => 'success', 'message' => 'Comunitat eliminada']);
     } catch (PDOException $e) {
@@ -367,23 +384,22 @@ if ($slug === "municipi") {
         exit;
     }
 
-    $partit = "Delete Estat: " . $partit['estat'];
-    $dataHora = date('Y-m-d H:i:s');
-    $idPersonaFitxa = NULL;
-
+    $detalls = "Eliminació Estat: " . $partit['estat'];
+    $tipusOperacio = "DELETE";
 
     try {
         $stmt = $conn->prepare("DELETE FROM aux_dades_municipis_estat WHERE id = :id");
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
 
-        $stmtLog = $conn->prepare("INSERT INTO control_registre_canvis (idUser, idPersonaFitxa, tipusOperacio, dataHoraCanvi)
-  VALUES (:idUser, :idPersonaFitxa, :tipusOperacio, :dataHoraCanvi)");
-        $stmtLog->bindParam(':idUser', $userId);
-        $stmtLog->bindParam(':idPersonaFitxa', $idPersonaFitxa);
-        $stmtLog->bindParam(':tipusOperacio', $partit);
-        $stmtLog->bindParam(':dataHoraCanvi', $dataHora);
-        $stmtLog->execute();
+        Audit::registrarCanvi(
+            $conn,
+            $userId,                      // ID del usuario que hace el cambio
+            $tipusOperacio,             // Tipus operacio
+            $detalls,                       // Descripción de la operación
+            Tables::AUX_DADES_MUNICIPIS_ESTAT,  // Nombre de la tabla afectada
+            $id                           // ID del registro modificada
+        );
 
         echo json_encode(['status' => 'success', 'message' => 'Estat eliminat']);
     } catch (PDOException $e) {

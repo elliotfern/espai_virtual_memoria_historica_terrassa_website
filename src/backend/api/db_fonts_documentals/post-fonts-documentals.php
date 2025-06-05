@@ -1,4 +1,16 @@
 <?php
+
+use App\Config\Tables;
+use App\Config\Audit;
+use App\Config\DatabaseConnection;
+
+$conn = DatabaseConnection::getConnection();
+
+if (!$conn) {
+    die("No se pudo establecer conexión a la base de datos.");
+}
+
+
 $slug = $routeParams[0];
 
 // Configuración de cabeceras para aceptar JSON y responder JSON
@@ -84,32 +96,21 @@ if ($slug === 'ref_bibliografica') {
         $stmt->execute();
 
         // Recuperar el ID del registro creado
-        $lastInsertId = $idRepresaliat;
+        $id = $conn->lastInsertId();
 
         // Si la inserció té èxit, cal registrar la inserció en la base de control de canvis
 
-        $dataHoraCanvi = date('Y-m-d H:i:s');
-        $tipusOperacio = "Insert Nova bibliografia";
-        $idUser = $userId;
+        $detalls = "Creació referència bibliogràfica";
+        $tipusOperacio = "INSERT";
 
-        // Crear la consulta SQL
-        $sql2 = "INSERT INTO control_registre_canvis (
-        idUser, idPersonaFitxa, tipusOperacio, dataHoraCanvi
-        ) VALUES (
-        :idUser, :idPersonaFitxa, :tipusOperacio, :dataHoraCanvi
-        )";
-
-        // Preparar la consulta
-        $stmt = $conn->prepare($sql2);
-
-        // Enlazar los parámetros con los valores de las variables PHP
-        $stmt->bindParam(':idUser', $idUser, PDO::PARAM_INT);
-        $stmt->bindParam(':idPersonaFitxa', $lastInsertId, PDO::PARAM_INT);
-        $stmt->bindParam(':dataHoraCanvi', $dataHoraCanvi, PDO::PARAM_STR);
-        $stmt->bindParam(':tipusOperacio', $tipusOperacio, PDO::PARAM_STR);
-
-        // Ejecutar la consulta
-        $stmt->execute();
+        Audit::registrarCanvi(
+            $conn,
+            $userId,                      // ID del usuario que hace el cambio
+            $tipusOperacio,             // Tipus operacio
+            $detalls,                       // Descripción de la operación
+            Tables::AUX_BIBLIOGRAFIA_LLIBRES,  // Nombre de la tabla afectada
+            $id                           // ID del registro modificada
+        );
 
         // Respuesta de éxito
         echo json_encode(["status" => "success", "message" => "Les dades s'han actualitzat correctament a la base de dades."]);
@@ -127,11 +128,6 @@ if ($slug === 'ref_bibliografica') {
 
     // Inicializar un array para los errores
     $errors = [];
-
-    // Validación de los datos recibidos
-    if (empty($data['referencia'])) {
-        $errors[] = 'El camp referencia és obligatori.';
-    }
 
     if (empty($data['codi'])) {
         $errors[] = 'El camp codi és obligatori.';
@@ -177,30 +173,22 @@ if ($slug === 'ref_bibliografica') {
         // Ejecutar la consulta
         $stmt->execute();
 
+        // Recuperar el ID del registro creado
+        $id = $conn->lastInsertId();
+
         // Si la inserció té èxit, cal registrar la inserció en la base de control de canvis
 
-        $dataHoraCanvi = date('Y-m-d H:i:s');
-        $tipusOperacio = "Insert Nova ref_arxivistica";
-        $idUser = $userId;
+        $detalls = "Creació referència arxivística";
+        $tipusOperacio = "INSERT";
 
-        // Crear la consulta SQL
-        $sql2 = "INSERT INTO control_registre_canvis (
-        idUser, idPersonaFitxa, tipusOperacio, dataHoraCanvi
-        ) VALUES (
-        :idUser, :idPersonaFitxa, :tipusOperacio, :dataHoraCanvi
-        )";
-
-        // Preparar la consulta
-        $stmt = $conn->prepare($sql2);
-
-        // Enlazar los parámetros con los valores de las variables PHP
-        $stmt->bindParam(':idUser', $idUser, PDO::PARAM_INT);
-        $stmt->bindParam(':idPersonaFitxa', $idRepresaliat, PDO::PARAM_INT);
-        $stmt->bindParam(':dataHoraCanvi', $dataHoraCanvi, PDO::PARAM_STR);
-        $stmt->bindParam(':tipusOperacio', $tipusOperacio, PDO::PARAM_STR);
-
-        // Ejecutar la consulta
-        $stmt->execute();
+        Audit::registrarCanvi(
+            $conn,
+            $userId,                      // ID del usuario que hace el cambio
+            $tipusOperacio,             // Tipus operacio
+            $detalls,                       // Descripción de la operación
+            Tables::AUX_BIBLIOGRAFIA_ARXIUS,  // Nombre de la tabla afectada
+            $id                           // ID del registro modificada
+        );
 
         // Respuesta de éxito
         echo json_encode(["status" => "success", "message" => "Les dades s'han actualitzat correctament a la base de dades."]);
@@ -284,6 +272,23 @@ if ($slug === 'ref_bibliografica') {
         // Ejecutar la consulta
         $stmt->execute();
 
+        // Recuperar el ID del registro creado
+        $id = $conn->lastInsertId();
+
+        // Si la inserció té èxit, cal registrar la inserció en la base de control de canvis
+
+        $detalls = "Creació nou arxiu: " . $arxiu;
+        $tipusOperacio = "INSERT";
+
+        Audit::registrarCanvi(
+            $conn,
+            $userId,                      // ID del usuario que hace el cambio
+            $tipusOperacio,             // Tipus operacio
+            $detalls,                       // Descripción de la operación
+            Tables::AUX_BIBLIOGRAFIA_ARXIUS_CODIS,  // Nombre de la tabla afectada
+            $id                           // ID del registro modificada
+        );
+
         // Respuesta de éxito
         echo json_encode(["status" => "success", "message" => "Les dades s'han actualitzat correctament a la base de dades."]);
     } catch (PDOException $e) {
@@ -349,31 +354,23 @@ if ($slug === 'ref_bibliografica') {
         // Ejecutar la consulta
         $stmt->execute();
 
+        // Recuperar el ID del registro creado
+        $id = $conn->lastInsertId();
+
         // Si la inserció té èxit, cal registrar la inserció en la base de control de canvis
 
-        $dataHoraCanvi = date('Y-m-d H:i:s');
-        $tipusOperacio = "Insert Nou llibre";
-        $idUser = $userId;
-        $lastInsertId = NULL;
+        $detalls = "Creació nou llibre: " . $llibre;
+        $tipusOperacio = "INSERT";
 
-        // Crear la consulta SQL
-        $sql2 = "INSERT INTO control_registre_canvis (
-        idUser, idPersonaFitxa, tipusOperacio, dataHoraCanvi
-        ) VALUES (
-        :idUser, :idPersonaFitxa, :tipusOperacio, :dataHoraCanvi
-        )";
+        Audit::registrarCanvi(
+            $conn,
+            $userId,                      // ID del usuario que hace el cambio
+            $tipusOperacio,             // Tipus operacio
+            $detalls,                       // Descripción de la operación
+            Tables::AUX_BIBLIOGRAFIA_LLIBRE_DETALLS,  // Nombre de la tabla afectada
+            $id                           // ID del registro modificada
+        );
 
-        // Preparar la consulta
-        $stmt = $conn->prepare($sql2);
-
-        // Enlazar los parámetros con los valores de las variables PHP
-        $stmt->bindParam(':idUser', $idUser, PDO::PARAM_INT);
-        $stmt->bindParam(':idPersonaFitxa', $lastInsertId, PDO::PARAM_INT);
-        $stmt->bindParam(':dataHoraCanvi', $dataHoraCanvi, PDO::PARAM_STR);
-        $stmt->bindParam(':tipusOperacio', $tipusOperacio, PDO::PARAM_STR);
-
-        // Ejecutar la consulta
-        $stmt->execute();
 
         // Respuesta de éxito
         echo json_encode(["status" => "success", "message" => "Les dades s'han actualitzat correctament a la base de dades."]);

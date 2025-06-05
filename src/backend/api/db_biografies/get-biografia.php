@@ -1,5 +1,13 @@
 <?php
 
+use App\Config\DatabaseConnection;
+
+$conn = DatabaseConnection::getConnection();
+
+if (!$conn) {
+    die("No se pudo establecer conexión a la base de datos.");
+}
+
 $slug = $routeParams[0];
 
 // Configuración de cabeceras para aceptar JSON y responder JSON

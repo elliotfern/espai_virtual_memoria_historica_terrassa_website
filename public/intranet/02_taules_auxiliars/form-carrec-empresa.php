@@ -1,6 +1,14 @@
 <?php
 require_once APP_ROOT . '/public/intranet/includes/header.php';
 
+use App\Config\DatabaseConnection;
+
+$conn = DatabaseConnection::getConnection();
+
+if (!$conn) {
+    die("No se pudo establecer conexión a la base de datos.");
+}
+
 $id_old = "";
 $carrec_cat_old = "";
 $carrec_cast_old = "";

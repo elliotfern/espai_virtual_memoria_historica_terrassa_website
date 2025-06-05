@@ -13,7 +13,9 @@ Thumbs.db
 /.vscode/
 
 # Ignorar archivos de configuración local (ejemplo para PHP)
-.env
+.env.dev
+.env.prod
+.env.test
 pass.txt
 contra.php
 memoria_intranet.code-workspace

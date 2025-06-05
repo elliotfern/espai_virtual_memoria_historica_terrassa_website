@@ -1,4 +1,16 @@
 <?php
+
+use App\Config\Tables;
+use App\Config\Audit;
+use App\Config\DatabaseConnection;
+
+$conn = DatabaseConnection::getConnection();
+
+if (!$conn) {
+    die("No se pudo establecer conexión a la base de datos.");
+}
+
+
 $id = $routeParams[0];
 
 // Configuración de cabeceras para aceptar JSON y responder JSON
@@ -70,23 +82,24 @@ $nom = $row['nom'];
 $cognom1 = $row['cognom1'];
 $cognom2 = $row['cognom2'];
 $nomComplet = $nom . " " . $cognom1 . " " . $cognom2;
-$valor = "Delete familiar: " . $nomComplet;
-$dataHora = date('Y-m-d H:i:s');
-$idPersonaFitxa = NULL;
-
 
 try {
     $stmt = $conn->prepare("DELETE FROM aux_familiars WHERE id = :id");
     $stmt->bindParam(':id', $id, PDO::PARAM_INT);
     $stmt->execute();
 
-    $stmtLog = $conn->prepare("INSERT INTO control_registre_canvis (idUser, idPersonaFitxa, tipusOperacio, dataHoraCanvi)
-  VALUES (:idUser, :idPersonaFitxa, :tipusOperacio, :dataHoraCanvi)");
-    $stmtLog->bindParam(':idUser', $userId);
-    $stmtLog->bindParam(':idPersonaFitxa', $idPersonaFitxa);
-    $stmtLog->bindParam(':tipusOperacio', $valor);
-    $stmtLog->bindParam(':dataHoraCanvi', $dataHora);
-    $stmtLog->execute();
+    // Si la inserció té èxit, cal registrar la inserció en la base de control de canvis
+    $tipusOperacio = "DELETE";
+    $detalls = "Eliminació de familiar: " . $nomComplet;
+
+    Audit::registrarCanvi(
+        $conn,
+        $userId,                      // ID del usuario que hace el cambio
+        $tipusOperacio,             // Tipus operacio
+        $detalls,                       // Descripción de la operación
+        Tables::AUX_FAMILIARS,  // Nombre de la tabla afectada
+        $id                           // ID del registro modificada
+    );
 
     echo json_encode(['status' => 'success', 'message' => 'Familiar eliminat']);
 } catch (PDOException $e) {

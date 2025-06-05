@@ -3,9 +3,15 @@
 $slug = $routeParams[0];
 
 use Firebase\JWT\JWT;
-use Firebase\JWT\Key;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
+use App\Config\DatabaseConnection;
+
+$conn = DatabaseConnection::getConnection();
+
+if (!$conn) {
+    die("No se pudo establecer conexión a la base de datos.");
+}
 
 // Cargar variables de entorno desde .env
 $jwtSecret = $_ENV['TOKEN'];

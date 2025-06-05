@@ -1,7 +1,16 @@
 <?php
+
+use App\Config\Tables;
+use App\Config\Audit;
+use App\Config\DatabaseConnection;
+
+$conn = DatabaseConnection::getConnection();
+
+if (!$conn) {
+    die("No se pudo establecer conexión a la base de datos.");
+}
+
 $slug = $routeParams[0];
-
-
 // Configuración de cabeceras para aceptar JSON y responder JSON
 header("Content-Type: application/json");
 header("Access-Control-Allow-Methods: PUT");
@@ -92,33 +101,18 @@ if ($slug === "municipi") {
         // Ejecutar la consulta
         $stmt->execute();
 
-        // Recuperar el ID del registro creado
-        $lastInsertId = $conn->lastInsertId();
-
         // Si la inserció té èxit, cal registrar la inserció en la base de control de canvis
+        $detalls = "Modificació municipi: " . $ciutat;
+        $tipusOperacio = "UPDATE";
 
-        $dataHoraCanvi = date('Y-m-d H:i:s');
-        $tipusOperacio = "Update municipi";
-        $idUser = $userId;
-
-        // Crear la consulta SQL
-        $sql2 = "INSERT INTO control_registre_canvis (
-        idUser, idPersonaFitxa, tipusOperacio, dataHoraCanvi
-        ) VALUES (
-        :idUser, :idPersonaFitxa, :tipusOperacio, :dataHoraCanvi
-        )";
-
-        // Preparar la consulta
-        $stmt = $conn->prepare($sql2);
-
-        // Enlazar los parámetros con los valores de las variables PHP
-        $stmt->bindParam(':idUser', $idUser, PDO::PARAM_INT);
-        $stmt->bindParam(':idPersonaFitxa', $lastInsertId, PDO::PARAM_INT);
-        $stmt->bindParam(':dataHoraCanvi', $dataHoraCanvi, PDO::PARAM_STR);
-        $stmt->bindParam(':tipusOperacio', $tipusOperacio, PDO::PARAM_STR);
-
-        // Ejecutar la consulta
-        $stmt->execute();
+        Audit::registrarCanvi(
+            $conn,
+            $userId,                      // ID del usuario que hace el cambio
+            $tipusOperacio,             // Tipus operacio
+            $detalls,                       // Descripción de la operación
+            Tables::AUX_DADES_MUNICIPIS,  // Nombre de la tabla afectada
+            $id                           // ID del registro modificada
+        );
 
         // Respuesta de éxito
         echo json_encode(["status" => "success", "message" => "Les dades s'han actualitzat correctament a la base de dades."]);
@@ -205,7 +199,6 @@ if ($slug === "municipi") {
         $errors[] = 'El camp partit_politic és obligatori.';
     }
 
-
     // Si hay errores, devolver una respuesta con los errores
     if (!empty($errors)) {
         http_response_code(400); // Bad Request
@@ -242,33 +235,18 @@ if ($slug === "municipi") {
         // Ejecutar la consulta
         $stmt->execute();
 
-        // Recuperar el ID del registro creado
-        $lastInsertId = $conn->lastInsertId();
-
         // Si la inserció té èxit, cal registrar la inserció en la base de control de canvis
+        $detalls = "Modificació partit polític: " . $partit_politic;
+        $tipusOperacio = "UPDATE";
 
-        $dataHoraCanvi = date('Y-m-d H:i:s');
-        $tipusOperacio = "Update municipi: " . $partit_politic;
-        $idUser = $userId;
-
-        // Crear la consulta SQL
-        $sql2 = "INSERT INTO control_registre_canvis (
-        idUser, idPersonaFitxa, tipusOperacio, dataHoraCanvi
-        ) VALUES (
-        :idUser, :idPersonaFitxa, :tipusOperacio, :dataHoraCanvi
-        )";
-
-        // Preparar la consulta
-        $stmt = $conn->prepare($sql2);
-
-        // Enlazar los parámetros con los valores de las variables PHP
-        $stmt->bindParam(':idUser', $idUser, PDO::PARAM_INT);
-        $stmt->bindParam(':idPersonaFitxa', $lastInsertId, PDO::PARAM_INT);
-        $stmt->bindParam(':dataHoraCanvi', $dataHoraCanvi, PDO::PARAM_STR);
-        $stmt->bindParam(':tipusOperacio', $tipusOperacio, PDO::PARAM_STR);
-
-        // Ejecutar la consulta
-        $stmt->execute();
+        Audit::registrarCanvi(
+            $conn,
+            $userId,                      // ID del usuario que hace el cambio
+            $tipusOperacio,             // Tipus operacio
+            $detalls,                       // Descripción de la operación
+            Tables::AUX_FILIACIO_POLITICA,  // Nombre de la tabla afectada
+            $id                           // ID del registro modificada
+        );
 
         // Respuesta de éxito
         echo json_encode(["status" => "success", "message" => "Les dades s'han actualitzat correctament a la base de dades."]);
@@ -292,7 +270,6 @@ if ($slug === "municipi") {
     if (empty($data['sindicat'])) {
         $errors[] = 'El camp sindicat és obligatori.';
     }
-
 
     // Si hay errores, devolver una respuesta con los errores
     if (!empty($errors)) {
@@ -329,33 +306,18 @@ if ($slug === "municipi") {
         // Ejecutar la consulta
         $stmt->execute();
 
-        // Recuperar el ID del registro creado
-        $lastInsertId = $id;
-
         // Si la inserció té èxit, cal registrar la inserció en la base de control de canvis
+        $detalls = "Modificació sindicat: " . $sindicat;
+        $tipusOperacio = "UPDATE";
 
-        $dataHoraCanvi = date('Y-m-d H:i:s');
-        $tipusOperacio = "Update sindicat: " . $sindicat;
-        $idUser = $userId;
-
-        // Crear la consulta SQL
-        $sql2 = "INSERT INTO control_registre_canvis (
-        idUser, idPersonaFitxa, tipusOperacio, dataHoraCanvi
-        ) VALUES (
-        :idUser, :idPersonaFitxa, :tipusOperacio, :dataHoraCanvi
-        )";
-
-        // Preparar la consulta
-        $stmt = $conn->prepare($sql2);
-
-        // Enlazar los parámetros con los valores de las variables PHP
-        $stmt->bindParam(':idUser', $idUser, PDO::PARAM_INT);
-        $stmt->bindParam(':idPersonaFitxa', $lastInsertId, PDO::PARAM_INT);
-        $stmt->bindParam(':dataHoraCanvi', $dataHoraCanvi, PDO::PARAM_STR);
-        $stmt->bindParam(':tipusOperacio', $tipusOperacio, PDO::PARAM_STR);
-
-        // Ejecutar la consulta
-        $stmt->execute();
+        Audit::registrarCanvi(
+            $conn,
+            $userId,                      // ID del usuario que hace el cambio
+            $tipusOperacio,             // Tipus operacio
+            $detalls,                       // Descripción de la operación
+            Tables::AUX_FILIACIO_SINDICAL,  // Nombre de la tabla afectada
+            $id                           // ID del registro modificada
+        );
 
         // Respuesta de éxito
         echo json_encode(["status" => "success", "message" => "Les dades s'han actualitzat correctament a la base de dades."]);
@@ -415,33 +377,18 @@ if ($slug === "municipi") {
         // Ejecutar la consulta
         $stmt->execute();
 
-        // Recuperar el ID del registro creado
-        $lastInsertId = $id;
-
         // Si la inserció té èxit, cal registrar la inserció en la base de control de canvis
+        $detalls = "Modificació comarca: " . $comarca;
+        $tipusOperacio = "UPDATE";
 
-        $dataHoraCanvi = date('Y-m-d H:i:s');
-        $tipusOperacio = "Update Comarca: " . $comarca;
-        $idUser = $userId;
-
-        // Crear la consulta SQL
-        $sql2 = "INSERT INTO control_registre_canvis (
-        idUser, idPersonaFitxa, tipusOperacio, dataHoraCanvi
-        ) VALUES (
-        :idUser, :idPersonaFitxa, :tipusOperacio, :dataHoraCanvi
-        )";
-
-        // Preparar la consulta
-        $stmt = $conn->prepare($sql2);
-
-        // Enlazar los parámetros con los valores de las variables PHP
-        $stmt->bindParam(':idUser', $idUser, PDO::PARAM_INT);
-        $stmt->bindParam(':idPersonaFitxa', $lastInsertId, PDO::PARAM_INT);
-        $stmt->bindParam(':dataHoraCanvi', $dataHoraCanvi, PDO::PARAM_STR);
-        $stmt->bindParam(':tipusOperacio', $tipusOperacio, PDO::PARAM_STR);
-
-        // Ejecutar la consulta
-        $stmt->execute();
+        Audit::registrarCanvi(
+            $conn,
+            $userId,                      // ID del usuario que hace el cambio
+            $tipusOperacio,             // Tipus operacio
+            $detalls,                       // Descripción de la operación
+            Tables::AUX_DADES_MUNICIPIS_COMARCA,  // Nombre de la tabla afectada
+            $id                           // ID del registro modificada
+        );
 
         // Respuesta de éxito
         echo json_encode(["status" => "success", "message" => "Les dades s'han actualitzat correctament a la base de dades."]);
@@ -501,33 +448,18 @@ if ($slug === "municipi") {
         // Ejecutar la consulta
         $stmt->execute();
 
-        // Recuperar el ID del registro creado
-        $lastInsertId = $id;
-
         // Si la inserció té èxit, cal registrar la inserció en la base de control de canvis
+        $detalls = "Modificació província: " . $provincia;
+        $tipusOperacio = "UPDATE";
 
-        $dataHoraCanvi = date('Y-m-d H:i:s');
-        $tipusOperacio = "Update Provincia: " . $provincia;
-        $idUser = $userId;
-
-        // Crear la consulta SQL
-        $sql2 = "INSERT INTO control_registre_canvis (
-        idUser, idPersonaFitxa, tipusOperacio, dataHoraCanvi
-        ) VALUES (
-        :idUser, :idPersonaFitxa, :tipusOperacio, :dataHoraCanvi
-        )";
-
-        // Preparar la consulta
-        $stmt = $conn->prepare($sql2);
-
-        // Enlazar los parámetros con los valores de las variables PHP
-        $stmt->bindParam(':idUser', $idUser, PDO::PARAM_INT);
-        $stmt->bindParam(':idPersonaFitxa', $lastInsertId, PDO::PARAM_INT);
-        $stmt->bindParam(':dataHoraCanvi', $dataHoraCanvi, PDO::PARAM_STR);
-        $stmt->bindParam(':tipusOperacio', $tipusOperacio, PDO::PARAM_STR);
-
-        // Ejecutar la consulta
-        $stmt->execute();
+        Audit::registrarCanvi(
+            $conn,
+            $userId,                      // ID del usuario que hace el cambio
+            $tipusOperacio,             // Tipus operacio
+            $detalls,                       // Descripción de la operación
+            Tables::AUX_DADES_MUNICIPIS_PROVINCIA,  // Nombre de la tabla afectada
+            $id                           // ID del registro modificada
+        );
 
         // Respuesta de éxito
         echo json_encode(["status" => "success", "message" => "Les dades s'han actualitzat correctament a la base de dades."]);
@@ -586,33 +518,18 @@ if ($slug === "municipi") {
         // Ejecutar la consulta
         $stmt->execute();
 
-        // Recuperar el ID del registro creado
-        $lastInsertId = $id;
-
         // Si la inserció té èxit, cal registrar la inserció en la base de control de canvis
+        $detalls = "Modificació comunitat: " . $comunitat;
+        $tipusOperacio = "UPDATE";
 
-        $dataHoraCanvi = date('Y-m-d H:i:s');
-        $tipusOperacio = "Update Comunitat: " . $comunitat;
-        $idUser = $userId;
-
-        // Crear la consulta SQL
-        $sql2 = "INSERT INTO control_registre_canvis (
-        idUser, idPersonaFitxa, tipusOperacio, dataHoraCanvi
-        ) VALUES (
-        :idUser, :idPersonaFitxa, :tipusOperacio, :dataHoraCanvi
-        )";
-
-        // Preparar la consulta
-        $stmt = $conn->prepare($sql2);
-
-        // Enlazar los parámetros con los valores de las variables PHP
-        $stmt->bindParam(':idUser', $idUser, PDO::PARAM_INT);
-        $stmt->bindParam(':idPersonaFitxa', $lastInsertId, PDO::PARAM_INT);
-        $stmt->bindParam(':dataHoraCanvi', $dataHoraCanvi, PDO::PARAM_STR);
-        $stmt->bindParam(':tipusOperacio', $tipusOperacio, PDO::PARAM_STR);
-
-        // Ejecutar la consulta
-        $stmt->execute();
+        Audit::registrarCanvi(
+            $conn,
+            $userId,                      // ID del usuario que hace el cambio
+            $tipusOperacio,             // Tipus operacio
+            $detalls,                       // Descripción de la operación
+            Tables::AUX_DADES_MUNICIPIS_COMUNITAT,  // Nombre de la tabla afectada
+            $id                           // ID del registro modificada
+        );
 
         // Respuesta de éxito
         echo json_encode(["status" => "success", "message" => "Les dades s'han actualitzat correctament a la base de dades."]);
@@ -671,33 +588,18 @@ if ($slug === "municipi") {
         // Ejecutar la consulta
         $stmt->execute();
 
-        // Recuperar el ID del registro creado
-        $lastInsertId = $id;
-
         // Si la inserció té èxit, cal registrar la inserció en la base de control de canvis
+        $detalls = "Modificació estat: " . $estat;
+        $tipusOperacio = "UPDATE";
 
-        $dataHoraCanvi = date('Y-m-d H:i:s');
-        $tipusOperacio = "Update Estat: " . $estat;
-        $idUser = $userId;
-
-        // Crear la consulta SQL
-        $sql2 = "INSERT INTO control_registre_canvis (
-        idUser, idPersonaFitxa, tipusOperacio, dataHoraCanvi
-        ) VALUES (
-        :idUser, :idPersonaFitxa, :tipusOperacio, :dataHoraCanvi
-        )";
-
-        // Preparar la consulta
-        $stmt = $conn->prepare($sql2);
-
-        // Enlazar los parámetros con los valores de las variables PHP
-        $stmt->bindParam(':idUser', $idUser, PDO::PARAM_INT);
-        $stmt->bindParam(':idPersonaFitxa', $lastInsertId, PDO::PARAM_INT);
-        $stmt->bindParam(':dataHoraCanvi', $dataHoraCanvi, PDO::PARAM_STR);
-        $stmt->bindParam(':tipusOperacio', $tipusOperacio, PDO::PARAM_STR);
-
-        // Ejecutar la consulta
-        $stmt->execute();
+        Audit::registrarCanvi(
+            $conn,
+            $userId,                      // ID del usuario que hace el cambio
+            $tipusOperacio,             // Tipus operacio
+            $detalls,                       // Descripción de la operación
+            Tables::AUX_DADES_MUNICIPIS_ESTAT,  // Nombre de la tabla afectada
+            $id                           // ID del registro modificada
+        );
 
         // Respuesta de éxito
         echo json_encode(["status" => "success", "message" => "Les dades s'han actualitzat correctament a la base de dades."]);
