@@ -1,28 +1,26 @@
 {
   "compilerOptions": {
-    "module": "commonjs",  // O "CommonJS" si prefieres módulos CommonJS
-    "target": "ES2020",
-    "moduleResolution": "node",
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "allowJs": true,
-    "outDir": "./dist",
-    "rootDir": "./src/frontend/",
-    "lib": ["es2017", "dom"],
+    "module": "ESNext",            // Usar módulos ESNext para importaciones
+    "target": "ES2020",            // Establecer el target a ES2020
+    "moduleResolution": "node",    // Resolver módulos de acuerdo con Node.js
+    "esModuleInterop": true,       // Compatibilidad con CommonJS y ES Modules
+    "strict": true,                // Habilitar todas las comprobaciones estrictas
+    "allowJs": true,               // Permitir archivos .js
+    "outDir": "./dist",            // Directorio de salida para los archivos compilados
+    "rootDir": "./src/frontend",   // Directorio raíz de tu código fuente
+    "lib": ["es2017", "dom"],      // Incluir las bibliotecas necesarias
     "forceConsistentCasingInFileNames": true,
-    "typeRoots": ["./node_modules/@types", "src/frontend/types"]
-      },
-
- "include": [
+    "incremental": true,
+    "typeRoots": [
+      "node_modules/@types",
+      "src/frontend/types",
+    ]
+  },
+  "include": [
     "src/frontend",
     "src/frontend/types/global.d.ts",
     "src/frontend/types",
-  ], 
-  "exclude": ["node_modules"],
-  "scripts": {
-      "build": "webpack --config ./node_modules/ts-node/register ./webpack.config.ts --mode production",
-      "dev": "webpack serve --config webpack.config.ts --mode development",
-      "start": "npm run dev"
-  }
+    "src/frontend/types/vite-env.d.ts",
+  ],
+  "exclude": ["node_modules"]
 }

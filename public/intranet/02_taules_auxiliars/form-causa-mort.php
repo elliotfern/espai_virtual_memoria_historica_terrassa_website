@@ -9,14 +9,23 @@ if (!$conn) {
 }
 require_once APP_ROOT . '/public/intranet/includes/header.php';
 
+// Obtener la URL completa
+$url2 = $_SERVER['REQUEST_URI'];
+
+// Dividir la URL en partes usando '/' como delimitador
+$urlParts = explode('/', $url2);
+
+// Obtener la parte deseada (en este caso, la cuarta parte)
+$pag = $urlParts[3] ?? '';
+
 $causa_defuncio_ca_old = "";
 $id_old = "";
-$btnModificar = 2;
+$btnModificar = 1;
 
-if ($btnModificar === 1) {
+if ($pag === "modifica-causa-mort") {
     // Verificar si la ID existe en la base de datos
-    $query = "SELECT id, tipologia_espai_ca
-    FROM aux_tipologia_espais";
+    $query = "SELECT id, causa_defuncio_ca, cat
+    FROM aux_causa_defuncio";
     $stmt = $conn->prepare($query);
     $stmt->execute();
 
@@ -25,15 +34,12 @@ if ($btnModificar === 1) {
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             // Acceder a las variables de la consulta
             $id_id = $row['id'] ?? "";
-            $tipologia_espai_ca_old = $row['tipologia_espai_ca'] ?? "";
+            $causa_defuncio_ca_old = $row['causa_defuncio_ca'] ?? "";
 
             // Crear el botón o usar los datos (TIPO PUT)
-            $btnModificar = 1;
+            $btnModificar = 2;
         }
     }
-} else {
-    // La ID no existe, realizamos un POST (INSERT)
-    $btnModificar = 2;
 }
 ?>
 
@@ -41,17 +47,22 @@ if ($btnModificar === 1) {
     <form id="causaMortForm">
         <div class="container">
             <div class="row g-3">
-                <h2>Crear nova causa de mort</h2>
+                <?php if ($btnModificar === 1) {
+                    echo '<h2>Crear nova causa de mort</h2>';
+                } else {
+                    echo '<h2>Modifica causa de mort: ' . $causa_defuncio_ca_old . '</h2>';
+                }
+                ?>
 
                 <div class="alert alert-success" role="alert" id="okMessage" style="display:none">
-                    <h4 class="alert-heading"><strong>Modificació correcte!</strong></h4>
                     <div id="okText"></div>
                 </div>
 
                 <div class="alert alert-danger" role="alert" id="errMessage" style="display:none">
-                    <h4 class="alert-heading"><strong>Error en les dades!</strong></h4>
                     <div id="errText"></div>
                 </div>
+
+                <input type="hidden" name="id" id="id" value="<?php echo $id_old; ?>">
 
                 <div class="col-md-4 mb-4">
                     <label for="causa_defuncio_ca" class="form-label negreta">Causa de mort (català):</label>
@@ -67,158 +78,15 @@ if ($btnModificar === 1) {
                     <div class="col d-flex justify-content-end align-items-center">
 
                         <?php
-                        if ($btnModificar === 1) {
-                            echo '<a class="btn btn-primary" role="button" aria-disabled="true" id="btnModificarDadesCombat" onclick="enviarFormulario(event)">Modificar dades</a>';
+                        if ($btnModificar === 2) {
+                            echo '<button class="btn btn-primary" type="submit">Modificar dades</button>';
                         } else {
-                            echo '<a class="btn btn-primary" role="button" aria-disabled="true" id="btnInserirDadesCombat" onclick="enviarFormularioPost(event)">Inserir dades</a>';
+                            echo '<button class="btn btn-primary" type="submit">Inserir dades</button>';
                         }
                         ?>
                     </div>
                 </div>
+            </div>
+        </div>
     </form>
 </div>
-</div>
-</div>
-
-<script>
-    // Función para manejar el envío del formulario
-    async function enviarFormulario(event) {
-        event.preventDefault(); // Prevenir el envío por defecto
-
-        // Obtener el formulario
-        const form = document.getElementById("causaMortForm");
-
-        // Crear un objeto para almacenar los datos del formulario
-        const formData = {};
-        new FormData(form).forEach((value, key) => {
-            formData[key] = value; // Agregar cada campo al objeto formData
-        });
-
-        // Convertir los datos del formulario a JSON
-        const jsonData = JSON.stringify(formData);
-        const devDirectory = `https://${window.location.hostname}`;
-        let urlAjax = devDirectory + "/api/auxiliars/put/causa_mort";
-
-        try {
-            // Hacer la solicitud con fetch y await
-            const response = await fetch(urlAjax, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json", // Indicar que se envía JSON
-                },
-                body: jsonData, // Enviar los datos en formato JSON
-            });
-
-            // Verificar si la solicitud fue exitosa
-            if (!response.ok) {
-                throw new Error("Error al enviar el formulario.");
-            }
-
-            // Procesar la respuesta como texto o JSON
-            const data = await response.json();
-
-            // Verificar si el status es success
-            if (data.status === "success") {
-                // Cambiar el display del div con id 'OkMessage' a 'block'
-                const okMessageDiv = document.getElementById("okMessage");
-                const okTextDiv = document.getElementById("okText");
-
-                if (okMessageDiv && okTextDiv) {
-                    okMessageDiv.style.display = "block";
-                    okTextDiv.textContent = data.message || "Les dades s'han actualitzat correctament!";
-                }
-
-            } else {
-                // Si el status no es success, puedes manejar el error aquí
-                // Cambiar el display del div con id 'OkMessage' a 'block'
-                const errMessageDiv = document.getElementById("errMessage");
-                const errTextDiv = document.getElementById("errText");
-                if (errMessageDiv && errTextDiv) {
-                    errMessageDiv.style.display = "block";
-                    errTextDiv.textContent = data.message || "S'ha produit un error a la base de dades.";
-                }
-            }
-        } catch (error) {
-            // Manejar errores
-            console.error("Error:", error);
-        }
-    }
-
-    // Asignar la función al botón del formulario
-    //document.getElementById("btnModificarDadesCombat").addEventListener("click", enviarFormulario);
-
-    // Función para manejar el envío del formulario
-    async function enviarFormularioPost(event) {
-        event.preventDefault(); // Prevenir el envío por defecto
-
-        // Obtener el formulario
-        const form = document.getElementById("causaMortForm");
-
-        // Crear un objeto para almacenar los datos del formulario
-        const formData = {};
-        new FormData(form).forEach((value, key) => {
-            formData[key] = value; // Agregar cada campo al objeto formData
-        });
-
-        // Convertir los datos del formulario a JSON
-        const jsonData = JSON.stringify(formData);
-        const devDirectory = `https://${window.location.hostname}`;
-        let urlAjax = devDirectory + "/api/auxiliars/post/causa_mort";
-
-        try {
-            // Hacer la solicitud con fetch y await
-            const response = await fetch(urlAjax, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json", // Indicar que se envía JSON
-                },
-                body: jsonData, // Enviar los datos en formato JSON
-            });
-
-            // Verificar si la solicitud fue exitosa
-            if (!response.ok) {
-
-                const errMessageDiv = document.getElementById("errMessage");
-                const errTextDiv = document.getElementById("errText");
-                if (errMessageDiv && errTextDiv) {
-                    errMessageDiv.style.display = "block";
-                    errTextDiv.textContent = data.message || "S'ha produit un error a la base de dades.";
-                }
-                throw new Error("Error al enviar el formulario.");
-            }
-
-            // Procesar la respuesta como texto o JSON
-            const data = await response.json();
-
-            // Verificar si el status es success
-            if (data.status === "success") {
-                // Cambiar el display del div con id 'OkMessage' a 'block'
-                const okMessageDiv = document.getElementById("okMessage");
-                const okTextDiv = document.getElementById("okText");
-                const errMessageDiv = document.getElementById("errMessage");
-
-                if (okMessageDiv && okTextDiv && errMessageDiv) {
-                    okMessageDiv.style.display = "block";
-                    okTextDiv.textContent = data.message || "Les dades s'han desat correctament!";
-                    errMessageDiv.style.display = "none";
-                }
-
-            } else {
-                // Si el status no es success, puedes manejar el error aquí
-                // Cambiar el display del div con id 'OkMessage' a 'block'
-                const errMessageDiv = document.getElementById("errMessage");
-                const errTextDiv = document.getElementById("errText");
-                if (errMessageDiv && errTextDiv) {
-                    errMessageDiv.style.display = "block";
-                    errTextDiv.textContent = data.message || "S'ha produit un error a la base de dades.";
-                }
-            }
-        } catch (error) {
-            // Manejar errores
-            console.error("Error:", error);
-        }
-    }
-
-    // Asignar la función al botón del formulario
-    // document.getElementById("btnInserirDadesCombat").addEventListener("click", enviarFormularioPost);
-</script>

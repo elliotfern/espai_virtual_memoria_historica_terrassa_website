@@ -26,6 +26,8 @@ class MissatgesAPI
             'delete' => "Error en intentar eliminar el registre.",
             'default' => "S'ha produït un error en el procés.",
             'errorBD' => "S'ha produït un error a la base de dades.",
+            'errorEndPoint' => "Aquesta operació no és vàlida.",
+            'duplicat' => "Ja existeix un valor a la base de dades amb el mateix nom.",
         ];
         return $messages[$key] ?? $messages['default'];
     }

@@ -35,12 +35,13 @@
 
             <h4>1. General</h4>
             <ul>
-                <li>aux_categoria</li>
+                <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['auxiliars']; ?>/llistat-categories-repressio">Taula llistat categories de repressió</a></li>
+                <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['auxiliars']; ?>/llistat-causa-mort">Taula llistat causes de defunció</a></li>
                 <li>aux_espai</li>
                 <li>aux_estat_civil</li>
                 <li>aux_estudis</li>
                 <li>aux_oficis</li>
-                <li>aux_ofici_carrec</li>
+                <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['auxiliars']; ?>/llistat-carrecs-empresa">Taula llistat càrrecs d'empresa</a></li>
                 <li>aux_sector_economic</li>
                 <li>aux_sub_sector_economic</li>
                 <li>aux_tipologia_espais</li>
@@ -64,7 +65,6 @@
             <h4>4. Cost humà guerra civil</h4>
             <ul>
                 <li>aux_bandol</li>
-                <li>aux_causa_defuncio</li>
                 <li>aux_condicio</li>
                 <li>aux_cossos_militars</li>
                 <li>aux_llocs_bombardeig</li>

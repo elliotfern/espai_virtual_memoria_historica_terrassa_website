@@ -9,6 +9,9 @@ import { taulaComarques } from './taulaComarques';
 import { taulaProvincies } from './taulaProvincies';
 import { taulaComunitats } from './taulaComunitats';
 import { taulaEstats } from './taulaEstats';
+import { taulaCategoriesRepressio } from './taulaCategoriesRepressio';
+import { API_URLS } from '../../../services/api/ApiUrls';
+import { formMunicipi } from './formMunicipi';
 
 export function auxiliars() {
   const url = window.location.href;
@@ -50,43 +53,119 @@ export function auxiliars() {
     const causaMortForm = document.getElementById('causaMortForm');
     if (causaMortForm) {
       causaMortForm.addEventListener('submit', function (event) {
-        transmissioDadesDB(event, 'POST', 'causaMortForm', '/api/auxiliars/post/carrec_empresa', true);
+        transmissioDadesDB(event, 'POST', 'causaMortForm', API_URLS.POST.CARREC_EMPRESA, true);
       });
     }
   } else if (pageType[2] === 'modifica-carrec-empresa') {
     const causaMortForm = document.getElementById('causaMortForm');
     if (causaMortForm) {
       causaMortForm.addEventListener('submit', function (event) {
-        transmissioDadesDB(event, 'PUT', 'causaMortForm', '/api/auxiliars/put/carrec_empresa');
+        transmissioDadesDB(event, 'PUT', 'causaMortForm', API_URLS.PUT.CARREC_EMPRESA);
       });
     }
   } else if (pageType[2] === 'nou-ofici') {
     const oficiForm = document.getElementById('oficiForm');
     if (oficiForm) {
       oficiForm.addEventListener('submit', function (event) {
-        transmissioDadesDB(event, 'POST', 'oficiForm', '/api/auxiliars/post/ofici', true);
+        transmissioDadesDB(event, 'POST', 'oficiForm', API_URLS.POST.OFICI, true);
       });
     }
   } else if (pageType[2] === 'modifica-ofici') {
     const oficiForm = document.getElementById('oficiForm');
     if (oficiForm) {
       oficiForm.addEventListener('submit', function (event) {
-        transmissioDadesDB(event, 'PUT', 'oficiForm', '/api/auxiliars/put/ofici');
+        transmissioDadesDB(event, 'PUT', 'oficiForm', API_URLS.PUT.OFICI);
       });
     }
   } else if (pageType[2] === 'nou-sub-sector-economic') {
     const subSectorForm = document.getElementById('subSectorForm');
     if (subSectorForm) {
       subSectorForm.addEventListener('submit', function (event) {
-        transmissioDadesDB(event, 'POST', 'subSectorForm', '/api/auxiliars/post/sub_sector_economic', true);
+        transmissioDadesDB(event, 'POST', 'subSectorForm', API_URLS.POST.SUB_SECTOR_ECONOMIC, true);
       });
     }
   } else if (pageType[2] === 'modifica-sub-sector-economic') {
     const subSectorForm = document.getElementById('subSectorForm');
     if (subSectorForm) {
       subSectorForm.addEventListener('submit', function (event) {
-        transmissioDadesDB(event, 'PUT', 'subSectorForm', '/api/auxiliars/put/sub_sector_economic');
+        transmissioDadesDB(event, 'PUT', 'subSectorForm', API_URLS.PUT.SUB_SECTOR_ECONOMIC);
       });
     }
+  } else if (pageType[2] === 'llistat-categories-repressio') {
+    taulaCategoriesRepressio();
+  } else if (pageType[2] === 'modifica-categoria-repressio') {
+    const categoriesForm = document.getElementById('categoriesForm');
+    if (categoriesForm) {
+      categoriesForm.addEventListener('submit', function (event) {
+        transmissioDadesDB(event, 'PUT', 'categoriesForm', API_URLS.PUT.CATEGORIA_REPRESSIO);
+      });
+    }
+  } else if (pageType[2] === 'nova-categoria-repressio') {
+    const categoriesForm = document.getElementById('categoriesForm');
+    if (categoriesForm) {
+      categoriesForm.addEventListener('submit', function (event) {
+        transmissioDadesDB(event, 'POST', 'categoriesForm', API_URLS.POST.CATEGORIA_REPRESSIO, true);
+      });
+    }
+  } else if (pageType[2] === 'nova-causa-mort') {
+    const causaMortForm = document.getElementById('causaMortForm');
+    if (causaMortForm) {
+      causaMortForm.addEventListener('submit', function (event) {
+        transmissioDadesDB(event, 'POST', 'causaMortForm', API_URLS.POST.CAUSA_MORT, true);
+      });
+    }
+  } else if (pageType[2] === 'modifica-causa-mort') {
+    const causaMortForm = document.getElementById('causaMortForm');
+    if (causaMortForm) {
+      causaMortForm.addEventListener('submit', function (event) {
+        transmissioDadesDB(event, 'PUT', 'causaMortForm', API_URLS.PUT.CAUSA_MORT);
+      });
+    }
+  } else if (pageType[2] === 'nova-comarca') {
+    const formComarca = document.getElementById('formComarca');
+    if (formComarca) {
+      formComarca.addEventListener('submit', function (event) {
+        transmissioDadesDB(event, 'POST', 'formComarca', API_URLS.POST.MUNICIPI_COMARCA, true);
+      });
+    }
+  } else if (pageType[2] === 'modifica-comarca') {
+    const formComarca = document.getElementById('formComarca');
+    if (formComarca) {
+      formComarca.addEventListener('submit', function (event) {
+        transmissioDadesDB(event, 'PUT', 'formComarca', API_URLS.PUT.MUNICIPI_COMARCA);
+      });
+    }
+  } else if (pageType[2] === 'nova-comunitat') {
+    const formComunitat = document.getElementById('formComunitat');
+    if (formComunitat) {
+      formComunitat.addEventListener('submit', function (event) {
+        transmissioDadesDB(event, 'POST', 'formComunitat', API_URLS.POST.MUNICIPI_COMUNITAT, true);
+      });
+    }
+  } else if (pageType[2] === 'modifica-comunitat') {
+    const formComunitat = document.getElementById('formComunitat');
+    if (formComunitat) {
+      formComunitat.addEventListener('submit', function (event) {
+        transmissioDadesDB(event, 'PUT', 'formComunitat', API_URLS.PUT.MUNICIPI_COMUNITAT);
+      });
+    }
+  } else if (pageType[2] === 'modifica-estat') {
+    const formEstat = document.getElementById('formEstat');
+    if (formEstat) {
+      formEstat.addEventListener('submit', function (event) {
+        transmissioDadesDB(event, 'PUT', 'formEstat', API_URLS.PUT.MUNICIPI_ESTAT);
+      });
+    }
+  } else if (pageType[2] === 'nou-estat') {
+    const formEstat = document.getElementById('formEstat');
+    if (formEstat) {
+      formEstat.addEventListener('submit', function (event) {
+        transmissioDadesDB(event, 'POST', 'formEstat', API_URLS.POST.MUNICIPI_ESTAT, true);
+      });
+    }
+  } else if (pageType[2] === 'modifica-municipi') {
+    formMunicipi(true, Number(pageType[3]));
+  } else if (pageType[2] === 'nou-municipi') {
+    formMunicipi(false);
   }
 }

@@ -5,6 +5,7 @@ use App\Config\Audit;
 use App\Config\DatabaseConnection;
 use App\Utils\MissatgesAPI;
 use App\Utils\Response;
+use App\Utils\ValidacioErrors;
 
 $conn = DatabaseConnection::getConnection();
 
@@ -50,11 +51,11 @@ if ($slug === "municipi") {
 
     // Validación de los datos recibidos
     if (empty($data['ciutat'])) {
-        $errors[] = 'El camp ciutat és obligatori.';
+        $errors[] =  ValidacioErrors::requerit('ciutat');
     }
 
     if (empty($data['estat'])) {
-        $errors[] = 'El camp Estat és obligatori.';
+        $errors[] =  ValidacioErrors::requerit('estat');
     }
 
     // Si hay errores, devolver una respuesta con los errores
@@ -77,10 +78,11 @@ if ($slug === "municipi") {
 
     if ($municipiExists > 0) {
         Response::error(
-            "El municipi ja existeix a la base de dades.",
+            MissatgesAPI::error('duplicat'),
             [],
             409
         );
+        exit;
     }
 
     // Si no hay errores, crear las variables PHP y preparar la consulta PDO
@@ -160,20 +162,23 @@ if ($slug === "municipi") {
 
     // Validación de los datos recibidos
     if (empty($data['ofici_cat'])) {
-        $errors[] = 'El camp ofici és obligatori.';
+        $errors[] =  ValidacioErrors::requerit('ofici');
     }
 
     // Si hay errores, devolver una respuesta con los errores
     if (!empty($errors)) {
-        http_response_code(400); // Bad Request
-        echo json_encode(["status" => "error", "message" => $errors]);
-        exit;
+        Response::error(
+            MissatgesAPI::error('validacio'),
+            $errors,
+            400
+        );
     }
 
     // Si no hay errores, crear las variables PHP y preparar la consulta PDO
     $ofici_cat = $data['ofici_cat'];
     $ofici_es = !empty($data['ofici_es']) ? $data['ofici_es'] : NULL;
     $ofici_en = !empty($data['ofici_en']) ? $data['ofici_en'] : NULL;
+
     // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
     try {
 
@@ -215,11 +220,18 @@ if ($slug === "municipi") {
         );
 
         // Respuesta de éxito
-        echo json_encode(["status" => "success", "message" => "Les dades s'han actualitzat correctament a la base de dades."]);
+        Response::success(
+            MissatgesAPI::success('create'),
+            ['id' => $id],
+            200
+        );
     } catch (PDOException $e) {
         // En caso de error en la conexión o ejecución de la consulta
-        http_response_code(500); // Internal Server Error
-        echo json_encode(["status" => "error", "message" => "S'ha produit un error a la base de dades: " . $e->getMessage()]);
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
     }
     // 3) POST tipologia_espai
     // ruta POST => "/api/auxiliars/post/tipologia_espai"
@@ -232,14 +244,16 @@ if ($slug === "municipi") {
 
     // Validación de los datos recibidos
     if (empty($data['tipologia_espai_ca'])) {
-        $errors[] = 'El camp tipologia és obligatori.';
+        $errors[] =  ValidacioErrors::requerit('tipologia espai');
     }
 
     // Si hay errores, devolver una respuesta con los errores
     if (!empty($errors)) {
-        http_response_code(400); // Bad Request
-        echo json_encode(["status" => "error", "message" => $errors]);
-        exit;
+        Response::error(
+            MissatgesAPI::error('validacio'),
+            $errors,
+            400
+        );
     }
 
     // Si no hay errores, crear las variables PHP y preparar la consulta PDO
@@ -286,11 +300,18 @@ if ($slug === "municipi") {
         );
 
         // Respuesta de éxito
-        echo json_encode(["status" => "success", "message" => "Les dades s'han actualitzat correctament a la base de dades."]);
+        Response::success(
+            MissatgesAPI::success('create'),
+            ['id' => $id],
+            200
+        );
     } catch (PDOException $e) {
         // En caso de error en la conexión o ejecución de la consulta
-        http_response_code(500); // Internal Server Error
-        echo json_encode(["status" => "error", "message" => "S'ha produit un error a la base de dades: " . $e->getMessage()]);
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
     }
     // 4) POST causa_mort
     // ruta POST => "/api/auxiliars/post/causa_mort"
@@ -303,14 +324,16 @@ if ($slug === "municipi") {
 
     // Validación de los datos recibidos
     if (empty($data['causa_defuncio_ca'])) {
-        $errors[] = 'El camp causa_defuncio és obligatori.';
+        $errors[] =  ValidacioErrors::requerit('causa de defunció');
     }
 
     // Si hay errores, devolver una respuesta con los errores
     if (!empty($errors)) {
-        http_response_code(400); // Bad Request
-        echo json_encode(["status" => "error", "message" => $errors]);
-        exit;
+        Response::error(
+            MissatgesAPI::error('validacio'),
+            $errors,
+            400
+        );
     }
 
     // Si no hay errores, crear las variables PHP y preparar la consulta PDO
@@ -357,11 +380,18 @@ if ($slug === "municipi") {
         );
 
         // Respuesta de éxito
-        echo json_encode(["status" => "success", "message" => "Les dades s'han actualitzat correctament a la base de dades."]);
+        Response::success(
+            MissatgesAPI::success('create'),
+            ['id' => $id],
+            200
+        );
     } catch (PDOException $e) {
         // En caso de error en la conexión o ejecución de la consulta
-        http_response_code(500); // Internal Server Error
-        echo json_encode(["status" => "error", "message" => "S'ha produit un error a la base de dades: " . $e->getMessage()]);
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
     }
     // 5) POST CARREC EMPRESA
     // ruta POST => "/api/auxiliars/post/carrec_empresa" 
@@ -374,14 +404,16 @@ if ($slug === "municipi") {
 
     // Validación de los datos recibidos
     if (empty($data['carrec_cat'])) {
-        $errors[] = 'El camp carrec_cat és obligatori.';
+        $errors[] =  ValidacioErrors::requerit('càrrec empresa');
     }
 
     // Si hay errores, devolver una respuesta con los errores
     if (!empty($errors)) {
-        http_response_code(400); // Bad Request
-        echo json_encode(["status" => "error", "message" => $errors]);
-        exit;
+        Response::error(
+            MissatgesAPI::error('validacio'),
+            $errors,
+            400
+        );
     }
 
     // Si no hay errores, crear las variables PHP y preparar la consulta PDO
@@ -432,11 +464,18 @@ if ($slug === "municipi") {
         );
 
         // Respuesta de éxito
-        echo json_encode(["status" => "success", "message" => "Les dades s'han actualitzat correctament a la base de dades."]);
+        Response::success(
+            MissatgesAPI::success('create'),
+            ['id' => $id],
+            200
+        );
     } catch (PDOException $e) {
         // En caso de error en la conexión o ejecución de la consulta
-        http_response_code(500); // Internal Server Error
-        echo json_encode(["status" => "error", "message" => "S'ha produit un error a la base de dades: " . $e->getMessage()]);
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
     }
 
     // 6) POST SUB-SECTOR ECONOMIC
@@ -450,14 +489,16 @@ if ($slug === "municipi") {
 
     // Validación de los datos recibidos
     if (empty($data['sub_sector_cat'])) {
-        $errors[] = 'El camp sub_sector és obligatori.';
+        $errors[] =  ValidacioErrors::requerit('sub-sector econòmic');
     }
 
     // Si hay errores, devolver una respuesta con los errores
     if (!empty($errors)) {
-        http_response_code(400); // Bad Request
-        echo json_encode(["status" => "error", "message" => "S'han produït errors en la validació", "errors" => $errors]);
-        exit;
+        Response::error(
+            MissatgesAPI::error('validacio'),
+            $errors,
+            400
+        );
     }
 
     // Si no hay errores, crear las variables PHP y preparar la consulta PDO
@@ -510,11 +551,18 @@ if ($slug === "municipi") {
         );
 
         // Respuesta de éxito
-        echo json_encode(["status" => "success", "message" => "Les dades s'han actualitzat correctament a la base de dades."]);
+        Response::success(
+            MissatgesAPI::success('create'),
+            ['id' => $id],
+            200
+        );
     } catch (PDOException $e) {
         // En caso de error en la conexión o ejecución de la consulta
-        http_response_code(500); // Internal Server Error
-        echo json_encode(["status" => "error", "message" => "S'ha produit un error a la base de dades: " . $e->getMessage()]);
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
     }
     // 6) POST PARTIT POLITIC
     // ruta POST => "/api/auxiliars/post/partit_politic"
@@ -527,18 +575,20 @@ if ($slug === "municipi") {
 
     // Validación de los datos recibidos
     if (empty($data['partit_politic'])) {
-        $errors[] = 'El camp partit polític és obligatori.';
+        $errors[] =  ValidacioErrors::requerit('partit polític');
     }
 
     if (empty($data['sigles'])) {
-        $errors[] = 'El camp sigles és obligatori.';
+        $errors[] =  ValidacioErrors::requerit('sigles');
     }
 
     // Si hay errores, devolver una respuesta con los errores
     if (!empty($errors)) {
-        http_response_code(400); // Bad Request
-        echo json_encode(["status" => "error", "message" => $errors]);
-        exit;
+        Response::error(
+            MissatgesAPI::error('validacio'),
+            $errors,
+            400
+        );
     }
 
     // Si no hay errores, crear las variables PHP y preparar la consulta PDO
@@ -584,11 +634,18 @@ if ($slug === "municipi") {
         );
 
         // Respuesta de éxito
-        echo json_encode(["status" => "success", "message" => "Les dades s'han actualitzat correctament a la base de dades."]);
+        Response::success(
+            MissatgesAPI::success('create'),
+            ['id' => $id],
+            200
+        );
     } catch (PDOException $e) {
         // En caso de error en la conexión o ejecución de la consulta
-        http_response_code(500); // Internal Server Error
-        echo json_encode(["status" => "error", "message" => "S'ha produit un error a la base de dades: " . $e->getMessage()]);
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
     }
     // 6) POST SINDICAT
     // ruta POST => "/api/auxiliars/post/sindicat"
@@ -601,18 +658,20 @@ if ($slug === "municipi") {
 
     // Validación de los datos recibidos
     if (empty($data['sindicat'])) {
-        $errors[] = 'El camp sindicat és obligatori.';
+        $errors[] =  ValidacioErrors::requerit('sindicat');
     }
 
     if (empty($data['sigles'])) {
-        $errors[] = 'El camp sigles és obligatori.';
+        $errors[] =  ValidacioErrors::requerit('sigles');
     }
 
     // Si hay errores, devolver una respuesta con los errores
     if (!empty($errors)) {
-        http_response_code(400); // Bad Request
-        echo json_encode(["status" => "error", "message" => "S'han produït errors en la validació", "errors" => $errors]);
-        exit;
+        Response::error(
+            MissatgesAPI::error('validacio'),
+            $errors,
+            400
+        );
     }
 
     // Si no hay errores, crear las variables PHP y preparar la consulta PDO
@@ -661,11 +720,18 @@ if ($slug === "municipi") {
         );
 
         // Respuesta de éxito
-        echo json_encode(["status" => "success", "message" => "Les dades s'han actualitzat correctament a la base de dades."]);
+        Response::success(
+            MissatgesAPI::success('create'),
+            ['id' => $id],
+            200
+        );
     } catch (PDOException $e) {
         // En caso de error en la conexión o ejecución de la consulta
-        http_response_code(500); // Internal Server Error
-        echo json_encode(["status" => "error", "message" => "S'ha produit un error a la base de dades: " . $e->getMessage()]);
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
     }
 
     // 7) POST COMARCA
@@ -679,14 +745,16 @@ if ($slug === "municipi") {
 
     // Validación de los datos recibidos
     if (empty($data['comarca'])) {
-        $errors[] = 'El camp comarca és obligatori.';
+        $errors[] =  ValidacioErrors::requerit('comarca');
     }
 
     // Si hay errores, devolver una respuesta con los errores
     if (!empty($errors)) {
-        http_response_code(400); // Bad Request
-        echo json_encode(["status" => "error", "message" => $errors]);
-        exit;
+        Response::error(
+            MissatgesAPI::error('validacio'),
+            $errors,
+            400
+        );
     }
 
     // Verificar si la comarca ya existe en la base de datos
@@ -699,8 +767,11 @@ if ($slug === "municipi") {
     $comarcaExists = $stmt->fetchColumn();
 
     if ($comarcaExists > 0) {
-        http_response_code(409); // Conflict
-        echo json_encode(["status" => "error", "message" => "La comarca ja existeix a la base de dades."]);
+        Response::error(
+            MissatgesAPI::error('duplicat'),
+            [],
+            409
+        );
         exit;
     }
 
@@ -750,11 +821,18 @@ if ($slug === "municipi") {
         );
 
         // Respuesta de éxito
-        echo json_encode(["status" => "success", "message" => "Les dades s'han actualitzat correctament a la base de dades."]);
+        Response::success(
+            MissatgesAPI::success('create'),
+            ['id' => $id],
+            200
+        );
     } catch (PDOException $e) {
         // En caso de error en la conexión o ejecución de la consulta
-        http_response_code(500); // Internal Server Error
-        echo json_encode(["status" => "error", "message" => "S'ha produit un error a la base de dades: " . $e->getMessage()]);
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
     }
 
     // 7) POST PROVINCIA
@@ -773,9 +851,11 @@ if ($slug === "municipi") {
 
     // Si hay errores, devolver una respuesta con los errores
     if (!empty($errors)) {
-        http_response_code(400); // Bad Request
-        echo json_encode(["status" => "error", "message" => $errors]);
-        exit;
+        Response::error(
+            MissatgesAPI::error('validacio'),
+            $errors,
+            400
+        );
     }
 
     // Verificar si la provincia ya existe en la base de datos
@@ -788,8 +868,11 @@ if ($slug === "municipi") {
     $provinciaExists = $stmt->fetchColumn();
 
     if ($provinciaExists > 0) {
-        http_response_code(409); // Conflict
-        echo json_encode(["status" => "error", "message" => "La provincia ja existeix a la base de dades."]);
+        Response::error(
+            MissatgesAPI::error('duplicat'),
+            [],
+            409
+        );
         exit;
     }
 
@@ -839,11 +922,18 @@ if ($slug === "municipi") {
         );
 
         // Respuesta de éxito
-        echo json_encode(["status" => "success", "message" => "Les dades s'han actualitzat correctament a la base de dades."]);
+        Response::success(
+            MissatgesAPI::success('create'),
+            ['id' => $id],
+            200
+        );
     } catch (PDOException $e) {
         // En caso de error en la conexión o ejecución de la consulta
-        http_response_code(500); // Internal Server Error
-        echo json_encode(["status" => "error", "message" => "S'ha produit un error a la base de dades: " . $e->getMessage()]);
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
     }
 
     // 7) POST COMUNITAT AUTONOMA
@@ -857,14 +947,16 @@ if ($slug === "municipi") {
 
     // Validación de los datos recibidos
     if (empty($data['comunitat'])) {
-        $errors[] = 'El camp comunitat és obligatori.';
+        $errors[] =  ValidacioErrors::requerit('comunitat');
     }
 
     // Si hay errores, devolver una respuesta con los errores
     if (!empty($errors)) {
-        http_response_code(400); // Bad Request
-        echo json_encode(["status" => "error", "message" => $errors]);
-        exit;
+        Response::error(
+            MissatgesAPI::error('validacio'),
+            $errors,
+            400
+        );
     }
 
     // Verificar si la comunitat ya existe en la base de datos
@@ -877,8 +969,11 @@ if ($slug === "municipi") {
     $comunitatExists = $stmt->fetchColumn();
 
     if ($comunitatExists > 0) {
-        http_response_code(409); // Conflict
-        echo json_encode(["status" => "error", "message" => "La comunitat ja existeix a la base de dades."]);
+        Response::error(
+            MissatgesAPI::error('duplicat'),
+            [],
+            409
+        );
         exit;
     }
 
@@ -928,11 +1023,18 @@ if ($slug === "municipi") {
         );
 
         // Respuesta de éxito
-        echo json_encode(["status" => "success", "message" => "Les dades s'han actualitzat correctament a la base de dades."]);
+        Response::success(
+            MissatgesAPI::success('create'),
+            ['id' => $id],
+            200
+        );
     } catch (PDOException $e) {
         // En caso de error en la conexión o ejecución de la consulta
-        http_response_code(500); // Internal Server Error
-        echo json_encode(["status" => "error", "message" => "S'ha produit un error a la base de dades: " . $e->getMessage()]);
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
     }
 
     // 8) POST ESTAT
@@ -946,14 +1048,16 @@ if ($slug === "municipi") {
 
     // Validación de los datos recibidos
     if (empty($data['estat'])) {
-        $errors[] = 'El camp estat és obligatori.';
+        $errors[] =  ValidacioErrors::requerit('estat');
     }
 
     // Si hay errores, devolver una respuesta con los errores
     if (!empty($errors)) {
-        http_response_code(400); // Bad Request
-        echo json_encode(["status" => "error", "message" => $errors]);
-        exit;
+        Response::error(
+            MissatgesAPI::error('validacio'),
+            $errors,
+            400
+        );
     }
 
     // Verificar si l'estat ja existeix a la base de dades
@@ -966,8 +1070,11 @@ if ($slug === "municipi") {
     $estatExists = $stmt->fetchColumn();
 
     if ($estatExists > 0) {
-        http_response_code(409); // Conflict
-        echo json_encode(["status" => "error", "message" => "L'estat ja existeix a la base de dades."]);
+        Response::error(
+            MissatgesAPI::error('duplicat'),
+            [],
+            409
+        );
         exit;
     }
 
@@ -1017,11 +1124,18 @@ if ($slug === "municipi") {
         );
 
         // Respuesta de éxito
-        echo json_encode(["status" => "success", "message" => "Les dades s'han actualitzat correctament a la base de dades."]);
+        Response::success(
+            MissatgesAPI::success('create'),
+            ['id' => $id],
+            200
+        );
     } catch (PDOException $e) {
         // En caso de error en la conexión o ejecución de la consulta
-        http_response_code(500); // Internal Server Error
-        echo json_encode(["status" => "error", "message" => "S'ha produit un error a la base de dades: " . $e->getMessage()]);
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
     }
     // 8) POST AVATAR USUARI
     // ruta POST => "/api/auxiliars/post/usuariAvatar"
@@ -1182,5 +1296,107 @@ if ($slug === "municipi") {
         // Si no hay resultados, devolver un mensaje de error
         header("Content-Type: application/json");
         echo json_encode(['status' => 'error', 'message' => 'Error en la transmissió de les dades.']);
+    }
+
+    // 8) POST CATEGORIA REPRESSIO
+    // ruta POST => "/api/auxiliars/post/categoriaRepressio"
+} else if ($slug === "categoriaRepressio") {
+    $inputData = file_get_contents('php://input');
+    $data = json_decode($inputData, true);
+
+    // Inicializar un array para los errores
+    $errors = [];
+
+    // Validación de los datos recibidos
+    if (empty($data['categoria_cat'])) {
+        $errors[] =  ValidacioErrors::requerit('Categoria repressió català');
+    }
+
+    // Si hay errores, devolver una respuesta con los errores
+    if (!empty($errors)) {
+        Response::error(
+            MissatgesAPI::error('validacio'),
+            $errors,
+            400
+        );
+    }
+
+    // Si no hay errores, crear las variables PHP y preparar la consulta PDO
+    $categoria_cat = $data['categoria_cat'];
+    $categoria_cast = !empty($data['categoria_cast']) ? $data['categoria_cast'] : NULL;
+    $categoria_eng = !empty($data['categoria_eng']) ? $data['categoria_eng'] : NULL;
+    $categoria_it = !empty($data['categoria_it']) ? $data['categoria_it'] : NULL;
+    $categoria_fr = !empty($data['categoria_fr']) ? $data['categoria_fr'] : NULL;
+    $categoria_pt = !empty($data['categoria_pt']) ? $data['categoria_pt'] : NULL;
+
+    // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
+    try {
+
+        global $conn;
+        /** @var PDO $conn */
+
+        // Crear la consulta SQL
+        $sql = "INSERT INTO aux_categoria (
+                categoria_cat,
+                categoria_cast,
+                categoria_eng,
+                categoria_fr,
+                categoria_it,
+                categoria_pt
+            ) 
+            VALUES (
+                'valor_categoria_cat', 
+                'valor_categoria_cast', 
+                'valor_categoria_eng', 
+                'valor_categoria_fr', 
+                'valor_categoria_it', 
+                'valor_categoria_pt'
+            )";
+
+        // Preparar la consulta
+        $stmt = $conn->prepare($sql);
+
+        // Enlazar los parámetros con los valores de las variables PHP
+        $stmt->bindParam(':categoria_cat', $categoria_cat, PDO::PARAM_STR);
+        $stmt->bindParam(':categoria_cast', $categoria_cast, PDO::PARAM_STR);
+        $stmt->bindParam(':categoria_eng', $categoria_eng, PDO::PARAM_STR);
+        $stmt->bindParam(':categoria_fr', $categoria_fr, PDO::PARAM_STR);
+        $stmt->bindParam(':categoria_it', $categoria_it, PDO::PARAM_STR);
+        $stmt->bindParam(':categoria_pt', $categoria_pt, PDO::PARAM_STR);
+
+        // Ejecutar la consulta
+        $stmt->execute();
+
+        // Recuperar el ID del registro creado
+        $id = $conn->lastInsertId();
+
+        // Recuperar el ID del registro creado
+        $tipusOperacio = "INSERT";
+        $detalls =  "Creació nova categoria repressió: " . $categoria_cat;
+
+        // Si la inserció té èxit, cal registrar la inserció en la base de control de canvis
+
+        Audit::registrarCanvi(
+            $conn,
+            $userId,                      // ID del usuario que hace el cambio
+            $tipusOperacio,             // Tipus operacio
+            $detalls,                       // Descripción de la operación
+            Tables::AUX_CATEGORIA,  // Nombre de la tabla afectada
+            $id                           // ID del registro modificado
+        );
+
+        // Respuesta de éxito
+        Response::success(
+            MissatgesAPI::success('create'),
+            ['id' => $id],
+            200
+        );
+    } catch (PDOException $e) {
+        // En caso de error en la conexión o ejecución de la consulta
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
     }
 }

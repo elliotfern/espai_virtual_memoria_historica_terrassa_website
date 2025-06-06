@@ -47,7 +47,7 @@ if ($categoriaId === "modifica-estat") {
 ?>
 
 <div class="container" style="margin-bottom:50px;border: 1px solid gray;border-radius: 10px;padding:25px;background-color:#eaeaea">
-    <form id="form">
+    <form id="formEstat">
         <div class="container">
             <?php if ($modificaBtn === 1) { ?>
                 <h2>Modificació dades Estat</h2>
@@ -105,9 +105,9 @@ if ($categoriaId === "modifica-estat") {
 
                         <?php
                         if ($modificaBtn === 1) {
-                            echo '<a class="btn btn-primary" role="button" aria-disabled="true" id="btnModificarDades" onclick="enviarFormulario(event)">Modificar dades</a>';
+                            echo '<button class="btn btn-primary" type="submit">Modificar dades</button>';
                         } else {
-                            echo '<a class="btn btn-primary" role="button" aria-disabled="true" id="btnInserirDades" onclick="enviarFormularioPost(event)">Inserir dades</a>';
+                            echo '<button class="btn btn-primary" type="submit">Inserir dades</button>';
                         }
                         ?>
                     </div>
@@ -116,136 +116,3 @@ if ($categoriaId === "modifica-estat") {
         </div>
     </form>
 </div>
-
-<script>
-    function goBack() {
-        window.history.back();
-    }
-
-    // Función para manejar el envío del formulario
-    async function enviarFormulario(event) {
-        event.preventDefault(); // Prevenir el envío por defecto
-
-        // Obtener el formulario
-        const form = document.getElementById("form");
-
-        // Crear un objeto para almacenar los datos del formulario
-        const formData = {};
-        new FormData(form).forEach((value, key) => {
-            formData[key] = value; // Agregar cada campo al objeto formData
-        });
-
-        // Convertir los datos del formulario a JSON
-        const jsonData = JSON.stringify(formData);
-        const devDirectory = `https://${window.location.hostname}`;
-        let urlAjax = devDirectory + "/api/auxiliars/put/estat";
-
-        try {
-            // Hacer la solicitud con fetch y await
-            const response = await fetch(urlAjax, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json", // Indicar que se envía JSON
-                },
-                body: jsonData, // Enviar los datos en formato JSON
-            });
-
-            // Verificar si la solicitud fue exitosa
-            if (!response.ok) {
-                throw new Error("Error al enviar el formulario.");
-            }
-
-            // Procesar la respuesta como texto o JSON
-            const data = await response.json();
-
-            // Verificar si el status es success
-            if (data.status === "success") {
-                // Cambiar el display del div con id 'OkMessage' a 'block'
-                const okMessageDiv = document.getElementById("okMessage");
-                const okTextDiv = document.getElementById("okText");
-
-                if (okMessageDiv && okTextDiv) {
-                    okMessageDiv.style.display = "block";
-                    okTextDiv.textContent = data.message || "Les dades s'han actualitzat correctament!";
-                }
-
-            } else {
-                // Si el status no es success, puedes manejar el error aquí
-                // Cambiar el display del div con id 'OkMessage' a 'block'
-                const errMessageDiv = document.getElementById("errMessage");
-                const errTextDiv = document.getElementById("errText");
-                if (errMessageDiv && errTextDiv) {
-                    errMessageDiv.style.display = "block";
-                    errTextDiv.textContent = data.message || "S'ha produit un error a la base de dades.";
-                }
-            }
-        } catch (error) {
-            // Manejar errores
-            console.error("Error:", error);
-        }
-    }
-
-    // Función para manejar el envío del formulario
-    async function enviarFormularioPost(event) {
-        event.preventDefault(); // Prevenir el envío por defecto
-
-        // Obtener el formulario
-        const form = document.getElementById("form");
-
-        // Crear un objeto para almacenar los datos del formulario
-        const formData = {};
-        new FormData(form).forEach((value, key) => {
-            formData[key] = value; // Agregar cada campo al objeto formData
-        });
-
-        // Convertir los datos del formulario a JSON
-        const jsonData = JSON.stringify(formData);
-        const devDirectory = `https://${window.location.hostname}`;
-        let urlAjax = devDirectory + "/api/auxiliars/post/estat";
-
-        try {
-            // Hacer la solicitud con fetch y await
-            const response = await fetch(urlAjax, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json", // Indicar que se envía JSON
-                },
-                body: jsonData, // Enviar los datos en formato JSON
-            });
-
-
-            // Procesar la respuesta como texto o JSON
-            const data = await response.json();
-
-            // Verificar si el status es success
-            if (data.status === "success") {
-                // Cambiar el display del div con id 'OkMessage' a 'block'
-                const okMessageDiv = document.getElementById("okMessage");
-                const okTextDiv = document.getElementById("okText");
-                const errMessageDiv = document.getElementById("errMessage");
-
-                if (okMessageDiv && okTextDiv && errMessageDiv) {
-                    okMessageDiv.style.display = "block";
-                    okTextDiv.textContent = data.message || "Les dades s'han desat correctament!";
-                    errMessageDiv.style.display = "none";
-                }
-
-            } else {
-                // Si el status no es success, puedes manejar el error aquí
-                // Cambiar el display del div con id 'OkMessage' a 'block'
-                const errMessageDiv = document.getElementById("errMessage");
-                const errTextDiv = document.getElementById("errText");
-                if (errMessageDiv && errTextDiv) {
-                    errMessageDiv.style.display = "block";
-                    errTextDiv.innerHTML = data.message || "S'ha produit un error a la base de dades.";
-                }
-            }
-        } catch (error) {
-            // Manejar errores
-            console.error("Error:", error);
-        }
-    }
-
-    // Asignar la función al botón del formulario
-    // document.getElementById("btnInserirDadesCombat").addEventListener("click", enviarFormularioPost);
-</script>

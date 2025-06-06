@@ -189,6 +189,12 @@ $routes = [
         'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-tipologia-espai.php'
     ]),
 
+
+    // Causa de mort
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/llistat-causa-mort' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/llistat-causa-mort.php'
+    ]),
+
     APP_INTRANET . $urlIntranet['auxiliars'] . '/nova-causa-mort' => array_merge($defaultProtectedConfig, [
         'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-causa-mort.php'
     ]),
@@ -197,13 +203,7 @@ $routes = [
         'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-causa-mort.php'
     ]),
 
-    APP_INTRANET . $urlIntranet['auxiliars'] . '/nou-carrec-empresa' => array_merge($defaultProtectedConfig, [
-        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-carrec-empresa.php'
-    ]),
 
-    APP_INTRANET . $urlIntranet['auxiliars'] . '/modifica-carrec-empresa/{id}' => array_merge($defaultProtectedConfig, [
-        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-carrec-empresa.php'
-    ]),
 
     APP_INTRANET . $urlIntranet['auxiliars'] . '/nou-sub-sector-economic' => array_merge($defaultProtectedConfig, [
         'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-sub-sector-economic.php'
@@ -211,6 +211,32 @@ $routes = [
 
     APP_INTRANET . $urlIntranet['auxiliars'] . '/modifica-sub-sector-economic/{id}' => array_merge($defaultProtectedConfig, [
         'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-sub-sector-economic.php'
+    ]),
+
+    // Categories de repressió
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/llistat-categories-repressio' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/llistat-categories-repressio.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/modifica-categoria-repressio/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-categoria-repressio.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/nova-categoria-repressio/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-categoria-repressio.php'
+    ]),
+
+    // carrecs empresa
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/llistat-carrecs-empresa' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/llistat-carrecs-empresa.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/nou-carrec-empresa' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-carrec-empresa.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/modifica-carrec-empresa/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-carrec-empresa.php'
     ]),
 
 

@@ -72,7 +72,7 @@ export async function transmissioDadesDB(event: Event, tipus: string, formId: st
     } else {
       const missatge = `
           ${data.message ? `<p>${data.message}</p>` : ''}
-          ${data.errors && data.errors.length > 0 ? `<ul>${data.errors.map((e: string) => `<li>${e}</li>`).join('')}</ul>` : `<p>${Missatges.error.default}</p>`}
+          ${data.errors && data.errors.length > 0 ? `<ul>${data.errors.map((e: string) => `<li>${e}</li>`).join('')}</ul>` : ``}
         `;
 
       missatgesBackend({

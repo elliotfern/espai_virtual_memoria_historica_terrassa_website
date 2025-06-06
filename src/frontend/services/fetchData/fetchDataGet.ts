@@ -1,6 +1,11 @@
-export async function fetchDataGet<T>(relativeUrl: string): Promise<T | null> {
-  const devDirectory = `https://${window.location.hostname}`;
-  const fullUrl = `${devDirectory}${relativeUrl}`;
+export async function fetchDataGet<T>(relativeUrl: string, url?: boolean): Promise<T | null> {
+  let fullUrl = '';
+  if (!url) {
+    const devDirectory = `https://${window.location.hostname}`;
+    fullUrl = `${devDirectory}${relativeUrl}`;
+  } else {
+    fullUrl = `${relativeUrl}`;
+  }
 
   try {
     const response = await fetch(fullUrl, {
