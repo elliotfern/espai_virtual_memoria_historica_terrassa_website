@@ -20,9 +20,12 @@ SetEnv APP_ENV prod
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule ^(.+)$ index.php?uri=$1 [QSA,L]
 
-    # Redirección de rutas con idiomas (separar rutas por idioma)
+    # Redirección de rutas con idiomas (solo si no son /api o /gestio)
+    RewriteCond %{REQUEST_URI} !^/api
+    RewriteCond %{REQUEST_URI} !^/gestio
     RewriteCond %{REQUEST_URI} ^/(es|fr|en|ca|it|pt)(.*)$
     RewriteRule ^(es|fr|en|ca|it|pt)(.*)$ index.php?lang=$1&uri=$2 [QSA,L]
+
 </IfModule>
 
 <IfModule mod_headers.c>

@@ -10,6 +10,12 @@ use App\Utils\MissatgesAPI;
 
 $conn = DatabaseConnection::getConnection();
 
+if ($conn === null) {
+    http_response_code(500);
+    echo json_encode(['error' => 'No se pudo conectar a la base de datos']);
+    exit;
+}
+
 if (!$conn) {
     die("No se pudo establecer conexión a la base de datos.");
 }
@@ -53,8 +59,6 @@ if ($slug === "login") {
         exit;
     }
 
-    global $conn;
-    /** @var PDO $conn */
     $query = "SELECT u.id, u.email, u.password, u.user_type, u.nom, i.nomArxiu
               FROM auth_users AS u
               INNER JOIN aux_imatges AS i ON u.avatar = i.id

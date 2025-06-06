@@ -1,5 +1,22 @@
 <?php
 
+define("APP_API", '/api');
+define("BACKEND_API", 'src/backend/api');
+define("BACKEND_URL", 'public/intranet');
+define("DOMAIN", 'https://dev.memoriaterrassa.cat');
+
+// definicio de url
+$url = [
+    'homepage' => '/homepage',
+    'auth' => '/auth',
+    'auxiliars' => '/auxiliars',
+];
+
+$urlApi = [
+    'fonts' => '/fonts',
+    'biografies' => '/biografies'
+
+];
 // Configuración por defecto para rutas que requieren sesión, sin header_footer, con header_menu_footer
 $defaultApiConfig = [
     'needs_session' => false,

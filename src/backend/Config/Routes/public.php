@@ -1,6 +1,15 @@
 <?php
 
+define("FRONTEND_URL", 'public/web-publica/');
+$base_url = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'];
+define("APP_WEB", $base_url);
 
+// definicio de url
+$url = [
+    'homepage' => '/homepage',
+    'auth' => '/auth',
+    'auxiliars' => '/auxiliars',
+];
 // Configuración por defecto para rutas que requieren sesión, sin header_footer, con header_menu_footer
 
 $defaultRoutesSenseHeaderConfig = [
@@ -23,54 +32,6 @@ $defaultRoutesUserLoggedConfig = [
     'header_footer' => false,
     'header_menu_footer' => true,
     'apiSenseHTML' => false
-];
-
-// Define las rutas base que quieres traducir
-$base_routes = [
-    // 00. Homepage
-    '/' => 'public/web-publica/index.php',
-    '/benvinguda' => 'public/web-publica/index.php',
-    '/inici' => 'public/web-publica/inici.php',
-
-    // Accés intranet i recuperació contrasenya
-    '/acces' => 'public/web-publica/auth/login.php',
-
-    'recuperacio-contrasenya' => 'public/web-publica/auth/recuperacio-contrasenya.php',
-
-    // 1. Base de dades
-    '/base-dades/general' => 'public/web-publica/base-dades/base-dades-global.php',
-    '/base-dades/cost-huma' => 'public/web-publica/base-dades/base-dades-cost-huma.php',
-    '/base-dades/represaliats' => 'public/web-publica/base-dades/base-dades-represaliats.php',
-    '/base-dades/exiliats-deportats' => 'public/web-publica/base-dades/base-dades-exiliats.php',
-    '/fitxa/{id}' => 'public/web-publica/base-dades/fitxa-represaliat.php',
-    '/cerca-represaliat' => 'public/web-publica/base-dades/cerca-represaliat.php',
-
-    // 2. Estudis
-    '/documents-estudis' => 'public/web-publica/estudis.php',
-
-    // 3. Fonts documentals
-    '/fonts-documentals' => 'public/web-publica/fonts.php',
-
-    // 4. Espai virtual
-    '/que-es-espai-virtual' => 'public/web-publica/espai-virtual.php',
-
-    // 5. Contacte
-    '/contacte' => 'public/web-publica/contacte.php',
-
-    // 6. Equip investigadors
-    '/equip/manel-marquez' => 'public/web-publica/equip/manel-marquez.php',
-    '/equip/juan-antonio-olivares' => 'public/web-publica/equip/juan-antonio.php',
-    '/equip/elliot-fernandez' => 'public/web-publica/equip/elliot-fernandez.php',
-    '/equip/josep-lluis-lacueva' => 'public/web-publica/equip/jose-luis.php',
-
-    // 7. Cronologia
-    '/cronologia' => 'public/web-publica/cronologia.php',
-
-    // Altres pagines
-    '/credits' => 'public/web-publica/legal/credits.php',
-    '/avis-legal' => 'public/web-publica/legal/avis-legal.php',
-    '/politica-privacitat' => 'public/web-publica/legal/politica-privacitat.php',
-
 ];
 
 // Rutas principales sin idioma explícito (solo para el idioma por defecto)
@@ -239,6 +200,6 @@ $routes = [
 ];
 
 // Unir rutas base con rutas específicas de idioma
-$routes = $routes + generateLanguageRoutes($base_routes, true);
+//$routes = $routes + generateLanguageRoutes($base_routes, true);
 
 return $routes;

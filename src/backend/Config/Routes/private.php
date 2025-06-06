@@ -1,5 +1,27 @@
 <?php
 
+define("APP_INTRANET", '/gestio');
+
+$urlIntranetDir = [
+    'homepage' => '/00_homepage',
+    'base_dades' => '/01_base_dades',
+    'auxiliars' => '/02_taules_auxiliars',
+    'fonts' => '/03_fonts_documentals',
+    'familiars' => '/04_familiars',
+    'biografies' => '/05_biografies',
+];
+
+$urlIntranet = [
+    'homepage' => '/admin',
+    'base_dades' => '/base-dades',
+    'auxiliars' => '/auxiliars',
+    'fonts' => '/fonts-documentals',
+    'cronologia' => '/cronologia',
+    'familiars' => '/familiars',
+    'biografies' => '/biografies',
+];
+
+
 // Configuración por defecto para rutas que requieren sesión, sin header_footer, con header_menu_footer
 $defaultProtectedConfig = [
     'needs_session' => true,

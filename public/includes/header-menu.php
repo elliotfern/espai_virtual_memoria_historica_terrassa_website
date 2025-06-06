@@ -1,5 +1,7 @@
 <?php
-
+echo $language;
+var_dump($translations);
+/*
 // Obtener traducciones generales
 $translate = $translations['header'] ?? [];
 
@@ -57,6 +59,7 @@ function getLanguageFromUrl()
 
 // Uso
 $langCode2 = getLanguageFromUrl();
+*/
 ?>
 
 <div class="container-fluid full-screen fonsColorPrimerHeader header1">
@@ -71,38 +74,29 @@ $langCode2 = getLanguageFromUrl();
                         Idioma
                     </button>
                     <ul class="dropdown-menu">
-                        <?php foreach ($languages as $langCode => $langName): ?>
-                            <li>
-                                <a class="dropdown-item" href="<?php echo $langCode === 'ca' ? $baseUri : '/' . $langCode . $baseUri ?>">
-                                    <?php echo $langName; ?>
-                                </a>
-                            </li>
-                        <?php endforeach; ?>
+
                     </ul>
                 </div>
 
                 <!-- Lista normal en desktop -->
                 <ul class="list-unstyled d-none d-md-flex flex-row gap-3 m-0 p-0">
-                    <?php foreach ($languages as $langCode => $langName): ?>
-                        <li>
-                            <a class="nav-link" href="<?php echo $langCode === 'ca' ? $baseUri : '/' . $langCode . $baseUri ?>">
-                                <?php echo $langName; ?>
-                            </a>
-                        </li>
-                    <?php endforeach; ?>
+
                 </ul>
             </div>
 
             <!-- Botón login o nombre usuario -->
             <div class="my-2 my-md-0 text-center">
 
-                <?php if (isUserLogged()): ?>
-                    <div id="userLogged"></div>
-                <?php else: ?>
-                    <a class="btn btn-primary btn-custom-3" href="<?php echo $langCode2 === 'ca' ? '/acces' : '/' . $langCode2 . '/acces'; ?>">
-                        Accés intranet
-                    </a>
-                <?php endif; ?>
+                <?php //if (isUserLogged()): 
+                ?>
+                <div id="userLogged"></div>
+                <?php //else: 
+                ?>
+                <a class="btn btn-primary btn-custom-3" href="<?php echo $langCode2 === 'ca' ? '/acces' : '/' . $langCode2 . '/acces'; ?>">
+                    Accés intranet
+                </a>
+                <?php //endif; 
+                ?>
 
             </div>
 
@@ -155,9 +149,9 @@ $langCode2 = getLanguageFromUrl();
                         <div class="offcanvas-body">
                             <ul class="navbar-nav w-100 d-flex justify-content-between">
 
-                                <?php if (isUserLogged()): ?>
-                                    <li class="nav-item"><a class="nav-link" href="<?php echo APP_WEB; ?>/gestio">Intranet</a></li>
-                                <?php endif; ?>
+
+                                <li class="nav-item"><a class="nav-link" href="<?php echo APP_WEB; ?>/gestio">Intranet</a></li>
+
 
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" id="submenuEstudis" role="button" data-bs-toggle="dropdown" aria-expanded="false">
