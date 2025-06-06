@@ -2,7 +2,10 @@
 
 namespace App\Application;
 
-class Router
+use App\Application\Contract\RouterInterface;
+
+
+class Router implements RouterInterface
 {
     private array $routes;
 
