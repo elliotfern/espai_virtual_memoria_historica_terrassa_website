@@ -7,20 +7,20 @@
     "strict": true,                // Habilitar todas las comprobaciones estrictas
     "allowJs": true,               // Permitir archivos .js
     "outDir": "./dist",            // Directorio de salida para los archivos compilados
-    "rootDir": "./src/frontend",   // Directorio raíz de tu código fuente
+    "rootDir": "./src/",   // Directorio raíz de tu código fuente
     "lib": ["es2017", "dom"],      // Incluir las bibliotecas necesarias
     "forceConsistentCasingInFileNames": true,
     "incremental": true,
     "typeRoots": [
       "node_modules/@types",
-      "src/frontend/types",
+      "src/types",
     ]
   },
   "include": [
-    "src/frontend",
-    "src/frontend/types/global.d.ts",
-    "src/frontend/types",
-    "src/frontend/types/vite-env.d.ts",
+    "src/",
+    "src/types/global.d.ts",
+    "src/types",
+    "src/types/vite-env.d.ts",
   ],
   "exclude": ["node_modules"]
 }

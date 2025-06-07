@@ -2,7 +2,7 @@ import * as path from 'path';
 import DotenvWebpackPlugin from 'dotenv-webpack'; // Importar el plugin dotenv-webpack
 
 export default {
-  entry: './src/frontend/main.ts', // Entrada de la aplicación
+  entry: './src/main.ts', // Entrada de la aplicación
   output: {
     filename: 'bundle.js', // Nombre del archivo de salida
     path: path.resolve(__dirname, 'dist'), // Directorio de salida

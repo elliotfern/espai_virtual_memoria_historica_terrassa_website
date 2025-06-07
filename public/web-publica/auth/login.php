@@ -12,8 +12,8 @@
         <form action="" method="post" class="login" style="margin-bottom:20px;margin-top:25px">
           <div class="row g-3">
 
-            <label for="username" class="negreta">Correu electrònic</label>
-            <input type="text" name="username" id="username" class="form-control">
+            <label for="email" class="negreta">Correu electrònic</label>
+            <input type="text" name="email" id="email" class="form-control">
             <div class="invalid-feedback" id="usernameFeedback"></div>
 
             <label for="password" class="negreta">Contrasenya</label>

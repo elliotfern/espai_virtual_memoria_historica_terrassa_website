@@ -1,2 +1,2 @@
-<script type="module" src="/dist/bundle.js?v=1.4.99"></script>
+<script type="module" src="/dist/bundle.js?v=1.5.2"></script>
 </body>
