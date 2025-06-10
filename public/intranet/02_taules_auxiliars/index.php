@@ -37,12 +37,12 @@
             <ul>
                 <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['auxiliars']; ?>/llistat-categories-repressio">Taula llistat categories de repressió</a></li>
                 <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['auxiliars']; ?>/llistat-causa-mort">Taula llistat causes de defunció</a></li>
-                <li>aux_espai</li>
-                <li>aux_estat_civil</li>
-                <li>aux_estudis</li>
-                <li>aux_oficis</li>
+                <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['auxiliars']; ?>/llistat-espais">Taula llistat d'espais</a></li>
+                <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['auxiliars']; ?>/llistat-estats-civils">Taula d'estats civils</a></li>
+                <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['auxiliars']; ?>/llistat-nivells-estudis">Taula d'estudis</a></li>
+                <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['auxiliars']; ?>/llistat-oficis">Taula d'oficis</a></li>
                 <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['auxiliars']; ?>/llistat-carrecs-empresa">Taula llistat càrrecs d'empresa</a></li>
-                <li>aux_sector_economic</li>
+                <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['auxiliars']; ?>/llistat-subsectors-economics">Taula llistat sub-sectors econòmics</a></li>
                 <li>aux_sub_sector_economic</li>
                 <li>aux_tipologia_espais</li>
             </ul>
@@ -50,7 +50,7 @@
             <h4>2. Represaliats 1939-1979</h4>
             <h6>Processats</h6>
             <ul>
-                <li>aux_acusacions</li>
+                <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['auxiliars']; ?>/llistat-acusacions-judicials">Taula llistat d'acusacions judicials</a></li>
                 <li>aux_jutjats</li>
                 <li>aux_procediment_judicial</li>
                 <li>aux_sentencies</li>
@@ -64,9 +64,9 @@
 
             <h4>4. Cost humà guerra civil</h4>
             <ul>
-                <li>aux_bandol</li>
-                <li>aux_condicio</li>
-                <li>aux_cossos_militars</li>
+                <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['auxiliars']; ?>/llistat-bandols-guerra">Taula llistat de bàndols Guerra civil</a></li>
+                <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['auxiliars']; ?>/llistat-condicions-militars">Taula llistat de condicions militars</a></li>
+                <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['auxiliars']; ?>/llistat-cossos-militars">Taula llistat de cossos militars</a></li>
                 <li>aux_llocs_bombardeig</li>
             </ul>
 

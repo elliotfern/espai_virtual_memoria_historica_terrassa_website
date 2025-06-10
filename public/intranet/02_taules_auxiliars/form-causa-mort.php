@@ -20,11 +20,18 @@ $pag = $urlParts[3] ?? '';
 
 $causa_defuncio_ca_old = "";
 $id_old = "";
+$cat_old = "";
+$causa_defuncio_es_old = "";
+$causa_defuncio_en_old = "";
+$causa_defuncio_fr_old = "";
+$causa_defuncio_pt_old = "";
+$causa_defuncio_it_old = "";
+
 $btnModificar = 1;
 
 if ($pag === "modifica-causa-mort") {
     // Verificar si la ID existe en la base de datos
-    $query = "SELECT id, causa_defuncio_ca, cat
+    $query = "SELECT id, causa_defuncio_ca, cat, causa_defuncio_es, causa_defuncio_en, causa_defuncio_fr, causa_defuncio_pt, causa_defuncio_it
     FROM aux_causa_defuncio";
     $stmt = $conn->prepare($query);
     $stmt->execute();
@@ -33,8 +40,13 @@ if ($pag === "modifica-causa-mort") {
     if ($stmt->rowCount() > 0) {
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             // Acceder a las variables de la consulta
-            $id_id = $row['id'] ?? "";
+            $id_old = $row['id'] ?? "";
             $causa_defuncio_ca_old = $row['causa_defuncio_ca'] ?? "";
+            $causa_defuncio_en_old = $row['causa_defuncio_en'] ?? "";
+            $causa_defuncio_fr_old = $row['causa_defuncio_fr'] ?? "";
+            $causa_defuncio_pt_old = $row['causa_defuncio_pt'] ?? "";
+            $causa_defuncio_it_old = $row['causa_defuncio_it'] ?? "";
+            $cat_old = $row['cat'] ?? "";
 
             // Crear el botón o usar los datos (TIPO PUT)
             $btnModificar = 2;
@@ -72,6 +84,46 @@ if ($pag === "modifica-causa-mort") {
                     </div>
                 </div>
 
+                <div class="col-md-4 mb-4">
+                    <label for="cat" class="form-label">Selecciona una categoria:</label>
+                    <select class="form-select" id="cat" name="cat">
+                        <option selected disabled>Escull una opció</option>
+                        <option value="1">Combatent al front</option>
+                        <option value="2">Mort civil</option>
+                        <option value="3">General</option>
+                    </select>
+                </div>
+
+                <?php if (isUserAdmin()) : ?>
+                    <hr>
+
+                    <div class="col-md-4 mb-4">
+                        <label for="causa_defuncio_es" class="form-label negreta">Causa de mort (castellà):</label>
+                        <input type="text" class="form-control" id="causa_defuncio_es" name="causa_defuncio_es" value="<?php echo $causa_defuncio_es_old; ?>">
+                    </div>
+
+                    <div class="col-md-4 mb-4">
+                        <label for="causa_defuncio_en" class="form-label negreta">Causa de mort (anglès):</label>
+                        <input type="text" class="form-control" id="causa_defuncio_en" name="causa_defuncio_en" value="<?php echo $causa_defuncio_en_old; ?>">
+                    </div>
+
+                    <div class="col-md-4 mb-4">
+                        <label for="causa_defuncio_fr" class="form-label negreta">Causa de mort (francès):</label>
+                        <input type="text" class="form-control" id="causa_defuncio_fr" name="causa_defuncio_fr" value="<?php echo $causa_defuncio_fr_old; ?>">
+                    </div>
+
+                    <div class="col-md-4 mb-4">
+                        <label for="causa_defuncio_it" class="form-label negreta">Causa de mort (italià):</label>
+                        <input type="text" class="form-control" id="causa_defuncio_it" name="causa_defuncio_it" value="<?php echo $causa_defuncio_it_old; ?>">
+                    </div>
+
+                    <div class="col-md-4 mb-4">
+                        <label for="causa_defuncio_pt" class="form-label negreta">Causa de mort (portuguès):</label>
+                        <input type="text" class="form-control" id="causa_defuncio_pt" name="causa_defuncio_pt" value="<?php echo $causa_defuncio_pt_old; ?>">
+                    </div>
+
+                <?php endif; ?>
+
                 <div class="row espai-superior" style="border-top: 1px solid black;padding-top:25px">
                     <div class="col"></div>
 
@@ -90,3 +142,18 @@ if ($pag === "modifica-causa-mort") {
         </div>
     </form>
 </div>
+
+<script>
+    // Simulamos que este valor viene de una API
+    const bandol_id_from_api = "<?php echo $cat_old; ?>";
+    console.log(bandol_id_from_api);
+
+    // Esperamos que el DOM esté listo (opcional si script va al final del body)
+    document.addEventListener('DOMContentLoaded', () => {
+        const selectElement = document.getElementById('cat');
+
+        if (selectElement) {
+            selectElement.value = bandol_id_from_api.toString(); // Aseguramos que sea string
+        }
+    });
+</script>

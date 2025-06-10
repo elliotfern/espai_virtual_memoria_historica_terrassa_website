@@ -12,6 +12,7 @@ import { taulaEstats } from './taulaEstats';
 import { taulaCategoriesRepressio } from './taulaCategoriesRepressio';
 import { API_URLS } from '../../../services/api/ApiUrls';
 import { formMunicipi } from './formMunicipi';
+import { formEspai } from './formEspai';
 
 export function auxiliars() {
   const url = window.location.href;
@@ -167,5 +168,93 @@ export function auxiliars() {
     formMunicipi(true, Number(pageType[3]));
   } else if (pageType[2] === 'nou-municipi') {
     formMunicipi(false);
+  } else if (pageType[2] === 'nova-acusacio') {
+    const acusacioForm = document.getElementById('acusacioForm');
+    if (acusacioForm) {
+      acusacioForm.addEventListener('submit', function (event) {
+        transmissioDadesDB(event, 'POST', 'acusacioForm', API_URLS.POST.ACUSACIO_JUDICIAL, true);
+      });
+    }
+  } else if (pageType[2] === 'modificacio-acusacio') {
+    const acusacioForm = document.getElementById('acusacioForm');
+    if (acusacioForm) {
+      acusacioForm.addEventListener('submit', function (event) {
+        transmissioDadesDB(event, 'PUT', 'acusacioForm', API_URLS.PUT.ACUSACIO_JUDICIAL);
+      });
+    }
+  } else if (pageType[2] === 'modificacio-bandol') {
+    const bandolForm = document.getElementById('bandolForm');
+    if (bandolForm) {
+      bandolForm.addEventListener('submit', function (event) {
+        transmissioDadesDB(event, 'PUT', 'bandolForm', API_URLS.PUT.BANDOL);
+      });
+    }
+  } else if (pageType[2] === 'nou-bandol') {
+    const bandolForm = document.getElementById('bandolForm');
+    if (bandolForm) {
+      bandolForm.addEventListener('submit', function (event) {
+        transmissioDadesDB(event, 'POST', 'bandolForm', API_URLS.POST.BANDOL, true);
+      });
+    }
+  } else if (pageType[2] === 'nova-condicio-militar') {
+    const condicioForm = document.getElementById('condicioForm');
+    if (condicioForm) {
+      condicioForm.addEventListener('submit', function (event) {
+        transmissioDadesDB(event, 'POST', 'condicioForm', API_URLS.POST.CONDICIO_MILITAR, true);
+      });
+    }
+  } else if (pageType[2] === 'modifica-condicio-militar') {
+    const condicioForm = document.getElementById('condicioForm');
+    if (condicioForm) {
+      condicioForm.addEventListener('submit', function (event) {
+        transmissioDadesDB(event, 'PUT', 'condicioForm', API_URLS.PUT.CONDICIO_MILITAR);
+      });
+    }
+  } else if (pageType[2] === 'modifica-cos-militar') {
+    const condicioForm = document.getElementById('condicioForm');
+    if (condicioForm) {
+      condicioForm.addEventListener('submit', function (event) {
+        transmissioDadesDB(event, 'PUT', 'condicioForm', API_URLS.PUT.COS_MILITAR);
+      });
+    }
+  } else if (pageType[2] === 'nou-cos-militar') {
+    const condicioForm = document.getElementById('condicioForm');
+    if (condicioForm) {
+      condicioForm.addEventListener('submit', function (event) {
+        transmissioDadesDB(event, 'PUT', 'condicioForm', API_URLS.POST.COS_MILITAR);
+      });
+    }
+  } else if (pageType[2] === 'modifica-espai') {
+    formEspai(true, Number(pageType[3]));
+  } else if (pageType[2] === 'nou-espai') {
+    formEspai(false);
+  } else if (pageType[2] === 'modifica-estat-civil') {
+    const estatCivilForm = document.getElementById('estatCivilForm');
+    if (estatCivilForm) {
+      estatCivilForm.addEventListener('submit', function (event) {
+        transmissioDadesDB(event, 'PUT', 'estatCivilForm', API_URLS.PUT.ESTAT_CIVIL);
+      });
+    }
+  } else if (pageType[2] === 'nou-estat-civil') {
+    const estatCivilForm = document.getElementById('estatCivilForm');
+    if (estatCivilForm) {
+      estatCivilForm.addEventListener('submit', function (event) {
+        transmissioDadesDB(event, 'POST', 'estatCivilForm', API_URLS.POST.ESTAT_CIVIL, true);
+      });
+    }
+  } else if (pageType[2] === 'nou-nivell-estudis') {
+    const nivellEstudisForm = document.getElementById('nivellEstudisForm');
+    if (nivellEstudisForm) {
+      nivellEstudisForm.addEventListener('submit', function (event) {
+        transmissioDadesDB(event, 'POST', 'nivellEstudisForm', API_URLS.POST.NIVELL_ESTUDIS, true);
+      });
+    }
+  } else if (pageType[2] === 'modifica-nivell-estudis') {
+    const nivellEstudisForm = document.getElementById('nivellEstudisForm');
+    if (nivellEstudisForm) {
+      nivellEstudisForm.addEventListener('submit', function (event) {
+        transmissioDadesDB(event, 'PUT', 'nivellEstudisForm', API_URLS.PUT.NIVELL_ESTUDIS);
+      });
+    }
   }
 }

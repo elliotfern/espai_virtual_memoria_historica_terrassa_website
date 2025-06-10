@@ -181,6 +181,7 @@ $routes = [
         'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-ofici.php'
     ]),
 
+    // tipologia d'espai
     APP_INTRANET . $urlIntranet['auxiliars'] . '/nova-tipologia-espai' => array_merge($defaultProtectedConfig, [
         'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-tipologia-espai.php'
     ]),
@@ -204,6 +205,10 @@ $routes = [
     ]),
 
 
+    // Sub-sector econòmic
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/llistat-subsectors-economics' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/llistat-subsectors-economics.php'
+    ]),
 
     APP_INTRANET . $urlIntranet['auxiliars'] . '/nou-sub-sector-economic' => array_merge($defaultProtectedConfig, [
         'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-sub-sector-economic.php'
@@ -222,7 +227,7 @@ $routes = [
         'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-categoria-repressio.php'
     ]),
 
-    APP_INTRANET . $urlIntranet['auxiliars'] . '/nova-categoria-repressio/{id}' => array_merge($defaultProtectedConfig, [
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/nova-categoria-repressio' => array_merge($defaultProtectedConfig, [
         'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-categoria-repressio.php'
     ]),
 
@@ -238,6 +243,98 @@ $routes = [
     APP_INTRANET . $urlIntranet['auxiliars'] . '/modifica-carrec-empresa/{id}' => array_merge($defaultProtectedConfig, [
         'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-carrec-empresa.php'
     ]),
+
+    // acusacions judicials
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/llistat-acusacions-judicials' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/llistat-acusacions.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/nova-acusacio' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-acusacions.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/modifica-acusacio/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-acusacions.php'
+    ]),
+
+    // bàndols guerra
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/llistat-bandols-guerra' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/llistat-bandols.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/nou-bandol' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-bandol.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/modifica-bandol/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-bandol.php'
+    ]),
+
+    // condicions militars guerra
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/llistat-condicions-militars' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/llistat-condicions-militars.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/nova-condicio-militar' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-condicio-militar.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/modifica-condicio-militar/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-condicio-militar.php'
+    ]),
+
+    // condicions cossos guerra
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/llistat-cossos-militars' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/llistat-cossos-militars.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/nou-cos-militar' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-cos-militar.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/modifica-cos-militar/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-cos-militar.php'
+    ]),
+
+    // espais (d'execució, enterrament, afusellament...)
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/llistat-espais' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/llistat-espais.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/nou-espai' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-espai.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/modifica-espai/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-espai.php'
+    ]),
+
+    // estat civil
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/llistat-estats-civils' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/llistat-estats-civils.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/nou-estat-civil' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-estat-civil.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/modifica-estat-civil/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-estat-civil.php'
+    ]),
+
+    // nivell estudis
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/llistat-nivells-estudis' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/llistat-nivells-estudis.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/nou-nivell-estudis' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-nivell-estudis.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/modifica-nivell-estudis/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-nivell-estudis.php'
+    ]),
+
 
 
     // Gestió familiars

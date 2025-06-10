@@ -19,12 +19,12 @@ $urlParts = explode('/', $url2);
 $pag = $urlParts[3] ?? '';
 
 $id_old = "";
-$categoria_cat = "";
-$categoria_cast = "";
-$categoria_eng = "";
-$categoria_fr = "";
-$categoria_it = "";
-$categoria_pt = "";
+$categoria_cat_old = "";
+$categoria_cast_old = "";
+$categoria_eng_old = "";
+$categoria_fr_old = "";
+$categoria_it_old = "";
+$categoria_pt_old = "";
 
 $btnModificar = 1;
 

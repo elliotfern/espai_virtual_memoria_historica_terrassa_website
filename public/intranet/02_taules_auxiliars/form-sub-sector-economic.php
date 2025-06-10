@@ -29,7 +29,7 @@ if ($pag === "modifica-sub-sector-economic") {
     $id = $routeParams[0];
 
     // Verificar si la ID existe en la base de datos
-    $query = "SELECT id, sub_sector_cat, sub_sector_cast, sub_sector_eng
+    $query = "SELECT id, sub_sector_cat, sub_sector_es, sub_sector_en, sub_sector_it, sub_sector_fr, sub_sector_pt, idSector
     FROM aux_sub_sector_economic
     WHERE id = :id";
 

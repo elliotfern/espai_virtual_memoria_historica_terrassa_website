@@ -2,6 +2,7 @@ export type ApiUrls = {
   GET: {
     CATEGORIES_REPRESSIO: (lang: string) => string;
     MUNICIPI_ID: (id: number) => string;
+    ESPAI_ID: (id: number) => string;
   };
   POST: {
     MUNICIPI: string;
@@ -13,6 +14,13 @@ export type ApiUrls = {
     SUB_SECTOR_ECONOMIC: string;
     OFICI: string;
     CARREC_EMPRESA: string;
+    ACUSACIO_JUDICIAL: string;
+    BANDOL: string;
+    CONDICIO_MILITAR: string;
+    COS_MILITAR: string;
+    ESPAI: string;
+    ESTAT_CIVIL: string;
+    NIVELL_ESTUDIS: string;
   };
   PUT: {
     MUNICIPI: string;
@@ -24,6 +32,13 @@ export type ApiUrls = {
     SUB_SECTOR_ECONOMIC: string;
     OFICI: string;
     CARREC_EMPRESA: string;
+    ACUSACIO_JUDICIAL: string;
+    BANDOL: string;
+    CONDICIO_MILITAR: string;
+    COS_MILITAR: string;
+    ESPAI: string;
+    ESTAT_CIVIL: string;
+    NIVELL_ESTUDIS: string;
   };
   DELETE: {
     MUNICIPI: string;
@@ -35,5 +50,12 @@ export type ApiUrls = {
     SUB_SECTOR_ECONOMIC: string;
     OFICI: string;
     CARREC_EMPRESA: string;
+    ACUSACIO_JUDICIAL: string;
+    BANDOL: string;
+    CONDICIO_MILITAR: string;
+    COS_MILITAR: string;
+    ESPAI: string;
+    ESTAT_CIVIL: string;
+    NIVELL_ESTUDIS: string;
   };
 };
