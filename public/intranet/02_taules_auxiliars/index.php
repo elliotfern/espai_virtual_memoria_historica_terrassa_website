@@ -43,7 +43,7 @@
                 <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['auxiliars']; ?>/llistat-oficis">Taula d'oficis</a></li>
                 <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['auxiliars']; ?>/llistat-carrecs-empresa">Taula llistat càrrecs d'empresa</a></li>
                 <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['auxiliars']; ?>/llistat-subsectors-economics">Taula llistat sub-sectors econòmics</a></li>
-                <li>aux_sub_sector_economic</li>
+                <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['auxiliars']; ?>/llistat-sectors-economics">Taula llistat sectors econòmics</a></li>
                 <li>aux_tipologia_espais</li>
             </ul>
 

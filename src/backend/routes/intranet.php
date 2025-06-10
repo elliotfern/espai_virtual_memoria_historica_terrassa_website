@@ -204,6 +204,18 @@ $routes = [
         'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-causa-mort.php'
     ]),
 
+    // sector econòmic
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/llistat-sectors-economics' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/llistat-sectors-economics.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/nou-sector-economic' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-sector-economic.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/modifica-sector-economic/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-sector-economic.php'
+    ]),
 
     // Sub-sector econòmic
     APP_INTRANET . $urlIntranet['auxiliars'] . '/llistat-subsectors-economics' => array_merge($defaultProtectedConfig, [

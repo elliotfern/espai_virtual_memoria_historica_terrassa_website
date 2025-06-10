@@ -543,9 +543,13 @@ if ($slug === "municipi") {
 
     // Si no hay errores, crear las variables PHP y preparar la consulta PDO
     $sub_sector_cat = $data['sub_sector_cat'];
-    $sub_sector_cast = !empty($data['sub_sector_cast']) ? $data['sub_sector_cast'] : NULL;
-    $sub_sector_eng = !empty($data['sub_sector_eng']) ? $data['sub_sector_eng'] : NULL;
+    $sub_sector_es = !empty($data['sub_sector_es']) ? $data['sub_sector_es'] : NULL;
+    $sub_sector_en = !empty($data['sub_sector_en']) ? $data['sub_sector_en'] : NULL;
+    $sub_sector_it = !empty($data['sub_sector_it']) ? $data['sub_sector_it'] : NULL;
+    $sub_sector_fr = !empty($data['sub_sector_fr']) ? $data['sub_sector_fr'] : NULL;
+    $sub_sector_pt = !empty($data['sub_sector_pt']) ? $data['sub_sector_pt'] : NULL;
     $idSector = !empty($data['idSector']) ? $data['idSector'] : NULL;
+
 
     // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
     try {
@@ -555,9 +559,9 @@ if ($slug === "municipi") {
 
         // Crear la consulta SQL
         $sql = "INSERT INTO aux_sub_sector_economic (
-            sub_sector_cat, sub_sector_eng, idSector, sub_sector_cast
+            sub_sector_cat, sub_sector_en, idSector, sub_sector_es, sub_sector_it, sub_sector_fr, sub_sector_pt
         ) VALUES (
-            :sub_sector_cat, :sub_sector_eng, :idSector, :sub_sector_cast
+            :sub_sector_cat, :sub_sector_en, :idSector, :sub_sector_es, :sub_sector_it, :sub_sector_fr, :sub_sector_pt
         )";
 
         // Preparar la consulta
@@ -565,8 +569,11 @@ if ($slug === "municipi") {
 
         // Enlazar los parámetros con los valores de las variables PHP
         $stmt->bindParam(':sub_sector_cat', $sub_sector_cat, PDO::PARAM_STR);
-        $stmt->bindParam(':sub_sector_eng', $sub_sector_eng, PDO::PARAM_STR);
-        $stmt->bindParam(':sub_sector_cast', $sub_sector_cast, PDO::PARAM_STR);
+        $stmt->bindParam(':sub_sector_en', $sub_sector_en, PDO::PARAM_STR);
+        $stmt->bindParam(':sub_sector_es', $sub_sector_es, PDO::PARAM_STR);
+        $stmt->bindParam(':sub_sector_it', $sub_sector_it, PDO::PARAM_STR);
+        $stmt->bindParam(':sub_sector_fr', $sub_sector_fr, PDO::PARAM_STR);
+        $stmt->bindParam(':sub_sector_pt', $sub_sector_pt, PDO::PARAM_STR);
         $stmt->bindParam(':idSector', $idSector, PDO::PARAM_INT);
 
         // Ejecutar la consulta
@@ -2131,6 +2138,107 @@ if ($slug === "municipi") {
             $tipusOperacio,             // Tipus operacio
             $detalls,                       // Descripción de la operación
             Tables::AUX_ESTAT_CIVIL,  // Nombre de la tabla afectada
+            $id                           // ID del registro modificado
+        );
+
+        // Respuesta de éxito
+        Response::success(
+            MissatgesAPI::success('create'),
+            ['id' => $id],
+            200
+        );
+    } catch (PDOException $e) {
+        // En caso de error en la conexión o ejecución de la consulta
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
+    // 4) POST sector econòmic
+    // ruta POST => "/api/auxiliars/post/sector_economic"
+} else if ($slug === "sector_economic") {
+    $inputData = file_get_contents('php://input');
+    $data = json_decode($inputData, true);
+
+    // Inicializar un array para los errores
+    $errors = [];
+
+    // Validación de los datos recibidos
+    if (empty($data['sector_cat'])) {
+        $errors[] =  ValidacioErrors::requerit('sector econòmic en català');
+    }
+
+    // Si hay errores, devolver una respuesta con los errores
+    if (!empty($errors)) {
+        Response::error(
+            MissatgesAPI::error('validacio'),
+            $errors,
+            400
+        );
+    }
+
+    // Si no hay errores, crear las variables PHP y preparar la consulta PDO
+    $sector_cat = $data['sector_cat'];
+    $sector_es  = !empty($data['sector_es']) ? $data['sector_es'] : NULL;
+    $sector_en  = !empty($data['sector_en']) ? $data['sector_en'] : NULL;
+    $sector_fr  = !empty($data['sector_fr']) ? $data['sector_fr'] : NULL;
+    $sector_it  = !empty($data['sector_it']) ? $data['sector_it'] : NULL;
+    $sector_pt  = !empty($data['sector_pt']) ? $data['sector_pt'] : NULL;
+
+    // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
+    try {
+
+        global $conn;
+        /** @var PDO $conn */
+
+        // Crear la consulta SQL
+        $sql = "INSERT INTO aux_sector_economic (
+            sector_cat,
+            sector_es,
+            sector_en,
+            sector_fr,
+            sector_it,
+            sector_pt
+        ) VALUES (
+            :sector_cat,
+            :sector_es,
+            :sector_en,
+            :sector_fr,
+            :sector_it,
+            :sector_pt
+        )";
+
+        // Preparar la consulta
+        $stmt = $conn->prepare($sql);
+
+        // Enlazar los parámetros con los valores de las variables PHP
+        $stmt->bindParam(':sector_cat', $sector_cat, PDO::PARAM_STR);
+        $stmt->bindParam(':sector_es', $sector_es, PDO::PARAM_STR);
+        $stmt->bindParam(':sector_en', $sector_en, PDO::PARAM_STR);
+        $stmt->bindParam(':sector_fr', $sector_fr, PDO::PARAM_STR);
+        $stmt->bindParam(':sector_it', $sector_it, PDO::PARAM_STR);
+        $stmt->bindParam(':sector_pt', $sector_pt, PDO::PARAM_STR);
+
+        // Ejecutar la consulta
+        $stmt->execute();
+
+        // Recuperar el ID del registro creado
+        $id = $conn->lastInsertId();
+
+        // Recuperar el ID del registro creado
+        $tipusOperacio = "INSERT";
+        $detalls =  "Creació de nou sector econòmic: " . $sector_cat;
+
+        // Si la inserció té èxit, cal registrar la inserció en la base de control de canvis
+
+        Audit::registrarCanvi(
+            $conn,
+            $userId,                      // ID del usuario que hace el cambio
+            $tipusOperacio,             // Tipus operacio
+            $detalls,                       // Descripción de la operación
+            Tables::AUX_SECTOR_ECONOMIC,  // Nombre de la tabla afectada
             $id                           // ID del registro modificado
         );
 

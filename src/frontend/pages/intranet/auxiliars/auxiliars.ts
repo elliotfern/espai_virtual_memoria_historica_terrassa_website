@@ -13,6 +13,7 @@ import { taulaCategoriesRepressio } from './taulaCategoriesRepressio';
 import { API_URLS } from '../../../services/api/ApiUrls';
 import { formMunicipi } from './formMunicipi';
 import { formEspai } from './formEspai';
+import { formSubSector } from './formSubSector';
 
 export function auxiliars() {
   const url = window.location.href;
@@ -76,20 +77,6 @@ export function auxiliars() {
     if (oficiForm) {
       oficiForm.addEventListener('submit', function (event) {
         transmissioDadesDB(event, 'PUT', 'oficiForm', API_URLS.PUT.OFICI);
-      });
-    }
-  } else if (pageType[2] === 'nou-sub-sector-economic') {
-    const subSectorForm = document.getElementById('subSectorForm');
-    if (subSectorForm) {
-      subSectorForm.addEventListener('submit', function (event) {
-        transmissioDadesDB(event, 'POST', 'subSectorForm', API_URLS.POST.SUB_SECTOR_ECONOMIC, true);
-      });
-    }
-  } else if (pageType[2] === 'modifica-sub-sector-economic') {
-    const subSectorForm = document.getElementById('subSectorForm');
-    if (subSectorForm) {
-      subSectorForm.addEventListener('submit', function (event) {
-        transmissioDadesDB(event, 'PUT', 'subSectorForm', API_URLS.PUT.SUB_SECTOR_ECONOMIC);
       });
     }
   } else if (pageType[2] === 'llistat-categories-repressio') {
@@ -254,6 +241,24 @@ export function auxiliars() {
     if (nivellEstudisForm) {
       nivellEstudisForm.addEventListener('submit', function (event) {
         transmissioDadesDB(event, 'PUT', 'nivellEstudisForm', API_URLS.PUT.NIVELL_ESTUDIS);
+      });
+    }
+  } else if (pageType[2] === 'modifica-sub-sector-economic') {
+    formSubSector(true, Number(pageType[3]));
+  } else if (pageType[2] === 'nou-sub-sector-economic') {
+    formSubSector(false);
+  } else if (pageType[2] === 'modifica-sector-economic') {
+    const sectorEconomicForm = document.getElementById('sectorEconomicForm');
+    if (sectorEconomicForm) {
+      sectorEconomicForm.addEventListener('submit', function (event) {
+        transmissioDadesDB(event, 'PUT', 'sectorEconomicForm', API_URLS.PUT.SECTOR_ECONOMIC);
+      });
+    }
+  } else if (pageType[2] === 'nou-sector-economic') {
+    const sectorEconomicForm = document.getElementById('sectorEconomicForm');
+    if (sectorEconomicForm) {
+      sectorEconomicForm.addEventListener('submit', function (event) {
+        transmissioDadesDB(event, 'POST', 'sectorEconomicForm', API_URLS.POST.SECTOR_ECONOMIC, true);
       });
     }
   }

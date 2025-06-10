@@ -1,9 +1,9 @@
-import { convertirFecha, calcularEdadAlMorir } from '../../config';
+import { calcularEdadAlMorir } from '../../config';
 import { categoriesRepressio } from '../taulaDades/categoriesRepressio';
 import { fetchData } from '../../services/api/api';
 import { Fitxa, FitxaJudicial, FitxaFamiliars } from '../../types/types';
 import { fitxaTipusRepressio } from './tab_tipus_repressio';
-import { formatDates } from '../../services/formatDates/dates';
+import { formatDates, formatDatesForm } from '../../services/formatDates/dates';
 import { carregarTraduccions, getTraducciones } from '../../services/textosIdiomes/traduccio';
 import { traduirCategoriesRepressioArray } from '../taulaDades/traduirCategoriesRepressio';
 
@@ -324,8 +324,8 @@ async function mostrarInformacion(tab: string, idPersona: string, label: string)
 
   const sexeText = parseInt(fitxa.sexe, 10) === 1 ? 'Home' : parseInt(fitxa.sexe, 10) === 2 ? 'Dona' : 'desconegut';
 
-  const fechaNacimiento = convertirFecha(fitxa.data_naixement);
-  const fechaDefuncion = convertirFecha(fitxa.data_defuncio);
+  const fechaNacimiento = fitxa.data_naixement;
+  const fechaDefuncion = fitxa.data_defuncio;
 
   let edatAlMorir = 'Desconeguda';
   if (fechaNacimiento && fechaDefuncion) {
@@ -355,8 +355,8 @@ async function mostrarInformacion(tab: string, idPersona: string, label: string)
   const dataActualitzacio = fitxa.data_actualitzacio;
 
   // variables tab1
-  const dataNaixement = fitxa.data_naixement === '' ? '?' : fitxa.data_naixement;
-  const dataDefuncio = fitxa.data_defuncio === '' || null ? '?' : fitxa.data_defuncio;
+  const dataNaixement = formatDatesForm(fitxa.data_naixement) === '' ? '?' : formatDatesForm(fitxa.data_naixement);
+  const dataDefuncio = formatDatesForm(fitxa.data_defuncio) === '' || null ? '?' : formatDatesForm(fitxa.data_defuncio);
   const ciutatNaixement = fitxa.ciutat_naixement === '' || null ? 'Desconegut' : fitxa.ciutat_naixement;
   const comarcaNaixement = fitxa.comarca_naixement === '' || null ? 'Desconegut' : fitxa.comarca_naixement;
   const provinciaNaixement = fitxa.provincia_naixement === '' || null ? 'Desconegut' : fitxa.provincia_naixement;
