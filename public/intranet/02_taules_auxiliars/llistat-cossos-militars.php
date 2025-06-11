@@ -11,7 +11,7 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
 
                 <p><button onclick="window.location.href='<?php echo APP_INTRANET . $url['auxiliars']; ?>/nou-cos-militar'" class="btn btn-success">Nou cos militar</button></p>
 
-                <div id="tabla1"></div>
+                <div id="taulaCossosMilitars"></div>
 
             <?php endif; ?>
         </div>

@@ -30,10 +30,13 @@ $sector_pt_old = "";
 $btnModificar = 1;
 
 if ($pag === "modifica-sector-economic") {
+    $id_old = $routeParams[0];
     // Verificar si la ID existe en la base de datos
     $query = "SELECT id, sector_cat, sector_es, sector_en, sector_fr, sector_it, sector_pt
-    FROM aux_sector_economic";
+    FROM aux_sector_economic
+    WHERE id = :id";
     $stmt = $conn->prepare($query);
+    $stmt->bindParam(':id', $id_old, PDO::PARAM_INT);
     $stmt->execute();
 
 

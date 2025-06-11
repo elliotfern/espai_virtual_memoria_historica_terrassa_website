@@ -40,7 +40,7 @@ if ($slug === "llistatComplet") {
             LEFT JOIN aux_dades_municipis AS e2 ON dp.municipi_defuncio = e2.id
             ORDER BY dp.cognom1 ASC";
 
-    $result = getData($query);
+    $result = getData2($query);
     echo json_encode($result);
 
     // 2) Pagina informacio fitxa deportat
@@ -72,7 +72,7 @@ if ($slug === "llistatComplet") {
             LEFT JOIN aux_tipus_presons AS tp ON d.preso_tipus = tp.id
             WHERE a.idPersona = :idPersona";
 
-    $result = getData($query, ['idPersona' => $id], true);
+    $result = getData2($query, ['idPersona' => $id], true);
     echo json_encode($result);
 
     // 3) Pagina fitxa repressió deportat
@@ -100,7 +100,7 @@ if ($slug === "llistatComplet") {
             FROM db_deportats
             WHERE idPersona = :idPersona";
 
-    $result = getData($query, ['idPersona' => $id], true);
+    $result = getData2($query, ['idPersona' => $id], true);
     echo json_encode($result);
 } else {
     // Si 'type', 'id' o 'token' están ausentes o 'type' no es 'user' en la URL

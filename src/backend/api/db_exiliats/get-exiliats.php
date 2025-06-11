@@ -1,5 +1,9 @@
 <?php
 
+use App\Config\Database;
+use App\Utils\Response;
+use App\Utils\MissatgesAPI;
+
 use App\Config\DatabaseConnection;
 
 $conn = DatabaseConnection::getConnection();
@@ -49,7 +53,7 @@ if ($slug === 'fitxaRepresaliat') {
         LEFT JOIN aux_tipologia_espais AS te2 ON e.tipologia_ultim_desti = te2.id
         WHERE e.idPersona = $id";
 
-    $result = getData($query, ['idRepresaliat' => $id], false);
+    $result = getData2($query, ['idRepresaliat' => $id], false);
     echo json_encode($result);
 
     // 2) Fitxa repressió exili
@@ -79,7 +83,7 @@ if ($slug === 'fitxaRepresaliat') {
         FROM db_exiliats AS e
         WHERE e.idPersona = :idPersona";
 
-    $result = getData($query, ['idPersona' => $id], true);
+    $result = getData2($query, ['idPersona' => $id], true);
     echo json_encode($result);
 } else {
     // Si 'type', 'id' o 'token' están ausentes o 'type' no es 'user' en la URL

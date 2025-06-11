@@ -28,7 +28,7 @@ $bandol_pt_old = "";
 
 $btnModificar = 1;
 
-if ($pag === "modifica-carrec-empresa") {
+if ($pag === "modifica-bandol") {
     $btnModificar = 2;
     $id = $routeParams[0];
 

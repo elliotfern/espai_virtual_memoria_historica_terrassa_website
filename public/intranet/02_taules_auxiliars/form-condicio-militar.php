@@ -60,9 +60,9 @@ if ($pag === "modifica-condicio-militar") {
         <div class="container">
             <div class="row g-3">
                 <?php if ($btnModificar === 1) {
-                    echo '<h2>Crear nova condició militar durant la Guerra Civil</h2>';
+                    echo '<h2>Crear nova condició civil i militar durant la Guerra Civil</h2>';
                 } else {
-                    echo '<h2>Modifica condició militar a la Guerra Civil: ' . $bandol_ca_old . '</h2>';
+                    echo '<h2>Modifica condició militar a la Guerra Civil: ' . $condicio_ca_old . '</h2>';
                 }
 
                 ?>

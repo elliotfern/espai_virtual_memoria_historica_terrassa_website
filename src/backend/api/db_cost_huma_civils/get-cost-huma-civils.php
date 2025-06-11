@@ -1,5 +1,9 @@
 <?php
 
+use App\Config\Database;
+use App\Utils\Response;
+use App\Utils\MissatgesAPI;
+
 $slug = $routeParams[0];
 
 // Configuración de cabeceras para aceptar JSON y responder JSON
@@ -23,6 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
 // URL: https://memoriaterrassa.cat/api/api/cost_huma_civils/get/fitxaRepressio?id=${id}
 if ($slug === "fitxaRepressio") {
     $id = $_GET['id'] ?? null;
+    $db = new Database();
 
     $query = "SELECT 
     c.id,
@@ -45,6 +50,29 @@ if ($slug === "fitxaRepressio") {
     LEFT JOIN db_dades_personals AS d ON c.idPersona = d.id
     WHERE c.idPersona = :idPersona";
 
-    $result = getData($query, ['idPersona' => $id], true);
-    echo json_encode($result);
+    try {
+        $params = [':idPersona' => $id];
+        $result = $db->getData($query, $params, true);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
 }

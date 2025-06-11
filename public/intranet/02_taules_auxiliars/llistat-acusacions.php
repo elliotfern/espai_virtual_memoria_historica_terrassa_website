@@ -11,7 +11,7 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
 
                 <p><button onclick="window.location.href='<?php echo APP_INTRANET . $url['auxiliars']; ?>/nova-acusacio'" class="btn btn-success">Nova acusació</button></p>
 
-                <div id="tabla1"></div>
+                <div id="taulaAcusacionsJudicials"></div>
 
             <?php endif; ?>
         </div>

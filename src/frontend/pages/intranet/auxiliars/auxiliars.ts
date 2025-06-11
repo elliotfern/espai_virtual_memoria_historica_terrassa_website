@@ -14,6 +14,19 @@ import { API_URLS } from '../../../services/api/ApiUrls';
 import { formMunicipi } from './formMunicipi';
 import { formEspai } from './formEspai';
 import { formSubSector } from './formSubSector';
+import { formCategoriaRepressio } from './formCategoriaRepressio';
+import { taulaCausaDefuncio } from './taulaCausaDefuncio';
+import { taulaEspais } from './taulaEspais';
+import { taulaEstatsCivils } from './taulaEstatsCivils';
+import { taulaNivellsEstudis } from './taulaNivellsEstudis';
+import { taulaOficis } from './taulaOficis';
+import { taulaCarrecsEmpresa } from './taulaCarrecsEmpresa';
+import { taulaSubsectorsEconomics } from './taulaSubsectorsEconomics';
+import { taulaSectorsEconomics } from './taulaSectorsEconomics';
+import { taulaAcusacionsJudicials } from './taulaAcusacionsJudicials';
+import { taulaBandolsGuerra } from './taulaBandolsGuerra';
+import { taulaCondicionsMilitars } from './taulaCondicionsMilitars';
+import { taulaCossosMilitars } from './taulaCossosMilitars';
 
 export function auxiliars() {
   const url = window.location.href;
@@ -82,19 +95,9 @@ export function auxiliars() {
   } else if (pageType[2] === 'llistat-categories-repressio') {
     taulaCategoriesRepressio();
   } else if (pageType[2] === 'modifica-categoria-repressio') {
-    const categoriesForm = document.getElementById('categoriesForm');
-    if (categoriesForm) {
-      categoriesForm.addEventListener('submit', function (event) {
-        transmissioDadesDB(event, 'PUT', 'categoriesForm', API_URLS.PUT.CATEGORIA_REPRESSIO);
-      });
-    }
+    formCategoriaRepressio(true, Number(pageType[3]));
   } else if (pageType[2] === 'nova-categoria-repressio') {
-    const categoriesForm = document.getElementById('categoriesForm');
-    if (categoriesForm) {
-      categoriesForm.addEventListener('submit', function (event) {
-        transmissioDadesDB(event, 'POST', 'categoriesForm', API_URLS.POST.CATEGORIA_REPRESSIO, true);
-      });
-    }
+    formCategoriaRepressio(false);
   } else if (pageType[2] === 'nova-causa-mort') {
     const causaMortForm = document.getElementById('causaMortForm');
     if (causaMortForm) {
@@ -169,7 +172,7 @@ export function auxiliars() {
         transmissioDadesDB(event, 'PUT', 'acusacioForm', API_URLS.PUT.ACUSACIO_JUDICIAL);
       });
     }
-  } else if (pageType[2] === 'modificacio-bandol') {
+  } else if (pageType[2] === 'modifica-bandol') {
     const bandolForm = document.getElementById('bandolForm');
     if (bandolForm) {
       bandolForm.addEventListener('submit', function (event) {
@@ -261,5 +264,29 @@ export function auxiliars() {
         transmissioDadesDB(event, 'POST', 'sectorEconomicForm', API_URLS.POST.SECTOR_ECONOMIC, true);
       });
     }
+  } else if (pageType[2] === 'llistat-causa-mort') {
+    taulaCausaDefuncio();
+  } else if (pageType[2] === 'llistat-espais') {
+    taulaEspais();
+  } else if (pageType[2] === 'llistat-estats-civils') {
+    taulaEstatsCivils();
+  } else if (pageType[2] === 'llistat-nivells-estudis') {
+    taulaNivellsEstudis();
+  } else if (pageType[2] === 'llistat-oficis') {
+    taulaOficis();
+  } else if (pageType[2] === 'llistat-carrecs-empresa') {
+    taulaCarrecsEmpresa();
+  } else if (pageType[2] === 'llistat-subsectors-economics') {
+    taulaSubsectorsEconomics();
+  } else if (pageType[2] === 'llistat-sectors-economics') {
+    taulaSectorsEconomics();
+  } else if (pageType[2] === 'llistat-acusacions-judicials') {
+    taulaAcusacionsJudicials();
+  } else if (pageType[2] === 'llistat-bandols-guerra') {
+    taulaBandolsGuerra();
+  } else if (pageType[2] === 'llistat-condicions-militars') {
+    taulaCondicionsMilitars();
+  } else if (pageType[2] === 'llistat-cossos-militars') {
+    taulaCossosMilitars();
   }
 }

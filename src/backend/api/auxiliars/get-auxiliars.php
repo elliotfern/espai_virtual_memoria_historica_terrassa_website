@@ -202,8 +202,9 @@ if ($slug === "municipis") {
     // GET : Llistat sub-sectors economics
     // URL: /api/auxiliars/get/sub_sectors_economics
 } elseif ($slug === "sub_sectors_economics") {
-    $query = "SELECT sse.id, sse.sub_sector_cat
+    $query = "SELECT sse.id, sse.sub_sector_cat, s.sector_cat
               FROM aux_sub_sector_economic AS sse
+              INNER JOIN aux_sector_economic AS s ON sse.idSector = s.id
               ORDER BY sse.sub_sector_cat ASC";
 
     $result = getData2($query);
@@ -420,7 +421,7 @@ if ($slug === "municipis") {
     echo json_encode($result);
 
     // GET : Llistat bàndols guerra
-    // URL: /api/auxiliars/get/=bandols_guerra
+    // URL: /api/auxiliars/get/bandols_guerra
 } elseif ($slug === "bandols_guerra") {
     $query = "SELECT b.id, b.bandol_ca
               FROM aux_bandol AS b
@@ -535,8 +536,8 @@ if ($slug === "municipis") {
     $db = new Database();
     $allowedLanguages = [
         'ca' => 'categoria_cat',
-        'es' => 'categoria_cast',
-        'en' => 'categoria_eng',
+        'es' => 'categoria_es',
+        'en' => 'categoria_en',
         'fr' => 'categoria_fr',
         'it' => 'categoria_it',
         'pt' => 'categoria_pt',
@@ -553,7 +554,10 @@ if ($slug === "municipis") {
     }
 
     $column = $allowedLanguages[$lang];
-    $query = "SELECT id, {$column} AS name FROM aux_categoria ORDER BY id";
+    $query = "SELECT c.id, c.{$column} AS name, g.grup_ca
+    FROM aux_categoria AS c
+    INNER JOIN aux_categoria_grup as g ON c.grup = g.id
+    ORDER BY c.id";
 
     try {
         $result = $db->getData($query);
@@ -580,14 +584,53 @@ if ($slug === "municipis") {
         );
     }
 
-    // GET : llistat de municipis
-    // URL: https://memoriaterrassa.cat/api/auxiliars/get/categoriesRepressio
-} else if ($slug === "ggg") {
+    // GET : categoria de repressió per ID
+    // URL: https://memoriaterrassa.cat/api/auxiliars/get/categoriaRepressioId?id=3
+} else if ($slug === "categoriaRepressioId") {
+    $id = $_GET['id'];
     $db = new Database();
 
-    $query = "SELECT c.id, c.categoria_cat, c.categoria_cast, c.categoria_eng, c.categoria_fr, c.categoria_it, c.categoria_pt
+    $query = "SELECT c.id, c.categoria_cat, c.categoria_es, c.categoria_en, c.categoria_fr, c.categoria_it, c.categoria_pt, c.grup
             FROM aux_categoria AS c
-            ORDER BY c.categoria_cat ASC";
+            WHERE c.id = :id";
+
+    $params = [
+        ':id' => $id,
+    ];
+
+    try {
+        $result = $db->getData($query, $params, true);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
+    // GET : llistat grups de repressió
+    // URL: https://memoriaterrassa.cat/api/auxiliars/get/categoriesGrupRepressio
+} else if ($slug === "categoriesGrupRepressio") {
+    $db = new Database();
+
+    $query = "SELECT id, grup_ca, grup_es, grup_en, grup_fr, grup_it, grup_pt
+            FROM aux_categoria_grup
+            ORDER BY grup_ca ASC";
 
     try {
         $result = $db->getData($query);

@@ -26,9 +26,31 @@ interface Fitxa {
 }
 
 export async function costHumaCivils(idRepresaliat: number) {
-  const data = await fetchDataGet<Fitxa>(`/api/cost_huma_civils/get/fitxaRepressio?id=${idRepresaliat}`);
+  let data: Partial<Fitxa> = {
+    id: 0,
+    idPersona: 0,
+    nom: '',
+    cognom1: '',
+    cognom2: '',
+    cirscumstancies_mort: 0,
+    data_bombardeig: '',
+    municipi_bombardeig: 0,
+    lloc_bombardeig: 0,
+    data_detencio: '',
+    lloc_detencio: 0,
+    qui_detencio: '',
+    qui_executa_afusellat: '',
+    qui_ordena_afusellat: '',
+    responsable_bombardeig: '',
+    data_trobada_cadaver: '',
+    lloc_trobada_cadaver: 0,
+  };
 
+  const response = await fetchDataGet<Fitxa>(`/api/cost_huma_civils/get/fitxaRepressio?id=${idRepresaliat}`);
   const data2 = await fetchDataGet<Fitxa>(`/api/dades_personals/get/?type=nomCognoms&id=${idRepresaliat}`);
+
+  if (!response || !response.data) return;
+  data = response.data;
 
   if (data2) {
     const container = document.getElementById('fitxaNomCognoms');
@@ -45,86 +67,54 @@ export async function costHumaCivils(idRepresaliat: number) {
     }
   }
 
-  if (!data || data.status === 'error') {
-    await auxiliarSelect(data?.cirscumstancies_mort, 'causa_defuncio_repressio?tipus=2', 'cirscumstancies_mort', 'causa_defuncio_ca');
-    await auxiliarSelect(data?.lloc_trobada_cadaver, 'municipis', 'lloc_trobada_cadaver', 'ciutat');
-    await auxiliarSelect(data?.lloc_detencio, 'municipis', 'lloc_detencio', 'ciutat');
-    await auxiliarSelect(data?.municipi_bombardeig, 'municipis', 'municipi_bombardeig', 'ciutat');
-    await auxiliarSelect(data?.lloc_bombardeig, 'llocs_bombardeig', 'lloc_bombardeig', 'lloc_bombardeig_ca');
+  renderFormInputs(data);
 
-    const btn1 = document.getElementById('refreshButtonMunicipi1');
-    const btn2 = document.getElementById('refreshButtonMunicipi2');
-    const btn3 = document.getElementById('refreshButtonMunicipi3');
-    const valorBombardeig = document.querySelector<HTMLSelectElement>('#responsable_bombardeig');
+  await auxiliarSelect(data?.cirscumstancies_mort, 'causa_defuncio_repressio?tipus=2', 'cirscumstancies_mort', 'causa_defuncio_ca');
+  await auxiliarSelect(data?.lloc_trobada_cadaver, 'municipis', 'lloc_trobada_cadaver', 'ciutat');
+  await auxiliarSelect(data?.lloc_detencio, 'municipis', 'lloc_detencio', 'ciutat');
+  await auxiliarSelect(data?.municipi_bombardeig, 'municipis', 'municipi_bombardeig', 'ciutat');
+  await auxiliarSelect(data?.lloc_bombardeig, 'llocs_bombardeig', 'lloc_bombardeig', 'lloc_bombardeig_ca');
 
-    if (btn1 && btn2 && btn3 && valorBombardeig) {
-      btn1.addEventListener('click', function (event) {
-        event.preventDefault();
-        auxiliarSelect(data?.lloc_trobada_cadaver, 'municipis', 'lloc_trobada_cadaver', 'ciutat');
+  const btn1 = document.getElementById('refreshButtonMunicipi1');
+  const btn2 = document.getElementById('refreshButtonMunicipi2');
+  const btn3 = document.getElementById('refreshButtonMunicipi3');
+  const valorBombardeig = document.querySelector<HTMLSelectElement>('#responsable_bombardeig');
+
+  if (btn1 && btn2 && btn3 && valorBombardeig) {
+    btn1.addEventListener('click', function (event) {
+      event.preventDefault();
+      auxiliarSelect(data?.lloc_trobada_cadaver, 'municipis', 'lloc_trobada_cadaver', 'ciutat');
+    });
+
+    btn2.addEventListener('click', function (event) {
+      event.preventDefault();
+      auxiliarSelect(data?.lloc_detencio, 'municipis', 'lloc_detencio', 'ciutat');
+    });
+
+    btn3.addEventListener('click', function (event) {
+      event.preventDefault();
+      auxiliarSelect(data?.municipi_bombardeig, 'municipis', 'municipi_bombardeig', 'ciutat');
+    });
+  }
+
+  if (!response) {
+    const mortCivilsForm = document.getElementById('mortCivilsForm');
+    if (mortCivilsForm) {
+      mortCivilsForm.addEventListener('submit', function (event) {
+        transmissioDadesDB(event, 'POST', 'mortCivilsForm', '/api/cost_huma_civils/post', true);
       });
-
-      btn2.addEventListener('click', function (event) {
-        event.preventDefault();
-        auxiliarSelect(data?.lloc_detencio, 'municipis', 'lloc_detencio', 'ciutat');
-      });
-
-      btn3.addEventListener('click', function (event) {
-        event.preventDefault();
-        auxiliarSelect(data?.municipi_bombardeig, 'municipis', 'municipi_bombardeig', 'ciutat');
-      });
-
-      const mortCivilsForm = document.getElementById('mortCivilsForm');
-      if (mortCivilsForm) {
-        mortCivilsForm.addEventListener('submit', function (event) {
-          transmissioDadesDB(event, 'POST', 'mortCivilsForm', '/api/cost_huma_civils/post', true);
-        });
-      }
     }
   } else {
-    if (data) {
-      await auxiliarSelect(data.cirscumstancies_mort, 'causa_defuncio_repressio?tipus=2', 'cirscumstancies_mort', 'causa_defuncio_ca');
-      await auxiliarSelect(data.lloc_trobada_cadaver, 'municipis', 'lloc_trobada_cadaver', 'ciutat');
-      await auxiliarSelect(data.lloc_detencio, 'municipis', 'lloc_detencio', 'ciutat');
-      await auxiliarSelect(data.municipi_bombardeig, 'municipis', 'municipi_bombardeig', 'ciutat');
-      await auxiliarSelect(data.lloc_bombardeig, 'llocs_bombardeig', 'lloc_bombardeig', 'lloc_bombardeig_ca');
+    const btn = document.getElementById('btnMortsCivils') as HTMLButtonElement;
+    if (btn) {
+      btn.textContent = 'Modificar dades';
+    }
 
-      const btn1 = document.getElementById('refreshButtonMunicipi1');
-      const btn2 = document.getElementById('refreshButtonMunicipi2');
-      const btn3 = document.getElementById('refreshButtonMunicipi3');
-      const valorBombardeig = document.querySelector<HTMLSelectElement>('#responsable_bombardeig');
-
-      if (btn1 && btn2 && btn3 && valorBombardeig) {
-        btn1.addEventListener('click', function (event) {
-          event.preventDefault();
-          auxiliarSelect(data.lloc_trobada_cadaver, 'municipis', 'lloc_trobada_cadaver', 'ciutat');
-        });
-
-        btn2.addEventListener('click', function (event) {
-          event.preventDefault();
-          auxiliarSelect(data.lloc_detencio, 'municipis', 'lloc_detencio', 'ciutat');
-        });
-
-        btn3.addEventListener('click', function (event) {
-          event.preventDefault();
-          auxiliarSelect(data.municipi_bombardeig, 'municipis', 'municipi_bombardeig', 'ciutat');
-        });
-
-        valorBombardeig.value = data.responsable_bombardeig !== null ? data.responsable_bombardeig.toString() : '';
-
-        renderFormInputs(data);
-
-        const btn = document.getElementById('btnMortsCivils') as HTMLButtonElement;
-        if (btn) {
-          btn.textContent = 'Modificar dades';
-        }
-
-        const mortCivilsForm = document.getElementById('mortCivilsForm');
-        if (mortCivilsForm) {
-          mortCivilsForm.addEventListener('submit', function (event) {
-            transmissioDadesDB(event, 'PUT', 'mortCivilsForm', '/api/cost_huma_civils/put');
-          });
-        }
-      }
+    const mortCivilsForm = document.getElementById('mortCivilsForm');
+    if (mortCivilsForm) {
+      mortCivilsForm.addEventListener('submit', function (event) {
+        transmissioDadesDB(event, 'PUT', 'mortCivilsForm', '/api/cost_huma_civils/put');
+      });
     }
   }
 }

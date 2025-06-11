@@ -11,7 +11,7 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
 
                 <p><button onclick="window.location.href='<?php echo APP_INTRANET . $url['auxiliars']; ?>/nou-ofici'" class="btn btn-success">Nou ofici</button></p>
 
-                <div id="tabla1"></div>
+                <div id="taulaOficis"></div>
 
             <?php endif; ?>
         </div>

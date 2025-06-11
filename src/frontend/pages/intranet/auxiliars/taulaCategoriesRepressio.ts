@@ -6,6 +6,7 @@ import { getIsAutor } from '../../../services/auth/getIsAutor';
 interface EspaiRow {
   id: number;
   name: string;
+  grup_ca: string;
 }
 
 type Column<T> = {
@@ -19,7 +20,10 @@ export async function taulaCategoriesRepressio() {
   const isAutor = await getIsAutor();
   const reloadKey = 'reload-taula-categories';
 
-  const columns: Column<EspaiRow>[] = [{ header: 'Categoria repressió', field: 'name' }];
+  const columns: Column<EspaiRow>[] = [
+    { header: 'Categoria repressió', field: 'name' },
+    { header: 'Grup repressió', field: 'grup_ca' },
+  ];
 
   if (isAdmin || isAutor) {
     columns.push({

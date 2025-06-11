@@ -5,6 +5,18 @@ export type ApiUrls = {
     ESPAI_ID: (id: number) => string;
     SUB_SECTOR_ID: (id: number) => string;
     SECTOR_ECONOMIC: string;
+    CATEGORIA_REPRESSIO_ID: (id: number) => string;
+    CAUSA_MORT: string;
+    ESPAIS: string;
+    ESTAT_CIVIL: string;
+    NIVELLS_ESTUDIS: string;
+    OFICIS: string;
+    CARRECS_EMPRESA: string;
+    SUB_SECTORS_ECONOMICS: string;
+    ACUSACIONS_JUDICIALS: string;
+    BANDOLS: string;
+    CONDICIONS_MILITARS: string;
+    COSOS_MILITARS: string;
   };
   POST: {
     MUNICIPI: string;

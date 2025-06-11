@@ -700,8 +700,11 @@ if ($slug === "municipi") {
 
     // Si no hay errores, crear las variables PHP y preparar la consulta PDO
     $carrec_cat = $data['carrec_cat'];
-    $carrec_cast = !empty($data['carrec_cast']) ? $data['carrec_cast'] : NULL;
-    $carrec_eng = !empty($data['carrec_eng']) ? $data['carrec_eng'] : NULL;
+    $carrec_es = !empty($data['carrec_es']) ? $data['carrec_es'] : NULL;
+    $carrec_en = !empty($data['carrec_en']) ? $data['carrec_en'] : NULL;
+    $carrec_fr = !empty($data['carrec_fr']) ? $data['carrec_fr'] : NULL;
+    $carrec_pt = !empty($data['carrec_pt']) ? $data['carrec_pt'] : NULL;
+    $carrec_it = !empty($data['carrec_it']) ? $data['carrec_it'] : NULL;
     $id = $data['id'];
 
     // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
@@ -713,8 +716,11 @@ if ($slug === "municipi") {
         // Crear la consulta SQL
         $sql = "UPDATE aux_ofici_carrec SET 
             carrec_cat = :carrec_cat,
-            carrec_eng = :carrec_eng,
-            carrec_cast = :carrec_cast
+            carrec_en = :carrec_en,
+            carrec_es = :carrec_es,
+            carrec_pt = :carrec_pt,
+            carrec_fr = :carrec_fr,
+            carrec_it = :carrec_it
         WHERE id = :id";
 
         // Preparar la consulta
@@ -722,8 +728,11 @@ if ($slug === "municipi") {
 
         // Enlazar los parámetros con los valores de las variables PHP
         $stmt->bindParam(':carrec_cat', $carrec_cat, PDO::PARAM_STR);
-        $stmt->bindParam(':carrec_eng', $carrec_eng, PDO::PARAM_STR);
-        $stmt->bindParam(':carrec_cast', $carrec_cast, PDO::PARAM_STR);
+        $stmt->bindParam(':carrec_en', $carrec_en, PDO::PARAM_STR);
+        $stmt->bindParam(':carrec_es', $carrec_es, PDO::PARAM_STR);
+        $stmt->bindParam(':carrec_fr', $carrec_fr, PDO::PARAM_STR);
+        $stmt->bindParam(':carrec_it', $carrec_it, PDO::PARAM_STR);
+        $stmt->bindParam(':carrec_pt', $carrec_pt, PDO::PARAM_STR);
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
 
         // Ejecutar la consulta
@@ -960,6 +969,10 @@ if ($slug === "municipi") {
         $errors[] =  ValidacioErrors::requerit('Categoria repressió català');
     }
 
+    if (empty($data['grup'])) {
+        $errors[] =  ValidacioErrors::requerit('Grup repressió');
+    }
+
     // Si hay errores, devolver una respuesta con los errores
     if (!empty($errors)) {
         Response::error(
@@ -971,8 +984,9 @@ if ($slug === "municipi") {
 
     // Si no hay errores, crear las variables PHP y preparar la consulta PDO
     $categoria_cat = $data['categoria_cat'];
-    $categoria_cast = !empty($data['categoria_cast']) ? $data['categoria_cast'] : NULL;
-    $categoria_eng = !empty($data['categoria_eng']) ? $data['categoria_eng'] : NULL;
+    $grup = $data['grup'];
+    $categoria_es = !empty($data['categoria_es']) ? $data['categoria_es'] : NULL;
+    $categoria_en = !empty($data['categoria_en']) ? $data['categoria_en'] : NULL;
     $categoria_it = !empty($data['categoria_it']) ? $data['categoria_it'] : NULL;
     $categoria_fr = !empty($data['categoria_fr']) ? $data['categoria_fr'] : NULL;
     $categoria_pt = !empty($data['categoria_pt']) ? $data['categoria_pt'] : NULL;
@@ -987,11 +1001,12 @@ if ($slug === "municipi") {
         // Crear la consulta SQL
         $sql = "UPDATE aux_categoria SET
             categoria_cat = :categoria_cat,
-            categoria_cast = :categoria_cast,
-            categoria_eng = :categoria_eng,
+            categoria_es = :categoria_es,
+            categoria_en = :categoria_en,
             categoria_fr = :categoria_fr,
             categoria_it = :categoria_it,
-            categoria_pt = :categoria_pt
+            categoria_pt = :categoria_pt,
+            grup = :grup
         WHERE id = :id";
 
         // Preparar la consulta
@@ -999,12 +1014,13 @@ if ($slug === "municipi") {
 
         // Enlazar los parámetros con los valores de las variables PHP
         $stmt->bindParam(':categoria_cat', $categoria_cat, PDO::PARAM_STR);
-        $stmt->bindParam(':categoria_cast', $categoria_cast, PDO::PARAM_STR);
-        $stmt->bindParam(':categoria_eng', $categoria_eng, PDO::PARAM_STR);
+        $stmt->bindParam(':categoria_es', $categoria_es, PDO::PARAM_STR);
+        $stmt->bindParam(':categoria_en', $categoria_en, PDO::PARAM_STR);
         $stmt->bindParam(':categoria_fr', $categoria_fr, PDO::PARAM_STR);
         $stmt->bindParam(':categoria_it', $categoria_it, PDO::PARAM_STR);
         $stmt->bindParam(':categoria_pt', $categoria_pt, PDO::PARAM_STR);
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->bindParam(':grup', $grup, PDO::PARAM_INT);
 
         // Ejecutar la consulta
         $stmt->execute();
@@ -1380,7 +1396,7 @@ if ($slug === "municipi") {
         /** @var PDO $conn */
 
         // Crear la consulta SQL
-        $sql = "UPDATE aux_condicions SET
+        $sql = "UPDATE aux_condicio SET
             condicio_ca = :condicio_ca,
             condicio_es = :condicio_es,
             condicio_en = :condicio_en,

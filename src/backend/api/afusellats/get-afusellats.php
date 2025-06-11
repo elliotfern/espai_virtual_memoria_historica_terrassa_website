@@ -1,41 +1,35 @@
 <?php
 
+use App\Config\Database;
+use App\Utils\Response;
+use App\Utils\MissatgesAPI;
+
+$slug = $routeParams[0];
+
 // Configuración de cabeceras para aceptar JSON y responder JSON
 header("Content-Type: application/json");
-header("Access-Control-Allow-Origin: https://memoriaterrassa.cat");
 header("Access-Control-Allow-Methods: GET");
 
-// 1) Llistat afusellats
-// ruta GET => "/api/afusellats/get/?type=tots"
-if (isset($_GET['type']) && $_GET['type'] == 'tots') {
-    global $conn;
-    $data = array();
-    /** @var PDO $conn */
-    $stmt = $conn->prepare(
-        "SELECT a.id, dp.cognom1, dp.cognom2, dp.nom, a.copia_exp, dp.data_naixement, dp.edat, dp.data_defuncio,
-            e1.ciutat, e1.comarca, e1.provincia, e1.comunitat, e1.pais, e2.ciutat AS ciutat2, e2.comarca AS comarca2, e2.provincia AS provincia2, e2.comunitat AS comunitat2, e2.pais AS pais2, dp.categoria
-            FROM db_afusellats AS a
-            LEFT JOIN db_dades_personals AS dp ON a.idPersona = dp.id
-            LEFT JOIN aux_dades_municipis AS e1 ON dp.municipi_naixement = e1.id
-            LEFT JOIN aux_dades_municipis AS e2 ON dp.municipi_defuncio = e2.id
-            ORDER BY dp.cognom1 ASC"
-    );
-    $stmt->execute();
-    if ($stmt->rowCount() === 0) echo ('No rows');
-    while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $data[] = $users;
-    }
-    echo json_encode($data);
+// Definir el dominio permitido
+$allowedOrigin = DOMAIN;
 
-    // 2) Pagina informacio fitxa afusellat
-    // ruta GET => "/api/afusellats/get/?type=fitxa&id=35"
-} elseif (isset($_GET['type']) && $_GET['type'] == 'fitxa' && isset($_GET['id'])) {
+// Llamar a la función para verificar el referer
+checkReferer($allowedOrigin);
+
+// Verificar que el método de la solicitud sea GET
+if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
+    header('HTTP/1.1 405 Method Not Allowed');
+    echo json_encode(['error' => 'Method not allowed']);
+    exit();
+}
+
+// 1 Pagina informacio fitxa afusellat
+// ruta GET => "/api/afusellats/get/fitxa&id=35"
+if ($slug === "fitxa") {
+    $db = new Database();
     $id = $_GET['id'];
-    global $conn;
-    $data = array();
-    /** @var PDO $conn */
-    $stmt = $conn->prepare(
-        "SELECT 
+
+    $query = "SELECT 
             pj.procediment_cat, 
             pj.id AS procediment_id, 
             a.num_causa, 
@@ -72,14 +66,32 @@ if (isset($_GET['type']) && $_GET['type'] == 'tots') {
             LEFT JOIN aux_acusacions AS acu ON a.acusacio = acu.id
             LEFT JOIN aux_acusacions AS acu2 ON a.acusacio_2 = acu2.id
             LEFT JOIN aux_sentencies AS sen ON a.sentencia = sen.id
-            WHERE a.idPersona = $id"
-    );
-    $stmt->execute();
-    if ($stmt->rowCount() === 0) echo ('No rows');
-    while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $data[] = $users;
+            WHERE a.idPersona = :idPersona";
+    try {
+        $params = [':idPersona' => $id];
+        $result = $db->getData($query, $params, true);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
     }
-    echo json_encode($data);
 } else {
     // Si 'type', 'id' o 'token' están ausentes o 'type' no es 'user' en la URL
     header('HTTP/1.1 403 Forbidden');

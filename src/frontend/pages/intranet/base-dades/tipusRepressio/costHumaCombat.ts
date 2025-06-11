@@ -25,9 +25,29 @@ interface Fitxa {
 }
 
 export async function costHumaCombat(idRepresaliat: number) {
-  const data = await fetchDataGet<Fitxa>(`/api/cost_huma_front/get/fitxaRepressio?id=${idRepresaliat}`);
+  let data: Partial<Fitxa> = {
+    id: 0,
+    idPersona: 0,
+    condicio: 0,
+    bandol: 0,
+    any_lleva: '',
+    unitat_inicial: '',
+    cos: 0,
+    unitat_final: '',
+    graduacio_final: '',
+    periple_militar: '',
+    circumstancia_mort: 0,
+    desaparegut_data: '',
+    desaparegut_lloc: 0,
+    desaparegut_data_aparicio: '',
+    desaparegut_lloc_aparicio: 0,
+  };
 
+  const response = await fetchDataGet<Fitxa>(`/api/cost_huma_front/get/fitxaRepressio?id=${idRepresaliat}`);
   const data2 = await fetchDataGet<Fitxa>(`/api/dades_personals/get/?type=nomCognoms&id=${idRepresaliat}`);
+
+  if (!response || !response.data) return;
+  data = response.data;
 
   if (data2) {
     const container = document.getElementById('fitxaNomCognoms');
@@ -44,29 +64,31 @@ export async function costHumaCombat(idRepresaliat: number) {
     }
   }
 
-  if (!data || data.status === 'error') {
-    await auxiliarSelect(data?.condicio, 'condicio_civil_militar', 'condicio', 'condicio_ca');
-    await auxiliarSelect(data?.bandol, 'bandols_guerra', 'bandol', 'bandol_ca');
-    await auxiliarSelect(data?.cos, 'cossos_militars', 'cos', 'cos_militar_ca');
-    await auxiliarSelect(data?.circumstancia_mort, 'causa_defuncio_repressio?tipus=1', 'circumstancia_mort', 'causa_defuncio_ca');
-    await auxiliarSelect(data?.desaparegut_lloc, 'municipis', 'desaparegut_lloc', 'ciutat');
-    await auxiliarSelect(data?.desaparegut_lloc_aparicio, 'municipis', 'desaparegut_lloc_aparicio', 'ciutat');
+  renderFormInputs(data);
 
-    const btn1 = document.getElementById('refreshButton2');
-    const btn2 = document.getElementById('refreshButton1');
+  await auxiliarSelect(data?.condicio, 'condicio_civil_militar', 'condicio', 'condicio_ca');
+  await auxiliarSelect(data?.bandol, 'bandols_guerra', 'bandol', 'bandol_ca');
+  await auxiliarSelect(data?.cos, 'cossos_militars', 'cos', 'cos_militar_ca');
+  await auxiliarSelect(data?.circumstancia_mort, 'causa_defuncio_repressio?tipus=1', 'circumstancia_mort', 'causa_defuncio_ca');
+  await auxiliarSelect(data?.desaparegut_lloc, 'municipis', 'desaparegut_lloc', 'ciutat');
+  await auxiliarSelect(data?.desaparegut_lloc_aparicio, 'municipis', 'desaparegut_lloc_aparicio', 'ciutat');
 
-    if (btn1 && btn2) {
-      btn1.addEventListener('click', function (event) {
-        event.preventDefault();
-        auxiliarSelect(data?.desaparegut_lloc_aparicio, 'municipis', 'desaparegut_lloc_aparicio', 'ciutat');
-      });
+  const btn1 = document.getElementById('refreshButton2');
+  const btn2 = document.getElementById('refreshButton1');
 
-      btn2.addEventListener('click', function (event) {
-        event.preventDefault();
-        auxiliarSelect(data?.desaparegut_lloc, 'municipis', 'desaparegut_lloc', 'ciutat');
-      });
-    }
+  if (btn1 && btn2) {
+    btn1.addEventListener('click', function (event) {
+      event.preventDefault();
+      auxiliarSelect(data?.desaparegut_lloc_aparicio, 'municipis', 'desaparegut_lloc_aparicio', 'ciutat');
+    });
 
+    btn2.addEventListener('click', function (event) {
+      event.preventDefault();
+      auxiliarSelect(data?.desaparegut_lloc, 'municipis', 'desaparegut_lloc', 'ciutat');
+    });
+  }
+
+  if (!response) {
     const mortCombatForm = document.getElementById('mortCombatForm');
     if (mortCombatForm) {
       mortCombatForm.addEventListener('submit', function (event) {
@@ -74,30 +96,6 @@ export async function costHumaCombat(idRepresaliat: number) {
       });
     }
   } else {
-    await auxiliarSelect(data.condicio, 'condicio_civil_militar', 'condicio', 'condicio_ca');
-    await auxiliarSelect(data.bandol, 'bandols_guerra', 'bandol', 'bandol_ca');
-    await auxiliarSelect(data.cos, 'cossos_militars', 'cos', 'cos_militar_ca');
-    await auxiliarSelect(data.circumstancia_mort, 'causa_defuncio_repressio?tipus=1', 'circumstancia_mort', 'causa_defuncio_ca');
-    await auxiliarSelect(data.desaparegut_lloc, 'municipis', 'desaparegut_lloc', 'ciutat');
-    await auxiliarSelect(data.desaparegut_lloc_aparicio, 'municipis', 'desaparegut_lloc_aparicio', 'ciutat');
-
-    const btn1 = document.getElementById('refreshButton2');
-    const btn2 = document.getElementById('refreshButton1');
-
-    if (btn1 && btn2) {
-      btn1.addEventListener('click', function (event) {
-        event.preventDefault();
-        auxiliarSelect(data.desaparegut_lloc_aparicio, 'municipis', 'desaparegut_lloc_aparicio', 'ciutat');
-      });
-
-      btn2.addEventListener('click', function (event) {
-        event.preventDefault();
-        auxiliarSelect(data.desaparegut_lloc, 'municipis', 'desaparegut_lloc', 'ciutat');
-      });
-    }
-
-    renderFormInputs(data);
-
     const btn = document.getElementById('btnMortsCombat') as HTMLButtonElement;
     if (btn) {
       btn.textContent = 'Modificar dades';
@@ -111,5 +109,3 @@ export async function costHumaCombat(idRepresaliat: number) {
     }
   }
 }
-
-//

@@ -27,7 +27,7 @@ $acusacio_pt_old = "";
 $acusacio_it_old = "";
 $btnModificar = 1;
 
-if ($pag === "modifica-carrec-empresa") {
+if ($pag === "modifica-acusacio") {
     $btnModificar = 2;
     $id = $routeParams[0];
 

@@ -3,6 +3,7 @@ import { costHumaCivils } from './costHumaCivils';
 import { costHumaCombat } from './costHumaCombat';
 import { exili } from './exili';
 import { deportat } from './deportat';
+import { afusellat } from './afusellat';
 
 export function formTipusRepressio() {
   const url = window.location.href;
@@ -16,5 +17,7 @@ export function formTipusRepressio() {
     exili(Number(pageType[4]));
   } else if (pageType[3] === '2') {
     deportat(Number(pageType[4]));
+  } else if (pageType[3] === '1') {
+    afusellat(Number(pageType[4]));
   }
 }

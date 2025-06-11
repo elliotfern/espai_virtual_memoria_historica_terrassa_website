@@ -33,7 +33,7 @@ if ($pag === "modifica-cos-militar") {
     $id = $routeParams[0];
 
     // Verificar si la ID existe en la base de datos
-    $query = "SELECT id, cos_militar_ca, cos_militar_es_es, cos_militar_en, cos_militar_fr, cos_militar_it, cos_militar_pt
+    $query = "SELECT id, cos_militar_ca, cos_militar_es, cos_militar_en, cos_militar_fr, cos_militar_it, cos_militar_pt
     FROM aux_cossos_militars
     WHERE id = :id";
     $stmt = $conn->prepare($query);
@@ -77,8 +77,8 @@ if ($pag === "modifica-cos-militar") {
                 <input type="hidden" name="id" id="id" value="<?php echo $id_old; ?>">
 
                 <div class="col-md-4 mb-4">
-                    <label for="bandol_ca" class="form-label negreta">Cos militar (català):</label>
-                    <input type="text" class="form-control" id="condicio_ca" name="condicio_ca" value="<?php echo $cos_militar_ca_old; ?>">
+                    <label for="cos_militar_ca" class="form-label negreta">Cos militar (català):</label>
+                    <input type="text" class="form-control" id="cos_militar_ca" name="cos_militar_ca" value="<?php echo $cos_militar_ca_old; ?>">
                     <div class="avis-form">
                         * Camp obligatori
                     </div>
@@ -88,28 +88,28 @@ if ($pag === "modifica-cos-militar") {
                     <hr>
 
                     <div class="col-md-4 mb-4">
-                        <label for="condicio_es" class="form-label negreta">Cos militar (castellà):</label>
-                        <input type="text" class="form-control" id="condicio_es" name="condicio_es" value="<?php echo $cos_militar_es_old; ?>">
+                        <label for="cos_militar_es" class="form-label negreta">Cos militar (castellà):</label>
+                        <input type="text" class="form-control" id="cos_militar_es" name="cos_militar_es" value="<?php echo $cos_militar_es_old; ?>">
                     </div>
 
                     <div class="col-md-4 mb-4">
-                        <label for="condicio_en" class="form-label negreta">Cos militar (anglès):</label>
-                        <input type="text" class="form-control" id="condicio_en" name="condicio_en" value="<?php echo $cos_militar_en_old; ?>">
+                        <label for="cos_militar_en" class="form-label negreta">Cos militar (anglès):</label>
+                        <input type="text" class="form-control" id="cos_militar_en" name="cos_militar_en" value="<?php echo $cos_militar_en_old; ?>">
                     </div>
 
                     <div class="col-md-4 mb-4">
-                        <label for="condicio_fr" class="form-label negreta">Cos militar (francès):</label>
-                        <input type="text" class="form-control" id="condicio_fr" name="condicio_fr" value="<?php echo $cos_militar_fr_old; ?>">
+                        <label for="cos_militar_fr" class="form-label negreta">Cos militar (francès):</label>
+                        <input type="text" class="form-control" id="cos_militar_fr" name="cos_militar_fr" value="<?php echo $cos_militar_fr_old; ?>">
                     </div>
 
                     <div class="col-md-4 mb-4">
-                        <label for="condicio_pt" class="form-label negreta">Cos militar (portuguès):</label>
-                        <input type="text" class="form-control" id="condicio_pt" name="condicio_pt" value="<?php echo $cos_militar_pt_old; ?>">
+                        <label for="cos_militar_pt" class="form-label negreta">Cos militar (portuguès):</label>
+                        <input type="text" class="form-control" id="cos_militar_pt" name="cos_militar_pt" value="<?php echo $cos_militar_pt_old; ?>">
                     </div>
 
                     <div class="col-md-4 mb-4">
-                        <label for="condicio_it" class="form-label negreta">Cos militar (italià):</label>
-                        <input type="text" class="form-control" id="condicio_it" name="condicio_it" value="<?php echo $cos_militar_it_old; ?>">
+                        <label for="cos_militar_it" class="form-label negreta">Cos militar (italià):</label>
+                        <input type="text" class="form-control" id="cos_militar_it" name="cos_militar_it" value="<?php echo $cos_militar_it_old; ?>">
                     </div>
                 <?php endif; ?>
 
