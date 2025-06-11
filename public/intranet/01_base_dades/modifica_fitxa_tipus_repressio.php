@@ -4,7 +4,7 @@ $idPersona = $routeParams[1]; // Segundo, por ejemplo, 2
 $categoriaId = (int) $categoriaId;
 
 // Verificar si es un número entero válido
-if (!is_int($categoriaId) || $categoriaId >= 17) {
+if (!is_int($categoriaId) || $categoriaId >= 18) {
     // Si no es un número entero o es menor o igual a cero, detener la ejecución
     header("Location: /404");
     exit();

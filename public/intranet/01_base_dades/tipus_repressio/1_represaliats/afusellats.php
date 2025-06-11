@@ -194,7 +194,7 @@
                     <div class="col"></div>
 
                     <div class="col d-flex justify-content-end align-items-center">
-                        <a class="btn btn-primary" role="button" aria-disabled="true" id="btnModificarDadesCombat">Modificar dades</a>
+                        <button class="btn btn-primary" type="submit" id="btnAfusellat">Modificar dades</button>
                     </div>
                 </div>
             </div>

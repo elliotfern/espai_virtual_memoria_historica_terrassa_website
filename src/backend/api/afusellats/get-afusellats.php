@@ -30,6 +30,7 @@ if ($slug === "fitxa") {
     $id = $_GET['id'];
 
     $query = "SELECT 
+            a.id,
             pj.procediment_cat, 
             pj.id AS procediment_id, 
             a.num_causa, 

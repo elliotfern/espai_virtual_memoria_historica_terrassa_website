@@ -3,6 +3,7 @@ import { getPageType } from '../../services/url/splitUrl';
 import { auxiliars } from './auxiliars/auxiliars';
 import { transmissioDadesDB } from '../../services/fetchData/transmissioDades';
 import { baseDadesIntranet } from './base-dades/baseDades';
+import { fontsDocumentals } from './fonts-documentals/fontsDocumentals';
 
 export function intranet() {
   const url = window.location.href;
@@ -22,5 +23,7 @@ export function intranet() {
         transmissioDadesDB(event, 'POST', 'arxiuForm', '/api/fonts_documentals/post/arxiu', true);
       });
     }
+  } else if (pageType[1] === 'fonts-documentals') {
+    fontsDocumentals();
   }
 }

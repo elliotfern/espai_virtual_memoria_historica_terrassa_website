@@ -17,6 +17,8 @@ export type ApiUrls = {
     BANDOLS: string;
     CONDICIONS_MILITARS: string;
     COSOS_MILITARS: string;
+    LLISTAT_BIBLIOGRAFIA: string;
+    LLISTAT_ARXIUS: string;
   };
   POST: {
     MUNICIPI: string;

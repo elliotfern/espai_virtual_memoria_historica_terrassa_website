@@ -39,7 +39,7 @@ if ($slug === 'llistatArxiusFonts') {
     echo json_encode($result);
 
     // GET : Llistat bibliografia
-    // URL: /api/fonts/get/llistatBibliografia
+    // URL: /api/fonts/get/llistatBibliografia 
 } elseif ($slug === 'llistatBibliografia') {
     $query = "SELECT l.id, l.llibre, l.autor, l.editorial, m.ciutat, l.any, l.volum
               FROM aux_bibliografia_llibre_detalls AS l

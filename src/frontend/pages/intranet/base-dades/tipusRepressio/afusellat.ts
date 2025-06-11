@@ -75,16 +75,29 @@ export async function afusellat(idAfusellat: number) {
     observacions: '',
   };
 
-  const response = await fetchDataGet<Fitxa>(`/api/afusellats/get/fitxa?id=${idAfusellat}`);
-  const data2 = await fetchDataGet<Fitxa>(`/api/dades_personals/get/?type=nomCognoms&id=${idAfusellat}`);
-
-  if (!response || !response.data) return;
-  data = response.data;
-
   const btn1 = document.getElementById('refreshButtonMunicipi1');
   const btn2 = document.getElementById('refreshButtonMunicipi2');
   const btn3 = document.getElementById('refreshButtonMunicipi3');
   const container = document.getElementById('fitxaNomCognoms');
+  const btn = document.getElementById('btnAfusellat') as HTMLButtonElement;
+  const afusellatForm = document.getElementById('afusellatForm');
+
+  const response = await fetchDataGet<Fitxa>(`/api/afusellats/get/fitxa?id=${idAfusellat}`);
+  const data2 = await fetchDataGet<Fitxa>(`/api/dades_personals/get/?type=nomCognoms&id=${idAfusellat}`);
+
+  if (!response || !response.data) {
+    if (btn) btn.textContent = 'Inserir dades';
+  } else {
+    data = response.data;
+    if (btn) btn.textContent = 'Modificar dades';
+
+    if (afusellatForm) {
+      afusellatForm.onsubmit = function (event) {
+        const isInsert = !response.data;
+        transmissioDadesDB(event, isInsert ? 'POST' : 'PUT', 'afusellatForm', isInsert ? '/api/cost_huma_civils/post' : '/api/cost_huma_civils/put', isInsert);
+      };
+    }
+  }
 
   if (data2) {
     const inputIdPersona = document.getElementById('idPersona') as HTMLInputElement | null;
@@ -118,25 +131,4 @@ export async function afusellat(idAfusellat: number) {
   }
 
   renderFormInputs(data);
-
-  if (!response) {
-    const mortCivilsForm = document.getElementById('mortCivilsForm');
-    if (mortCivilsForm) {
-      mortCivilsForm.addEventListener('submit', function (event) {
-        transmissioDadesDB(event, 'POST', 'mortCivilsForm', '/api/cost_huma_civils/post', true);
-      });
-    }
-  } else {
-    const btn = document.getElementById('btnMortsCivils') as HTMLButtonElement;
-    if (btn) {
-      btn.textContent = 'Modificar dades';
-    }
-
-    const mortCivilsForm = document.getElementById('mortCivilsForm');
-    if (mortCivilsForm) {
-      mortCivilsForm.addEventListener('submit', function (event) {
-        transmissioDadesDB(event, 'PUT', 'mortCivilsForm', '/api/cost_huma_civils/put');
-      });
-    }
-  }
 }

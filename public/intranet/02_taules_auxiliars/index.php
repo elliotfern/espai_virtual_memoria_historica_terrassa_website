@@ -87,9 +87,9 @@
             <h4>7.Fonts bibliogràfiques i arxius</h4>
             <ul>
                 <li>aux_bibliografia_arxius</li>
-                <li>aux_bibliografia_arxius_codis</li>
                 <li>aux_bibliografia_llibres</li>
-                <li>aux_bibliografia_llibre_detalls</li>
+                <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['fonts']; ?>/llistat-arxius">Taula llistat d'arxius</a></li>
+                <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['fonts']; ?>/llistat-llibres">Taula llistat de bibliografia</a></li>
             </ul>
 
             <h4>8. Bases de dades col·lectius repressió</h4>
