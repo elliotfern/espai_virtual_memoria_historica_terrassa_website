@@ -1,5 +1,8 @@
 <?php
 
+use App\Config\Database;
+use App\Utils\Response;
+use App\Utils\MissatgesAPI;
 use App\Config\DatabaseConnection;
 
 $conn = DatabaseConnection::getConnection();
@@ -29,11 +32,11 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
 }
 
 // GET : Llistat arxius i fonts documentals
-// URL: /api/fonts/get/llistatArxiusFonts
+// URL: /api/fonts/get/llistatArxiusFonts 
 if ($slug === 'llistatArxiusFonts') {
     $query = "SELECT l.id, l.arxiu, l.codi, l.descripcio, l.web
               FROM aux_bibliografia_arxius_codis AS l
-              ORDER BY l.arxiu ASC";
+              ORDER BY l.codi ASC";
 
     $result = getData2($query);
     echo json_encode($result);
@@ -89,4 +92,95 @@ if ($slug === 'llistatArxiusFonts') {
 
     $result = getData2($query, ['idRepresaliat' => $id], false);
     echo json_encode($result);
+
+    // GET : Llibre per ID
+    // URL: /api/fonts/get/llibreId?id=${id}
+} elseif ($slug === 'llibreId') {
+    $db = new Database();
+    $id = $_GET['id'];
+
+    $query = "SELECT 
+            id,
+            llibre,
+            autor,
+            editorial,
+            any,
+            volum,
+            ciutat
+            FROM aux_bibliografia_llibre_detalls
+            WHERE id = :id";
+
+    $params = [
+        ':id' => $id,
+    ];
+
+    try {
+        $result = $db->getData($query, $params, true);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
+    // GET : Arxiu per ID
+    // URL: /api/fonts/get/llibreId?id=${id}
+} elseif ($slug === 'arxiuId') {
+    $db = new Database();
+    $id = $_GET['id'];
+
+    $query = "SELECT
+	        id,
+            arxiu,
+            descripcio,
+            codi,
+            web,
+            ciutat
+            FROM aux_bibliografia_arxius_codis
+            WHERE id = :id";
+
+    $params = [
+        ':id' => $id,
+    ];
+
+    try {
+        $result = $db->getData($query, $params, true);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
 }

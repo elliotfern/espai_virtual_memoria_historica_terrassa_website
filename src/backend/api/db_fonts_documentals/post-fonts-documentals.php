@@ -3,6 +3,9 @@
 use App\Config\Tables;
 use App\Config\Audit;
 use App\Config\DatabaseConnection;
+use App\Utils\MissatgesAPI;
+use App\Utils\Response;
+use App\Utils\ValidacioErrors;
 
 $conn = DatabaseConnection::getConnection();
 
@@ -56,14 +59,16 @@ if ($slug === 'ref_bibliografica') {
 
     // Validación de los datos recibidos
     if (empty($data['llibre'])) {
-        $errors[] = 'El camp llibre és obligatori.';
+        $errors[] =  ValidacioErrors::requerit('llibre');
     }
 
     // Si hay errores, devolver una respuesta con los errores
     if (!empty($errors)) {
-        http_response_code(400); // Bad Request
-        echo json_encode(["status" => "error", "message" => $errors]);
-        exit;
+        Response::error(
+            MissatgesAPI::error('validacio'),
+            $errors,
+            400
+        );
     }
 
     // Si no hay errores, crear las variables PHP y preparar la consulta PDO
@@ -113,11 +118,17 @@ if ($slug === 'ref_bibliografica') {
         );
 
         // Respuesta de éxito
-        echo json_encode(["status" => "success", "message" => "Les dades s'han actualitzat correctament a la base de dades."]);
+        Response::success(
+            MissatgesAPI::success('create'),
+            ['id' => $id],
+            200
+        );
     } catch (PDOException $e) {
-        // En caso de error en la conexión o ejecución de la consulta
-        http_response_code(500); // Internal Server Error
-        echo json_encode(["status" => "error", "message" => "S'ha produit un error a la base de dades: "]);
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
     }
 
     // 3) POST arxivistica
@@ -130,18 +141,20 @@ if ($slug === 'ref_bibliografica') {
     $errors = [];
 
     if (empty($data['codi'])) {
-        $errors[] = 'El camp codi és obligatori.';
+        $errors[] =  ValidacioErrors::requerit('codi');
     }
 
     if (empty($data['idRepresaliat'])) {
-        $errors[] = 'El camp represaliat és obligatori.';
+        $errors[] =  ValidacioErrors::requerit('id Represaliat');
     }
 
     // Si hay errores, devolver una respuesta con los errores
     if (!empty($errors)) {
-        http_response_code(400); // Bad Request
-        echo json_encode(["status" => "error", "message" => $errors]);
-        exit;
+        Response::error(
+            MissatgesAPI::error('validacio'),
+            $errors,
+            400
+        );
     }
 
     // Si no hay errores, crear las variables PHP y preparar la consulta PDO
@@ -191,11 +204,17 @@ if ($slug === 'ref_bibliografica') {
         );
 
         // Respuesta de éxito
-        echo json_encode(["status" => "success", "message" => "Les dades s'han actualitzat correctament a la base de dades."]);
+        Response::success(
+            MissatgesAPI::success('create'),
+            ['id' => $id],
+            200
+        );
     } catch (PDOException $e) {
-        // En caso de error en la conexión o ejecución de la consulta
-        http_response_code(500); // Internal Server Error
-        echo json_encode(["status" => "error", "message" => "S'ha produit un error a la base de dades"]);
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
     }
 
     // POST creació nou arxiu i codis arxiu
@@ -223,20 +242,19 @@ if ($slug === 'ref_bibliografica') {
 
     $errors = [];
     if (empty($data['arxiu'])) {
-        $errors['arxiu'] = 'El camp arxiu és obligatori.';
+        $errors[] =  ValidacioErrors::requerit('arxiu');
     }
     if (empty($data['codi'])) {
-        $errors['codi'] = 'El camp codi és obligatori.';
+        $errors[] =  ValidacioErrors::requerit('coid');
     }
 
-    if (empty($data['descripcio'])) {
-        $errors['descripcio'] = 'El camp descripcio és obligatori.';
-    }
 
     if (!empty($errors)) {
-        http_response_code(400); // Bad Request
-        echo json_encode(["status" => "error", "message" => $errors]);
-        exit;
+        Response::error(
+            MissatgesAPI::error('validacio'),
+            $errors,
+            400
+        );
     }
 
     // Si no hay errores, crear las variables PHP y preparar la consulta PDO
@@ -290,11 +308,17 @@ if ($slug === 'ref_bibliografica') {
         );
 
         // Respuesta de éxito
-        echo json_encode(["status" => "success", "message" => "Les dades s'han actualitzat correctament a la base de dades."]);
+        Response::success(
+            MissatgesAPI::success('create'),
+            ['id' => $id],
+            200
+        );
     } catch (PDOException $e) {
-        // En caso de error en la conexión o ejecución de la consulta
-        http_response_code(500); // Internal Server Error
-        echo json_encode(["status" => "error", "message" => "S'ha produit un error a la base de dades: "]);
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
     }
 } else if ($slug === 'llibre') {
     $inputData = file_get_contents('php://input');
@@ -305,18 +329,20 @@ if ($slug === 'ref_bibliografica') {
 
     // Validación de los datos recibidos
     if (empty($data['llibre'])) {
-        $errors[] = 'El camp llibre és obligatori.';
+        $errors[] =  ValidacioErrors::requerit('llibre');
     }
 
     if (empty($data['autor'])) {
-        $errors[] = 'El camp autor és obligatori.';
+        $errors[] =  ValidacioErrors::requerit('autor');
     }
 
     // Si hay errores, devolver una respuesta con los errores
     if (!empty($errors)) {
-        http_response_code(400); // Bad Request
-        echo json_encode(["status" => "error", "message" => "S'han produït errors en la validació", "errors" => $errors]);
-        exit;
+        Response::error(
+            MissatgesAPI::error('validacio'),
+            $errors,
+            400
+        );
     }
 
     // Si no hay errores, crear las variables PHP y preparar la consulta PDO
@@ -373,14 +399,23 @@ if ($slug === 'ref_bibliografica') {
 
 
         // Respuesta de éxito
-        echo json_encode(["status" => "success", "message" => "Les dades s'han actualitzat correctament a la base de dades."]);
+        Response::success(
+            MissatgesAPI::success('create'),
+            ['id' => $id],
+            200
+        );
     } catch (PDOException $e) {
-        // En caso de error en la conexión o ejecución de la consulta
-        http_response_code(500); // Internal Server Error
-        echo json_encode(["status" => "error", "message" => "S'ha produit un error a la base de dades"]);
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
     }
 } else {
     // En caso de error en la conexión o ejecución de la consulta
-    http_response_code(500); // Internal Server Error
-    echo json_encode(["status" => "error", "message" => "S'ha produit un error a la base de dades: "]);
+    Response::error(
+        MissatgesAPI::error('errorBD'),
+        [$e->getMessage()],
+        500
+    );
 }

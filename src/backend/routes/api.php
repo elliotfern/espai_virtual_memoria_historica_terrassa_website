@@ -109,11 +109,17 @@ $routes = [
         'view' => BACKEND_API . '/db_fonts_documentals/get-fonts-bibliografia.php',
     ]),
 
-    '/api/fonts_documentals/post/{slug}' => ['view' => 'src/backend/api/db_fonts_documentals/post-fonts-documentals.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+    APP_API . $urlApi['fonts'] . '/post/{slug}' => array_merge($defaultApiConfig, [
+        'view' => BACKEND_API . '/db_fonts_documentals/post-fonts-documentals.php',
+    ]),
 
-    '/api/fonts_documentals/put/{slug}' => ['view' => 'src/backend/api/db_fonts_documentals/put-fonts-documentals.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+    APP_API . $urlApi['fonts'] . '/put/{slug}' => array_merge($defaultApiConfig, [
+        'view' => BACKEND_API . '/db_fonts_documentals/put-fonts-documentals.php',
+    ]),
 
-    '/api/fonts_documentals/delete/{slug}/{id}' => ['view' => 'src/backend/api/db_fonts_documentals/delete-fonts-documentals.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+    APP_API . $urlApi['fonts'] . '/delete/{slug}/{id}' => array_merge($defaultApiConfig, [
+        'view' => BACKEND_API . '/db_fonts_documentals/delete-fonts-documentals.php',
+    ]),
 
     // API db_cronologia
     '/api/cronologia/post' => ['view' => 'src/backend/api/cronologia/post-cronologia.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],

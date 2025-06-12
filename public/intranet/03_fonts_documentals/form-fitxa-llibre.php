@@ -243,7 +243,7 @@ if ($modificaBtn === 1) {
         // Convertir los datos del formulario a JSON
         const jsonData = JSON.stringify(formData);
         const devDirectory = `https://${window.location.hostname}`;
-        let urlAjax = devDirectory + "/api/fonts_documentals/put/ref_bibliografica";
+        let urlAjax = devDirectory + "/api/fonts/put/ref_bibliografica";
 
         try {
             // Hacer la solicitud con fetch y await
@@ -316,7 +316,7 @@ if ($modificaBtn === 1) {
         // Convertir los datos del formulario a JSON
         const jsonData = JSON.stringify(formData);
         const devDirectory = `https://${window.location.hostname}`;
-        let urlAjax = devDirectory + "/api/fonts_documentals/post/ref_bibliografica";
+        let urlAjax = devDirectory + "/api/fonts/post/ref_bibliografica";
 
         try {
             // Hacer la solicitud con fetch y await

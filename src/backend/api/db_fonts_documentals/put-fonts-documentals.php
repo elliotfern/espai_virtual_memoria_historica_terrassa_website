@@ -305,7 +305,7 @@ if ($slug === 'ref_bibliografica') {
     }
 
     // Si no hay errores, crear las variables PHP y preparar la consulta PDO
-    $arxiu = $data['llibre'];
+    $arxiu = $data['arxiu'];
     $descripcio = !empty($data['descripcio']) ? $data['descripcio'] : NULL;
     $codi = $data['codi'];
     $ciutat = !empty($data['ciutat']) ? $data['ciutat'] : NULL;
@@ -322,7 +322,7 @@ if ($slug === 'ref_bibliografica') {
         $sql = "UPDATE aux_bibliografia_arxius_codis SET
         arxiu = :arxiu,
         descripcio = :descripcio,
-        codi = ;codi,
+        codi = :codi,
         web = :web,
         ciutat = :ciutat
         WHERE id = :id";

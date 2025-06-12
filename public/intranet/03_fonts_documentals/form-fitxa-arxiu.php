@@ -109,16 +109,7 @@ if ($modificaBtn === 1) {
 
                 <input type="hidden" name="id" id="id" value="<?php echo $id_old; ?>">
 
-                <div class="col-md-4 mb-4">
-                    <label for="referencia" class="form-label negreta">Referència documentació:</label>
-                    <input type="text" class="form-control" name="referencia" id="referencia" value="<?php echo $referencia_old; ?>">
-                    <div class="avis-form">
-                        * Camp obligatori
-                    </div>
-                </div>
-
-
-                <div class="col-md-4 mb-4">
+                <div class="col-md-12 mb-4">
                     <label for="codi" class="form-label negreta">Codi arxiu:</label>
                     <select class="form-select" name="codi" id="codi" value="<?php echo $codi_old; ?>">
                     </select>
@@ -131,6 +122,14 @@ if ($modificaBtn === 1) {
                         <button id="refreshButtonArxius" class="btn btn-primary btn-sm">Actualitzar llistat arxius</button>
                     </div>
                 </div>
+
+
+                <div class="col-md-8 mb-4">
+                    <label for="referencia" class="form-label negreta">Referència documentació:</label>
+                    <input type="text" class="form-control" name="referencia" id="referencia" value="<?php echo $referencia_old; ?>">
+
+                </div>
+
 
                 <div class="col-md-4 mb-4">
                     <label for="idRepresaliat" class="form-label negreta">Represaliat:</label>
@@ -248,7 +247,7 @@ if ($modificaBtn === 1) {
         // Convertir los datos del formulario a JSON
         const jsonData = JSON.stringify(formData);
         const devDirectory = `https://${window.location.hostname}`;
-        let urlAjax = devDirectory + "/api/fonts_documentals/put/ref_arxivistica";
+        let urlAjax = devDirectory + "/api/fonts/put/ref_arxivistica";
 
         try {
             // Hacer la solicitud con fetch y await
@@ -321,7 +320,7 @@ if ($modificaBtn === 1) {
         // Convertir los datos del formulario a JSON
         const jsonData = JSON.stringify(formData);
         const devDirectory = `https://${window.location.hostname}`;
-        let urlAjax = devDirectory + "/api/fonts_documentals/post/ref_arxivistica";
+        let urlAjax = devDirectory + "/api/fonts/post/ref_arxivistica";
 
         try {
             // Hacer la solicitud con fetch y await

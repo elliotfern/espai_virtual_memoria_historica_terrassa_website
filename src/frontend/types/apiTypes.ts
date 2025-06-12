@@ -19,6 +19,8 @@ export type ApiUrls = {
     COSOS_MILITARS: string;
     LLISTAT_BIBLIOGRAFIA: string;
     LLISTAT_ARXIUS: string;
+    LLIBRE_ID: (id: number) => string;
+    ARXIU_ID: (id: number) => string;
   };
   POST: {
     MUNICIPI: string;
@@ -38,6 +40,8 @@ export type ApiUrls = {
     ESTAT_CIVIL: string;
     NIVELL_ESTUDIS: string;
     SECTOR_ECONOMIC: string;
+    LLIBRE_BIBLIOFRAFIA: string;
+    ARXIU_CODI: string;
   };
   PUT: {
     MUNICIPI: string;
@@ -57,6 +61,8 @@ export type ApiUrls = {
     ESTAT_CIVIL: string;
     NIVELL_ESTUDIS: string;
     SECTOR_ECONOMIC: string;
+    LLIBRE_BIBLIOFRAFIA: string;
+    ARXIU_CODI: string;
   };
   DELETE: {
     MUNICIPI: string;
@@ -76,5 +82,7 @@ export type ApiUrls = {
     ESTAT_CIVIL: string;
     NIVELL_ESTUDIS: string;
     SECTOR_ECONOMIC: string;
+    LLIBRE_BIBLIOFRAFIA: string;
+    ARXIU_CODI: string;
   };
 };

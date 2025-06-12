@@ -25,8 +25,8 @@ export async function taulaLlistatArxius() {
   const reloadKey = 'reload-taula-taulaLlistatArxius';
 
   const columns: Column<EspaiRow>[] = [
-    { header: 'Arxiu', field: 'arxiu' },
     { header: 'Acrònim', field: 'codi' },
+    { header: 'Arxiu', field: 'arxiu' },
   ];
 
   if (isAdmin || isAutor) {

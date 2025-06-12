@@ -510,9 +510,9 @@ if ($slug === "municipis") {
     // URL: /api/auxiliars/get/llistat_arxivistica
 } elseif ($slug === 'llistat_arxivistica') {
     $query = "SELECT l.id, 
-                     CONCAT(l.codi, ', ', SUBSTRING(l.arxiu, 1, 40), '...') AS arxiu
+                     CONCAT(l.codi, ', ', l.arxiu) AS arxiu
               FROM aux_bibliografia_arxius_codis AS l
-              ORDER BY l.arxiu ASC";
+              ORDER BY l.codi ASC";
 
     $result = getData2($query);
     echo json_encode($result);
