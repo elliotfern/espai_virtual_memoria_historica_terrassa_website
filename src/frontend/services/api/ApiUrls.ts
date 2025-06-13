@@ -43,12 +43,15 @@ export const ENDPOINTS = {
   LLIBRE_ID: 'llibreId',
   ARXIU_ID: 'arxiuId',
   ARXIU: 'arxiu',
+  LLISTAT_EXILIATS: 'exiliats',
+  LLISTAT_DEPORTATS: 'deportats',
 } as const;
 
 // Mapa de recursos disponibles
 const RESOURCES = {
   AUXILIARS: 'auxiliars',
   FONTS_DOCUMENTALS: 'fonts',
+  REPRESALIATS: 'represaliats',
 } as const;
 
 const TIPUS = {
@@ -81,6 +84,8 @@ export const API_URLS: ApiUrls = {
     LLISTAT_ARXIUS: `${BASE_URL}/${API}/${RESOURCES.FONTS_DOCUMENTALS}/${TIPUS.GET}/${ENDPOINTS.LLISTAT_ARXIUS}`,
     LLIBRE_ID: (id: number) => `${BASE_URL}/${API}/${RESOURCES.FONTS_DOCUMENTALS}/${TIPUS.GET}/${ENDPOINTS.LLIBRE_ID}?id=${id}`,
     ARXIU_ID: (id: number) => `${BASE_URL}/${API}/${RESOURCES.FONTS_DOCUMENTALS}/${TIPUS.GET}/${ENDPOINTS.ARXIU_ID}?id=${id}`,
+    LLISTAT_EXILIATS: `${BASE_URL}/${API}/${RESOURCES.REPRESALIATS}/${TIPUS.GET}/${ENDPOINTS.LLISTAT_EXILIATS}`,
+    LLISTAT_DEPORTATS: `${BASE_URL}/${API}/${RESOURCES.REPRESALIATS}/${TIPUS.GET}/${ENDPOINTS.LLISTAT_DEPORTATS}`,
   },
 
   POST: {

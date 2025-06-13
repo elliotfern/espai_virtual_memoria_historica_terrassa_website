@@ -4,6 +4,8 @@ import { cargarTabla } from '../../../components/taulaDades/taulaDades';
 import { botonsEstat } from '../../../components/taulaDades/botonsEstat';
 import { modificaFitxa } from '../../../components/modificaFitxaRepresaliat/modificaFitxa';
 import { formTipusRepressio } from './tipusRepressio/formTipusRepressio';
+import { taulaExiliats } from './taulaExiliats';
+import { taulaDeportats } from './taulaDeportats';
 
 export function baseDadesIntranet() {
   const url = window.location.href;
@@ -18,8 +20,14 @@ export function baseDadesIntranet() {
     botonsEstat(pageType[2]);
     cargarTabla(pageType[2], 2);
   } else if (pageType[2] === 'exiliats-deportats') {
-    botonsEstat(pageType[2]);
-    cargarTabla(pageType[2], 2);
+    if (pageType[3] === 'llistat-exiliats') {
+      taulaExiliats();
+    } else if (pageType[3] === 'llistat-deportats') {
+      taulaDeportats();
+    } else {
+      botonsEstat(pageType[2]);
+      cargarTabla(pageType[2], 2);
+    }
   } else if (pageType[2] === 'cost-huma') {
     botonsEstat(pageType[2]);
     cargarTabla(pageType[2], 2);

@@ -57,6 +57,7 @@ $urlIntranet = [
 
 $urlApi = [
     'fonts' => '/fonts',
-    'biografies' => '/biografies'
+    'biografies' => '/biografies',
+    'represaliats' => '/represaliats',
 
 ];

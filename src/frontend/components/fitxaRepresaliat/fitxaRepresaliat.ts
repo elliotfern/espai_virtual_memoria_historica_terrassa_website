@@ -355,8 +355,12 @@ async function mostrarInformacion(tab: string, idPersona: string, label: string)
   const dataActualitzacio = fitxa.data_actualitzacio;
 
   // variables tab1
-  const dataNaixement = formatDatesForm(fitxa.data_naixement) === '' ? '?' : formatDatesForm(fitxa.data_naixement);
-  const dataDefuncio = formatDatesForm(fitxa.data_defuncio) === '' || null ? '?' : formatDatesForm(fitxa.data_defuncio);
+  const dataFormatada = formatDatesForm(fitxa.data_naixement);
+  const dataNaixement = dataFormatada ?? 'Data desconeguda';
+
+  const dataFormatada2 = formatDatesForm(fitxa.data_defuncio);
+  const dataDefuncio = dataFormatada2 ?? 'Data desconeguda';
+
   const ciutatNaixement = fitxa.ciutat_naixement === '' || null ? 'Desconegut' : fitxa.ciutat_naixement;
   const comarcaNaixement = fitxa.comarca_naixement === '' || null ? 'Desconegut' : fitxa.comarca_naixement;
   const provinciaNaixement = fitxa.provincia_naixement === '' || null ? 'Desconegut' : fitxa.provincia_naixement;

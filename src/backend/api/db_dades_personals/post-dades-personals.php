@@ -177,16 +177,17 @@ try {
 
     // Crear la consulta SQL
     $sql = "INSERT INTO db_dades_personals (
-    nom, cognom1, cognom2, categoria, sexe, data_naixement, data_defuncio,
-    municipi_naixement, municipi_defuncio, tipologia_lloc_defuncio, causa_defuncio,
-    municipi_residencia, adreca, estat_civil, estudis, ofici, empresa, sector,
-    observacions, autor, data_creacio, data_actualitzacio, completat, visibilitat
+    nom, cognom1, cognom2, categoria, sexe, data_naixement, data_defuncio, municipi_naixement,
+    municipi_defuncio, tipologia_lloc_defuncio, causa_defuncio, municipi_residencia, adreca,
+    estat_civil, estudis, ofici, empresa, sector, sub_sector, carrec_empresa, filiacio_politica,
+    filiacio_sindical, activitat_durant_guerra, observacions, autor, data_creacio,
+    data_actualitzacio, completat, visibilitat
     ) VALUES (
-    :nom, :cognom1, :cognom2, :categoria, :sexe, :data_naixement, :data_defuncio,
-    :municipi_naixement, :municipi_defuncio, :tipologia_lloc_defuncio, :causa_defuncio,
-    :municipi_residencia, :adreca, :estat_civil, :estudis, :ofici, :empresa, :sector,
-    :sub_sector, :carrec_empresa, :filiacio_politica, :filiacio_sindical, :activitat_durant_guerra,
-    :observacions, :autor, :data_creacio, :data_actualitzacio, :completat, :visibilitat
+        :nom, :cognom1, :cognom2, :categoria, :sexe, :data_naixement, :data_defuncio, :municipi_naixement,
+        :municipi_defuncio, :tipologia_lloc_defuncio, :causa_defuncio, :municipi_residencia, :adreca,
+        :estat_civil, :estudis, :ofici, :empresa, :sector, :sub_sector, :carrec_empresa, :filiacio_politica,
+        :filiacio_sindical, :activitat_durant_guerra, :observacions, :autor, :data_creacio,
+        :data_actualitzacio, :completat, :visibilitat
     )";
 
     // Preparar la consulta

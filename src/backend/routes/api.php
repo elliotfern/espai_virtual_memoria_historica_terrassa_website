@@ -41,7 +41,11 @@ $routes = [
         'view' => BACKEND_API . $url['auxiliars'] . '/delete-auxiliars.php',
     ]),
 
-    // API INTRANET OPERACIONS CRUD
+    // API Taules resum represaliats
+    APP_API . $urlApi['represaliats'] . '/get/{slug}' => array_merge($defaultApiConfig, [
+        'view' => BACKEND_API . $urlApi['represaliats'] . '/get-represaliats.php',
+    ]),
+
     // API db_cost_huma_morts_front
     '/api/cost_huma_front/get/{slug}' => ['view' => 'src/backend/api/db_cost_huma_front/get-cost-huma-front.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
 

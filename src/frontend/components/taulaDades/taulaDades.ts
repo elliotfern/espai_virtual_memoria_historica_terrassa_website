@@ -94,14 +94,16 @@ export async function cargarTabla(pag: string, context: number, completat: numbe
       tr.appendChild(tdNombre);
 
       // Municipio nacimiento
+      const municipiNaixement = `${formatDatesForm(row.data_naixement) ?? 'Data desconeguda'} (${row.ciutat && row.ciutat !== '0' ? row.ciutat : 'Municipi desconegut'})`;
+
       const tdMunicipiNaixement = document.createElement('td');
-      const municipiNaixement = `${formatDatesForm(row.data_naixement) ?? 'Desconegut'} (${row.ciutat ?? 'Desconegut'})`;
       tdMunicipiNaixement.textContent = municipiNaixement;
       tr.appendChild(tdMunicipiNaixement);
 
       // Municipio defunció
+      const municipiDefuncio = `${formatDatesForm(row.data_defuncio) ?? 'Data desconeguda'} (${row.ciutat2 && row.ciutat2 !== '0' ? row.ciutat2 : 'Municipi desconegut'})`;
+
       const tdMunicipiDefuncio = document.createElement('td');
-      const municipiDefuncio = `${formatDatesForm(row.data_defuncio) ?? 'Desconegut'} (${row.ciutat2 ?? 'Desconegut'})`;
       tdMunicipiDefuncio.textContent = municipiDefuncio;
       tr.appendChild(tdMunicipiDefuncio);
 

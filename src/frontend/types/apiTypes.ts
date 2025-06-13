@@ -21,6 +21,8 @@ export type ApiUrls = {
     LLISTAT_ARXIUS: string;
     LLIBRE_ID: (id: number) => string;
     ARXIU_ID: (id: number) => string;
+    LLISTAT_EXILIATS: string;
+    LLISTAT_DEPORTATS: string;
   };
   POST: {
     MUNICIPI: string;

@@ -25,16 +25,27 @@ $routes = [
         'view' => BACKEND_URL . $urlIntranetDir['base_dades'] . '/llistat_general.php'
     ]),
 
-    APP_INTRANET . '/base-dades/represaliats' => array_merge($defaultProtectedConfig, [
-        'view' => BACKEND_URL . $urlIntranetDir['base_dades'] . '/llistat_represaliats.php'
-    ]),
-
+    // Grup 1: Exiliats
     APP_INTRANET . '/base-dades/exiliats-deportats' => array_merge($defaultProtectedConfig, [
         'view' => BACKEND_URL . $urlIntranetDir['base_dades'] . '/llistat_exiliats.php'
     ]),
 
+    APP_INTRANET . '/base-dades/exiliats-deportats/llistat-exiliats' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['base_dades'] . '/1_llistat-exiliats.php'
+    ]),
+
+    APP_INTRANET . '/base-dades/exiliats-deportats/llistat-deportats' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['base_dades'] . '/1_llistat-deportats.php'
+    ]),
+
+    // Grup 2: Cost humà
     APP_INTRANET . '/base-dades/cost-huma' => array_merge($defaultProtectedConfig, [
         'view' => BACKEND_URL . $urlIntranetDir['base_dades'] . '/llistat_cost_huma.php'
+    ]),
+
+    // Grup 3: Represaliats 1939-79
+    APP_INTRANET . '/base-dades/represaliats' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['base_dades'] . '/llistat_represaliats.php'
     ]),
 
     // 01. Modificació dades de les fitxes
