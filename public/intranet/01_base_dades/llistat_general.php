@@ -4,8 +4,13 @@
     <?php if ($isAdmin || $isAutor): ?>
         <h2>Llistat complert de víctimes i represaliats</h2>
 
-        <hr>
-
+        <?php if ($isAdmin): ?>
+            <h2>Llistat de registres duplicats</h2>
+            <ul>
+                <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['base_dades']; ?>/general/llistat-duplicats">Llistat duplicats</a></li>
+            </ul>
+            <hr>
+        <?php endif; ?>
         <input type="text" id="searchInput" placeholder="Cercar...">
 
         <div id="botonsFiltres" class="mb-3 d-flex gap-3" style="margin-top:25px;margin-bottom:25px"></div>

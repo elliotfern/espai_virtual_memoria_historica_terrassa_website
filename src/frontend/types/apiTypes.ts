@@ -23,6 +23,7 @@ export type ApiUrls = {
     ARXIU_ID: (id: number) => string;
     LLISTAT_EXILIATS: string;
     LLISTAT_DEPORTATS: string;
+    LLISTAT_REGISTRES_DUPLICATS: string;
   };
   POST: {
     MUNICIPI: string;

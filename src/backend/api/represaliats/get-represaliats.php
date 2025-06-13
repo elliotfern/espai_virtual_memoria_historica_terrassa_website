@@ -96,4 +96,45 @@ if ($slug === "exiliats") {
             500
         );
     }
+
+    // GET : llistat de represaliats duplicats a la base de dades
+    // URL: https://memoriaterrassa.cat/api/represaliats/get/duplicats
+} else if ($slug === "duplicats") {
+    $db = new Database();
+
+    $query = "SELECT p.id, p.nom, p.cognom1, p.cognom2, p.categoria
+        FROM db_dades_personals p
+        JOIN (
+        SELECT nom, cognom1, cognom2
+        FROM db_dades_personals
+        GROUP BY nom, cognom1, cognom2
+        HAVING COUNT(*) > 1
+        ) dups
+        ON p.nom = dups.nom AND p.cognom1 = dups.cognom1 AND p.cognom2 = dups.cognom2
+        ORDER BY p.nom, p.cognom1, p.cognom2;";
+
+    try {
+        $result = $db->getData($query);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
 }

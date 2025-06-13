@@ -6,6 +6,7 @@ import { modificaFitxa } from '../../../components/modificaFitxaRepresaliat/modi
 import { formTipusRepressio } from './tipusRepressio/formTipusRepressio';
 import { taulaExiliats } from './taulaExiliats';
 import { taulaDeportats } from './taulaDeportats';
+import { taulaDuplicats } from './taulaDuplicats';
 
 export function baseDadesIntranet() {
   const url = window.location.href;
@@ -14,8 +15,12 @@ export function baseDadesIntranet() {
   mostrarBotonsNomesAdmin();
 
   if (pageType[2] === 'general') {
-    botonsEstat(pageType[2]);
-    cargarTabla(pageType[2], 2);
+    if (pageType[3] === 'llistat-duplicats') {
+      taulaDuplicats();
+    } else {
+      botonsEstat(pageType[2]);
+      cargarTabla(pageType[2], 2);
+    }
   } else if (pageType[2] === 'represaliats') {
     botonsEstat(pageType[2]);
     cargarTabla(pageType[2], 2);

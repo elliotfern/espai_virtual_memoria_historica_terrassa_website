@@ -25,6 +25,10 @@ $routes = [
         'view' => BACKEND_URL . $urlIntranetDir['base_dades'] . '/llistat_general.php'
     ]),
 
+    APP_INTRANET . '/base-dades/general/llistat-duplicats' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['base_dades'] . '/llistat-duplicats.php'
+    ]),
+
     // Grup 1: Exiliats
     APP_INTRANET . '/base-dades/exiliats-deportats' => array_merge($defaultProtectedConfig, [
         'view' => BACKEND_URL . $urlIntranetDir['base_dades'] . '/llistat_exiliats.php'
