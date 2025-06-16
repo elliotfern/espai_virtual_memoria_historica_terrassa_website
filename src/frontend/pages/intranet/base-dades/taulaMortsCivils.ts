@@ -9,9 +9,12 @@ import { formatDatesForm } from '../../../services/formatDates/dates';
 interface EspaiRow {
   id: number;
   nom_complet: string;
-  data_defuncio: string;
+  cognom1: string;
   data_naixement: string;
-  es_exiliat: string;
+  data_defuncio: string;
+  cognom2: string;
+  categoria: string;
+  es_mortCivil: string;
 }
 
 type Column<T> = {
@@ -20,15 +23,15 @@ type Column<T> = {
   render?: (value: T[keyof T], row: T) => string;
 };
 
-export async function taulaExiliats() {
+export async function taulaMortsCivils() {
   const isAdmin = await getIsAdmin();
   const isAutor = await getIsAutor();
   const isLogged = await getIsLogged();
-  const reloadKey = 'reload-taula-taulaLlistatExiliats';
+  const reloadKey = 'reload-taula-taulaLlistatMortsCivils';
 
   const columns: Column<EspaiRow>[] = [
+    { header: 'ID', field: 'id' },
     { header: 'Nom i cognoms', field: 'id', render: (_: unknown, row: EspaiRow) => `<a id="${row.id}" title="Fitxa" href="https://${window.location.hostname}/fitxa/${row.id}" target="_blank">${row.nom_complet}</a>` },
-
     {
       header: 'Data naixement',
       field: 'id',
@@ -54,7 +57,7 @@ export async function taulaExiliats() {
         }
       },
     },
-    { header: 'Fitxa exiliat creada', field: 'es_exiliat' },
+    { header: 'Fitxa mort civil creada', field: 'es_mortCivil' },
   ];
 
   if (isAdmin || isAutor || isLogged) {
@@ -69,7 +72,7 @@ export async function taulaExiliats() {
     columns.push({
       header: 'Accions',
       field: 'id',
-      render: (_: unknown, row: EspaiRow) => `<a id="${row.id}" title="Modifica" target="_blank" href="https://${window.location.hostname}/gestio/base-dades/modifica-repressio/10/${row.id}"><button type="button" class="btn btn-warning btn-sm">Modifica repressió</button></a>`,
+      render: (_: unknown, row: EspaiRow) => `<a id="${row.id}" title="Modifica" target="_blank" href="https://${window.location.hostname}/gestio/base-dades/modifica-repressio/4/${row.id}"><button type="button" class="btn btn-warning btn-sm">Modifica repressió</button></a>`,
     });
   }
 
@@ -82,7 +85,7 @@ export async function taulaExiliats() {
           type="button"
           class="btn btn-danger btn-sm delete-button"
           data-id="${row.id}" 
-          data-url="/api/auxiliars/delete/causa_defuncio/${row.id}"
+          data-url="/api/dades_personals/delete/eliminaDuplicat?id=${row.id}"
           data-reload-callback="${reloadKey}"
         >
           Elimina
@@ -91,15 +94,15 @@ export async function taulaExiliats() {
   }
 
   renderTaulaCercadorFiltres<EspaiRow>({
-    url: API_URLS.GET.LLISTAT_EXILIATS,
-    containerId: 'taulaLlistatExiliats',
+    url: API_URLS.GET.LLISTAT_MORTS_CIVILS,
+    containerId: 'taulaLlistatMortsCivils',
     columns,
     filterKeys: ['nom_complet'],
-    filterByField: 'es_exiliat',
+    //filterByField: 'es_deportat',
   });
 
   // Registra el callback con una clave única
-  registerDeleteCallback(reloadKey, () => taulaExiliats());
+  registerDeleteCallback(reloadKey, () => taulaMortsCivils());
 
   // Inicia el listener una sola vez
   initDeleteHandlers();

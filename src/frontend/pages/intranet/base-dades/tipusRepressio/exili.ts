@@ -56,7 +56,7 @@ export async function exili(idRepresaliat: number) {
 
     container.innerHTML = `<h4>Fitxa: <a href="${url}" target="_blank">${nomComplet}</a></h4>`;
 
-    if (inputIdPersona && data2.id !== undefined) {
+    if (inputIdPersona) {
       inputIdPersona.value = String(data2.id);
     }
   }

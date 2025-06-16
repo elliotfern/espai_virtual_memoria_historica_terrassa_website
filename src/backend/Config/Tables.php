@@ -50,6 +50,7 @@ final class Tables
     public const CONTROL_REGISTRE_CANVIS = 'control_registre_canvis';
 
     public const DB_AFUSELLATS = 'db_afusellats';
+    public const DB_PROCESSATS = 'db_processats';
     public const DB_BIOGRAFIES = 'db_biografies';
     public const DB_COST_HUMA_MORTS_CIVILS = 'db_cost_huma_morts_civils';
     public const DB_COST_HUMA_MORTS_FRONT = 'db_cost_huma_morts_front';

@@ -7,6 +7,9 @@ import { formTipusRepressio } from './tipusRepressio/formTipusRepressio';
 import { taulaExiliats } from './taulaExiliats';
 import { taulaDeportats } from './taulaDeportats';
 import { taulaDuplicats } from './taulaDuplicats';
+import { taulaMortsFronts } from './taulaMortsFront';
+import { taulaMortsCivils } from './taulaMortsCivils';
+import { taulaRepresaliaRepublicana } from './taulaRepresaliaRepublicana';
 
 export function baseDadesIntranet() {
   const url = window.location.href;
@@ -34,8 +37,16 @@ export function baseDadesIntranet() {
       cargarTabla(pageType[2], 2);
     }
   } else if (pageType[2] === 'cost-huma') {
-    botonsEstat(pageType[2]);
-    cargarTabla(pageType[2], 2);
+    if (pageType[3] === 'llistat-morts-al-front') {
+      taulaMortsFronts();
+    } else if (pageType[3] === 'llistat-morts-civils') {
+      taulaMortsCivils();
+    } else if (pageType[3] === 'llistat-represalia-republicana') {
+      taulaRepresaliaRepublicana();
+    } else {
+      botonsEstat(pageType[2]);
+      cargarTabla(pageType[2], 2);
+    }
   } else if (pageType[2] === 'modifica-fitxa') {
     modificaFitxa(Number(pageType[3]));
   } else if (pageType[2] === 'nova-fitxa') {

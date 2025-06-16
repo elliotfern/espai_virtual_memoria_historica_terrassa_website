@@ -29,22 +29,34 @@ $routes = [
         'view' => BACKEND_URL . $urlIntranetDir['base_dades'] . '/llistat-duplicats.php'
     ]),
 
-    // Grup 1: Exiliats
+    // Grup 2: Exiliats
     APP_INTRANET . '/base-dades/exiliats-deportats' => array_merge($defaultProtectedConfig, [
         'view' => BACKEND_URL . $urlIntranetDir['base_dades'] . '/llistat_exiliats.php'
     ]),
 
     APP_INTRANET . '/base-dades/exiliats-deportats/llistat-exiliats' => array_merge($defaultProtectedConfig, [
-        'view' => BACKEND_URL . $urlIntranetDir['base_dades'] . '/1_llistat-exiliats.php'
+        'view' => BACKEND_URL . $urlIntranetDir['base_dades'] . '/2_llistat-exiliats.php'
     ]),
 
     APP_INTRANET . '/base-dades/exiliats-deportats/llistat-deportats' => array_merge($defaultProtectedConfig, [
-        'view' => BACKEND_URL . $urlIntranetDir['base_dades'] . '/1_llistat-deportats.php'
+        'view' => BACKEND_URL . $urlIntranetDir['base_dades'] . '/2_llistat-deportats.php'
     ]),
 
-    // Grup 2: Cost humà
+    // Grup 1: Cost humà
     APP_INTRANET . '/base-dades/cost-huma' => array_merge($defaultProtectedConfig, [
         'view' => BACKEND_URL . $urlIntranetDir['base_dades'] . '/llistat_cost_huma.php'
+    ]),
+
+    APP_INTRANET . '/base-dades/cost-huma/llistat-morts-al-front' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['base_dades'] . '/1_llistat-morts_al_front.php'
+    ]),
+
+    APP_INTRANET . '/base-dades/cost-huma/llistat-morts-civils' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['base_dades'] . '/1_llistat-morts_civils.php'
+    ]),
+
+    APP_INTRANET . '/base-dades/cost-huma/llistat-represalia-republicana' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['base_dades'] . '/1_llistat-represalia_republicana.php'
     ]),
 
     // Grup 3: Represaliats 1939-79

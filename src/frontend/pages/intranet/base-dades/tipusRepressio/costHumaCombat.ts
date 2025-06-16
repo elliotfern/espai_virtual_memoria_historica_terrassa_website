@@ -45,9 +45,18 @@ export async function costHumaCombat(idRepresaliat: number) {
 
   const response = await fetchDataGet<Fitxa>(`/api/cost_huma_front/get/fitxaRepressio?id=${idRepresaliat}`);
   const data2 = await fetchDataGet<Fitxa>(`/api/dades_personals/get/?type=nomCognoms&id=${idRepresaliat}`);
+  const btn = document.getElementById('btnMortsCombat') as HTMLButtonElement;
 
-  if (!response || !response.data) return;
-  data = response.data;
+  if (!response || !response.data) {
+    if (btn) {
+      btn.textContent = 'Inserir dades';
+    }
+  } else {
+    if (btn) {
+      btn.textContent = 'Modificar dades';
+    }
+    data = response.data;
+  }
 
   if (data2) {
     const container = document.getElementById('fitxaNomCognoms');
@@ -96,11 +105,6 @@ export async function costHumaCombat(idRepresaliat: number) {
       });
     }
   } else {
-    const btn = document.getElementById('btnMortsCombat') as HTMLButtonElement;
-    if (btn) {
-      btn.textContent = 'Modificar dades';
-    }
-
     const mortCombatForm = document.getElementById('mortCombatForm');
     if (mortCombatForm) {
       mortCombatForm.addEventListener('submit', function (event) {

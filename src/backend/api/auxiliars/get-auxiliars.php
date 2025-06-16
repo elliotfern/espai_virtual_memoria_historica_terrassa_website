@@ -370,12 +370,22 @@ if ($slug === "municipis") {
     $result = getData2($query);
     echo json_encode($result);
 
-    // GET : Procediments judicials
+    // GET : Tipus Procediments judicials
     // URL: /api/auxiliars/get/procediments
 } elseif ($slug === "procediments") {
-    $query = "SELECT pj.id, pj.procediment_cat
+    $query = "SELECT pj.id, pj.procediment_ca
               FROM aux_procediment_judicial AS pj
-              ORDER BY pj.procediment_cat ASC";
+              ORDER BY pj.procediment_ca ASC";
+
+    $result = getData2($query);
+    echo json_encode($result);
+
+    // GET : tipus judicis
+    // URL: /api/auxiliars/get/tipusJudici
+} elseif ($slug === "tipusJudici") {
+    $query = "SELECT id, tipusJudici_ca, tipusJudici_es, tipusJudici_en, tipusJudici_fr, tipusJudici_it, tipusJudici_pt
+              FROM aux_tipus_judici
+              ORDER BY tipusJudici_ca ASC";
 
     $result = getData2($query);
     echo json_encode($result);
@@ -383,9 +393,9 @@ if ($slug === "municipis") {
     // GET : Llistat jutjats
     // URL: /api/auxiliars/get/jutjats
 } elseif ($slug === "jutjats") {
-    $query = "SELECT j.id, j.jutjat_cat
+    $query = "SELECT j.id, j.jutjat_ca
               FROM aux_jutjats AS j
-              ORDER BY j.jutjat_cat ASC";
+              ORDER BY j.jutjat_ca ASC";
 
     $result = getData2($query);
     echo json_encode($result);
@@ -393,9 +403,9 @@ if ($slug === "municipis") {
     // GET : Llistat tipus acusacions
     // URL: /api/auxiliars/get/acusacions
 } elseif ($slug === "acusacions") {
-    $query = "SELECT sa.id, sa.acusacio_cat
+    $query = "SELECT sa.id, sa.acusacio_ca
               FROM aux_acusacions AS sa
-              ORDER BY sa.acusacio_cat ASC";
+              ORDER BY sa.acusacio_ca ASC";
 
     $result = getData2($query);
     echo json_encode($result);
@@ -403,12 +413,23 @@ if ($slug === "municipis") {
     // GET : Llistat sentencies
     // URL: /api/auxiliars/get/sentencies
 } elseif ($slug === "sentencies") {
-    $query = "SELECT sen.id, sen.sentencia_cat
+    $query = "SELECT sen.id, sen.sentencia_ca
               FROM aux_sentencies AS sen
-              ORDER BY sen.sentencia_cat ASC";
+              ORDER BY sen.sentencia_ca ASC";
 
     $result = getData2($query);
     echo json_encode($result);
+
+    // GET : Llistat penes
+    // URL: /api/auxiliars/get/penes
+} elseif ($slug === "penes") {
+    $query = "SELECT id, pena_ca
+              FROM aux_penes
+              ORDER BY pena_ca ASC";
+
+    $result = getData2($query);
+    echo json_encode($result);
+
 
     // GET : Condició civil/militar
     // URL: /api/auxiliars/get/condicio_civil_militar

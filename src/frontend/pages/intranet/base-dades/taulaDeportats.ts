@@ -3,6 +3,7 @@ import { renderTaulaCercadorFiltres } from '../../../services/renderTaula/render
 import { initDeleteHandlers, registerDeleteCallback } from '../../../services/fetchData/handleDelete';
 import { getIsAdmin } from '../../../services/auth/getIsAdmin';
 import { getIsAutor } from '../../../services/auth/getIsAutor';
+import { getIsLogged } from '../../../services/auth/getIsLogged';
 import { formatDatesForm } from '../../../services/formatDates/dates';
 
 interface EspaiRow {
@@ -22,6 +23,7 @@ type Column<T> = {
 export async function taulaDeportats() {
   const isAdmin = await getIsAdmin();
   const isAutor = await getIsAutor();
+  const isLogged = await getIsLogged();
   const reloadKey = 'reload-taula-taulaLlistatDeportats';
 
   const columns: Column<EspaiRow>[] = [
@@ -55,11 +57,19 @@ export async function taulaDeportats() {
     { header: 'Fitxa deportat creada', field: 'es_deportat' },
   ];
 
-  if (isAdmin || isAutor) {
+  if (isAdmin || isAutor || isLogged) {
     columns.push({
       header: 'Accions',
       field: 'id',
-      render: (_: unknown, row: EspaiRow) => `<a id="${row.id}" title="Modifica" href="https://${window.location.hostname}/gestio/base-dades/modifica-repressio/2/${row.id}"><button type="button" class="btn btn-warning btn-sm">Modifica</button></a>`,
+      render: (_: unknown, row: EspaiRow) => `<a id="${row.id}" title="Modifica" target="_blank" href="https://${window.location.hostname}/gestio/base-dades/modifica-fitxa/${row.id}"><button type="button" class="btn btn-success btn-sm">Modifica Dades personals</button></a>`,
+    });
+  }
+
+  if (isAdmin || isAutor || isLogged) {
+    columns.push({
+      header: 'Accions',
+      field: 'id',
+      render: (_: unknown, row: EspaiRow) => `<a id="${row.id}" title="Modifica" target="_blank" href="https://${window.location.hostname}/gestio/base-dades/modifica-repressio/2/${row.id}"><button type="button" class="btn btn-warning btn-sm">Modifica repressió</button></a>`,
     });
   }
 

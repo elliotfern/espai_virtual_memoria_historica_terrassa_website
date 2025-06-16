@@ -24,49 +24,18 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
 }
 
 // 1 Pagina informacio fitxa afusellat
-// ruta GET => "/api/afusellats/get/fitxa&id=35"
-if ($slug === "fitxa") {
+// ruta GET => "/api/afusellats/get/fitxaRepressio&id=35"
+if ($slug === "fitxaRepressio") {
     $db = new Database();
     $id = $_GET['id'];
 
     $query = "SELECT 
             a.id,
-            pj.procediment_cat, 
-            pj.id AS procediment_id, 
-            a.num_causa, 
-            a.data_inici_proces, 
-            a.jutge_instructor, 
-            a.secretari_instructor, 
-            j.jutjat_cat AS jutjat, 
-            j.id AS jutjat_id, 
-            a.any_inicial, 
-            a.consell_guerra_data, 
-            a.president_tribunal, 
-            a.defensor, 
-            a.fiscal, 
-            a.ponent, 
-            a.tribunal_vocals, 
-            acu.acusacio_cat AS acusacio, 
-            acu.id AS acusacio_id, 
-            acu2.acusacio_cat AS acusacio2, 
-            acu2.id AS acusacio_id2, 
-            a.testimoni_acusacio, 
-            a.sentencia_data, 
-            sen.sentencia_cat AS sentencia, 
-            sen.id AS sentencia_id, 
-            a.data_sentencia, 
+            a.idPersona,
             a.data_execucio,
-            a.ref_num_arxiu, 
-            a.font_1, 
-            a.font_2, 
-            a.familiars, 
+            a.lloc_execucio_enterrament,
             a.observacions
             FROM db_afusellats AS a
-            LEFT JOIN aux_procediment_judicial AS pj ON a.procediment = pj.id
-            LEFT JOIN aux_jutjats as j ON a.jutjat = j.id
-            LEFT JOIN aux_acusacions AS acu ON a.acusacio = acu.id
-            LEFT JOIN aux_acusacions AS acu2 ON a.acusacio_2 = acu2.id
-            LEFT JOIN aux_sentencies AS sen ON a.sentencia = sen.id
             WHERE a.idPersona = :idPersona";
     try {
         $params = [':idPersona' => $id];

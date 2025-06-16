@@ -48,9 +48,18 @@ export async function costHumaCivils(idRepresaliat: number) {
 
   const response = await fetchDataGet<Fitxa>(`/api/cost_huma_civils/get/fitxaRepressio?id=${idRepresaliat}`);
   const data2 = await fetchDataGet<Fitxa>(`/api/dades_personals/get/?type=nomCognoms&id=${idRepresaliat}`);
+  const btn = document.getElementById('btnMortsCivils') as HTMLButtonElement;
 
-  if (!response || !response.data) return;
-  data = response.data;
+  if (!response || !response.data) {
+    if (btn) {
+      btn.textContent = 'Inserir dades';
+    }
+  } else {
+    if (btn) {
+      btn.textContent = 'Modificar dades';
+    }
+    data = response.data;
+  }
 
   if (data2) {
     const container = document.getElementById('fitxaNomCognoms');
@@ -105,11 +114,6 @@ export async function costHumaCivils(idRepresaliat: number) {
       });
     }
   } else {
-    const btn = document.getElementById('btnMortsCivils') as HTMLButtonElement;
-    if (btn) {
-      btn.textContent = 'Modificar dades';
-    }
-
     const mortCivilsForm = document.getElementById('mortCivilsForm');
     if (mortCivilsForm) {
       mortCivilsForm.addEventListener('submit', function (event) {

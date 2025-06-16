@@ -4,9 +4,9 @@
     <?php if ($isAdmin || $isAutor || $isUserCostHuma): ?>
         <h2>Cost humà de la Guerra Civil (1936-1939):</h2>
         <ul>
-            <li>Cost humà de desapareguts i morts al front</li>
-            <li>Cost humà de civils</li>
-            <li>Represàlia republicana</li>
+            <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['base_dades']; ?>/cost-huma/llistat-morts-al-front">Llistat de desapareguts i morts al front</a></li>
+            <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['base_dades']; ?>/cost-huma/llistat-morts-civils">Llistat de morts civils</a></li>
+            <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['base_dades']; ?>/cost-huma/llistat-represalia-republicana">Llistat de la represàlia republicana</a></li>
         </ul>
         <hr>
 

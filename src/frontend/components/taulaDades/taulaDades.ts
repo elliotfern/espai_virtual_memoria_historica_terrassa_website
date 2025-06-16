@@ -6,6 +6,8 @@ import { getIsAdmin } from '../../services/auth/getIsAdmin';
 import { getIsAutor } from '../../services/auth/getIsAutor';
 import { getIsLogged } from '../../services/auth/getIsLogged';
 import { formatDatesForm } from '../../services/formatDates/dates';
+import { registerDeleteCallback } from '../../services/fetchData/handleDelete';
+import { initDeleteHandlers } from '../../services/fetchData/handleDelete';
 
 export async function cargarTabla(pag: string, context: number, completat: number | null = null) {
   const devDirectory = `https://${window.location.hostname}`;
@@ -210,17 +212,26 @@ export async function cargarTabla(pag: string, context: number, completat: numbe
 
       // Botón Eliminar
       if (context === 2 && isAdmin) {
+        const reloadKey = 'reload-taula-taulaLlistat';
         const tdEliminar = document.createElement('td');
-        const btnEliminar = document.createElement('button');
-        btnEliminar.textContent = 'Eliminar';
-        btnEliminar.classList.add('btn', 'btn-sm', 'btn-danger');
-        btnEliminar.onclick = function () {
-          if (confirm('¿Estás seguro de que deseas eliminar este registro?')) {
-            window.location.href = `/afusellats/eliminar/${row.id}`;
-          }
-        };
-        tdEliminar.appendChild(btnEliminar);
+        tdEliminar.innerHTML = `
+          <button 
+            type="button"
+            class="btn btn-danger btn-sm delete-button"
+            data-id="${row.id}" 
+            data-url="/api/dades_personals/delete/eliminaDuplicat?id=${row.id}"
+            data-reload-callback="${reloadKey}"
+          >
+            Elimina
+          </button>
+        `;
         tr.appendChild(tdEliminar);
+
+        // Registra el callback con una clave única
+        registerDeleteCallback(reloadKey, () => obtenerDatos());
+
+        // Inicia el listener una sola vez
+        initDeleteHandlers();
       } else if (context === 1) {
         // nada
       } else {
