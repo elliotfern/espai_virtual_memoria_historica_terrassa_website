@@ -4,24 +4,31 @@ import { formatDatesForm } from '../../services/formatDates/dates';
 
 // Mostrar la información dependiendo de la categoría
 export const fitxaTipusRepressio = async (categoriaNumerica: string, fitxa2: FitxaJudicial): Promise<void> => {
+  const divInfo = document.getElementById('fitxa-categoria');
+  if (!divInfo) return;
+
+  // 1. Mostrar el div y el spinner
+  divInfo.style.display = 'block';
+  divInfo.innerHTML = `<div class="spinner">Carregant dades...</div>`; // Pon aquí tu HTML spinner
+
+  // 2. Esperar por los datos (simulado o real)
   const colectiusArray = await categoriesRepressio('ca');
 
-  const dades = fitxa2.data;
-  // Convertimos el array en un objeto tipo diccionario
+  // 3. Cuando estén los datos, construir el contenido
   const colectiusRepressio = colectiusArray.reduce((acc, categoria) => {
     acc[categoria.id] = categoria.name;
     return acc;
   }, {} as { [key: string]: string });
 
-  const divInfo = document.getElementById('fitxa-categoria');
-  if (!divInfo) return;
+  const dades = fitxa2;
 
-  divInfo.innerHTML += `
-      <h3><span class="blau1 raleway">${colectiusRepressio[categoriaNumerica]}: </span></h3>
-    `;
+  // 4. Reemplaza el contenido del div con la info final (quitando spinner)
+  let htmlContent = `
+    <h3><span class="blau1 raleway">${colectiusRepressio[categoriaNumerica]}: </span></h3>
+  `;
 
   if (parseInt(categoriaNumerica) === 1) {
-    divInfo.innerHTML += `
+    htmlContent += `
     <div class="negreta raleway">
         <p><span class='marro2'>Data d'execució:</span> <span class='blau1'>${formatDatesForm(dades.data_execucio)}</span></p>
         <p><span class='marro2'>Lloc d'execució:</span> <span class='blau1'>${dades.lloc_execucio}</span> ${dades.ciutat_execucio && dades.ciutat_execucio.trim() !== '' ? `<span class="normal blau1">(${dades.ciutat_execucio})</span>` : ''}</p>
@@ -29,20 +36,205 @@ export const fitxaTipusRepressio = async (categoriaNumerica: string, fitxa2: Fit
         ${dades.observacions && dades.observacions.trim() !== '' ? `  <p><span class='marro2'>Observacions:</span> <span class='blau1'> ${dades.observacions}.</span></p>` : ''}
     </div>`;
   } else if (parseInt(categoriaNumerica) === 2) {
-    divInfo.innerHTML += `
-          <h5>En elaboració:</h5>
+    const situacioDeportat = dades.situacio && dades.situacio.trim() !== '' ? dades.situacio : 'Desconegut';
+    const situacioId = dades.situacioId;
+    let alliberamentMort = '';
+    let municipiMort = '';
+
+    if (situacioId === 1) {
+      alliberamentMort = 'Data de defunció';
+      municipiMort = 'Municipi de defunció';
+    } else if (situacioId === 2) {
+      alliberamentMort = "Data d'alliberament del camp";
+      municipiMort = "Municipi d'alliberament";
+    } else {
+      alliberamentMort = "Data d'evasió";
+      municipiMort = "Municipi d'evasió";
+    }
+
+    const dataAlliberament = dades.data_alliberament && dades.data_alliberament.trim() !== '' ? formatDatesForm(dades.data_alliberament) : 'Desconeguda';
+    const municipiAlliberament = dades.ciutat_mort_alliberament && dades.ciutat_mort_alliberament.trim() !== '' ? dades.ciutat_mort_alliberament : 'Desconegut';
+    const tipusPreso = dades.preso_tipus && dades.preso_tipus.trim() !== '' ? dades.preso_tipus : 'Desconeguda';
+    const nomPreso = dades.preso_nom && dades.preso_nom.trim() !== '' ? dades.preso_nom : 'Desconeguda';
+    const dataSortidaPreso = dades.preso_data_sortida && dades.preso_data_sortida.trim() !== '' ? formatDatesForm(dades.preso_data_sortida) : 'Desconeguda';
+    const municipiPreso = dades.preso_localitat && dades.preso_localitat.trim() !== '' ? dades.preso_localitat : 'Desconegut';
+    const numMatriculaPreso = dades.preso_num_matricula && dades.preso_num_matricula.trim() !== '' ? dades.preso_num_matricula : 'Desconegut';
+
+    const nomCamp = dades.deportacio_nom_camp && dades.deportacio_nom_camp.trim() !== '' ? dades.deportacio_nom_camp : 'Desconegut';
+    const dataEntradaCamp = dades.deportacio_data_entrada && dades.deportacio_data_entrada.trim() !== '' ? formatDatesForm(dades.deportacio_data_entrada) : 'Desconeguda';
+    const numeroMatriculaCamp = dades.deportacio_num_matricula && dades.deportacio_num_matricula.trim() !== '' ? dades.deportacio_num_matricula : 'Desconegut';
+    const nomSubCamp = dades.deportacio_nom_sub && dades.deportacio_nom_sub.trim() !== '' ? dades.deportacio_nom_sub : 'Desconegut';
+    const dataEntradaSubCamp = dades.deportacio_data_entrada_subcamp && dades.deportacio_data_entrada_subcamp.trim() !== '' ? dades.deportacio_data_entrada_subcamp : 'Desconegut';
+    const numeroMatriculaSubCamp = dades.deportacio_nom_matricula_subcamp && dades.deportacio_nom_matricula_subcamp.trim() !== '' ? dades.deportacio_nom_matricula_subcamp : 'Desconegut';
+
+    htmlContent += `
+    <div class="negreta raleway">
+      <div style="margin-top:25px">
+        <h5><span class="negreta blau1">1) Dades bàsiques:</span></h5>
+          <p><span class='marro2'>Situació del deportat: </span> <span class='blau1'>${situacioDeportat}</span></p>
+          <p><span class='marro2'>${alliberamentMort}:</span> <span class='blau1'>${dataAlliberament}</span></p>
+          <p><span class='marro2'>${municipiMort}:</span> <span class='blau1'>${municipiAlliberament}</span></p>
+        </div>
+
+      <div style="margin-top:25px">
+        <h5><span class="negreta blau1">2) Dades sobre l'empresonament (previ a la deportació):</span></h5>
+          <p><span class='marro2'>Tipus de presó: </span> <span class='blau1'>${tipusPreso}</span></p>
+          <p><span class='marro2'>Nom de la presó:</span> <span class='blau1'>${nomPreso}</span></p>
+          <p><span class='marro2'>Data de la sortida de la presó:</span> <span class='blau1'>${dataSortidaPreso}</span></p>
+          <p><span class='marro2'>Municipi de la presó:</span> <span class='blau1'>${municipiPreso}</span></p>
+          <p><span class='marro2'>Número de matrícula presó:</span> <span class='blau1'>${numMatriculaPreso}</span></p>
+        </div>
+
+      <div style="margin-top:25px">
+        <h5><span class="negreta blau1">3) Dades sobre la deportació:</span></h5>
+          <p><span class='marro2'>Nom del camp de deportació : </span> <span class='blau1'>${nomCamp}</span></p>
+          <p><span class='marro2'>Data d'entrada al camp</span> <span class='blau1'>${dataEntradaCamp}</span></p>
+          <p><span class='marro2'>Número de matrícula:</span> <span class='blau1'>${numeroMatriculaCamp}</span></p>
+          <p><span class='marro2'>Nom del subcamp :</span> <span class='blau1'>${nomSubCamp}</span></p>
+          <p><span class='marro2'>Data d'entrada al subcamp:</span> <span class='blau1'>${dataEntradaSubCamp}</span></p>
+          <p><span class='marro2'>Número de matrícula del subcamp:</span> <span class='blau1'>${numeroMatriculaSubCamp}</span></p>
+        </div>
+    </div>
         `;
   } else if (parseInt(categoriaNumerica) === 3) {
-    divInfo.innerHTML += `
-          <h5>En elaboració :</h5>
+    const condicio = dades.condicio && dades.condicio.trim() !== '' ? dades.condicio : 'Desconegut';
+    const bandol = dades.bandol && dades.bandol.trim() !== '' ? dades.bandol : 'Desconegut';
+    const any_lleva = dades.any_lleva && dades.any_lleva.trim() !== '' ? dades.any_lleva : 'Desconegut';
+
+    const unitat_inicial = dades.unitat_inicial && dades.unitat_inicial.trim() !== '' ? dades.unitat_inicial : 'Desconegut';
+    const cos = dades.cos && dades.cos.trim() !== '' ? dades.cos : 'Desconegut';
+    const unitat_final = dades.unitat_final && dades.unitat_final.trim() !== '' ? dades.unitat_final : 'Desconegut';
+    const graduacio_final = dades.graduacio_final && dades.graduacio_final.trim() !== '' ? dades.graduacio_final : 'Desconegut';
+    const periple_militar = dades.periple_militar && dades.periple_militar.trim() !== '' ? dades.periple_militar : 'Desconegut';
+
+    const circumstancia_mort = dades.circumstancia_mort && dades.circumstancia_mort.trim() !== '' ? dades.circumstancia_mort : 'Desconeguda';
+    const desaparegut_data = dades.desaparegut_data && dades.desaparegut_data.trim() !== '' ? formatDatesForm(dades.desaparegut_data) : '-';
+    const desaparegut_lloc = dades.desaparegut_lloc && dades.desaparegut_lloc.trim() !== '' ? dades.desaparegut_lloc : '-';
+    const desaparegut_data_aparicio = dades.desaparegut_data_aparicio && dades.desaparegut_data_aparicio.trim() !== '' ? formatDatesForm(dades.desaparegut_data_aparicio) : '-';
+    const desaparegut_lloc_aparicio = dades.desaparegut_lloc_aparicio && dades.desaparegut_lloc_aparicio.trim() !== '' ? dades.desaparegut_lloc_aparicio : '-';
+
+    htmlContent += `
+    <div class="negreta raleway">
+      <div style="margin-top:25px">
+        <h5><span class="negreta blau1">1) Dades bàsiques:</span></h5>
+          <p><span class='marro2'>Condició: </span> <span class='blau1'>${condicio}</span></p>
+          <p><span class='marro2'>Bàndol durant la guerra:</span> <span class='blau1'>${bandol}</span></p>
+          <p><span class='marro2'>Any lleva:</span> <span class='blau1'>${any_lleva}</span></p>
+        </div>
+
+      <div style="margin-top:25px">
+        <h5><span class="negreta blau1">2) Dades militars:</span></h5>
+          <p><span class='marro2'>Unitat inicial:</span> <span class='blau1'>${unitat_inicial}</span></p>
+          <p><span class='marro2'>Cos militar:</span> <span class='blau1'>${cos}</span></p>
+          <p><span class='marro2'>Unitat final:</span> <span class='blau1'>${unitat_final}</span></p>
+          <p><span class='marro2'>Graduació final:</span> <span class='blau1'>${graduacio_final}</span></p>
+          <p><span class='marro2'>Periple militar:</span> <span class='blau1'>${periple_militar}</span></p>
+        </div>
+
+      <div style="margin-top:25px">
+        <h5><span class="negreta blau1">3) Circumstàncies de la mort:</span></h5>
+          <p><span class='marro2'>Causa de defunció/desaparació:</span> <span class='blau1'>${circumstancia_mort}</span></p>
+          <p><span class='marro2'>Data de la desaparació:</span> <span class='blau1'>${desaparegut_data}</span></p>
+          <p><span class='marro2'>Lloc de desaparació:</span> <span class='blau1'>${desaparegut_lloc}</span></p>
+          <p><span class='marro2'>Data d'aparació del desaparegut:</span> <span class='blau1'>${desaparegut_data_aparicio}</span></p>
+          <p><span class='marro2'>Lloc d'aparació del desaparegut:</span> <span class='blau1'>${desaparegut_lloc_aparicio}</span></p>
+        </div>
+    </div>
 
         `;
   } else if (parseInt(categoriaNumerica) === 4) {
-    divInfo.innerHTML += `
-          <h5>En elaboració:</h5>
-        `;
+    const cirscumstancies_mortId = dades.cirscumstancies_mortId;
+
+    let data_bombardeig = '';
+    let municipi_bombardeig = '';
+    let lloc_bombardeig = '';
+    let data_detencio = '';
+    let lloc_detencio = '';
+    let qui_detencio = '';
+    let qui_ordena_afusellat = '';
+    let qui_executa_afusellat = '';
+    let titolMunicipiCadaver = '';
+    let contingutHtmlBombargeig = '';
+    let contingutHtmlAssassinat = '';
+    let contingutHtmlAfusellat = '';
+
+    if (cirscumstancies_mortId === 5) {
+      // Causa de la mort: Bombardeig
+      data_bombardeig = dades.data_bombardeig && dades.data_bombardeig.trim() !== '' ? dades.data_bombardeig : 'Desconegut';
+      municipi_bombardeig = dades.municipi_bombardeig && dades.municipi_bombardeig.trim() !== '' ? dades.municipi_bombardeig : 'Desconegut';
+      lloc_bombardeig = dades.lloc_bombardeig && dades.lloc_bombardeig.trim() !== '' ? dades.lloc_bombardeig : 'Desconegut';
+      const responsablesMap: Record<string, string> = {
+        '1': 'Aviació feixista italiana',
+        '2': 'Aviació nazista alemanya',
+        '3': 'Aviació franquista',
+      };
+
+      titolMunicipiCadaver = 'Municipi del bombargeig';
+      const responsable_bombardeig = dades.responsable_bombardeig != null ? responsablesMap[dades.responsable_bombardeig] || 'Desconegut' : 'Desconegut';
+
+      contingutHtmlBombargeig = `
+        <div class="negreta raleway">
+          <div style="margin-top:25px">
+            <h5><span class="negreta blau1">Causa de la mort: Bombardeig</span></h5>
+              <p><span class='marro2'>Data del bombardeig: </span> <span class='blau1'>${data_bombardeig}</span></p>
+              <p><span class='marro2'>Municipi del bombardeig:</span> <span class='blau1'>${municipi_bombardeig}</span></p>
+              <p><span class='marro2'>Tipus d'espai del bombardeig:</span> <span class='blau1'>${lloc_bombardeig}</span></p>
+              <p><span class='marro2'>Responsable del bombardeig:</span> <span class='blau1'>${responsable_bombardeig}</span></p>
+            </div>
+        </div> `;
+    } else if (cirscumstancies_mortId === 8) {
+      // Causa de la mort: Extra-judicial (assassinat)
+      data_detencio = dades.data_detencio && dades.data_detencio.trim() !== '' ? dades.data_detencio : 'Desconegut';
+      lloc_detencio = dades.lloc_detencio && dades.lloc_detencio.trim() !== '' ? dades.lloc_detencio : 'Desconegut';
+      qui_detencio = dades.qui_detencio && dades.qui_detencio.trim() !== '' ? dades.qui_detencio : 'Desconegut';
+      titolMunicipiCadaver = 'Municipi assassinat extra-judicial';
+
+      contingutHtmlAssassinat = `
+        <div class="negreta raleway">
+          <div style="margin-top:25px">
+            <h5><span class="negreta blau1">Causa de la mort: extra-judicial (assassinat)</span></h5>
+              <p><span class='marro2'>Data de la detenció: </span> <span class='blau1'>${data_detencio}</span></p>
+              <p><span class='marro2'>Lloc de la detenció:</span> <span class='blau1'>${lloc_detencio}</span></p>
+              <p><span class='marro2'>Qui el deté?:</span> <span class='blau1'>${qui_detencio}</span></p>
+            </div>
+        </div> `;
+    } else if (cirscumstancies_mortId === 9) {
+      //Causa de la mort: Afusellat
+      qui_ordena_afusellat = dades.qui_ordena_afusellat && dades.qui_ordena_afusellat.trim() !== '' ? dades.qui_ordena_afusellat : 'Desconegut';
+      qui_executa_afusellat = dades.qui_executa_afusellat && dades.qui_executa_afusellat.trim() !== '' ? dades.qui_executa_afusellat : 'Desconegut';
+      titolMunicipiCadaver = 'Municipi afusellament';
+
+      contingutHtmlAfusellat = `
+        <div class="negreta raleway">
+          <div style="margin-top:25px">
+            <h5><span class="negreta blau1">Causa de la mort: afusellat</span></h5>
+              <p><span class='marro2'>Qui ordena l'afusellament: </span> <span class='blau1'>${qui_ordena_afusellat}</span></p>
+              <p><span class='marro2'>Qui l'executa:</span> <span class='blau1'>${qui_executa_afusellat}</span></p>
+            </div>
+        </div> `;
+    } else {
+      titolMunicipiCadaver = 'Municipi trobada del cadàver';
+    }
+
+    const cirscumstancies_mort = dades.cirscumstancies_mort && dades.cirscumstancies_mort.trim() !== '' ? dades.cirscumstancies_mort : 'Desconegut';
+    const data_trobada_cadaver = dades.data_trobada_cadaver && dades.data_trobada_cadaver.trim() !== '' ? formatDatesForm(dades.data_trobada_cadaver) : 'Desconegut';
+    const lloc_trobada_cadaver = dades.lloc_trobada_cadaver && dades.lloc_trobada_cadaver.trim() !== '' ? dades.lloc_trobada_cadaver : 'Desconegut';
+
+    htmlContent += `
+    <div class="negreta raleway">
+      <div style="margin-top:25px">
+        <h5><span class="negreta blau1">1) Dades bàsiques:</span></h5>
+          <p><span class='marro2'>Circumstàncies de la mort: </span> <span class='blau1'>${cirscumstancies_mort}</span></p>
+          <p><span class='marro2'>Data trobada del càdaver:</span> <span class='blau1'>${data_trobada_cadaver}</span></p>
+          <p><span class='marro2'>${titolMunicipiCadaver}:</span> <span class='blau1'>${lloc_trobada_cadaver}</span></p>
+        </div>
+    </div> `;
+
+    htmlContent += contingutHtmlBombargeig;
+    htmlContent += contingutHtmlAssassinat;
+    htmlContent += contingutHtmlAfusellat;
   } else if (parseInt(categoriaNumerica) === 5) {
-    divInfo.innerHTML += `
+    htmlContent += `
           <h5>En elaboració:</h5>
         `;
   } else if (parseInt(categoriaNumerica) === 6) {
@@ -74,9 +266,8 @@ export const fitxaTipusRepressio = async (categoriaNumerica: string, fitxa2: Fit
     const testimoniAcusacio = dades.testimoni_acusacio && dades.testimoni_acusacio.trim() !== '' ? dades.testimoni_acusacio : 'Desconegut';
     const observacions = dades.observacions && dades.observacions.trim() !== '' ? dades.observacions : 'Sense dades';
 
-    divInfo.innerHTML += `
+    htmlContent += `
      <div class="negreta raleway">
-
       <div style="margin-top:25px">
         <h5><span class="negreta blau1">1) Informació bàsica del procés judicial:</span></h5>
           <p><span class='marro2'>Tipus de procediment: </span> <span class='blau1'>${tipusProcediment}</span></p>
@@ -117,21 +308,77 @@ export const fitxaTipusRepressio = async (categoriaNumerica: string, fitxa2: Fit
             <h5><span class="negreta blau1">4) Altres dades:</span></h5>
             <p><span class='marro2'>Observacions:</span> <span class='blau1'>${observacions}</span></p>
         </div>
-
-        </div>`;
+      </div>`;
   } else if (parseInt(categoriaNumerica) === 7) {
-    divInfo.innerHTML += `
+    htmlContent += `
           <h5>En elaboració:</h5>
         `;
   } else if (parseInt(categoriaNumerica) === 8) {
-    divInfo.innerHTML += `
+    htmlContent += `
           <h5>En elaboració:</h5>
         `;
   } else if (parseInt(categoriaNumerica) === 10) {
-    divInfo.innerHTML += `
-          <h5>En elaboració</h5>
+    const dataExili = dades.data_exili && dades.data_exili.trim() !== '' ? dades.data_exili : 'Sense dades';
+    const lloc_partida = dades.lloc_partida && dades.lloc_partida.trim() !== '' ? dades.lloc_partida : 'Sense dades';
+    const llocPas = dades.lloc_pas_frontera && dades.lloc_pas_frontera.trim() !== '' ? dades.lloc_pas_frontera : 'Sense dades';
+    const ambQuiPasaFrontera = dades.amb_qui_passa_frontera && dades.amb_qui_passa_frontera.trim() !== '' ? dades.amb_qui_passa_frontera : 'Sense dades';
+    const primerMunicipiExili = dades.primer_desti_exili && dades.primer_desti_exili.trim() !== '' ? dades.primer_desti_exili : 'Sense dades';
+    const dataPrimerDesti = dades.primer_desti_data && dades.primer_desti_data.trim() !== '' ? dades.primer_desti_data : 'Sense dades';
+    const tipologiaPrimerDesti = dades.tipologia_primer_desti && dades.tipologia_primer_desti.trim() !== '' ? dades.tipologia_primer_desti : 'Sense dades';
+    const dadesPrimerDesti = dades.dades_lloc_primer_desti && dades.dades_lloc_primer_desti.trim() !== '' ? dades.dades_lloc_primer_desti : 'Sense dades';
+
+    const peripleExili = dades.periple_recorregut && dades.periple_recorregut.trim() !== '' ? dades.periple_recorregut : 'Sense dades';
+    const deportat = dades.deportat === '1' ? 'Sí' : 'No';
+    const resistencia = dades.participacio_resistencia === '1' ? 'Sí' : 'No';
+    const dadesResistencia = dades.dades_resistencia && dades.dades_resistencia.trim() !== '' ? dades.dades_resistencia : 'Sense dades';
+    const activitatPolitica = dades.activitat_politica_exili && dades.activitat_politica_exili.trim() !== '' ? dades.activitat_politica_exili : 'Sense dades';
+    const activitatSindical = dades.activitat_sindical_exili && dades.activitat_sindical_exili.trim() !== '' ? dades.activitat_sindical_exili : 'Sense dades';
+    const situacioEspanya = dades.situacio_legal_espanya && dades.situacio_legal_espanya.trim() !== '' ? dades.situacio_legal_espanya : 'Sense dades';
+    const darrerDestiExili = dades.ultim_desti_exili && dades.ultim_desti_exili.trim() !== '' ? dades.ultim_desti_exili : 'Sense dades';
+    const tipologiaDarrerDesti = dades.tipologia_ultim_desti && dades.tipologia_ultim_desti.trim() !== '' ? dades.tipologia_ultim_desti : 'Sense dades';
+
+    htmlContent += `
+     <div class="negreta raleway">
+      <div style="margin-top:25px">
+        <h5><span class="negreta blau1">1) Sortida de Catalunya:</span></h5>
+          <p><span class='marro2'>Data d'exili: </span> <span class='blau1'>${dataExili}</span></p>
+          <p><span class='marro2'>Lloc de partida per a l'exili:</span> <span class='blau1'>${lloc_partida}</span></p>
+          <p><span class='marro2'>Lloc de pas de la frontera:</span> <span class='blau1'>${llocPas}</span></p>
+          <p><span class='marro2'>Amb qui pasa a l'exili:</span> <span class='blau1'>${ambQuiPasaFrontera}</span></p>
+      </div>
+
+      <div style="margin-top:45px">
+        <h5><span class="negreta blau1">2) Arribada al lloc d'exili:</span></h5>
+          <p><span class='marro2'>Primer municipi de destí a l'exili: </span> <span class='blau1'>${primerMunicipiExili}</span></p>
+          <p><span class='marro2'>Data del primer destí de l'exili: </span> <span class='blau1'>${dataPrimerDesti}</span></p>
+          <p><span class='marro2'>Tipologia del primer destí a l'exili: </span> <span class='blau1'>${tipologiaPrimerDesti}</span></p>
+          <p><span class='marro2'>Dades del primer destí de l'exili: </span> <span class='blau1'>${dadesPrimerDesti}</span></p>
+        </div>
+
+      <div style="margin-top:45px">
+        <h5><span class="negreta blau1">3) Periple durant l'exili:</span></h5>
+          <p><span class='marro2'>Periple del recorregut a l'exili: </span> <span class='blau1'>${peripleExili}</span></p>
+          <p><span class='marro2'>Deportat als camps de concentració nazi: </span> <span class='blau1'>${deportat}</span></p>
+        </div>
+
+        <div style="margin-top:45px">
+        <h5><span class="negreta blau1">4) Activitat política i sindical durant l'exili:</span></h5>
+          <p><span class='marro2'>Participació a la Resistència francesa: </span> <span class='blau1'>${resistencia}</span></p>
+          <p><span class='marro2'>Dades de la Resistència: </span> <span class='blau1'>${dadesResistencia}</span></p>
+          <p><span class='marro2'>Activitat política a l'exili: </span> <span class='blau1'>${activitatPolitica}</span></p>
+          <p><span class='marro2'>Activitat sindical a l'exili: </span> <span class='blau1'>${activitatSindical}</span></p>
+           <p><span class='marro2'>Situació legal a Espanya: </span> <span class='blau1'>${situacioEspanya}</span></p>
+        </div>
+
+      <div style="margin-top:45px">
+        <h5><span class="negreta blau1">5) Final del període d'exili:</span></h5>
+          <p><span class='marro2'>Darrer municipi de destí a l'exili: </span> <span class='blau1'>${darrerDestiExili}</span></p>
+          <p><span class='marro2'>Tipologia del darrer destí a l'exili: </span> <span class='blau1'>${tipologiaDarrerDesti}</span></p>
+        </div> 
+    </div>      
         `;
-  } else {
-    console.error('Categoria no válida:', categoriaNumerica);
   }
+
+  // Finalmente actualiza el div
+  divInfo.innerHTML = htmlContent;
 };

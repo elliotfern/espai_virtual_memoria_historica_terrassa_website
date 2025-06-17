@@ -1,6 +1,9 @@
 <?php
 
 use App\Config\DatabaseConnection;
+use App\Config\Database;
+use App\Utils\Response;
+use App\Utils\MissatgesAPI;
 
 $conn = DatabaseConnection::getConnection();
 
@@ -44,8 +47,9 @@ if ($slug === "llistatComplet") {
     echo json_encode($result);
 
     // 2) Pagina informacio fitxa deportat
-    // ruta GET => "/api/deportats/get/fitxaRepresaliat?id=35"
-} else if ($slug === "fitxaRepresaliat") {
+    // ruta GET => "/api/deportats/get/fitxaId?id=${id}
+} else if ($slug === "fitxaId") {
+    $db = new Database();
     $id = $_GET['id'] ?? null;
 
     $query = "SELECT 
@@ -62,6 +66,7 @@ if ($slug === "llistatComplet") {
                 d.deportacio_data_entrada_subcamp,
                 d.deportacio_nom_matricula_subcamp,
                 sd.situacio_ca AS situacio,
+                sd.id AS situacioId,
                 m1.ciutat AS ciutat_mort_alliberament,
                 m2.ciutat AS preso_localitat,
                 tp.tipus_preso_ca AS preso_tipus
@@ -70,10 +75,33 @@ if ($slug === "llistatComplet") {
             LEFT JOIN aux_dades_municipis AS m1 ON d.lloc_mort_alliberament = m1.id
             LEFT JOIN aux_dades_municipis AS m2 ON d.preso_localitat = m2.id
             LEFT JOIN aux_tipus_presons AS tp ON d.preso_tipus = tp.id
-            WHERE a.idPersona = :idPersona";
+            WHERE d.idPersona = :idPersona";
 
-    $result = getData2($query, ['idPersona' => $id], true);
-    echo json_encode($result);
+    try {
+        $params = [':idPersona' => $id];
+        $result = $db->getData($query, $params, true);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
 
     // 3) Pagina fitxa repressió deportat
     // ruta GET => "/api/deportats/get/fitxaRepressio?id=35"

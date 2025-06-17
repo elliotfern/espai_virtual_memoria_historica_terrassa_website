@@ -61,7 +61,7 @@ if (empty($data['lloc_mort_alliberament'])) {
 
 $data_alliberamentRaw = $data['data_alliberament'] ?? '';
 if (!empty($data_alliberamentRaw)) {
-    $data_alliberamentFormat = convertirDataFormatMysql($data_alliberamentRaw, 1);
+    $data_alliberamentFormat = convertirDataFormatMysql($data_alliberamentRaw, 2);
 
     if (!$data_alliberamentFormat) {
         $errors[] = "El format de data no és vàlid. Format esperat: DD/MM/YYYY, amb anys entre 1936 i 1939";

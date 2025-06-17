@@ -3,7 +3,6 @@
 use App\Config\Database;
 use App\Utils\Response;
 use App\Utils\MissatgesAPI;
-
 use App\Config\DatabaseConnection;
 
 $conn = DatabaseConnection::getConnection();
@@ -21,8 +20,9 @@ header("Access-Control-Allow-Methods: GET");
 $slug = $routeParams[0];
 
 // GET : Pagina informacio fitxa exiliat
-// URL: /api/exiliats/get/fitxaRepresaliat?id=${id}
-if ($slug === 'fitxaRepresaliat') {
+// URL: /api/exiliats/get/fitxaId?id=${id}
+if ($slug === 'fitxaId') {
+    $db = new Database();
     $id = $_GET['id'];
 
     $query = "SELECT 
@@ -51,10 +51,33 @@ if ($slug === 'fitxaRepresaliat') {
         LEFT JOIN aux_tipologia_espais AS te ON e.tipologia_primer_desti = te.id
         LEFT JOIN aux_dades_municipis AS m4 ON e.ultim_desti_exili = m4.id
         LEFT JOIN aux_tipologia_espais AS te2 ON e.tipologia_ultim_desti = te2.id
-        WHERE e.idPersona = $id";
+        WHERE e.idPersona = :idPersona";
 
-    $result = getData2($query, ['idRepresaliat' => $id], false);
-    echo json_encode($result);
+    try {
+        $params = [':idPersona' => $id];
+        $result = $db->getData($query, $params, true);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
 
     // 2) Fitxa repressió exili
     // ruta GET => "/api/exiliats/get/fitxaRepressio?id=35"

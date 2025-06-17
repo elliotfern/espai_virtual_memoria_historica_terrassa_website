@@ -1,8 +1,9 @@
 // Definimos la interfaz Fitxa para tipar los datos devueltos por la API
 export interface ApiResponse<T> {
   status: 'success' | 'error';
-  data?: T;
   message?: string;
+  errors: string[];
+  data: T | null;
 }
 
 export interface FitxaFamiliars {
@@ -85,31 +86,10 @@ export interface Fitxa {
 }
 
 export interface FitxaJudicial {
-  data: FitxaJudicialItem;
+  data: object;
   procediment_cat: string;
-  num_causa: string;
-  data_inici_proces: string; // o Date si prefieres
-  jutge_instructor: string;
-  secretari_instructor: string;
-  jutjat: string;
-  any_inicial: number; // o string si puede ser un año en formato de texto
-  consell_guerra_data: string; // o Date si prefieres
   ciutat_consellGuerra: string;
-  president_tribunal: string;
-  defensor: string;
-  fiscal: string;
-  ponent: string;
-  tribunal_vocals: string;
-  acusacio: string;
-  acusacio_2: string;
-  testimoni_acusacio: string;
-  sentencia_data: string; // o Date si prefieres
-  sentencia: string;
   data_sentencia: string; // o Date si prefieres
-}
-
-export interface FitxaJudicialItem {
-  // Propiedades del item dentro de `data`, si es que son diferentes de las de FitxaJudicial
   data_execucio: string; // o Date si prefieres
   espai: string;
   lloc_execucio: string;
@@ -143,6 +123,66 @@ export interface FitxaJudicialItem {
   sentencia: string;
   commutacio: string;
   anyDetingut: string;
+  data_exili: string;
+  lloc_partida: string;
+  lloc_pas_frontera: string;
+  amb_qui_passa_frontera: string;
+  primer_desti_exili: string;
+  primer_desti_data: string;
+  tipologia_primer_desti: string;
+  dades_lloc_primer_desti: string;
+  periple_recorregut: string;
+  deportat: string;
+  ultim_desti_exili: string;
+  tipologia_ultim_desti: string;
+  participacio_resistencia: string;
+  dades_resistencia: string;
+  activitat_politica_exili: string;
+  activitat_sindical_exili: string;
+  situacio_legal_espanya: string;
+  data_alliberament: string;
+  preso_nom: string;
+  preso_data_sortida: string;
+  preso_num_matricula: string;
+  deportacio_nom_camp: string;
+  deportacio_data_entrada: string;
+  deportacio_num_matricula: string;
+  deportacio_nom_subcamp: string;
+  deportacio_data_entrada_subcamp: string;
+  deportacio_nom_matricula_subcamp: string;
+  situacio: string;
+  ciutat_mort_alliberament: string;
+  lloc_mort_alliberament: string;
+  preso_localitat: string;
+  preso_tipus: string;
+  deportacio_nom_sub: string;
+  situacioId: number;
+  condicio: string;
+  bandol: string;
+  any_lleva: string;
+  unitat_inicial: string;
+  cos: string;
+  unitat_final: string;
+  graduacio_final: string;
+  periple_militar: string;
+  circumstancia_mort: string;
+  desaparegut_data: string;
+  desaparegut_lloc: string;
+  desaparegut_data_aparicio: string;
+  desaparegut_lloc_aparicio: string;
+  cirscumstancies_mortId: number;
+  cirscumstancies_mort: string;
+  data_trobada_cadaver: string;
+  lloc_trobada_cadaver: string;
+  data_detencio: string;
+  qui_ordena_afusellat: string;
+  qui_executa_afusellat: string;
+  qui_detencio: string;
+  lloc_detencio: string;
+  data_bombardeig: string;
+  municipi_bombardeig: string;
+  lloc_bombardeig: string;
+  responsable_bombardeig: number;
 }
 
 // Interfaces para los datos

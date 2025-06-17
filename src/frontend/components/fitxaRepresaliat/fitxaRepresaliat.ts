@@ -1,7 +1,7 @@
 import { calcularEdadAlMorir } from '../../config';
 import { categoriesRepressio } from '../taulaDades/categoriesRepressio';
 import { fetchData } from '../../services/api/api';
-import { Fitxa, FitxaJudicial, FitxaFamiliars } from '../../types/types';
+import { Fitxa, FitxaJudicial, FitxaFamiliars, ApiResponse } from '../../types/types';
 import { fitxaTipusRepressio } from './tab_tipus_repressio';
 import { formatDates, formatDatesForm } from '../../services/formatDates/dates';
 import { carregarTraduccions, getTraducciones } from '../../services/textosIdiomes/traduccio';
@@ -163,27 +163,33 @@ async function generarBotonesCategoria(idPersona: string): Promise<void> {
       btn.className = 'botoCategoriaRepresio';
       btn.innerText = nombre;
       btn.dataset.tab = `categoria${catNum}`;
+      btn.style.marginRight = '25px';
 
-      btn.onclick = () => {
+      btn.onclick = async () => {
         const divInfo = document.getElementById('fitxa-categoria');
         if (!divInfo) return;
 
-        if (divInfo.style.display === 'block' && divInfo.dataset.categoria === String(catNum)) {
+        const currentCategoria = String(catNum);
+        const isActive = divInfo.style.display === 'block' && divInfo.dataset.categoria === currentCategoria;
+
+        if (isActive) {
           divInfo.style.display = 'none';
+          divInfo.dataset.categoria = '';
           btn.classList.remove('active');
-        } else {
-          divInfo.innerHTML = '';
-          divInfo.dataset.categoria = String(catNum);
-
-          // Quitar active a todos los botones y poner al actual
-          const allButtons = contenedorCategorias.getElementsByClassName('botoCategoriaRepresio');
-          Array.from(allButtons).forEach((b) => b.classList.remove('active'));
-
-          btn.classList.add('active');
-
-          mostrarCategoria(catNum, idPersona);
-          divInfo.style.display = 'block';
+          return;
         }
+
+        // Asigna la categoría antes de cargar
+        divInfo.dataset.categoria = currentCategoria;
+        divInfo.innerHTML = '';
+        btn.classList.add('active');
+
+        const allButtons = contenedorCategorias.getElementsByClassName('botoCategoriaRepresio');
+        Array.from(allButtons).forEach((b) => b.classList.remove('active'));
+
+        await mostrarCategoria(currentCategoria, idPersona);
+
+        divInfo.style.display = 'block';
       };
 
       contenedorCategorias.appendChild(btn);
@@ -200,12 +206,6 @@ const categoriaCache: { [key: string]: FitxaJudicial | null } = {};
 async function mostrarCategoria(categoriaNumerica: string, idPersona: string): Promise<void> {
   const divInfo = document.getElementById('fitxa-categoria');
   if (!divInfo) return; // Verifica si el div existe
-
-  // Si el contenido ya está visible, lo ocultamos
-  if (divInfo.style.display === 'block' && divInfo.dataset.categoria === String(categoriaNumerica)) {
-    divInfo.style.display = 'none';
-    return;
-  }
 
   // Limpiar contenido previo y actualizar el dataset
   divInfo.innerHTML = '';
@@ -240,24 +240,38 @@ async function mostrarCategoria(categoriaNumerica: string, idPersona: string): P
 
   // Comprobar si los datos ya están en caché
   if (!categoriaCache[categoriaNumerica]) {
+    const divInfo = document.getElementById('fitxa-categoria');
+    if (!divInfo) return;
+
+    // 1. Mostrar missatge de càrrega
+    divInfo.innerHTML = `<div id="fitxa-view">
+      <div class="spinner-border" role="status">
+        <span class="visually-hidden">Carregant dades...</span>
+      </div>`;
+
     try {
       // Hacer la llamada a la API y esperar la respuesta
-      const data = await fetchData(urlAjax2);
-      const fitxa2 = data as FitxaJudicial;
+
+      const response = (await fetchData(urlAjax2)) as ApiResponse<FitxaJudicial>;
+
+      // Verificamos si la respuesta tiene error o no tiene datos
+      if (response.status === 'error' || !response.data) {
+        divInfo.innerHTML = `<p class="text-danger">⚠️ ${response.message || "No s'han trobat dades."}</p>`;
+        return;
+      }
+
+      const fitxa2 = response.data as FitxaJudicial;
+
+      // 3. Substituir el missatge per les dades carregades
+      divInfo.innerHTML = ''; // o renderitzar la vista amb fitxa2
 
       categoriaCache[categoriaNumerica] = fitxa2; // Almacenar en caché
-
-      // Continúa con tu código
-      const divInfo = document.getElementById('fitxa-categoria');
-      if (!divInfo) return;
-
-      // Mostrar el div en caso de estar oculto
-      divInfo.style.display = 'block';
 
       // Mostrar la información dependiendo de la categoría
       fitxaTipusRepressio(categoriaNumerica, fitxa2);
     } catch (error) {
-      console.error('Error al obtener la información de la categoría:', error);
+      console.error('Error al obtenir la informació de la categoria:', error);
+      divInfo.innerHTML = '<p class="text-danger">⚠️ Error al carregar les dades. Torna-ho a intentar més tard.</p>';
     }
   } else {
     // Si los datos ya están en caché, usarlos
