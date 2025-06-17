@@ -254,4 +254,78 @@ if ($slug === "exiliats") {
             500
         );
     }
+
+    // GET : llistat represaliats - processats/empresonats
+    // URL: https://memoriaterrassa.cat/api/represaliats/get/processats
+} else if ($slug === 'processats') {
+    $db = new Database();
+
+    $query = "SELECT a.id, CONCAT(a.cognom1, ' ', a.cognom2, ', ', a.nom) AS nom_complet, a.data_naixement, a.data_defuncio,
+                CASE WHEN e.id IS NOT NULL THEN 'Fitxa creada' ELSE 'No' END AS es_processat
+                FROM db_dades_personals AS a
+                LEFT JOIN db_processats AS e ON a.id = e.idPersona
+                WHERE FIND_IN_SET('6', REPLACE(REPLACE(a.categoria, '{', ''), '}', '')) > 0
+                ORDER BY a.cognom1 ASC;";
+
+    try {
+        $result = $db->getData($query);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
+    // GET : llistat represaliats - afusellats
+    // URL: https://memoriaterrassa.cat/api/represaliats/get/afusellats
+} else if ($slug === 'afusellats') {
+    $db = new Database();
+
+    $query = "SELECT a.id, CONCAT(a.cognom1, ' ', a.cognom2, ', ', a.nom) AS nom_complet, a.data_naixement, a.data_defuncio,
+                CASE WHEN e.id IS NOT NULL THEN 'Fitxa creada' ELSE 'No' END AS es_afusellat
+                FROM db_dades_personals AS a
+                LEFT JOIN db_afusellats AS e ON a.id = e.idPersona
+                WHERE FIND_IN_SET('1', REPLACE(REPLACE(a.categoria, '{', ''), '}', '')) > 0
+                ORDER BY a.cognom1 ASC;";
+
+    try {
+        $result = $db->getData($query);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
 }

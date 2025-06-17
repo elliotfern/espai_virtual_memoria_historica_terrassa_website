@@ -4,8 +4,8 @@
     <?php if ($isAdmin || $isAutor): ?>
         <h2>Llistat de represaliats (1939-1979):</h2>
         <ul>
-            <li>Processats / Empresonats</li>
-            <li>Afusellats</li>
+            <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['base_dades']; ?>/represaliats/llistat-processats">Llistat de processats / Empresonats</a></li>
+            <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['base_dades']; ?>/represaliats/llistat-afusellats">Llistat d'afusellats</a></li>
             <li>Depurats</li>
             <li>Represaliats pendents de classificar (llistat Ajuntament)</li>
             <li>Detinguts Presó Model</li>

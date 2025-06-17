@@ -10,6 +10,8 @@ import { taulaDuplicats } from './taulaDuplicats';
 import { taulaMortsFronts } from './taulaMortsFront';
 import { taulaMortsCivils } from './taulaMortsCivils';
 import { taulaRepresaliaRepublicana } from './taulaRepresaliaRepublicana';
+import { taulaProcessats } from './taulaProcessats';
+import { taulaAfusellats } from './taulaAfusellats';
 
 export function baseDadesIntranet() {
   const url = window.location.href;
@@ -25,8 +27,14 @@ export function baseDadesIntranet() {
       cargarTabla(pageType[2], 2);
     }
   } else if (pageType[2] === 'represaliats') {
-    botonsEstat(pageType[2]);
-    cargarTabla(pageType[2], 2);
+    if (pageType[3] === 'llistat-processats') {
+      taulaProcessats();
+    } else if (pageType[3] === 'llistat-afusellats') {
+      taulaAfusellats();
+    } else {
+      botonsEstat(pageType[2]);
+      cargarTabla(pageType[2], 2);
+    }
   } else if (pageType[2] === 'exiliats-deportats') {
     if (pageType[3] === 'llistat-exiliats') {
       taulaExiliats();

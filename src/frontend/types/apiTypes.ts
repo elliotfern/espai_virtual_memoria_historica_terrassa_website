@@ -27,6 +27,8 @@ export type ApiUrls = {
     LLISTAT_MORTS_FRONT: string;
     LLISTAT_MORTS_CIVILS: string;
     LLISTAT_REPRESALIA_REPUBLICANA: string;
+    LLISTAT_PROCESSATS: string;
+    LLISTAT_AFUSELLATS: string;
   };
   POST: {
     MUNICIPI: string;

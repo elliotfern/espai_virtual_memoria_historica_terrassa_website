@@ -64,6 +64,14 @@ $routes = [
         'view' => BACKEND_URL . $urlIntranetDir['base_dades'] . '/llistat_represaliats.php'
     ]),
 
+    APP_INTRANET . '/base-dades/represaliats/llistat-processats' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['base_dades'] . '/3_llistat-processats.php'
+    ]),
+
+    APP_INTRANET . '/base-dades/represaliats/llistat-afusellats' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['base_dades'] . '/3_llistat-afusellats.php'
+    ]),
+
     // 01. Modificació dades de les fitxes
     APP_INTRANET . '/base-dades/modifica-fitxa/{id}' => array_merge($defaultProtectedConfig, [
         'view' => BACKEND_URL . $urlIntranetDir['base_dades'] . '/modifica_fitxa_persona.php'

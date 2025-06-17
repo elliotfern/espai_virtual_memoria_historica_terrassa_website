@@ -216,23 +216,23 @@ async function mostrarCategoria(categoriaNumerica: string, idPersona: string): P
 
   // Definir la URL de la API dependiendo de la categoría
   if (parseInt(categoriaNumerica) === 1) {
-    urlAjax2 = `${devDirectory}/api/afusellats/get/?type=fitxa&id=${idPersona}`;
+    urlAjax2 = `${devDirectory}/api/afusellats/get/fitxaId?id=${idPersona}`;
   } else if (parseInt(categoriaNumerica) === 2) {
-    urlAjax2 = `${devDirectory}/api/deportats/get/?type=fitxa&id=${idPersona}`;
+    urlAjax2 = `${devDirectory}/api/deportats/get/fitxaId?id=${idPersona}`;
   } else if (parseInt(categoriaNumerica) === 3) {
-    urlAjax2 = `${devDirectory}/api/cost_huma_front/get/?type=fitxa&id=${idPersona}`;
+    urlAjax2 = `${devDirectory}/api/cost_huma_front/get/fitxaId?id=${idPersona}`;
   } else if (parseInt(categoriaNumerica) === 4) {
-    urlAjax2 = `${devDirectory}/api/cost_huma_civils/get/?type=fitxa&id=${idPersona}`;
+    urlAjax2 = `${devDirectory}/api/cost_huma_civils/get/fitxaId?id=${idPersona}`;
   } else if (parseInt(categoriaNumerica) === 5) {
-    urlAjax2 = `${devDirectory}/api/represalia_republicana/get/?type=fitxa&id=${idPersona}`;
+    urlAjax2 = `${devDirectory}/api/represalia_republicana/get/fitxaId?id=${idPersona}`;
   } else if (parseInt(categoriaNumerica) === 6) {
-    urlAjax2 = `${devDirectory}/api/processats/get/?type=fitxa&id=${idPersona}`;
+    urlAjax2 = `${devDirectory}/api/processats/get/fitxaId?id=${idPersona}`;
   } else if (parseInt(categoriaNumerica) === 7) {
-    urlAjax2 = `${devDirectory}/api/depurats/get/?type=fitxa&id=${idPersona}`;
+    urlAjax2 = `${devDirectory}/api/depurats/get/fitxaId?id=${idPersona}`;
   } else if (parseInt(categoriaNumerica) === 8) {
-    urlAjax2 = `${devDirectory}/api/dones/get/?type=fitxa&id=${idPersona}`;
+    urlAjax2 = `${devDirectory}/api/dones/get/fitxaId?id=${idPersona}`;
   } else if (parseInt(categoriaNumerica) === 10) {
-    urlAjax2 = `${devDirectory}/api/exiliats/get/?type=fitxa&id=${idPersona}`;
+    urlAjax2 = `${devDirectory}/api/exiliats/get/fitxaId?id=${idPersona}`;
   } else {
     console.error('Categoria no válida:', categoriaNumerica);
     return;
@@ -243,24 +243,19 @@ async function mostrarCategoria(categoriaNumerica: string, idPersona: string): P
     try {
       // Hacer la llamada a la API y esperar la respuesta
       const data = await fetchData(urlAjax2);
+      const fitxa2 = data as FitxaJudicial;
 
-      if (Array.isArray(data)) {
-        const fitxa2 = data[0] as FitxaJudicial; // Hacer cast explícito a 'Fitxa'
-        categoriaCache[categoriaNumerica] = fitxa2; // Almacenar en caché
+      categoriaCache[categoriaNumerica] = fitxa2; // Almacenar en caché
 
-        // Continúa con tu código
-        const divInfo = document.getElementById('fitxa-categoria');
-        if (!divInfo) return;
+      // Continúa con tu código
+      const divInfo = document.getElementById('fitxa-categoria');
+      if (!divInfo) return;
 
-        // Mostrar el div en caso de estar oculto
-        divInfo.style.display = 'block';
+      // Mostrar el div en caso de estar oculto
+      divInfo.style.display = 'block';
 
-        // Mostrar la información dependiendo de la categoría
-        console.log(categoriaNumerica);
-        fitxaTipusRepressio(categoriaNumerica, fitxa2);
-      } else {
-        throw new Error('La API no devolvió un array.');
-      }
+      // Mostrar la información dependiendo de la categoría
+      fitxaTipusRepressio(categoriaNumerica, fitxa2);
     } catch (error) {
       console.error('Error al obtener la información de la categoría:', error);
     }

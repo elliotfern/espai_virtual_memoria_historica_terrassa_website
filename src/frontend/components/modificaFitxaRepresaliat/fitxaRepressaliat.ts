@@ -22,7 +22,7 @@ export async function fitxaRepressaliat(idRepressaliat?: number): Promise<void> 
     // Mostrar nom i cognoms
     const fitxaNomCognoms = document.getElementById('fitxaNomCognoms');
     if (fitxaNomCognoms) {
-      fitxaNomCognoms.innerHTML = `Modificació de la fitxa: ${fitxa.nom} ${fitxa.cognom1} ${fitxa.cognom2}`;
+      fitxaNomCognoms.innerHTML = `Modificació de la fitxa: <a href="https://memoriaterrassa.cat/fitxa/${fitxa.id}" target="_blank"> ${fitxa.nom} ${fitxa.cognom1} ${fitxa.cognom2}</a>`;
     }
 
     // tab1 - Categories repressió

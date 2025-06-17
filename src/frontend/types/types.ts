@@ -85,6 +85,7 @@ export interface Fitxa {
 }
 
 export interface FitxaJudicial {
+  data: FitxaJudicialItem;
   procediment_cat: string;
   num_causa: string;
   data_inici_proces: string; // o Date si prefieres
@@ -105,8 +106,43 @@ export interface FitxaJudicial {
   sentencia_data: string; // o Date si prefieres
   sentencia: string;
   data_sentencia: string; // o Date si prefieres
+}
+
+export interface FitxaJudicialItem {
+  // Propiedades del item dentro de `data`, si es que son diferentes de las de FitxaJudicial
   data_execucio: string; // o Date si prefieres
   espai: string;
+  lloc_execucio: string;
+  lloc_enterrament: string;
+  observacions: string;
+  ciutat_execucio: string;
+  ciutat_enterrament: string;
+
+  copia_exp: string | null;
+  tipus_procediment: string;
+  tipus_judici: string;
+  num_causa: string;
+  data_inici_proces: string; // o Date si lo parseas
+  jutge_instructor: string;
+  secretari_instructor: string;
+  jutjat: string;
+  any_inicial: string;
+  any_final: string;
+  consell_guerra_data: string; // o Date
+  lloc_consell_guerra: string;
+  president_tribunal: string;
+  defensor: string;
+  fiscal: string;
+  ponent: string;
+  tribunal_vocals: string;
+  acusacio: string;
+  acusacio_2: string;
+  testimoni_acusacio: string;
+  sentencia_data: string; // o Date
+  pena: string;
+  sentencia: string;
+  commutacio: string;
+  anyDetingut: string;
 }
 
 // Interfaces para los datos

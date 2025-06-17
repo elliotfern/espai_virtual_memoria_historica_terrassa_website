@@ -43,6 +43,11 @@
                 </div>
 
                 <div class="col-md-4 mb-4">
+                    <label for="anyDetingut" class="form-label negreta">Anys en ser detingut o investigat:</label>
+                    <input type="text" class="form-control" id="anyDetingut" name="anyDetingut" value="">
+                </div>
+
+                <div class="col-md-4 mb-4">
                     <label for="any_inicial" class="form-label negreta">Any inici procés:</label>
                     <input type="text" class="form-control" id="any_inicial" name="any_inicial" value="">
                 </div>
@@ -107,7 +112,7 @@
 
                 <div class="col-md-4 mb-4">
                     <label for="jutjat" class="form-label negreta">Jutjat:</label>
-                    <select class="form-select" aria-label="Default select example" id="jutjat">
+                    <select class="form-select" aria-label="Default select example" name="jutjat" id="jutjat">
                     </select>
                     <div class="mt-2">
                         <a href="https://memoriaterrassa.cat/gestio/auxiliars/nou-procediment" target="_blank" class="btn btn-secondary btn-sm" id="afegir6">Afegir jutjat</a>

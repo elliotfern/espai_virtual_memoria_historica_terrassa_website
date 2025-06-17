@@ -136,6 +136,7 @@ $sentencia = !empty($data['sentencia']) ? $data['sentencia'] : NULL;
 $pena = !empty($data['pena']) ? $data['pena'] : NULL;
 $commutacio = !empty($data['commutacio']) ? $data['commutacio'] : NULL;
 $observacions = !empty($data['observacions']) ? $data['observacions'] : NULL;
+$anyDetingut = !empty($data['anyDetingut']) ? $data['anyDetingut'] : NULL;
 
 // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
 try {
@@ -149,13 +150,13 @@ try {
     data_inici_proces, jutge_instructor, secretari_instructor, jutjat, any_inicial,
     any_final, consell_guerra_data, lloc_consell_guerra, president_tribunal, defensor,
     fiscal, ponent, tribunal_vocals, acusacio, acusacio_2, testimoni_acusacio,
-    sentencia_data, sentencia, pena, commutacio, observacions
+    sentencia_data, sentencia, pena, commutacio, observacions, anyDetingut
         ) VALUES (
     :idPersona, :copia_exp, :tipus_procediment, :tipus_judici, :num_causa,
     :data_inici_proces, :jutge_instructor, :secretari_instructor, :jutjat, :any_inicial,
     :any_final, :consell_guerra_data, :lloc_consell_guerra, :president_tribunal, :defensor,
     :fiscal, :ponent, :tribunal_vocals, :acusacio, :acusacio_2, :testimoni_acusacio,
-    :sentencia_data, :sentencia, :pena, :commutacio, :observacions
+    :sentencia_data, :sentencia, :pena, :commutacio, :observacions, :anyDetingut
 )";
 
     // Preparar la consulta
@@ -188,6 +189,7 @@ try {
     $stmt->bindParam(':pena', $pena, PDO::PARAM_INT);
     $stmt->bindParam(':commutacio', $commutacio, PDO::PARAM_STR);
     $stmt->bindParam(':observacions', $observacions, PDO::PARAM_STR);
+    $stmt->bindParam(':anyDetingut', $anyDetingut, PDO::PARAM_STR);
 
     // Ejecutar la consulta
     $stmt->execute();

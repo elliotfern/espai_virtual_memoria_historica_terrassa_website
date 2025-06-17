@@ -122,6 +122,8 @@ $sentencia = !empty($data['sentencia']) ? $data['sentencia'] : NULL;
 $pena = !empty($data['pena']) ? $data['pena'] : NULL;
 $commutacio = !empty($data['commutacio']) ? $data['commutacio'] : NULL;
 $observacions = !empty($data['observacions']) ? $data['observacions'] : NULL;
+$anyDetingut = !empty($data['anyDetingut']) ? $data['anyDetingut'] : NULL;
+
 
 // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
 try {
@@ -157,7 +159,8 @@ try {
             sentencia = :sentencia,
             pena = :pena,
             commutacio = :commutacio,
-            observacions = :observacions
+            observacions = :observacions,
+            anyDetingut = :anyDetingut
         WHERE id = :id;";
 
     // Preparar la consulta
@@ -191,6 +194,7 @@ try {
     $stmt->bindParam(':pena', $pena, PDO::PARAM_INT);
     $stmt->bindParam(':commutacio', $commutacio, PDO::PARAM_STR);
     $stmt->bindParam(':observacions', $observacions, PDO::PARAM_STR);
+    $stmt->bindParam(':anyDetingut', $anyDetingut, PDO::PARAM_STR);
 
     // Ejecutar la consulta
     $stmt->execute();
