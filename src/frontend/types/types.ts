@@ -183,6 +183,15 @@ export interface FitxaJudicial {
   municipi_bombardeig: string;
   lloc_bombardeig: string;
   responsable_bombardeig: number;
+
+  data_empresonament: string;
+  trasllats: number;
+  lloc_trasllat: string;
+  data_trasllat: string;
+  llibertat: number;
+  data_llibertat: string;
+  modalitat: number;
+  vicissituds: string;
 }
 
 // Interfaces para los datos

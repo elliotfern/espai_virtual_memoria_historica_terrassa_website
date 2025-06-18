@@ -59,5 +59,6 @@ final class Tables
     public const DB_DEPORTATS = 'db_deportats';
     public const DB_DEPURATS = 'db_depurats';
     public const DB_EXILIATS = 'db_exiliats';
+    public const DB_PRESO_MODEL = 'db_detinguts_model';
     public const DB_FORM_CONTACTE = 'db_form_contacte';
 }

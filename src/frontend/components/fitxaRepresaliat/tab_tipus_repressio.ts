@@ -142,7 +142,7 @@ export const fitxaTipusRepressio = async (categoriaNumerica: string, fitxa2: Fit
     </div>
 
         `;
-  } else if (parseInt(categoriaNumerica) === 4) {
+  } else if (parseInt(categoriaNumerica) === 4 || parseInt(categoriaNumerica) === 5) {
     const cirscumstancies_mortId = dades.cirscumstancies_mortId;
 
     let data_bombardeig = '';
@@ -233,11 +233,10 @@ export const fitxaTipusRepressio = async (categoriaNumerica: string, fitxa2: Fit
     htmlContent += contingutHtmlBombargeig;
     htmlContent += contingutHtmlAssassinat;
     htmlContent += contingutHtmlAfusellat;
-  } else if (parseInt(categoriaNumerica) === 5) {
-    htmlContent += `
-          <h5>En elaboració:</h5>
-        `;
   } else if (parseInt(categoriaNumerica) === 6) {
+    const dataDetencio = dades.data_detencio && dades.data_detencio.trim() !== '' ? formatDatesForm(dades.data_detencio) : 'Desconeguda';
+    const llocDetencio = dades.lloc_detencio && dades.lloc_detencio.trim() !== '' ? dades.lloc_detencio : 'Desconegut';
+
     const tipusProcediment = dades.tipus_procediment && dades.tipus_procediment.trim() !== '' ? dades.tipus_procediment : 'Desconegut';
     const tipusJudici = dades.tipus_judici && dades.tipus_judici.trim() !== '' ? dades.tipus_judici : 'Desconegut';
     const numCausa = dades.num_causa && dades.num_causa.trim() !== '' ? dades.num_causa : 'Desconegut';
@@ -268,8 +267,15 @@ export const fitxaTipusRepressio = async (categoriaNumerica: string, fitxa2: Fit
 
     htmlContent += `
      <div class="negreta raleway">
-      <div style="margin-top:25px">
-        <h5><span class="negreta blau1">1) Informació bàsica del procés judicial:</span></h5>
+
+     <div style="margin-top:25px">
+        <h5><span class="negreta blau1">1) Dades sobre la detenció</span></h5>
+          <p><span class='marro2'>Data de detenció: </span> <span class='blau1'>${dataDetencio}</span></p>
+          <p><span class='marro2'>Lloc de detenció:</span> <span class='blau1'>${llocDetencio}</span></p>
+        </div>
+
+      <div style="margin-top:45px">
+        <h5><span class="negreta blau1">2) Dades bàsiques del procés judicial:</span></h5>
           <p><span class='marro2'>Tipus de procediment: </span> <span class='blau1'>${tipusProcediment}</span></p>
           <p><span class='marro2'>Tipus de judici:</span> <span class='blau1'>${tipusJudici}</span></p>
           <p><span class='marro2'>Número de causa:</span> <span class='blau1'>${numCausa}</span></p>
@@ -281,14 +287,14 @@ export const fitxaTipusRepressio = async (categoriaNumerica: string, fitxa2: Fit
         </div>
 
       <div style="margin-top:45px">
-          <h5><span class="negreta blau1">2) Resolució del procés judicial:</span></h5>
+          <h5><span class="negreta blau1">3) Resolució del procés judicial:</span></h5>
             <p><span class='marro2'>Sentència: </span> <span class='blau1'>${sentencia}</span></p>
             <p><span class='marro2'>Pena: </span> <span class='blau1'>${pena}</span></p>
             <p><span class='marro2'>Commutació o indult: </span> <span class='blau1'>${commutacio}</span></p>
       </div>
 
       <div style="margin-top:45px">
-         <h5><span class="negreta blau1">3) Informació detallada del procés judicial:</span></h5>
+         <h5><span class="negreta blau1">4) Informació detallada del procés judicial:</span></h5>
             <p><span class='marro2'>Jutjat: </span> <span class='blau1'>${jutjat}</span></p>
             <p><span class='marro2'>Jutge instructor: </span> <span class='blau1'>${jutgeInstructor}</span></p>
             <p><span class='marro2'>Secretari instructor:</span> <span class='blau1'>${secretariInstructor}</span></p>
@@ -305,7 +311,7 @@ export const fitxaTipusRepressio = async (categoriaNumerica: string, fitxa2: Fit
         </div>
 
         <div style="margin-top:45px">
-            <h5><span class="negreta blau1">4) Altres dades:</span></h5>
+            <h5><span class="negreta blau1">5) Altres dades:</span></h5>
             <p><span class='marro2'>Observacions:</span> <span class='blau1'>${observacions}</span></p>
         </div>
       </div>`;
@@ -318,12 +324,12 @@ export const fitxaTipusRepressio = async (categoriaNumerica: string, fitxa2: Fit
           <h5>En elaboració:</h5>
         `;
   } else if (parseInt(categoriaNumerica) === 10) {
-    const dataExili = dades.data_exili && dades.data_exili.trim() !== '' ? dades.data_exili : 'Sense dades';
+    const dataExili = dades.data_exili && dades.data_exili.trim() !== '' ? formatDatesForm(dades.data_exili) : 'Sense dades';
     const lloc_partida = dades.lloc_partida && dades.lloc_partida.trim() !== '' ? dades.lloc_partida : 'Sense dades';
     const llocPas = dades.lloc_pas_frontera && dades.lloc_pas_frontera.trim() !== '' ? dades.lloc_pas_frontera : 'Sense dades';
     const ambQuiPasaFrontera = dades.amb_qui_passa_frontera && dades.amb_qui_passa_frontera.trim() !== '' ? dades.amb_qui_passa_frontera : 'Sense dades';
     const primerMunicipiExili = dades.primer_desti_exili && dades.primer_desti_exili.trim() !== '' ? dades.primer_desti_exili : 'Sense dades';
-    const dataPrimerDesti = dades.primer_desti_data && dades.primer_desti_data.trim() !== '' ? dades.primer_desti_data : 'Sense dades';
+    const dataPrimerDesti = dades.primer_desti_data && dades.primer_desti_data.trim() !== '' ? formatDatesForm(dades.primer_desti_data) : 'Sense dades';
     const tipologiaPrimerDesti = dades.tipologia_primer_desti && dades.tipologia_primer_desti.trim() !== '' ? dades.tipologia_primer_desti : 'Sense dades';
     const dadesPrimerDesti = dades.dades_lloc_primer_desti && dades.dades_lloc_primer_desti.trim() !== '' ? dades.dades_lloc_primer_desti : 'Sense dades';
 
@@ -377,6 +383,52 @@ export const fitxaTipusRepressio = async (categoriaNumerica: string, fitxa2: Fit
         </div> 
     </div>      
         `;
+  } else if (parseInt(categoriaNumerica) === 12) {
+    const optionsMap: Record<string, string> = {
+      '1': 'Sí',
+      '2': 'No',
+      '3': 'Sense dades',
+    };
+
+    const data_empresonament = dades.data_empresonament && dades.data_empresonament.trim() !== '' ? formatDatesForm(dades.data_empresonament) : 'Sense dades';
+    const trasllats = optionsMap[dades.trasllats] || 'Sense dades';
+    const lloc_trasllat = dades.lloc_trasllat && dades.lloc_trasllat.trim() !== '' ? dades.lloc_trasllat : 'Sense dades';
+    const data_trasllat = dades.data_trasllat && dades.data_trasllat.trim() !== '' ? formatDatesForm(dades.data_trasllat) : 'Sense dades';
+    const llibertat = optionsMap[dades.llibertat] || 'Sense dades';
+    const data_llibertat = dades.data_llibertat && dades.data_llibertat.trim() !== '' ? formatDatesForm(dades.data_llibertat) : 'Sense dades';
+    const modalitat = dades.modalitat ?? 'Sense dades';
+    const vicissituds = dades.vicissituds && dades.vicissituds.trim() !== '' ? dades.vicissituds : 'Sense dades';
+    const observacions = dades.observacions && dades.observacions.trim() !== '' ? dades.observacions : 'Sense dades';
+
+    htmlContent += `
+     <div class="negreta raleway">
+      <div style="margin-top:25px">
+        <h5><span class="negreta blau1">1) Dades de l'empresonament:</span></h5>
+        <p><span class='marro2'>Data d'empresonament: </span> <span class='blau1'>${data_empresonament}</span></p>
+        <p><span class='marro2'>Modalitat de presó:</span> <span class='blau1'>${modalitat}</span></p>
+        <p><span class='marro2'>Llibertat:</span> <span class='blau1'>${llibertat}</span></p>
+        <p><span class='marro2'>Data llibertat:</span> <span class='blau1'>${data_llibertat}</span></p>
+      </div>
+
+        <div style="margin-top:45px">
+          <h5><span class="negreta blau1">2) Trasllats de presó:</span></h5>
+          <p><span class='marro2'>Trasllats: </span> <span class='blau1'>${trasllats}</span></p>
+          <p><span class='marro2'>Lloc trasllat:</span> <span class='blau1'>${lloc_trasllat}</span></p>
+          <p><span class='marro2'>Data trasllat:</span> <span class='blau1'>${data_trasllat}</span></p>
+        </div>
+
+         <div style="margin-top:45px">
+            <h5><span class="negreta blau1">3) Altres dades:</span></h5>
+            <p><span class='marro2'>Vicissituds: </span> <span class='blau1'>${vicissituds}</span></p>
+             <p><span class='marro2'>Observacions:</span> <span class='blau1'>${observacions}</span></p>
+        </div>
+      </div>     
+        `;
+  } else {
+    htmlContent += `
+     <div class="negreta raleway">
+     Sense dades
+     `;
   }
 
   // Finalmente actualiza el div

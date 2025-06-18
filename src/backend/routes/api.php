@@ -113,6 +113,13 @@ $routes = [
 
     '/api/depurats/post' => ['view' => 'src/backend/api/db_depurats/post-depurats.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
 
+    // API db_detinguts_model
+    '/api/preso_model/get/{slug}' => ['view' => 'src/backend/api/db_detinguts_model/get-model.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+
+    '/api/preso_model/put' => ['view' => 'src/backend/api/db_detinguts_model/put-model.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+
+    '/api/preso_model/post' => ['view' => 'src/backend/api/db_detinguts_model/post-model.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+
 
     // API fonts documentals
     APP_API . $urlApi['fonts'] . '/get/{slug}' => array_merge($defaultApiConfig, [

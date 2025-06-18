@@ -538,6 +538,17 @@ if ($slug === "municipis") {
     $result = getData2($query);
     echo json_encode($result);
 
+    // GET : Llistat arxius bibliografia
+    // URL: /api/auxiliars/get/modalitatPreso
+} elseif ($slug === 'modalitatPreso') {
+    $query = "SELECT id, modalitat_ca
+              FROM aux_modalitat_preso
+              ORDER BY modalitat_ca ASC";
+
+    $result = getData2($query);
+    echo json_encode($result);
+
+
     // GET : llistat d'avatars usuaris
     // URL: https://memoriaterrassa.cat/api/auxiliars/get/avatarsUsuaris
 } else if ($slug === "avatarsUsuaris") {

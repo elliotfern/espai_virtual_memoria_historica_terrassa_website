@@ -112,6 +112,17 @@ if (!empty($sentencia_data_raw)) {
     $sentencia_dataFormat = null;
 }
 
+$data_detencio_raw = $data['data_detencio'] ?? '';
+if (!empty($data_detencio_raw)) {
+    $data_detencioFormat = convertirDataFormatMysql($data_detencio_raw, 3);
+
+    if (!$data_detencioFormat) {
+        $errors[] = ValidacioErrors::dataNoValida('data detenció');
+    }
+} else {
+    $data_detencioFormat = null;
+}
+
 // Si no hay errores, crear las variables PHP y preparar la consulta PDO
 $idPersona = $data['idPersona'];
 $copia_exp = !empty($data['copia_exp']) ? $data['copia_exp'] : NULL;
@@ -137,6 +148,7 @@ $pena = !empty($data['pena']) ? $data['pena'] : NULL;
 $commutacio = !empty($data['commutacio']) ? $data['commutacio'] : NULL;
 $observacions = !empty($data['observacions']) ? $data['observacions'] : NULL;
 $anyDetingut = !empty($data['anyDetingut']) ? $data['anyDetingut'] : NULL;
+$lloc_detencio = !empty($data['lloc_detencio']) ? $data['lloc_detencio'] : NULL;
 
 // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
 try {
@@ -150,13 +162,13 @@ try {
     data_inici_proces, jutge_instructor, secretari_instructor, jutjat, any_inicial,
     any_final, consell_guerra_data, lloc_consell_guerra, president_tribunal, defensor,
     fiscal, ponent, tribunal_vocals, acusacio, acusacio_2, testimoni_acusacio,
-    sentencia_data, sentencia, pena, commutacio, observacions, anyDetingut
+    sentencia_data, sentencia, pena, commutacio, observacions, anyDetingut, data_detencio, lloc_detencio
         ) VALUES (
     :idPersona, :copia_exp, :tipus_procediment, :tipus_judici, :num_causa,
     :data_inici_proces, :jutge_instructor, :secretari_instructor, :jutjat, :any_inicial,
     :any_final, :consell_guerra_data, :lloc_consell_guerra, :president_tribunal, :defensor,
     :fiscal, :ponent, :tribunal_vocals, :acusacio, :acusacio_2, :testimoni_acusacio,
-    :sentencia_data, :sentencia, :pena, :commutacio, :observacions, :anyDetingut
+    :sentencia_data, :sentencia, :pena, :commutacio, :observacions, :anyDetingut, :data_detencio, :lloc_detencio
 )";
 
     // Preparar la consulta
@@ -165,6 +177,8 @@ try {
     // Enlazar los parámetros con los valores de las variables PHP
     $stmt->bindParam(':idPersona', $idPersona, PDO::PARAM_INT);
     $stmt->bindParam(':copia_exp', $copia_exp, PDO::PARAM_STR);
+    $stmt->bindParam(':data_detencio', $data_detencioFormat, PDO::PARAM_STR);
+    $stmt->bindParam(':lloc_detencio', $lloc_detencio, PDO::PARAM_STR);
     $stmt->bindParam(':tipus_procediment', $tipus_procediment, PDO::PARAM_INT);
     $stmt->bindParam(':tipus_judici', $tipus_judici, PDO::PARAM_INT);
     $stmt->bindParam(':num_causa', $num_causa, PDO::PARAM_STR);

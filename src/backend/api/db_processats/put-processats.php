@@ -97,6 +97,17 @@ if (!empty($sentencia_data_raw)) {
     $sentencia_dataFormat = null;
 }
 
+$data_detencio_raw = $data['data_detencio'] ?? '';
+if (!empty($data_detencio_raw)) {
+    $data_detencioFormat = convertirDataFormatMysql($data_detencio_raw, 3);
+
+    if (!$data_detencioFormat) {
+        $errors[] = ValidacioErrors::dataNoValida('data detenció');
+    }
+} else {
+    $data_detencioFormat = null;
+}
+
 // Si no hay errores, crear las variables PHP y preparar la consulta PDO
 $idPersona = $data['idPersona'];
 $id = $data['id'];
@@ -123,7 +134,7 @@ $pena = !empty($data['pena']) ? $data['pena'] : NULL;
 $commutacio = !empty($data['commutacio']) ? $data['commutacio'] : NULL;
 $observacions = !empty($data['observacions']) ? $data['observacions'] : NULL;
 $anyDetingut = !empty($data['anyDetingut']) ? $data['anyDetingut'] : NULL;
-
+$lloc_detencio = !empty($data['lloc_detencio']) ? $data['lloc_detencio'] : NULL;
 
 // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
 try {
@@ -160,7 +171,9 @@ try {
             pena = :pena,
             commutacio = :commutacio,
             observacions = :observacions,
-            anyDetingut = :anyDetingut
+            anyDetingut = :anyDetingut,
+            lloc_detencio = :lloc_detencio,
+            data_detencio = :data_detencio
         WHERE id = :id;";
 
     // Preparar la consulta
@@ -169,6 +182,8 @@ try {
     // Enlazar los parámetros con los valores de las variables PHP
     $stmt->bindParam(':id', $id, PDO::PARAM_INT);
     $stmt->bindParam(':idPersona', $idPersona, PDO::PARAM_INT);
+    $stmt->bindParam(':data_detencio', $data_detencioFormat, PDO::PARAM_STR);
+    $stmt->bindParam(':lloc_detencio', $lloc_detencio, PDO::PARAM_STR);
     $stmt->bindParam(':copia_exp', $copia_exp, PDO::PARAM_STR);
     $stmt->bindParam(':tipus_procediment', $tipus_procediment, PDO::PARAM_INT);
     $stmt->bindParam(':tipus_judici', $tipus_judici, PDO::PARAM_INT);

@@ -6,6 +6,8 @@ import { fitxaTipusRepressio } from './tab_tipus_repressio';
 import { formatDates, formatDatesForm } from '../../services/formatDates/dates';
 import { carregarTraduccions, getTraducciones } from '../../services/textosIdiomes/traduccio';
 import { traduirCategoriesRepressioArray } from '../taulaDades/traduirCategoriesRepressio';
+import { valorTextDesconegut } from '../../services/formatDates/valorTextDesconegut';
+import { joinValors } from '../../services/formatDates/joinValors';
 
 interface Partit {
   id: number;
@@ -224,7 +226,7 @@ async function mostrarCategoria(categoriaNumerica: string, idPersona: string): P
   } else if (parseInt(categoriaNumerica) === 4) {
     urlAjax2 = `${devDirectory}/api/cost_huma_civils/get/fitxaId?id=${idPersona}`;
   } else if (parseInt(categoriaNumerica) === 5) {
-    urlAjax2 = `${devDirectory}/api/represalia_republicana/get/fitxaId?id=${idPersona}`;
+    urlAjax2 = `${devDirectory}/api/cost_huma_civils/get/fitxaId?id=${idPersona}`;
   } else if (parseInt(categoriaNumerica) === 6) {
     urlAjax2 = `${devDirectory}/api/processats/get/fitxaId?id=${idPersona}`;
   } else if (parseInt(categoriaNumerica) === 7) {
@@ -233,6 +235,20 @@ async function mostrarCategoria(categoriaNumerica: string, idPersona: string): P
     urlAjax2 = `${devDirectory}/api/dones/get/fitxaId?id=${idPersona}`;
   } else if (parseInt(categoriaNumerica) === 10) {
     urlAjax2 = `${devDirectory}/api/exiliats/get/fitxaId?id=${idPersona}`;
+  } else if (parseInt(categoriaNumerica) === 11) {
+    urlAjax2 = `${devDirectory}/api/pendents/get/fitxaId?id=${idPersona}`;
+  } else if (parseInt(categoriaNumerica) === 12) {
+    urlAjax2 = `${devDirectory}/api/preso_model/get/fitxaId?id=${idPersona}`;
+  } else if (parseInt(categoriaNumerica) === 13) {
+    urlAjax2 = `${devDirectory}/api/---/get/fitxaId?id=${idPersona}`;
+  } else if (parseInt(categoriaNumerica) === 14) {
+    urlAjax2 = `${devDirectory}/api/----/get/fitxaId?id=${idPersona}`;
+  } else if (parseInt(categoriaNumerica) === 15) {
+    urlAjax2 = `${devDirectory}/api/---/get/fitxaId?id=${idPersona}`;
+  } else if (parseInt(categoriaNumerica) === 16) {
+    urlAjax2 = `${devDirectory}/api/---/get/fitxaId?id=${idPersona}`;
+  } else if (parseInt(categoriaNumerica) === 17) {
+    urlAjax2 = `${devDirectory}/api/exi---liats/get/fitxaId?id=${idPersona}`;
   } else {
     console.error('Categoria no válida:', categoriaNumerica);
     return;
@@ -365,27 +381,37 @@ async function mostrarInformacion(tab: string, idPersona: string, label: string)
 
   // variables tab1
   const dataFormatada = formatDatesForm(fitxa.data_naixement);
-  const dataNaixement = dataFormatada ?? 'Data desconeguda';
+  const dataNaixement = valorTextDesconegut(dataFormatada, 4);
 
   const dataFormatada2 = formatDatesForm(fitxa.data_defuncio);
-  const dataDefuncio = dataFormatada2 ?? 'Data desconeguda';
+  const dataDefuncio = valorTextDesconegut(dataFormatada2, 4);
 
-  const ciutatNaixement = fitxa.ciutat_naixement === '' || null ? 'Desconegut' : fitxa.ciutat_naixement;
-  const comarcaNaixement = fitxa.comarca_naixement === '' || null ? 'Desconegut' : fitxa.comarca_naixement;
-  const provinciaNaixement = fitxa.provincia_naixement === '' || null ? 'Desconegut' : fitxa.provincia_naixement;
-  const comunitatNaixement = fitxa.comunitat_naixement === '' || null ? 'Desconegut' : fitxa.comunitat_naixement;
-  const paisNaixement = fitxa.pais_naixement === '' || null ? 'Desconegut' : fitxa.pais_naixement;
-  const adreca = fitxa.adreca === '' || null ? 'Desconeguda' : fitxa.adreca;
-  const ciutatResidencia = fitxa.ciutat_residencia === '' || null ? 'Desconeguda' : fitxa.ciutat_residencia;
-  const comarcaResidencia = fitxa.comarca_residencia === '' || null ? 'Desconeguda' : fitxa.comarca_residencia;
-  const provinciaResidencia = fitxa.provincia_residencia === '' || null ? 'Desconeguda' : fitxa.provincia_residencia;
-  const comunitatResidencia = fitxa.comunitat_residencia === '' || null ? 'Desconeguda' : fitxa.comunitat_residencia;
-  const paisResidencia = fitxa.pais_residencia === '' || null ? 'Desconegut' : fitxa.pais_residencia;
-  const ciutatDefuncio = fitxa.ciutat_defuncio === '' || fitxa.ciutat_defuncio === null || fitxa.ciutat_defuncio === undefined ? 'Desconeguda' : fitxa.ciutat_defuncio;
-  const comarcaDefuncio = fitxa.comarca_defuncio === '' || null ? 'Desconeguda' : fitxa.comarca_defuncio;
-  const provinciaDefuncio = fitxa.provincia_defuncio === '' || null ? 'Desconeguda' : fitxa.provincia_defuncio;
-  const comunitatDefuncio = fitxa.comunitat_defuncio === '' || null ? 'Desconeguda' : fitxa.comunitat_defuncio;
-  const paisDefuncio = fitxa.pais_defuncio === '' || null ? 'Desconegut' : fitxa.pais_defuncio;
+  const ciutatNaixement = valorTextDesconegut(fitxa.ciutat_naixement, 2);
+  const comarcaNaixement = valorTextDesconegut(fitxa.comarca_naixement, 3);
+  const provinciaNaixement = valorTextDesconegut(fitxa.provincia_naixement, 3);
+  const comunitatNaixement = valorTextDesconegut(fitxa.comunitat_naixement, 3);
+  const paisNaixement = valorTextDesconegut(fitxa.pais_naixement, 3);
+
+  const naixement = joinValors([comarcaNaixement, provinciaNaixement, comunitatNaixement, paisNaixement], ', ', true);
+
+  const adreca = valorTextDesconegut(fitxa.adreca, 3);
+  const ciutatResidencia = valorTextDesconegut(fitxa.ciutat_residencia, 2);
+  const adrecaText = joinValors([adreca, ciutatResidencia]);
+
+  const comarcaResidencia = valorTextDesconegut(fitxa.comarca_residencia, 3);
+  const provinciaResidencia = valorTextDesconegut(fitxa.provincia_residencia, 3);
+  const comunitatResidencia = valorTextDesconegut(fitxa.comunitat_residencia, 3);
+  const paisResidencia = valorTextDesconegut(fitxa.pais_residencia, 3);
+
+  const residencia = joinValors([comarcaResidencia, provinciaResidencia, comunitatResidencia, paisResidencia], ', ', true);
+
+  const ciutatDefuncio = valorTextDesconegut(fitxa.ciutat_defuncio, 2);
+  const comarcaDefuncio = valorTextDesconegut(fitxa.comarca_defuncio, 3);
+  const provinciaDefuncio = valorTextDesconegut(fitxa.provincia_defuncio, 3);
+  const comunitatDefuncio = valorTextDesconegut(fitxa.comunitat_defuncio, 3);
+  const paisDefuncio = valorTextDesconegut(fitxa.pais_defuncio, 3);
+
+  const defuncio = joinValors([comarcaDefuncio, provinciaDefuncio, comunitatDefuncio, paisDefuncio], ', ', true);
 
   const tipologiaEspaiDefuncio = fitxa.tipologia_espai_ca === '' || fitxa.tipologia_espai_ca === null || fitxa.tipologia_espai_ca === undefined ? 'Desconeguda' : fitxa.tipologia_espai_ca;
   const observacionsTipologiaEspacioDefuncio = fitxa.observacions_espai === '' || fitxa.observacions_espai === null || fitxa.observacions_espai === undefined ? 'Desconeguda' : fitxa.observacions_espai;
@@ -411,9 +437,11 @@ async function mostrarInformacion(tab: string, idPersona: string, label: string)
         <p><span class='marro2'>Data de naixement:</span> <span class='blau1'>${dataNaixement}</span></p>
         <p><span class='marro2'>Data de defunció:</span> <span class='blau1'>${dataDefuncio}</span></p>
         <p><span class='marro2'>Edat:</span> <span class='blau1'>${edatAlMorir}</span></p>
-        <p><span class='marro2'>Ciutat de naixement:</span> <span class='blau1'>${ciutatNaixement} <span class='normal'>(${comarcaNaixement}, ${provinciaNaixement}, ${comunitatNaixement}, ${paisNaixement})</span></span></p>
-        <p><span class='marro2'>Lloc de residència:</span> <span class='blau1'>${adreca}, ${ciutatResidencia} <span class='normal'>(${comarcaResidencia}, ${provinciaResidencia}, ${comunitatResidencia}, ${paisResidencia})</span></span></p>
-        <p><span class='marro2'>Ciutat de defunció:</span> <span class='blau1'>${ciutatDefuncio} <span class='normal'>(${comarcaDefuncio}, ${provinciaDefuncio}, ${comunitatDefuncio}, ${paisDefuncio})</span></span></p>
+
+        <p><span class='marro2'>Municipi de naixement:</span> <span class='blau1'>${ciutatNaixement} <span class='normal'>${naixement}</span></span></p>
+
+        <p><span class='marro2'>Adreça de residència:</span> <span class='blau1'>${adrecaText} <span class='normal'>${residencia}</span></span></p>
+        <p><span class='marro2'>Municipi de defunció:</span> <span class='blau1'>${ciutatDefuncio} <span class='normal'>${defuncio}</span></span></p>
         <p><span class='marro2'>Tipologia espai de defunció:</span> <span class='blau1'>${tipologiaEspaiDefuncio}</span></p>
         <p><span class='marro2'>Observacions espai de defunció:</span> <span class='blau1'>${observacionsTipologiaEspacioDefuncio}</span></p>
         <p><span class='marro2'>Causa de la defunció:</span> <span class='blau1'>${causaDefuncio}</span></p>

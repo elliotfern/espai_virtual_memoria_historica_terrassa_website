@@ -1,7 +1,7 @@
 <div class="container" style="margin-bottom:50px;border: 1px solid gray;border-radius: 10px;padding:25px;background-color:#eaeaea">
     <form id="processatForm">
         <div class="container">
-            <h2>Tipus de repressió: Processat/Empresonat</h2>
+            <h2>Tipus de repressió: Detingut/Processat</h2>
             <h4 id="fitxaNomCognoms">Fitxa:</a></h4>
             <div class="row g-4">
                 <div class="alert alert-success" role="alert" id="okMessage" style="display:none">
@@ -15,8 +15,18 @@
                 <input type="hidden" name="idPersona" id="idPersona" value="">
                 <input type="hidden" name="id" id="id" value="">
 
+                <h4>1) Detenció</h4>
+                <div class="col-md-4 mb-4">
+                    <label for="data_detencio" class="form-label negreta">Data de detenció:</label>
+                    <input type="text" class="form-control" id="data_detencio" name="data_detencio" value="">
+                </div>
 
-                <h4>1) Procés judicial</h4>
+                <div class="col-md-4 mb-4">
+                    <label for="lloc_detencio" class="form-label negreta">Lloc de detenció:</label>
+                    <input type="text" class="form-control" id="lloc_detencio" name="lloc_detencio" value="">
+                </div>
+
+                <h4>2) Procés judicial</h4>
                 <div class="col-md-4 mb-4">
                     <label for="tipus_procediment" class="form-label negreta">Tipus de procediment:</label>
                     <select class="form-select" aria-label="Default select example" name="tipus_procediment" id="tipus_procediment">
@@ -62,7 +72,7 @@
                     <input type="text" class="form-control" id="sentencia_data" name="sentencia_data" value="">
                 </div>
 
-                <h4>2) Detalls de la conclusió del procés</h4>
+                <h4>3) Detalls de la conclusió del procés</h4>
 
                 <div class="alert alert-info">
                     <h5>Sobre la sentència i la pena</h5>
@@ -99,7 +109,7 @@
                     <input type="text" class="form-control" id="commutacio" name="commutacio" value="">
                 </div>
 
-                <h4>3) Detalls del procediment judicial: Consell de Guerra</h4>
+                <h4>4) Detalls del procediment judicial: Consell de Guerra</h4>
                 <div class="col-md-4 mb-4">
                     <label for="copia_exp" class="form-label negreta">Còpia expedient:</label>
                     <input type="text" class="form-control" id="copia_exp" name="copia_exp" value="">
@@ -170,7 +180,7 @@
                     <input type="text" class="form-control" id="tribunal_vocals" name="tribunal_vocals" value="">
                 </div>
 
-                <h4>4) Detalls de l'acusació</h4>
+                <h4>5) Detalls de l'acusació</h4>
                 <div class="col-md-6 mb-4">
                     <label for="acusacio" class="form-label negreta">Acusació 1:</label>
                     <select class="form-select" aria-label="Default select example" name="acusacio" id="acusacio">

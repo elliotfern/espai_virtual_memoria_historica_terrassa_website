@@ -12,6 +12,7 @@ import { taulaMortsCivils } from './taulaMortsCivils';
 import { taulaRepresaliaRepublicana } from './taulaRepresaliaRepublicana';
 import { taulaProcessats } from './taulaProcessats';
 import { taulaAfusellats } from './taulaAfusellats';
+import { taulaQuadreGeneral } from './taulaQuadreGeneral';
 
 export function baseDadesIntranet() {
   const url = window.location.href;
@@ -22,6 +23,8 @@ export function baseDadesIntranet() {
   if (pageType[2] === 'general') {
     if (pageType[3] === 'llistat-duplicats') {
       taulaDuplicats();
+    } else if (pageType[3] === 'quadre-general') {
+      taulaQuadreGeneral();
     } else {
       botonsEstat(pageType[2]);
       cargarTabla(pageType[2], 2);

@@ -328,4 +328,528 @@ if ($slug === "exiliats") {
             500
         );
     }
+
+    // GET : Comptador: grup 1 - cost huma
+    // URL: https://memoriaterrassa.cat/api/represaliats/get/totalCostHuma
+} else if ($slug === 'totalCostHuma') {
+    $db = new Database();
+
+    $query = "SELECT COUNT(*) AS total
+        FROM db_dades_personals
+        WHERE categoria LIKE '%{3}%' OR categoria LIKE '%{4}%' OR categoria LIKE '%{5}%'";
+
+    try {
+        $result = $db->getData($query);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
+    // GET : Comptador: grup 1 - cost huma militars - republica
+    // URL: https://memoriaterrassa.cat/api/represaliats/get/totalCombatentsRepublica
+} else if ($slug === 'totalCombatentsRepublica') {
+    $db = new Database();
+
+    $query = "SELECT COUNT(*) AS total
+        FROM db_cost_huma_morts_front
+        WHERE condicio IN (2, 4, 1)
+        AND bandol = 1";
+
+    try {
+        $result = $db->getData($query);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
+    // GET : Comptador: grup 1 - cost huma militars - sollevats
+    // URL: https://memoriaterrassa.cat/api/represaliats/get/totalCombatentsSollevats
+} else if ($slug === 'totalCombatentsSollevats') {
+    $db = new Database();
+
+    $query = "SELECT COUNT(*) AS total
+        FROM db_cost_huma_morts_front
+        WHERE condicio = 1
+        AND bandol = 2";
+
+    try {
+        $result = $db->getData($query);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
+    // GET : Comptador: grup 1 - cost huma militars - sense definir bàndol
+    // URL: https://memoriaterrassa.cat/api/represaliats/get/totalCombatentsSenseDefinir
+} else if ($slug === 'totalCombatentsSenseDefinir') {
+    $db = new Database();
+
+    $query = "SELECT COUNT(*) AS total
+        FROM db_cost_huma_morts_front
+        WHERE condicio IN (2, 4, 3, 1)
+        AND bandol = 3";
+
+    try {
+        $result = $db->getData($query);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
+    // GET : Comptador: grup 1 - cost huma civils - bombardeigs
+    // URL: https://memoriaterrassa.cat/api/represaliats/get/totalCivilsBombardeigs
+} else if ($slug === 'totalCivilsBombardeigs') {
+    $db = new Database();
+
+    $query = "SELECT COUNT(*) AS total
+        FROM db_cost_huma_morts_civils
+        WHERE cirscumstancies_mort IN (4, 5, 2)";
+
+    try {
+        $result = $db->getData($query);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
+    // GET : Comptador: grup 1 - cost huma civils - repressio republicana
+    // URL: https://memoriaterrassa.cat/api/represaliats/get/totalCivilsRepresaliaRepublicana
+} else if ($slug === 'totalCivilsRepresaliaRepublicana') {
+    $db = new Database();
+
+    $query = "SELECT COUNT(*) AS total
+        FROM db_dades_personals
+        WHERE categoria LIKE '%{5}%'";
+
+    try {
+        $result = $db->getData($query);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
+    // GET : Comptador: grup 2 - exiliats i deportats (deportats morts)
+    // URL: https://memoriaterrassa.cat/api/represaliats/get/totalDeportatsMorts
+} else if ($slug === 'totalDeportatsMorts') {
+    $db = new Database();
+
+    $query = "SELECT COUNT(*) AS total
+        FROM db_deportats
+        WHERE situacio = 1";
+
+    try {
+        $result = $db->getData($query);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
+    // GET : Comptador: grup 2 - exiliats i deportats (deportats alliberats)
+    // URL: https://memoriaterrassa.cat/api/represaliats/get/totalDeportatsAlliberats
+} else if ($slug === 'totalDeportatsAlliberats') {
+    $db = new Database();
+
+    $query = "SELECT COUNT(*) AS total
+        FROM db_deportats
+        WHERE situacio = 2";
+
+    try {
+        $result = $db->getData($query);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
+    // GET : Comptador: grup 3 - deportats totals
+    // URL: https://memoriaterrassa.cat/api/represaliats/get/totalDeportatsTotal
+} else if ($slug === 'totalDeportatsTotal') {
+    $db = new Database();
+
+    $query = "SELECT COUNT(*) AS total
+        FROM db_dades_personals
+        WHERE categoria LIKE '%{10,2}%'";
+
+    try {
+        $result = $db->getData($query);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
+    // GET : Comptador: grup 3 - exiliats totals
+    // URL: https://memoriaterrassa.cat/api/represaliats/get/totalExiliatsTotal
+} else if ($slug === 'totalExiliatsTotal') {
+    $db = new Database();
+
+    $query = "SELECT COUNT(*) AS total
+        FROM db_dades_personals
+        WHERE categoria LIKE '%{10}%'";
+
+    try {
+        $result = $db->getData($query);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
+    // GET : Comptador: grup 3 - exiliats i deportats totals
+    // URL: https://memoriaterrassa.cat/api/represaliats/get/totalExiliatsDeportatsTotal
+} else if ($slug === 'totalExiliatsDeportatsTotal') {
+    $db = new Database();
+
+    $query = "SELECT COUNT(*) AS total
+                FROM db_dades_personals
+                WHERE categoria LIKE '%{10}%' OR categoria LIKE '%{10,2}%'";
+
+    try {
+        $result = $db->getData($query);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
+    // GET : Comptador: grup 1 - total represaliats
+    // URL: https://memoriaterrassa.cat/api/represaliats/get/totalRepresaliats
+} else if ($slug === 'totalRepresaliats') {
+    $db = new Database();
+
+    $query = "SELECT COUNT(*) AS total
+            FROM db_dades_personals
+            WHERE categoria LIKE '{1}%' 
+            OR categoria LIKE '%{1}%' 
+            OR categoria LIKE '%,{1}%' 
+            OR categoria LIKE '{1,%'
+            OR categoria LIKE '{6}%' 
+            OR categoria LIKE '%{6}%' 
+            OR categoria LIKE '%,{6}%' 
+            OR categoria LIKE '{6,%'
+            OR categoria LIKE '{7}%' 
+            OR categoria LIKE '%{7}%' 
+            OR categoria LIKE '%,{7}%' 
+            OR categoria LIKE '{7,%'
+            OR categoria LIKE '{11}%' 
+            OR categoria LIKE '%{11}%' 
+            OR categoria LIKE '%,{11}%' 
+            OR categoria LIKE '{11,%'
+            OR categoria LIKE '{12}%' 
+            OR categoria LIKE '%{12}%' 
+            OR categoria LIKE '%,{12}%' 
+            OR categoria LIKE '{12,%'
+            OR categoria LIKE '{13}%' 
+            OR categoria LIKE '%{13}%' 
+            OR categoria LIKE '%,{13}%' 
+            OR categoria LIKE '{13,%'
+            OR categoria LIKE '{14}%' 
+            OR categoria LIKE '%{14}%' 
+            OR categoria LIKE '%,{14}%' 
+            OR categoria LIKE '{14,%'
+            OR categoria LIKE '{15}%' 
+            OR categoria LIKE '%{15}%' 
+            OR categoria LIKE '%,{15}%' 
+            OR categoria LIKE '{15,%'
+            OR categoria LIKE '{16}%' 
+            OR categoria LIKE '%{16}%' 
+            OR categoria LIKE '%,{16}%' 
+            OR categoria LIKE '{16,%'
+            OR categoria LIKE '{17}%' 
+            OR categoria LIKE '%{17}%' 
+            OR categoria LIKE '%,{17}%' 
+            OR categoria LIKE '{17,%';";
+
+    try {
+        $result = $db->getData($query);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
+    // GET : Comptador: grup 1 - total processats
+    // URL: https://memoriaterrassa.cat/api/represaliats/get/totalProcessats
+} else if ($slug === 'totalProcessats') {
+    $db = new Database();
+
+    $query = "SELECT COUNT(*) AS total
+                FROM db_dades_personals
+                WHERE categoria LIKE '{6}%'
+                OR categoria LIKE '%{6}%'
+                OR categoria LIKE '%,{6}%'
+                OR categoria LIKE '{6,%';";
+
+    try {
+        $result = $db->getData($query);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
+    // GET : Comptador: grup 1 - total afusellats
+    // URL: https://memoriaterrassa.cat/api/represaliats/get/totalAfusellats
+} else if ($slug === 'totalAfusellats') {
+    $db = new Database();
+
+    $query = "SELECT COUNT(*) AS total
+                FROM db_dades_personals
+                WHERE categoria LIKE '{1}%'
+                OR categoria LIKE '%{1}%'
+                OR categoria LIKE '%,{1}%'
+                OR categoria LIKE '{1,%';";
+
+    try {
+        $result = $db->getData($query);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
 }
