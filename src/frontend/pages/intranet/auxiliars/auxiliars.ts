@@ -27,6 +27,7 @@ import { taulaAcusacionsJudicials } from './taulaAcusacionsJudicials';
 import { taulaBandolsGuerra } from './taulaBandolsGuerra';
 import { taulaCondicionsMilitars } from './taulaCondicionsMilitars';
 import { taulaCossosMilitars } from './taulaCossosMilitars';
+import { formEmpresa } from './formEmpresa';
 
 export function auxiliars() {
   const url = window.location.href;
@@ -288,5 +289,9 @@ export function auxiliars() {
     taulaCondicionsMilitars();
   } else if (pageType[2] === 'llistat-cossos-militars') {
     taulaCossosMilitars();
+  } else if (pageType[2] === 'modifica-empresa') {
+    formEmpresa(true, Number(pageType[3]));
+  } else if (pageType[2] === 'nova-empresa') {
+    formEmpresa(false);
   }
 }

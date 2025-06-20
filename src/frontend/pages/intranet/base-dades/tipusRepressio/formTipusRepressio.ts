@@ -6,6 +6,7 @@ import { deportat } from './deportat';
 import { afusellat } from './afusellat';
 import { processat } from './processat';
 import { presoModel } from './presoModel';
+import { depurats } from './depurats';
 
 export function formTipusRepressio() {
   const url = window.location.href;
@@ -25,5 +26,7 @@ export function formTipusRepressio() {
     processat(Number(pageType[4]));
   } else if (pageType[3] === '12') {
     presoModel(Number(pageType[4]));
+  } else if (pageType[3] === '7') {
+    depurats(Number(pageType[4]));
   }
 }

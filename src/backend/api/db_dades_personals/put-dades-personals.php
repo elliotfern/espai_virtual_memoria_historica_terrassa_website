@@ -227,7 +227,7 @@ try {
     $stmt->bindParam(':estat_civil', $estat_civil, PDO::PARAM_INT);
     $stmt->bindParam(':estudis', $estudis, PDO::PARAM_INT);
     $stmt->bindParam(':ofici', $ofici, PDO::PARAM_INT);
-    $stmt->bindParam(':empresa', $empresa, PDO::PARAM_STR);
+    $stmt->bindParam(':empresa', $empresa, PDO::PARAM_INT);
     $stmt->bindParam(':sector', $sector, PDO::PARAM_INT);
     $stmt->bindParam(':sub_sector', $sub_sector, PDO::PARAM_INT);
     $stmt->bindParam(':carrec_empresa', $carrec_empresa, PDO::PARAM_INT);

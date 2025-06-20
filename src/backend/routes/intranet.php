@@ -76,6 +76,10 @@ $routes = [
         'view' => BACKEND_URL . $urlIntranetDir['base_dades'] . '/3_llistat-afusellats.php'
     ]),
 
+    APP_INTRANET . '/base-dades/represaliats/llistat-preso-model' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['base_dades'] . '/3_llistat-preso-model.php'
+    ]),
+
     // 01. Modificació dades de les fitxes
     APP_INTRANET . '/base-dades/modifica-fitxa/{id}' => array_merge($defaultProtectedConfig, [
         'view' => BACKEND_URL . $urlIntranetDir['base_dades'] . '/modifica_fitxa_persona.php'
@@ -227,6 +231,19 @@ $routes = [
 
     APP_INTRANET . $urlIntranet['auxiliars'] . '/modifica-tipologia-espai/{id}' => array_merge($defaultProtectedConfig, [
         'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-tipologia-espai.php'
+    ]),
+
+    // 2.10 Llistat empreses
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/llistat-empreses' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/llistat-empreses.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/nova-empresa' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-empresa.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/modifica-empresa/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-empresa.php'
     ]),
 
 

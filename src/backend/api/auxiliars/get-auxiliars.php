@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
 if ($slug === "municipis") {
     $db = new Database();
 
-    $query = "SELECT m.id, m.ciutat, c.comarca, p.provincia, co.comunitat, e.estat
+    $query = "SELECT m.id, COALESCE(m.ciutat_ca, m.ciutat) AS ciutat, c.comarca, p.provincia, co.comunitat, e.estat
             FROM  aux_dades_municipis AS m
             LEFT JOIN aux_dades_municipis_comarca AS c ON m.comarca = c.id
             LEFT JOIN aux_dades_municipis_provincia AS p ON m.provincia = p.id
@@ -127,7 +127,7 @@ if ($slug === "municipis") {
     // URL: https://memoriaterrassa.cat/api/auxiliars/get/provincies
 } else if ($slug === "provincies") {
 
-    $query = "SELECT p.id, p.provincia
+    $query = "SELECT p.id, COALESCE(p.provincia_ca, p.provincia) AS provincia
         FROM aux_dades_municipis_provincia AS p
         ORDER BY p.provincia ASC";
 
@@ -139,7 +139,7 @@ if ($slug === "municipis") {
     // URL: https://memoriaterrassa.cat/api/auxiliars/get/comarques
 } else if ($slug === "comarques") {
 
-    $query = "SELECT c.id, c.comarca
+    $query = "SELECT c.id, COALESCE(c.comarca_ca, c.comarca) AS comarca
         FROM aux_dades_municipis_comarca AS c
         ORDER BY c.comarca ASC";
 
@@ -150,7 +150,7 @@ if ($slug === "municipis") {
     // URL: https://memoriaterrassa.cat/api/auxiliars/get/comunitats
 } else if ($slug === "comunitats") {
 
-    $query = "SELECT c.id, c.comunitat
+    $query = "SELECT c.id, COALESCE(c.comunitat_ca, c.comunitat) AS comunitat
         FROM aux_dades_municipis_comunitat AS c
         ORDER BY c.comunitat ASC";
 
@@ -161,7 +161,7 @@ if ($slug === "municipis") {
     // URL: https://memoriaterrassa.cat/api/auxiliars/get/estats
 } else if ($slug === "estats") {
 
-    $query = "SELECT e.id, e.estat
+    $query = "SELECT e.id, COALESCE(e.estat_ca, e.estat) AS estat
         FROM aux_dades_municipis_estat AS e
         ORDER BY e.estat ASC";
 
@@ -185,6 +185,16 @@ if ($slug === "municipis") {
     $query = "SELECT o.id, o.ofici_cat
               FROM aux_oficis AS o
               ORDER BY o.ofici_cat ASC";
+
+    $result = getData2($query);
+    echo json_encode($result);
+
+    // GET : Llistat empreses
+    // URL: /api/auxiliars/get/empreses
+} else if ($slug === "empreses") {
+    $query = "SELECT id, empresa_ca
+              FROM aux_empreses
+              ORDER BY empresa_ca ASC";
 
     $result = getData2($query);
     echo json_encode($result);
@@ -688,6 +698,61 @@ if ($slug === "municipis") {
             500
         );
     }
+
+    // GET : Empresa per ID 
+    // URL: /api/auxiliars/get/empresa?id=44
+} elseif ($slug === "empresa") {
+
+    $db = new Database();
+
+    $id = $_GET['id'] ?? null;
+
+    $query = "SELECT id, empresa_ca, empresa_es, empresa_fr, empresa_en, empresa_it, empresa_pt
+              FROM aux_empreses 
+              WHERE id = :id";
+
+    try {
+
+        $params = [':id' => $id];
+        $result = $db->getData($query, $params, true);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;  // o exit; según cómo funcione Response::error
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
+    // GET : Tipus empleat - no cal fer petició a la base de dades
+    // URL: /api/auxiliars/get/tipusEmpleat
+} elseif ($slug === "tipusEmpleat") {
+
+    $result = [
+        ["id" => 1, "tipus_ca" => "Empleat sector públic (funcionari públic)"],
+        ["id" => 2, "tipus_ca" => "Empleat sector públic (professor educació pública)"],
+        ["id" => 3, "tipus_ca" => "Empleat sector privat"]
+    ];
+
+    Response::success(
+        MissatgesAPI::success('get'),
+        $result,
+        200
+    );
 } else {
     // Si el parámetro 'type' no coincide con ninguno de los casos anteriores, mostramos un error
     echo json_encode(["error" => "Tipo no válido"]);

@@ -25,9 +25,14 @@ export function tab4(fitxa?: Fitxa) {
   }
 
   // Asegurarse que 'empresa' es un input
-  const empresaInput = document.getElementById('empresa') as HTMLInputElement | null;
-  if (empresaInput && fitxa?.empresa !== undefined) {
-    empresaInput.value = fitxa.empresa && fitxa.empresa.trim() !== '' ? fitxa.empresa : 'Desconeguda';
+  auxiliarSelect(fitxa?.empresa_id ?? 1, 'empreses', 'empresa', 'empresa_ca', '1');
+
+  const refreshButtonEmpresa = document.getElementById('refreshButtonEmpresa');
+  if (refreshButtonEmpresa) {
+    refreshButtonEmpresa.addEventListener('click', (event: Event) => {
+      event.preventDefault();
+      auxiliarSelect(fitxa?.empresa_id ?? 1, 'empreses', 'empresa', 'empresa_ca');
+    });
   }
 
   auxiliarSelect(fitxa?.carrecs_empresa_id ?? 1, 'carrecs_empresa', 'carrec_empresa', 'carrec_cat', '1');

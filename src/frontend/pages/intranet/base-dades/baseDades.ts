@@ -13,6 +13,7 @@ import { taulaRepresaliaRepublicana } from './taulaRepresaliaRepublicana';
 import { taulaProcessats } from './taulaProcessats';
 import { taulaAfusellats } from './taulaAfusellats';
 import { taulaQuadreGeneral } from './taulaQuadreGeneral';
+import { taulaPresoModel } from './taulaPresoModel';
 
 export function baseDadesIntranet() {
   const url = window.location.href;
@@ -34,6 +35,8 @@ export function baseDadesIntranet() {
       taulaProcessats();
     } else if (pageType[3] === 'llistat-afusellats') {
       taulaAfusellats();
+    } else if (pageType[3] === 'llistat-preso-model') {
+      taulaPresoModel();
     } else {
       botonsEstat(pageType[2]);
       cargarTabla(pageType[2], 2);

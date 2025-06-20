@@ -45,6 +45,7 @@ export interface Fitxa {
   fills_noms: string;
   ofici_cat: string;
   empresa: string;
+  empresa_id: number;
   carrec_cat: string;
   sector_cat: string;
   sub_sector_cat: string;
@@ -192,6 +193,10 @@ export interface FitxaJudicial {
   data_llibertat: string;
   modalitat: number;
   vicissituds: string;
+  tipus_professional: number;
+  empresa: string;
+  professio: string;
+  sancio: string;
 }
 
 // Interfaces para los datos

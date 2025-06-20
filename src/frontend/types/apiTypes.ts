@@ -29,6 +29,8 @@ export type ApiUrls = {
     LLISTAT_REPRESALIA_REPUBLICANA: string;
     LLISTAT_PROCESSATS: string;
     LLISTAT_AFUSELLATS: string;
+    LLISTAT_PRESO_MODEL: string;
+    EMPRESA_ID: (id: number) => string;
   };
   POST: {
     MUNICIPI: string;
@@ -50,6 +52,7 @@ export type ApiUrls = {
     SECTOR_ECONOMIC: string;
     LLIBRE_BIBLIOFRAFIA: string;
     ARXIU_CODI: string;
+    EMPRESA: string;
   };
   PUT: {
     MUNICIPI: string;
@@ -71,6 +74,7 @@ export type ApiUrls = {
     SECTOR_ECONOMIC: string;
     LLIBRE_BIBLIOFRAFIA: string;
     ARXIU_CODI: string;
+    EMPRESA: string;
   };
   DELETE: {
     MUNICIPI: string;
@@ -92,5 +96,6 @@ export type ApiUrls = {
     SECTOR_ECONOMIC: string;
     LLIBRE_BIBLIOFRAFIA: string;
     ARXIU_CODI: string;
+    EMPRESA: string;
   };
 };

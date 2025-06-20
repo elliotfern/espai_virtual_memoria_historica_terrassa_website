@@ -46,6 +46,7 @@ final class Tables
     public const AUX_SUB_SECTOR_ECONOMIC = 'aux_sub_sector_economic';
     public const AUX_TIPOLOGIA_ESPAIS = 'aux_tipologia_espais';
     public const AUX_TIPUS_PRESONS = 'aux_tipus_presons';
+    public const AUX_EMPRESES = 'aux_empreses';
 
     public const CONTROL_REGISTRE_CANVIS = 'control_registre_canvis';
 

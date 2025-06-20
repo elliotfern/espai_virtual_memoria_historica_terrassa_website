@@ -852,4 +852,40 @@ if ($slug === "exiliats") {
             500
         );
     }
+    // GET : grup 1 - LListat Detinguts presó model
+    // URL: https://memoriaterrassa.cat/api/represaliats/get/detingutsPresoModel
+} else if ($slug === 'detingutsPresoModel') {
+    $db = new Database();
+
+    $query = "SELECT a.id, CONCAT(a.cognom1, ' ', a.cognom2, ', ', a.nom) AS nom_complet, a.data_naixement, a.data_defuncio,
+                CASE WHEN e.id IS NOT NULL THEN 'Fitxa creada' ELSE 'No' END AS es_PresoModel
+                FROM db_dades_personals AS a
+                LEFT JOIN db_detinguts_model AS e ON a.id = e.idPersona
+                WHERE FIND_IN_SET('12', REPLACE(REPLACE(a.categoria, '{', ''), '}', '')) > 0
+                ORDER BY a.cognom1 ASC;";
+
+    try {
+        $result = $db->getData($query);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
 }

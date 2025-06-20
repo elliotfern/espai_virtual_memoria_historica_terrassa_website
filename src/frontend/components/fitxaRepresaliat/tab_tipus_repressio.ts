@@ -1,6 +1,7 @@
 import { categoriesRepressio } from '../taulaDades/categoriesRepressio';
 import { FitxaJudicial } from '../../types/types';
 import { formatDatesForm } from '../../services/formatDates/dates';
+import { valorTextDesconegut } from '../../services/formatDates/valorTextDesconegut';
 
 // Mostrar la información dependiendo de la categoría
 export const fitxaTipusRepressio = async (categoriaNumerica: string, fitxa2: FitxaJudicial): Promise<void> => {
@@ -316,8 +317,30 @@ export const fitxaTipusRepressio = async (categoriaNumerica: string, fitxa2: Fit
         </div>
       </div>`;
   } else if (parseInt(categoriaNumerica) === 7) {
+    const empresa = valorTextDesconegut(dades.empresa, 1);
+    type ProfessionalTypeKeys = 1 | 2 | 3;
+    const professionalTypes = {
+      1: 'Empleat sector públic: (funcionari públic)',
+      2: 'Empleat sector públic: (professor educació pública)',
+      3: 'Empleat sector privat',
+    };
+
+    const tipusProfessional = professionalTypes[dades.tipus_professional as ProfessionalTypeKeys] || 'Desconegut';
+    const professio = valorTextDesconegut(dades.professio, 1);
+    const sancio = valorTextDesconegut(dades.sancio, 5);
+    const observacions = valorTextDesconegut(dades.observacions, 3);
+
     htmlContent += `
-          <h5>En elaboració:</h5>
+          <div class="negreta raleway">
+
+     <div style="margin-top:25px">
+        <h5><span class="negreta blau1">1) Dades sobre la depuració al lloc de treball</span></h5>
+          <p><span class='marro2'>Sector professional: </span> <span class='blau1'>${tipusProfessional}</span></p>
+          <p><span class='marro2'>Professió:</span> <span class='blau1'>${professio}</span></p>
+          <p><span class='marro2'>Empresa:</span> <span class='blau1'>${empresa}</span></p>
+          <p><span class='marro2'>Sanció:</span> <span class='blau1'>${sancio}</span></p>
+          <p><span class='marro2'>Observacions:</span> <span class='blau1'>${observacions}</span></p>     
+        </div>
         `;
   } else if (parseInt(categoriaNumerica) === 8) {
     htmlContent += `

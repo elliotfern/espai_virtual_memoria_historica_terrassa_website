@@ -95,35 +95,35 @@ if ($pagina === "modifica-fitxa") {
                 <div class="form-check me-3">
                   <input class="form-check-input" type="checkbox" id="categoria12" name="categoria" value="categoria12">
                   <label class="form-check-label" for="categoria12">
-                    Detinguts Presó Model
+                    Empresonat Presó Model
                   </label>
                 </div>
 
                 <div class="form-check me-3">
                   <input class="form-check-input" type="checkbox" id="categoria13" name="categoria" value="categoria13">
                   <label class="form-check-label" for="categoria13">
-                    Detinguts Guàrdia Urbana
+                    Detingut Guàrdia Urbana
                   </label>
                 </div>
 
                 <div class="form-check me-3">
                   <input class="form-check-input" type="checkbox" id="categoria14" name="categoria" value="categoria14">
                   <label class="form-check-label" for="categoria14">
-                    Detinguts Comitè de Solidaritat
+                    Detingut Comitè de Solidaritat (1970-1977)
                   </label>
                 </div>
 
                 <div class="form-check me-3">
                   <input class="form-check-input" type="checkbox" id="categoria15" name="categoria" value="categoria15">
                   <label class="form-check-label" for="categoria15">
-                    Responsabilitats polítiques
+                    Expedient Responsabilitats polítiques
                   </label>
                 </div>
 
                 <div class="form-check me-3">
                   <input class="form-check-input" type="checkbox" id="categoria16" name="categoria" value="categoria16">
                   <label class="form-check-label" for="categoria16">
-                    Funcionaris depurats
+                    Empresonat dipòsit municipal Sant Llàtzer (1951-1975)
                   </label>
                 </div>
 
@@ -131,6 +131,13 @@ if ($pagina === "modifica-fitxa") {
                   <input class="form-check-input" type="checkbox" id="categoria17" name="categoria" value="categoria17">
                   <label class="form-check-label" for="categoria17">
                     Tribunal Orden Público
+                  </label>
+                </div>
+
+                <div class="form-check me-3">
+                  <input class="form-check-input" type="checkbox" id="categoria18" name="categoria" value="categoria18">
+                  <label class="form-check-label" for="categoria18">
+                    Comitè Relacions de Solidaritat (1939-1940)
                   </label>
                 </div>
 
@@ -381,8 +388,16 @@ if ($pagina === "modifica-fitxa") {
         </div>
 
         <div class="col-md-4 mb-4">
-          <label for="empresa" class="form-label negreta">Empresa:</label>
-          <input type="text" class="form-control" id="empresa" name="empresa" value="">
+          <label for="empresa" class="form-label negreta">Empresa / Organisme públic:</label>
+          <select class="form-select" id="empresa" value="" name="empresa">
+          </select>
+          <div class="avis" style="font-size:14px">
+            * En cas d'absència d'informació marqueu "Desconeguda".
+          </div>
+          <div class="mt-2">
+            <a href="<?php echo APP_WEB . APP_INTRANET . $url['auxiliars'] ?>/nova-empresa" target="_blank" class="btn btn-secondary btn-sm" id="afegirEmpresa">Afegir empresa</a>
+            <button id="refreshButtonEmpresa" class="btn btn-primary btn-sm">Actualitzar llistat</button>
+          </div>
         </div>
 
         <div class="col-md-4 mb-4">

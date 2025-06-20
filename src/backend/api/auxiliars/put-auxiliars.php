@@ -1904,6 +1904,100 @@ if ($slug === "municipi") {
             500
         );
     }
+
+    // 4) PUT Empresa
+    // ruta PUT => "/api/auxiliars/post/empresa"
+} else if ($slug === "empresa") {
+    $inputData = file_get_contents('php://input');
+    $data = json_decode($inputData, true);
+
+    // Inicializar un array para los errores
+    $errors = [];
+
+    // Validación de los datos recibidos
+    if (empty($data['empresa_ca'])) {
+        $errors[] =  ValidacioErrors::requerit('empresa en català');
+    }
+
+    // Si hay errores, devolver una respuesta con los errores
+    if (!empty($errors)) {
+        Response::error(
+            MissatgesAPI::error('validacio'),
+            $errors,
+            400
+        );
+    }
+
+    // Si no hay errores, crear las variables PHP y preparar la consulta PDO
+    $empresa_ca = $data['empresa_ca'];
+    $empresa_es  = !empty($data['empresa_es']) ? $data['empresa_es'] : NULL;
+    $empresa_en  = !empty($data['empresa_en']) ? $data['empresa_en'] : NULL;
+    $empresa_fr  = !empty($data['empresa_fr']) ? $data['empresa_fr'] : NULL;
+    $empresa_it  = !empty($data['empresa_it']) ? $data['empresa_it'] : NULL;
+    $empresa_pt  = !empty($data['empresa_pt']) ? $data['empresa_pt'] : NULL;
+    $id = $data['id'];
+
+    // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
+    try {
+
+        global $conn;
+        /** @var PDO $conn */
+
+        // Crear la consulta SQL
+        $sql = "UPDATE aux_empreses SET
+            empresa_ca = :empresa_ca,
+            empresa_es = :empresa_es,
+            empresa_en = :empresa_en,
+            empresa_fr = :empresa_fr,
+            empresa_it = :empresa_it,
+            empresa_pt = :empresa_pt
+        WHERE id = :id";
+
+        // Preparar la consulta
+        $stmt = $conn->prepare($sql);
+
+        // Enlazar los parámetros con los valores de las variables PHP
+        $stmt->bindParam(':empresa_ca', $empresa_ca, PDO::PARAM_STR);
+        $stmt->bindParam(':empresa_es', $empresa_es, PDO::PARAM_STR);
+        $stmt->bindParam(':empresa_en', $empresa_en, PDO::PARAM_STR);
+        $stmt->bindParam(':empresa_fr', $empresa_fr, PDO::PARAM_STR);
+        $stmt->bindParam(':empresa_it', $empresa_it, PDO::PARAM_STR);
+        $stmt->bindParam(':empresa_pt', $empresa_pt, PDO::PARAM_STR);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+
+        // Ejecutar la consulta
+        $stmt->execute();
+
+        // Recuperar el ID del registro creado
+        $tipusOperacio = "UPDATE";
+        $detalls =  "Modificació empresa: " . $empresa_ca;
+
+        // Si la inserció té èxit, cal registrar la inserció en la base de control de canvis
+
+        Audit::registrarCanvi(
+            $conn,
+            $userId,                      // ID del usuario que hace el cambio
+            $tipusOperacio,             // Tipus operacio
+            $detalls,                       // Descripción de la operación
+            Tables::AUX_EMPRESES,  // Nombre de la tabla afectada
+            $id                           // ID del registro modificado
+        );
+
+        // Respuesta de éxito
+        Response::success(
+            MissatgesAPI::success('update'),
+            ['id' => $id],
+            200
+        );
+    } catch (PDOException $e) {
+        // En caso de error en la conexión o ejecución de la consulta
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
     // Fi endpoints   
 } else {
     Response::error(

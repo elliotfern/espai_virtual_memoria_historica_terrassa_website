@@ -428,7 +428,8 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
             es.id AS estudis_id, 
             o.ofici_cat, 
             o.id AS ofici_id, 
-            dp.empresa, 
+            em.empresa_ca AS empresa,
+            dp.empresa AS empresa_id,
             fp.partit_politic, 
             fp.id AS partit_politic_id,
             dp.filiacio_politica,
@@ -485,6 +486,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
             LEFT JOIN auth_users AS u ON dp.autor = u.id
             LEFT JOIN aux_imatges AS img ON dp.img = img.id
             LEFT JOIN db_biografies AS bio ON dp.id = bio.idRepresaliat
+            LEFT JOIN aux_empreses AS em ON dp.empresa = em.id
             WHERE dp.id = $id";
 
 

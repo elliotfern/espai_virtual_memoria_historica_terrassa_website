@@ -6,14 +6,13 @@
         <ul>
             <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['base_dades']; ?>/represaliats/llistat-processats">Llistat de detinguts / processats</a></li>
             <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['base_dades']; ?>/represaliats/llistat-afusellats">Llistat d'afusellats</a></li>
+            <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['base_dades']; ?>/represaliats/llistat-preso-model">Llistat detinguts Presó Model</a></li>
             <li>Depurats</li>
-            <li>Represaliats pendents de classificar (llistat Ajuntament)</li>
-            <li>Detinguts Presó Model</li>
             <li>Detinguts Guàrdia Urbana Terrassa</li>
             <li>Detinguts Comitè Solidaritat</li>
             <li>Responsabilitats polítiques</li>
-            <li>Funcionaris depurats</li>
             <li>Tribunal Orden Público</li>
+            <li>Represaliats pendents de classificar (llistat Ajuntament)</li>
         </ul>
 
         <hr>

@@ -2,6 +2,7 @@ export function valorTextDesconegut(valor: string | null, perDefecte: number = 1
   const textos: Record<number, string> = {
     1: 'Sense dades',
     2: 'Desconegut',
+    5: 'Desconeguda',
     3: '',
     4: 'Data desconeguda',
   };

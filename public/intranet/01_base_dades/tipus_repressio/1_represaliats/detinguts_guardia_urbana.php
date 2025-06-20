@@ -1,7 +1,7 @@
 <div class="container" style="margin-bottom:50px;border: 1px solid gray;border-radius: 10px;padding:25px;background-color:#eaeaea">
     <form id="processatForm">
         <div class="container">
-            <h2>Tipus de repressió: Detinguts Guàrdia Urbana</h2>
+            <h2>Tipus de repressió: Detingut Guàrdia Urbana</h2>
             <h4 id="fitxaNomCognoms">Fitxa:</a></h4>
             <div class="row g-4">
                 <div class="alert alert-success" role="alert" id="okMessage" style="display:none">
@@ -16,7 +16,13 @@
                 <input type="hidden" name="id" id="id" value="">
 
 
-
+                data_empresonament
+                data_sortida
+                motiu_empresonament
+                qui_ordena_detencio
+                grup_ordena_detencio
+                top
+                observacions
                 <div class="row espai-superior" style="border-top: 1px solid black;padding-top:25px">
                     <div class="col"></div>
 

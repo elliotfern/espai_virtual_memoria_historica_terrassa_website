@@ -62,8 +62,8 @@ export async function presoModel(idRepresaliat: number) {
 
   renderFormInputs(data);
 
-  await auxiliarSelect(data?.trasllats, '', 'trasllats', '');
-  await auxiliarSelect(data?.llibertat, '', 'llibertat', '');
+  await auxiliarSelect(data?.trasllats, '', 'trasllats', '', '');
+  await auxiliarSelect(data?.llibertat, '', 'llibertat', '', '');
   await auxiliarSelect(data?.modalitat, 'modalitatPreso', 'modalitat', 'modalitat_ca');
 
   if (!response) {
