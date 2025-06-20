@@ -8,6 +8,8 @@ import { carregarTraduccions, getTraducciones } from '../../services/textosIdiom
 import { traduirCategoriesRepressioArray } from '../taulaDades/traduirCategoriesRepressio';
 import { valorTextDesconegut } from '../../services/formatDates/valorTextDesconegut';
 import { joinValors } from '../../services/formatDates/joinValors';
+import { taulaBibliografia } from '../modificaFitxaRepresaliat/taulaBibliografia';
+import { taulaArxius } from '../modificaFitxaRepresaliat/taulaArxius';
 
 interface Partit {
   id: number;
@@ -457,11 +459,17 @@ async function mostrarInformacion(tab: string, idPersona: string, label: string)
       if (fitxaFam) {
         divInfo.innerHTML += `<div class="familiar"><p><span class='marro2'>Relació de familiars:</span></p>`;
         fitxaFam.forEach((familiar) => {
+          const nomFamiliar = valorTextDesconegut(familiar.nomFamiliar ?? '', 3);
+          const cognom1Familiar = valorTextDesconegut(familiar.cognomFamiliar1 ?? '', 3);
+          const cognomFamiliar2 = valorTextDesconegut(familiar.cognomFamiliar2 ?? '', 3);
+          const naixementFamiliar = valorTextDesconegut(familiar.anyNaixementFamiliar ?? '', 3);
+          const familiarDades = joinValors([nomFamiliar, cognom1Familiar, cognomFamiliar2], ' ', false);
+
           divInfo.innerHTML += `
-        <p><span class='marro2'>${familiar.relacio_parentiu}:</span> <span class='blau1'>${familiar.nomFamiliar} ${familiar.cognomFamiliar1} 
-        ${familiar.cognomFamiliar2} ${familiar.anyNaixementFamiliar ? `(${familiar.anyNaixementFamiliar})` : ''}</span></p>
-      </div>`;
+        <p><span class='marro2'>${familiar.relacio_parentiu}:</span> <span class='blau1'>${familiarDades} ${naixementFamiliar ? `(${naixementFamiliar})` : ''}</span> </p>
+      `;
         });
+        divInfo.innerHTML += `</div>`;
       }
 
       break;
@@ -490,9 +498,8 @@ async function mostrarInformacion(tab: string, idPersona: string, label: string)
           </div>
     
           <div style="margin-top:30px;margin-bottom:30px">
-            <h5 class="titolSeccio2">Activitat política i sindical durant la guerra:</h5>
-            <p><span class='marro2'>Afiliació política:</span> <span class='blau1'>-</span></p>
-            <p><span class='marro2'>Afiliació sindical:</span> <span class='blau1'>-</span></p>
+            <h5 class="titolSeccio2">Activitat política i sindical durant la guerra civil i la dictadura:</h5>
+            <p><span class='blau1'>${valorTextDesconegut(fitxa.activitat_durant_guerra, 1)}</span></p>
           </div>
         `;
       });
@@ -503,13 +510,60 @@ async function mostrarInformacion(tab: string, idPersona: string, label: string)
         ${fitxa.biografiaCa ? `<span class='blau1 normal'>${fitxa.biografiaCa}</span>` : 'La biografia no està disponible.'}
       `;
       break;
-    case 'tab6':
-      divInfo.innerHTML = `
-        <h3 class="titolSeccio">${label}</h3>
-        <p>En elaboració</p>
+    case 'tab6': {
+      divInfo.innerHTML = `<div id="bibliografia"></div>`;
+      // Obtener el contenedor recién creado
+      const bibliografiaContainer = document.getElementById('bibliografia');
 
-      `;
+      if (bibliografiaContainer) {
+        // Crear los elementos dinámicamente
+        const quadreFonts1 = document.createElement('div');
+        quadreFonts1.id = 'quadreFonts1';
+
+        const quadreBibliografia = document.createElement('div');
+        quadreBibliografia.id = 'quadreFontsBibliografia';
+
+        const quadreFonts2 = document.createElement('div');
+        quadreFonts2.id = 'quadreFonts2';
+        quadreFonts2.style.marginTop = '35px';
+
+        const quadreArxius = document.createElement('div');
+        quadreArxius.id = 'quadreFontsArxius';
+
+        // Añadir los nuevos elementos al contenedor 'bibliografia'
+        bibliografiaContainer.appendChild(quadreFonts1);
+        bibliografiaContainer.appendChild(quadreFonts2);
+
+        quadreFonts1.appendChild(quadreBibliografia);
+        quadreFonts2.appendChild(quadreArxius);
+
+        // Configurar y añadir contenido a los nuevos elementos
+        if (quadreFonts1) {
+          quadreFonts1.style.display = 'block';
+          const h4 = document.createElement('h4');
+          h4.textContent = 'Llistat de bibliografia';
+          h4.classList.add('titolSeccio');
+          quadreFonts1.prepend(h4);
+
+          if (fitxa?.id) {
+            taulaBibliografia(fitxa.id);
+          }
+        }
+
+        if (quadreFonts2) {
+          quadreFonts2.style.display = 'block';
+          const h4 = document.createElement('h4');
+          h4.textContent = "Llistat d'arxius";
+          h4.classList.add('titolSeccio');
+          quadreFonts2.prepend(h4);
+
+          if (fitxa?.id) {
+            taulaArxius(fitxa.id);
+          }
+        }
+      }
       break;
+    }
     case 'tab7':
       divInfo.innerHTML = `
         <h3 class="titolSeccio">${label}</h3>

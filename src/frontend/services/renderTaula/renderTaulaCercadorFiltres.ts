@@ -1,6 +1,6 @@
 type Column<T> = {
   header: string;
-  field: keyof T; // field debe ser clave de T
+  field: keyof T;
   render?: (value: T[keyof T], row: T) => string;
 };
 
@@ -11,9 +11,20 @@ type RenderTableOptions<T> = {
   rowsPerPage?: number;
   filterKeys?: (keyof T)[];
   filterByField?: keyof T;
+  showSearch?: boolean; // Nuevo parámetro para controlar la visibilidad del buscador
+  showPagination?: boolean; // Nuevo parámetro para controlar la visibilidad de la paginación
 };
 
-export async function renderTaulaCercadorFiltres<T>({ url, columns, containerId, rowsPerPage = 15, filterKeys = [], filterByField }: RenderTableOptions<T>) {
+export async function renderTaulaCercadorFiltres<T>({
+  url,
+  columns,
+  containerId,
+  rowsPerPage = 15,
+  filterKeys = [],
+  filterByField,
+  showSearch = true, // Valor por defecto es true para mantener la compatibilidad
+  showPagination = true, // Valor por defecto es true para mantener la compatibilidad
+}: RenderTableOptions<T>) {
   const container = document.getElementById(containerId);
   if (!container) return console.error(`Contenedor #${containerId} no encontrado`);
 
@@ -25,7 +36,6 @@ export async function renderTaulaCercadorFiltres<T>({ url, columns, containerId,
     return;
   }
 
-  // Aquí comprobamos si la propiedad 'data' existe y es un array, si no, usamos directamente 'result'
   const data: T[] = Array.isArray(result.data) ? result.data : result;
 
   let currentPage = 1;
@@ -74,7 +84,6 @@ export async function renderTaulaCercadorFiltres<T>({ url, columns, containerId,
     let uniqueValues = Array.from(new Set(data.map((row) => row[filterByField]))).filter(Boolean) as T[keyof T][];
 
     uniqueValues = uniqueValues.sort((a, b) => {
-      // Para evitar error, forzamos a string (si son string)
       return String(a).localeCompare(String(b), 'ca', { sensitivity: 'base' });
     });
 
@@ -130,34 +139,42 @@ export async function renderTaulaCercadorFiltres<T>({ url, columns, containerId,
       )
       .join('');
 
-    const totalPages = Math.ceil(filteredData.length / rowsPerPage);
-    pagination.innerHTML = '';
-    for (let i = 1; i <= totalPages; i++) {
-      const link = document.createElement('a');
-      link.textContent = i.toString();
-      link.href = '#';
-      link.className = 'pagination-link' + (i === currentPage ? ' current-page' : '');
-      link.onclick = (e) => {
-        e.preventDefault();
-        currentPage = i;
-        renderTable();
-      };
-      pagination.appendChild(link);
+    if (showPagination) {
+      const totalPages = Math.ceil(filteredData.length / rowsPerPage);
+      pagination.innerHTML = '';
+      for (let i = 1; i <= totalPages; i++) {
+        const link = document.createElement('a');
+        link.textContent = i.toString();
+        link.href = '#';
+        link.className = 'pagination-link' + (i === currentPage ? ' current-page' : '');
+        link.onclick = (e) => {
+          e.preventDefault();
+          currentPage = i;
+          renderTable();
+        };
+        pagination.appendChild(link);
+      }
     }
+
     totalRecords.textContent = `Número total de registres: ${filteredData.length}`;
   }
 
-  searchInput.addEventListener('input', applyFilters);
+  if (showSearch) {
+    searchInput.addEventListener('input', applyFilters);
+    container.appendChild(searchInput);
+  }
 
-  container.innerHTML = '';
-  container.appendChild(searchInput);
   if (filterByField) {
     container.appendChild(buttonContainer);
     renderFilterButtons();
   }
+
   container.appendChild(table);
   container.appendChild(totalRecords);
-  container.appendChild(pagination);
+
+  if (showPagination) {
+    container.appendChild(pagination);
+  }
 
   applyFilters();
 }

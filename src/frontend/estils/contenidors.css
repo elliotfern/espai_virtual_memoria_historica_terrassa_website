@@ -29,6 +29,10 @@
   color: white;
 }
 
+#bibliografia td {
+  font-weight: normal !important;
+}
+
 /* Estilo base de las columnas */
 .column-hover {
   background-color: #b39b7c;

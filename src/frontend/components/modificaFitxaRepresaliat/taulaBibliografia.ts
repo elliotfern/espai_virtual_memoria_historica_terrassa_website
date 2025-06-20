@@ -85,6 +85,8 @@ export async function taulaBibliografia(idRepressaliat: number) {
     columns,
     filterKeys: ['llibre'],
     //filterByField: 'provincia',
+    showSearch: false, // Desactiva el buscador
+    showPagination: false, // Desactiva la paginación
   });
 
   // Registra el callback con una clave única

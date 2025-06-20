@@ -29,7 +29,7 @@ export async function taulaArxius(idRepressaliat: number) {
     { header: 'Referència', field: 'referencia' },
     { header: 'Arxiu', field: 'arxiu' },
     { header: 'Codi', field: 'codi' },
-    { header: 'Ciutat arxiu', field: 'ciutat' },
+    { header: 'Ciutat', field: 'ciutat' },
   ];
 
   if (isAdmin || isAutor || isLogged) {
@@ -63,6 +63,8 @@ export async function taulaArxius(idRepressaliat: number) {
     columns,
     filterKeys: ['arxiu'],
     //filterByField: 'provincia',
+    showSearch: false, // Desactiva el buscador
+    showPagination: false, // Desactiva la paginación
   });
 
   // Registra el callback con una clave única
