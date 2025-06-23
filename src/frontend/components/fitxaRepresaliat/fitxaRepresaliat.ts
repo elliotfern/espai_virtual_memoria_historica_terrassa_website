@@ -238,19 +238,21 @@ async function mostrarCategoria(categoriaNumerica: string, idPersona: string): P
   } else if (parseInt(categoriaNumerica) === 10) {
     urlAjax2 = `${devDirectory}/api/exiliats/get/fitxaId?id=${idPersona}`;
   } else if (parseInt(categoriaNumerica) === 11) {
-    urlAjax2 = `${devDirectory}/api/pendents/get/fitxaId?id=${idPersona}`;
+    urlAjax2 = '';
   } else if (parseInt(categoriaNumerica) === 12) {
     urlAjax2 = `${devDirectory}/api/preso_model/get/fitxaId?id=${idPersona}`;
   } else if (parseInt(categoriaNumerica) === 13) {
-    urlAjax2 = `${devDirectory}/api/---/get/fitxaId?id=${idPersona}`;
+    urlAjax2 = `${devDirectory}/api/detinguts_guardia_urbana/get/fitxaId?id=${idPersona}`;
   } else if (parseInt(categoriaNumerica) === 14) {
     urlAjax2 = `${devDirectory}/api/----/get/fitxaId?id=${idPersona}`;
   } else if (parseInt(categoriaNumerica) === 15) {
-    urlAjax2 = `${devDirectory}/api/---/get/fitxaId?id=${idPersona}`;
+    urlAjax2 = `${devDirectory}/api/responsabilitats_politiques/get/fitxaId?id=${idPersona}`;
   } else if (parseInt(categoriaNumerica) === 16) {
     urlAjax2 = `${devDirectory}/api/---/get/fitxaId?id=${idPersona}`;
   } else if (parseInt(categoriaNumerica) === 17) {
-    urlAjax2 = `${devDirectory}/api/exi---liats/get/fitxaId?id=${idPersona}`;
+    urlAjax2 = `${devDirectory}/api/---/get/fitxaId?id=${idPersona}`;
+  } else if (parseInt(categoriaNumerica) === 18) {
+    urlAjax2 = `${devDirectory}/api/detinguts_comite_solidaritat/get/fitxaId?id=${idPersona}`;
   } else {
     console.error('Categoria no válida:', categoriaNumerica);
     return;

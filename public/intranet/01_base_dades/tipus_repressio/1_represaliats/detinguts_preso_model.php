@@ -68,9 +68,9 @@
                     <input type="text" class="form-control" id="vicissituds" name="vicissituds" value="">
                 </div>
 
-                <div class="col-md-6 mb-4">
+                <div class="col-md-12 mb-4">
                     <label for="observacions" class="form-label negreta">Observacions:</label>
-                    <input type="text" class="form-control" id="observacions" name="observacions" value="">
+                    <textarea class="form-control" id="observacions" name="observacions" rows="4"></textarea>
                 </div>
 
                 <div class="row espai-superior" style="border-top: 1px solid black;padding-top:25px">

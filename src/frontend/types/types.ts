@@ -197,6 +197,17 @@ export interface FitxaJudicial {
   empresa: string;
   professio: string;
   sancio: string;
+
+  lloc_empresonament: string;
+  preso_ciutat: string;
+  lloc_exili: string;
+  condemna: string;
+  data_sortida: string;
+  motiu_empresonament: string;
+  qui_ordena_detencio: string;
+  nom_institucio: string;
+  grup: string;
+  top: number;
 }
 
 // Interfaces para los datos

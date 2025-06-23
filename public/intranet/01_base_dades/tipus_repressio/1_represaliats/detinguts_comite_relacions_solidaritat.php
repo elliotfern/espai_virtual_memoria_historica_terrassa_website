@@ -1,7 +1,7 @@
 <div class="container" style="margin-bottom:50px;border: 1px solid gray;border-radius: 10px;padding:25px;background-color:#eaeaea">
     <form id="processatForm">
         <div class="container">
-            <h2>Tipus de repressió: Funcionaris depurats</h2>
+            <h2>Tipus de repressió: Detinguts Comitè Relacions de Solidaritat</h2>
             <h4 id="fitxaNomCognoms">Fitxa:</a></h4>
             <div class="row g-4">
                 <div class="alert alert-success" role="alert" id="okMessage" style="display:none">

@@ -753,6 +753,164 @@ if ($slug === "municipis") {
         $result,
         200
     );
+
+    // GET : Empresa per ID 
+    // URL: /api/auxiliars/get/empresa?id=44
+} elseif ($slug === "empresa") {
+
+    $db = new Database();
+
+    $id = $_GET['id'] ?? null;
+
+    $query = "SELECT id, empresa_ca, empresa_es, empresa_fr, empresa_en, empresa_it, empresa_pt
+              FROM aux_empreses 
+              WHERE id = :id";
+
+    try {
+
+        $params = [':id' => $id];
+        $result = $db->getData($query, $params, true);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;  // o exit; según cómo funcione Response::error
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
+    // GET : Motius detenció
+    // URL: /api/auxiliars/get/motiusEmpresonament
+} elseif ($slug === "motiusEmpresonament") {
+
+    $db = new Database();
+    $query = "SELECT id, motiuEmpresonament_ca
+              FROM aux_motius_empresonament
+              ORDER BY motiuEmpresonament_ca";
+
+    try {
+        $result = $db->getData($query);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;  // o exit; según cómo funcione Response::error
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
+    // GET :TOP - no cal fer petició a la base de dades
+    // URL: /api/auxiliars/get/top
+} elseif ($slug === "top") {
+
+    $result = [
+        ["id" => 1, "ordena_top" => "Sí"],
+        ["id" => 2, "ordena_top" => "No"],
+        ["id" => 3, "ordena_top" => "SD"]
+    ];
+
+    Response::success(
+        MissatgesAPI::success('get'),
+        $result,
+        200
+    );
+
+    // GET : Grups de repressió
+    // URL: /api/auxiliars/get/sistemaRepressiu
+} elseif ($slug === "sistemaRepressiu") {
+
+    $db = new Database();
+    $query = "SELECT id, CONCAT_WS(' - ', carrec, nom_institucio) AS carrec
+              FROM aux_sistema_repressiu
+              ORDER BY carrec";
+
+    try {
+        $result = $db->getData($query);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;  // o exit; según cómo funcione Response::error
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
+    // GET : Llistat de presons
+    // URL: /api/auxiliars/get/llistatPresons
+} elseif ($slug === "llistatPresons") {
+
+    $db = new Database();
+    $query = "SELECT CONCAT_WS(' - ', p.nom_preso, m.ciutat) AS preso, p.id
+              FROM aux_presons AS p
+              LEFT JOIN aux_dades_municipis AS m ON p.municipi_preso = m.id
+              ORDER BY p.nom_preso ASC";
+
+    try {
+        $result = $db->getData($query);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;  // o exit; según cómo funcione Response::error
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
 } else {
     // Si el parámetro 'type' no coincide con ninguno de los casos anteriores, mostramos un error
     echo json_encode(["error" => "Tipo no válido"]);

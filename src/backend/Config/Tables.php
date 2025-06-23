@@ -62,4 +62,7 @@ final class Tables
     public const DB_EXILIATS = 'db_exiliats';
     public const DB_PRESO_MODEL = 'db_detinguts_model';
     public const DB_FORM_CONTACTE = 'db_form_contacte';
+    public const DB_DETINGUTS_GU = 'db_detinguts_guardia_urbana';
+    public const DB_AFECTATS_RESPONSABILITATS = 'db_responsabilitats_politiques';
+    public const DB_TRIBUNAL_ORDEN_PUBLICO = 'db_tribunal_orden_publico';
 }

@@ -5,6 +5,8 @@ export function valorTextDesconegut(valor: string | null, perDefecte: number = 1
     5: 'Desconeguda',
     3: '',
     4: 'Data desconeguda',
+    6: 'No consta cap empresonament',
+    7: "No consta que marxés a l'exili",
   };
 
   return typeof valor === 'string' && valor.trim() !== '' ? valor : textos[perDefecte];

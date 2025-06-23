@@ -127,6 +127,28 @@ $routes = [
 
     '/api/depurats/post' => ['view' => 'src/backend/api/db_depurats/post-depurats.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
 
+    // API db detinguts guardia urbana
+    '/api/detinguts_guardia_urbana/get/{slug}' => ['view' => 'src/backend/api/db_detinguts_guardia_urbana/get-guardia-urbana.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+
+    '/api/detinguts_guardia_urbana/put' => ['view' => 'src/backend/api/db_detinguts_guardia_urbana/put-guardia-urbana.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+
+    '/api/detinguts_guardia_urbana/post' => ['view' => 'src/backend/api/db_detinguts_guardia_urbana/post-guardia-urbana.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+
+    // API db Afectats Llei responsabilitats politiques
+    '/api/responsabilitats_politiques/get/{slug}' => ['view' => 'src/backend/api/db_responsabilitats_politiques/get-responsabilitats.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+
+    '/api/responsabilitats_politiques/put' => ['view' => 'src/backend/api/db_responsabilitats_politiques/put-responsabilitats.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+
+    '/api/responsabilitats_politiques/post' => ['view' => 'src/backend/api/db_responsabilitats_politiques/post-responsabilitats.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+
+    // API db Tribunal orden publico
+    '/api/top/get/{slug}' => ['view' => 'src/backend/api/db_tribunal_orden_publico/get-top.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+
+    '/api/top/put' => ['view' => 'src/backend/api/db_tribunal_orden_publico/put-top.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+
+    '/api/top/post' => ['view' => 'src/backend/api/db_tribunal_orden_publico/post-top.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+
+
     // API fonts documentals
     APP_API . $urlApi['fonts'] . '/get/{slug}' => array_merge($defaultApiConfig, [
         'view' => BACKEND_API . '/db_fonts_documentals/get-fonts-bibliografia.php',

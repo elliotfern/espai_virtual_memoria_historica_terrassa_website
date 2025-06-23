@@ -1,5 +1,5 @@
 <div class="container" style="margin-bottom:50px;border: 1px solid gray;border-radius: 10px;padding:25px;background-color:#eaeaea">
-    <form id="processatForm">
+    <form id="detingutGUForm">
         <div class="container">
             <h2>Tipus de repressió: Detingut Guàrdia Urbana</h2>
             <h4 id="fitxaNomCognoms">Fitxa:</a></h4>
@@ -16,18 +16,44 @@
                 <input type="hidden" name="id" id="id" value="">
 
 
-                data_empresonament
-                data_sortida
-                motiu_empresonament
-                qui_ordena_detencio
-                grup_ordena_detencio
-                top
-                observacions
+                <div class="col-md-4 mb-4">
+                    <label for="data_empresonament" class="form-label negreta">Data d'empresonament:</label>
+                    <input type="text" class="form-control" id="data_empresonament" name="data_empresonament" value="">
+                </div>
+
+                <div class="col-md-4 mb-4">
+                    <label for="data_sortida" class="form-label negreta">Data de sortida:</label>
+                    <input type="text" class="form-control" id="data_sortida" name="data_sortida" value="">
+                </div>
+
+                <div class="col-md-4 mb-4">
+                    <label for="motiu_empresonament" class="form-label negreta">Motiu de la detenció:</label>
+                    <select class="form-select" id="motiu_empresonament" name="motiu_empresonament">
+                    </select>
+                </div>
+
+                <div class="col-md-4 mb-4">
+                    <label for="qui_ordena_detencio" class="form-label negreta">Qui ordena la detenció:</label>
+                    <select class="form-select" id="qui_ordena_detencio" name="qui_ordena_detencio">
+                    </select>
+                </div>
+
+                <div class="col-md-4 mb-4">
+                    <label for="top" class="form-label negreta">Detenció ordenada pel TOP?:</label>
+                    <select class="form-select" id="top" name="top">
+                    </select>
+                </div>
+
+                <div class="col-md-12 mb-4">
+                    <label for="observacions" class="form-label negreta">Observacions:</label>
+                    <textarea class="form-control" id="observacions" name="observacions" rows="4"></textarea>
+                </div>
+
                 <div class="row espai-superior" style="border-top: 1px solid black;padding-top:25px">
                     <div class="col"></div>
 
                     <div class="col d-flex justify-content-end align-items-center">
-                        <button class="btn btn-primary" type="submit" id="btnProcessat">Modificar dades</button>
+                        <button class="btn btn-primary" type="submit" id="btndetingutGU">Modificar dades</button>
                     </div>
                 </div>
             </div>

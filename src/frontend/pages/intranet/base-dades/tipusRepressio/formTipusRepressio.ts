@@ -7,6 +7,9 @@ import { afusellat } from './afusellat';
 import { processat } from './processat';
 import { presoModel } from './presoModel';
 import { depurats } from './depurats';
+import { detingutsGuardiaUrbana } from './ detingutsGuardiaUrbana';
+import { responsabilitatsPolitiques } from './responsabilitatsPolitiques';
+import { top } from './top';
 
 export function formTipusRepressio() {
   const url = window.location.href;
@@ -28,5 +31,11 @@ export function formTipusRepressio() {
     presoModel(Number(pageType[4]));
   } else if (pageType[3] === '7') {
     depurats(Number(pageType[4]));
+  } else if (pageType[3] === '13') {
+    detingutsGuardiaUrbana(Number(pageType[4]));
+  } else if (pageType[3] === '15') {
+    responsabilitatsPolitiques(Number(pageType[4]));
+  } else if (pageType[3] === '17') {
+    top(Number(pageType[4]));
   }
 }
