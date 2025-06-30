@@ -11,7 +11,7 @@ interface EspaiRow {
   provincia: string;
   comunitat: string;
   sector_cat: string;
-  acusacio_ca: string;
+  procediment_ca: string;
 }
 
 type Column<T> = {
@@ -20,18 +20,18 @@ type Column<T> = {
   render?: (value: T[keyof T], row: T) => string;
 };
 
-export async function taulaAcusacionsJudicials() {
+export async function taulaProcedimentsJudicials() {
   const isAdmin = await getIsAdmin();
   const isAutor = await getIsAutor();
-  const reloadKey = 'reload-taula-taulaAcusacionsJudicials';
+  const reloadKey = 'reload-taula-taulaProcedimentJudicial';
 
-  const columns: Column<EspaiRow>[] = [{ header: 'Acusació judicial', field: 'acusacio_ca' }];
+  const columns: Column<EspaiRow>[] = [{ header: 'Tipus procediment judicial', field: 'procediment_ca' }];
 
   if (isAdmin || isAutor) {
     columns.push({
       header: 'Accions',
       field: 'id',
-      render: (_: unknown, row: EspaiRow) => `<a id="${row.id}" title="Modifica" href="https://${window.location.hostname}/gestio/auxiliars/modifica-acusacio/${row.id}"><button type="button" class="btn btn-warning btn-sm">Modifica</button></a>`,
+      render: (_: unknown, row: EspaiRow) => `<a id="${row.id}" title="Modifica" href="https://${window.location.hostname}/gestio/auxiliars/modifica-tipus-procediment-judicial/${row.id}"><button type="button" class="btn btn-warning btn-sm">Modifica</button></a>`,
     });
   }
 
@@ -44,7 +44,7 @@ export async function taulaAcusacionsJudicials() {
           type="button"
           class="btn btn-danger btn-sm delete-button"
           data-id="${row.id}" 
-          data-url="/api/auxiliars/delete/carrecEmpresa/${row.id}"
+          data-url="/api/auxiliars/delete/procedimentJudicial/${row.id}"
           data-reload-callback="${reloadKey}"
         >
           Elimina
@@ -53,15 +53,15 @@ export async function taulaAcusacionsJudicials() {
   }
 
   renderTaulaCercadorFiltres<EspaiRow>({
-    url: API_URLS.GET.ACUSACIONS_JUDICIALS,
-    containerId: 'taulaAcusacionsJudicials',
+    url: API_URLS.GET.PROCEDIMENTS_JUDICIALS,
+    containerId: 'taulaProcedimentJudicial',
     columns,
-    filterKeys: ['acusacio_cat'],
+    filterKeys: ['procediment_ca'],
     //filterByField: 'sector_cat',
   });
 
   // Registra el callback con una clave única
-  registerDeleteCallback(reloadKey, () => taulaAcusacionsJudicials());
+  registerDeleteCallback(reloadKey, () => taulaProcedimentsJudicials());
 
   // Inicia el listener una sola vez
   initDeleteHandlers();

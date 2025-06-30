@@ -28,6 +28,7 @@ import { taulaBandolsGuerra } from './taulaBandolsGuerra';
 import { taulaCondicionsMilitars } from './taulaCondicionsMilitars';
 import { taulaCossosMilitars } from './taulaCossosMilitars';
 import { formEmpresa } from './formEmpresa';
+import { taulaProcedimentsJudicials } from './taulaProcedimentsJudicials';
 
 export function auxiliars() {
   const url = window.location.href;
@@ -166,7 +167,8 @@ export function auxiliars() {
         transmissioDadesDB(event, 'POST', 'acusacioForm', API_URLS.POST.ACUSACIO_JUDICIAL, true);
       });
     }
-  } else if (pageType[2] === 'modificacio-acusacio') {
+  } else if (pageType[2] === 'modifica-acusacio') {
+    console.log('hola');
     const acusacioForm = document.getElementById('acusacioForm');
     if (acusacioForm) {
       acusacioForm.addEventListener('submit', function (event) {
@@ -293,5 +295,21 @@ export function auxiliars() {
     formEmpresa(true, Number(pageType[3]));
   } else if (pageType[2] === 'nova-empresa') {
     formEmpresa(false);
+  } else if (pageType[2] === 'nou-tipus-procediment-judicial') {
+    const procedimentJudicialForm = document.getElementById('procedimentJudicialForm');
+    if (procedimentJudicialForm) {
+      procedimentJudicialForm.addEventListener('submit', function (event) {
+        transmissioDadesDB(event, 'POST', 'procedimentJudicialForm', API_URLS.POST.PROCEDIMENT_JUDICIAL, true);
+      });
+    }
+  } else if (pageType[2] === 'modifica-tipus-procediment-judicial') {
+    const procedimentJudicialForm = document.getElementById('procedimentJudicialForm');
+    if (procedimentJudicialForm) {
+      procedimentJudicialForm.addEventListener('submit', function (event) {
+        transmissioDadesDB(event, 'PUT', 'procedimentJudicialForm', API_URLS.PUT.PROCEDIMENT_JUDICIAL);
+      });
+    }
+  } else if (pageType[2] === 'llistat-tipus-procediments-judicials') {
+    taulaProcedimentsJudicials();
   }
 }

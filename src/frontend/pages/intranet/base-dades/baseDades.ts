@@ -14,6 +14,7 @@ import { taulaProcessats } from './taulaProcessats';
 import { taulaAfusellats } from './taulaAfusellats';
 import { taulaQuadreGeneral } from './taulaQuadreGeneral';
 import { taulaPresoModel } from './taulaPresoModel';
+import { formDetingutsGuardiaUrbana } from './tipusRepressio/ detingutsGuardiaUrbana';
 
 export function baseDadesIntranet() {
   const url = window.location.href;
@@ -67,5 +68,7 @@ export function baseDadesIntranet() {
     modificaFitxa();
   } else if (pageType[2] === 'modifica-repressio') {
     formTipusRepressio();
+  } else if (pageType[2] === 'empresonaments') {
+    formDetingutsGuardiaUrbana(Number(pageType[4]), Number(pageType[5]));
   }
 }

@@ -17,6 +17,7 @@ interface Fitxa {
   acusacio_2: number;
   sentencia: number;
   pena: number;
+  lloc_detencio: number;
 }
 
 export async function processat(idRepresaliat: number) {
@@ -29,6 +30,7 @@ export async function processat(idRepresaliat: number) {
     acusacio_2: 0,
     sentencia: 0,
     pena: 0,
+    lloc_detencio: 0,
   };
 
   const response = await fetchDataGet<Fitxa>(`/api/processats/get/fitxaRepressio?id=${idRepresaliat}`);
@@ -44,6 +46,7 @@ export async function processat(idRepresaliat: number) {
   const btn7 = document.getElementById('refreshButton7');
   const btn8 = document.getElementById('refreshButton8');
   const btn9 = document.getElementById('refreshButton9');
+  const btn10 = document.getElementById('refreshButton10');
   const container = document.getElementById('fitxaNomCognoms');
   const processatForm = document.getElementById('processatForm');
   const inputIdPersona = document.getElementById('idPersona') as HTMLInputElement | null;
@@ -74,7 +77,7 @@ export async function processat(idRepresaliat: number) {
 
   renderFormInputs(data);
 
-  if (btn1 && btn2 && btn3 && btn4 && btn5 && btn6 && btn7 && btn8 && btn9) {
+  if (btn1 && btn2 && btn3 && btn4 && btn5 && btn6 && btn7 && btn8 && btn9 && btn10) {
     btn1.addEventListener('click', function (event) {
       event.preventDefault();
       auxiliarSelect(data?.tipus_procediment, 'procediments', 'tipus_procediment', 'procediment_ca');
@@ -93,6 +96,11 @@ export async function processat(idRepresaliat: number) {
     btn4.addEventListener('click', function (event) {
       event.preventDefault();
       auxiliarSelect(data?.lloc_consell_guerra, 'municipis', 'lloc_consell_guerra', 'ciutat');
+    });
+
+    btn10.addEventListener('click', function (event) {
+      event.preventDefault();
+      auxiliarSelect(data?.lloc_detencio, 'municipis', 'lloc_detencio', 'ciutat');
     });
 
     btn5.addEventListener('click', function (event) {
@@ -121,6 +129,7 @@ export async function processat(idRepresaliat: number) {
     });
   }
 
+  auxiliarSelect(data?.lloc_detencio, 'municipis', 'lloc_detencio', 'ciutat');
   await auxiliarSelect(data?.tipus_procediment, 'procediments', 'tipus_procediment', 'procediment_ca');
   await auxiliarSelect(data?.tipus_judici, 'tipusJudici', 'tipus_judici', 'tipusJudici_ca');
   await auxiliarSelect(data?.jutjat, 'jutjats', 'jutjat', 'jutjat_ca');

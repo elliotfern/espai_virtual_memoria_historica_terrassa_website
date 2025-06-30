@@ -19,21 +19,22 @@ $urlParts = explode('/', $url2);
 $pag = $urlParts[3] ?? '';
 
 $id_old = "";
-$acusacio_cat_old = "";
-$acusacio_es_old = "";
-$acusacio_en_old = "";
-$acusacio_fr_old = "";
-$acusacio_pt_old = "";
-$acusacio_it_old = "";
+$procediment_ca_old = "";
+$procediment_es_old = "";
+$procediment_en_old = "";
+$estat_fr_old = "";
+$estat_it_old = "";
+$estat_pt_old = "";
+
 $btnModificar = 1;
 
-if ($pag === "modifica-acusacio") {
+if ($pag === "modifica-tipus-procediment-judicial") {
     $btnModificar = 2;
     $id = $routeParams[0];
 
     // Verificar si la ID existe en la base de datos
-    $query = "SELECT id, acusacio_ca, acusacio_es, acusacio_en, acusacio_fr, acusacio_pt, acusacio_it
-    FROM aux_acusacions
+    $query = "SELECT id, procediment_ca, procediment_es, procediment_en
+    FROM aux_procediment_judicial
     WHERE id = :id";
     $stmt = $conn->prepare($query);
     $stmt->bindParam(':id', $id, PDO::PARAM_INT);
@@ -43,25 +44,22 @@ if ($pag === "modifica-acusacio") {
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             // Acceder a las variables de la consulta
             $id_old = $row['id'] ?? "";
-            $acusacio_cat_old = $row['acusacio_ca'] ?? "";
-            $acusacio_es_old = $row['acusacio_es'] ?? "";
-            $acusacio_en_old = $row['acusacio_en'] ?? "";
-            $acusacio_fr_old = $row['acusacio_fr'] ?? "";
-            $acusacio_pt_old = $row['acusacio_pt'] ?? "";
-            $acusacio_it_old = $row['acusacio_it'] ?? "";
+            $procediment_ca_old = $row['procediment_ca'] ?? "";
+            $procediment_es_old = $row['procediment_es'] ?? "";
+            $procediment_en_old = $row['procediment_en'] ?? "";
         }
     }
 }
 ?>
 
 <div class="container" style="margin-bottom:50px;border: 1px solid gray;border-radius: 10px;padding:25px;background-color:#eaeaea">
-    <form id="acusacioForm" action="" type="post">
+    <form id="procedimentJudicialForm" action="" type="post">
         <div class="container">
             <div class="row g-3">
                 <?php if ($btnModificar === 1) {
-                    echo '<h2>Crear nova acusació judicial (de la fiscalia)</h2>';
+                    echo '<h2>Crear nou tipus de Procediment judicial</h2>';
                 } else {
-                    echo '<h2>Modifica acusació judicial: ' . $acusacio_cat_old . '</h2>';
+                    echo '<h2>Modifica tipus de procediment judicial: ' . $procediment_ca_old . '</h2>';
                 }
 
                 ?>
@@ -76,8 +74,8 @@ if ($pag === "modifica-acusacio") {
                 <input type="hidden" name="id" id="id" value="<?php echo $id_old; ?>">
 
                 <div class="col-md-4 mb-4">
-                    <label for="acusacio_ca" class="form-label negreta">Acusació judicial (català):</label>
-                    <input type="text" class="form-control" id="acusacio_ca" name="acusacio_ca" value="<?php echo $acusacio_cat_old; ?>">
+                    <label for="procediment_ca" class="form-label negreta">Procediment judicial (català):</label>
+                    <input type="text" class="form-control" id="procediment_ca" name="procediment_ca" value="<?php echo $procediment_ca_old; ?>">
                     <div class="avis-form">
                         * Camp obligatori
                     </div>
@@ -87,28 +85,28 @@ if ($pag === "modifica-acusacio") {
                     <hr>
 
                     <div class="col-md-4 mb-4">
-                        <label for="acusacio_es" class="form-label negreta">Acusació judicial (castellà):</label>
-                        <input type="text" class="form-control" id="acusacio_es" name="acusacio_es" value="<?php echo $acusacio_es_old; ?>">
+                        <label for="procediment_es" class="form-label negreta">Procediment judicial(castellà):</label>
+                        <input type="text" class="form-control" id="procediment_es" name="procediment_es" value="<?php echo $procediment_es_old; ?>">
                     </div>
 
                     <div class="col-md-4 mb-4">
-                        <label for="acusacio_en" class="form-label negreta">Acusació judicial (anglès):</label>
-                        <input type="text" class="form-control" id="acusacio_en" name="acusacio_en" value="<?php echo $acusacio_en_old; ?>">
+                        <label for="procediment_en" class="form-label negreta">Procediment judicial (anglès):</label>
+                        <input type="text" class="form-control" id="procediment_en" name="procediment_en" value="<?php echo $procediment_en_old; ?>">
                     </div>
 
                     <div class="col-md-4 mb-4">
-                        <label for="acusacio_fr" class="form-label negreta">Acusació judicial (francès):</label>
-                        <input type="text" class="form-control" id="acusacio_fr" name="acusacio_fr" value="<?php echo $acusacio_fr_old; ?>">
+                        <label for="estat_fr" class="form-label negreta">Estat civil (francès):</label>
+                        <input type="text" class="form-control" id="estat_fr" name="estat_fr" value="<?php echo $estat_fr_old; ?>">
                     </div>
 
                     <div class="col-md-4 mb-4">
-                        <label for="acusacio_pt" class="form-label negreta">Acusació judicial (portuguès):</label>
-                        <input type="text" class="form-control" id="acusacio_pt" name="acusacio_pt" value="<?php echo $acusacio_pt_old; ?>">
+                        <label for="estat_pt" class="form-label negreta">Estat civil (portuguès):</label>
+                        <input type="text" class="form-control" id="estat_pt" name="estat_pt" value="<?php echo $estat_pt_old; ?>">
                     </div>
 
                     <div class="col-md-4 mb-4">
-                        <label for="acusacio_it" class="form-label negreta">Acusació judicial (italià):</label>
-                        <input type="text" class="form-control" id="acusacio_it" name="acusacio_it" value="<?php echo $acusacio_it_old; ?>">
+                        <label for="estat_it" class="form-label negreta">Estat civil (italià):</label>
+                        <input type="text" class="form-control" id="estat_it" name="estat_it" value="<?php echo $estat_it_old; ?>">
                     </div>
                 <?php endif; ?>
 

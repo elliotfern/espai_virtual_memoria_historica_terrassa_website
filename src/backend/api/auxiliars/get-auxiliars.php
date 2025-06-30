@@ -911,6 +911,40 @@ if ($slug === "municipis") {
             500
         );
     }
+
+    // GET : Llistat de tipus de procediments judicials
+    // URL: /api/auxiliars/get/procedimentsJudicials
+} elseif ($slug === "procedimentsJudicials") {
+
+    $db = new Database();
+    $query = "SELECT id, procediment_ca
+              FROM aux_procediment_judicial
+              ORDER BY procediment_ca ASC";
+
+    try {
+        $result = $db->getData($query);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;  // o exit; según cómo funcione Response::error
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
 } else {
     // Si el parámetro 'type' no coincide con ninguno de los casos anteriores, mostramos un error
     echo json_encode(["error" => "Tipo no válido"]);

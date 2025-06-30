@@ -36,7 +36,21 @@ export async function renderTaulaCercadorFiltres<T>({
     return;
   }
 
-  const data: T[] = Array.isArray(result.data) ? result.data : result;
+  let data: T[];
+
+  if (Array.isArray(result)) {
+    // Caso: respuesta es un array directamente
+    data = result;
+  } else if (Array.isArray(result.data)) {
+    // Caso: respuesta es un objeto con `data` como array
+    data = result.data;
+  } else if (result.data) {
+    // Caso: respuesta es un objeto con un único objeto como `data`
+    data = [result.data];
+  } else {
+    container.innerHTML = `<div class="alert alert-info">No s'han trobat dades vàlides.</div>`;
+    return;
+  }
 
   let currentPage = 1;
   let filteredData = [...data];

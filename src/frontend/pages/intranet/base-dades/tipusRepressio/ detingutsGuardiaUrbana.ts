@@ -2,6 +2,11 @@ import { fetchDataGet } from '../../../../services/fetchData/fetchDataGet';
 import { auxiliarSelect } from '../../../../services/fetchData/auxiliarSelect';
 import { renderFormInputs } from '../../../../services/fetchData/renderInputsForm';
 import { transmissioDadesDB } from '../../../../services/fetchData/transmissioDades';
+import { renderTaulaCercadorFiltres } from '../../../../services/renderTaula/renderTaulaCercadorFiltres';
+import { initDeleteHandlers, registerDeleteCallback } from '../../../../services/fetchData/handleDelete';
+import { getIsAdmin } from '../../../../services/auth/getIsAdmin';
+import { getIsAutor } from '../../../../services/auth/getIsAutor';
+import { formatDatesForm } from '../../../../services/formatDates/dates';
 
 interface Fitxa {
   [key: string]: unknown;
@@ -16,7 +21,89 @@ interface Fitxa {
   qui_ordena_detencio: number;
 }
 
+interface EspaiRow {
+  id: number;
+  data_empresonament: string;
+  data_sortida: string;
+  motiu_empresonament: string;
+  codi: string;
+  arxiu: string;
+}
+
+type Column<T> = {
+  header: string;
+  field: keyof T;
+  render?: (value: T[keyof T], row: T) => string;
+};
+
 export async function detingutsGuardiaUrbana(idRepresaliat: number) {
+  const isAdmin = await getIsAdmin();
+  const isAutor = await getIsAutor();
+  const reloadKey = 'reload-taula-taulaLlistatArxius';
+  const container = document.getElementById('fitxaNomCognoms');
+
+  const data2 = await fetchDataGet<Fitxa>(`/api/dades_personals/get/?type=nomCognoms&id=${idRepresaliat}`);
+
+  if (data2) {
+    if (!container) return;
+
+    const nomComplet = `${data2.nom} ${data2.cognom1} ${data2.cognom2}`;
+    const url = `https://memoriaterrassa.cat/fitxa/${data2.id}`;
+
+    container.innerHTML = `<h4>Fitxa: <a href="${url}" target="_blank">${nomComplet}</a></h4>`;
+  }
+
+  const columns: Column<EspaiRow>[] = [
+    { header: 'Data entrada', field: 'data_empresonament', render: (_: unknown, row: EspaiRow) => `${formatDatesForm(row.data_empresonament)}` },
+    {
+      header: 'Data sortida',
+      field: 'data_sortida',
+      render: (_: unknown, row: EspaiRow) => `${formatDatesForm(row.data_sortida)}`,
+    },
+    { header: 'Motiu empresonament', field: 'motiu_empresonament' },
+  ];
+
+  if (isAdmin || isAutor) {
+    columns.push({
+      header: 'Accions',
+      field: 'id',
+      render: (_: unknown, row: EspaiRow) => `<a id="${row.id}" title="Modifica" href="https://${window.location.hostname}/gestio/base-dades/empresonaments/modifica-empresonament/${idRepresaliat}/${row.id}"><button type="button" class="btn btn-warning btn-sm">Modifica</button></a>`,
+    });
+  }
+
+  if (isAdmin) {
+    columns.push({
+      header: '',
+      field: 'id',
+      render: (_: unknown, row: EspaiRow) => `
+          <button 
+            type="button"
+            class="btn btn-danger btn-sm delete-button"
+            data-id="${row.id}" 
+            data-url="/api/fonts/delete/arxiu/${row.id}"
+            data-reload-callback="${reloadKey}"
+          >
+            Elimina
+          </button>`,
+    });
+  }
+
+  renderTaulaCercadorFiltres<EspaiRow>({
+    url: `/api/detinguts_guardia_urbana/get/empresonatId?id=${idRepresaliat}`,
+    containerId: 'taulaLlistatDetencions',
+    columns,
+    filterKeys: ['arxiu'],
+    //filterByField: 'provincia',
+  });
+
+  // Registra el callback con una clave única
+  registerDeleteCallback(reloadKey, () => detingutsGuardiaUrbana(idRepresaliat));
+
+  // Inicia el listener una sola vez
+  initDeleteHandlers();
+}
+
+export async function formDetingutsGuardiaUrbana(idRepresaliat: number, id?: number) {
   let data: Partial<Fitxa> = {
     motiu_empresonament: 0,
     professio: 0,
@@ -24,7 +111,12 @@ export async function detingutsGuardiaUrbana(idRepresaliat: number) {
     qui_ordena_detencio: 0,
   };
 
-  const response = await fetchDataGet<Fitxa>(`/api/detinguts_guardia_urbana/get/fitxaRepressio?id=${idRepresaliat}`);
+  let response: Fitxa | null = null;
+
+  if (id) {
+    response = await fetchDataGet<Fitxa>(`/api/detinguts_guardia_urbana/get/fitxaRepressio?id=${id}`);
+  }
+
   const data2 = await fetchDataGet<Fitxa>(`/api/dades_personals/get/?type=nomCognoms&id=${idRepresaliat}`);
 
   const btnForm = document.getElementById('btndetingutGU') as HTMLButtonElement;

@@ -19,11 +19,19 @@
                 <div class="col-md-4 mb-4">
                     <label for="data_detencio" class="form-label negreta">Data de detenció:</label>
                     <input type="text" class="form-control" id="data_detencio" name="data_detencio" value="">
+                    <div class="avis-form">
+                        * Format de la data: DD/MM/AAAA
+                    </div>
                 </div>
 
                 <div class="col-md-4 mb-4">
-                    <label for="lloc_detencio" class="form-label negreta">Lloc de detenció:</label>
-                    <input type="text" class="form-control" id="lloc_detencio" name="lloc_detencio" value="">
+                    <label for="lloc_detencio" class="form-label negreta">Ciutat de detenció:</label>
+                    <select class="form-select" aria-label="Default select example" name="lloc_detencio" id="lloc_detencio">
+                    </select>
+                    <div class="mt-2">
+                        <a href="https://memoriaterrassa.cat/gestio/auxiliars/nou-municipi" target="_blank" class="btn btn-secondary btn-sm" id="afegirMun1">Afegir municipi</a>
+                        <button id="refreshButton10" class="btn btn-primary btn-sm">Actualitzar llistat</button>
+                    </div>
                 </div>
 
                 <h4>2) Procés judicial</h4>
@@ -32,7 +40,7 @@
                     <select class="form-select" aria-label="Default select example" name="tipus_procediment" id="tipus_procediment">
                     </select>
                     <div class="mt-2">
-                        <a href="https://memoriaterrassa.cat/gestio/auxiliars/nou-procediment" target="_blank" class="btn btn-secondary btn-sm" id="afegir1">Afegir procediment</a>
+                        <a href="https://memoriaterrassa.cat/gestio/auxiliars/nou-tipus-procediment-judicial" target="_blank" class="btn btn-secondary btn-sm" id="afegir1">Afegir procediment</a>
                         <button id="refreshButton1" class="btn btn-primary btn-sm">Actualitzar llistat</button>
                     </div>
                 </div>

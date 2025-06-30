@@ -1481,7 +1481,7 @@ if ($slug === "municipi") {
     $errors = [];
 
     // Validación de los datos recibidos
-    if (empty($data['acusacio_cat'])) {
+    if (empty($data['acusacio_ca'])) {
         $errors[] =  ValidacioErrors::requerit('Acusació judicial català');
     }
 
@@ -1495,7 +1495,7 @@ if ($slug === "municipi") {
     }
 
     // Si no hay errores, crear las variables PHP y preparar la consulta PDO
-    $acusacio_cat = $data['acusacio_cat'];
+    $acusacio_ca = $data['acusacio_ca'];
     $acusacio_es = !empty($data['acusacio_es']) ? $data['acusacio_es'] : NULL;
     $acusacio_en = !empty($data['acusacio_en']) ? $data['acusacio_en'] : NULL;
     $acusacio_fr = !empty($data['acusacio_fr']) ? $data['acusacio_fr'] : NULL;
@@ -1510,7 +1510,7 @@ if ($slug === "municipi") {
 
         // Crear la consulta SQL
         $sql = "INSERT INTO aux_acusacions (
-                acusacio_cat,
+                acusacio_ca,
                 acusacio_es,
                 acusacio_en,
                 acusacio_fr,
@@ -1518,7 +1518,7 @@ if ($slug === "municipi") {
                 acusacio_it
             ) 
             VALUES (
-                ':acusacio_cat', 
+                ':acusacio_ca', 
                 ':acusacio_es', 
                 ':acusacio_en', 
                 ':acusacio_fr', 
@@ -1530,7 +1530,7 @@ if ($slug === "municipi") {
         $stmt = $conn->prepare($sql);
 
         // Enlazar los parámetros con los valores de las variables PHP
-        $stmt->bindParam(':acusacio_cat', $acusacio_cat, PDO::PARAM_STR);
+        $stmt->bindParam(':acusacio_ca', $acusacio_ca, PDO::PARAM_STR);
         $stmt->bindParam(':acusacio_es', $acusacio_es, PDO::PARAM_STR);
         $stmt->bindParam(':acusacio_en', $acusacio_en, PDO::PARAM_STR);
         $stmt->bindParam(':acusacio_fr', $acusacio_fr, PDO::PARAM_STR);
@@ -1545,7 +1545,7 @@ if ($slug === "municipi") {
 
         // Recuperar el ID del registro creado
         $tipusOperacio = "INSERT";
-        $detalls =  "Creació nova acusació judicial: " . $acusacio_cat;
+        $detalls =  "Creació nova acusació judicial: " . $acusacio_ca;
 
         // Si la inserció té èxit, cal registrar la inserció en la base de control de canvis
 
@@ -2356,6 +2356,95 @@ if ($slug === "municipi") {
             $tipusOperacio,             // Tipus operacio
             $detalls,                       // Descripción de la operación
             Tables::AUX_EMPRESES,  // Nombre de la tabla afectada
+            $id                           // ID del registro modificado
+        );
+
+        // Respuesta de éxito
+        Response::success(
+            MissatgesAPI::success('create'),
+            ['id' => $id],
+            200
+        );
+    } catch (PDOException $e) {
+        // En caso de error en la conexión o ejecución de la consulta
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
+    // 4) POST TIpus procediment judicial
+    // ruta POST => "/api/auxiliars/post/procedimentJudicial"
+} else if ($slug === "procedimentJudicial") {
+    $inputData = file_get_contents('php://input');
+    $data = json_decode($inputData, true);
+
+    // Inicializar un array para los errores
+    $errors = [];
+
+    // Validación de los datos recibidos
+    if (empty($data['procediment_ca'])) {
+        $errors[] =  ValidacioErrors::requerit('procediment judicial en català');
+    }
+
+    // Si hay errores, devolver una respuesta con los errores
+    if (!empty($errors)) {
+        Response::error(
+            MissatgesAPI::error('validacio'),
+            $errors,
+            400
+        );
+    }
+
+    // Si no hay errores, crear las variables PHP y preparar la consulta PDO
+    $procediment_ca = $data['procediment_ca'];
+    $procediment_es  = !empty($data['procediment_es']) ? $data['procediment_es'] : NULL;
+    $procediment_en  = !empty($data['procediment_en']) ? $data['procediment_en'] : NULL;
+
+    // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
+    try {
+
+        global $conn;
+        /** @var PDO $conn */
+
+        // Crear la consulta SQL
+        $sql = "INSERT INTO aux_procediment_judicial (
+            procediment_ca,
+            procediment_es,
+            procediment_en
+        ) VALUES (
+            :procediment_ca,
+            :procediment_es,
+            :procediment_en
+        )";
+
+        // Preparar la consulta
+        $stmt = $conn->prepare($sql);
+
+        // Enlazar los parámetros con los valores de las variables PHP
+        $stmt->bindParam(':procediment_ca', $procediment_ca, PDO::PARAM_STR);
+        $stmt->bindParam(':procediment_es', $procediment_es, PDO::PARAM_STR);
+        $stmt->bindParam(':procediment_en', $procediment_en, PDO::PARAM_STR);
+
+        // Ejecutar la consulta
+        $stmt->execute();
+
+        // Recuperar el ID del registro creado
+        $id = $conn->lastInsertId();
+
+        // Recuperar el ID del registro creado
+        $tipusOperacio = "INSERT";
+        $detalls =  "Creació de nou tipus de procediment judicial: " . $procediment_ca;
+
+        // Si la inserció té èxit, cal registrar la inserció en la base de control de canvis
+
+        Audit::registrarCanvi(
+            $conn,
+            $userId,                      // ID del usuario que hace el cambio
+            $tipusOperacio,             // Tipus operacio
+            $detalls,                       // Descripción de la operación
+            Tables::AUX_PROCEDIMENT_JUDICIAL,  // Nombre de la tabla afectada
             $id                           // ID del registro modificado
         );
 

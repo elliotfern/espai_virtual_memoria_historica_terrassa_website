@@ -37,10 +37,10 @@ if ($slug === 'fitxaRepressio') {
             top,
             observacions
             FROM db_detinguts_guardia_urbana
-            WHERE idPersona = :idPersona";
+            WHERE id = :id";
 
     try {
-        $params = [':idPersona' => $id];
+        $params = [':id' => $id];
         $result = $db->getData($query, $params, true);
 
         if (empty($result)) {
@@ -92,6 +92,48 @@ if ($slug === 'fitxaRepressio') {
     try {
         $params = [':idPersona' => $id];
         $result = $db->getData($query, $params, true);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
+    // GET : Llistat empresonaments represaliat ID
+    // URL: /api/detinguts_guardia_urbana/get/empresonatId?id=${id}
+} elseif ($slug === 'empresonatId') {
+    $id = $_GET['id'];
+    $db = new Database();
+
+    $query = "SELECT 
+            d.id,
+            d.idPersona,
+            d.data_empresonament,
+            d.data_sortida,
+            e.motiuEmpresonament_ca AS motiu_empresonament
+            FROM db_detinguts_guardia_urbana AS d
+            LEFT JOIN aux_motius_empresonament AS e ON d.motiu_empresonament = e.id
+            WHERE d.idPersona = :idPersona";
+
+    try {
+        $params = [':idPersona' => $id];
+        $result = $db->getData($query, $params, false);
 
         if (empty($result)) {
             Response::error(

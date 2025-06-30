@@ -48,7 +48,7 @@ switch ($categoriaId) {
         require_once APP_ROOT . '/public/intranet/01_base_dades/tipus_repressio/1_represaliats/detinguts_preso_model.php';
         break;
     case 13:
-        require_once APP_ROOT . '/public/intranet/01_base_dades/tipus_repressio/1_represaliats/detinguts_guardia_urbana.php';
+        require_once APP_ROOT . '/public/intranet/01_base_dades/tipus_repressio/1_represaliats/llistat-detinguts_guardia_urbana.php';
         break;
     case 14:
         require_once APP_ROOT . '/public/intranet/01_base_dades/tipus_repressio/1_represaliats/detinguts_comite_solidaritat.php';

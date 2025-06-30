@@ -31,6 +31,8 @@ export type ApiUrls = {
     LLISTAT_AFUSELLATS: string;
     LLISTAT_PRESO_MODEL: string;
     EMPRESA_ID: (id: number) => string;
+    EMPRESONAT_ID: (id: number) => string;
+    PROCEDIMENTS_JUDICIALS: string;
   };
   POST: {
     MUNICIPI: string;
@@ -53,6 +55,7 @@ export type ApiUrls = {
     LLIBRE_BIBLIOFRAFIA: string;
     ARXIU_CODI: string;
     EMPRESA: string;
+    PROCEDIMENT_JUDICIAL: string;
   };
   PUT: {
     MUNICIPI: string;
@@ -75,6 +78,7 @@ export type ApiUrls = {
     LLIBRE_BIBLIOFRAFIA: string;
     ARXIU_CODI: string;
     EMPRESA: string;
+    PROCEDIMENT_JUDICIAL: string;
   };
   DELETE: {
     MUNICIPI: string;
@@ -97,5 +101,6 @@ export type ApiUrls = {
     LLIBRE_BIBLIOFRAFIA: string;
     ARXIU_CODI: string;
     EMPRESA: string;
+    PROCEDIMENT_JUDICIAL: string;
   };
 };

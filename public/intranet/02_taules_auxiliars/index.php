@@ -52,7 +52,7 @@
             <ul>
                 <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['auxiliars']; ?>/llistat-acusacions-judicials">Taula llistat d'acusacions judicials</a></li>
                 <li>aux_jutjats</li>
-                <li>aux_procediment_judicial</li>
+                <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['auxiliars']; ?>/llistat-tipus-procediments-judicials">Taula llistat tipus procediments judicials</a></li>
                 <li>aux_sentencies</li>
                 <li>aux_tipus_presons</li>
             </ul>

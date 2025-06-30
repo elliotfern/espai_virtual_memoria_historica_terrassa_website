@@ -93,6 +93,15 @@ $routes = [
         'view' => BACKEND_URL . $urlIntranetDir['base_dades'] . '/modifica_fitxa_tipus_repressio.php'
     ]),
 
+    // empresonaments
+    APP_INTRANET . '/base-dades/empresonaments/modifica-empresonament/{idPersona}/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['base_dades'] . '/tipus_repressio/1_represaliats/detinguts_guardia_urbana.php'
+    ]),
+
+    APP_INTRANET . '/base-dades/empresonaments/nou-empresonament/{idPersona}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['base_dades'] . '/tipus_repressio/1_represaliats/detinguts_guardia_urbana.php'
+    ]),
+
     // 2. Pàgines taules auxiliars
     APP_INTRANET . $urlIntranet['auxiliars'] => array_merge($defaultProtectedConfig, [
         'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/index.php'
@@ -401,6 +410,19 @@ $routes = [
 
     APP_INTRANET . $urlIntranet['auxiliars'] . '/modifica-nivell-estudis/{id}' => array_merge($defaultProtectedConfig, [
         'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-nivell-estudis.php'
+    ]),
+
+    // tipus procediments judicials
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/llistat-tipus-procediments-judicials' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/llistat-procediments-judicials.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/nou-tipus-procediment-judicial' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-tipus-procediment-judicial.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/modifica-tipus-procediment-judicial/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-tipus-procediment-judicial.php'
     ]),
 
 
