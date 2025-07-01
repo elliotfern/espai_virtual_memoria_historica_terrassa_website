@@ -33,6 +33,13 @@ export type ApiUrls = {
     EMPRESA_ID: (id: number) => string;
     EMPRESONAT_ID: (id: number) => string;
     PROCEDIMENTS_JUDICIALS: string;
+    TIPUS_JUDICIS: string;
+    SENTENCIES: string;
+    PENES: string;
+    JUTJATS: string;
+    MODALITATS_PRESO: string;
+    MOTIUS_DETENCIO: string;
+    GRUPS_REPRESSIO: string;
   };
   POST: {
     MUNICIPI: string;
@@ -56,6 +63,13 @@ export type ApiUrls = {
     ARXIU_CODI: string;
     EMPRESA: string;
     PROCEDIMENT_JUDICIAL: string;
+    TIPUS_JUDICI: string;
+    SENTENCIA: string;
+    PENA: string;
+    JUTJAT: string;
+    MODALITAT_PRESO: string;
+    MOTIU_DETENCIO: string;
+    GRUP_REPRESSIO: string;
   };
   PUT: {
     MUNICIPI: string;
@@ -79,6 +93,13 @@ export type ApiUrls = {
     ARXIU_CODI: string;
     EMPRESA: string;
     PROCEDIMENT_JUDICIAL: string;
+    TIPUS_JUDICI: string;
+    SENTENCIA: string;
+    PENA: string;
+    JUTJAT: string;
+    MODALITAT_PRESO: string;
+    MOTIU_DETENCIO: string;
+    GRUP_REPRESSIO: string;
   };
   DELETE: {
     MUNICIPI: string;
@@ -102,5 +123,12 @@ export type ApiUrls = {
     ARXIU_CODI: string;
     EMPRESA: string;
     PROCEDIMENT_JUDICIAL: string;
+    TIPUS_JUDICI: string;
+    SENTENCIA: string;
+    PENA: string;
+    JUTJAT: string;
+    MODALITAT_PRESO: string;
+    MOTIU_DETENCIO: string;
+    GRUP_REPRESSIO: string;
   };
 };

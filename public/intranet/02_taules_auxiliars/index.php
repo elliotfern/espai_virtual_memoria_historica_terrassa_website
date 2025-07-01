@@ -37,10 +37,11 @@
             <ul>
                 <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['auxiliars']; ?>/llistat-categories-repressio">Taula llistat categories de repressió</a></li>
                 <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['auxiliars']; ?>/llistat-causa-mort">Taula llistat causes de defunció</a></li>
-                <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['auxiliars']; ?>/llistat-espais">Taula llistat d'espais</a></li>
+                <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['auxiliars']; ?>/llistat-espais">Taula llistat d'espais (execució, enterrament, afusellament)</a></li>
                 <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['auxiliars']; ?>/llistat-estats-civils">Taula d'estats civils</a></li>
                 <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['auxiliars']; ?>/llistat-nivells-estudis">Taula d'estudis</a></li>
                 <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['auxiliars']; ?>/llistat-oficis">Taula d'oficis</a></li>
+                <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['auxiliars']; ?>/llistat-empreses">Taula llistat empreses</a></li>
                 <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['auxiliars']; ?>/llistat-carrecs-empresa">Taula llistat càrrecs d'empresa</a></li>
                 <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['auxiliars']; ?>/llistat-subsectors-economics">Taula llistat sub-sectors econòmics</a></li>
                 <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['auxiliars']; ?>/llistat-sectors-economics">Taula llistat sectors econòmics</a></li>
@@ -51,10 +52,30 @@
             <h6>Processats</h6>
             <ul>
                 <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['auxiliars']; ?>/llistat-acusacions-judicials">Taula llistat d'acusacions judicials</a></li>
-                <li>aux_jutjats</li>
+                <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['auxiliars']; ?>/llistat-jutjats">Taula llistat de seus judicials</a></li>
                 <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['auxiliars']; ?>/llistat-tipus-procediments-judicials">Taula llistat tipus procediments judicials</a></li>
-                <li>aux_sentencies</li>
+                <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['auxiliars']; ?>/llistat-tipus-judicis">Taula llistat tipus de judicis</a></li>
+                <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['auxiliars']; ?>/llistat-sentencies">Taula llistat sentències</a></li>
+                <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['auxiliars']; ?>/llistat-penes">Taula llistat penes</a></li>
                 <li>aux_tipus_presons</li>
+            </ul>
+
+            <h6>Afusellats</h6>
+            <ul>
+                <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['auxiliars']; ?>/llistat-espais">Taula llistat d'espais (execució, enterrament, afusellament)</a></li>
+                </li>
+            </ul>
+
+            <h6>Empresonats Presó Model</h6>
+            <ul>
+                <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['auxiliars']; ?>/llistat-modalitats-preso">Taula modalitat de presó</a></li>
+            </ul>
+
+            <h6>Detinguts Guàrdia Urbana Terrassa</h6>
+            <ul>
+                <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['auxiliars']; ?>/llistat-motius-detencio">Taula motius de
+                        detenció/empresonament</a></li>
+                <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['auxiliars']; ?>/llistat-grups-repressio">Taula forces de seguretat / repressió</a></li>
             </ul>
 
             <h4>3. Exiliats / Deportats</h4>

@@ -45,7 +45,6 @@ export async function processat(idRepresaliat: number) {
   const btn6 = document.getElementById('refreshButton6');
   const btn7 = document.getElementById('refreshButton7');
   const btn8 = document.getElementById('refreshButton8');
-  const btn9 = document.getElementById('refreshButton9');
   const btn10 = document.getElementById('refreshButton10');
   const container = document.getElementById('fitxaNomCognoms');
   const processatForm = document.getElementById('processatForm');
@@ -77,7 +76,7 @@ export async function processat(idRepresaliat: number) {
 
   renderFormInputs(data);
 
-  if (btn1 && btn2 && btn3 && btn4 && btn5 && btn6 && btn7 && btn8 && btn9 && btn10) {
+  if (btn1 && btn2 && btn3 && btn4 && btn5 && btn6 && btn7 && btn8 && btn10) {
     btn1.addEventListener('click', function (event) {
       event.preventDefault();
       auxiliarSelect(data?.tipus_procediment, 'procediments', 'tipus_procediment', 'procediment_ca');
@@ -90,42 +89,37 @@ export async function processat(idRepresaliat: number) {
 
     btn3.addEventListener('click', function (event) {
       event.preventDefault();
-      auxiliarSelect(data?.jutjat, 'jutjats', 'jutjat', 'jutjat_ca');
+      auxiliarSelect(data?.sentencia, 'sentencies', 'sentencia', 'sentencia_ca');
     });
 
     btn4.addEventListener('click', function (event) {
       event.preventDefault();
+      auxiliarSelect(data?.pena, 'penes', 'pena', 'pena_ca');
+    });
+
+    btn5.addEventListener('click', function (event) {
+      event.preventDefault();
+      auxiliarSelect(data?.jutjat, 'jutjats', 'jutjat', 'jutjat_ca');
+    });
+
+    btn6.addEventListener('click', function (event) {
+      event.preventDefault();
       auxiliarSelect(data?.lloc_consell_guerra, 'municipis', 'lloc_consell_guerra', 'ciutat');
+    });
+
+    btn7.addEventListener('click', function (event) {
+      event.preventDefault();
+      auxiliarSelect(data?.acusacio, 'acusacions', 'acusacio', 'acusacio_ca');
+    });
+
+    btn8.addEventListener('click', function (event) {
+      event.preventDefault();
+      auxiliarSelect(data?.acusacio_2, 'acusacions', 'acusacio_2', 'acusacio_ca');
     });
 
     btn10.addEventListener('click', function (event) {
       event.preventDefault();
       auxiliarSelect(data?.lloc_detencio, 'municipis', 'lloc_detencio', 'ciutat');
-    });
-
-    btn5.addEventListener('click', function (event) {
-      event.preventDefault();
-      auxiliarSelect(data?.acusacio, 'acusacions', 'acusacio', 'acusacio_ca');
-    });
-
-    btn6.addEventListener('click', function (event) {
-      event.preventDefault();
-      auxiliarSelect(data?.acusacio_2, 'acusacions', 'acusacio_2', 'acusacio_ca');
-    });
-
-    btn7.addEventListener('click', function (event) {
-      event.preventDefault();
-      auxiliarSelect(data?.sentencia, 'sentencies', 'sentencia', 'sentencia_ca');
-    });
-
-    btn8.addEventListener('click', function (event) {
-      event.preventDefault();
-      auxiliarSelect(data?.pena, 'penes', 'pena', 'pena_ca');
-    });
-
-    btn9.addEventListener('click', function (event) {
-      event.preventDefault();
-      auxiliarSelect(data?.pena, 'penes', 'pena', 'pena_ca');
     });
   }
 

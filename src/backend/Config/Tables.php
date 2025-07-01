@@ -40,14 +40,18 @@ final class Tables
     public const AUX_OFICIS = 'aux_oficis';
     public const AUX_OFICI_CARREC = 'aux_ofici_carrec';
     public const AUX_PROCEDIMENT_JUDICIAL = 'aux_procediment_judicial';
+    public const AUX_TIPUS_JUDICI = 'aux_tipus_judici';
     public const AUX_SECTOR_ECONOMIC = 'aux_sector_economic';
     public const AUX_SENTENCIES = 'aux_sentencies';
+    public const AUX_PENES = 'aux_penes';
     public const AUX_SITUACIONS_DEPORTATS = 'aux_situacions_deportats';
     public const AUX_SUB_SECTOR_ECONOMIC = 'aux_sub_sector_economic';
     public const AUX_TIPOLOGIA_ESPAIS = 'aux_tipologia_espais';
     public const AUX_TIPUS_PRESONS = 'aux_tipus_presons';
     public const AUX_EMPRESES = 'aux_empreses';
-
+    public const AUX_MODALITAT_PRESO = 'aux_modalitat_preso';
+    public const AUX_MOTIUS_EMPRESONANENT = 'aux_motius_empresonament';
+    public const AUX_SISTEMA_REPRESSIU = 'aux_sistema_repressiu';
     public const CONTROL_REGISTRE_CANVIS = 'control_registre_canvis';
 
     public const DB_AFUSELLATS = 'db_afusellats';

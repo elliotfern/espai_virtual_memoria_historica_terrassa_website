@@ -29,7 +29,7 @@
                     <select class="form-select" aria-label="Default select example" name="lloc_detencio" id="lloc_detencio">
                     </select>
                     <div class="mt-2">
-                        <a href="https://memoriaterrassa.cat/gestio/auxiliars/nou-municipi" target="_blank" class="btn btn-secondary btn-sm" id="afegirMun1">Afegir municipi</a>
+                        <a href="https://memoriaterrassa.cat/gestio/auxiliars/nou-municipi" target="_blank" class="btn btn-secondary btn-sm" id="afegirMun10">Afegir municipi</a>
                         <button id="refreshButton10" class="btn btn-primary btn-sm">Actualitzar llistat</button>
                     </div>
                 </div>
@@ -50,7 +50,7 @@
                     <select class="form-select" aria-label="Default select example" name="tipus_judici" id="tipus_judici">
                     </select>
                     <div class="mt-2">
-                        <a href="https://memoriaterrassa.cat/gestio/auxiliars/nou-procediment" target="_blank" class="btn btn-secondary btn-sm" id="afegir2">Afegir tipus judici</a>
+                        <a href="https://memoriaterrassa.cat/gestio/auxiliars/nou-tipus-judici" target="_blank" class="btn btn-secondary btn-sm" id="afegir2">Afegir tipus judici</a>
                         <button id="refreshButton2" class="btn btn-primary btn-sm">Actualitzar llistat</button>
                     </div>
                 </div>
@@ -78,6 +78,9 @@
                 <div class="col-md-4 mb-4">
                     <label for="sentencia_data" class="form-label negreta">Data sentència:</label>
                     <input type="text" class="form-control" id="sentencia_data" name="sentencia_data" value="">
+                    <div class="avis-form">
+                        * Format de la data: DD/MM/AAAA
+                    </div>
                 </div>
 
                 <h4>3) Detalls de la conclusió del procés</h4>
@@ -85,7 +88,6 @@
                 <div class="alert alert-info">
                     <h5>Sobre la sentència i la pena</h5>
                     <ul>
-
                         <li>1. La sentència és la decició final emitida per un jutjat o tribunal en un cas legal. Aquesta pot incloure la imposició d'una pena, però també pot ordenar l'absolució de l'acusat si no se'l troba culpable del delicte.</li>
                         <li>2. La pena és una de les possibles conseqüències que pot incloure la sentència.</li>
                         <li>3. La sentència pot incloure la imposició d'una pena si es considera que l'acusat és culpable del delicte</li>
@@ -97,7 +99,7 @@
                     <select class="form-select" aria-label="Default select example" name="sentencia" id="sentencia">
                     </select>
                     <div class="mt-2">
-                        <a href="https://memoriaterrassa.cat/gestio/auxiliars/nou-procediment" target="_blank" class="btn btn-secondary btn-sm" id="afegir3">Afegir sentència</a>
+                        <a href="https://memoriaterrassa.cat/gestio/auxiliars/nova-sentencia" target="_blank" class="btn btn-secondary btn-sm" id="afegir3">Afegir sentència</a>
                         <button id="refreshButton3" class="btn btn-primary btn-sm">Actualitzar llistat</button>
                     </div>
                 </div>
@@ -107,8 +109,8 @@
                     <select class="form-select" aria-label="Default select example" name="pena" id="pena">
                     </select>
                     <div class="mt-2">
-                        <a href="https://memoriaterrassa.cat/gestio/auxiliars/nou-procediment" target="_blank" class="btn btn-secondary btn-sm" id="afegir5">Afegir pena</a>
-                        <button id="refreshButton5" class="btn btn-primary btn-sm">Actualitzar llistat</button>
+                        <a href="https://memoriaterrassa.cat/gestio/auxiliars/nova-pena" target="_blank" class="btn btn-secondary btn-sm" id="afegir4">Afegir pena</a>
+                        <button id="refreshButton4" class="btn btn-primary btn-sm">Actualitzar llistat</button>
                     </div>
                 </div>
 
@@ -126,6 +128,9 @@
                 <div class="col-md-4 mb-4">
                     <label for="data_inici_proces" class="form-label negreta">Data inici del procés judicial:</label>
                     <input type="text" class="form-control" id="data_inici_proces" name="data_inici_proces" value="">
+                    <div class="avis-form">
+                        * Format de la data: DD/MM/AAAA
+                    </div>
                 </div>
 
                 <div class="col-md-4 mb-4">
@@ -133,8 +138,8 @@
                     <select class="form-select" aria-label="Default select example" name="jutjat" id="jutjat">
                     </select>
                     <div class="mt-2">
-                        <a href="https://memoriaterrassa.cat/gestio/auxiliars/nou-procediment" target="_blank" class="btn btn-secondary btn-sm" id="afegir6">Afegir jutjat</a>
-                        <button id="refreshButton6" class="btn btn-primary btn-sm">Actualitzar llistat</button>
+                        <a href="https://memoriaterrassa.cat/gestio/auxiliars/nou-jutjat" target="_blank" class="btn btn-secondary btn-sm" id="afegir5">Afegir jutjat</a>
+                        <button id="refreshButton5" class="btn btn-primary btn-sm">Actualitzar llistat</button>
                     </div>
                 </div>
 
@@ -151,6 +156,9 @@
                 <div class="col-md-4 mb-4">
                     <label for="consell_guerra_data" class="form-label negreta">Data Consell de guerra:</label>
                     <input type="text" class="form-control" id="consell_guerra_data" name="consell_guerra_data" value="">
+                    <div class="avis-form">
+                        * Format de la data: DD/MM/AAAA
+                    </div>
                 </div>
 
                 <div class="col-md-4 mb-4">
@@ -158,8 +166,8 @@
                     <select class="form-select" aria-label="Default select example" name="lloc_consell_guerra" id="lloc_consell_guerra">
                     </select>
                     <div class="mt-2">
-                        <a href="https://memoriaterrassa.cat/gestio/auxiliars/nou-municipi" target="_blank" class="btn btn-secondary btn-sm" id="afegir7">Afegir municipi</a>
-                        <button id="refreshButton7" class="btn btn-primary btn-sm">Actualitzar llistat</button>
+                        <a href="https://memoriaterrassa.cat/gestio/auxiliars/nou-municipi" target="_blank" class="btn btn-secondary btn-sm" id="afegir6">Afegir municipi</a>
+                        <button id="refreshButton6" class="btn btn-primary btn-sm">Actualitzar llistat</button>
                     </div>
                 </div>
 
@@ -188,24 +196,24 @@
                     <input type="text" class="form-control" id="tribunal_vocals" name="tribunal_vocals" value="">
                 </div>
 
-                <h4>5) Detalls de l'acusació</h4>
+                <h4>5) Detalls de l'acusació fiscalia</h4>
                 <div class="col-md-6 mb-4">
-                    <label for="acusacio" class="form-label negreta">Acusació 1:</label>
+                    <label for="acusacio" class="form-label negreta">Acusació fiscalia 1:</label>
                     <select class="form-select" aria-label="Default select example" name="acusacio" id="acusacio">
                     </select>
                     <div class="mt-2">
-                        <a href="https://memoriaterrassa.cat/gestio/auxiliars/nou-procediment" target="_blank" class="btn btn-secondary btn-sm" id="afegir8">Afegir acusació</a>
-                        <button id="refreshButton8" class="btn btn-primary btn-sm">Actualitzar llistat</button>
+                        <a href="https://memoriaterrassa.cat/gestio/auxiliars/nova-acusacio" target="_blank" class="btn btn-secondary btn-sm" id="afegir7">Afegir acusació</a>
+                        <button id="refreshButton7" class="btn btn-primary btn-sm">Actualitzar llistat</button>
                     </div>
                 </div>
 
                 <div class="col-md-6 mb-4">
-                    <label for="acusacio_2" class="form-label negreta">Acusació 2:</label>
+                    <label for="acusacio_2" class="form-label negreta">Acusació fiscalia 2:</label>
                     <select class="form-select" aria-label="Default select example" name="acusacio_2" id="acusacio_2">
                     </select>
                     <div class="mt-2">
-                        <a href="https://memoriaterrassa.cat/gestio/auxiliars/nou-procediment" target="_blank" class="btn btn-secondary btn-sm" id="afegir9">Afegir acusació</a>
-                        <button id="refreshButton9" class="btn btn-primary btn-sm">Actualitzar llistat</button>
+                        <a href="https://memoriaterrassa.cat/gestio/auxiliars/nova-acusacio" target="_blank" class="btn btn-secondary btn-sm" id="afegir8">Afegir acusació</a>
+                        <button id="refreshButton8" class="btn btn-primary btn-sm">Actualitzar llistat</button>
                     </div>
                 </div>
 

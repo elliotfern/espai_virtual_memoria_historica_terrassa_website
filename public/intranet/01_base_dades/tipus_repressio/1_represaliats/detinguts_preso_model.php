@@ -15,10 +15,29 @@
                 <input type="hidden" name="idPersona" id="idPersona" value="">
                 <input type="hidden" name="id" id="id" value="">
 
+                <h4>1) Dades empresonament</h4>
+
                 <div class="col-md-4 mb-4">
                     <label for="data_empresonament" class="form-label negreta">Data d'empresonament:</label>
                     <input type="text" class="form-control" id="data_empresonament" name="data_empresonament" value="">
+                    <div class="avis-form">
+                        * Format de la data: DD/MM/AAAA
+                    </div>
                 </div>
+
+                <div class="col-md-4 mb-4">
+                    <label for="modalitat" class="form-label negreta">Modalitat de presó:</label>
+                    <select class="form-select" id="modalitat" name="modalitat">
+                    </select>
+
+                    <div class="mt-2">
+                        <a href="https://memoriaterrassa.cat/gestio/auxiliars/nova-modalitat-preso" target="_blank" class="btn btn-secondary btn-sm" id="afegir1">Afegir modalitat presó</a>
+                        <button id="refreshButton1" class="btn btn-primary btn-sm">Actualitzar llistat</button>
+                    </div>
+                </div>
+
+                <hr>
+                <h4>2) Trasllats</h4>
 
                 <div class="col-md-4 mb-4">
                     <label for="trasllats" class="form-label negreta">Trasllats:</label>
@@ -38,8 +57,13 @@
                 <div class="col-md-4 mb-4">
                     <label for="data_trasllat" class="form-label negreta">Data trasllat:</label>
                     <input type="text" class="form-control" id="data_trasllat" name="data_trasllat" value="">
+                    <div class="avis-form">
+                        * Format de la data: DD/MM/AAAA
+                    </div>
                 </div>
 
+                <hr>
+                <h4>3) Dades alliberament</h4>
                 <div class="col-md-4 mb-4">
                     <label for="llibertat" class="form-label negreta">Llibertat:</label>
                     <select class="form-select" id="llibertat" name="llibertat">
@@ -53,19 +77,18 @@
                 <div class="col-md-4 mb-4">
                     <label for="data_llibertat" class="form-label negreta">Data llibertat:</label>
                     <input type="text" class="form-control" id="data_llibertat" name="data_llibertat" value="">
-                </div>
-
-                <div class="col-md-4 mb-4">
-                    <label for="modalitat" class="form-label negreta">Modalitat de presó:</label>
-                    <select class="form-select" id="modalitat" name="modalitat">
-                    </select>
+                    <div class="avis-form">
+                        * Format de la data: DD/MM/AAAA
+                    </div>
                 </div>
 
                 <hr>
 
-                <div class="col-md-6 mb-4">
+                <h4>4) Altres dades</h4>
+
+                <div class="col-md-12 mb-4">
                     <label for="vicissituds" class="form-label negreta">Vicissituds:</label>
-                    <input type="text" class="form-control" id="vicissituds" name="vicissituds" value="">
+                    <textarea class="form-control" id="vicissituds" name="vicissituds" rows="4"></textarea>
                 </div>
 
                 <div class="col-md-12 mb-4">

@@ -293,9 +293,9 @@ if ($slug === "municipis") {
     $db = new Database();
     $id = $_GET['id'] ?? null;
 
-    $query = "SELECT esp.id, esp.espai_cat, esp.municipi
-              FROM aux_espai AS esp
-              WHERE esp.id = :id";
+    $query = "SELECT id, espai_cat, municipi, espai_es, espai_en, espai_fr, espai_it, espai_pt, descripcio_espai
+              FROM aux_espai
+              WHERE id = :id";
 
     try {
 
@@ -403,12 +403,40 @@ if ($slug === "municipis") {
     // GET : Llistat jutjats
     // URL: /api/auxiliars/get/jutjats
 } elseif ($slug === "jutjats") {
-    $query = "SELECT j.id, j.jutjat_ca
+
+    $db = new Database();
+    $query = "SELECT j.id, j.jutjat_ca, jutjat_es,
+                jutjat_en,
+                jutjat_fr,
+                jutjat_it,
+                jutjat_pt
               FROM aux_jutjats AS j
               ORDER BY j.jutjat_ca ASC";
 
-    $result = getData2($query);
-    echo json_encode($result);
+    try {
+        $result = $db->getData($query);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;  // o exit; según cómo funcione Response::error
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
 
     // GET : Llistat tipus acusacions
     // URL: /api/auxiliars/get/acusacions
@@ -423,22 +451,69 @@ if ($slug === "municipis") {
     // GET : Llistat sentencies
     // URL: /api/auxiliars/get/sentencies
 } elseif ($slug === "sentencies") {
-    $query = "SELECT sen.id, sen.sentencia_ca
-              FROM aux_sentencies AS sen
-              ORDER BY sen.sentencia_ca ASC";
+    $db = new Database();
+    $query = "SELECT id, sentencia_ca, sentencia_es, sentencia_en, sentencia_fr, sentencia_it, sentencia_pt
+              FROM aux_sentencies
+              ORDER BY sentencia_ca ASC";
 
-    $result = getData2($query);
-    echo json_encode($result);
+    try {
+        $result = $db->getData($query);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;  // o exit; según cómo funcione Response::error
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
 
     // GET : Llistat penes
     // URL: /api/auxiliars/get/penes
 } elseif ($slug === "penes") {
-    $query = "SELECT id, pena_ca
+
+    $db = new Database();
+    $query = "SELECT id, pena_ca, pena_es, pena_en, pena_it, pena_fr, pena_pt
               FROM aux_penes
               ORDER BY pena_ca ASC";
 
-    $result = getData2($query);
-    echo json_encode($result);
+    try {
+        $result = $db->getData($query);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;  // o exit; según cómo funcione Response::error
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
 
 
     // GET : Condició civil/militar
@@ -551,13 +626,42 @@ if ($slug === "municipis") {
     // GET : Llistat arxius bibliografia
     // URL: /api/auxiliars/get/modalitatPreso
 } elseif ($slug === 'modalitatPreso') {
-    $query = "SELECT id, modalitat_ca
+
+    $db = new Database();
+
+    $query = "SELECT id, modalitat_ca, 
+                modalitat_es,
+                modalitat_en,
+                modalitat_fr,
+                modalitat_it,
+                modalitat_pt
               FROM aux_modalitat_preso
               ORDER BY modalitat_ca ASC";
 
-    $result = getData2($query);
-    echo json_encode($result);
+    try {
+        $result = $db->getData($query);
 
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
 
     // GET : llistat d'avatars usuaris
     // URL: https://memoriaterrassa.cat/api/auxiliars/get/avatarsUsuaris
@@ -798,7 +902,7 @@ if ($slug === "municipis") {
 } elseif ($slug === "motiusEmpresonament") {
 
     $db = new Database();
-    $query = "SELECT id, motiuEmpresonament_ca
+    $query = "SELECT id, motiuEmpresonament_ca, motiuEmpresonament_es, motiuEmpresonament_en, motiuEmpresonament_fr, motiuEmpresonament_it, motiuEmpresonament_pt
               FROM aux_motius_empresonament
               ORDER BY motiuEmpresonament_ca";
 
@@ -877,6 +981,77 @@ if ($slug === "municipis") {
         );
     }
 
+    // GET : Grups de repressió - categoria
+    // URL: /api/auxiliars/get/sistemaRepressiuGrup
+} elseif ($slug === "sistemaRepressiuGrup") {
+
+    $db = new Database();
+    $query = "SELECT id, grup
+              FROM aux_sistema_repressiu_grup
+              ORDER BY grup";
+
+    try {
+        $result = $db->getData($query);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;  // o exit; según cómo funcione Response::error
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
+    // GET : Grups de repressió ID
+    // URL: /api/auxiliars/get/sistemaRepressiuID
+} elseif ($slug === "sistemaRepressiuID") {
+    $db = new Database();
+
+    $id = $_GET['id'] ?? null;
+
+    $query = "SELECT id, carrec, nom_institucio, grup_institucio
+              FROM aux_sistema_repressiu
+              WHERE id = :id";
+
+    try {
+        $params = [':id' => $id];
+        $result = $db->getData($query, $params, true);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;  // o exit; según cómo funcione Response::error
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
     // GET : Llistat de presons
     // URL: /api/auxiliars/get/llistatPresons
 } elseif ($slug === "llistatPresons") {
@@ -920,6 +1095,47 @@ if ($slug === "municipis") {
     $query = "SELECT id, procediment_ca
               FROM aux_procediment_judicial
               ORDER BY procediment_ca ASC";
+
+    try {
+        $result = $db->getData($query);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;  // o exit; según cómo funcione Response::error
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
+    // GET : Llistat de tipus de judicis
+    // URL: /api/auxiliars/get/tipusJudicis
+} elseif ($slug === "tipusJudicis") {
+
+    $db = new Database();
+    $query = "SELECT 
+            id,
+            tipusJudici_ca,
+            tipusJudici_es,
+            tipusJudici_en,
+            tipusJudici_fr,
+            tipusJudici_it,
+            tipusJudici_pt
+        FROM aux_tipus_judici
+        ORDER BY tipusJudici_ca";
 
     try {
         $result = $db->getData($query);

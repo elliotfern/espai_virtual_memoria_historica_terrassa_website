@@ -327,11 +327,11 @@ $routes = [
     ]),
 
     APP_INTRANET . $urlIntranet['auxiliars'] . '/nova-acusacio' => array_merge($defaultProtectedConfig, [
-        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-acusacions.php'
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-acusacio.php'
     ]),
 
     APP_INTRANET . $urlIntranet['auxiliars'] . '/modifica-acusacio/{id}' => array_merge($defaultProtectedConfig, [
-        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-acusacions.php'
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-acusacio.php'
     ]),
 
     // bàndols guerra
@@ -425,7 +425,96 @@ $routes = [
         'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-tipus-procediment-judicial.php'
     ]),
 
+    // tipus judicis
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/llistat-tipus-judicis' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/llistat-tipus-judicis.php'
+    ]),
 
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/nou-tipus-judici' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-tipus-judici.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/modifica-tipus-judici/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-tipus-judici.php'
+    ]),
+
+    // sentències
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/llistat-sentencies' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/llistat-sentencies.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/nova-sentencia' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-sentencia.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/modifica-sentencia/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-sentencia.php'
+    ]),
+
+    // penes
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/llistat-penes' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/llistat-penes.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/nova-pena' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-pena.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/modifica-pena/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-pena.php'
+    ]),
+
+    // jutjats
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/llistat-jutjats' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/llistat-jutjats.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/nou-jutjat' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-jutjat.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/modifica-jutjat/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-jutjat.php'
+    ]),
+
+    // modalitat preso
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/llistat-modalitats-preso' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/llistat-modalitats-preso.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/nova-modalitat-preso' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-modalitat-preso.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/modifica-modalitat-preso/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-modalitat-preso.php'
+    ]),
+
+    // motius empresonament/detencio
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/llistat-motius-detencio' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/llistat-motius-detencio.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/nou-motiu-detencio' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-motiu-detencio.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/modifica-motiu-detencio/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-motiu-detencio.php'
+    ]),
+
+    // grups de repressió
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/llistat-grups-repressio' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/llistat-grups-repressio.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/nou-grup-repressio' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-grup-repressio.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/modifica-grup-repressio/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-grup-repressio.php'
+    ]),
 
     // Gestió familiars
     APP_INTRANET . $urlIntranet['familiars'] . '/modifica-familiar/{id}/{id}' => array_merge($defaultProtectedConfig, [

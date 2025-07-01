@@ -1518,12 +1518,12 @@ if ($slug === "municipi") {
                 acusacio_it
             ) 
             VALUES (
-                ':acusacio_ca', 
-                ':acusacio_es', 
-                ':acusacio_en', 
-                ':acusacio_fr', 
-                ':acusacio_pt', 
-                ':acusacio_it'
+                :acusacio_ca, 
+                :acusacio_es, 
+                :acusacio_en, 
+                :acusacio_fr, 
+                :acusacio_pt, 
+                :acusacio_it
             )";
 
         // Preparar la consulta
@@ -1911,6 +1911,12 @@ if ($slug === "municipi") {
     // Si no hay errores, crear las variables PHP y preparar la consulta PDO
     $espai_cat = $data['espai_cat'];
     $municipi = !empty($data['municipi']) ? $data['municipi'] : NULL;
+    $espai_es = !empty($data['espai_es']) ? $data['espai_es'] : NULL;
+    $espai_en = !empty($data['espai_en']) ? $data['espai_en'] : NULL;
+    $espai_fr = !empty($data['espai_fr']) ? $data['espai_fr'] : NULL;
+    $espai_it = !empty($data['espai_it']) ? $data['espai_it'] : NULL;
+    $espai_pt = !empty($data['espai_pt']) ? $data['espai_pt'] : NULL;
+    $descripcio_espai = !empty($data['descripcio_espai']) ? $data['descripcio_espai'] : NULL;
 
     // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
     try {
@@ -1921,9 +1927,21 @@ if ($slug === "municipi") {
         // Crear la consulta SQL
         $sql = "INSERT INTO aux_espai (
             espai_cat,
+            espai_es,
+            espai_en,
+            espai_fr,
+            espai_it,
+            espai_pt,
+            descripcio_espai,
             municipi
         ) VALUES (
             :espai_cat,
+            :espai_es,
+            :espai_en,
+            :espai_fr,
+            :espai_it,
+            :espai_pt,
+            :descripcio_espai,
             :municipi
         )";
 
@@ -1932,7 +1950,13 @@ if ($slug === "municipi") {
 
         // Enlazar los parámetros con los valores de las variables PHP
         $stmt->bindParam(':espai_cat', $espai_cat, PDO::PARAM_STR);
-        $stmt->bindParam(':municipi', $municipi, PDO::PARAM_STR);
+        $stmt->bindParam(':espai_es', $espai_es, PDO::PARAM_STR);
+        $stmt->bindParam(':espai_en', $espai_en, PDO::PARAM_STR);
+        $stmt->bindParam(':espai_fr', $espai_fr, PDO::PARAM_STR);
+        $stmt->bindParam(':espai_it', $espai_it, PDO::PARAM_STR);
+        $stmt->bindParam(':espai_pt', $espai_pt, PDO::PARAM_STR);
+        $stmt->bindParam(':descripcio_espai', $descripcio_espai, PDO::PARAM_STR);
+        $stmt->bindParam(':municipi', $municipi, PDO::PARAM_INT);
 
         // Ejecutar la consulta
         $stmt->execute();
@@ -2445,6 +2469,699 @@ if ($slug === "municipi") {
             $tipusOperacio,             // Tipus operacio
             $detalls,                       // Descripción de la operación
             Tables::AUX_PROCEDIMENT_JUDICIAL,  // Nombre de la tabla afectada
+            $id                           // ID del registro modificado
+        );
+
+        // Respuesta de éxito
+        Response::success(
+            MissatgesAPI::success('create'),
+            ['id' => $id],
+            200
+        );
+    } catch (PDOException $e) {
+        // En caso de error en la conexión o ejecución de la consulta
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
+    // 4) POST Tipus judici
+    // ruta POST => "/api/auxiliars/post/tipusJudici"
+} else if ($slug === "tipusJudici") {
+    $inputData = file_get_contents('php://input');
+    $data = json_decode($inputData, true);
+
+    // Inicializar un array para los errores
+    $errors = [];
+
+    // Validación de los datos recibidos
+    if (empty($data['tipusJudici_ca'])) {
+        $errors[] =  ValidacioErrors::requerit('tipus judici en català');
+    }
+
+    // Si hay errores, devolver una respuesta con los errores
+    if (!empty($errors)) {
+        Response::error(
+            MissatgesAPI::error('validacio'),
+            $errors,
+            400
+        );
+    }
+
+    // Si no hay errores, crear las variables PHP y preparar la consulta PDO
+    $tipusJudici_ca  = $data['tipusJudici_ca'];
+    $tipusJudici_es  = !empty($data['tipusJudici_es']) ? $data['tipusJudici_es'] : NULL;
+    $tipusJudici_en  = !empty($data['tipusJudici_en']) ? $data['tipusJudici_en'] : NULL;
+    $tipusJudici_fr  = !empty($data['tipusJudici_fr']) ? $data['tipusJudici_fr'] : NULL;
+    $tipusJudici_it  = !empty($data['tipusJudici_it']) ? $data['tipusJudici_it'] : NULL;
+    $tipusJudici_pt  = !empty($data['tipusJudici_pt']) ? $data['tipusJudici_pt'] : NULL;
+
+    // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
+    try {
+
+        global $conn;
+        /** @var PDO $conn */
+
+        // Crear la consulta SQL
+        $sql = "INSERT INTO aux_tipus_judici (
+            tipusJudici_ca,
+            tipusJudici_es,
+            tipusJudici_en,
+            tipusJudici_fr,
+            tipusJudici_it,
+            tipusJudici_pt
+        ) VALUES (
+
+            :tipusJudici_ca,
+            :tipusJudici_es,
+            :tipusJudici_en,
+            :tipusJudici_fr,
+            :tipusJudici_it,
+            :tipusJudici_pt
+        )";
+
+        // Preparar la consulta
+        $stmt = $conn->prepare($sql);
+
+        // Enlazar los parámetros con los valores de las variables PHP
+        $stmt->bindParam(':tipusJudici_ca', $tipusJudici_ca, PDO::PARAM_STR);
+        $stmt->bindParam(':tipusJudici_es', $tipusJudici_es, PDO::PARAM_STR);
+        $stmt->bindParam(':tipusJudici_en', $tipusJudici_en, PDO::PARAM_STR);
+        $stmt->bindParam(':tipusJudici_fr', $tipusJudici_fr, PDO::PARAM_STR);
+        $stmt->bindParam(':tipusJudici_it', $tipusJudici_it, PDO::PARAM_STR);
+        $stmt->bindParam(':tipusJudici_pt', $tipusJudici_pt, PDO::PARAM_STR);
+
+        // Ejecutar la consulta
+        $stmt->execute();
+
+        // Recuperar el ID del registro creado
+        $id = $conn->lastInsertId();
+
+        // Recuperar el ID del registro creado
+        $tipusOperacio = "INSERT";
+        $detalls =  "Creació de nou tipus de judici: " . $tipusJudici_ca;
+
+        // Si la inserció té èxit, cal registrar la inserció en la base de control de canvis
+
+        Audit::registrarCanvi(
+            $conn,
+            $userId,                      // ID del usuario que hace el cambio
+            $tipusOperacio,             // Tipus operacio
+            $detalls,                       // Descripción de la operación
+            Tables::AUX_TIPUS_JUDICI,  // Nombre de la tabla afectada
+            $id                           // ID del registro modificado
+        );
+
+        // Respuesta de éxito
+        Response::success(
+            MissatgesAPI::success('create'),
+            ['id' => $id],
+            200
+        );
+    } catch (PDOException $e) {
+        // En caso de error en la conexión o ejecución de la consulta
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
+    // 4) POST Sentències
+    // ruta POST => "/api/auxiliars/post/sentencia"
+} else if ($slug === "sentencia") {
+    $inputData = file_get_contents('php://input');
+    $data = json_decode($inputData, true);
+
+    // Inicializar un array para los errores
+    $errors = [];
+
+    // Validación de los datos recibidos
+    if (empty($data['sentencia_ca'])) {
+        $errors[] =  ValidacioErrors::requerit('sentència en català');
+    }
+
+    // Si hay errores, devolver una respuesta con los errores
+    if (!empty($errors)) {
+        Response::error(
+            MissatgesAPI::error('validacio'),
+            $errors,
+            400
+        );
+    }
+
+    // Si no hay errores, crear las variables PHP y preparar la consulta PDO
+    $sentencia_ca = $data['sentencia_ca'];
+    $sentencia_es = !empty($data['sentencia_es']) ? $data['sentencia_es'] : NULL;
+    $sentencia_en = !empty($data['sentencia_en']) ? $data['sentencia_en'] : NULL;
+    $sentencia_fr = !empty($data['sentencia_fr']) ? $data['sentencia_fr'] : NULL;
+    $sentencia_it = !empty($data['sentencia_it']) ? $data['sentencia_it'] : NULL;
+    $sentencia_pt = !empty($data['sentencia_pt']) ? $data['sentencia_pt'] : NULL;
+
+    // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
+    try {
+
+        global $conn;
+        /** @var PDO $conn */
+
+        // Crear la consulta SQL
+        $sql = "INSERT INTO aux_sentencies (
+            sentencia_ca,
+            sentencia_es,
+            sentencia_en,
+            sentencia_fr,
+            sentencia_it,
+            sentencia_pt
+        ) VALUES (
+            :sentencia_ca,
+            :sentencia_es,
+            :sentencia_en,
+            :sentencia_fr,
+            :sentencia_it,
+            :sentencia_pt
+        )";
+
+        // Preparar la consulta
+        $stmt = $conn->prepare($sql);
+
+        // Enlazar los parámetros con los valores de las variables PHP
+        $stmt->bindParam(':sentencia_ca', $sentencia_ca, PDO::PARAM_STR);
+        $stmt->bindParam(':sentencia_es', $sentencia_es, PDO::PARAM_STR);
+        $stmt->bindParam(':sentencia_en', $sentencia_en, PDO::PARAM_STR);
+        $stmt->bindParam(':sentencia_fr', $sentencia_fr, PDO::PARAM_STR);
+        $stmt->bindParam(':sentencia_it', $sentencia_it, PDO::PARAM_STR);
+        $stmt->bindParam(':sentencia_pt', $sentencia_pt, PDO::PARAM_STR);
+
+        // Ejecutar la consulta
+        $stmt->execute();
+
+        // Recuperar el ID del registro creado
+        $id = $conn->lastInsertId();
+
+        // Recuperar el ID del registro creado
+        $tipusOperacio = "INSERT";
+        $detalls =  "Creació de nova sentència: " . $sentencia_ca;
+
+        // Si la inserció té èxit, cal registrar la inserció en la base de control de canvis
+
+        Audit::registrarCanvi(
+            $conn,
+            $userId,                      // ID del usuario que hace el cambio
+            $tipusOperacio,             // Tipus operacio
+            $detalls,                       // Descripción de la operación
+            Tables::AUX_SENTENCIES,  // Nombre de la tabla afectada
+            $id                           // ID del registro modificado
+        );
+
+        // Respuesta de éxito
+        Response::success(
+            MissatgesAPI::success('create'),
+            ['id' => $id],
+            200
+        );
+    } catch (PDOException $e) {
+        // En caso de error en la conexión o ejecución de la consulta
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
+    // 4) POST Pena
+    // ruta POST => "/api/auxiliars/post/pena"
+} else if ($slug === "pena") {
+    $inputData = file_get_contents('php://input');
+    $data = json_decode($inputData, true);
+
+    // Inicializar un array para los errores
+    $errors = [];
+
+    // Validación de los datos recibidos
+    if (empty($data['pena_ca'])) {
+        $errors[] =  ValidacioErrors::requerit('pena en català');
+    }
+
+    // Si hay errores, devolver una respuesta con los errores
+    if (!empty($errors)) {
+        Response::error(
+            MissatgesAPI::error('validacio'),
+            $errors,
+            400
+        );
+    }
+
+    // Si no hay errores, crear las variables PHP y preparar la consulta PDO
+    $pena_ca = $data['pena_ca'];
+    $pena_es = !empty($data['pena_es']) ? $data['pena_es'] : NULL;
+    $pena_en = !empty($data['pena_en']) ? $data['pena_en'] : NULL;
+    $pena_it = !empty($data['pena_it']) ? $data['pena_it'] : NULL;
+    $pena_fr = !empty($data['pena_fr']) ? $data['pena_fr'] : NULL;
+    $pena_pt = !empty($data['pena_pt']) ? $data['pena_pt'] : NULL;
+
+    // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
+    try {
+
+        global $conn;
+        /** @var PDO $conn */
+
+        // Crear la consulta SQL
+        $sql = "INSERT INTO aux_penes (
+            pena_ca,
+            pena_es,
+            pena_en,
+            pena_it,
+            pena_fr,
+            pena_pt
+        ) VALUES (
+            :pena_ca,
+            :pena_es,
+            :pena_en,
+            :pena_it,
+            :pena_fr,
+            :pena_pt
+        )";
+
+        // Preparar la consulta
+        $stmt = $conn->prepare($sql);
+
+        // Enlazar los parámetros con los valores de las variables PHP
+        $stmt->bindParam(':pena_ca', $pena_ca, PDO::PARAM_STR);
+        $stmt->bindParam(':pena_es', $pena_es, PDO::PARAM_STR);
+        $stmt->bindParam(':pena_en', $pena_en, PDO::PARAM_STR);
+        $stmt->bindParam(':pena_it', $pena_it, PDO::PARAM_STR);
+        $stmt->bindParam(':pena_fr', $pena_fr, PDO::PARAM_STR);
+        $stmt->bindParam(':pena_pt', $pena_pt, PDO::PARAM_STR);
+
+        // Ejecutar la consulta
+        $stmt->execute();
+
+        // Recuperar el ID del registro creado
+        $id = $conn->lastInsertId();
+
+        // Recuperar el ID del registro creado
+        $tipusOperacio = "INSERT";
+        $detalls =  "Creació de nova pena: " . $pena_ca;
+
+        // Si la inserció té èxit, cal registrar la inserció en la base de control de canvis
+
+        Audit::registrarCanvi(
+            $conn,
+            $userId,                      // ID del usuario que hace el cambio
+            $tipusOperacio,             // Tipus operacio
+            $detalls,                       // Descripción de la operación
+            Tables::AUX_PENES,  // Nombre de la tabla afectada
+            $id                           // ID del registro modificado
+        );
+
+        // Respuesta de éxito
+        Response::success(
+            MissatgesAPI::success('create'),
+            ['id' => $id],
+            200
+        );
+    } catch (PDOException $e) {
+        // En caso de error en la conexión o ejecución de la consulta
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
+    // 4) POST Jutjats
+    // ruta POST => "/api/auxiliars/post/jutjat"
+} else if ($slug === "jutjat") {
+    $inputData = file_get_contents('php://input');
+    $data = json_decode($inputData, true);
+
+    // Inicializar un array para los errores
+    $errors = [];
+
+    // Validación de los datos recibidos
+    if (empty($data['jutjat_ca'])) {
+        $errors[] =  ValidacioErrors::requerit('seu judicial en català');
+    }
+
+    // Si hay errores, devolver una respuesta con los errores
+    if (!empty($errors)) {
+        Response::error(
+            MissatgesAPI::error('validacio'),
+            $errors,
+            400
+        );
+    }
+
+    // Si no hay errores, crear las variables PHP y preparar la consulta PDO
+    $jutjat_ca = $data['jutjat_ca'];
+    $jutjat_es = !empty($data['jutjat_es']) ? $data['jutjat_es'] : NULL;
+    $jutjat_en = !empty($data['jutjat_en']) ? $data['jutjat_en'] : NULL;
+    $jutjat_fr = !empty($data['jutjat_fr']) ? $data['jutjat_fr'] : NULL;
+    $jutjat_it = !empty($data['jutjat_it']) ? $data['jutjat_it'] : NULL;
+    $jutjat_pt = !empty($data['jutjat_pt']) ? $data['jutjat_pt'] : NULL;
+
+    // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
+    try {
+
+        global $conn;
+        /** @var PDO $conn */
+
+        // Crear la consulta SQL
+        $sql = "INSERT INTO aux_jutjats (
+                jutjat_ca,
+                jutjat_es,
+                jutjat_en,
+                jutjat_fr,
+                jutjat_it,
+                jutjat_pt
+            ) VALUES (
+                :jutjat_ca,
+                :jutjat_es,
+                :jutjat_en,
+                :jutjat_fr,
+                :jutjat_it,
+                :jutjat_pt
+            )";
+
+        // Preparar la consulta
+        $stmt = $conn->prepare($sql);
+
+        // Enlazar los parámetros con los valores de las variables PHP
+        $stmt->bindParam(':jutjat_ca', $jutjat_ca, PDO::PARAM_STR);
+        $stmt->bindParam(':jutjat_es', $jutjat_es, PDO::PARAM_STR);
+        $stmt->bindParam(':jutjat_en', $jutjat_en, PDO::PARAM_STR);
+        $stmt->bindParam(':jutjat_fr', $jutjat_fr, PDO::PARAM_STR);
+        $stmt->bindParam(':jutjat_it', $jutjat_it, PDO::PARAM_STR);
+        $stmt->bindParam(':jutjat_pt', $jutjat_pt, PDO::PARAM_STR);
+
+        // Ejecutar la consulta
+        $stmt->execute();
+
+        // Recuperar el ID del registro creado
+        $id = $conn->lastInsertId();
+
+        // Recuperar el ID del registro creado
+        $tipusOperacio = "INSERT";
+        $detalls =  "Creació de nova seu judicial: " . $jutjat_ca;
+
+        // Si la inserció té èxit, cal registrar la inserció en la base de control de canvis
+
+        Audit::registrarCanvi(
+            $conn,
+            $userId,                      // ID del usuario que hace el cambio
+            $tipusOperacio,             // Tipus operacio
+            $detalls,                       // Descripción de la operación
+            Tables::AUX_JUTJATS,  // Nombre de la tabla afectada
+            $id                           // ID del registro modificado
+        );
+
+        // Respuesta de éxito
+        Response::success(
+            MissatgesAPI::success('create'),
+            ['id' => $id],
+            200
+        );
+    } catch (PDOException $e) {
+        // En caso de error en la conexión o ejecución de la consulta
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
+    // 4) POST Modalitats preso
+    // ruta POST => "/api/auxiliars/post/modalitatPreso"
+} else if ($slug === "modalitatPreso") {
+    $inputData = file_get_contents('php://input');
+    $data = json_decode($inputData, true);
+
+    // Inicializar un array para los errores
+    $errors = [];
+
+    // Validación de los datos recibidos
+    if (empty($data['modalitat_ca'])) {
+        $errors[] =  ValidacioErrors::requerit('modalitat de presó en català');
+    }
+
+    // Si hay errores, devolver una respuesta con los errores
+    if (!empty($errors)) {
+        Response::error(
+            MissatgesAPI::error('validacio'),
+            $errors,
+            400
+        );
+    }
+
+    // Si no hay errores, crear las variables PHP y preparar la consulta PDO
+    $modalitat_ca = $data['modalitat_ca'];
+    $modalitat_es = !empty($data['modalitat_es']) ? $data['modalitat_es'] : NULL;
+    $modalitat_en = !empty($data['modalitat_en']) ? $data['modalitat_en'] : NULL;
+    $modalitat_fr = !empty($data['modalitat_fr']) ? $data['modalitat_fr'] : NULL;
+    $modalitat_it = !empty($data['modalitat_it']) ? $data['modalitat_it'] : NULL;
+    $modalitat_pt = !empty($data['modalitat_pt']) ? $data['modalitat_pt'] : NULL;
+
+    // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
+    try {
+
+        global $conn;
+        /** @var PDO $conn */
+
+        $sql = "INSERT INTO aux_modalitat_preso (
+                modalitat_ca,
+                modalitat_es,
+                modalitat_en,
+                modalitat_fr,
+                modalitat_it,
+                modalitat_pt
+            ) VALUES (
+                :modalitat_ca,
+                :modalitat_es,
+                :modalitat_en,
+                :modalitat_fr,
+                :modalitat_it,
+                :modalitat_pt
+            )";
+
+        // Preparar la consulta
+        $stmt = $conn->prepare($sql);
+
+        // Enlazar los parámetros con los valores de las variables PHP
+        $stmt->bindParam(':modalitat_ca', $modalitat_ca, PDO::PARAM_STR);
+        $stmt->bindParam(':modalitat_es', $modalitat_es, PDO::PARAM_STR);
+        $stmt->bindParam(':modalitat_en', $modalitat_en, PDO::PARAM_STR);
+        $stmt->bindParam(':modalitat_fr', $modalitat_fr, PDO::PARAM_STR);
+        $stmt->bindParam(':modalitat_it', $modalitat_it, PDO::PARAM_STR);
+        $stmt->bindParam(':modalitat_pt', $modalitat_pt, PDO::PARAM_STR);
+
+        // Ejecutar la consulta
+        $stmt->execute();
+
+        // Recuperar el ID del registro creado
+        $id = $conn->lastInsertId();
+
+        // Recuperar el ID del registro creado
+        $tipusOperacio = "INSERT";
+        $detalls =  "Creació de nova modalitat de presó: " . $modalitat_ca;
+
+        // Si la inserció té èxit, cal registrar la inserció en la base de control de canvis
+
+        Audit::registrarCanvi(
+            $conn,
+            $userId,                      // ID del usuario que hace el cambio
+            $tipusOperacio,             // Tipus operacio
+            $detalls,                       // Descripción de la operación
+            Tables::AUX_MODALITAT_PRESO,  // Nombre de la tabla afectada
+            $id                           // ID del registro modificado
+        );
+
+        // Respuesta de éxito
+        Response::success(
+            MissatgesAPI::success('create'),
+            ['id' => $id],
+            200
+        );
+    } catch (PDOException $e) {
+        // En caso de error en la conexión o ejecución de la consulta
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
+    // 4) POST Motius de detencio/empresonament
+    // ruta POST => "/api/auxiliars/post/motiuEmpresonament"
+} else if ($slug === "motiuEmpresonament") {
+    $inputData = file_get_contents('php://input');
+    $data = json_decode($inputData, true);
+
+    // Inicializar un array para los errores
+    $errors = [];
+
+    // Validación de los datos recibidos
+    if (empty($data['motiuEmpresonament_ca'])) {
+        $errors[] =  ValidacioErrors::requerit('motiu empresonament en català');
+    }
+
+    // Si hay errores, devolver una respuesta con los errores
+    if (!empty($errors)) {
+        Response::error(
+            MissatgesAPI::error('validacio'),
+            $errors,
+            400
+        );
+    }
+
+    // Si no hay errores, crear las variables PHP y preparar la consulta PDO
+    $motiuEmpresonament_ca = $data['motiuEmpresonament_ca'];
+    $motiuEmpresonament_es = !empty($data['motiuEmpresonament_es']) ? $data['motiuEmpresonament_es'] : NULL;
+    $motiuEmpresonament_en = !empty($data['motiuEmpresonament_en']) ? $data['motiuEmpresonament_en'] : NULL;
+    $motiuEmpresonament_fr = !empty($data['motiuEmpresonament_fr']) ? $data['motiuEmpresonament_fr'] : NULL;
+    $motiuEmpresonament_it = !empty($data['motiuEmpresonament_it']) ? $data['motiuEmpresonament_it'] : NULL;
+    $motiuEmpresonament_pt = !empty($data['motiuEmpresonament_pt']) ? $data['motiuEmpresonament_pt'] : NULL;
+
+    // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
+    try {
+
+        global $conn;
+        /** @var PDO $conn */
+
+        $sql = "INSERT INTO aux_motius_empresonament (
+                motiuEmpresonament_ca,
+                motiuEmpresonament_es,
+                motiuEmpresonament_en,
+                motiuEmpresonament_fr,
+                motiuEmpresonament_it,
+                motiuEmpresonament_pt
+            ) VALUES (
+                :motiuEmpresonament_ca,
+                :motiuEmpresonament_es,
+                :motiuEmpresonament_en,
+                :motiuEmpresonament_fr,
+                :motiuEmpresonament_it,
+                :motiuEmpresonament_pt
+            )";
+
+        // Preparar la consulta
+        $stmt = $conn->prepare($sql);
+
+        // Enlazar los parámetros con los valores de las variables PHP
+        $stmt->bindParam(':motiuEmpresonament_ca', $motiuEmpresonament_ca, PDO::PARAM_STR);
+        $stmt->bindParam(':motiuEmpresonament_es', $motiuEmpresonament_es, PDO::PARAM_STR);
+        $stmt->bindParam(':motiuEmpresonament_en', $motiuEmpresonament_en, PDO::PARAM_STR);
+        $stmt->bindParam(':motiuEmpresonament_fr', $motiuEmpresonament_fr, PDO::PARAM_STR);
+        $stmt->bindParam(':motiuEmpresonament_it', $motiuEmpresonament_it, PDO::PARAM_STR);
+        $stmt->bindParam(':motiuEmpresonament_pt', $motiuEmpresonament_pt, PDO::PARAM_STR);
+
+        // Ejecutar la consulta
+        $stmt->execute();
+
+        // Recuperar el ID del registro creado
+        $id = $conn->lastInsertId();
+
+        // Recuperar el ID del registro creado
+        $tipusOperacio = "INSERT";
+        $detalls =  "Creació de nou motiu d'empresonament: " . $motiuEmpresonament_ca;
+
+        // Si la inserció té èxit, cal registrar la inserció en la base de control de canvis
+
+        Audit::registrarCanvi(
+            $conn,
+            $userId,                      // ID del usuario que hace el cambio
+            $tipusOperacio,             // Tipus operacio
+            $detalls,                       // Descripción de la operación
+            Tables::AUX_MOTIUS_EMPRESONANENT,  // Nombre de la tabla afectada
+            $id                           // ID del registro modificado
+        );
+
+        // Respuesta de éxito
+        Response::success(
+            MissatgesAPI::success('create'),
+            ['id' => $id],
+            200
+        );
+    } catch (PDOException $e) {
+        // En caso de error en la conexión o ejecución de la consulta
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
+    // 4) POST Grups de repressió
+    // ruta POST => "/api/auxiliars/post/grupRepressio"
+} else if ($slug === "grupRepressio") {
+    $inputData = file_get_contents('php://input');
+    $data = json_decode($inputData, true);
+
+    // Inicializar un array para los errores
+    $errors = [];
+
+    // Validación de los datos recibidos
+    if (empty($data['nom_institucio'])) {
+        $errors[] =  ValidacioErrors::requerit('nom institució en català');
+    }
+
+    // Si hay errores, devolver una respuesta con los errores
+    if (!empty($errors)) {
+        Response::error(
+            MissatgesAPI::error('validacio'),
+            $errors,
+            400
+        );
+    }
+
+    // Si no hay errores, crear las variables PHP y preparar la consulta PDO
+    $carrec = !empty($data['carrec']) ? $data['carrec'] : NULL;
+    $nom_institucio = $data['nom_institucio'];
+    $grup_institucio = !empty($data['grup_institucio']) ? $data['grup_institucio'] : NULL;
+
+    // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
+    try {
+
+        global $conn;
+        /** @var PDO $conn */
+
+        $sql = "INSERT INTO aux_sistema_repressiu (
+            carrec,
+            nom_institucio,
+            grup_institucio
+        ) VALUES (
+            :carrec,
+            :nom_institucio,
+            :grup_institucio
+        )";
+
+        // Preparar la consulta
+        $stmt = $conn->prepare($sql);
+
+        // Enlazar los parámetros con los valores de las variables PHP
+        $stmt->bindParam(':carrec', $carrec, PDO::PARAM_STR);
+        $stmt->bindParam(':nom_institucio', $nom_institucio, PDO::PARAM_STR);
+        $stmt->bindParam(':grup_institucio', $grup_institucio, PDO::PARAM_INT); // suponiendo que es int
+
+        // Ejecutar la consulta
+        $stmt->execute();
+
+        // Recuperar el ID del registro creado
+        $id = $conn->lastInsertId();
+
+        // Recuperar el ID del registro creado
+        $tipusOperacio = "INSERT";
+        $detalls =  "Creació de nou grup de repressió: " . $nom_institucio;
+
+        // Si la inserció té èxit, cal registrar la inserció en la base de control de canvis
+
+        Audit::registrarCanvi(
+            $conn,
+            $userId,                      // ID del usuario que hace el cambio
+            $tipusOperacio,             // Tipus operacio
+            $detalls,                       // Descripción de la operación
+            Tables::AUX_SISTEMA_REPRESSIU,  // Nombre de la tabla afectada
             $id                           // ID del registro modificado
         );
 

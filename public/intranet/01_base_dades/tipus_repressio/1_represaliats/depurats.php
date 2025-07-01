@@ -19,6 +19,9 @@
                     <label for="tipus_professional" class="form-label negreta">Tipus d'empleat:</label>
                     <select class="form-select" id="tipus_professional" name="tipus_professional">
                     </select>
+                    <div class="avis-form">
+                        * Camp obligatori
+                    </div>
                 </div>
 
                 <div class="col-md-4 mb-4">

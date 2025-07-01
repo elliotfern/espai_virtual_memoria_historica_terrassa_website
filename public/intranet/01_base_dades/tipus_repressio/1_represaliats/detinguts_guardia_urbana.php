@@ -19,23 +19,39 @@
                 <div class="col-md-4 mb-4">
                     <label for="data_empresonament" class="form-label negreta">Data d'empresonament:</label>
                     <input type="text" class="form-control" id="data_empresonament" name="data_empresonament" value="">
+                    <div class="avis-form">
+                        * Format de la data: DD/MM/AAAA
+                    </div>
                 </div>
 
                 <div class="col-md-4 mb-4">
                     <label for="data_sortida" class="form-label negreta">Data de sortida:</label>
                     <input type="text" class="form-control" id="data_sortida" name="data_sortida" value="">
+                    <div class="avis-form">
+                        * Format de la data: DD/MM/AAAA
+                    </div>
                 </div>
 
                 <div class="col-md-4 mb-4">
                     <label for="motiu_empresonament" class="form-label negreta">Motiu de la detenció:</label>
                     <select class="form-select" id="motiu_empresonament" name="motiu_empresonament">
                     </select>
+
+                    <div class="mt-2">
+                        <a href="https://memoriaterrassa.cat/gestio/auxiliars/nou-motiu-detencio" target="_blank" class="btn btn-secondary btn-sm" id="afegir1">Afegir motiu detenció</a>
+                        <button id="refreshButton1" class="btn btn-primary btn-sm">Actualitzar llistat</button>
+                    </div>
                 </div>
 
                 <div class="col-md-4 mb-4">
                     <label for="qui_ordena_detencio" class="form-label negreta">Qui ordena la detenció:</label>
                     <select class="form-select" id="qui_ordena_detencio" name="qui_ordena_detencio">
                     </select>
+
+                    <div class="mt-2">
+                        <a href="https://memoriaterrassa.cat/gestio/auxiliars/nou-grup-repressio" target="_blank" class="btn btn-secondary btn-sm" id="afegir2">Afegir grup repressió</a>
+                        <button id="refreshButton2" class="btn btn-primary btn-sm">Actualitzar llistat</button>
+                    </div>
                 </div>
 
                 <div class="col-md-4 mb-4">

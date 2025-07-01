@@ -29,8 +29,17 @@ import { taulaCondicionsMilitars } from './taulaCondicionsMilitars';
 import { taulaCossosMilitars } from './taulaCossosMilitars';
 import { formEmpresa } from './formEmpresa';
 import { taulaProcedimentsJudicials } from './taulaProcedimentsJudicials';
+import { taulaTipusJudicis } from './taulaTipusJudicis';
+import { taulaSentencies } from './taulaSentencies';
+import { taulaPenes } from './taulaPenes';
+import { taulaJutjats } from './taulaJutjats';
+import { taulaModalitatsPreso } from './taulaModalitatsPreso';
+import { taulaMotiusDetencio } from './taulaMotiusDetencio';
+import { taulaGrupsRepressio } from './taulaGrupsRepressio';
+import { fetchDataGet } from '../../../services/fetchData/fetchDataGet';
+import { auxiliarSelect } from '../../../services/fetchData/auxiliarSelect';
 
-export function auxiliars() {
+export async function auxiliars() {
   const url = window.location.href;
   const pageType = getPageType(url);
 
@@ -311,5 +320,134 @@ export function auxiliars() {
     }
   } else if (pageType[2] === 'llistat-tipus-procediments-judicials') {
     taulaProcedimentsJudicials();
+  } else if (pageType[2] === 'nou-tipus-judici') {
+    const tipusJudiciForm = document.getElementById('tipusJudiciForm');
+    if (tipusJudiciForm) {
+      tipusJudiciForm.addEventListener('submit', function (event) {
+        transmissioDadesDB(event, 'POST', 'tipusJudiciForm', API_URLS.POST.TIPUS_JUDICI, true);
+      });
+    }
+  } else if (pageType[2] === 'modifica-tipus-judici') {
+    const tipusJudiciForm = document.getElementById('tipusJudiciForm');
+    if (tipusJudiciForm) {
+      tipusJudiciForm.addEventListener('submit', function (event) {
+        transmissioDadesDB(event, 'PUT', 'tipusJudiciForm', API_URLS.PUT.TIPUS_JUDICI);
+      });
+    }
+  } else if (pageType[2] === 'llistat-tipus-judicis') {
+    taulaTipusJudicis();
+  } else if (pageType[2] === 'nova-sentencia') {
+    const sentenciaForm = document.getElementById('sentenciaForm');
+    if (sentenciaForm) {
+      sentenciaForm.addEventListener('submit', function (event) {
+        transmissioDadesDB(event, 'POST', 'sentenciaForm', API_URLS.POST.SENTENCIA, true);
+      });
+    }
+  } else if (pageType[2] === 'modifica-sentencia') {
+    const sentenciaForm = document.getElementById('sentenciaForm');
+    if (sentenciaForm) {
+      sentenciaForm.addEventListener('submit', function (event) {
+        transmissioDadesDB(event, 'PUT', 'sentenciaForm', API_URLS.PUT.SENTENCIA);
+      });
+    }
+  } else if (pageType[2] === 'llistat-sentencies') {
+    taulaSentencies();
+  } else if (pageType[2] === 'nova-pena') {
+    const penaForm = document.getElementById('penaForm');
+    if (penaForm) {
+      penaForm.addEventListener('submit', function (event) {
+        transmissioDadesDB(event, 'POST', 'penaForm', API_URLS.POST.PENA, true);
+      });
+    }
+  } else if (pageType[2] === 'modifica-pena') {
+    const penaForm = document.getElementById('penaForm');
+    if (penaForm) {
+      penaForm.addEventListener('submit', function (event) {
+        transmissioDadesDB(event, 'PUT', 'penaForm', API_URLS.PUT.PENA);
+      });
+    }
+  } else if (pageType[2] === 'llistat-penes') {
+    taulaPenes();
+  } else if (pageType[2] === 'nou-jutjat') {
+    const jutjatForm = document.getElementById('jutjatForm');
+    if (jutjatForm) {
+      jutjatForm.addEventListener('submit', function (event) {
+        transmissioDadesDB(event, 'POST', 'jutjatForm', API_URLS.POST.JUTJAT, true);
+      });
+    }
+  } else if (pageType[2] === 'modifica-jutjat') {
+    const jutjatForm = document.getElementById('jutjatForm');
+    if (jutjatForm) {
+      jutjatForm.addEventListener('submit', function (event) {
+        transmissioDadesDB(event, 'PUT', 'jutjatForm', API_URLS.PUT.JUTJAT);
+      });
+    }
+  } else if (pageType[2] === 'llistat-jutjats') {
+    taulaJutjats();
+  } else if (pageType[2] === 'nova-modalitat-preso') {
+    const modalitatPresoForm = document.getElementById('modalitatPresoForm');
+    if (modalitatPresoForm) {
+      modalitatPresoForm.addEventListener('submit', function (event) {
+        transmissioDadesDB(event, 'POST', 'modalitatPresoForm', API_URLS.POST.MODALITAT_PRESO, true);
+      });
+    }
+  } else if (pageType[2] === 'modifica-modalitat-preso') {
+    const modalitatPresoForm = document.getElementById('modalitatPresoForm');
+    if (modalitatPresoForm) {
+      modalitatPresoForm.addEventListener('submit', function (event) {
+        transmissioDadesDB(event, 'PUT', 'modalitatPresoForm', API_URLS.PUT.MODALITAT_PRESO);
+      });
+    }
+  } else if (pageType[2] === 'llistat-modalitats-preso') {
+    taulaModalitatsPreso();
+  } else if (pageType[2] === 'nou-motiu-detencio') {
+    const motiuDetencioForm = document.getElementById('motiuDetencioForm');
+    if (motiuDetencioForm) {
+      motiuDetencioForm.addEventListener('submit', function (event) {
+        transmissioDadesDB(event, 'POST', 'motiuDetencioForm', API_URLS.POST.MOTIU_DETENCIO, true);
+      });
+    }
+  } else if (pageType[2] === 'modifica-motiu-detencio') {
+    const motiuDetencioForm = document.getElementById('motiuDetencioForm');
+    if (motiuDetencioForm) {
+      motiuDetencioForm.addEventListener('submit', function (event) {
+        transmissioDadesDB(event, 'PUT', 'motiuDetencioForm', API_URLS.PUT.MOTIU_DETENCIO);
+      });
+    }
+  } else if (pageType[2] === 'llistat-motius-detencio') {
+    taulaMotiusDetencio();
+  } else if (pageType[2] === 'nou-grup-repressio') {
+    await auxiliarSelect(null, 'sistemaRepressiuGrup', 'grup_institucio', 'grup');
+
+    const grupRepressioForm = document.getElementById('grupRepressioForm');
+    if (grupRepressioForm) {
+      grupRepressioForm.addEventListener('submit', function (event) {
+        transmissioDadesDB(event, 'POST', 'grupRepressioForm', API_URLS.POST.GRUP_REPRESSIO, true);
+      });
+    }
+  } else if (pageType[2] === 'modifica-grup-repressio') {
+    interface Fitxa {
+      [key: string]: unknown;
+      status: string;
+      message: string;
+      data: {
+        grup_institucio: number;
+      };
+    }
+    const id = pageType[3];
+    const data = await fetchDataGet<Fitxa>(`/api/auxiliars/get/sistemaRepressiuID?id=${id}`);
+    console.log(data);
+    if (data && data.status === 'success') {
+      await auxiliarSelect(data.data.grup_institucio, 'sistemaRepressiuGrup', 'grup_institucio', 'grup');
+    }
+
+    const grupRepressioForm = document.getElementById('grupRepressioForm');
+    if (grupRepressioForm) {
+      grupRepressioForm.addEventListener('submit', function (event) {
+        transmissioDadesDB(event, 'PUT', 'grupRepressioForm', API_URLS.PUT.GRUP_REPRESSIO);
+      });
+    }
+  } else if (pageType[2] === 'llistat-grups-repressio') {
+    taulaGrupsRepressio();
   }
 }

@@ -19,6 +19,9 @@
                 <div class="col-md-4 mb-4">
                     <label for="data_execucio" class="form-label negreta">Data execució:</label>
                     <input type="text" class="form-control" id="data_execucio" name="data_execucio" value="">
+                    <div class="avis-form">
+                        * Format de la data: DD/MM/AAAA
+                    </div>
                 </div>
 
                 <!-- lloc_execucio_enterrament (int) -->
@@ -26,16 +29,22 @@
                     <label for="lloc_execucio_enterrament" class="form-label negreta">Lloc execució:</label>
                     <select class="form-select" id="lloc_execucio_enterrament" name="lloc_execucio_enterrament">
                     </select>
+                    <div class="mt-2">
+                        <a href="https://memoriaterrassa.cat/gestio/auxiliars/nou-espai" target="_blank" class="btn btn-secondary btn-sm" id="afegir1">Afegir espai</a>
+                        <button id="refreshButton1" class="btn btn-primary btn-sm">Actualitzar llistat</button>
+                    </div>
                 </div>
 
                 <!-- enterrament_lloc (int) -->
                 <div class="col-md-4 mb-4">
                     <label for="enterrament_lloc" class="form-label negreta">Lloc enterrament:</label>
                     <select class="form-select" id="enterrament_lloc" name="enterrament_lloc">
-
                     </select>
+                    <div class="mt-2">
+                        <a href="https://memoriaterrassa.cat/gestio/auxiliars/nou-espai" target="_blank" class="btn btn-secondary btn-sm" id="afegir2">Afegir espai</a>
+                        <button id="refreshButton2" class="btn btn-primary btn-sm">Actualitzar llistat</button>
+                    </div>
                 </div>
-
 
                 <!-- observacions -->
                 <div class="col-md-12 mb-4">

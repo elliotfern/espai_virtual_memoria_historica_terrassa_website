@@ -36,8 +36,41 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
                     </div>
                 </div>
 
+                <div class="col-md-12 mb-4">
+                    <label for="espai_cat" class="form-label negreta">Descripció espai (català):</label>
+                    <textarea class="form-control" id="descripcio_espai" name="descripcio_espai" rows="4"></textarea>
+                    <div class="avis-form">
+                        * Opcional
+                    </div>
+                </div>
+
                 <?php if (isUserAdmin()) : ?>
                     <hr>
+
+                    <div class="col-md-4 mb-4">
+                        <label for="espai_es" class="form-label negreta">Espai (castellano):</label>
+                        <input type="text" class="form-control" id="espai_es" name="espai_es" value="<?php echo $espai_es_old ?? ''; ?>">
+                    </div>
+
+                    <div class="col-md-4 mb-4">
+                        <label for="espai_en" class="form-label negreta">Space (English):</label>
+                        <input type="text" class="form-control" id="espai_en" name="espai_en" value="<?php echo $espai_en_old ?? ''; ?>">
+                    </div>
+
+                    <div class="col-md-4 mb-4">
+                        <label for="espai_fr" class="form-label negreta">Espace (français):</label>
+                        <input type="text" class="form-control" id="espai_fr" name="espai_fr" value="<?php echo $espai_fr_old ?? ''; ?>">
+                    </div>
+
+                    <div class="col-md-4 mb-4">
+                        <label for="espai_it" class="form-label negreta">Spazio (italiano):</label>
+                        <input type="text" class="form-control" id="espai_it" name="espai_it" value="<?php echo $espai_it_old ?? ''; ?>">
+                    </div>
+
+                    <div class="col-md-4 mb-4">
+                        <label for="espai_pt" class="form-label negreta">Espaço (português):</label>
+                        <input type="text" class="form-control" id="espai_pt" name="espai_pt" value="<?php echo $espai_pt_old ?? ''; ?>">
+                    </div>
 
                 <?php endif; ?>
 

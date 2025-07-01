@@ -34,7 +34,7 @@ export async function presoModel(idRepresaliat: number) {
   const container = document.getElementById('fitxaNomCognoms');
   const presoModelForm = document.getElementById('presoModelForm');
   const inputIdPersona = document.getElementById('idPersona') as HTMLInputElement | null;
-  //const btn1 = document.getElementById('refreshButton1');
+  const btn1 = document.getElementById('refreshButton1');
 
   if (!response || !response.data) {
     if (btnForm) {
@@ -65,6 +65,13 @@ export async function presoModel(idRepresaliat: number) {
   await auxiliarSelect(data?.trasllats, '', 'trasllats', '', '');
   await auxiliarSelect(data?.llibertat, '', 'llibertat', '', '');
   await auxiliarSelect(data?.modalitat, 'modalitatPreso', 'modalitat', 'modalitat_ca');
+
+  if (btn1) {
+    btn1.addEventListener('click', function (event) {
+      event.preventDefault();
+      auxiliarSelect(data?.modalitat, 'modalitatPreso', 'modalitat', 'modalitat_ca');
+    });
+  }
 
   if (!response) {
     if (presoModelForm) {
