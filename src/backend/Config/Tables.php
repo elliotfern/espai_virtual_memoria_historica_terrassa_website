@@ -53,6 +53,7 @@ final class Tables
     public const AUX_MOTIUS_EMPRESONANENT = 'aux_motius_empresonament';
     public const AUX_SISTEMA_REPRESSIU = 'aux_sistema_repressiu';
     public const CONTROL_REGISTRE_CANVIS = 'control_registre_canvis';
+    public const AUX_PRESONS = 'aux_presons';
 
     public const DB_AFUSELLATS = 'db_afusellats';
     public const DB_PROCESSATS = 'db_processats';
@@ -69,4 +70,6 @@ final class Tables
     public const DB_DETINGUTS_GU = 'db_detinguts_guardia_urbana';
     public const DB_AFECTATS_RESPONSABILITATS = 'db_responsabilitats_politiques';
     public const DB_TRIBUNAL_ORDEN_PUBLICO = 'db_tribunal_orden_publico';
+    public const DB_DETINGUTS_COMITE_SOLIDARITAT = 'db_detinguts_comite_solidaritat';
+    public const DB_DETINGUTS_COMITE_RELACIONS_SOLIDARITAT = 'db_comite_relacions_solidaritat';
 }

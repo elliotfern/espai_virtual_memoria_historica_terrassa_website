@@ -91,7 +91,7 @@ if ($slug === 'fitxaRepressio') {
 
     try {
         $params = [':idPersona' => $id];
-        $result = $db->getData($query, $params, true);
+        $result = $db->getData($query, $params, false);
 
         if (empty($result)) {
             Response::error(

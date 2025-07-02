@@ -87,7 +87,6 @@ export interface Fitxa {
 }
 
 export interface FitxaJudicial {
-  data: object;
   procediment_cat: string;
   ciutat_consellGuerra: string;
   data_sentencia: string; // o Date si prefieres
@@ -208,6 +207,12 @@ export interface FitxaJudicial {
   nom_institucio: string;
   grup: string;
   top: number;
+
+  any_detencio: string;
+  motiu: string;
+  advocat: string;
+
+  preso: string;
 }
 
 // Interfaces para los datos

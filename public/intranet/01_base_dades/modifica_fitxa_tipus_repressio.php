@@ -45,21 +45,24 @@ switch ($categoriaId) {
         require_once APP_ROOT . '/public/intranet/01_base_dades/tipus_repressio/1_represaliats/pendents.php';
         break;
     case 12:
-        require_once APP_ROOT . '/public/intranet/01_base_dades/tipus_repressio/1_represaliats/detinguts_preso_model.php';
+        require_once APP_ROOT . '/public/intranet/01_base_dades/tipus_repressio/1_represaliats/llistat-detinguts_preso_model.php';
         break;
     case 13:
         require_once APP_ROOT . '/public/intranet/01_base_dades/tipus_repressio/1_represaliats/llistat-detinguts_guardia_urbana.php';
         break;
     case 14:
-        require_once APP_ROOT . '/public/intranet/01_base_dades/tipus_repressio/1_represaliats/detinguts_comite_solidaritat.php';
+        require_once APP_ROOT . '/public/intranet/01_base_dades/tipus_repressio/1_represaliats/llistat-detinguts_comite_solidaritat.php';
         break;
     case 15:
         require_once APP_ROOT . '/public/intranet/01_base_dades/tipus_repressio/1_represaliats/responsabilitats_politiques.php';
+        break;
+    case 16:
+        require_once APP_ROOT . '/public/intranet/01_base_dades/tipus_repressio/1_represaliats/llistat-detinguts_guardia_urbana.php';
         break;
     case 17:
         require_once APP_ROOT . '/public/intranet/01_base_dades/tipus_repressio/1_represaliats/tribunal_orden_publico.php';
         break;
     case 18:
-        require_once APP_ROOT . '/public/intranet/01_base_dades/tipus_repressio/1_represaliats/detinguts_comite_relacions_solidaritat.php';
+        require_once APP_ROOT . '/public/intranet/01_base_dades/tipus_repressio/1_represaliats/llistat-detinguts_comite_relacions_solidaritat.php';
         break;
 }

@@ -204,7 +204,7 @@ async function generarBotonesCategoria(idPersona: string): Promise<void> {
 }
 
 // Cache para almacenar los datos de las categorías
-const categoriaCache: { [key: string]: FitxaJudicial | null } = {};
+const categoriaCache: { [key: string]: FitxaJudicial | FitxaJudicial[] } = {};
 
 // Función para mostrar la información de la categoría
 async function mostrarCategoria(categoriaNumerica: string, idPersona: string): Promise<void> {
@@ -241,18 +241,16 @@ async function mostrarCategoria(categoriaNumerica: string, idPersona: string): P
     urlAjax2 = '';
   } else if (parseInt(categoriaNumerica) === 12) {
     urlAjax2 = `${devDirectory}/api/preso_model/get/fitxaId?id=${idPersona}`;
-  } else if (parseInt(categoriaNumerica) === 13) {
+  } else if (parseInt(categoriaNumerica) === 13 || parseInt(categoriaNumerica) === 16) {
     urlAjax2 = `${devDirectory}/api/detinguts_guardia_urbana/get/fitxaId?id=${idPersona}`;
   } else if (parseInt(categoriaNumerica) === 14) {
-    urlAjax2 = `${devDirectory}/api/----/get/fitxaId?id=${idPersona}`;
+    urlAjax2 = `${devDirectory}/api/comite_solidaritat/get/fitxaId?id=${idPersona}`;
   } else if (parseInt(categoriaNumerica) === 15) {
     urlAjax2 = `${devDirectory}/api/responsabilitats_politiques/get/fitxaId?id=${idPersona}`;
-  } else if (parseInt(categoriaNumerica) === 16) {
-    urlAjax2 = `${devDirectory}/api/---/get/fitxaId?id=${idPersona}`;
   } else if (parseInt(categoriaNumerica) === 17) {
-    urlAjax2 = `${devDirectory}/api/---/get/fitxaId?id=${idPersona}`;
+    urlAjax2 = `${devDirectory}/api/top/get/fitxaId?id=${idPersona}`;
   } else if (parseInt(categoriaNumerica) === 18) {
-    urlAjax2 = `${devDirectory}/api/detinguts_comite_solidaritat/get/fitxaId?id=${idPersona}`;
+    urlAjax2 = `${devDirectory}/api/comite_relacions_solidaritat/get/fitxaId?id=${idPersona}`;
   } else {
     console.error('Categoria no válida:', categoriaNumerica);
     return;
@@ -272,7 +270,7 @@ async function mostrarCategoria(categoriaNumerica: string, idPersona: string): P
     try {
       // Hacer la llamada a la API y esperar la respuesta
 
-      const response = (await fetchData(urlAjax2)) as ApiResponse<FitxaJudicial>;
+      const response = (await fetchData(urlAjax2)) as ApiResponse<FitxaJudicial | FitxaJudicial[]>;
 
       // Verificamos si la respuesta tiene error o no tiene datos
       if (response.status === 'error' || !response.data) {
@@ -280,15 +278,17 @@ async function mostrarCategoria(categoriaNumerica: string, idPersona: string): P
         return;
       }
 
-      const fitxa2 = response.data as FitxaJudicial;
+      // const fitxa2 = response.data as FitxaJudicial;
+      // Manejar ambos formatos posibles: objeto único o array de objetos
+      const fitxaArray = Array.isArray(response.data) ? response.data : [response.data];
 
       // 3. Substituir el missatge per les dades carregades
       divInfo.innerHTML = ''; // o renderitzar la vista amb fitxa2
 
-      categoriaCache[categoriaNumerica] = fitxa2; // Almacenar en caché
+      categoriaCache[categoriaNumerica] = fitxaArray;
 
       // Mostrar la información dependiendo de la categoría
-      fitxaTipusRepressio(categoriaNumerica, fitxa2);
+      fitxaTipusRepressio(categoriaNumerica, fitxaArray);
     } catch (error) {
       console.error('Error al obtenir la informació de la categoria:', error);
       divInfo.innerHTML = '<p class="text-danger">⚠️ Error al carregar les dades. Torna-ho a intentar més tard.</p>';

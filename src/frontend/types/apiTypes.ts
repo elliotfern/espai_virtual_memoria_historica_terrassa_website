@@ -40,6 +40,7 @@ export type ApiUrls = {
     MODALITATS_PRESO: string;
     MOTIUS_DETENCIO: string;
     GRUPS_REPRESSIO: string;
+    PRESONS: string;
   };
   POST: {
     MUNICIPI: string;
@@ -70,6 +71,7 @@ export type ApiUrls = {
     MODALITAT_PRESO: string;
     MOTIU_DETENCIO: string;
     GRUP_REPRESSIO: string;
+    PRESO: string;
   };
   PUT: {
     MUNICIPI: string;
@@ -100,6 +102,7 @@ export type ApiUrls = {
     MODALITAT_PRESO: string;
     MOTIU_DETENCIO: string;
     GRUP_REPRESSIO: string;
+    PRESO: string;
   };
   DELETE: {
     MUNICIPI: string;
@@ -130,5 +133,6 @@ export type ApiUrls = {
     MODALITAT_PRESO: string;
     MOTIU_DETENCIO: string;
     GRUP_REPRESSIO: string;
+    PRESO: string;
   };
 };

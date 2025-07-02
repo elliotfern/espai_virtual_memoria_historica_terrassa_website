@@ -1087,6 +1087,44 @@ if ($slug === "municipis") {
         );
     }
 
+    // GET : Presons ID
+    // URL: /api/auxiliars/get/presonsID
+} elseif ($slug === "presonsID") {
+    $db = new Database();
+
+    $id = $_GET['id'] ?? null;
+
+    $query = "SELECT nom_preso, id, municipi_preso
+              FROM aux_presons
+              WHERE id = :id";
+
+    try {
+        $params = [':id' => $id];
+        $result = $db->getData($query, $params, true);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;  // o exit; según cómo funcione Response::error
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
+
     // GET : Llistat de tipus de procediments judicials
     // URL: /api/auxiliars/get/procedimentsJudicials
 } elseif ($slug === "procedimentsJudicials") {

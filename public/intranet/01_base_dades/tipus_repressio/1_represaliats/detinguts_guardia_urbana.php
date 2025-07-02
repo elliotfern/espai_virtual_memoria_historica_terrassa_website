@@ -1,7 +1,7 @@
 <div class="container" style="margin-bottom:50px;border: 1px solid gray;border-radius: 10px;padding:25px;background-color:#eaeaea">
     <form id="detingutGUForm">
         <div class="container">
-            <h2>Tipus de repressió: Detingut Guàrdia Urbana</h2>
+            <h2>Tipus de repressió: Detingut Guàrdia Urbana / Empresonat Dipòsit Municipal Sant Llàtzer</h2>
             <h4 id="fitxaNomCognoms">Fitxa:</a></h4>
             <div class="row g-4">
                 <div class="alert alert-success" role="alert" id="okMessage" style="display:none">

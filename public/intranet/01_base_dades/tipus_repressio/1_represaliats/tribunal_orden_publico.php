@@ -19,11 +19,18 @@
                     <label for="preso" class="form-label negreta">Lloc d'empresonament:</label>
                     <select class="form-select" id="preso" name="preso">
                     </select>
+                    <div class="mt-2">
+                        <a href="<?php echo APP_WEB . APP_INTRANET . $url['auxiliars'] ?>/nova-preso" target="_blank" class="btn btn-secondary btn-sm" id="afegir1">Afegir presó</a>
+                        <button id="refreshButton1" class="btn btn-primary btn-sm">Actualitzar llistat</button>
+                    </div>
                 </div>
 
                 <div class="col-md-4 mb-4">
                     <label for="data_sentencia" class="form-label negreta">Data sentència:</label>
                     <input type="text" class="form-control" id="data_sentencia" name="data_sentencia" value="">
+                    <div class="avis-form">
+                        * Format data: DD/MM/AAAA
+                    </div>
                 </div>
 
                 <div class="col-md-4 mb-4">

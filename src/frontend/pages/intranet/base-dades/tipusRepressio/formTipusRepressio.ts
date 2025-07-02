@@ -5,11 +5,13 @@ import { exili } from './exili';
 import { deportat } from './deportat';
 import { afusellat } from './afusellat';
 import { processat } from './processat';
-import { presoModel } from './presoModel';
+import { empresonatsPresoModel } from './presoModel';
 import { depurats } from './depurats';
 import { detingutsGuardiaUrbana } from './ detingutsGuardiaUrbana';
 import { responsabilitatsPolitiques } from './responsabilitatsPolitiques';
 import { top } from './top';
+import { comiteSolidaritat } from './comiteSolidaritat';
+import { comiteRelacionsSolidaritat } from './comiteRelacionsSolidaritat';
 
 export function formTipusRepressio() {
   const url = window.location.href;
@@ -28,14 +30,18 @@ export function formTipusRepressio() {
   } else if (pageType[3] === '6') {
     processat(Number(pageType[4]));
   } else if (pageType[3] === '12') {
-    presoModel(Number(pageType[4]));
+    empresonatsPresoModel(Number(pageType[4]));
   } else if (pageType[3] === '7') {
     depurats(Number(pageType[4]));
-  } else if (pageType[3] === '13') {
+  } else if (pageType[3] === '13' || pageType[3] === '16') {
     detingutsGuardiaUrbana(Number(pageType[4]));
   } else if (pageType[3] === '15') {
     responsabilitatsPolitiques(Number(pageType[4]));
   } else if (pageType[3] === '17') {
     top(Number(pageType[4]));
+  } else if (pageType[3] === '14') {
+    comiteSolidaritat(Number(pageType[4]));
+  } else if (pageType[3] === '18') {
+    comiteRelacionsSolidaritat(Number(pageType[4]));
   }
 }

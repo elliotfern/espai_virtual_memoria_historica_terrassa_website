@@ -15,6 +15,9 @@ import { taulaAfusellats } from './taulaAfusellats';
 import { taulaQuadreGeneral } from './taulaQuadreGeneral';
 import { taulaPresoModel } from './taulaPresoModel';
 import { formDetingutsGuardiaUrbana } from './tipusRepressio/ detingutsGuardiaUrbana';
+import { formPresoModel } from './tipusRepressio/presoModel';
+import { formcomiteSolidaritat } from './tipusRepressio/comiteSolidaritat';
+import { formcomiteRelacionsSolidaritat } from './tipusRepressio/comiteRelacionsSolidaritat';
 
 export function baseDadesIntranet() {
   const url = window.location.href;
@@ -70,5 +73,11 @@ export function baseDadesIntranet() {
     formTipusRepressio();
   } else if (pageType[2] === 'empresonaments') {
     formDetingutsGuardiaUrbana(Number(pageType[4]), Number(pageType[5]));
+  } else if (pageType[2] === 'empresonaments-preso-model') {
+    formPresoModel(Number(pageType[4]), Number(pageType[5]));
+  } else if (pageType[2] === 'empresonaments-comite-solidaritat') {
+    formcomiteSolidaritat(Number(pageType[4]), Number(pageType[5]));
+  } else if (pageType[2] === 'empresonaments-comite-relacions-solidaritat') {
+    formcomiteRelacionsSolidaritat(Number(pageType[4]), Number(pageType[5]));
   }
 }

@@ -5,13 +5,13 @@ import { valorTextDesconegut } from '../../services/formatDates/valorTextDescone
 import { joinValors } from '../../services/formatDates/joinValors';
 
 // Mostrar la información dependiendo de la categoría
-export const fitxaTipusRepressio = async (categoriaNumerica: string, fitxa2: FitxaJudicial): Promise<void> => {
+export const fitxaTipusRepressio = async (categoriaNumerica: string, fitxa2: FitxaJudicial | FitxaJudicial[]): Promise<void> => {
   const divInfo = document.getElementById('fitxa-categoria');
   if (!divInfo) return;
 
   // 1. Mostrar el div y el spinner
   divInfo.style.display = 'block';
-  divInfo.innerHTML = `<div class="spinner">Carregant dades...</div>`; // Pon aquí tu HTML spinner
+  divInfo.innerHTML = `<div class="spinner">Carregant dada...</div>`; // Pon aquí tu HTML spinner
 
   // 2. Esperar por los datos (simulado o real)
   const colectiusArray = await categoriesRepressio('ca');
@@ -22,54 +22,55 @@ export const fitxaTipusRepressio = async (categoriaNumerica: string, fitxa2: Fit
     return acc;
   }, {} as { [key: string]: string });
 
-  const dades = fitxa2;
+  const dades = Array.isArray(fitxa2) ? fitxa2 : [fitxa2];
 
   // 4. Reemplaza el contenido del div con la info final (quitando spinner)
   let htmlContent = `
     <h3><span class="blau1 raleway">${colectiusRepressio[categoriaNumerica]}: </span></h3>
   `;
 
-  if (parseInt(categoriaNumerica) === 1) {
-    htmlContent += `
+  for (const dada of dades) {
+    if (parseInt(categoriaNumerica) === 1) {
+      htmlContent += `
     <div class="negreta raleway">
-        <p><span class='marro2'>Data d'execució:</span> <span class='blau1'>${formatDatesForm(dades.data_execucio)}</span></p>
-        <p><span class='marro2'>Lloc d'execució:</span> <span class='blau1'>${dades.lloc_execucio}</span> ${dades.ciutat_execucio && dades.ciutat_execucio.trim() !== '' ? `<span class="normal blau1">(${dades.ciutat_execucio})</span>` : ''}</p>
-        <p><span class='marro2'>Lloc d'enterrament:</span> <span class='blau1'>${dades.lloc_enterrament} </span> ${dades.ciutat_enterrament && dades.ciutat_enterrament.trim() !== '' ? `<span class="normal blau1">(${dades.ciutat_enterrament})</span>` : ''}</p>
-        ${dades.observacions && dades.observacions.trim() !== '' ? `  <p><span class='marro2'>Observacions:</span> <span class='blau1'> ${dades.observacions}.</span></p>` : ''}
+        <p><span class='marro2'>Data d'execució:</span> <span class='blau1'>${formatDatesForm(dada.data_execucio)}</span></p>
+        <p><span class='marro2'>Lloc d'execució:</span> <span class='blau1'>${dada.lloc_execucio}</span> ${dada.ciutat_execucio && dada.ciutat_execucio.trim() !== '' ? `<span class="normal blau1">(${dada.ciutat_execucio})</span>` : ''}</p>
+        <p><span class='marro2'>Lloc d'enterrament:</span> <span class='blau1'>${dada.lloc_enterrament} </span> ${dada.ciutat_enterrament && dada.ciutat_enterrament.trim() !== '' ? `<span class="normal blau1">(${dada.ciutat_enterrament})</span>` : ''}</p>
+        ${dada.observacions && dada.observacions.trim() !== '' ? `  <p><span class='marro2'>Observacions:</span> <span class='blau1'> ${dada.observacions}.</span></p>` : ''}
     </div>`;
-  } else if (parseInt(categoriaNumerica) === 2) {
-    const situacioDeportat = dades.situacio && dades.situacio.trim() !== '' ? dades.situacio : 'Desconegut';
-    const situacioId = dades.situacioId;
-    let alliberamentMort = '';
-    let municipiMort = '';
+    } else if (parseInt(categoriaNumerica) === 2) {
+      const situacioDeportat = dada.situacio && dada.situacio.trim() !== '' ? dada.situacio : 'Desconegut';
+      const situacioId = dada.situacioId;
+      let alliberamentMort = '';
+      let municipiMort = '';
 
-    if (situacioId === 1) {
-      alliberamentMort = 'Data de defunció';
-      municipiMort = 'Municipi de defunció';
-    } else if (situacioId === 2) {
-      alliberamentMort = "Data d'alliberament del camp";
-      municipiMort = "Municipi d'alliberament";
-    } else {
-      alliberamentMort = "Data d'evasió";
-      municipiMort = "Municipi d'evasió";
-    }
+      if (situacioId === 1) {
+        alliberamentMort = 'Data de defunció';
+        municipiMort = 'Municipi de defunció';
+      } else if (situacioId === 2) {
+        alliberamentMort = "Data d'alliberament del camp";
+        municipiMort = "Municipi d'alliberament";
+      } else {
+        alliberamentMort = "Data d'evasió";
+        municipiMort = "Municipi d'evasió";
+      }
 
-    const dataAlliberament = dades.data_alliberament && dades.data_alliberament.trim() !== '' ? formatDatesForm(dades.data_alliberament) : 'Desconeguda';
-    const municipiAlliberament = dades.ciutat_mort_alliberament && dades.ciutat_mort_alliberament.trim() !== '' ? dades.ciutat_mort_alliberament : 'Desconegut';
-    const tipusPreso = dades.preso_tipus && dades.preso_tipus.trim() !== '' ? dades.preso_tipus : 'Desconeguda';
-    const nomPreso = dades.preso_nom && dades.preso_nom.trim() !== '' ? dades.preso_nom : 'Desconeguda';
-    const dataSortidaPreso = dades.preso_data_sortida && dades.preso_data_sortida.trim() !== '' ? formatDatesForm(dades.preso_data_sortida) : 'Desconeguda';
-    const municipiPreso = dades.preso_localitat && dades.preso_localitat.trim() !== '' ? dades.preso_localitat : 'Desconegut';
-    const numMatriculaPreso = dades.preso_num_matricula && dades.preso_num_matricula.trim() !== '' ? dades.preso_num_matricula : 'Desconegut';
+      const dataAlliberament = dada.data_alliberament && dada.data_alliberament.trim() !== '' ? formatDatesForm(dada.data_alliberament) : 'Desconeguda';
+      const municipiAlliberament = dada.ciutat_mort_alliberament && dada.ciutat_mort_alliberament.trim() !== '' ? dada.ciutat_mort_alliberament : 'Desconegut';
+      const tipusPreso = dada.preso_tipus && dada.preso_tipus.trim() !== '' ? dada.preso_tipus : 'Desconeguda';
+      const nomPreso = dada.preso_nom && dada.preso_nom.trim() !== '' ? dada.preso_nom : 'Desconeguda';
+      const dataSortidaPreso = dada.preso_data_sortida && dada.preso_data_sortida.trim() !== '' ? formatDatesForm(dada.preso_data_sortida) : 'Desconeguda';
+      const municipiPreso = dada.preso_localitat && dada.preso_localitat.trim() !== '' ? dada.preso_localitat : 'Desconegut';
+      const numMatriculaPreso = dada.preso_num_matricula && dada.preso_num_matricula.trim() !== '' ? dada.preso_num_matricula : 'Desconegut';
 
-    const nomCamp = dades.deportacio_nom_camp && dades.deportacio_nom_camp.trim() !== '' ? dades.deportacio_nom_camp : 'Desconegut';
-    const dataEntradaCamp = dades.deportacio_data_entrada && dades.deportacio_data_entrada.trim() !== '' ? formatDatesForm(dades.deportacio_data_entrada) : 'Desconeguda';
-    const numeroMatriculaCamp = dades.deportacio_num_matricula && dades.deportacio_num_matricula.trim() !== '' ? dades.deportacio_num_matricula : 'Desconegut';
-    const nomSubCamp = dades.deportacio_nom_sub && dades.deportacio_nom_sub.trim() !== '' ? dades.deportacio_nom_sub : 'Desconegut';
-    const dataEntradaSubCamp = dades.deportacio_data_entrada_subcamp && dades.deportacio_data_entrada_subcamp.trim() !== '' ? dades.deportacio_data_entrada_subcamp : 'Desconegut';
-    const numeroMatriculaSubCamp = dades.deportacio_nom_matricula_subcamp && dades.deportacio_nom_matricula_subcamp.trim() !== '' ? dades.deportacio_nom_matricula_subcamp : 'Desconegut';
+      const nomCamp = dada.deportacio_nom_camp && dada.deportacio_nom_camp.trim() !== '' ? dada.deportacio_nom_camp : 'Desconegut';
+      const dataEntradaCamp = dada.deportacio_data_entrada && dada.deportacio_data_entrada.trim() !== '' ? formatDatesForm(dada.deportacio_data_entrada) : 'Desconeguda';
+      const numeroMatriculaCamp = dada.deportacio_num_matricula && dada.deportacio_num_matricula.trim() !== '' ? dada.deportacio_num_matricula : 'Desconegut';
+      const nomSubCamp = dada.deportacio_nom_sub && dada.deportacio_nom_sub.trim() !== '' ? dada.deportacio_nom_sub : 'Desconegut';
+      const dataEntradaSubCamp = dada.deportacio_data_entrada_subcamp && dada.deportacio_data_entrada_subcamp.trim() !== '' ? dada.deportacio_data_entrada_subcamp : 'Desconegut';
+      const numeroMatriculaSubCamp = dada.deportacio_nom_matricula_subcamp && dada.deportacio_nom_matricula_subcamp.trim() !== '' ? dada.deportacio_nom_matricula_subcamp : 'Desconegut';
 
-    htmlContent += `
+      htmlContent += `
     <div class="negreta raleway">
       <div style="margin-top:25px">
         <h5><span class="negreta blau1">1) Dades bàsiques:</span></h5>
@@ -98,24 +99,24 @@ export const fitxaTipusRepressio = async (categoriaNumerica: string, fitxa2: Fit
         </div>
     </div>
         `;
-  } else if (parseInt(categoriaNumerica) === 3) {
-    const condicio = dades.condicio && dades.condicio.trim() !== '' ? dades.condicio : 'Desconegut';
-    const bandol = dades.bandol && dades.bandol.trim() !== '' ? dades.bandol : 'Desconegut';
-    const any_lleva = dades.any_lleva && dades.any_lleva.trim() !== '' ? dades.any_lleva : 'Desconegut';
+    } else if (parseInt(categoriaNumerica) === 3) {
+      const condicio = dada.condicio && dada.condicio.trim() !== '' ? dada.condicio : 'Desconegut';
+      const bandol = dada.bandol && dada.bandol.trim() !== '' ? dada.bandol : 'Desconegut';
+      const any_lleva = dada.any_lleva && dada.any_lleva.trim() !== '' ? dada.any_lleva : 'Desconegut';
 
-    const unitat_inicial = dades.unitat_inicial && dades.unitat_inicial.trim() !== '' ? dades.unitat_inicial : 'Desconegut';
-    const cos = dades.cos && dades.cos.trim() !== '' ? dades.cos : 'Desconegut';
-    const unitat_final = dades.unitat_final && dades.unitat_final.trim() !== '' ? dades.unitat_final : 'Desconegut';
-    const graduacio_final = dades.graduacio_final && dades.graduacio_final.trim() !== '' ? dades.graduacio_final : 'Desconegut';
-    const periple_militar = dades.periple_militar && dades.periple_militar.trim() !== '' ? dades.periple_militar : 'Desconegut';
+      const unitat_inicial = dada.unitat_inicial && dada.unitat_inicial.trim() !== '' ? dada.unitat_inicial : 'Desconegut';
+      const cos = dada.cos && dada.cos.trim() !== '' ? dada.cos : 'Desconegut';
+      const unitat_final = dada.unitat_final && dada.unitat_final.trim() !== '' ? dada.unitat_final : 'Desconegut';
+      const graduacio_final = dada.graduacio_final && dada.graduacio_final.trim() !== '' ? dada.graduacio_final : 'Desconegut';
+      const periple_militar = dada.periple_militar && dada.periple_militar.trim() !== '' ? dada.periple_militar : 'Desconegut';
 
-    const circumstancia_mort = dades.circumstancia_mort && dades.circumstancia_mort.trim() !== '' ? dades.circumstancia_mort : 'Desconeguda';
-    const desaparegut_data = dades.desaparegut_data && dades.desaparegut_data.trim() !== '' ? formatDatesForm(dades.desaparegut_data) : '-';
-    const desaparegut_lloc = dades.desaparegut_lloc && dades.desaparegut_lloc.trim() !== '' ? dades.desaparegut_lloc : '-';
-    const desaparegut_data_aparicio = dades.desaparegut_data_aparicio && dades.desaparegut_data_aparicio.trim() !== '' ? formatDatesForm(dades.desaparegut_data_aparicio) : '-';
-    const desaparegut_lloc_aparicio = dades.desaparegut_lloc_aparicio && dades.desaparegut_lloc_aparicio.trim() !== '' ? dades.desaparegut_lloc_aparicio : '-';
+      const circumstancia_mort = dada.circumstancia_mort && dada.circumstancia_mort.trim() !== '' ? dada.circumstancia_mort : 'Desconeguda';
+      const desaparegut_data = dada.desaparegut_data && dada.desaparegut_data.trim() !== '' ? formatDatesForm(dada.desaparegut_data) : '-';
+      const desaparegut_lloc = dada.desaparegut_lloc && dada.desaparegut_lloc.trim() !== '' ? dada.desaparegut_lloc : '-';
+      const desaparegut_data_aparicio = dada.desaparegut_data_aparicio && dada.desaparegut_data_aparicio.trim() !== '' ? formatDatesForm(dada.desaparegut_data_aparicio) : '-';
+      const desaparegut_lloc_aparicio = dada.desaparegut_lloc_aparicio && dada.desaparegut_lloc_aparicio.trim() !== '' ? dada.desaparegut_lloc_aparicio : '-';
 
-    htmlContent += `
+      htmlContent += `
     <div class="negreta raleway">
       <div style="margin-top:25px">
         <h5><span class="negreta blau1">1) Dades bàsiques:</span></h5>
@@ -144,37 +145,37 @@ export const fitxaTipusRepressio = async (categoriaNumerica: string, fitxa2: Fit
     </div>
 
         `;
-  } else if (parseInt(categoriaNumerica) === 4 || parseInt(categoriaNumerica) === 5) {
-    const cirscumstancies_mortId = dades.cirscumstancies_mortId;
+    } else if (parseInt(categoriaNumerica) === 4 || parseInt(categoriaNumerica) === 5) {
+      const cirscumstancies_mortId = dada.cirscumstancies_mortId;
 
-    let data_bombardeig = '';
-    let municipi_bombardeig = '';
-    let lloc_bombardeig = '';
-    let data_detencio = '';
-    let lloc_detencio = '';
-    let qui_detencio = '';
-    let qui_ordena_afusellat = '';
-    let qui_executa_afusellat = '';
-    let titolMunicipiCadaver = '';
-    let contingutHtmlBombargeig = '';
-    let contingutHtmlAssassinat = '';
-    let contingutHtmlAfusellat = '';
+      let data_bombardeig = '';
+      let municipi_bombardeig = '';
+      let lloc_bombardeig = '';
+      let data_detencio = '';
+      let lloc_detencio = '';
+      let qui_detencio = '';
+      let qui_ordena_afusellat = '';
+      let qui_executa_afusellat = '';
+      let titolMunicipiCadaver = '';
+      let contingutHtmlBombargeig = '';
+      let contingutHtmlAssassinat = '';
+      let contingutHtmlAfusellat = '';
 
-    if (cirscumstancies_mortId === 5) {
-      // Causa de la mort: Bombardeig
-      data_bombardeig = dades.data_bombardeig && dades.data_bombardeig.trim() !== '' ? dades.data_bombardeig : 'Desconegut';
-      municipi_bombardeig = dades.municipi_bombardeig && dades.municipi_bombardeig.trim() !== '' ? dades.municipi_bombardeig : 'Desconegut';
-      lloc_bombardeig = dades.lloc_bombardeig && dades.lloc_bombardeig.trim() !== '' ? dades.lloc_bombardeig : 'Desconegut';
-      const responsablesMap: Record<string, string> = {
-        '1': 'Aviació feixista italiana',
-        '2': 'Aviació nazista alemanya',
-        '3': 'Aviació franquista',
-      };
+      if (cirscumstancies_mortId === 5) {
+        // Causa de la mort: Bombardeig
+        data_bombardeig = dada.data_bombardeig && dada.data_bombardeig.trim() !== '' ? dada.data_bombardeig : 'Desconegut';
+        municipi_bombardeig = dada.municipi_bombardeig && dada.municipi_bombardeig.trim() !== '' ? dada.municipi_bombardeig : 'Desconegut';
+        lloc_bombardeig = dada.lloc_bombardeig && dada.lloc_bombardeig.trim() !== '' ? dada.lloc_bombardeig : 'Desconegut';
+        const responsablesMap: Record<string, string> = {
+          '1': 'Aviació feixista italiana',
+          '2': 'Aviació nazista alemanya',
+          '3': 'Aviació franquista',
+        };
 
-      titolMunicipiCadaver = 'Municipi del bombargeig';
-      const responsable_bombardeig = dades.responsable_bombardeig != null ? responsablesMap[dades.responsable_bombardeig] || 'Desconegut' : 'Desconegut';
+        titolMunicipiCadaver = 'Municipi del bombargeig';
+        const responsable_bombardeig = dada.responsable_bombardeig != null ? responsablesMap[dada.responsable_bombardeig] || 'Desconegut' : 'Desconegut';
 
-      contingutHtmlBombargeig = `
+        contingutHtmlBombargeig = `
         <div class="negreta raleway">
           <div style="margin-top:25px">
             <h5><span class="negreta blau1">Causa de la mort: Bombardeig</span></h5>
@@ -184,14 +185,14 @@ export const fitxaTipusRepressio = async (categoriaNumerica: string, fitxa2: Fit
               <p><span class='marro2'>Responsable del bombardeig:</span> <span class='blau1'>${responsable_bombardeig}</span></p>
             </div>
         </div> `;
-    } else if (cirscumstancies_mortId === 8) {
-      // Causa de la mort: Extra-judicial (assassinat)
-      data_detencio = dades.data_detencio && dades.data_detencio.trim() !== '' ? dades.data_detencio : 'Desconegut';
-      lloc_detencio = dades.lloc_detencio && dades.lloc_detencio.trim() !== '' ? dades.lloc_detencio : 'Desconegut';
-      qui_detencio = dades.qui_detencio && dades.qui_detencio.trim() !== '' ? dades.qui_detencio : 'Desconegut';
-      titolMunicipiCadaver = 'Municipi assassinat extra-judicial';
+      } else if (cirscumstancies_mortId === 8) {
+        // Causa de la mort: Extra-judicial (assassinat)
+        data_detencio = dada.data_detencio && dada.data_detencio.trim() !== '' ? dada.data_detencio : 'Desconegut';
+        lloc_detencio = dada.lloc_detencio && dada.lloc_detencio.trim() !== '' ? dada.lloc_detencio : 'Desconegut';
+        qui_detencio = dada.qui_detencio && dada.qui_detencio.trim() !== '' ? dada.qui_detencio : 'Desconegut';
+        titolMunicipiCadaver = 'Municipi assassinat extra-judicial';
 
-      contingutHtmlAssassinat = `
+        contingutHtmlAssassinat = `
         <div class="negreta raleway">
           <div style="margin-top:25px">
             <h5><span class="negreta blau1">Causa de la mort: extra-judicial (assassinat)</span></h5>
@@ -200,13 +201,13 @@ export const fitxaTipusRepressio = async (categoriaNumerica: string, fitxa2: Fit
               <p><span class='marro2'>Qui el deté?:</span> <span class='blau1'>${qui_detencio}</span></p>
             </div>
         </div> `;
-    } else if (cirscumstancies_mortId === 9) {
-      //Causa de la mort: Afusellat
-      qui_ordena_afusellat = dades.qui_ordena_afusellat && dades.qui_ordena_afusellat.trim() !== '' ? dades.qui_ordena_afusellat : 'Desconegut';
-      qui_executa_afusellat = dades.qui_executa_afusellat && dades.qui_executa_afusellat.trim() !== '' ? dades.qui_executa_afusellat : 'Desconegut';
-      titolMunicipiCadaver = 'Municipi afusellament';
+      } else if (cirscumstancies_mortId === 9) {
+        //Causa de la mort: Afusellat
+        qui_ordena_afusellat = dada.qui_ordena_afusellat && dada.qui_ordena_afusellat.trim() !== '' ? dada.qui_ordena_afusellat : 'Desconegut';
+        qui_executa_afusellat = dada.qui_executa_afusellat && dada.qui_executa_afusellat.trim() !== '' ? dada.qui_executa_afusellat : 'Desconegut';
+        titolMunicipiCadaver = 'Municipi afusellament';
 
-      contingutHtmlAfusellat = `
+        contingutHtmlAfusellat = `
         <div class="negreta raleway">
           <div style="margin-top:25px">
             <h5><span class="negreta blau1">Causa de la mort: afusellat</span></h5>
@@ -214,15 +215,15 @@ export const fitxaTipusRepressio = async (categoriaNumerica: string, fitxa2: Fit
               <p><span class='marro2'>Qui l'executa:</span> <span class='blau1'>${qui_executa_afusellat}</span></p>
             </div>
         </div> `;
-    } else {
-      titolMunicipiCadaver = 'Municipi trobada del cadàver';
-    }
+      } else {
+        titolMunicipiCadaver = 'Municipi trobada del cadàver';
+      }
 
-    const cirscumstancies_mort = dades.cirscumstancies_mort && dades.cirscumstancies_mort.trim() !== '' ? dades.cirscumstancies_mort : 'Desconegut';
-    const data_trobada_cadaver = dades.data_trobada_cadaver && dades.data_trobada_cadaver.trim() !== '' ? formatDatesForm(dades.data_trobada_cadaver) : 'Desconegut';
-    const lloc_trobada_cadaver = dades.lloc_trobada_cadaver && dades.lloc_trobada_cadaver.trim() !== '' ? dades.lloc_trobada_cadaver : 'Desconegut';
+      const cirscumstancies_mort = dada.cirscumstancies_mort && dada.cirscumstancies_mort.trim() !== '' ? dada.cirscumstancies_mort : 'Desconegut';
+      const data_trobada_cadaver = dada.data_trobada_cadaver && dada.data_trobada_cadaver.trim() !== '' ? formatDatesForm(dada.data_trobada_cadaver) : 'Desconegut';
+      const lloc_trobada_cadaver = dada.lloc_trobada_cadaver && dada.lloc_trobada_cadaver.trim() !== '' ? dada.lloc_trobada_cadaver : 'Desconegut';
 
-    htmlContent += `
+      htmlContent += `
     <div class="negreta raleway">
       <div style="margin-top:25px">
         <h5><span class="negreta blau1">1) Dades bàsiques:</span></h5>
@@ -232,42 +233,42 @@ export const fitxaTipusRepressio = async (categoriaNumerica: string, fitxa2: Fit
         </div>
     </div> `;
 
-    htmlContent += contingutHtmlBombargeig;
-    htmlContent += contingutHtmlAssassinat;
-    htmlContent += contingutHtmlAfusellat;
-  } else if (parseInt(categoriaNumerica) === 6) {
-    const dataDetencio = dades.data_detencio && dades.data_detencio.trim() !== '' ? formatDatesForm(dades.data_detencio) : 'Desconeguda';
-    const llocDetencio = dades.lloc_detencio && dades.lloc_detencio.trim() !== '' ? dades.lloc_detencio : 'Desconegut';
+      htmlContent += contingutHtmlBombargeig;
+      htmlContent += contingutHtmlAssassinat;
+      htmlContent += contingutHtmlAfusellat;
+    } else if (parseInt(categoriaNumerica) === 6) {
+      const dataDetencio = dada.data_detencio && dada.data_detencio.trim() !== '' ? formatDatesForm(dada.data_detencio) : 'Desconeguda';
+      const llocDetencio = dada.lloc_detencio && dada.lloc_detencio.trim() !== '' ? dada.lloc_detencio : 'Desconegut';
 
-    const tipusProcediment = dades.tipus_procediment && dades.tipus_procediment.trim() !== '' ? dades.tipus_procediment : 'Desconegut';
-    const tipusJudici = dades.tipus_judici && dades.tipus_judici.trim() !== '' ? dades.tipus_judici : 'Desconegut';
-    const numCausa = dades.num_causa && dades.num_causa.trim() !== '' ? dades.num_causa : 'Desconegut';
-    const anyDetingut = dades.anyDetingut && dades.anyDetingut.trim() !== '' ? dades.anyDetingut + ' anys' : 'Desconegut';
-    const anyInici = dades.any_inicial && dades.any_inicial.trim() !== '' ? dades.any_inicial : 'Desconegut';
-    const anyFinal = dades.any_final && dades.any_final.trim() !== '' ? dades.any_final : 'Desconegut';
-    const dataInici = dades.data_inici_proces && dades.data_inici_proces.trim() !== '' ? formatDatesForm(dades.data_inici_proces) : 'Desconegut';
-    const dataSentencia = dades.sentencia_data && dades.sentencia_data.trim() !== '' ? formatDatesForm(dades.sentencia_data) : 'Desconegut';
+      const tipusProcediment = dada.tipus_procediment && dada.tipus_procediment.trim() !== '' ? dada.tipus_procediment : 'Desconegut';
+      const tipusJudici = dada.tipus_judici && dada.tipus_judici.trim() !== '' ? dada.tipus_judici : 'Desconegut';
+      const numCausa = dada.num_causa && dada.num_causa.trim() !== '' ? dada.num_causa : 'Desconegut';
+      const anyDetingut = dada.anyDetingut && dada.anyDetingut.trim() !== '' ? dada.anyDetingut + ' anys' : 'Desconegut';
+      const anyInici = dada.any_inicial && dada.any_inicial.trim() !== '' ? dada.any_inicial : 'Desconegut';
+      const anyFinal = dada.any_final && dada.any_final.trim() !== '' ? dada.any_final : 'Desconegut';
+      const dataInici = dada.data_inici_proces && dada.data_inici_proces.trim() !== '' ? formatDatesForm(dada.data_inici_proces) : 'Desconegut';
+      const dataSentencia = dada.sentencia_data && dada.sentencia_data.trim() !== '' ? formatDatesForm(dada.sentencia_data) : 'Desconegut';
 
-    const sentencia = dades.sentencia && dades.sentencia.trim() !== '' ? dades.sentencia : 'Desconeguda';
-    const pena = dades.pena && dades.pena.trim() !== '' ? dades.pena : 'Desconeguda';
-    const commutacio = dades.commutacio && dades.commutacio.trim() !== '' ? dades.commutacio : '-';
+      const sentencia = dada.sentencia && dada.sentencia.trim() !== '' ? dada.sentencia : 'Desconeguda';
+      const pena = dada.pena && dada.pena.trim() !== '' ? dada.pena : 'Desconeguda';
+      const commutacio = dada.commutacio && dada.commutacio.trim() !== '' ? dada.commutacio : '-';
 
-    const jutgeInstructor = dades.jutge_instructor && dades.jutge_instructor.trim() !== '' ? dades.jutge_instructor : 'Desconegut';
-    const secretariInstructor = dades.secretari_instructor && dades.secretari_instructor.trim() !== '' ? dades.secretari_instructor : 'Desconegut';
-    const jutjat = dades.jutjat && dades.jutjat.trim() !== '' ? dades.jutjat : 'Desconegut';
-    const consellGuerraData = dades.consell_guerra_data && dades.consell_guerra_data.trim() !== '' ? formatDatesForm(dades.consell_guerra_data) : 'Desconegut';
-    const llocConsellGuerra = dades.lloc_consell_guerra && dades.lloc_consell_guerra.trim() !== '' ? dades.lloc_consell_guerra : 'Desconegut';
-    const presidentTribunal = dades.president_tribunal && dades.president_tribunal.trim() !== '' ? dades.president_tribunal : 'Desconegut';
-    const defensor = dades.defensor && dades.defensor.trim() !== '' ? dades.defensor : 'Desconegut';
-    const fiscal = dades.fiscal && dades.fiscal.trim() !== '' ? dades.fiscal : 'Desconegut';
-    const ponent = dades.ponent && dades.ponent.trim() !== '' ? dades.ponent : 'Desconegut';
-    const tribunalVocals = dades.tribunal_vocals && dades.tribunal_vocals.trim() !== '' ? dades.tribunal_vocals : 'Desconegut';
-    const acusacio = dades.acusacio && dades.acusacio.trim() !== '' ? dades.acusacio : 'Desconeguda';
-    const acusacio2 = dades.acusacio_2 && dades.acusacio_2.trim() !== '' ? dades.acusacio_2 : 'Desconeguda';
-    const testimoniAcusacio = dades.testimoni_acusacio && dades.testimoni_acusacio.trim() !== '' ? dades.testimoni_acusacio : 'Desconegut';
-    const observacions = dades.observacions && dades.observacions.trim() !== '' ? dades.observacions : 'Sense dades';
+      const jutgeInstructor = dada.jutge_instructor && dada.jutge_instructor.trim() !== '' ? dada.jutge_instructor : 'Desconegut';
+      const secretariInstructor = dada.secretari_instructor && dada.secretari_instructor.trim() !== '' ? dada.secretari_instructor : 'Desconegut';
+      const jutjat = dada.jutjat && dada.jutjat.trim() !== '' ? dada.jutjat : 'Desconegut';
+      const consellGuerraData = dada.consell_guerra_data && dada.consell_guerra_data.trim() !== '' ? formatDatesForm(dada.consell_guerra_data) : 'Desconegut';
+      const llocConsellGuerra = dada.lloc_consell_guerra && dada.lloc_consell_guerra.trim() !== '' ? dada.lloc_consell_guerra : 'Desconegut';
+      const presidentTribunal = dada.president_tribunal && dada.president_tribunal.trim() !== '' ? dada.president_tribunal : 'Desconegut';
+      const defensor = dada.defensor && dada.defensor.trim() !== '' ? dada.defensor : 'Desconegut';
+      const fiscal = dada.fiscal && dada.fiscal.trim() !== '' ? dada.fiscal : 'Desconegut';
+      const ponent = dada.ponent && dada.ponent.trim() !== '' ? dada.ponent : 'Desconegut';
+      const tribunalVocals = dada.tribunal_vocals && dada.tribunal_vocals.trim() !== '' ? dada.tribunal_vocals : 'Desconegut';
+      const acusacio = dada.acusacio && dada.acusacio.trim() !== '' ? dada.acusacio : 'Desconeguda';
+      const acusacio2 = dada.acusacio_2 && dada.acusacio_2.trim() !== '' ? dada.acusacio_2 : 'Desconeguda';
+      const testimoniAcusacio = dada.testimoni_acusacio && dada.testimoni_acusacio.trim() !== '' ? dada.testimoni_acusacio : 'Desconegut';
+      const observacions = dada.observacions && dada.observacions.trim() !== '' ? dada.observacions : 'Sense dades';
 
-    htmlContent += `
+      htmlContent += `
      <div class="negreta raleway">
 
      <div style="margin-top:25px">
@@ -317,21 +318,21 @@ export const fitxaTipusRepressio = async (categoriaNumerica: string, fitxa2: Fit
             <p><span class='marro2'>Observacions:</span> <span class='blau1'>${observacions}</span></p>
         </div>
       </div>`;
-  } else if (parseInt(categoriaNumerica) === 7) {
-    const empresa = valorTextDesconegut(dades.empresa, 1);
-    type ProfessionalTypeKeys = 1 | 2 | 3;
-    const professionalTypes = {
-      1: 'Empleat sector públic: (funcionari públic)',
-      2: 'Empleat sector públic: (professor educació pública)',
-      3: 'Empleat sector privat',
-    };
+    } else if (parseInt(categoriaNumerica) === 7) {
+      const empresa = valorTextDesconegut(dada.empresa, 1);
+      type ProfessionalTypeKeys = 1 | 2 | 3;
+      const professionalTypes = {
+        1: 'Empleat sector públic: (funcionari públic)',
+        2: 'Empleat sector públic: (professor educació pública)',
+        3: 'Empleat sector privat',
+      };
 
-    const tipusProfessional = professionalTypes[dades.tipus_professional as ProfessionalTypeKeys] || 'Desconegut';
-    const professio = valorTextDesconegut(dades.professio, 1);
-    const sancio = valorTextDesconegut(dades.sancio, 5);
-    const observacions = valorTextDesconegut(dades.observacions, 3);
+      const tipusProfessional = professionalTypes[dada.tipus_professional as ProfessionalTypeKeys] || 'Desconegut';
+      const professio = valorTextDesconegut(dada.professio, 1);
+      const sancio = valorTextDesconegut(dada.sancio, 5);
+      const observacions = valorTextDesconegut(dada.observacions, 3);
 
-    htmlContent += `
+      htmlContent += `
           <div class="negreta raleway">
 
      <div style="margin-top:25px">
@@ -343,31 +344,31 @@ export const fitxaTipusRepressio = async (categoriaNumerica: string, fitxa2: Fit
           <p><span class='marro2'>Observacions:</span> <span class='blau1'>${observacions}</span></p>     
         </div>
         `;
-  } else if (parseInt(categoriaNumerica) === 8) {
-    htmlContent += `
-          <h5>En elaboració:</h5>
+    } else if (parseInt(categoriaNumerica) === 8) {
+      htmlContent += `
+          <h5>Dona:</h5>
         `;
-  } else if (parseInt(categoriaNumerica) === 10) {
-    const dataExili = dades.data_exili && dades.data_exili.trim() !== '' ? formatDatesForm(dades.data_exili) : 'Sense dades';
-    const lloc_partida = dades.lloc_partida && dades.lloc_partida.trim() !== '' ? dades.lloc_partida : 'Sense dades';
-    const llocPas = dades.lloc_pas_frontera && dades.lloc_pas_frontera.trim() !== '' ? dades.lloc_pas_frontera : 'Sense dades';
-    const ambQuiPasaFrontera = dades.amb_qui_passa_frontera && dades.amb_qui_passa_frontera.trim() !== '' ? dades.amb_qui_passa_frontera : 'Sense dades';
-    const primerMunicipiExili = dades.primer_desti_exili && dades.primer_desti_exili.trim() !== '' ? dades.primer_desti_exili : 'Sense dades';
-    const dataPrimerDesti = dades.primer_desti_data && dades.primer_desti_data.trim() !== '' ? formatDatesForm(dades.primer_desti_data) : 'Sense dades';
-    const tipologiaPrimerDesti = dades.tipologia_primer_desti && dades.tipologia_primer_desti.trim() !== '' ? dades.tipologia_primer_desti : 'Sense dades';
-    const dadesPrimerDesti = dades.dades_lloc_primer_desti && dades.dades_lloc_primer_desti.trim() !== '' ? dades.dades_lloc_primer_desti : 'Sense dades';
+    } else if (parseInt(categoriaNumerica) === 10) {
+      const dataExili = dada.data_exili && dada.data_exili.trim() !== '' ? formatDatesForm(dada.data_exili) : 'Sense dades';
+      const lloc_partida = dada.lloc_partida && dada.lloc_partida.trim() !== '' ? dada.lloc_partida : 'Sense dades';
+      const llocPas = dada.lloc_pas_frontera && dada.lloc_pas_frontera.trim() !== '' ? dada.lloc_pas_frontera : 'Sense dades';
+      const ambQuiPasaFrontera = dada.amb_qui_passa_frontera && dada.amb_qui_passa_frontera.trim() !== '' ? dada.amb_qui_passa_frontera : 'Sense dades';
+      const primerMunicipiExili = dada.primer_desti_exili && dada.primer_desti_exili.trim() !== '' ? dada.primer_desti_exili : 'Sense dades';
+      const dataPrimerDesti = dada.primer_desti_data && dada.primer_desti_data.trim() !== '' ? formatDatesForm(dada.primer_desti_data) : 'Sense dades';
+      const tipologiaPrimerDesti = dada.tipologia_primer_desti && dada.tipologia_primer_desti.trim() !== '' ? dada.tipologia_primer_desti : 'Sense dades';
+      const dadesPrimerDesti = dada.dades_lloc_primer_desti && dada.dades_lloc_primer_desti.trim() !== '' ? dada.dades_lloc_primer_desti : 'Sense dades';
 
-    const peripleExili = dades.periple_recorregut && dades.periple_recorregut.trim() !== '' ? dades.periple_recorregut : 'Sense dades';
-    const deportat = dades.deportat === '1' ? 'Sí' : 'No';
-    const resistencia = dades.participacio_resistencia === '1' ? 'Sí' : 'No';
-    const dadesResistencia = dades.dades_resistencia && dades.dades_resistencia.trim() !== '' ? dades.dades_resistencia : 'Sense dades';
-    const activitatPolitica = dades.activitat_politica_exili && dades.activitat_politica_exili.trim() !== '' ? dades.activitat_politica_exili : 'Sense dades';
-    const activitatSindical = dades.activitat_sindical_exili && dades.activitat_sindical_exili.trim() !== '' ? dades.activitat_sindical_exili : 'Sense dades';
-    const situacioEspanya = dades.situacio_legal_espanya && dades.situacio_legal_espanya.trim() !== '' ? dades.situacio_legal_espanya : 'Sense dades';
-    const darrerDestiExili = dades.ultim_desti_exili && dades.ultim_desti_exili.trim() !== '' ? dades.ultim_desti_exili : 'Sense dades';
-    const tipologiaDarrerDesti = dades.tipologia_ultim_desti && dades.tipologia_ultim_desti.trim() !== '' ? dades.tipologia_ultim_desti : 'Sense dades';
+      const peripleExili = dada.periple_recorregut && dada.periple_recorregut.trim() !== '' ? dada.periple_recorregut : 'Sense dades';
+      const deportat = dada.deportat === '1' ? 'Sí' : 'No';
+      const resistencia = dada.participacio_resistencia === '1' ? 'Sí' : 'No';
+      const dadesResistencia = dada.dades_resistencia && dada.dades_resistencia.trim() !== '' ? dada.dades_resistencia : 'Sense dades';
+      const activitatPolitica = dada.activitat_politica_exili && dada.activitat_politica_exili.trim() !== '' ? dada.activitat_politica_exili : 'Sense dades';
+      const activitatSindical = dada.activitat_sindical_exili && dada.activitat_sindical_exili.trim() !== '' ? dada.activitat_sindical_exili : 'Sense dades';
+      const situacioEspanya = dada.situacio_legal_espanya && dada.situacio_legal_espanya.trim() !== '' ? dada.situacio_legal_espanya : 'Sense dades';
+      const darrerDestiExili = dada.ultim_desti_exili && dada.ultim_desti_exili.trim() !== '' ? dada.ultim_desti_exili : 'Sense dades';
+      const tipologiaDarrerDesti = dada.tipologia_ultim_desti && dada.tipologia_ultim_desti.trim() !== '' ? dada.tipologia_ultim_desti : 'Sense dades';
 
-    htmlContent += `
+      htmlContent += `
      <div class="negreta raleway">
       <div style="margin-top:25px">
         <h5><span class="negreta blau1">1) Sortida de Catalunya:</span></h5>
@@ -407,84 +408,126 @@ export const fitxaTipusRepressio = async (categoriaNumerica: string, fitxa2: Fit
         </div> 
     </div>      
         `;
-  } else if (parseInt(categoriaNumerica) === 12) {
-    const optionsMap: Record<string, string> = {
-      '1': 'Sí',
-      '2': 'No',
-      '3': 'Sense dades',
-    };
+    } else if (parseInt(categoriaNumerica) === 12) {
+      // RESULTATS MULTIPLES
+      const optionsMap: Record<string, string> = {
+        '1': 'Sí',
+        '2': 'No',
+        '3': 'Sense dades',
+      };
 
-    const data_empresonament = dades.data_empresonament && dades.data_empresonament.trim() !== '' ? formatDatesForm(dades.data_empresonament) : 'Sense dades';
-    const trasllats = optionsMap[dades.trasllats] || 'Sense dades';
-    const lloc_trasllat = dades.lloc_trasllat && dades.lloc_trasllat.trim() !== '' ? dades.lloc_trasllat : 'Sense dades';
-    const data_trasllat = dades.data_trasllat && dades.data_trasllat.trim() !== '' ? formatDatesForm(dades.data_trasllat) : 'Sense dades';
-    const llibertat = optionsMap[dades.llibertat] || 'Sense dades';
-    const data_llibertat = dades.data_llibertat && dades.data_llibertat.trim() !== '' ? formatDatesForm(dades.data_llibertat) : 'Sense dades';
-    const modalitat = dades.modalitat ?? 'Sense dades';
-    const vicissituds = dades.vicissituds && dades.vicissituds.trim() !== '' ? dades.vicissituds : 'Sense dades';
-    const observacions = dades.observacions && dades.observacions.trim() !== '' ? dades.observacions : 'Sense dades';
+      htmlContent = '';
 
-    htmlContent += `
-     <div class="negreta raleway">
-      <div style="margin-top:25px">
-        <h5><span class="negreta blau1">1) Dades de l'empresonament:</span></h5>
-        <p><span class='marro2'>Data d'empresonament: </span> <span class='blau1'>${data_empresonament}</span></p>
-        <p><span class='marro2'>Modalitat de presó:</span> <span class='blau1'>${modalitat}</span></p>
-        <p><span class='marro2'>Llibertat:</span> <span class='blau1'>${llibertat}</span></p>
-        <p><span class='marro2'>Data llibertat:</span> <span class='blau1'>${data_llibertat}</span></p>
-      </div>
+      for (const [index, dada] of dades.entries()) {
+        const dataEmpresonament = formatDatesForm(dada.data_empresonament);
+        const data_empresonament = valorTextDesconegut(dataEmpresonament, 5);
+        const trasllats = optionsMap[dada.trasllats] || 'Sense dades';
+        const lloc_trasllat = valorTextDesconegut(dada.lloc_trasllat, 5);
+        const dataTrasllat = formatDatesForm(dada.data_trasllat);
+        const data_trasllat = valorTextDesconegut(dataTrasllat, 5);
+        const llibertat = optionsMap[dada.llibertat] || 'Sense dades';
+        const dataLlibertat = formatDatesForm(dada.data_llibertat);
+        const data_llibertat = valorTextDesconegut(dataLlibertat, 5);
+        const modalitat = dada.modalitat ?? 'Sense dades';
+        const vicissituds = valorTextDesconegut(dada.vicissituds, 1);
+        const observacions = valorTextDesconegut(dada.observacions, 1);
 
-        <div style="margin-top:45px">
-          <h5><span class="negreta blau1">2) Trasllats de presó:</span></h5>
-          <p><span class='marro2'>Trasllats: </span> <span class='blau1'>${trasllats}</span></p>
-          <p><span class='marro2'>Lloc trasllat:</span> <span class='blau1'>${lloc_trasllat}</span></p>
-          <p><span class='marro2'>Data trasllat:</span> <span class='blau1'>${data_trasllat}</span></p>
-        </div>
+        htmlContent += `
+        <div class="negreta raleway" style="margin-bottom:10px; padding-bottom:30px">
+          <h4 class="blau1">Empresonament Presó Model, registre núm. ${index + 1}</h4>
+        <div class="negreta raleway" style="margin-bottom:10px; padding-bottom:30px">
+          <div style="margin-top:25px">
+            <h5><span class="negreta blau1">1) Dades de l'empresonament:</span></h5>
+            <p><span class='marro2'>Data d'empresonament:</span> <span class='blau1'>${data_empresonament}</span></p>
+            <p><span class='marro2'>Modalitat de presó:</span> <span class='blau1'>${modalitat}</span></p>
+            <p><span class='marro2'>Llibertat:</span> <span class='blau1'>${llibertat}</span></p>
+            <p><span class='marro2'>Data llibertat:</span> <span class='blau1'>${data_llibertat}</span></p>
+          </div>
 
-         <div style="margin-top:45px">
+          <div style="margin-top:45px">
+            <h5><span class="negreta blau1">2) Trasllats de presó:</span></h5>
+            <p><span class='marro2'>Trasllats:</span> <span class='blau1'>${trasllats}</span></p>
+            <p><span class='marro2'>Lloc trasllat:</span> <span class='blau1'>${lloc_trasllat}</span></p>
+            <p><span class='marro2'>Data trasllat:</span> <span class='blau1'>${data_trasllat}</span></p>
+          </div>
+
+          <div style="margin-top:45px">
             <h5><span class="negreta blau1">3) Altres dades:</span></h5>
-            <p><span class='marro2'>Vicissituds: </span> <span class='blau1'>${vicissituds}</span></p>
-             <p><span class='marro2'>Observacions:</span> <span class='blau1'>${observacions}</span></p>
+            <p><span class='marro2'>Vicissituds:</span> <span class='blau1'>${vicissituds}</span></p>
+            <p><span class='marro2'>Observacions:</span> <span class='blau1'>${observacions}</span></p>
+          </div>
         </div>
-      </div>     
-        `;
-  } else if (parseInt(categoriaNumerica) === 13) {
-    // detinguts guardia urbana
-    const dataEntradaFormat = formatDatesForm(dades.data_empresonament);
-    const data_empresonament = valorTextDesconegut(dataEntradaFormat, 4);
-    const dataSortidaFormat = formatDatesForm(dades.data_sortida);
-    const data_sortida = valorTextDesconegut(dataSortidaFormat, 4);
-    const motiu_empresonament = valorTextDesconegut(dades.motiu_empresonament, 1);
-    const qui_ordena_detencio = valorTextDesconegut(dades.qui_ordena_detencio, 1);
-    const nom_institucio = valorTextDesconegut(dades.nom_institucio, 1);
-    const grup = valorTextDesconegut(dades.grup, 1);
-    const topText = dades.top === 1 ? 'Sí' : dades.top === 2 ? 'No' : dades.top === 3 ? 'Sense dades' : 'Desconegut';
-    const observacions = valorTextDesconegut(dades.observacions, 1);
-    htmlContent += `
-     <div class="negreta raleway">
-      <div style="margin-top:25px">
-        <p><span class='marro2'>Data de detenció: </span> <span class='blau1'>${data_empresonament}</span></p>
-        <p><span class='marro2'>Data de sortida:</span> <span class='blau1'>${data_sortida}</span></p>
-        <p><span class='marro2'>Motiu de la detenció:</span> <span class='blau1'>${motiu_empresonament}</span></p>
-        <p><span class='marro2'>Responsable d'ordenar la detenció:</span> <span class='blau1'>${qui_ordena_detencio} - ${nom_institucio}</span></p>
-        <p><span class='marro2'>TIpus d'institució que ordena la detenció:</span> <span class='blau1'>${grup}</span></p>
-        <p><span class='marro2'>Detenció ordenada pel Tribunal de Orden Público?:</span> <span class='blau1'>${topText}</span></p>
-        <p><span class='marro2'>Observacions: </span> <span class='blau1'>${observacions}</span></p>
       </div>
-      </div>     
-        `;
-  } else if (parseInt(categoriaNumerica) === 14) {
-    // Detingut Comitè Solidaritat (1971-1977)
-  } else if (parseInt(categoriaNumerica) === 15) {
-    // Llei Responsabilitats Polítiques
-    const nomPreso = valorTextDesconegut(dades.lloc_empresonament, 6);
-    const ciutatPreso = valorTextDesconegut(dades.preso_ciutat, 3);
-    const empresonament = joinValors([nomPreso, ciutatPreso], ' - ', false);
-    const paisExili = valorTextDesconegut(dades.lloc_exili, 7);
-    const condemna = valorTextDesconegut(dades.condemna, 1);
-    const observacions = valorTextDesconegut(dades.observacions, 1);
+      `;
+      }
+    } else if (parseInt(categoriaNumerica) === 13 || parseInt(categoriaNumerica) === 16) {
+      // detinguts guardia urbana
 
-    htmlContent += `
+      htmlContent = '';
+
+      for (const [index, dada] of dades.entries()) {
+        const dataEntradaFormat = formatDatesForm(dada.data_empresonament);
+        const data_empresonament = valorTextDesconegut(dataEntradaFormat, 4);
+        const dataSortidaFormat = formatDatesForm(dada.data_sortida);
+        const data_sortida = valorTextDesconegut(dataSortidaFormat, 4);
+        const motiu_empresonament = valorTextDesconegut(dada.motiu_empresonament, 1);
+        const qui_ordena_detencio = valorTextDesconegut(dada.qui_ordena_detencio, 1);
+        const nom_institucio = valorTextDesconegut(dada.nom_institucio, 1);
+        const grup = valorTextDesconegut(dada.grup, 1);
+        const topText = dada.top === 1 ? 'Sí' : dada.top === 2 ? 'No' : dada.top === 3 ? 'Sense dades' : 'Desconegut';
+        const observacions = valorTextDesconegut(dada.observacions, 1);
+
+        htmlContent += `
+       <div class="negreta raleway" style="margin-bottom:10px; padding-bottom:30px">
+          <h4 class="blau1">Detingut Guàrdia Urbana / Empresonat al Dipòsit municipal Sant Llàtzer, registre núm. ${index + 1}</h4>
+            <div class="negreta raleway">
+              <div style="margin-top:25px">
+                <p><span class='marro2'>Data de detenció: </span> <span class='blau1'>${data_empresonament}</span></p>
+                <p><span class='marro2'>Data de sortida:</span> <span class='blau1'>${data_sortida}</span></p>
+                <p><span class='marro2'>Motiu de la detenció:</span> <span class='blau1'>${motiu_empresonament}</span></p>
+                <p><span class='marro2'>Responsable d'ordenar la detenció:</span> <span class='blau1'>${qui_ordena_detencio} - ${nom_institucio}</span></p>
+                <p><span class='marro2'>TIpus d'institució que ordena la detenció:</span> <span class='blau1'>${grup}</span></p>
+                <p><span class='marro2'>Detenció ordenada pel Tribunal de Orden Público?:</span> <span class='blau1'>${topText}</span></p>
+                <p><span class='marro2'>Observacions: </span> <span class='blau1'>${observacions}</span></p>
+              </div>
+            </div>     
+        </div>
+      `;
+      }
+    } else if (parseInt(categoriaNumerica) === 14) {
+      // Detingut Comitè Solidaritat (1971-1977)
+      htmlContent = '';
+
+      for (const [index, dada] of dades.entries()) {
+        const anyDetencio = valorTextDesconegut(dada.any_detencio, 4);
+        const motiu_empresonament = valorTextDesconegut(dada.motiu, 1);
+        const advocat = valorTextDesconegut(dada.advocat, 1);
+        const observacions = valorTextDesconegut(dada.observacions, 1);
+
+        htmlContent += `
+       <div class="negreta raleway" style="margin-bottom:10px; padding-bottom:30px">
+          <h4 class="blau1">Detingut Comitè de Solidaritat (1971-1977), registre núm. ${index + 1}</h4>
+            <div class="negreta raleway">
+              <div style="margin-top:25px">
+                <p><span class='marro2'>Any de la detenció: </span> <span class='blau1'>${anyDetencio}</span></p>
+                <p><span class='marro2'>Motiu de la detenció:</span> <span class='blau1'>${motiu_empresonament}</span></p>
+                <p><span class='marro2'>Advocat:</span> <span class='blau1'>${advocat}</span></p>
+                <p><span class='marro2'>Observacions: </span> <span class='blau1'>${observacions}</span></p>
+              </div>
+            </div>     
+        </div>
+      `;
+      }
+    } else if (parseInt(categoriaNumerica) === 15) {
+      // Llei Responsabilitats Polítiques
+      const nomPreso = valorTextDesconegut(dada.lloc_empresonament, 6);
+      const ciutatPreso = valorTextDesconegut(dada.preso_ciutat, 3);
+      const empresonament = joinValors([nomPreso, ciutatPreso], ' - ', false);
+      const paisExili = valorTextDesconegut(dada.lloc_exili, 7);
+      const condemna = valorTextDesconegut(dada.condemna, 1);
+      const observacions = valorTextDesconegut(dada.observacions, 1);
+
+      htmlContent += `
      <div class="negreta raleway">
       <div style="margin-top:25px">
         <p><span class='marro2'>Lloc d'empresonament: </span> <span class='blau1'>${empresonament}</span></p>
@@ -494,17 +537,42 @@ export const fitxaTipusRepressio = async (categoriaNumerica: string, fitxa2: Fit
       </div>
       </div>     
         `;
-  } else if (parseInt(categoriaNumerica) === 16) {
-    // Empresonat dipòsit municipal Sant Llàtzer
-  } else if (parseInt(categoriaNumerica) === 17) {
-    // Processat Tribunal Orden Público
-  } else if (parseInt(categoriaNumerica) === 18) {
-    // Detingut Comitè Relacions de Solidaritat (1939-194.
-  } else {
-    htmlContent += `
+    } else if (parseInt(categoriaNumerica) === 17) {
+      // Processat Tribunal Orden Público
+
+      const num_causa = valorTextDesconegut(dada.num_causa, 6);
+      const dataSentencia = formatDatesForm(dada.data_sentencia);
+      const data_sentencia = valorTextDesconegut(dataSentencia, 1);
+      const ciutatPreso = valorTextDesconegut(dada.preso_ciutat, 1);
+      const nomPreso = valorTextDesconegut(dada.preso, 1);
+      const empresonament = joinValors([nomPreso, ciutatPreso], ' - ', false);
+      const sentencia = valorTextDesconegut(dada.sentencia, 1);
+
+      htmlContent += `
+     <div class="negreta raleway">
+      <div style="margin-top:25px">
+        <p><span class='marro2'>Número de la causa: </span> <span class='blau1'>${num_causa}</span></p>
+        <p><span class='marro2'>Data sentència:</span> <span class='blau1'>${data_sentencia}</span></p>
+        <p><span class='marro2'>Sentència:</span> <span class='blau1'>${sentencia}</span></p>
+        <p><span class='marro2'>Lloc d'empresonament: </span> <span class='blau1'>${empresonament}</span></p>
+      </div>
+      </div>     
+        `;
+    } else if (parseInt(categoriaNumerica) === 18) {
+      // Detingut Comitè Relacions de Solidaritat (1939-1941).
+      htmlContent += `
+     <div class="negreta raleway">
+      <div style="margin-top:25px">
+        <p>Represaliat per haver donat suport als exiliats a través del Comitè de Relacions de Solidaritat.</p>
+      </div>
+      </div>     
+        `;
+    } else {
+      htmlContent += `
      <div class="negreta raleway">
      Sense dades
      `;
+    }
   }
 
   // Finalmente actualiza el div

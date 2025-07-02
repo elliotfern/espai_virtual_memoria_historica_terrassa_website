@@ -1,12 +1,10 @@
 import { fetchDataGet } from '../../../../services/fetchData/fetchDataGet';
-import { auxiliarSelect } from '../../../../services/fetchData/auxiliarSelect';
 import { renderFormInputs } from '../../../../services/fetchData/renderInputsForm';
 import { transmissioDadesDB } from '../../../../services/fetchData/transmissioDades';
 import { renderTaulaCercadorFiltres } from '../../../../services/renderTaula/renderTaulaCercadorFiltres';
 import { initDeleteHandlers, registerDeleteCallback } from '../../../../services/fetchData/handleDelete';
 import { getIsAdmin } from '../../../../services/auth/getIsAdmin';
 import { getIsAutor } from '../../../../services/auth/getIsAutor';
-import { formatDatesForm } from '../../../../services/formatDates/dates';
 
 interface Fitxa {
   [key: string]: unknown;
@@ -19,23 +17,16 @@ interface Fitxa {
   observacions: string;
   top: number;
   qui_ordena_detencio: number;
-  data_empresonament: string;
-  trasllats: number;
-  lloc_trasllat: string;
-  data_trasllat: string;
-  llibertat: number;
-  data_llibertat: string;
-  modalitat: number;
-  vicissituds: string;
+  motiu: number;
 }
 
 interface EspaiRow {
   id: number;
   data_empresonament: string;
-  data_llibertat: string;
+  data_sortida: string;
   motiu_empresonament: string;
-  codi: string;
-  arxiu: string;
+  motiu: string;
+  nom: string;
 }
 
 type Column<T> = {
@@ -44,10 +35,10 @@ type Column<T> = {
   render?: (value: T[keyof T], row: T) => string;
 };
 
-export async function empresonatsPresoModel(idRepresaliat: number) {
+export async function comiteRelacionsSolidaritat(idRepresaliat: number) {
   const isAdmin = await getIsAdmin();
   const isAutor = await getIsAutor();
-  const reloadKey = 'reload-taula-taulaLlistatDetencionsPresoModel';
+  const reloadKey = 'reload-taula-taulaLlistatDetencionsComiteSolidaritat';
   const container = document.getElementById('fitxaNomCognoms');
 
   const data2 = await fetchDataGet<Fitxa>(`/api/dades_personals/get/?type=nomCognoms&id=${idRepresaliat}`);
@@ -61,20 +52,13 @@ export async function empresonatsPresoModel(idRepresaliat: number) {
     container.innerHTML = `<h4>Fitxa: <a href="${url}" target="_blank">${nomComplet}</a></h4>`;
   }
 
-  const columns: Column<EspaiRow>[] = [
-    { header: 'Data entrada', field: 'data_empresonament', render: (_: unknown, row: EspaiRow) => `${formatDatesForm(row.data_empresonament)}` },
-    {
-      header: 'Data sortida',
-      field: 'data_llibertat',
-      render: (_: unknown, row: EspaiRow) => `${formatDatesForm(row.data_llibertat)}`,
-    },
-  ];
+  const columns: Column<EspaiRow>[] = [{ header: 'Represaliat', field: 'nom' }];
 
   if (isAdmin || isAutor) {
     columns.push({
       header: 'Accions',
       field: 'id',
-      render: (_: unknown, row: EspaiRow) => `<a id="${row.id}" title="Modifica" href="https://${window.location.hostname}/gestio/base-dades/empresonaments-preso-model/modifica-empresonament/${idRepresaliat}/${row.id}"><button type="button" class="btn btn-warning btn-sm">Modifica</button></a>`,
+      render: (_: unknown, row: EspaiRow) => `<a id="${row.id}" title="Modifica" href="https://${window.location.hostname}/gestio/base-dades/empresonaments-comite-relacions-solidaritat/modifica-empresonament/${idRepresaliat}/${row.id}"><button type="button" class="btn btn-warning btn-sm">Modifica</button></a>`,
     });
   }
 
@@ -87,7 +71,7 @@ export async function empresonatsPresoModel(idRepresaliat: number) {
             type="button"
             class="btn btn-danger btn-sm delete-button"
             data-id="${row.id}" 
-            data-url="/api/presoModel/delete/${row.id}"
+            data-url="/api/comite_relacions_solidaritat/delete/${row.id}"
             data-reload-callback="${reloadKey}"
           >
             Elimina
@@ -96,40 +80,40 @@ export async function empresonatsPresoModel(idRepresaliat: number) {
   }
 
   renderTaulaCercadorFiltres<EspaiRow>({
-    url: `/api/preso_model/get/empresonatId?id=${idRepresaliat}`,
-    containerId: 'taulaLlistatDetencionsPresoModel',
+    url: `/api/comite_relacions_solidaritat/get/empresonatId?id=${idRepresaliat}`,
+    containerId: 'taulaLlistatDetencionsComiteRelacionsSolidaritat',
     columns,
-    filterKeys: ['arxiu'],
+    filterKeys: ['nom'],
     //filterByField: 'provincia',
   });
 
   // Registra el callback con una clave única
-  registerDeleteCallback(reloadKey, () => empresonatsPresoModel(idRepresaliat));
+  registerDeleteCallback(reloadKey, () => comiteRelacionsSolidaritat(idRepresaliat));
 
   // Inicia el listener una sola vez
   initDeleteHandlers();
 }
 
-export async function formPresoModel(idRepresaliat: number, id?: number) {
+export async function formcomiteRelacionsSolidaritat(idRepresaliat: number, id?: number) {
   let data: Partial<Fitxa> = {
-    trasllats: 0,
-    llibertat: 0,
-    modalitat: 0,
+    motiu_empresonament: 0,
+    professio: 0,
+    top: 0,
+    qui_ordena_detencio: 0,
   };
 
   let response: Fitxa | null = null;
 
   if (id) {
-    response = await fetchDataGet<Fitxa>(`/api/preso_model/get/fitxaRepressio?id=${id}`);
+    response = await fetchDataGet<Fitxa>(`/api/comite_relacions_solidaritat/get/fitxaRepressio?id=${id}`);
   }
 
   const data2 = await fetchDataGet<Fitxa>(`/api/dades_personals/get/?type=nomCognoms&id=${idRepresaliat}`);
 
-  const btnForm = document.getElementById('btnPresoModel') as HTMLButtonElement;
+  const btnForm = document.getElementById('btnCRS') as HTMLButtonElement;
   const container = document.getElementById('fitxaNomCognoms');
-  const presoModelForm = document.getElementById('presoModelForm');
+  const htmlForm = document.getElementById('comiteRelacionsSolidaritatForm');
   const inputIdPersona = document.getElementById('idPersona') as HTMLInputElement | null;
-  const btn1 = document.getElementById('refreshButton1');
 
   if (!response || !response.data) {
     if (btnForm) {
@@ -157,27 +141,16 @@ export async function formPresoModel(idRepresaliat: number, id?: number) {
 
   renderFormInputs(data);
 
-  await auxiliarSelect(data?.trasllats, '', 'trasllats', '', '');
-  await auxiliarSelect(data?.llibertat, '', 'llibertat', '', '');
-  await auxiliarSelect(data?.modalitat, 'modalitatPreso', 'modalitat', 'modalitat_ca');
-
-  if (btn1) {
-    btn1.addEventListener('click', function (event) {
-      event.preventDefault();
-      auxiliarSelect(data?.modalitat, 'modalitatPreso', 'modalitat', 'modalitat_ca');
-    });
-  }
-
   if (!response) {
-    if (presoModelForm) {
-      presoModelForm.addEventListener('submit', function (event) {
-        transmissioDadesDB(event, 'POST', 'presoModelForm', '/api/preso_model/post', true);
+    if (htmlForm) {
+      htmlForm.addEventListener('submit', function (event) {
+        transmissioDadesDB(event, 'POST', 'comiteRelacionsSolidaritatForm', '/api/comite_relacions_solidaritat/post', true);
       });
     }
   } else {
-    if (presoModelForm) {
-      presoModelForm.addEventListener('submit', function (event) {
-        transmissioDadesDB(event, 'PUT', 'presoModelForm', '/api/preso_model/put');
+    if (htmlForm) {
+      htmlForm.addEventListener('submit', function (event) {
+        transmissioDadesDB(event, 'PUT', 'comiteRelacionsSolidaritatForm', '/api/comite_relacions_solidaritat/put');
       });
     }
   }

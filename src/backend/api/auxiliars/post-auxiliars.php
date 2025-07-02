@@ -3179,4 +3179,108 @@ if ($slug === "municipi") {
             500
         );
     }
+
+    // 4) POST Presons
+    // ruta POST => "/api/auxiliars/post/preso"
+} else if ($slug === "preso") {
+    $inputData = file_get_contents('php://input');
+    $data = json_decode($inputData, true);
+
+    // Inicializar un array para los errores
+    $errors = [];
+
+    // Validación de los datos recibidos
+    if (empty($data['nom_preso'])) {
+        $errors[] =  ValidacioErrors::requerit('nom presó en català');
+    }
+
+    // Si hay errores, devolver una respuesta con los errores
+    if (!empty($errors)) {
+        Response::error(
+            MissatgesAPI::error('validacio'),
+            $errors,
+            400
+        );
+    }
+
+    // Si no hay errores, crear las variables PHP y preparar la consulta PDO
+    $nom_preso        = $data['nom_preso'];
+    $municipi_preso   = !empty($data['municipi_preso']) ? $data['municipi_preso'] : null;
+    $nom_preso_es     = !empty($data['nom_preso_es']) ? $data['nom_preso_es'] : null;
+    $nom_preso_en     = !empty($data['nom_preso_en']) ? $data['nom_preso_en'] : null;
+    $nom_preso_fr     = !empty($data['nom_preso_fr']) ? $data['nom_preso_fr'] : null;
+    $nom_preso_it     = !empty($data['nom_preso_it']) ? $data['nom_preso_it'] : null;
+    $nom_preso_pt     = !empty($data['nom_preso_pt']) ? $data['nom_preso_pt'] : null;
+
+    // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
+    try {
+
+        global $conn;
+        /** @var PDO $conn */
+
+        $sql = "INSERT INTO aux_presons (
+            nom_preso,
+            municipi_preso,
+            nom_preso_es,
+            nom_preso_en,
+            nom_preso_fr,
+            nom_preso_it,
+            nom_preso_pt
+        ) VALUES (
+            :nom_preso,
+            :municipi_preso,
+            :nom_preso_es,
+            :nom_preso_en,
+            :nom_preso_fr,
+            :nom_preso_it,
+            :nom_preso_pt
+        )";
+
+        // Preparar la consulta
+        $stmt = $conn->prepare($sql);
+
+        // Enlazar los parámetros con los valores de las variables PHP
+        $stmt->bindParam(':nom_preso', $nom_preso, PDO::PARAM_STR);
+        $stmt->bindParam(':municipi_preso', $municipi_preso, PDO::PARAM_INT);
+        $stmt->bindParam(':nom_preso_es', $nom_preso_es, PDO::PARAM_STR);
+        $stmt->bindParam(':nom_preso_en', $nom_preso_en, PDO::PARAM_STR);
+        $stmt->bindParam(':nom_preso_fr', $nom_preso_fr, PDO::PARAM_STR);
+        $stmt->bindParam(':nom_preso_it', $nom_preso_it, PDO::PARAM_STR);
+        $stmt->bindParam(':nom_preso_pt', $nom_preso_pt, PDO::PARAM_STR);
+
+        // Ejecutar la consulta
+        $stmt->execute();
+
+        // Recuperar el ID del registro creado
+        $id = $conn->lastInsertId();
+
+        // Recuperar el ID del registro creado
+        $tipusOperacio = "INSERT";
+        $detalls =  "Creació de nova presó: " . $nom_preso;
+
+        // Si la inserció té èxit, cal registrar la inserció en la base de control de canvis
+
+        Audit::registrarCanvi(
+            $conn,
+            $userId,                      // ID del usuario que hace el cambio
+            $tipusOperacio,             // Tipus operacio
+            $detalls,                       // Descripción de la operación
+            Tables::AUX_PRESONS,  // Nombre de la tabla afectada
+            $id                           // ID del registro modificado
+        );
+
+        // Respuesta de éxito
+        Response::success(
+            MissatgesAPI::success('create'),
+            ['id' => $id],
+            200
+        );
+    } catch (PDOException $e) {
+        // En caso de error en la conexión o ejecución de la consulta
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
 }

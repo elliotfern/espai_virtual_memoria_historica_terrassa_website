@@ -148,6 +148,20 @@ $routes = [
 
     '/api/top/post' => ['view' => 'src/backend/api/db_tribunal_orden_publico/post-top.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
 
+    // API db comitè solidaritat
+    '/api/comite_solidaritat/get/{slug}' => ['view' => 'src/backend/api/db_comite_solidaritat/get-comite-solidaritat.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+
+    '/api/comite_solidaritat/put' => ['view' => 'src/backend/api/db_comite_solidaritat/put-comite-solidaritat.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+
+    '/api/comite_solidaritat/post' => ['view' => 'src/backend/api/db_comite_solidaritat/post-comite-solidaritat.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+
+
+    // API db comitè relacions solidaritat
+    '/api/comite_relacions_solidaritat/get/{slug}' => ['view' => 'src/backend/api/db_comite_relacions_solidaritat/get-comite-relacions-solidaritat.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+
+    '/api/comite_relacions_solidaritat/put' => ['view' => 'src/backend/api/db_comite_relacions_solidaritat/put-comite-relacions-solidaritat.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+
+    '/api/comite_relacions_solidaritat/post' => ['view' => 'src/backend/api/db_comite_relacions_solidaritat/post-comite-relacions-solidaritat.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
 
     // API fonts documentals
     APP_API . $urlApi['fonts'] . '/get/{slug}' => array_merge($defaultApiConfig, [

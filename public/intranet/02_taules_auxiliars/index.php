@@ -57,7 +57,6 @@
                 <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['auxiliars']; ?>/llistat-tipus-judicis">Taula llistat tipus de judicis</a></li>
                 <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['auxiliars']; ?>/llistat-sentencies">Taula llistat sentències</a></li>
                 <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['auxiliars']; ?>/llistat-penes">Taula llistat penes</a></li>
-                <li>aux_tipus_presons</li>
             </ul>
 
             <h6>Afusellats</h6>
@@ -69,6 +68,7 @@
             <h6>Empresonats Presó Model</h6>
             <ul>
                 <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['auxiliars']; ?>/llistat-modalitats-preso">Taula modalitat de presó</a></li>
+                <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['auxiliars']; ?>/llistat-presons">Taula presons</a></li>
             </ul>
 
             <h6>Detinguts Guàrdia Urbana Terrassa</h6>

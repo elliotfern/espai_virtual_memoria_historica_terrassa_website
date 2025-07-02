@@ -38,6 +38,7 @@ import { taulaMotiusDetencio } from './taulaMotiusDetencio';
 import { taulaGrupsRepressio } from './taulaGrupsRepressio';
 import { fetchDataGet } from '../../../services/fetchData/fetchDataGet';
 import { auxiliarSelect } from '../../../services/fetchData/auxiliarSelect';
+import { taulaPresons } from './taulaPresons';
 
 export async function auxiliars() {
   const url = window.location.href;
@@ -436,7 +437,6 @@ export async function auxiliars() {
     }
     const id = pageType[3];
     const data = await fetchDataGet<Fitxa>(`/api/auxiliars/get/sistemaRepressiuID?id=${id}`);
-    console.log(data);
     if (data && data.status === 'success') {
       await auxiliarSelect(data.data.grup_institucio, 'sistemaRepressiuGrup', 'grup_institucio', 'grup');
     }
@@ -449,5 +449,53 @@ export async function auxiliars() {
     }
   } else if (pageType[2] === 'llistat-grups-repressio') {
     taulaGrupsRepressio();
+  } else if (pageType[2] === 'nova-preso') {
+    auxiliarSelect(null, 'municipis', 'municipi_preso', 'ciutat');
+    const btn1 = document.getElementById('refreshButton1');
+    if (btn1) {
+      btn1.addEventListener('click', function (event) {
+        event.preventDefault();
+        auxiliarSelect(null, 'municipis', 'municipi_preso', 'ciutat');
+      });
+    }
+
+    const presoForm = document.getElementById('presoForm');
+    if (presoForm) {
+      presoForm.addEventListener('submit', function (event) {
+        transmissioDadesDB(event, 'POST', 'presoForm', API_URLS.POST.PRESO, true);
+      });
+    }
+  } else if (pageType[2] === 'modifica-preso') {
+    interface Fitxa {
+      [key: string]: unknown;
+      status: string;
+      message: string;
+      data: {
+        municipi_preso: number;
+      };
+    }
+    const id = pageType[3];
+    const data = await fetchDataGet<Fitxa>(`/api/auxiliars/get/presonsID?id=${id}`);
+    if (data && data.status === 'success') {
+      await auxiliarSelect(data.data.municipi_preso, 'municipis', 'municipi_preso', 'ciutat');
+    }
+
+    const btn1 = document.getElementById('refreshButton1');
+
+    if (btn1 && data) {
+      btn1.addEventListener('click', function (event) {
+        event.preventDefault();
+        auxiliarSelect(data.data.municipi_preso, 'municipis', 'municipi_preso', 'ciutat');
+      });
+    }
+
+    const presoForm = document.getElementById('presoForm');
+    if (presoForm) {
+      presoForm.addEventListener('submit', function (event) {
+        transmissioDadesDB(event, 'PUT', 'presoForm', API_URLS.PUT.PRESO);
+      });
+    }
+  } else if (pageType[2] === 'llistat-presons') {
+    taulaPresons();
   }
 }

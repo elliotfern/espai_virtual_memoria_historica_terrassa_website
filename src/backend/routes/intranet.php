@@ -93,13 +93,40 @@ $routes = [
         'view' => BACKEND_URL . $urlIntranetDir['base_dades'] . '/modifica_fitxa_tipus_repressio.php'
     ]),
 
-    // empresonaments
+    // empresonaments TERRASSA
     APP_INTRANET . '/base-dades/empresonaments/modifica-empresonament/{idPersona}/{id}' => array_merge($defaultProtectedConfig, [
         'view' => BACKEND_URL . $urlIntranetDir['base_dades'] . '/tipus_repressio/1_represaliats/detinguts_guardia_urbana.php'
     ]),
 
     APP_INTRANET . '/base-dades/empresonaments/nou-empresonament/{idPersona}' => array_merge($defaultProtectedConfig, [
         'view' => BACKEND_URL . $urlIntranetDir['base_dades'] . '/tipus_repressio/1_represaliats/detinguts_guardia_urbana.php'
+    ]),
+
+    // empresonaments PRESO MODEL
+    APP_INTRANET . '/base-dades/empresonaments-preso-model/modifica-empresonament/{idPersona}/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['base_dades'] . '/tipus_repressio/1_represaliats/detinguts_preso_model.php'
+    ]),
+
+    APP_INTRANET . '/base-dades/empresonaments-preso-model/nou-empresonament/{idPersona}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['base_dades'] . '/tipus_repressio/1_represaliats/detinguts_preso_model.php'
+    ]),
+
+    // detinguts COMITE SOLIDARITAT
+    APP_INTRANET . '/base-dades/empresonaments-comite-solidaritat/modifica-empresonament/{idPersona}/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['base_dades'] . '/tipus_repressio/1_represaliats/detinguts_comite_solidaritat.php'
+    ]),
+
+    APP_INTRANET . '/base-dades/empresonaments-comite-solidaritat/nou-empresonament/{idPersona}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['base_dades'] . '/tipus_repressio/1_represaliats/detinguts_comite_solidaritat.php'
+    ]),
+
+    // detinguts COMITE RELACIONS SOLIDARITAT
+    APP_INTRANET . '/base-dades/empresonaments-comite-relacions-solidaritat/modifica-empresonament/{idPersona}/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['base_dades'] . '/tipus_repressio/1_represaliats/detinguts_comite_relacions_solidaritat.php'
+    ]),
+
+    APP_INTRANET . '/base-dades/empresonaments-comite-relacions-solidaritat/nou-empresonament/{idPersona}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['base_dades'] . '/tipus_repressio/1_represaliats/detinguts_comite_relacions_solidaritat.php'
     ]),
 
     // 2. Pàgines taules auxiliars
@@ -514,6 +541,19 @@ $routes = [
 
     APP_INTRANET . $urlIntranet['auxiliars'] . '/modifica-grup-repressio/{id}' => array_merge($defaultProtectedConfig, [
         'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-grup-repressio.php'
+    ]),
+
+    // presons
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/llistat-presons' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/llistat-presons.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/nova-preso' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-preso.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/modifica-preso/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-preso.php'
     ]),
 
     // Gestió familiars

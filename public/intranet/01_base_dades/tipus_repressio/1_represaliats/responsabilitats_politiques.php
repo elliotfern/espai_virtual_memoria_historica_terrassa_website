@@ -19,17 +19,30 @@
                     <label for="lloc_empresonament" class="form-label negreta">Si va ser empresonat, lloc:</label>
                     <select class="form-select" id="lloc_empresonament" name="lloc_empresonament">
                     </select>
+                    <div class="mt-2">
+                        <a href="<?php echo APP_WEB . APP_INTRANET . $url['auxiliars'] ?>/nova-preso" target="_blank" class="btn btn-secondary btn-sm" id="afegir1">Afegir presó</a>
+                        <button id="refreshButton1" class="btn btn-primary btn-sm">Actualitzar llistat</button>
+                    </div>
+
                 </div>
 
                 <div class="col-md-4 mb-4">
                     <label for="lloc_exili" class="form-label negreta">Si va anar a l'exili, país:</label>
                     <select class="form-select" id="lloc_exili" name="lloc_exili">
                     </select>
+                    <div class="mt-2">
+                        <a href="<?php echo APP_WEB . APP_INTRANET . $url['auxiliars'] ?>/nou-estat" target="_blank" class="btn btn-secondary btn-sm" id="afegir2">Afegir país</a>
+                        <button id="refreshButton2" class="btn btn-primary btn-sm">Actualitzar llistat</button>
+                    </div>
+
                 </div>
 
                 <div class="col-md-12 mb-4">
                     <label for="condemna" class="form-label negreta">Condemna:</label>
                     <textarea class="form-control" id="condemna" name="condemna" rows="4"></textarea>
+                    <div class="avis-form">
+                        * Camp obligatori
+                    </div>
                 </div>
 
                 <div class="col-md-12 mb-4">

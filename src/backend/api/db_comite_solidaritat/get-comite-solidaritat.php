@@ -20,27 +20,16 @@ header("Access-Control-Allow-Methods: GET");
 
 $slug = $routeParams[0];
 
-// GET : Pagina informacio fitxa Detingut Presó Model (pel formulari de modificació de dades)
-// URL: /api/preso_model/get/fitxaRepresaliat?id=${id}
+// GET : Pagina informacio fitxa Comitè solidaritat (pel formulari de modificació de dades)
+// URL: /api/comite_solidaritat/get/fitxaRepresaliat?id=${id}
 if ($slug === 'fitxaRepressio') {
     $id = $_GET['id'];
 
     $db = new Database();
 
-    $query = "SELECT 
-    id,
-    idPersona,
-    data_empresonament,
-    trasllats,
-    lloc_trasllat,
-    data_trasllat,
-    llibertat,
-    data_llibertat,
-    modalitat,
-    vicissituds,
-    observacions
-    FROM db_detinguts_model
-    WHERE id = :id";
+    $query = "SELECT id, idPersona, advocat, motiu, any_detencio, observacions
+            FROM db_detinguts_comite_solidaritat
+            WHERE id = :id";
 
     try {
         $params = [':id' => $id];
@@ -68,28 +57,17 @@ if ($slug === 'fitxaRepressio') {
         );
     }
 
-    // GET : fitxa WEB PUBLICA - detingut Presó Model ID
-    // URL: /api/preso_model/get/fitxaId?id=${id}
+    // GET : fitxa Web publica - detingut comitè solidaritat ID
+    // URL: /api/comite_solidaritat/get/fitxaId?id=${id}
 } elseif ($slug === 'fitxaId') {
     $id = $_GET['id'];
 
     $db = new Database();
 
-    $query = "SELECT 
-    p.id,
-    p.idPersona,
-    p.data_empresonament,
-    p.trasllats,
-    p.lloc_trasllat,
-    p.data_trasllat,
-    p.llibertat,
-    p.data_llibertat,
-    m.modalitat_ca AS modalitat,
-    p.vicissituds,
-    p.observacions
-    FROM db_detinguts_model AS p
-    LEFT JOIN aux_modalitat_preso AS m ON p.modalitat = m.id
-    WHERE idPersona = :idPersona";
+    $query = "SELECT c.id, c.idPersona, c.advocat, me.motiuEmpresonament_ca AS motiu, c.any_detencio, c.observacions
+        FROM db_detinguts_comite_solidaritat AS c
+        LEFT JOIN aux_motius_empresonament AS me ON c.motiu = me.id
+        WHERE c.idPersona = :idPersona";
 
     try {
         $params = [':idPersona' => $id];
@@ -117,19 +95,16 @@ if ($slug === 'fitxaRepressio') {
         );
     }
 
-    // GET : Llistat empresonants Preso Model represaliat ID
-    // URL: /api/preso_model/get/empresonatId?id=${id}
+    // GET : Llistat empresonaments comitè solidaritat ID
+    // URL: /api/comite_solidaritat/get/empresonatId?id=${id}
 } elseif ($slug === 'empresonatId') {
     $id = $_GET['id'];
     $db = new Database();
 
-    $query = "SELECT 
-            id,
-            idPersona,
-            data_empresonament,
-            data_llibertat
-            FROM db_detinguts_model
-            WHERE idPersona = :idPersona";
+    $query = "SELECT c.id, c.idPersona, c.advocat, e.motiuEmpresonament_ca AS motiu, c.any_detencio, c.observacions
+            FROM db_detinguts_comite_solidaritat AS c
+            LEFT JOIN aux_motius_empresonament AS e ON c.motiu = e.id
+            WHERE c.idPersona = :idPersona";
 
     try {
         $params = [':idPersona' => $id];
