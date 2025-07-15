@@ -1,4 +1,4 @@
-name: Deploy Symfony Backend
+name: Deploy Memoria Historica web
 
 on:
   push:
