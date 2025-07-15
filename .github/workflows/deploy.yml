@@ -56,13 +56,6 @@ jobs:
             cd /home/epgylzqu/memoriaterrassa.cat
             git pull origin main
 
-            # Limpiar caché de Symfony
-            php bin/console cache:clear --env=prod
-
-            # Ejecutar migraciones de base de datos si es necesario
-            # php bin/console doctrine:migrations:migrate --no-interaction
-            
             # Otros comandos de deploy si es necesario
-            # php bin/console assets:install --env=prod
             # composer install --no-dev --optimize-autoloader
           EOF
