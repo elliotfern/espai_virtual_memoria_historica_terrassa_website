@@ -97,8 +97,8 @@ if ($slug === 'fitxaRepressio') {
     $query = "SELECT 
     p.id,
     p.idPersona,
-    data_detencio,
-    lloc_detencio,
+    p.data_detencio,
+    m2.ciutat AS lloc_detencio,
     p.copia_exp,
     pj.procediment_ca AS tipus_procediment,
     tp.tipusJudici_ca AS tipus_judici,
@@ -134,6 +134,7 @@ if ($slug === 'fitxaRepressio') {
     LEFT JOIN aux_acusacions AS a2 ON p.acusacio_2 = a2.id
     LEFT JOIN aux_sentencies AS se ON p.sentencia = se.id
     LEFT JOIN aux_penes AS pe ON p.pena = pe.id
+    LEFT JOIN aux_dades_municipis AS m2 ON p.lloc_detencio = m2.id
     WHERE idPersona = :idPersona";
 
     try {

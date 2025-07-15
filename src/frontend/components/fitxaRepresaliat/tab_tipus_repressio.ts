@@ -238,7 +238,7 @@ export const fitxaTipusRepressio = async (categoriaNumerica: string, fitxa2: Fit
       htmlContent += contingutHtmlAfusellat;
     } else if (parseInt(categoriaNumerica) === 6) {
       const dataDetencio = dada.data_detencio && dada.data_detencio.trim() !== '' ? formatDatesForm(dada.data_detencio) : 'Desconeguda';
-      const llocDetencio = dada.lloc_detencio && dada.lloc_detencio.trim() !== '' ? dada.lloc_detencio : 'Desconegut';
+      const llocDetencio = valorTextDesconegut(dada.lloc_detencio, 1);
 
       const tipusProcediment = dada.tipus_procediment && dada.tipus_procediment.trim() !== '' ? dada.tipus_procediment : 'Desconegut';
       const tipusJudici = dada.tipus_judici && dada.tipus_judici.trim() !== '' ? dada.tipus_judici : 'Desconegut';

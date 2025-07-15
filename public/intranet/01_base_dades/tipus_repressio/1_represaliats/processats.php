@@ -94,6 +94,28 @@
                     </ul>
                 </div>
 
+                <div class="alert alert-info">
+                    <h5>Codi Penal que s'aplicava durant els consells de guerra: determinació de les sentències i les penes</h5>
+                    * Més greu: Adhesión a la rebelión:
+                    <ul>
+                        <li>Pena de mort</li>
+                        <li>Entre 30 i 20 anys i 1 día de reclusió major</li>
+                    </ul>
+
+                    * Auxili a la rebelió:
+                    <ul>
+                        <li>20 anys i 1 dia de reclusió menor</li>
+                        <li>Penes d'1 any de presó menor</li>
+                    </ul>
+
+                    * Excitació a la rebelió:
+                    <ul>
+                        <li>12 anys de presó major</li>
+                        <li>Penes d'1 any de presó menor</li>
+                        <li>Fins a 6 mesos de presó</li>
+                    </ul>
+                </div>
+
                 <div class="col-md-6 mb-4">
                     <label for="sentencia" class="form-label negreta">Sentència:</label>
                     <select class="form-select" aria-label="Default select example" name="sentencia" id="sentencia">
