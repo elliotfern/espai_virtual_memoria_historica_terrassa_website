@@ -38,6 +38,12 @@ jobs:
           cd ${{ github.workspace }}  # Cambia a la carpeta del repositorio
           npm run build  # O "npm run dev" según necesites
 
+      # 6. Agregar la clave del servidor remoto a known_hosts
+      - name: Add server to known_hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H 87.98.230.129 >> ~/.ssh/known_hosts
+
       # 6. Subir los archivos generados al servidor
       - name: Upload built assets to server
         run: |
