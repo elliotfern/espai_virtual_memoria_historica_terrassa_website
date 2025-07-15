@@ -29,19 +29,19 @@ jobs:
       # 4. Instalar dependencias de Node.js
       - name: Install dependencies (npm)
         run: |
-          cd /home/runner/work/memoriaterrassa.cat/memoriaterrassa.cat
+          cd ${{ github.workspace }}  # Cambia a la carpeta del repositorio
           npm install  # O "yarn install" si usas Yarn
 
       # 5. Ejecutar Webpack para construir los assets
       - name: Build assets with Webpack
         run: |
-          cd /home/runner/work/memoriaterrassa.cat/memoriaterrassa.cat
+          cd ${{ github.workspace }}  # Cambia a la carpeta del repositorio
           npm run build  # O "npm run dev" según necesites
 
       # 6. Subir los archivos generados al servidor
       - name: Upload built assets to server
         run: |
-          scp -r /home/runner/work/memoriaterrassa.cat/memoriaterrassa.cat/dist/* epgylzqu@87.98.230.129:/home/epgylzqu/memoriaterrassa.cat/public_html/assets
+          scp -r ${{ github.workspace }}/dist/* epgylzqu@87.98.230.129:/home/epgylzqu/memoriaterrassa.cat/public_html/assets
 
       # 7. Desplegar en el servidor via SSH
       - name: Deploy to server via SSH
