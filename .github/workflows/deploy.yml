@@ -54,6 +54,10 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no epgylzqu@87.98.230.129 << 'EOF'
             cd /home/epgylzqu/memoriaterrassa.cat
+
+            # Verificar si hay cambios locales y guardarlos
+            git stash || echo "No hay cambios locales para guardar"
+
             git pull origin main
 
             # Otros comandos de deploy si es necesario
