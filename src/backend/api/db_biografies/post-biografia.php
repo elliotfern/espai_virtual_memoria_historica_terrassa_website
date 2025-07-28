@@ -51,11 +51,6 @@ $data = json_decode($inputData, true);
 // Inicializar un array para los errores
 $errors = [];
 
-/* Validación de los datos recibidos
-if (empty($data['biografiaCa'])) {
-    $errors[] = 'El camp biografia és obligatori.';
-}
-*/
 // Si hay errores, devolver una respuesta con los errores
 if (!empty($errors)) {
     http_response_code(400); // Bad Request

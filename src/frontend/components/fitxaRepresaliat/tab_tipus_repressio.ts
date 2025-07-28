@@ -359,8 +359,8 @@ export const fitxaTipusRepressio = async (categoriaNumerica: string, fitxa2: Fit
       const dadesPrimerDesti = dada.dades_lloc_primer_desti && dada.dades_lloc_primer_desti.trim() !== '' ? dada.dades_lloc_primer_desti : 'Sense dades';
 
       const peripleExili = dada.periple_recorregut && dada.periple_recorregut.trim() !== '' ? dada.periple_recorregut : 'Sense dades';
-      const deportat = dada.deportat === '1' ? 'Sí' : 'No';
-      const resistencia = dada.participacio_resistencia === '1' ? 'Sí' : 'No';
+      const deportat = dada.deportat === 1 ? 'Sí' : 'No';
+      const resistencia = dada.participacio_resistencia === 1 ? 'Sí' : 'No';
       const dadesResistencia = dada.dades_resistencia && dada.dades_resistencia.trim() !== '' ? dada.dades_resistencia : 'Sense dades';
       const activitatPolitica = dada.activitat_politica_exili && dada.activitat_politica_exili.trim() !== '' ? dada.activitat_politica_exili : 'Sense dades';
       const activitatSindical = dada.activitat_sindical_exili && dada.activitat_sindical_exili.trim() !== '' ? dada.activitat_sindical_exili : 'Sense dades';

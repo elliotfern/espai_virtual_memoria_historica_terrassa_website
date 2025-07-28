@@ -132,10 +132,10 @@ export interface FitxaJudicial {
   tipologia_primer_desti: string;
   dades_lloc_primer_desti: string;
   periple_recorregut: string;
-  deportat: string;
+  deportat: number;
   ultim_desti_exili: string;
   tipologia_ultim_desti: string;
-  participacio_resistencia: string;
+  participacio_resistencia: number;
   dades_resistencia: string;
   activitat_politica_exili: string;
   activitat_sindical_exili: string;

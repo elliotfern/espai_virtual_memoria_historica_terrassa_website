@@ -64,6 +64,9 @@ if (!is_numeric($data['id']) || !is_numeric($data['idRepresaliat'])) {
     exit;
 }
 
+$id = $data['id'];
+$idRepresaliat = $data['idRepresaliat'];
+
 $sqlCheck = "SELECT COUNT(*) FROM `" . Tables::DB_BIOGRAFIES . "` WHERE id = :id";
 $stmtCheck = $conn->prepare($sqlCheck);
 $stmtCheck->bindParam(':id', $id, PDO::PARAM_INT);
@@ -87,8 +90,6 @@ $biografiaCa = !empty($data['biografiaCa']) ? sanitizeHtml($data['biografiaCa'])
 $biografiaEs = !empty($data['biografiaEs']) ? sanitizeHtml($data['biografiaEs']) : NULL;
 $biografiaEn = !empty($data['biografiaEn']) ? sanitizeHtml($data['biografiaEn']) : NULL;
 
-$idRepresaliat =  $data['idRepresaliat'];
-$id = $data['id'];
 
 // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
 try {
