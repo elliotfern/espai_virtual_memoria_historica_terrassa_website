@@ -58,7 +58,8 @@ jobs:
             # Verificar si hay cambios locales y guardarlos
             git stash || echo "No hay cambios locales para guardar"
 
-            git pull origin main
+            git fetch origin main
+            git reset --hard origin/main
 
             # Otros comandos de deploy si es necesario
             # composer install --no-dev --optimize-autoloader
