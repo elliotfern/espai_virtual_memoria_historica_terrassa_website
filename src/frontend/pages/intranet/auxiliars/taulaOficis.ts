@@ -20,7 +20,15 @@ type Column<T> = {
   render?: (value: T[keyof T], row: T) => string;
 };
 
+// Estado global para mantener la paginación, búsqueda y filtros
+let currentPageOficis = 1;
+let currentSearchText = '';
+let currentFilterValue: EspaiRow[keyof EspaiRow] | null = null;
+
 export async function taulaOficis() {
+  const container = document.getElementById('taulaOficis');
+  if (container) container.innerHTML = '';
+
   const isAdmin = await getIsAdmin();
   const isAutor = await getIsAutor();
   const reloadKey = 'reload-taula-taulaOficis';
@@ -31,7 +39,10 @@ export async function taulaOficis() {
     columns.push({
       header: 'Accions',
       field: 'id',
-      render: (_: unknown, row: EspaiRow) => `<a id="${row.id}" title="Modifica" href="https://${window.location.hostname}/gestio/auxiliars/modifica-ofici/${row.id}"><button type="button" class="btn btn-warning btn-sm">Modifica</button></a>`,
+      render: (_: unknown, row: EspaiRow) =>
+        `<a id="${row.id}" title="Modifica" href="https://${window.location.hostname}/gestio/auxiliars/modifica-ofici/${row.id}">
+           <button type="button" class="btn btn-warning btn-sm">Modifica</button>
+         </a>`,
     });
   }
 
@@ -52,17 +63,27 @@ export async function taulaOficis() {
     });
   }
 
-  renderTaulaCercadorFiltres<EspaiRow>({
+  const result = await renderTaulaCercadorFiltres<EspaiRow>({
     url: API_URLS.GET.OFICIS,
     containerId: 'taulaOficis',
     columns,
     filterKeys: ['ofici_cat'],
-    //filterByField: 'provincia',
+    initialPage: currentPageOficis,
+    initialSearch: currentSearchText,
+    initialFilterValue: currentFilterValue,
   });
 
-  // Registra el callback con una clave única
-  registerDeleteCallback(reloadKey, () => taulaOficis());
+  // Guardar el estado actual para mantenerlo en la siguiente recarga
+  currentPageOficis = result.page;
+  currentSearchText = result.search;
+  currentFilterValue = result.filter;
 
-  // Inicia el listener una sola vez
+  console.log('Estado actualizado:', currentPageOficis, currentSearchText, currentFilterValue);
+
+  registerDeleteCallback(reloadKey, async () => {
+    console.log('Recargando tabla con página', currentPageOficis);
+    await taulaOficis();
+  });
+
   initDeleteHandlers();
 }

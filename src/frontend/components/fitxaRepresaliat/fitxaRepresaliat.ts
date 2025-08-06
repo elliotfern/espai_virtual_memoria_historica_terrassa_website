@@ -506,12 +506,31 @@ async function mostrarInformacion(tab: string, idPersona: string, label: string)
         `;
       });
       break;
-    case 'tab5':
+
+    // Biografia
+    case 'tab5': {
+      let bioHtml: string;
+
+      if (fitxa.biografiaCa) {
+        bioHtml = `<span class='blau1 normal'>${fitxa.biografiaCa}</span>`;
+      } else if (fitxa.biografiaEs) {
+        bioHtml = `
+      <div class="alert alert-warning">
+        La biografia en català no està disponible, però hi ha disponible la versió en castellà.
+      </div>
+      <span class='blau1 normal'>${fitxa.biografiaEs}</span>
+    `;
+      } else {
+        bioHtml = 'La biografia no està disponible.';
+      }
+
       divInfo.innerHTML = `
-        <h3 class="titolSeccio">${label}</h3>
-        ${fitxa.biografiaCa ? `<span class='blau1 normal'>${fitxa.biografiaCa}</span>` : 'La biografia no està disponible.'}
-      `;
+    <h3 class="titolSeccio">${label}</h3>
+    ${bioHtml}
+  `;
       break;
+    }
+
     case 'tab6': {
       divInfo.innerHTML = `<div id="bibliografia"></div>`;
       // Obtener el contenedor recién creado

@@ -406,4 +406,54 @@ if ($slug === "municipi") {
         http_response_code(500);
         echo json_encode(['status' => 'error', 'message' => 'Error del servidor']);
     }
+
+    // 1) DELETE ofici
+    // ruta DELETE => "/api/auxiliars/delete/ofici/{id}"
+} else if ($slug === "ofici") {
+
+    global $conn;
+    /** @var PDO $conn */
+
+    $id = $id ?? null;
+    if (!$id) {
+        http_response_code(400);
+        echo json_encode(['status' => 'error', 'message' => 'ID no proporcionat']);
+        exit;
+    }
+
+    // Opcional: evitar eliminar si ofici no existe
+    $stmtCheck = $conn->prepare("SELECT id, ofici_cat FROM aux_oficis WHERE id = :id");
+    $stmtCheck->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmtCheck->execute();
+
+    $ofici = $stmtCheck->fetch(PDO::FETCH_ASSOC);
+
+    if (!$ofici) {
+        http_response_code(404);
+        echo json_encode(['status' => 'error', 'message' => 'Registre no trobat']);
+        exit;
+    }
+
+    $detalls = "Eliminació ofici";
+    $tipusOperacio = "DELETE";
+
+    try {
+        $stmt = $conn->prepare("DELETE FROM aux_oficis WHERE id = :id");
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+
+        Audit::registrarCanvi(
+            $conn,
+            $userId,                      // ID del usuario que hace el cambio
+            $tipusOperacio,             // Tipus operacio
+            $detalls,                       // Descripción de la operación
+            Tables::AUX_OFICIS,  // Nombre de la tabla afectada
+            $id                           // ID del registro modificada
+        );
+
+        echo json_encode(['status' => 'success', 'message' => 'Ofici eliminat']);
+    } catch (PDOException $e) {
+        http_response_code(500);
+        echo json_encode(['status' => 'error', 'message' => 'Error del servidor']);
+    }
 }

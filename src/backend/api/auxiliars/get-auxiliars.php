@@ -604,10 +604,11 @@ if ($slug === "municipis") {
     // GET : Llistat llibres bibliografia
     // URL: /api/auxiliars/get/llistat_llibres_bibliografia
 } elseif ($slug === 'llistat_llibres_bibliografia') {
-    $query = "SELECT l.id, l.llibre, l.autor, l.any,
-                     CONCAT(l.autor, ', ', SUBSTRING(l.llibre, 1, 40), '...', ', ', l.any) AS llibre
-              FROM aux_bibliografia_llibre_detalls AS l
-              ORDER BY l.llibre ASC";
+    $query = "SELECT 
+        l.id,
+        CONCAT(l.autor, ', ', SUBSTRING(l.llibre, 1, 40), '...', ', ', l.any) AS llibre
+        FROM aux_bibliografia_llibre_detalls AS l
+        ORDER BY l.autor ASC;";
 
     $result = getData2($query);
     echo json_encode($result);

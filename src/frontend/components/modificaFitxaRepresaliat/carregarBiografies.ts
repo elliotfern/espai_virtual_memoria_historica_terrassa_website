@@ -8,6 +8,7 @@ type Biografia = {
   biografiaIt?: string | null;
   biografiaPt?: string | null;
 };
+
 export async function carregarBiografies(id: number | string): Promise<void> {
   const quadre = document.getElementById('quadreBiografies');
   if (!quadre) return;
@@ -18,15 +19,13 @@ export async function carregarBiografies(id: number | string): Promise<void> {
     const response = await fetch(`https://memoriaterrassa.cat/api/biografies/get/fitxaBiografia?id=${id}`);
     const data: Biografia[] = await response.json();
 
-    // Validar que hay al menos un resultado
-
-    if (Array.isArray(data) && data.length > 0 && data[0].biografiaCa) {
-      crearBoto(id, true);
-    } else {
+    if (!Array.isArray(data) || data.length === 0) {
       crearBoto(id, false);
       quadre.innerHTML = '<div class="alert alert-warning">Biografia no disponible.</div>';
       return;
     }
+
+    crearBoto(id, true);
 
     const bio = data[0];
 
@@ -39,10 +38,11 @@ export async function carregarBiografies(id: number | string): Promise<void> {
       biografiaPt: 'Portugués',
     };
 
+    // Filtramos biografías con contenido real
     const biografiesDisponibles = Object.entries(traducciones)
       .filter(([key]) => {
         const valor = bio[key as keyof Biografia];
-        return typeof valor === 'string' && valor.trim() !== '';
+        return typeof valor === 'string' && valor.trim().length > 0;
       })
       .map(([key, idioma]) => ({
         key,
@@ -50,12 +50,13 @@ export async function carregarBiografies(id: number | string): Promise<void> {
         html: bio[key as keyof Biografia] as string,
       }));
 
+    // Si no hay ninguna biografía con contenido, mostramos un mensaje
     if (biografiesDisponibles.length === 0) {
       quadre.innerHTML = '<div class="alert alert-warning">Biografia no disponible.</div>';
       return;
     }
 
-    // Crear tabs Bootstrap
+    // Crear tabs de Bootstrap dinámicamente
     const navTabs = document.createElement('ul');
     navTabs.className = 'nav nav-tabs mb-3';
     navTabs.role = 'tablist';
@@ -63,40 +64,49 @@ export async function carregarBiografies(id: number | string): Promise<void> {
     const tabContent = document.createElement('div');
     tabContent.className = 'tab-content';
 
-    biografiesDisponibles.forEach((bio, index) => {
-      const isActive = index === 0 ? 'active' : '';
+    biografiesDisponibles.forEach((bioItem, index) => {
+      const isActive = index === 0;
 
+      // Tab
       const li = document.createElement('li');
       li.className = 'nav-item';
 
       const button = document.createElement('button');
-      button.className = `nav-link ${isActive}`;
-      button.id = `tab-${bio.key}`;
+      button.className = `nav-link${isActive ? ' active' : ''}`;
+      button.id = `tab-${bioItem.key}`;
       button.setAttribute('data-bs-toggle', 'tab');
-      button.setAttribute('data-bs-target', `#pane-${bio.key}`);
+      button.setAttribute('data-bs-target', `#pane-${bioItem.key}`);
       button.type = 'button';
       button.role = 'tab';
-      button.setAttribute('aria-controls', `pane-${bio.key}`);
-      button.setAttribute('aria-selected', `${index === 0}`);
-      button.textContent = bio.idioma;
+      button.setAttribute('aria-controls', `pane-${bioItem.key}`);
+      button.setAttribute('aria-selected', isActive.toString());
+      button.textContent = bioItem.idioma;
 
       li.appendChild(button);
       navTabs.appendChild(li);
 
+      // Contenido del tab
       const pane = document.createElement('div');
-      pane.style.padding = '20px';
-      pane.className = `tab-pane fade ${isActive} show`;
-      pane.id = `pane-${bio.key}`;
+      pane.className = `tab-pane fade${isActive ? ' show active' : ''}`;
+      pane.id = `pane-${bioItem.key}`;
       pane.role = 'tabpanel';
-      pane.setAttribute('aria-labelledby', `tab-${bio.key}`);
-      pane.innerHTML = bio.html;
+      pane.setAttribute('aria-labelledby', `tab-${bioItem.key}`);
+      pane.style.padding = '20px';
+      pane.innerHTML = bioItem.html;
 
       tabContent.appendChild(pane);
     });
 
+    // Reemplazar contenido del cuadro con las tabs
     quadre.innerHTML = '';
     quadre.appendChild(navTabs);
     quadre.appendChild(tabContent);
+
+    // Garantizar que la primera pestaña queda activa
+    const firstTab = tabContent.querySelector('.tab-pane');
+    if (firstTab && !firstTab.classList.contains('show')) {
+      firstTab.classList.add('show', 'active');
+    }
   } catch (error) {
     console.error('Error carregant biografies:', error);
     quadre.innerHTML = '<div class="alert alert-danger">Error carregant les dades.</div>';
@@ -136,6 +146,5 @@ function crearBoto(idPersona: number | string, tieneBiografia: boolean) {
 
   div.appendChild(updateBtn);
   div.appendChild(link);
-
   container.appendChild(div);
 }

@@ -11,54 +11,45 @@ type RenderTableOptions<T> = {
   rowsPerPage?: number;
   filterKeys?: (keyof T)[];
   filterByField?: keyof T;
-  showSearch?: boolean; // Nuevo parámetro para controlar la visibilidad del buscador
-  showPagination?: boolean; // Nuevo parámetro para controlar la visibilidad de la paginación
+  showSearch?: boolean;
+  showPagination?: boolean;
+  initialPage?: number;
+  initialSearch?: string;
+  initialFilterValue?: T[keyof T] | null;
 };
 
-export async function renderTaulaCercadorFiltres<T>({
-  url,
-  columns,
-  containerId,
-  rowsPerPage = 15,
-  filterKeys = [],
-  filterByField,
-  showSearch = true, // Valor por defecto es true para mantener la compatibilidad
-  showPagination = true, // Valor por defecto es true para mantener la compatibilidad
-}: RenderTableOptions<T>) {
+export async function renderTaulaCercadorFiltres<T>({ url, columns, containerId, rowsPerPage = 15, filterKeys = [], filterByField, showSearch = true, showPagination = true, initialPage = 1, initialSearch = '', initialFilterValue = null }: RenderTableOptions<T>): Promise<{ page: number; search: string; filter: T[keyof T] | null }> {
   const container = document.getElementById(containerId);
-  if (!container) return console.error(`Contenedor #${containerId} no encontrado`);
+  if (!container) {
+    console.error(`Contenedor #${containerId} no encontrado`);
+    return { page: initialPage, search: initialSearch, filter: initialFilterValue };
+  }
 
   const response = await fetch(url);
   const result = await response.json();
 
   if (result.status === 'error') {
     container.innerHTML = `<div class="alert alert-info">${result.message || 'No hi ha dades.'}</div>`;
-    return;
+    return { page: initialPage, search: initialSearch, filter: initialFilterValue };
   }
 
   let data: T[];
-
-  if (Array.isArray(result)) {
-    // Caso: respuesta es un array directamente
-    data = result;
-  } else if (Array.isArray(result.data)) {
-    // Caso: respuesta es un objeto con `data` como array
-    data = result.data;
-  } else if (result.data) {
-    // Caso: respuesta es un objeto con un único objeto como `data`
-    data = [result.data];
-  } else {
+  if (Array.isArray(result)) data = result;
+  else if (Array.isArray(result.data)) data = result.data;
+  else if (result.data) data = [result.data];
+  else {
     container.innerHTML = `<div class="alert alert-info">No s'han trobat dades vàlides.</div>`;
-    return;
+    return { page: initialPage, search: initialSearch, filter: initialFilterValue };
   }
 
-  let currentPage = 1;
+  let currentPage = initialPage;
   let filteredData = [...data];
-  let activeButtonFilter: T[keyof T] | null = null;
+  let activeButtonFilter: T[keyof T] | null = initialFilterValue;
 
   const searchInput = document.createElement('input');
   searchInput.style.marginBottom = '15px';
   searchInput.placeholder = 'Cercar...';
+  searchInput.value = initialSearch;
 
   const buttonContainer = document.createElement('div');
   buttonContainer.className = 'filter-buttons';
@@ -88,18 +79,17 @@ export async function renderTaulaCercadorFiltres<T>({
     const search = normalizeText(searchInput.value);
     filteredData = data.filter((row) => !activeButtonFilter || row[filterByField!] === activeButtonFilter).filter((row) => (search.length === 0 ? true : filterKeys.some((key) => normalizeText(String(row[key])).includes(search))));
 
-    currentPage = 1;
+    const totalPages = Math.ceil(filteredData.length / rowsPerPage);
+    if (currentPage > totalPages) currentPage = Math.max(1, totalPages);
+
     renderTable();
   }
 
   function renderFilterButtons() {
     if (!filterByField) return;
 
-    let uniqueValues = Array.from(new Set(data.map((row) => row[filterByField]))).filter(Boolean) as T[keyof T][];
-
-    uniqueValues = uniqueValues.sort((a, b) => {
-      return String(a).localeCompare(String(b), 'ca', { sensitivity: 'base' });
-    });
+    const uniqueValues = Array.from(new Set(data.map((row) => row[filterByField]))).filter(Boolean) as T[keyof T][];
+    uniqueValues.sort((a, b) => String(a).localeCompare(String(b), 'ca', { sensitivity: 'base' }));
 
     buttonContainer.innerHTML = '';
 
@@ -123,9 +113,13 @@ export async function renderTaulaCercadorFiltres<T>({
         applyFilters();
       };
       buttonContainer.appendChild(button);
+
+      if (activeButtonFilter && activeButtonFilter === value) {
+        updateActiveButton(button);
+      }
     });
 
-    updateActiveButton(allButton);
+    if (!activeButtonFilter) updateActiveButton(allButton);
   }
 
   function updateActiveButton(activeButton: HTMLButtonElement) {
@@ -173,8 +167,13 @@ export async function renderTaulaCercadorFiltres<T>({
     totalRecords.textContent = `Número total de registres: ${filteredData.length}`;
   }
 
+  container.innerHTML = '';
+
   if (showSearch) {
-    searchInput.addEventListener('input', applyFilters);
+    searchInput.addEventListener('input', () => {
+      currentPage = 1;
+      applyFilters();
+    });
     container.appendChild(searchInput);
   }
 
@@ -190,5 +189,18 @@ export async function renderTaulaCercadorFiltres<T>({
     container.appendChild(pagination);
   }
 
+  // Al final de renderTaulaCercadorFiltres
   applyFilters();
+
+  // <<-- Cambiar el return anterior por un getter dinámico >>
+  return new Promise((resolve) => {
+    // Esperar un ciclo de renderizado para devolver el estado final
+    setTimeout(() => {
+      resolve({
+        page: currentPage,
+        search: searchInput.value,
+        filter: activeButtonFilter,
+      });
+    }, 0);
+  });
 }

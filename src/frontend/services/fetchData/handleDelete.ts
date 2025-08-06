@@ -39,7 +39,7 @@ export function initDeleteHandlers() {
         alert('Registre eliminat correctament.');
 
         if (reloadKey && reloadCallbacks[reloadKey]) {
-          reloadCallbacks[reloadKey]();
+          await reloadCallbacks[reloadKey]();
         } else {
           const rowElement = button.closest('tr');
           if (rowElement) rowElement.remove();
@@ -52,4 +52,5 @@ export function initDeleteHandlers() {
       alert('Error de xarxa en eliminar el registre.');
     }
   });
+  return Promise.resolve();
 }

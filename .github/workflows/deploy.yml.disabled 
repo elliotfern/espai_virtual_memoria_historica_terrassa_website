@@ -1,6 +1,6 @@
 name: Deploy Memoria Historica web
 
-on:
+on: [none]
   push:
     branches:
       - main

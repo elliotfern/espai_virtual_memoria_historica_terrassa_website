@@ -52,7 +52,6 @@ if (!$userAdmin) {
     exit;
 }
 
-
 // 1) DELETE ref_bibliografica
 // ruta DELETE => "/api/fonts_documentals/delete/ref_bibliografica/{id}"
 if ($slug === 'ref_bibliografica') {
@@ -83,18 +82,22 @@ if ($slug === 'ref_bibliografica') {
     $dataHora = date('Y-m-d H:i:s');
     $idPersonaFitxa = NULL;
 
+    $detalls = "Eliminació de referència bibliografica";
+    $tipusOperacio = "DELETE";
+
     try {
         $stmt = $conn->prepare("DELETE FROM aux_bibliografia_llibres WHERE id = :id");
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
 
-        $stmtLog = $conn->prepare("INSERT INTO control_registre_canvis (idUser, idPersonaFitxa, tipusOperacio, dataHoraCanvi)
-  VALUES (:idUser, :idPersonaFitxa, :tipusOperacio, :dataHoraCanvi)");
-        $stmtLog->bindParam(':idUser', $userId);
-        $stmtLog->bindParam(':idPersonaFitxa', $idPersonaFitxa);
-        $stmtLog->bindParam(':tipusOperacio', $valor);
-        $stmtLog->bindParam(':dataHoraCanvi', $dataHora);
-        $stmtLog->execute();
+        Audit::registrarCanvi(
+            $conn,
+            $userId,                      // ID del usuario que hace el cambio
+            $tipusOperacio,             // Tipus operacio
+            $detalls,                       // Descripción de la operación
+            Tables::AUX_BIBLIOGRAFIA_LLIBRES,  // Nombre de la tabla afectada
+            $id                           // ID del registro modificada
+        );
 
         echo json_encode(['status' => 'success', 'message' => 'Familiar eliminat']);
     } catch (PDOException $e) {

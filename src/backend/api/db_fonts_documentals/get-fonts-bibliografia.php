@@ -47,7 +47,7 @@ if ($slug === 'llistatArxiusFonts') {
     $query = "SELECT l.id, l.llibre, l.autor, l.editorial, m.ciutat, l.any, l.volum
               FROM aux_bibliografia_llibre_detalls AS l
               LEFT JOIN aux_dades_municipis AS m ON l.ciutat = m.id
-              ORDER BY l.llibre";
+              ORDER BY l.autor";
 
     $result = getData2($query);
     echo json_encode($result);

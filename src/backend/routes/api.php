@@ -176,9 +176,22 @@ $routes = [
         'view' => BACKEND_API . '/db_fonts_documentals/put-fonts-documentals.php',
     ]),
 
+    APP_API . '/fonts/put/{slug}' => array_merge($defaultApiConfig, [
+        'view' => BACKEND_API . '/db_fonts_documentals/put-fonts-documentals.php',
+    ]),
+
+    APP_API . '/fonts/post/{slug}' => array_merge($defaultApiConfig, [
+        'view' => BACKEND_API . '/db_fonts_documentals/post-fonts-documentals.php',
+    ]),
+
+    APP_API . '/fonts/get/{slug}' => array_merge($defaultApiConfig, [
+        'view' => BACKEND_API . '/db_fonts_documentals/get-fonts-bibliografia.php',
+    ]),
+
     APP_API . $urlApi['fonts'] . '/delete/{slug}/{id}' => array_merge($defaultApiConfig, [
         'view' => BACKEND_API . '/db_fonts_documentals/delete-fonts-documentals.php',
     ]),
+
 
     // API db_cronologia
     '/api/cronologia/post' => ['view' => 'src/backend/api/cronologia/post-cronologia.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],

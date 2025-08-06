@@ -31,7 +31,6 @@ export async function taulaFamiliars(idRepressaliat: number) {
       field: 'anyNaixement',
       render: (value: string | number) => (value && String(value).trim() !== '' ? String(value) : 'Desconegut'),
     },
-
     { header: 'Relació de parentiu', field: 'relacio_parentiu' },
   ];
 
@@ -39,7 +38,10 @@ export async function taulaFamiliars(idRepressaliat: number) {
     columns.push({
       header: 'Accions',
       field: 'id',
-      render: (_: unknown, row: EspaiRow) => `<a id="${row.id}" title="Modifica" href="https://${window.location.hostname}/gestio/familiars/modifica-familiar/${row.idParent}/${row.id}/" target="_blank"><button type="button" class="btn btn-warning btn-sm">Modifica</button></a>`,
+      render: (_: unknown, row: EspaiRow) =>
+        `<a id="${row.id}" title="Modifica" href="https://${window.location.hostname}/gestio/familiars/modifica-familiar/${row.idParent}/${row.id}/" target="_blank">
+          <button type="button" class="btn btn-warning btn-sm">Modifica</button>
+        </a>`,
     });
   }
 
@@ -48,16 +50,22 @@ export async function taulaFamiliars(idRepressaliat: number) {
       header: '',
       field: 'id',
       render: (_: unknown, row: EspaiRow) => `
-    <button 
-      type="button"
-      class="btn btn-danger btn-sm delete-button"
-      data-id="${row.id}" 
-      data-url="/api/familiars/delete/${row.id}"
-      data-reload-callback="${reloadKey}"
-    >
-      Elimina
-    </button>`,
+        <button 
+          type="button"
+          class="btn btn-danger btn-sm delete-button"
+          data-id="${row.id}" 
+          data-url="/api/familiars/delete/${row.id}"
+          data-reload-callback="${reloadKey}"
+        >
+          Elimina
+        </button>`,
     });
+  }
+
+  // LIMPIAR CONTENEDOR ANTES DE RENDERIZAR NUEVAMENTE
+  const container = document.getElementById('quadreFamiliars');
+  if (container) {
+    container.innerHTML = '';
   }
 
   renderTaulaCercadorFiltres<EspaiRow>({
@@ -65,12 +73,10 @@ export async function taulaFamiliars(idRepressaliat: number) {
     containerId: 'quadreFamiliars',
     columns,
     filterKeys: ['nom_complet'],
-    //filterByField: 'provincia',
   });
 
-  // Registra el callback con una clave única
+  // Registrar la callback una sola vez por clave única
   registerDeleteCallback(reloadKey, () => taulaFamiliars(idRepressaliat));
 
-  // Inicia el listener una sola vez
-  initDeleteHandlers();
+  initDeleteHandlers(); // listener global, no se duplica gracias al flag
 }
