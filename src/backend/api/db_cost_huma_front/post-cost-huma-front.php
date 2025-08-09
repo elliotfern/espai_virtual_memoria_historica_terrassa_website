@@ -110,6 +110,8 @@ $periple_militar = !empty($data['periple_militar']) ? $data['periple_militar'] :
 $circumstancia_mort = $data['circumstancia_mort'];
 $desaparegut_lloc = !empty($data['desaparegut_lloc']) ? $data['desaparegut_lloc'] : NULL;
 $desaparegut_lloc_aparicio = !empty($data['desaparegut_lloc_aparicio']) ? $data['desaparegut_lloc_aparicio'] : NULL;
+$aparegut_observacions = !empty($data['aparegut_observacions']) ? $data['aparegut_observacions'] : NULL;
+$reaparegut = !empty($data['reaparegut']) ? $data['reaparegut'] : NULL;
 
 // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
 try {
@@ -132,7 +134,9 @@ try {
         desaparegut_data,
         desaparegut_lloc,
         desaparegut_data_aparicio,
-        desaparegut_lloc_aparicio
+        desaparegut_lloc_aparicio,
+        aparegut_observacions,
+        reaparegut
     ) VALUES (
         :idPersona,
         :condicio,
@@ -147,7 +151,9 @@ try {
         :desaparegut_data,
         :desaparegut_lloc,
         :desaparegut_data_aparicio,
-        :desaparegut_lloc_aparicio
+        :desaparegut_lloc_aparicio,
+        :aparegut_observacions,
+        :reaparegut
     )";
 
     // Preparar la consulta
@@ -168,6 +174,9 @@ try {
     $stmt->bindParam(':desaparegut_lloc', $desaparegut_lloc, PDO::PARAM_INT);
     $stmt->bindParam(':desaparegut_data_aparicio', $desaparegut_data_aparicioFormat, PDO::PARAM_STR);
     $stmt->bindParam(':desaparegut_lloc_aparicio', $desaparegut_lloc_aparicio, PDO::PARAM_INT);
+    $stmt->bindParam(':aparegut_observacions', $aparegut_observacions, PDO::PARAM_STR);
+    $stmt->bindParam(':reaparegut', $reaparegut, PDO::PARAM_INT);
+
 
     // Ejecutar la consulta
     $stmt->execute();

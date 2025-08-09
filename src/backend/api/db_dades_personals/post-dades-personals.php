@@ -163,7 +163,10 @@ $filiacio_politica = $data['filiacio_politica'] ?? null;
 $filiacio_sindical = $data['filiacio_sindical'] ?? null;
 $activitat_durant_guerra = $data['activitat_durant_guerra'] ?? null;
 $observacions = $data['observacions'] ?? null;
-$autor = $data['autor'] ?? null;
+$autor = $data['autor'];
+$autor2 = $data['autor2'] ?? null;
+$autor3 = $data['autor3'] ?? null;
+$colab1 = $data['colab1'] ?? null;
 $data_creacio =  date('Y-m-d');
 $data_actualitzacio = date('Y-m-d');
 $completat = $data['completat'] ?? 1;
@@ -181,13 +184,13 @@ try {
     municipi_defuncio, tipologia_lloc_defuncio, causa_defuncio, municipi_residencia, adreca,
     estat_civil, estudis, ofici, empresa, sector, sub_sector, carrec_empresa, filiacio_politica,
     filiacio_sindical, activitat_durant_guerra, observacions, autor, data_creacio,
-    data_actualitzacio, completat, visibilitat
+    data_actualitzacio, completat, visibilitat, autor2, autor3, colab1
     ) VALUES (
         :nom, :cognom1, :cognom2, :categoria, :sexe, :data_naixement, :data_defuncio, :municipi_naixement,
         :municipi_defuncio, :tipologia_lloc_defuncio, :causa_defuncio, :municipi_residencia, :adreca,
         :estat_civil, :estudis, :ofici, :empresa, :sector, :sub_sector, :carrec_empresa, :filiacio_politica,
         :filiacio_sindical, :activitat_durant_guerra, :observacions, :autor, :data_creacio,
-        :data_actualitzacio, :completat, :visibilitat
+        :data_actualitzacio, :completat, :visibilitat, :autor2, :autor3, :colab1
     )";
 
     // Preparar la consulta
@@ -219,6 +222,9 @@ try {
     $stmt->bindParam(':activitat_durant_guerra', $activitat_durant_guerra, PDO::PARAM_STR);
     $stmt->bindParam(':observacions', $observacions, PDO::PARAM_STR);
     $stmt->bindParam(':autor', $autor, PDO::PARAM_INT);
+    $stmt->bindParam(':autor2', $autor2, PDO::PARAM_INT);
+    $stmt->bindParam(':autor3', $autor3, PDO::PARAM_INT);
+    $stmt->bindParam(':colab1', $colab1, PDO::PARAM_INT);
     $stmt->bindParam(':data_creacio', $data_creacio, PDO::PARAM_STR);
     $stmt->bindParam(':data_actualitzacio', $data_actualitzacio, PDO::PARAM_STR);
     $stmt->bindParam(':completat', $completat, PDO::PARAM_INT);

@@ -59,6 +59,9 @@ export interface Fitxa {
   data_creacio: string;
   data_actualitzacio: string;
   autorNom: string;
+  autor2Nom: string;
+  autor3Nom: string;
+  colab1Nom: string;
   biografia_cat: string;
   tipologia_espai_ca: string;
   observacions_espai: string;
@@ -82,8 +85,12 @@ export interface Fitxa {
   filiacio_sindical: string;
   activitat_durant_guerra: string;
   autor_id: number;
+  autor_id2: number;
+  autor_id3: number;
+  colab1_id: number;
   completat: number;
   visibilitat: number;
+  slug: string;
 }
 
 export interface FitxaJudicial {
@@ -229,6 +236,7 @@ export interface Represeliat {
   completat: number;
   font_intern: number;
   visibilitat: number;
+  slug: string;
 }
 
 export interface HTMLTrixEditorElement extends HTMLElement {

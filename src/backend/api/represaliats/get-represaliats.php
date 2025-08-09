@@ -3,12 +3,14 @@
 use App\Config\Database;
 use App\Utils\Response;
 use App\Utils\MissatgesAPI;
+use App\Config\DatabaseConnection;
 
 $slug = $routeParams[0];
 
 // Configuración de cabeceras para aceptar JSON y responder JSON
 header("Content-Type: application/json");
 header("Access-Control-Allow-Methods: GET");
+
 
 // Definir el dominio permitido
 $allowedOrigin = DOMAIN;
@@ -120,7 +122,7 @@ if ($slug === "exiliats") {
         ORDER BY p.nom, p.cognom1, p.cognom2;";
 
     try {
-        $result = $db->getData($query);
+        $result = $db->getData($query2);
 
         if (empty($result)) {
             Response::error(

@@ -9,6 +9,9 @@ export function tab8(fitxa?: Fitxa) {
   }
 
   auxiliarSelect(fitxa?.autor_id, 'autors_fitxa', 'autor', 'nom');
+  auxiliarSelect(fitxa?.autor_id2, 'autors_fitxa', 'autor2', 'nom');
+  auxiliarSelect(fitxa?.autor_id3, 'autors_fitxa', 'autor3', 'nom');
+  auxiliarSelect(fitxa?.colab1_id, 'autors_fitxa', 'colab1', 'nom');
 
   const dataCreacioElement = document.getElementById('data_creacio');
   if (dataCreacioElement && fitxa) {

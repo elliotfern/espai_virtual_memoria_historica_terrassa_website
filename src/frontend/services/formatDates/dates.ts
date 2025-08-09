@@ -19,3 +19,20 @@ export function formatDatesForm(fecha: string | null | undefined): string | null
 
   return `${dia}/${mes}/${any}`;
 }
+
+export function formatDatesFormDateTime(fecha: string | null | undefined): string | null {
+  if (!fecha || fecha === '0000-00-00' || fecha === '1970-01-01') return null;
+
+  const date = new Date(fecha);
+  if (isNaN(date.getTime())) return null;
+
+  const dia = String(date.getUTCDate()).padStart(2, '0');
+  const mes = String(date.getUTCMonth() + 1).padStart(2, '0');
+  const any = date.getUTCFullYear();
+
+  const hora = String(date.getUTCHours()).padStart(2, '0');
+  const minutos = String(date.getUTCMinutes()).padStart(2, '0');
+  const segundos = String(date.getUTCSeconds()).padStart(2, '0');
+
+  return `${dia}/${mes}/${any} ${hora}:${minutos}:${segundos}`;
+}

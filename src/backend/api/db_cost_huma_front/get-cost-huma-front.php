@@ -44,7 +44,9 @@ if ($slug === "fitxaRepressio") {
     f.desaparegut_data,
     f.desaparegut_lloc,
     f.desaparegut_data_aparicio,
-    f.desaparegut_lloc_aparicio
+    f.desaparegut_lloc_aparicio,
+    f.aparegut_observacions,
+    f.reaparegut
     FROM db_cost_huma_morts_front AS f
     WHERE f.idPersona = :idPersona";
 
@@ -96,7 +98,9 @@ if ($slug === "fitxaRepressio") {
                 d.desaparegut_data,
                 m1.ciutat AS desaparegut_lloc,
                 d.desaparegut_data_aparicio,
-                m2.ciutat AS desaparegut_lloc_aparicio
+                m2.ciutat AS desaparegut_lloc_aparicio,
+                d.aparegut_observacions,
+                d.reaparegut
             FROM db_cost_huma_morts_front AS d
             LEFT JOIN aux_condicio AS c ON d.condicio = c.id
             LEFT JOIN aux_bandol AS b ON d.bandol = b.id

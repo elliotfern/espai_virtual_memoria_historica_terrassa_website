@@ -45,6 +45,7 @@ if ($pagina === "modifica-fitxa") {
     <button class="tablinks" data-tab="tab6">Biografia</button>
     <button class="tablinks" data-tab="tab7">Fonts documentals</button>
     <button class="tablinks" data-tab="tab8">Altres dades</button>
+    <button class="tablinks" data-tab="tab9">Registre canvis</button>
   </div>
 
   <form id="formFitxaRepressaliat">
@@ -527,12 +528,30 @@ if ($pagina === "modifica-fitxa") {
         </div>
 
         <div class="col-md-4 mb-4">
-          <label for="autor" class="form-label negreta">Autor fitxa:</label>
+          <label for="autor" class="form-label negreta">Autor principal fitxa:</label>
           <select class="form-select" id="autor" value="" name="autor">
           </select>
           <div class="avis-form">
             * Camp obligatori
           </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+          <label for="autor2" class="form-label negreta">Co-autor 2:</label>
+          <select class="form-select" id="autor2" value="" name="autor2">
+          </select>
+        </div>
+
+        <div class="col-md-4 mb-4">
+          <label for="autor3" class="form-label negreta">Co-autor 3:</label>
+          <select class="form-select" id="autor3" value="" name="autor3">
+          </select>
+        </div>
+
+        <div class="col-md-4 mb-4">
+          <label for="colab1" class="form-label negreta">Col·laborador fitxa / introducció dades:</label>
+          <select class="form-select" id="colab1" value="" name="colab1">
+          </select>
         </div>
 
         <div class="col-md-4 mb-4">
@@ -581,6 +600,15 @@ if ($pagina === "modifica-fitxa") {
 
       </div>
     </div> <!-- Fi tab7 -->
+
+    <div id="tab9" class="tabcontent">
+      <div class="row g-3">
+        <h3>Registre edició fitxa</h3>
+
+        <div id="quadreEdicions"></div>
+
+      </div>
+    </div> <!-- Fi tab9 -->
 
     <div class="row espai-superior" style="border-top: 1px solid black;padding-top:25px">
       <div class="col">

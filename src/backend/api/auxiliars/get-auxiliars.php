@@ -1200,6 +1200,23 @@ if ($slug === "municipis") {
             500
         );
     }
+
+
+    // GET : Llistat reaparegut
+    // URL: /api/auxiliars/get/reaparegut
+} elseif ($slug === "reaparegut") {
+
+    $options = [
+        ['id' => 1, 'value' => 'Sí'],
+        ['id' => 2, 'value' => 'No']
+    ];
+
+    // Responder con éxito y devolver las opciones
+    Response::success(
+        MissatgesAPI::success('get'),
+        $options,
+        200
+    );
 } else {
     // Si el parámetro 'type' no coincide con ninguno de los casos anteriores, mostramos un error
     echo json_encode(["error" => "Tipo no válido"]);

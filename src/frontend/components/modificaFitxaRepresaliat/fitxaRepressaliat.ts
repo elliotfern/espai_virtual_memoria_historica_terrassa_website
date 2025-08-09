@@ -9,6 +9,7 @@ import { tab5 } from './tab5';
 import { tab6 } from './tab6';
 import { tab7 } from './tab7';
 import { tab8 } from './tab8';
+import { tab9 } from './tab9';
 
 export async function fitxaRepressaliat(idRepressaliat?: number): Promise<void> {
   if (idRepressaliat !== undefined) {
@@ -22,7 +23,7 @@ export async function fitxaRepressaliat(idRepressaliat?: number): Promise<void> 
     // Mostrar nom i cognoms
     const fitxaNomCognoms = document.getElementById('fitxaNomCognoms');
     if (fitxaNomCognoms) {
-      fitxaNomCognoms.innerHTML = `Modificació de la fitxa: <a href="https://memoriaterrassa.cat/fitxa/${fitxa.id}" target="_blank"> ${fitxa.nom} ${fitxa.cognom1} ${fitxa.cognom2}</a>`;
+      fitxaNomCognoms.innerHTML = `Modificació de la fitxa: <a href="https://memoriaterrassa.cat/fitxa/${fitxa.slug}" target="_blank"> ${fitxa.nom} ${fitxa.cognom1} ${fitxa.cognom2}</a>`;
     }
 
     // tab1 - Categories repressió
@@ -48,6 +49,9 @@ export async function fitxaRepressaliat(idRepressaliat?: number): Promise<void> 
 
     // tab8 - Altres dades
     tab8(fitxa);
+
+    // tab9 - Registre canvis
+    tab9(fitxa);
 
     // Escolta event
     const form = document.getElementById('formFitxaRepressaliat') as HTMLFormElement | null;
@@ -80,6 +84,9 @@ export async function fitxaRepressaliat(idRepressaliat?: number): Promise<void> 
 
     // tab8 - Altres dades
     tab8();
+
+    // tab9 - Registre canvis
+    tab9();
 
     // Escolta event
     const form = document.getElementById('formFitxaRepressaliat') as HTMLFormElement | null;

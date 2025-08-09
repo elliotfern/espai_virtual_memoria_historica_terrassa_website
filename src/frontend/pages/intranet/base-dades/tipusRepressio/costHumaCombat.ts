@@ -22,6 +22,7 @@ interface Fitxa {
   desaparegut_lloc: number;
   desaparegut_data_aparicio: string;
   desaparegut_lloc_aparicio: number;
+  reaparegut: number;
 }
 
 export async function costHumaCombat(idRepresaliat: number) {
@@ -81,6 +82,7 @@ export async function costHumaCombat(idRepresaliat: number) {
   await auxiliarSelect(data?.circumstancia_mort, 'causa_defuncio_repressio?tipus=1', 'circumstancia_mort', 'causa_defuncio_ca');
   await auxiliarSelect(data?.desaparegut_lloc, 'municipis', 'desaparegut_lloc', 'ciutat');
   await auxiliarSelect(data?.desaparegut_lloc_aparicio, 'municipis', 'desaparegut_lloc_aparicio', 'ciutat');
+  await auxiliarSelect(data?.reaparegut, 'reaparegut', 'reaparegut', 'value');
 
   const btn1 = document.getElementById('refreshButton2');
   const btn2 = document.getElementById('refreshButton1');

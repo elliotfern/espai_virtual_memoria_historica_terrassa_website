@@ -66,14 +66,22 @@
                     <textarea class="form-control" id="periple_militar" name="periple_militar" rows="3"></textarea>
                 </div>
 
+                <hr>
+
+                <h4>Dades conegudes sobre la defunció/desaparació:</h4>
+
                 <div class="col-md-4 mb-4">
-                    <label for="circumstancia_mort" class="form-label negreta">Circumstància mort:</label>
+                    <label for="circumstancia_mort" class="form-label negreta">Circumstància mort/desaparació:</label>
                     <select class="form-select" name="circumstancia_mort" id="circumstancia_mort" value="">
                     </select>
                     <div class="avis-form">
                         * Camp obligatori
                     </div>
                 </div>
+
+                <hr>
+
+                <h4>Si el combatent és donat per desaparegut:</h4>
 
                 <div class="col-md-4 mb-4">
                     <label for="desaparegut_data" class="form-label negreta">Data de la desaparació:</label>
@@ -94,6 +102,17 @@
                     </div>
                 </div>
 
+                <hr>
+
+                <h4>Dades conegudes sobre l'aparició posterior del desaparegut:</h4>
+
+                <div class="col-md-4 mb-4">
+                    <label for="reaparegut" class="form-label negreta">És un reaparegut?:</label>
+                    <select class="form-select" name="reaparegut" id="reaparegut" value="">
+                    </select>
+                </div>
+
+
                 <div class="col-md-4 mb-4">
                     <label for="desaparegut_data_aparicio" class="form-label negreta">Data d'aparació del desaparegut:</label>
                     <input type="text" class="form-control" id="desaparegut_data_aparicio" name="desaparegut_data_aparicio" value="">
@@ -111,8 +130,14 @@
                         <a href="https://memoriaterrassa.cat/gestio/auxiliars/nou-municipi" target="_blank" class="btn btn-secondary btn-sm" id="afegirMunicipi1">Afegir municipi</a>
                         <button id="refreshButton2" class="btn btn-primary btn-sm">Actualitzar llistat Municipis</button>
                     </div>
-
                 </div>
+
+                <div class="col-md-12 mb-4">
+                    <label for="aparegut_observacions" class="form-label negreta">Observacions sobre l'aparició:</label>
+                    <textarea class="form-control" id="aparegut_observacions" name="aparegut_observacions" rows="4"></textarea>
+                </div>
+
+
 
                 <div class="row espai-superior" style="border-top: 1px solid black;padding-top:25px">
                     <div class="col"></div>

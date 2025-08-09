@@ -63,6 +63,11 @@ if (empty($data['categoria'])) {
     $errors[] = ValidacioErrors::requerit('categoria');
 }
 
+
+if (empty(trim($data['categoria']))) {
+    $errors[] = ValidacioErrors::requerit('categoria');
+}
+
 if (empty($data['sexe'])) {
     $errors[] = ValidacioErrors::requerit('sexe');
 }
@@ -162,7 +167,10 @@ $filiacio_politica = $data['filiacio_politica'] ?? null;
 $filiacio_sindical = $data['filiacio_sindical'] ?? null;
 $activitat_durant_guerra = $data['activitat_durant_guerra'] ?? null;
 $observacions = $data['observacions'] ?? null;
-$autor = $data['autor'] ?? null;
+$autor = $data['autor'];
+$autor2 = $data['autor2'] ?? null;
+$autor3 = $data['autor3'] ?? null;
+$colab1 = $data['colab1'] ?? null;
 $completat = $data['completat'] ?? 1;
 $visibilitat = $data['visibilitat'] ?? 1;
 
@@ -202,6 +210,9 @@ try {
         activitat_durant_guerra = :activitat_durant_guerra,
         observacions = :observacions,
         autor = :autor,
+        autor2 = :autor2,
+        autor3 = :autor3,
+        colab1 = :colab1,
         data_actualitzacio = :data_actualitzacio,
         completat = :completat,
         visibilitat = :visibilitat
@@ -236,6 +247,9 @@ try {
     $stmt->bindParam(':activitat_durant_guerra', $activitat_durant_guerra, PDO::PARAM_STR);
     $stmt->bindParam(':observacions', $observacions, PDO::PARAM_STR);
     $stmt->bindParam(':autor', $autor, PDO::PARAM_INT);
+    $stmt->bindParam(':autor2', $autor2, PDO::PARAM_INT);
+    $stmt->bindParam(':autor3', $autor3, PDO::PARAM_INT);
+    $stmt->bindParam(':colab1', $colab1, PDO::PARAM_INT);
     $stmt->bindParam(':data_actualitzacio', $data_actualitzacio, PDO::PARAM_STR);
     $stmt->bindParam(':completat', $completat, PDO::PARAM_INT);
     $stmt->bindParam(':visibilitat', $visibilitat, PDO::PARAM_INT);

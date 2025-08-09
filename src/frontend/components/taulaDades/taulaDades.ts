@@ -92,7 +92,7 @@ export async function cargarTabla(pag: string, context: number, completat: numbe
       const cognom1 = row.cognom1 !== null ? row.cognom1 : '';
       const cognom2 = row.cognom2 !== null ? row.cognom2 : '';
       const nombreCompleto = `${cognom1} ${cognom2 ?? ''}, ${nom}`;
-      tdNombre.innerHTML = `<strong><a href="${webFitxa}${row.id}" target="${webTarget}">${nombreCompleto}</a></strong>`;
+      tdNombre.innerHTML = `<strong><a href="${webFitxa}${row.slug}" target="${webTarget}">${nombreCompleto}</a></strong>`;
       tr.appendChild(tdNombre);
 
       // Municipio nacimiento
