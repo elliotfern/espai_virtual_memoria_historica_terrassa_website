@@ -48,7 +48,7 @@ export async function costHumaCombat(idRepresaliat: number) {
   const data2 = await fetchDataGet<Fitxa>(`/api/dades_personals/get/?type=nomCognoms&id=${idRepresaliat}`);
   const btn = document.getElementById('btnMortsCombat') as HTMLButtonElement;
 
-  if (!response || !response.data) {
+  if (!response || response.status === 'error') {
     if (btn) {
       btn.textContent = 'Inserir dades';
     }
@@ -56,25 +56,30 @@ export async function costHumaCombat(idRepresaliat: number) {
     if (btn) {
       btn.textContent = 'Modificar dades';
     }
-    data = response.data;
+    data = response.data as Partial<Fitxa>;
   }
 
   if (data2) {
     const container = document.getElementById('fitxaNomCognoms');
-    const inputIdPersona = document.getElementById('idPersona') as HTMLInputElement | null;
     if (!container) return;
 
     const nomComplet = `${data2.nom} ${data2.cognom1} ${data2.cognom2}`;
     const url = `https://memoriaterrassa.cat/fitxa/${data2.id}`;
 
     container.innerHTML = `<h4>Fitxa: <a href="${url}" target="_blank">${nomComplet}</a></h4>`;
-
-    if (inputIdPersona && data2.id !== undefined) {
-      inputIdPersona.value = String(data2.id);
-    }
   }
 
+  // Primero renderizamos el formulario con los datos
   renderFormInputs(data);
+
+  // Luego actualizamos el input hidden con el valor idPersona
+  if (data2) {
+    const inputIdPersona = document.getElementById('idPersona') as HTMLInputElement | null;
+    if (inputIdPersona) {
+      inputIdPersona.value = String(data2.id);
+      inputIdPersona.setAttribute('value', String(data2.id));
+    }
+  }
 
   await auxiliarSelect(data?.condicio, 'condicio_civil_militar', 'condicio', 'condicio_ca');
   await auxiliarSelect(data?.bandol, 'bandols_guerra', 'bandol', 'bandol_ca');
@@ -99,19 +104,14 @@ export async function costHumaCombat(idRepresaliat: number) {
     });
   }
 
-  if (!response) {
-    const mortCombatForm = document.getElementById('mortCombatForm');
-    if (mortCombatForm) {
-      mortCombatForm.addEventListener('submit', function (event) {
+  const mortCombatForm = document.getElementById('mortCombatForm');
+  if (mortCombatForm) {
+    mortCombatForm.addEventListener('submit', function (event) {
+      if (!response || response.status === 'error') {
         transmissioDadesDB(event, 'POST', 'mortCombatForm', '/api/cost_huma_front/post', true);
-      });
-    }
-  } else {
-    const mortCombatForm = document.getElementById('mortCombatForm');
-    if (mortCombatForm) {
-      mortCombatForm.addEventListener('submit', function (event) {
+      } else {
         transmissioDadesDB(event, 'PUT', 'mortCombatForm', '/api/cost_huma_front/put');
-      });
-    }
+      }
+    });
   }
 }

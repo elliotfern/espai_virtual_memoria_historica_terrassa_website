@@ -15,6 +15,7 @@ interface EspaiRow {
   cognom2: string;
   categoria: string;
   es_mortCivil: string;
+  slug: string;
 }
 
 type Column<T> = {
@@ -31,7 +32,7 @@ export async function taulaMortsCivils() {
 
   const columns: Column<EspaiRow>[] = [
     { header: 'ID', field: 'id' },
-    { header: 'Nom i cognoms', field: 'id', render: (_: unknown, row: EspaiRow) => `<a id="${row.id}" title="Fitxa" href="https://${window.location.hostname}/fitxa/${row.id}" target="_blank">${row.nom_complet}</a>` },
+    { header: 'Nom i cognoms', field: 'id', render: (_: unknown, row: EspaiRow) => `<a id="${row.id}" title="Fitxa" href="https://${window.location.hostname}/fitxa/${row.slug}" target="_blank">${row.nom_complet}</a>` },
     {
       header: 'Data naixement',
       field: 'id',

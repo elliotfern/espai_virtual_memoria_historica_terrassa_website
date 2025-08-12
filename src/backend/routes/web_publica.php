@@ -42,6 +42,9 @@ $base_routes = [
     '/base-dades/cost-huma' => 'public/web-publica/base-dades/base-dades-cost-huma.php',
     '/base-dades/represaliats' => 'public/web-publica/base-dades/base-dades-represaliats.php',
     '/base-dades/exiliats-deportats' => 'public/web-publica/base-dades/base-dades-exiliats.php',
+
+    '/base-dades/filtre-exiliats' => 'public/web-publica/base-dades/filtre-pagina-exiliats.php',
+
     '/fitxa/{id}' => 'public/web-publica/base-dades/fitxa-represaliat.php',
     '/cerca-represaliat' => 'public/web-publica/base-dades/cerca-represaliat.php',
 
@@ -125,6 +128,13 @@ $routes = [
 
     '/base-dades/exiliats' => [
         'view' => 'public/web-publica/base-dades/base-dades-exiliats.php',
+        'needs_session' => false,
+        'header_footer' => false,
+        'header_menu_footer' => true
+    ],
+
+    '/base-dades/filtre-exiliats' => [
+        'view' => 'public/web-publica/base-dades/filtre-pagina-exiliats.php',
         'needs_session' => false,
         'header_footer' => false,
         'header_menu_footer' => true

@@ -220,6 +220,9 @@ export interface FitxaJudicial {
   advocat: string;
 
   preso: string;
+
+  reaparegut: number;
+  aparegut_observacions: string;
 }
 
 // Interfaces para los datos

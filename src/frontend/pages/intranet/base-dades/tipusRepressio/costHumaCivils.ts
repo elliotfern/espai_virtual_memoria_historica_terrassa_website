@@ -8,6 +8,7 @@ interface Fitxa {
   status: string;
   message: string;
   id: number;
+  idPersona: number;
   nom: string;
   cognom1: string;
   cognom2: string;
@@ -58,25 +59,29 @@ export async function costHumaCivils(idRepresaliat: number) {
     if (btn) {
       btn.textContent = 'Modificar dades';
     }
-    data = response.data;
+    data = response.data as Partial<Fitxa>;
   }
 
   if (data2) {
     const container = document.getElementById('fitxaNomCognoms');
-    const inputIdPersona = document.getElementById('idPersona') as HTMLInputElement | null;
+
     if (!container) return;
 
     const nomComplet = `${data2.nom} ${data2.cognom1} ${data2.cognom2}`;
     const url = `https://memoriaterrassa.cat/fitxa/${data2.id}`;
 
     container.innerHTML = `<h4>Fitxa: <a href="${url}" target="_blank">${nomComplet}</a></h4>`;
-
-    if (inputIdPersona && data2.id !== undefined) {
-      inputIdPersona.value = String(data2.id);
-    }
   }
 
   renderFormInputs(data);
+
+  if (data2) {
+    const inputIdPersona = document.getElementById('idPersona') as HTMLInputElement | null;
+    if (inputIdPersona) {
+      inputIdPersona.value = String(data2.id);
+      inputIdPersona.setAttribute('value', String(data2.id));
+    }
+  }
 
   await auxiliarSelect(data?.cirscumstancies_mort, 'causa_defuncio_repressio?tipus=2', 'cirscumstancies_mort', 'causa_defuncio_ca');
   await auxiliarSelect(data?.lloc_trobada_cadaver, 'municipis', 'lloc_trobada_cadaver', 'ciutat');

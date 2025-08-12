@@ -6,11 +6,13 @@ import type { Fitxa, FitxaFamiliars } from '../../../types/types';
 export function renderTab2(fitxa: Fitxa, fitxaFam: FitxaFamiliars[] | null, label: string): void {
   const divInfo = document.getElementById('fitxa');
 
+  const estatCivil = valorTextDesconegut(fitxa.estat_civil ?? '', 2);
+
   if (!divInfo) return;
 
   divInfo.innerHTML = `
     <h3 class="titolSeccio">${label}</h3>
-        <p><span class='marro2'>Estat civil:</span> <span class='blau1'>${fitxa.estat_civil}</span></p>
+        <p><span class='marro2'>Estat civil:</span> <span class='blau1'>${estatCivil}</span></p>
       `;
 
   // Recorremos el array de familiares y mostramos la información

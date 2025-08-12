@@ -103,25 +103,75 @@ if ($slug === "municipis") {
     // URL: https://memoriaterrassa.cat/api/auxiliars/get/partitsPolitics
 } else if ($slug === "partitsPolitics") {
 
+    $db = new Database();
     $query = "SELECT 
 	        p.id, p.partit_politic, p.sigles
             FROM aux_filiacio_politica AS p
             ORDER BY p.partit_politic ASC";
 
-    $result = getData2($query);
-    echo json_encode($result);
+    try {
+
+        $result = $db->getData($query);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
 
     // GET : llistat de sindicats
     // URL: https://memoriaterrassa.cat/api/auxiliars/get/sindicats
 } else if ($slug === "sindicats") {
 
+    $db = new Database();
     $query = "SELECT 
 	        s.id, s.sindicat, s.sigles
             FROM aux_filiacio_sindical AS s
             ORDER BY s.sindicat ASC";
 
-    $result = getData2($query);
-    echo json_encode($result);
+
+    try {
+
+        $result = $db->getData($query);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
 
     // GET : llistat de provincies
     // URL: https://memoriaterrassa.cat/api/auxiliars/get/provincies
@@ -172,22 +222,74 @@ if ($slug === "municipis") {
     // URL: https://memoriaterrassa.cat/api/auxiliars/get/estudis
 } else if ($slug === "estudis") {
 
+    $db = new Database();
+
     $query = "SELECT e.id, e.estudi_cat
         FROM aux_estudis AS e
         ORDER BY e.estudi_cat ASC";
 
-    $result = getData2($query);
-    echo json_encode($result);
+    try {
+
+        $result = $db->getData($query);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
 
     // GET : Llistat oficis
     // URL: /api/auxiliars/get/oficis
 } else if ($slug === "oficis") {
+
+    $db = new Database();
+
     $query = "SELECT o.id, o.ofici_cat
               FROM aux_oficis AS o
               ORDER BY o.ofici_cat ASC";
 
-    $result = getData2($query);
-    echo json_encode($result);
+    try {
+
+        $result = $db->getData($query);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
 
     // GET : Llistat empreses
     // URL: /api/auxiliars/get/empreses
@@ -270,12 +372,38 @@ if ($slug === "municipis") {
     // GET : Llistat estat civil
     // URL: /api/auxiliars/get/?type=estats_civils
 } elseif ($slug === "estats_civils") {
+
+    $db = new Database();
+
     $query = "SELECT ec.id, ec.estat_cat
               FROM aux_estat_civil AS ec
               ORDER BY ec.estat_cat ASC";
 
-    $result = getData2($query);
-    echo json_encode($result);
+    try {
+        // Pasamos los valores como array en el mismo orden de los placeholders
+        $result = $db->getData($query);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
 
     // GET : Llistat espais
     // URL: /api/auxiliars/get/espais
@@ -348,12 +476,36 @@ if ($slug === "municipis") {
     // GET : Causa defuncio - tots els casos (per formulari fitxa dades personals)
     // URL: /api/auxiliars/get/causa_defuncio
 } elseif ($slug === "causa_defuncio") {
+
+    $db = new Database();
     $query = "SELECT c.id, c.causa_defuncio_ca
               FROM aux_causa_defuncio AS c
               ORDER BY c.causa_defuncio_ca ASC";
+    try {
 
-    $result = getData2($query);
-    echo json_encode($result);
+        $result = $db->getData($query);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
 
     // GET : Causa defuncio - per formulari morts civils
     // tipus 1 > morts militars / tipus 2 > morts civils / tipus 3 > tots

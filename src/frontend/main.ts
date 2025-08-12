@@ -12,6 +12,7 @@ import { fitxaRepresaliat } from './components/fitxaRepresaliat';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './estils/style.css';
 import 'bootstrap';
+import { iniciarBuscador } from './components/filtreAdvanced/buscador';
 
 nameUser();
 
@@ -35,6 +36,9 @@ document.addEventListener('DOMContentLoaded', () => {
   } else if (pageType[1] === 'exiliats-deportats' || pageType[1] === 'exiliats-deportats#filtre') {
     botonsEstat(pageType[1]);
     cargarTabla(pageType[1], 1);
+  } else if (pageType[1] === 'filtre-exiliats') {
+    // carregar aqui scripts
+    iniciarBuscador();
   } else if (pageType[1] === 'cost-huma' || pageType[1] === 'cost-huma#filtre') {
     botonsEstat(pageType[1]);
     cargarTabla(pageType[1], 1);

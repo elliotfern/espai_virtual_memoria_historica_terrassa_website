@@ -36,6 +36,7 @@
   "license": "ISC",
   "dependencies": {
     "bootstrap": "^5.3.3",
+    "choices.js": "^11.1.0",
     "dayjs": "^1.11.13"
   },
   "lint-staged": {

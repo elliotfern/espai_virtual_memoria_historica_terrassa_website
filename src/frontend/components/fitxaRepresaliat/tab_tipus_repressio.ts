@@ -108,13 +108,25 @@ export const fitxaTipusRepressio = async (categoriaNumerica: string, fitxa2: Fit
       const cos = dada.cos && dada.cos.trim() !== '' ? dada.cos : 'Desconegut';
       const unitat_final = dada.unitat_final && dada.unitat_final.trim() !== '' ? dada.unitat_final : 'Desconegut';
       const graduacio_final = dada.graduacio_final && dada.graduacio_final.trim() !== '' ? dada.graduacio_final : 'Desconegut';
-      const periple_militar = dada.periple_militar && dada.periple_militar.trim() !== '' ? dada.periple_militar : 'Desconegut';
+      const periple_militar = dada.periple_militar && dada.periple_militar.trim() !== '' ? dada.periple_militar : 'Sense dades';
 
       const circumstancia_mort = dada.circumstancia_mort && dada.circumstancia_mort.trim() !== '' ? dada.circumstancia_mort : 'Desconeguda';
       const desaparegut_data = dada.desaparegut_data && dada.desaparegut_data.trim() !== '' ? formatDatesForm(dada.desaparegut_data) : '-';
       const desaparegut_lloc = dada.desaparegut_lloc && dada.desaparegut_lloc.trim() !== '' ? dada.desaparegut_lloc : '-';
       const desaparegut_data_aparicio = dada.desaparegut_data_aparicio && dada.desaparegut_data_aparicio.trim() !== '' ? formatDatesForm(dada.desaparegut_data_aparicio) : '-';
       const desaparegut_lloc_aparicio = dada.desaparegut_lloc_aparicio && dada.desaparegut_lloc_aparicio.trim() !== '' ? dada.desaparegut_lloc_aparicio : '-';
+
+      const fragment =
+        dada.reaparegut === 1
+          ? `
+          <div style="margin-top:25px">
+            <h5><span class="negreta blau1">4) Dades conegudes sobre l'aparició posterior del desaparegut:</span></h5>
+                <p><span class='marro2'>Data d'aparació del desaparegut:</span> <span class='blau1'>${desaparegut_data_aparicio}</span></p>
+                <p><span class='marro2'>Lloc d'aparació del desaparegut:</span> <span class='blau1'>${desaparegut_lloc_aparicio}</span></p>
+                <p><span class='marro2'>Observacions:</span> <span class='blau1'>${dada.aparegut_observacions}</span></p>
+          </div>
+      `
+          : '';
 
       htmlContent += `
     <div class="negreta raleway">
@@ -131,17 +143,19 @@ export const fitxaTipusRepressio = async (categoriaNumerica: string, fitxa2: Fit
           <p><span class='marro2'>Cos militar:</span> <span class='blau1'>${cos}</span></p>
           <p><span class='marro2'>Unitat final:</span> <span class='blau1'>${unitat_final}</span></p>
           <p><span class='marro2'>Graduació final:</span> <span class='blau1'>${graduacio_final}</span></p>
-          <p><span class='marro2'>Periple militar:</span> <span class='blau1'>${periple_militar}</span></p>
+          <p><span class='marro2'>Periple militar i altres observacions:</span> <span class='blau1'>${periple_militar}</span></p>
         </div>
 
       <div style="margin-top:25px">
-        <h5><span class="negreta blau1">3) Circumstàncies de la mort:</span></h5>
+        <h5><span class="negreta blau1">3) Circumstàncies de la mort o desaparació:</span></h5>
           <p><span class='marro2'>Causa de defunció/desaparació:</span> <span class='blau1'>${circumstancia_mort}</span></p>
+          <h6><span class="negreta blau1">Si el combatent és donat per desaparegut:</span></h6>
           <p><span class='marro2'>Data de la desaparació:</span> <span class='blau1'>${desaparegut_data}</span></p>
           <p><span class='marro2'>Lloc de desaparació:</span> <span class='blau1'>${desaparegut_lloc}</span></p>
-          <p><span class='marro2'>Data d'aparació del desaparegut:</span> <span class='blau1'>${desaparegut_data_aparicio}</span></p>
-          <p><span class='marro2'>Lloc d'aparació del desaparegut:</span> <span class='blau1'>${desaparegut_lloc_aparicio}</span></p>
         </div>
+
+          ${fragment}
+
     </div>
 
         `;

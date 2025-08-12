@@ -37,7 +37,13 @@ if (!$userId) {
 $inputData = file_get_contents('php://input');
 $data = json_decode($inputData, true);
 
-$idPersona = $data['idPersona'] ?? null;
+if (!$data['idPersona']) {
+    http_response_code(400); // Bad Request
+    echo json_encode(["status" => 'error', 'message' => 'Falta IDPersona']);
+    exit;
+}
+
+$idPersona = $data['idPersona'];
 
 // Comprobación directa en la misma sección del PUT
 global $conn;

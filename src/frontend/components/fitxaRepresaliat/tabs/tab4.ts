@@ -4,40 +4,65 @@ import type { Fitxa } from '../../../types/types';
 import { partitsPolitics } from '../partitsPolitics';
 import { sindicats } from '../sindicats';
 
-export function renderTab4(fitxa: Fitxa, label: string): void {
-  const divInfo = document.getElementById('fitxa');
+type IdLike = string | number | number[] | null | undefined;
 
+function normalizeIds(input: IdLike): number[] {
+  const isValid = (n: number) => Number.isFinite(n) && n > 0;
+
+  if (Array.isArray(input)) {
+    return input.map((n) => Number(n)).filter(isValid);
+  }
+
+  if (typeof input === 'string') {
+    const nums = input.match(/\d+/g) ?? [];
+    return nums.map((s) => Number(s)).filter(isValid);
+  }
+
+  if (typeof input === 'number') {
+    return isValid(input) ? [input] : [];
+  }
+
+  return [];
+}
+
+// helper para quitar "Filiació desconeguda", "Desconegut", etc.
+function filterUnknownLabels(list: string[]): string[] {
+  const deaccent = (s: string) => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  return list.filter((name) => {
+    // quita paréntesis tipo "(-)" para comparar
+    const base = deaccent(name)
+      .toLowerCase()
+      .replace(/\s*\([^)]*\)/g, '')
+      .trim();
+    return !(base === 'filiacio desconeguda' || base === 'desconegut' || base === 'desconeguda' || base === 'sense afiliacio' || base === 'no consta');
+  });
+}
+
+export async function renderTab4(fitxa: Fitxa, label: string): Promise<void> {
+  const divInfo = document.getElementById('fitxa');
   if (!divInfo) return;
 
-  // partits politics
-  const idsPartidos = fitxa.filiacio_politica
-    .replace(/[{}]/g, '')
-    .split(',')
-    .map((id) => parseInt(id.trim(), 10));
+  const idsPartidos = normalizeIds(fitxa.filiacio_politica);
+  const idsSindicats = normalizeIds(fitxa.filiacio_sindical);
 
-  // Sindicats
-  const idsSindicats = fitxa.filiacio_sindical
-    .replace(/[{}]/g, '')
-    .split(',')
-    .map((id) => parseInt(id.trim(), 10));
+  const [nombresPartidos, nombresSindicats] = await Promise.all([partitsPolitics(idsPartidos), sindicats(idsSindicats)]);
 
-  Promise.all([partitsPolitics(idsPartidos), sindicats(idsSindicats)]).then(([nombresPartidos, nombresSindicats]) => {
-    const partitPolitic = nombresPartidos.length === 0 ? 'Desconegut' : nombresPartidos.join(', ');
-    const sindicat = nombresSindicats.length === 0 ? 'Desconegut' : nombresSindicats.join(', ');
+  const partitsLimpios = filterUnknownLabels(nombresPartidos);
+  const sindicatsLimpios = filterUnknownLabels(nombresSindicats);
 
-    divInfo.innerHTML = `
+  const partitPolitic = partitsLimpios.length ? partitsLimpios.join(', ') : 'Desconegut';
+  const sindicat = sindicatsLimpios.length ? sindicatsLimpios.join(', ') : 'Desconegut';
+
+  divInfo.innerHTML = `
     <h3 class="titolSeccio">${label}</h3>
     <div style="margin-top:30px;margin-bottom:30px">
-                <h5 class="titolSeccio2">Activitat política i sindical abans de l'esclat de la guerra:</h5>
-                <p><span class='marro2'>Afiliació política:</span> <span class='blau1'>${partitPolitic}</span></p>
-                <p><span class='marro2'>Afiliació sindical:</span> <span class='blau1'>${sindicat}</span></p>
-              </div>
-        
-              <div style="margin-top:30px;margin-bottom:30px">
-                <h5 class="titolSeccio2">Activitat política i sindical durant la guerra civil i la dictadura:</h5>
-                <p><span class='blau1'>${valorTextDesconegut(fitxa.activitat_durant_guerra, 1)}</span></p>
-              </div>
-
-      `;
-  });
+      <h5 class="titolSeccio2">Activitat política i sindical abans de l'esclat de la guerra:</h5>
+      <p><span class='marro2'>Afiliació política:</span> <span class='blau1'>${partitPolitic}</span></p>
+      <p><span class='marro2'>Afiliació sindical:</span> <span class='blau1'>${sindicat}</span></p>
+    </div>
+    <div style="margin-top:30px;margin-bottom:30px">
+      <h5 class="titolSeccio2">Activitat política i sindical durant la guerra civil i la dictadura:</h5>
+      <p><span class='blau1'>${valorTextDesconegut(fitxa.activitat_durant_guerra, 1)}</span></p>
+    </div>
+  `;
 }

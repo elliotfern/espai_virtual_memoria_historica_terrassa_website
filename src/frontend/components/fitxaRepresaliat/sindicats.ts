@@ -1,22 +1,26 @@
-import { Sindicat } from '../../types/sindicat';
+// src/pages/fitxaRepresaliat/sindicats.ts
+type ApiWrapper<T> = { status?: string; message?: string; errors?: unknown[]; data?: T[] };
+type Sindicat = { id: number; sindicat: string; sigles?: string | null };
+
+const base = window.location.origin;
+
+async function fetchAux<T>(endpoint: string): Promise<T[]> {
+  const res = await fetch(`${base}/api/auxiliars/get/${endpoint}`);
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const json = (await res.json()) as ApiWrapper<T> | T[];
+  const arr = Array.isArray(json) ? json : json.data ?? [];
+  if (!Array.isArray(arr)) throw new Error('Formato de respuesta inesperado');
+  return arr;
+}
 
 export async function sindicats(ids: number[]): Promise<string[]> {
+  if (!ids?.length) return [];
   try {
-    // Llamada a la API para obtener todos los partidos políticos
-    const devDirectory = `https://${window.location.hostname}`;
-    const url = `${devDirectory}/api/auxiliars/get/sindicats`;
-
-    const response = await fetch(url);
-    if (!response.ok) throw new Error('Error al obtener los datos de la API');
-
-    const sindicats: Sindicat[] = await response.json();
-
-    // Filtrar los partidos que coinciden con los IDs proporcionados
-    const sindicatsFiltrados = sindicats.filter((sindicat) => ids.includes(sindicat.id)).map((sindicat) => (sindicat.id === 4 ? sindicat.sindicat : `${sindicat.sindicat} (${sindicat.sigles})`));
-
-    return sindicatsFiltrados;
-  } catch (error) {
-    console.error('Error al procesar los partidos:', error);
+    const rows = await fetchAux<Sindicat>('sindicats');
+    const byId = new Map<number, string>(rows.map((r) => [r.id, r.sigles ? `${r.sindicat} (${r.sigles})` : r.sindicat]));
+    return ids.map((id) => byId.get(id)).filter((v): v is string => Boolean(v));
+  } catch (e) {
+    console.error('Error al procesar los sindicats:', e);
     return [];
   }
 }

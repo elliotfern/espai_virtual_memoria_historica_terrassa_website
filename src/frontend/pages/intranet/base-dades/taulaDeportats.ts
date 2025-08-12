@@ -12,6 +12,7 @@ interface EspaiRow {
   data_defuncio: string;
   data_naixement: string;
   es_deportat: string;
+  slug: string;
 }
 
 type Column<T> = {
@@ -27,7 +28,7 @@ export async function taulaDeportats() {
   const reloadKey = 'reload-taula-taulaLlistatDeportats';
 
   const columns: Column<EspaiRow>[] = [
-    { header: 'Nom i cognoms', field: 'id', render: (_: unknown, row: EspaiRow) => `<a id="${row.id}" title="Fitxa" href="https://${window.location.hostname}/fitxa/${row.id}" target="_blank">${row.nom_complet}</a>` },
+    { header: 'Nom i cognoms', field: 'id', render: (_: unknown, row: EspaiRow) => `<a id="${row.id}" title="Fitxa" href="https://${window.location.hostname}/fitxa/${row.slug}" target="_blank">${row.nom_complet}</a>` },
 
     {
       header: 'Data naixement',

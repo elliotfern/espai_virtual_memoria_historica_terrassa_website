@@ -13,6 +13,7 @@ interface EspaiRow {
   data_naixement: string;
   cognom2: string;
   categoria: string;
+  slug: string;
 }
 
 type Column<T> = {
@@ -29,7 +30,7 @@ export async function taulaDuplicats() {
 
   const columns: Column<EspaiRow>[] = [
     { header: 'ID', field: 'id' },
-    { header: 'Nom i cognoms', field: 'id', render: (_: unknown, row: EspaiRow) => `<a id="${row.id}" title="Fitxa" href="https://${window.location.hostname}/fitxa/${row.id}" target="_blank">${row.nom} ${row.cognom1} ${row.cognom2}</a>` },
+    { header: 'Nom i cognoms', field: 'id', render: (_: unknown, row: EspaiRow) => `<a id="${row.id}" title="Fitxa" href="https://${window.location.hostname}/fitxa/${row.slug}" target="_blank">${row.nom} ${row.cognom1} ${row.cognom2}</a>` },
     { header: 'Categoria', field: 'id', render: (_: unknown, row: EspaiRow) => `${traduirCategoriesRepressio(row.categoria, colectiusRepressio)}` },
   ];
 

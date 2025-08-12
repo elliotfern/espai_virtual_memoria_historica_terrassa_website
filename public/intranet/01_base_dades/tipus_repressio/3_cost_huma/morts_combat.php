@@ -62,8 +62,8 @@
                 </div>
 
                 <div class="col-md-12 mb-4">
-                    <label for="periple_militar" class="form-label negreta">Periple militar:</label>
-                    <textarea class="form-control" id="periple_militar" name="periple_militar" rows="3"></textarea>
+                    <label for="periple_militar" class="form-label negreta">Periple militar i altres observacions:</label>
+                    <textarea class="form-control" id="periple_militar" name="periple_militar" rows="5"></textarea>
                 </div>
 
                 <hr>

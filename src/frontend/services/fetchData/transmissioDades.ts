@@ -12,14 +12,11 @@ export async function transmissioDadesDB(event: Event, tipus: string, formId: st
   }
 
   // Crear un objeto para almacenar los datos del formulario
+  const formDataRaw = new FormData(form);
   const formData: { [key: string]: FormDataEntryValue } = {};
 
-  Array.from(form.elements).forEach((element) => {
-    if (element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement || element instanceof HTMLSelectElement) {
-      if (element.name) {
-        formData[element.name] = element.value;
-      }
-    }
+  formDataRaw.forEach((value, key) => {
+    formData[key] = value;
   });
 
   const jsonData = JSON.stringify(formData);

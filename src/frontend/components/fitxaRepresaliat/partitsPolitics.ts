@@ -1,28 +1,28 @@
-import { Partit } from '../../types/partitPolitic';
+// src/pages/fitxaRepresaliat/partitsPolitics.ts
+type ApiWrapper<T> = { status?: string; message?: string; errors?: unknown[]; data?: T[] };
+type Partit = { id: number; partit_politic: string; sigles?: string | null };
+
+const base = window.location.origin;
+
+async function fetchAux<T>(endpoint: string): Promise<T[]> {
+  const res = await fetch(`${base}/api/auxiliars/get/${endpoint}`);
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const json = (await res.json()) as ApiWrapper<T> | T[];
+  const arr = Array.isArray(json) ? json : json.data ?? [];
+  if (!Array.isArray(arr)) throw new Error('Formato de respuesta inesperado');
+  return arr;
+}
 
 export async function partitsPolitics(ids: number[]): Promise<string[]> {
+  if (!ids?.length) return [];
   try {
-    // Llamada a la API para obtener todos los partidos políticos
-    const devDirectory = `https://${window.location.hostname}`;
-    const url = `${devDirectory}/api/auxiliars/get/partitsPolitics`;
-
-    const response = await fetch(url, {
-      method: 'GET', // O cualquier otro método que necesites (POST, PUT, etc.)
-      headers: {
-        'Content-Type': 'application/json', // Opcional, dependiendo de lo que espera el backend
-      },
-      credentials: 'include', // Esto asegura que la cookie se envíe con la solicitud
-    });
-    if (!response.ok) throw new Error('Error al obtener los datos de la API');
-
-    const partits: Partit[] = await response.json();
-
-    // Filtrar los partidos que coinciden con los IDs proporcionados
-    const partidosFiltrados = partits.filter((partit) => ids.includes(partit.id)).map((partit) => (partit.id === 10 ? partit.partit_politic : `${partit.partit_politic} (${partit.sigles})`));
-
-    return partidosFiltrados;
-  } catch (error) {
-    console.error('Error al procesar los partidos:', error);
+    const rows = await fetchAux<Partit>('partitsPolitics'); // ajusta si tu endpoint difiere
+    // Mapa id -> "Nombre (SIGLES)" si hay siglas
+    const byId = new Map<number, string>(rows.map((r) => [r.id, r.sigles ? `${r.partit_politic} (${r.sigles})` : r.partit_politic]));
+    // Devuelve en el mismo orden de 'ids' y omite los que no existan en la tabla
+    return ids.map((id) => byId.get(id)).filter((v): v is string => Boolean(v));
+  } catch (e) {
+    console.error('Error al procesar los partidos:', e);
     return [];
   }
 }
