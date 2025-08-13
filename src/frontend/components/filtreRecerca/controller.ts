@@ -149,6 +149,15 @@ export class BuscadorController {
     return new Worker(url); // simple, sin { type: 'module' }
   }
 
+  // dentro de la clase
+  private applyAllFilters(rows: Persona[], sel = this.selection): Persona[] {
+    let out = rows;
+    for (const f of this.filters) {
+      if (typeof f.predicate === 'function') out = out.filter((p) => f.predicate!(p, sel));
+    }
+    return out;
+  }
+
   private ensureWorker(): void {
     if (this.worker) return;
     this.worker = this.createInlineWorker();
@@ -224,6 +233,7 @@ export class BuscadorController {
    * - Base de cada filtro = (subconjunto por TEXTO) + (TODOS los demás filtros activos, menos el propio).
    * - Preserva selecciones aunque no aparezcan en el recuento actual.
    */
+  // Sustituye tu hydrateFilters por esta versión
   private hydrateFilters(keep?: SelectionState): void {
     this.isHydrating = true;
 
@@ -232,8 +242,12 @@ export class BuscadorController {
     this.choicesMap.clear();
 
     for (const spec of this.filters) {
-      // Base para available: TEXTO + “todos menos yo”
-      const baseForSpec = this.filterAllExcept(this.textSubset, spec.stateKey as string, this.selection);
+      const isCategories = spec.stateKey === 'categories';
+
+      // Base para available:
+      // - categories => TEXTO + TODOS los filtros (incluido él mismo) → co-ocurrencias
+      // - resto      => TEXTO + TODOS MENOS él mismo (cascada normal)
+      const baseForSpec = isCategories ? this.applyAllFilters(this.textSubset, this.selection) : this.filterAllExcept(this.textSubset, spec.stateKey as string, this.selection);
 
       const av = spec.available(baseForSpec, this.opciones);
       if (!av) continue;

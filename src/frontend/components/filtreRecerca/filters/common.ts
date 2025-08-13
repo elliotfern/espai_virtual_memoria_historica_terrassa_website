@@ -380,11 +380,13 @@ export const FILTER_CATEGORIES: FilterSpec = {
     return { id: this.id, stateKey: this.stateKey, options };
   },
   hydrate: hydrateChoices,
-  predicate(p: Persona, sel: SelectionShape): boolean {
+  predicate(p, sel) {
     const chosen = new Set((sel['categories'] ?? []).map(Number));
     if (chosen.size === 0) return true;
-    const cats = p.categoria ?? [];
-    return cats.some((id) => chosen.has(id));
+
+    const cats = new Set(p.categoria ?? []);
+    // AND interno: la persona debe tener TODAS las categorías elegidas
+    return Array.from(chosen).every((id) => cats.has(id));
   },
 };
 
