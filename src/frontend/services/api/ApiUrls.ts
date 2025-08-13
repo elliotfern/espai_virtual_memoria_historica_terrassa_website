@@ -1,7 +1,7 @@
 import { ApiUrls } from '../../types/apiTypes';
 
 // Accede al dominio desde la variable de entorno
-const BASE_URL = process.env.VITE_API_BASE_URL;
+const BASE_URL = 'https://memoriaterrassa.cat';
 const API = 'api';
 
 // Mapa de Endpoints
