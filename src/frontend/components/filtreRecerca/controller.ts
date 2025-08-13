@@ -199,38 +199,68 @@ export class BuscadorController {
    * y destruimos/creamos Choices para evitar desajustes de tipos.
    * Se evita cascada de eventos con isHydrating.
    */
+  // --- dentro de BuscadorController ---
+
+  /** Aplica predicados de filtros [0..uptoExclusive-1] sobre `rows`. */
+  private applyFiltersUpTo(rows: Persona[], uptoExclusive: number, sel = this.selection): Persona[] {
+    let out = rows;
+    for (let j = 0; j < uptoExclusive; j++) {
+      const f = this.filters[j];
+      if (typeof f.predicate === 'function') {
+        out = out.filter((p) => f.predicate!(p, sel));
+      }
+    }
+    return out;
+  }
+
+  /** Asegura que los valores ya seleccionados existen en av.options (si no, los añade con (0)). */
+  private ensureSelectedOptions(av: { id: string; stateKey: string; options: { value: string; label: string }[] }, selected: string[]) {
+    const present = new Set(av.options.map((o) => o.value));
+    const missing = selected.filter((v) => !present.has(v));
+    if (missing.length === 0) return;
+
+    // Etiqueta mínima: mantener el value y marcar (0).
+    // Si quieres etiquetas “bonitas”, aquí podrías mapear por spec/stateKey a su catálogo.
+    for (const v of missing) {
+      av.options.push({ value: v, label: `${v} (0)` });
+    }
+  }
+
   private hydrateFilters(keep?: SelectionState): void {
     this.isHydrating = true;
 
-    // destruir previos
+    // Destruir previos
     this.choicesMap.forEach((c) => c.destroy());
     this.choicesMap.clear();
 
-    this.filters.forEach((spec) => {
-      // Personas filtradas por todos los demás filtros
-      let base = this.personas;
-      this.filters.forEach((f) => {
-        if (f === spec) return; // saltar el propio filtro
-        if (typeof f.predicate === 'function') {
-          base = base.filter((p) => f.predicate!(p, this.selection));
-        }
-      });
-      const av = spec.available(base, this.opciones);
-      if (!av) return;
+    // ⚠️ CASCADA: filtro i ve personas filtradas por [0..i-1], no por sí mismo.
+    for (let i = 0; i < this.filters.length; i++) {
+      const spec = this.filters[i];
 
+      // Base para available del filtro i
+      const baseForI = this.applyFiltersUpTo(this.personas, i, this.selection);
+
+      const av = spec.available(baseForI, this.opciones);
+      if (!av) continue;
+
+      // Preserva selección previa de este filtro
+      const prevSel = keep?.[spec.stateKey as string] ?? this.selection[spec.stateKey as string] ?? [];
+
+      // No perder lo elegido: añadir opciones faltantes con contador (0)
+      this.ensureSelectedOptions(av, prevSel);
+
+      // Hidratar Choices
       const ch = spec.hydrate(av);
       this.choicesMap.set(spec.id, ch);
 
-      // restaurar selección sin disparar cambios
-      const prev = keep?.[spec.stateKey as string];
-      if (prev && prev.length > 0) ch.setChoiceByValue(prev);
+      // Restaurar selección sin disparar cambios
+      if (prevSel && prevSel.length > 0) ch.setChoiceByValue(prevSel);
 
-      // listener que respeta el flag
       ch.passedElement.element.addEventListener('change', () => {
         if (this.isHydrating) return;
         this.scheduleCriteriaChange();
       });
-    });
+    }
 
     this.isHydrating = false;
   }
