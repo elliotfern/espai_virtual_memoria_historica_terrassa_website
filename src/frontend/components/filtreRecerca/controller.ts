@@ -207,7 +207,15 @@ export class BuscadorController {
     this.choicesMap.clear();
 
     this.filters.forEach((spec) => {
-      const av = spec.available(this.resultados, this.opciones);
+      // Personas filtradas por todos los demás filtros
+      let base = this.personas;
+      this.filters.forEach((f) => {
+        if (f === spec) return; // saltar el propio filtro
+        if (typeof f.predicate === 'function') {
+          base = base.filter((p) => f.predicate!(p, this.selection));
+        }
+      });
+      const av = spec.available(base, this.opciones);
       if (!av) return;
 
       const ch = spec.hydrate(av);
