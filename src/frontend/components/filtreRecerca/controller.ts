@@ -28,6 +28,7 @@ export class BuscadorController {
   private filters: FilterSpec[];
   private choicesMap = new Map<string, Choices>();
   private selection: SelectionState;
+  private isHydrating = false; // ⬅️ nou
 
   private config: BuscadorConfig;
 
@@ -88,11 +89,13 @@ export class BuscadorController {
   }
 
   private hydrateFilters(keep?: SelectionState): void {
+    // evita cascada d'esdeveniments durant la hidrata
+    this.isHydrating = true;
+
     // destruir previos
     this.choicesMap.forEach((c) => c.destroy());
     this.choicesMap.clear();
 
-    // pedir disponibles a cada filtro + hidratar
     this.filters.forEach((spec) => {
       const av = spec.available(this.resultados, this.opciones);
       if (!av) return;
@@ -100,12 +103,18 @@ export class BuscadorController {
       const ch = spec.hydrate(av);
       this.choicesMap.set(spec.id, ch);
 
-      // restaurar si procede
+      // restaurar selecció sense provocar re-filtres
       const prev = keep?.[spec.stateKey as string];
       if (prev?.length) ch.setChoiceByValue(prev);
 
-      ch.passedElement.element.addEventListener('change', () => this.onCriteriaChange());
+      // IMPORTANT: listener que respecta el flag
+      ch.passedElement.element.addEventListener('change', () => {
+        if (this.isHydrating) return; // ⬅️ ignora canvis programàtics
+        this.onCriteriaChange();
+      });
     });
+
+    this.isHydrating = false; // ja es pot escoltar canvis reals d’usuari
   }
 
   private readSelection(): SelectionState {
