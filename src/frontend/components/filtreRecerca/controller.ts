@@ -115,9 +115,40 @@ export class BuscadorController {
 
   // ——————————————————— Internals ———————————————————
 
+  /** Crea un Web Worker inline (sin depender de import.meta.url). */
+  private createInlineWorker(): Worker {
+    const workerCode = `
+    let INDEX = [];
+    self.onmessage = function(e) {
+      const msg = e.data;
+      if (msg.type === 'init') {
+        INDEX = msg.index || [];
+        self.postMessage({ type: 'ready' });
+        return;
+      }
+      if (msg.type === 'filter') {
+        const t = (msg.texto || '').trim().toLowerCase();
+        if (t.length === 0) {
+          const allIdx = INDEX.map(x => x.i);
+          self.postMessage({ type: 'filtered', id: msg.id, idx: allIdx });
+          return;
+        }
+        const idx = [];
+        for (let k = 0; k < INDEX.length; k++) {
+          if (INDEX[k].s.includes(t)) idx.push(INDEX[k].i);
+        }
+        self.postMessage({ type: 'filtered', id: msg.id, idx });
+      }
+    };
+  `;
+    const blob = new Blob([workerCode], { type: 'application/javascript' });
+    const url = URL.createObjectURL(blob);
+    return new Worker(url); // simple, sin { type: 'module' }
+  }
+
   private ensureWorker(): void {
     if (this.worker) return;
-    this.worker = new Worker(new URL('./filters.worker.ts', import.meta.url), { type: 'module' });
+    this.worker = this.createInlineWorker();
     this.worker.onmessage = (e: MessageEvent<WorkerOutMsg>) => {
       const msg = e.data;
       if (msg.type === 'ready') {
