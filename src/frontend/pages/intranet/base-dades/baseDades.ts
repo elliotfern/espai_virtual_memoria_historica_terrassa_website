@@ -26,6 +26,7 @@ export function baseDadesIntranet() {
   mostrarBotonsNomesAdmin();
 
   if (pageType[2] === 'general') {
+    console.log('hola');
     botonsEstat(pageType[1]);
     cargarTabla(pageType[1], 1);
     if (pageType[3] === 'llistat-duplicats') {
