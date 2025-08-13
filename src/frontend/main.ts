@@ -1,6 +1,7 @@
-//import { initButtons } from './components/fitxaRepresaliat/fitxaRepresaliat';
-import { cargarTabla } from './components/taulaDades/taulaDades';
-import { botonsEstat } from './components/taulaDades/botonsEstat';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './estils/style.css';
+import 'bootstrap';
+
 import { initBuscador } from './components/cercadorHomepage/cercadorPaginaInici';
 import { TaulaDadesFonts } from './components/fontsDocumentals/taulaDadesFonts';
 import { nameUser } from './components/userName/userName';
@@ -8,11 +9,8 @@ import { getPageType } from './services/url/splitUrl';
 import { intranet } from './pages/intranet/intranet';
 import { loginPage } from './services/auth/login';
 import { initCookieConsent } from './components/bannerCookies/cookie';
+import { baseDadesWebPublica } from './pages/webPublica/baseDades/baseDades';
 import { fitxaRepresaliat } from './components/fitxaRepresaliat';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './estils/style.css';
-import 'bootstrap';
-import { iniciarBuscador } from './components/filtreAdvanced/buscador';
 
 nameUser();
 
@@ -27,21 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
     loginPage();
   } else if (pageType[0] === 'gestio') {
     intranet();
-  } else if (pageType[1] === 'general' || pageType[1] === 'general#filtre') {
-    botonsEstat(pageType[1]);
-    cargarTabla(pageType[1], 1);
-  } else if (pageType[1] === 'represaliats' || pageType[1] === 'represaliats#filtre') {
-    botonsEstat(pageType[1]);
-    cargarTabla(pageType[1], 1);
-  } else if (pageType[1] === 'exiliats-deportats' || pageType[1] === 'exiliats-deportats#filtre') {
-    botonsEstat(pageType[1]);
-    cargarTabla(pageType[1], 1);
-  } else if (pageType[1] === 'filtre-exiliats') {
-    // carregar aqui scripts
-    iniciarBuscador();
-  } else if (pageType[1] === 'cost-huma' || pageType[1] === 'cost-huma#filtre') {
-    botonsEstat(pageType[1]);
-    cargarTabla(pageType[1], 1);
+  } else if (pageType[0] === 'base-dades') {
+    baseDadesWebPublica();
   } else if (pageType[0] === 'fitxa') {
     // const id = pageType[1];
     const slug = pageType[1];

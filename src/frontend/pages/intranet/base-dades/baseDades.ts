@@ -26,6 +26,8 @@ export function baseDadesIntranet() {
   mostrarBotonsNomesAdmin();
 
   if (pageType[2] === 'general') {
+    botonsEstat(pageType[1]);
+    cargarTabla(pageType[1], 1);
     if (pageType[3] === 'llistat-duplicats') {
       taulaDuplicats();
     } else if (pageType[3] === 'quadre-general') {
@@ -35,6 +37,8 @@ export function baseDadesIntranet() {
       cargarTabla(pageType[2], 2);
     }
   } else if (pageType[2] === 'represaliats') {
+    botonsEstat(pageType[1]);
+    cargarTabla(pageType[1], 1);
     if (pageType[3] === 'llistat-processats') {
       taulaProcessats();
     } else if (pageType[3] === 'llistat-afusellats') {
@@ -46,6 +50,8 @@ export function baseDadesIntranet() {
       cargarTabla(pageType[2], 2);
     }
   } else if (pageType[2] === 'exiliats-deportats') {
+    botonsEstat(pageType[1]);
+    cargarTabla(pageType[1], 1);
     if (pageType[3] === 'llistat-exiliats') {
       taulaExiliats();
     } else if (pageType[3] === 'llistat-deportats') {
@@ -55,6 +61,8 @@ export function baseDadesIntranet() {
       cargarTabla(pageType[2], 2);
     }
   } else if (pageType[2] === 'cost-huma') {
+    botonsEstat(pageType[1]);
+    cargarTabla(pageType[1], 1);
     if (pageType[3] === 'llistat-morts-al-front') {
       taulaMortsFronts();
     } else if (pageType[3] === 'llistat-morts-civils') {

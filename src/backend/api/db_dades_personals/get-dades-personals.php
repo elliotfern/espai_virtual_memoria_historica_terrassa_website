@@ -793,41 +793,101 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
                 a.estat_civil,
                 a.estudis,
                 a.ofici,
-                a.causa_defuncio
-
+                a.causa_defuncio,
+                ex.data_exili,
+                ex.primer_desti_exili,
+                ex.deportat,
+                ex.participacio_resistencia
           FROM db_dades_personals AS a
           LEFT JOIN aux_dades_municipis AS e1 ON a.municipi_naixement = e1.id
           LEFT JOIN aux_dades_municipis AS e2 ON a.municipi_defuncio = e2.id
+          LEFT JOIN db_exiliats AS ex ON a.id = ex.idPersona
           WHERE (
                  FIND_IN_SET(:catNum1, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
                  OR FIND_IN_SET(:catNum2, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
           )
           ORDER BY a.cognom1 ASC;";
 
-    /*
-	municipi_naixement 	municipi_defuncio 	tipologia_lloc_defuncio 	causa_defuncio 	municipi_residencia 	adreca 	estat_civil 	estudis 	ofici 	empresa 	sector 	sub_sector 	carrec_empresa 	filiacio_politica 	filiacio_sindical
-
-sexe	string	Sexo: "Home" o "Dona"
-provincia_naixement	string	Provincia de nacimiento
-estat_civil	string	Estado civil (ej: "Solter/a", "Casat/da")
-estudis	string	Nivel de estudios (ej: "Alfabetitzat")
-ofici	string	Oficio (ej: "Agent a comissió")
-filiacio_politica	string	IDs de partidos políticos, formato string o array (ej: "{1,3}")
-filiacio_sindical	string	IDs de sindicatos, igual que partido
-causa_defuncio	string	Causa de defunción (ej: "Accidente")
-completat	number	Estado completado (ej: 3)
-visibilitat	number	Estado de visibilidad
-situacio	string	Situación: "exiliat" o "deportat"
-sub_filtro_deportat	string	Subfiltro para deportados: "allibertat", "mort"
-primer_desti_exili	string	Municipio de primer destino en exilio
-deportat	boolean	Si es deportado o no
-participa_resistencia_francesa	boolean	Si participó en la resistencia francesa
-*/
     try {
         // Pasamos los valores como array en el mismo orden de los placeholders
         $params = [
             ':catNum1' => $catNum1,
             ':catNum2' => $catNum2,
+        ];
+
+        $result = $db->getData($query, $params, false);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
+    // 4) Llistat filtre Cost huma guerra civil
+    // ruta GET => "https://memoriaterrassa.cat/api/dades_personals/get/?type=filtreCostHuma"
+} elseif (isset($_GET['type']) && $_GET['type'] == 'filtreCostHuma') {
+    $db = new Database();
+    $catNum1 = 3;
+    $catNum2 = 4;
+    $catNum3 = 5;
+
+    $query = "SELECT 
+                a.id,
+                a.cognom1,
+                a.cognom2,
+                a.nom, 
+                a.data_naixement,
+                a.data_defuncio,
+                e1.ciutat,
+                a.municipi_naixement,
+                a.municipi_defuncio,
+                REPLACE(REPLACE(a.categoria, '{', '['), '}', ']') AS categoria,
+                e2.ciutat AS ciutat2, 
+                a.slug,
+                a.sexe,
+                REPLACE(REPLACE(a.filiacio_politica, '{', '['), '}', ']') AS filiacio_politica,
+                REPLACE(REPLACE(a.filiacio_sindical, '{', '['), '}', ']') AS filiacio_sindical,
+                a.estat_civil,
+                a.estudis,
+                a.ofici,
+                a.causa_defuncio,
+                ex.data_exili,
+                ex.primer_desti_exili,
+                ex.deportat,
+                ex.participacio_resistencia
+          FROM db_dades_personals AS a
+          LEFT JOIN aux_dades_municipis AS e1 ON a.municipi_naixement = e1.id
+          LEFT JOIN aux_dades_municipis AS e2 ON a.municipi_defuncio = e2.id
+          LEFT JOIN db_exiliats AS ex ON a.id = ex.idPersona
+          WHERE (
+                 FIND_IN_SET(:catNum1, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
+                 OR FIND_IN_SET(:catNum2, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
+                 OR FIND_IN_SET(:catNum3, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
+          )
+          ORDER BY a.cognom1 ASC;";
+
+    try {
+        // Pasamos los valores como array en el mismo orden de los placeholders
+        $params = [
+            ':catNum1' => $catNum1,
+            ':catNum2' => $catNum2,
+            ':catNum3' => $catNum3,
         ];
 
         $result = $db->getData($query, $params, false);

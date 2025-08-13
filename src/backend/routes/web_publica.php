@@ -39,11 +39,10 @@ $base_routes = [
 
     // 1. Base de dades
     '/base-dades/general' => 'public/web-publica/base-dades/base-dades-global.php',
-    '/base-dades/cost-huma' => 'public/web-publica/base-dades/base-dades-cost-huma.php',
+    '/base-dades/cost-huma' => 'public/web-publica/base-dades/filtre-pagina-cost-huma.php',
     '/base-dades/represaliats' => 'public/web-publica/base-dades/base-dades-represaliats.php',
-    '/base-dades/exiliats-deportats' => 'public/web-publica/base-dades/base-dades-exiliats.php',
+    '/base-dades/exiliats-deportats' => 'public/web-publica/base-dades/filtre-pagina-exiliats.php',
 
-    '/base-dades/filtre-exiliats' => 'public/web-publica/base-dades/filtre-pagina-exiliats.php',
 
     '/fitxa/{id}' => 'public/web-publica/base-dades/fitxa-represaliat.php',
     '/cerca-represaliat' => 'public/web-publica/base-dades/cerca-represaliat.php',
@@ -113,7 +112,7 @@ $routes = [
     ],
 
     '/base-dades/cost-huma' => [
-        'view' => 'public/web-publica/base-dades/base-dades-cost-huma.php',
+        'view' => 'public/web-publica/base-dades/filtre-pagina-cost-huma.php',
         'needs_session' => false,
         'header_footer' => false,
         'header_menu_footer' => true
@@ -127,13 +126,6 @@ $routes = [
     ],
 
     '/base-dades/exiliats' => [
-        'view' => 'public/web-publica/base-dades/base-dades-exiliats.php',
-        'needs_session' => false,
-        'header_footer' => false,
-        'header_menu_footer' => true
-    ],
-
-    '/base-dades/filtre-exiliats' => [
         'view' => 'public/web-publica/base-dades/filtre-pagina-exiliats.php',
         'needs_session' => false,
         'header_footer' => false,
