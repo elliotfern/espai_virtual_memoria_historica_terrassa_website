@@ -55,6 +55,9 @@ export class BuscadorController {
   private newestAcceptedId = 0;
   private workerReady = false;
 
+  // NUEVO: subconjunto por TEXTO para hidratar opciones con “texto + otros filtros”
+  private textSubset: Persona[] = [];
+
   constructor(filters: FilterSpec[], config: BuscadorConfig) {
     this.filters = filters;
     this.config = config;
@@ -77,6 +80,7 @@ export class BuscadorController {
       setMuniToProv(new Map(opciones.municipis.map((m) => [m.id, m.provincia || ''])));
 
       // Estado inicial
+      this.textSubset = this.personas.slice(); // base por texto (vacío) = todas
       this.resultados = [...this.personas];
 
       // Worker: índice compacto {i, s}
@@ -84,7 +88,7 @@ export class BuscadorController {
       const index = this.personas.map((_, i) => ({ i, s: this.personas[i].__search }));
       this.postToWorker({ type: 'init', index });
 
-      // Render de slots y primera hidratación (como tu versión original)
+      // Render de slots y primera hidratación
       this.renderFilterSlots();
       this.hydrateFilters(this.selection);
 
@@ -108,7 +112,6 @@ export class BuscadorController {
       // Reset
       document.getElementById('btn-reset')?.addEventListener('click', () => this.reset());
     } catch (err) {
-      // eslint-disable-next-line no-console
       console.error('Error inicialitzant el cercador:', err);
     }
   }
@@ -158,10 +161,12 @@ export class BuscadorController {
       if (msg.type === 'filtered') {
         if (msg.id < this.newestAcceptedId) return; // respuesta obsoleta
 
-        // Subconjunto por texto (índices → personas)
-        let filtered: Persona[] = msg.idx.map((i) => this.personas[i]);
+        // ① subconjunto por texto (índices → personas)
+        const filteredByText: Persona[] = msg.idx.map((i) => this.personas[i]);
+        this.textSubset = filteredByText.slice();
 
-        // Aplica predicados de filtros sobre el subconjunto
+        // ② Aplica predicados de filtros (AND global) sobre el subconjunto por texto
+        let filtered: Persona[] = filteredByText;
         this.filters.forEach((spec) => {
           if (typeof spec.predicate === 'function') {
             filtered = filtered.filter((p) => spec.predicate!(p, this.selection));
@@ -173,7 +178,7 @@ export class BuscadorController {
         // Chips actuales
         renderActiveChips(this.selection, this.opciones, this.filters, this.choicesMap, () => this.scheduleCriteriaChange());
 
-        // Rehidrata selects según resultados (siguiendo tu contrato de FilterSpec)
+        // Rehidrata selects según “texto + demás filtros (no el propio)”
         this.hydrateFilters(this.selection);
 
         // Render
@@ -194,68 +199,58 @@ export class BuscadorController {
     this.filters.forEach((f) => f.renderSlot(container));
   }
 
-  /**
-   * Hidratación «contrato original»: usamos available() → hydrate(av)
-   * y destruimos/creamos Choices para evitar desajustes de tipos.
-   * Se evita cascada de eventos con isHydrating.
-   */
-  // --- dentro de BuscadorController ---
+  // ---------- Helpers NUEVOS para hidratación coherente ----------
 
-  /** Aplica predicados de filtros [0..uptoExclusive-1] sobre `rows`. */
-  private applyFiltersUpTo(rows: Persona[], uptoExclusive: number, sel = this.selection): Persona[] {
+  /** Aplica todos los predicados excepto el del filtro cuyo stateKey sea `skipKey`. */
+  private filterAllExcept(rows: Persona[], skipKey: string, sel: SelectionState): Persona[] {
     let out = rows;
-    for (let j = 0; j < uptoExclusive; j++) {
-      const f = this.filters[j];
-      if (typeof f.predicate === 'function') {
-        out = out.filter((p) => f.predicate!(p, sel));
-      }
+    for (const f of this.filters) {
+      if (f.stateKey === skipKey) continue;
+      if (typeof f.predicate === 'function') out = out.filter((p) => f.predicate!(p, sel));
     }
     return out;
   }
 
-  /** Asegura que los valores ya seleccionados existen en av.options (si no, los añade con (0)). */
+  /** Si alguna opción seleccionada no está en av.options, la añadimos con contador (0) para no perder selección. */
   private ensureSelectedOptions(av: { id: string; stateKey: string; options: { value: string; label: string }[] }, selected: string[]) {
     const present = new Set(av.options.map((o) => o.value));
     const missing = selected.filter((v) => !present.has(v));
-    if (missing.length === 0) return;
-
-    // Etiqueta mínima: mantener el value y marcar (0).
-    // Si quieres etiquetas “bonitas”, aquí podrías mapear por spec/stateKey a su catálogo.
-    for (const v of missing) {
-      av.options.push({ value: v, label: `${v} (0)` });
-    }
+    for (const v of missing) av.options.push({ value: v, label: `${v} (0)` });
+    av.options.sort((a, b) => a.label.localeCompare(b.label));
   }
 
+  /**
+   * Hidratación:
+   * - Base de cada filtro = (subconjunto por TEXTO) + (TODOS los demás filtros activos, menos el propio).
+   * - Preserva selecciones aunque no aparezcan en el recuento actual.
+   */
   private hydrateFilters(keep?: SelectionState): void {
     this.isHydrating = true;
 
-    // Destruir previos
+    // destruir previos
     this.choicesMap.forEach((c) => c.destroy());
     this.choicesMap.clear();
 
-    // ⚠️ CASCADA: filtro i ve personas filtradas por [0..i-1], no por sí mismo.
-    for (let i = 0; i < this.filters.length; i++) {
-      const spec = this.filters[i];
+    for (const spec of this.filters) {
+      // Base para available: TEXTO + “todos menos yo”
+      const baseForSpec = this.filterAllExcept(this.textSubset, spec.stateKey as string, this.selection);
 
-      // Base para available del filtro i
-      const baseForI = this.applyFiltersUpTo(this.personas, i, this.selection);
-
-      const av = spec.available(baseForI, this.opciones);
+      const av = spec.available(baseForSpec, this.opciones);
       if (!av) continue;
 
-      // Preserva selección previa de este filtro
+      // selección previa (desde keep o desde selection)
       const prevSel = keep?.[spec.stateKey as string] ?? this.selection[spec.stateKey as string] ?? [];
 
-      // No perder lo elegido: añadir opciones faltantes con contador (0)
+      // no perder selección si no aparece en options ahora mismo
       this.ensureSelectedOptions(av, prevSel);
 
-      // Hidratar Choices
       const ch = spec.hydrate(av);
       this.choicesMap.set(spec.id, ch);
 
-      // Restaurar selección sin disparar cambios
+      // restaurar selección sin disparar cambios
       if (prevSel && prevSel.length > 0) ch.setChoiceByValue(prevSel);
 
+      // listener que respeta el flag
       ch.passedElement.element.addEventListener('change', () => {
         if (this.isHydrating) return;
         this.scheduleCriteriaChange();
@@ -301,8 +296,12 @@ export class BuscadorController {
     // Fallback si aún no está listo el worker
     if (!this.workerReady || !this.worker) {
       const t = texto.trim().toLowerCase();
-      let filtered: Persona[] = t ? this.personas.filter((p) => p.__search.includes(t)) : this.personas;
 
+      // ① subconjunto por texto
+      this.textSubset = t ? this.personas.filter((p) => p.__search.includes(t)) : this.personas;
+
+      // ② AND de TODOS los filtros sobre ese subconjunto
+      let filtered: Persona[] = this.textSubset;
       this.filters.forEach((spec) => {
         if (typeof spec.predicate === 'function') {
           filtered = filtered.filter((p) => spec.predicate!(p, this.selection));
@@ -353,6 +352,9 @@ export class BuscadorController {
 
     this.page = 1;
     this.selection = createEmptySelection(this.filters);
+
+    // Reset también del subconjunto por texto
+    this.textSubset = this.personas.slice();
 
     this.hydrateFilters(this.selection);
 

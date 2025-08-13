@@ -76,8 +76,9 @@ export const FILTER_PROVINCIA: FilterSpec = {
     let prov = (p.provincia_naixement ?? '').trim().toLowerCase();
 
     // 2) si no hay directa, derivada desde el municipi
+    // dentro de FILTER_PROVINCIA.predicate
     if (!prov && typeof p.municipi_naixement === 'number') {
-      prov = getProvinciaByMunicipi(p.municipi_naixement);
+      prov = (getProvinciaByMunicipi(p.municipi_naixement) ?? '').trim().toLowerCase();
     }
 
     return prov ? chosen.has(prov) : false;
