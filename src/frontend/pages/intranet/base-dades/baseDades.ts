@@ -22,71 +22,89 @@ import { formcomiteRelacionsSolidaritat } from './tipusRepressio/comiteRelacions
 export function baseDadesIntranet() {
   const url = window.location.href;
   const pageType = getPageType(url);
+  // Estructura esperada: [ 'gestio', 'base-dades', section, sub? , ... ]
+  const section = pageType[2]; // 'general' | 'represaliats' | 'exiliats-deportats' | 'cost-huma' | ...
+  const sub = pageType[3]; // 'llistat-*' | 'quadre-general' | id | undefined
 
   mostrarBotonsNomesAdmin();
 
-  if (pageType[2] === 'general') {
-    console.log('hola');
-    botonsEstat(pageType[1]);
-    cargarTabla(pageType[1], 1);
-    if (pageType[3] === 'llistat-duplicats') {
-      taulaDuplicats();
-    } else if (pageType[3] === 'quadre-general') {
-      taulaQuadreGeneral();
-    } else {
-      botonsEstat(pageType[2]);
-      cargarTabla(pageType[2], 2);
-    }
-  } else if (pageType[2] === 'represaliats') {
-    botonsEstat(pageType[1]);
-    cargarTabla(pageType[1], 1);
-    if (pageType[3] === 'llistat-processats') {
-      taulaProcessats();
-    } else if (pageType[3] === 'llistat-afusellats') {
-      taulaAfusellats();
-    } else if (pageType[3] === 'llistat-preso-model') {
-      taulaPresoModel();
-    } else {
-      botonsEstat(pageType[2]);
-      cargarTabla(pageType[2], 2);
-    }
-  } else if (pageType[2] === 'exiliats-deportats') {
-    botonsEstat(pageType[1]);
-    cargarTabla(pageType[1], 1);
-    if (pageType[3] === 'llistat-exiliats') {
-      taulaExiliats();
-    } else if (pageType[3] === 'llistat-deportats') {
-      taulaDeportats();
-    } else {
-      botonsEstat(pageType[2]);
-      cargarTabla(pageType[2], 2);
-    }
-  } else if (pageType[2] === 'cost-huma') {
-    botonsEstat(pageType[1]);
-    cargarTabla(pageType[1], 1);
-    if (pageType[3] === 'llistat-morts-al-front') {
-      taulaMortsFronts();
-    } else if (pageType[3] === 'llistat-morts-civils') {
-      taulaMortsCivils();
-    } else if (pageType[3] === 'llistat-represalia-republicana') {
-      taulaRepresaliaRepublicana();
-    } else {
-      botonsEstat(pageType[2]);
-      cargarTabla(pageType[2], 2);
-    }
-  } else if (pageType[2] === 'modifica-fitxa') {
-    modificaFitxa(Number(pageType[3]));
-  } else if (pageType[2] === 'nova-fitxa') {
+  // Ramas “directas” que no son listados
+  if (section === 'modifica-fitxa') {
+    modificaFitxa(Number(sub));
+    return;
+  }
+  if (section === 'nova-fitxa') {
     modificaFitxa();
-  } else if (pageType[2] === 'modifica-repressio') {
+    return;
+  }
+  if (section === 'modifica-repressio') {
     formTipusRepressio();
-  } else if (pageType[2] === 'empresonaments') {
+    return;
+  }
+  if (section === 'empresonaments') {
     formDetingutsGuardiaUrbana(Number(pageType[4]), Number(pageType[5]));
-  } else if (pageType[2] === 'empresonaments-preso-model') {
+    return;
+  }
+  if (section === 'empresonaments-preso-model') {
     formPresoModel(Number(pageType[4]), Number(pageType[5]));
-  } else if (pageType[2] === 'empresonaments-comite-solidaritat') {
+    return;
+  }
+  if (section === 'empresonaments-comite-solidaritat') {
     formcomiteSolidaritat(Number(pageType[4]), Number(pageType[5]));
-  } else if (pageType[2] === 'empresonaments-comite-relacions-solidaritat') {
+    return;
+  }
+  if (section === 'empresonaments-comite-relacions-solidaritat') {
     formcomiteRelacionsSolidaritat(Number(pageType[4]), Number(pageType[5]));
+    return;
+  }
+
+  // A partir de aquí, solo secciones de listados en INTRANET (context = 2)
+  // Llamamos UNA sola vez a los botones y al listado base de la sección
+  const context = 2;
+  botonsEstat(section);
+
+  // Valor por defecto para “completat” en intranet: 3 (totes)
+  // (ajústalo si quieres otro por defecto)
+  cargarTabla(section, context, 3);
+
+  // Subrutas específicas: pintan tablas/consultas concretas SIN volver a crear botones
+  if (section === 'general') {
+    if (sub === 'llistat-duplicats') {
+      taulaDuplicats();
+    } else if (sub === 'quadre-general') {
+      taulaQuadreGeneral();
+    }
+    return;
+  }
+
+  if (section === 'represaliats') {
+    if (sub === 'llistat-processats') {
+      taulaProcessats();
+    } else if (sub === 'llistat-afusellats') {
+      taulaAfusellats();
+    } else if (sub === 'llistat-preso-model') {
+      taulaPresoModel();
+    }
+    return;
+  }
+
+  if (section === 'exiliats-deportats') {
+    if (sub === 'llistat-exiliats') {
+      taulaExiliats();
+    } else if (sub === 'llistat-deportats') {
+      taulaDeportats();
+    }
+    return;
+  }
+
+  if (section === 'cost-huma') {
+    if (sub === 'llistat-morts-al-front') {
+      taulaMortsFronts();
+    } else if (sub === 'llistat-morts-civils') {
+      taulaMortsCivils();
+    } else if (sub === 'llistat-represalia-republicana') {
+      taulaRepresaliaRepublicana();
+    }
+    return;
   }
 }

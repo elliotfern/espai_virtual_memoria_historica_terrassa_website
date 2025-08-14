@@ -577,6 +577,12 @@ if ($pagina === "modifica-fitxa") {
 
           <!-- Botón de opción "No" -->
           <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" id="completat_pendent" name="completat" value="3" class="custom-control-input">
+            <label class="custom-control-label" for="completat_pendent">Revisió pendent</label>
+          </div>
+
+          <!-- Botón de opción "No" -->
+          <div class="custom-control custom-radio custom-control-inline">
             <input type="radio" id="completat_no" name="completat" value="1" class="custom-control-input">
             <label class="custom-control-label" for="completat_no">No completada</label>
           </div>

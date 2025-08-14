@@ -21,6 +21,7 @@ export async function cargarTabla(pag: string, context: number, completat: numbe
   // completat 1 = PENDENT > visibilitat = 1
   // completat 2 = COMPLETADA > visibilitat = 2
   // completat 3 = TOTES
+  // completat 4 = cal revisio
   // error: completat 1 > visibilitat 2
   // cal fer un endpoint independent per web publica i intranet
 
@@ -46,8 +47,10 @@ export async function cargarTabla(pag: string, context: number, completat: numbe
     webFitxa = `/fitxa/`;
     webTarget = '_blank';
 
-    if (completat !== 1 && completat !== 2) {
+    if (completat === 3) {
       completat = 3;
+    } else if (completat === 4) {
+      completat = 4;
     }
 
     if (pagNet === 'general') {
@@ -150,7 +153,14 @@ export async function cargarTabla(pag: string, context: number, completat: numbe
           btnModificar.classList.add('btn', 'btn-sm', 'btn-primary');
           tdModificar.appendChild(btnModificar);
           tr.appendChild(tdModificar);
-        } else {
+        } else if (estatFitxa === 3) {
+          const tdModificar = document.createElement('td');
+          const btnModificar = document.createElement('button');
+          btnModificar.textContent = 'CAL REVISIÓ';
+          btnModificar.classList.add('btn', 'btn-sm', 'btn-secondary');
+          tdModificar.appendChild(btnModificar);
+          tr.appendChild(tdModificar);
+        } else if (estatFitxa === 2) {
           const tdModificar = document.createElement('td');
           const btnModificar = document.createElement('button');
           btnModificar.textContent = 'COMPLETADA';

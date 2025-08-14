@@ -72,6 +72,16 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
               ORDER BY a.cognom1 ASC";
         $stmt = $conn->prepare($query);
         $stmt->execute();
+    } else if ($completat === '4') {
+        // Caso especial: completat=3 significa completat IN (1, 2)
+        $query = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat, a.font_intern, a.visibilitat, a.slug
+              FROM db_dades_personals AS a
+              LEFT JOIN aux_dades_municipis AS e1 ON a.municipi_naixement = e1.id
+              LEFT JOIN aux_dades_municipis AS e2 ON a.municipi_defuncio = e2.id
+              WHERE a.completat = 3
+              ORDER BY a.cognom1 ASC";
+        $stmt = $conn->prepare($query);
+        $stmt->execute();
     } else {
         // Caso normal: filtro por un solo valor
         $query = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat, a.font_intern, a.visibilitat, a.slug

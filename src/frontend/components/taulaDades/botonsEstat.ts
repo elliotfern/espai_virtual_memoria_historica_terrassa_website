@@ -5,6 +5,7 @@ export function botonsEstat(pag: string) {
   const divBotones = document.getElementById('botonsFiltres');
 
   if (divBotones) {
+    divBotones.innerHTML = ''; // Limpia botones anteriores
     // Crear botón "Mostrar Todos"
     const botonMostrarTodos = document.createElement('button');
     botonMostrarTodos.innerText = 'Tots';
@@ -21,6 +22,14 @@ export function botonsEstat(pag: string) {
       cargarTabla(pag, 2, 2); // Filtrar por completado (2)
     };
 
+    // Crear botón "cal revisio"
+    const botonRevisio = document.createElement('button');
+    botonRevisio.innerText = 'Cal revisió';
+    botonRevisio.classList.add('btn', 'btn-secondarys', 'mr-2'); // Clases de Bootstrap
+    botonRevisio.onclick = function () {
+      cargarTabla(pag, 2, 4); // Filtrar por completado (2)
+    };
+
     // Crear botón "No Completado"
     const botonNoCompletado = document.createElement('button');
     botonNoCompletado.innerText = 'Pendents';
@@ -32,6 +41,7 @@ export function botonsEstat(pag: string) {
     // Agregar los botones al contenedor
     divBotones.appendChild(botonMostrarTodos);
     divBotones.appendChild(botonCompletado);
+    divBotones.appendChild(botonRevisio);
     divBotones.appendChild(botonNoCompletado);
   }
 }
