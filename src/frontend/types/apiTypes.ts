@@ -41,6 +41,7 @@ export type ApiUrls = {
     MOTIUS_DETENCIO: string;
     GRUPS_REPRESSIO: string;
     PRESONS: string;
+    LLISTAT_CASOS_REVISIO: string;
   };
   POST: {
     MUNICIPI: string;

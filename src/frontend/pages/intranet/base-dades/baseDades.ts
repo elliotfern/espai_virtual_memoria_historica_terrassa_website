@@ -18,6 +18,7 @@ import { formDetingutsGuardiaUrbana } from './tipusRepressio/ detingutsGuardiaUr
 import { formPresoModel } from './tipusRepressio/presoModel';
 import { formcomiteSolidaritat } from './tipusRepressio/comiteSolidaritat';
 import { formcomiteRelacionsSolidaritat } from './tipusRepressio/comiteRelacionsSolidaritat';
+import { taulaRevisio } from './taulaRevisio';
 
 export function baseDadesIntranet() {
   const url = window.location.href;
@@ -73,6 +74,8 @@ export function baseDadesIntranet() {
       taulaDuplicats();
     } else if (sub === 'quadre-general') {
       taulaQuadreGeneral();
+    } else if (sub === 'casos-revisio') {
+      taulaRevisio();
     }
     return;
   }

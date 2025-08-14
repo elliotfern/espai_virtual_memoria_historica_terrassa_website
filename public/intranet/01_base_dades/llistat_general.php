@@ -7,6 +7,7 @@
         <?php if ($isAdmin): ?>
             <ul>
                 <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['base_dades']; ?>/general/llistat-duplicats">Llistat duplicats</a></li>
+                <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['base_dades']; ?>/general/llistat-revisio">Llistat casos revisió</a></li>
                 <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['base_dades']; ?>/general/quadre-general">Llistat Quadre general de víctimes</a></li>
             </ul>
             <hr>

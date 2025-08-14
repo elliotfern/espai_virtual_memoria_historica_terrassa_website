@@ -6,6 +6,7 @@
         <ul>
             <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['base_dades']; ?>/exiliats-deportats/llistat-exiliats">Llistat exiliats</a></li>
             <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['base_dades']; ?>/exiliats-deportats/llistat-deportats">Llistat deportats</a></li>
+            <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['base_dades']; ?>/general/llistat-revisio">Llistat casos revisió</a></li>
         </ul>
         <hr>
 

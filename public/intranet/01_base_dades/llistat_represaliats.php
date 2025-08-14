@@ -13,6 +13,7 @@
             <li>Responsabilitats polítiques</li>
             <li>Tribunal Orden Público</li>
             <li>Represaliats pendents de classificar (llistat Ajuntament)</li>
+            <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['base_dades']; ?>/general/llistat-revisio">Llistat casos revisió</a></li>
         </ul>
 
         <hr>

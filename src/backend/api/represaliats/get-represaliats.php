@@ -890,4 +890,43 @@ if ($slug === "exiliats") {
             500
         );
     }
+
+    // GET : grup 1 - LListat casos cal revisio
+    // URL: https://memoriaterrassa.cat/api/represaliats/get/llistatCasosRevisio
+} else if ($slug === 'llistatCasosRevisio') {
+    $db = new Database();
+
+    $query = "SELECT 
+                a.id, 
+                CONCAT(a.cognom1, ' ', a.cognom2, ', ', a.nom) AS nom_complet,
+                a.observacions_internes,
+               a.categoria,
+                FROM db_dades_personals AS a
+                WHERE completat = 3
+                ORDER BY a.cognom1 ASC;";
+
+    try {
+        $result = $db->getData($query);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
 }
