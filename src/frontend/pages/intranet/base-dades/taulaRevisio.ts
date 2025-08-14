@@ -68,7 +68,7 @@ export async function taulaRevisio() {
   }
 
   renderTaulaCercadorFiltres<EspaiRow>({
-    url: API_URLS.GET.LLISTAT_MORTS_CIVILS,
+    url: API_URLS.GET.LLISTAT_CASOS_REVISIO,
     containerId: 'taulaLlistatRevisio',
     columns,
     filterKeys: ['nom_complet'],

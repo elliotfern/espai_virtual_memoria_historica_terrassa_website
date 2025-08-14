@@ -74,7 +74,7 @@ export function baseDadesIntranet() {
       taulaDuplicats();
     } else if (sub === 'quadre-general') {
       taulaQuadreGeneral();
-    } else if (sub === 'casos-revisio') {
+    } else if (sub === 'llistat-revisio') {
       taulaRevisio();
     }
     return;
