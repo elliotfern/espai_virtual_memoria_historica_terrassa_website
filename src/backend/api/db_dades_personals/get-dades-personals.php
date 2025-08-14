@@ -211,7 +211,36 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
     $cat = filter_input(INPUT_GET, 'categoria', FILTER_DEFAULT);
 
     if ($cat === "cost-huma") {
-        if ($completat == 3) {
+        if ($completat == 4) {
+            $catNum1 = 3;
+            $catNum2 = 4;
+            $catNum3 = 5;
+
+            $sql = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat, a.font_intern, a.visibilitat, a.slug
+                FROM db_dades_personals AS a
+                LEFT JOIN aux_dades_municipis AS e1 ON a.municipi_naixement = e1.id
+                LEFT JOIN aux_dades_municipis AS e2 ON a.municipi_defuncio = e2.id
+                WHERE 
+                (FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
+                    OR FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
+                    OR FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0)
+                    AND a.completat = 3
+                    AND a.visibilitat IN (1, 2)
+                ORDER BY a.cognom1 ASC;";
+            global $conn;
+            $data = array();
+            /** @var PDO $conn */
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(1, $catNum1, PDO::PARAM_STR);
+            $stmt->bindParam(2, $catNum2, PDO::PARAM_STR);
+            $stmt->bindParam(3, $catNum3, PDO::PARAM_STR);
+            $stmt->execute();
+            if ($stmt->rowCount() === 0)  echo json_encode("No data");
+            while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $data[] = $users;
+            }
+            echo json_encode($data);
+        } else  if ($completat == 3) {
             $catNum1 = 3;
             $catNum2 = 4;
             $catNum3 = 5;
@@ -235,7 +264,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
             $stmt->bindParam(2, $catNum2, PDO::PARAM_STR);
             $stmt->bindParam(3, $catNum3, PDO::PARAM_STR);
             $stmt->execute();
-            if ($stmt->rowCount() === 0) echo ('No rows');
+            if ($stmt->rowCount() === 0)  echo json_encode("No data");
             while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 $data[] = $users;
             }
@@ -265,14 +294,39 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
             $stmt->bindParam(3, $catNum3, PDO::PARAM_STR);
             $stmt->bindParam(4, $completat, PDO::PARAM_INT);
             $stmt->execute();
-            if ($stmt->rowCount() === 0) echo ('No rows');
+            if ($stmt->rowCount() === 0)  echo json_encode("No data");
             while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 $data[] = $users;
             }
             echo json_encode($data);
         }
     } else if ($cat === "exiliats-deportats") {
-        if ($completat == 3) {
+        if ($completat == 4) {
+            $catNum1 = 10;
+            $catNum2 = 2;
+            $sql = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat, a.font_intern, a.visibilitat, a.slug, a.sexe
+                FROM db_dades_personals AS a
+                LEFT JOIN aux_dades_municipis AS e1 ON a.municipi_naixement = e1.id
+                LEFT JOIN aux_dades_municipis AS e2 ON a.municipi_defuncio = e2.id
+                WHERE 
+                    (FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
+                    OR FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0)
+                    AND a.completat = 3
+                    AND a.visibilitat IN (1, 2)
+                ORDER BY a.cognom1 ASC;";
+            global $conn;
+            $data = array();
+            /** @var PDO $conn */
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(1, $catNum1, PDO::PARAM_STR);
+            $stmt->bindParam(2, $catNum2, PDO::PARAM_STR);
+            $stmt->execute();
+            if ($stmt->rowCount() === 0)  echo json_encode("No data");
+            while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $data[] = $users;
+            }
+            echo json_encode($data);
+        } else if ($completat == 3) {
             $catNum1 = 10;
             $catNum2 = 2;
             $sql = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat, a.font_intern, a.visibilitat, a.slug, a.sexe
@@ -292,7 +346,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
             $stmt->bindParam(1, $catNum1, PDO::PARAM_STR);
             $stmt->bindParam(2, $catNum2, PDO::PARAM_STR);
             $stmt->execute();
-            if ($stmt->rowCount() === 0) echo ('No rows');
+            if ($stmt->rowCount() === 0)  echo json_encode("No data");
             while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 $data[] = $users;
             }
@@ -318,14 +372,45 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
             $stmt->bindParam(2, $catNum2, PDO::PARAM_STR);
             $stmt->bindParam(3, $completat, PDO::PARAM_INT);
             $stmt->execute();
-            if ($stmt->rowCount() === 0) echo ('No rows');
+            if ($stmt->rowCount() === 0)  echo json_encode("No data");
             while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 $data[] = $users;
             }
             echo json_encode($data);
         }
     } else if ($cat === "represaliats") {
-        if ($completat == 3) {
+        if ($completat == 4) {
+            $catNum1 = 1;
+            $catNum2 = 6;
+            $catNum3 = 7;
+            $catNum4 = 11;
+            $sql = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat, a.font_intern, a.visibilitat, a.slug
+                FROM db_dades_personals AS a
+                LEFT JOIN aux_dades_municipis AS e1 ON a.municipi_naixement = e1.id
+                LEFT JOIN aux_dades_municipis AS e2 ON a.municipi_defuncio = e2.id
+                WHERE 
+                    (FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
+                    OR FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
+                    OR FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
+                    OR FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0)
+                    AND a.completat = 3
+                    AND a.visibilitat IN (1, 2)
+                ORDER BY a.cognom1 ASC;";
+            global $conn;
+            $data = array();
+            /** @var PDO $conn */
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(1, $catNum1, PDO::PARAM_STR);
+            $stmt->bindParam(2, $catNum2, PDO::PARAM_STR);
+            $stmt->bindParam(3, $catNum3, PDO::PARAM_STR);
+            $stmt->bindParam(4, $catNum4, PDO::PARAM_STR);
+            $stmt->execute();
+            if ($stmt->rowCount() === 0)  echo json_encode("No data");
+            while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $data[] = $users;
+            }
+            echo json_encode($data);
+        } else if ($completat == 3) {
             $catNum1 = 1;
             $catNum2 = 6;
             $catNum3 = 7;
@@ -351,7 +436,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
             $stmt->bindParam(3, $catNum3, PDO::PARAM_STR);
             $stmt->bindParam(4, $catNum4, PDO::PARAM_STR);
             $stmt->execute();
-            if ($stmt->rowCount() === 0) echo ('No rows');
+            if ($stmt->rowCount() === 0)  echo json_encode("No data");
             while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 $data[] = $users;
             }
@@ -383,7 +468,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
             $stmt->bindParam(4, $catNum4, PDO::PARAM_STR);
             $stmt->bindParam(5, $completat, PDO::PARAM_INT);
             $stmt->execute();
-            if ($stmt->rowCount() === 0) echo ('No rows');
+            if ($stmt->rowCount() === 0)  echo json_encode("No data");
             while ($users = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 $data[] = $users;
             }
@@ -474,7 +559,8 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
             bio.biografiaCa,
             bio.biografiaEs,
             dp.visibilitat,
-            dp.slug
+            dp.slug,
+            dp.observacions_internes
             FROM db_dades_personals AS dp
             LEFT JOIN aux_dades_municipis AS m1 ON dp.municipi_naixement = m1.id
             LEFT JOIN aux_dades_municipis_comarca AS m1a ON m1.comarca = m1a.id

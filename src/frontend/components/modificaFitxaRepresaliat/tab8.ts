@@ -8,6 +8,11 @@ export function tab8(fitxa?: Fitxa) {
     observacionsInput.value = fitxa?.observacions ?? '';
   }
 
+  const observacionsInternesInput = document.getElementById('observacions_internes') as HTMLInputElement | null;
+  if (observacionsInternesInput) {
+    observacionsInternesInput.value = fitxa?.observacions_internes ?? '';
+  }
+
   auxiliarSelect(fitxa?.autor_id, 'autors_fitxa', 'autor', 'nom');
   auxiliarSelect(fitxa?.autor_id2, 'autors_fitxa', 'autor2', 'nom');
   auxiliarSelect(fitxa?.autor_id3, 'autors_fitxa', 'autor3', 'nom');
@@ -25,11 +30,14 @@ export function tab8(fitxa?: Fitxa) {
 
   const completatNoRadio = document.getElementById('completat_no') as HTMLInputElement;
   const completatSiRadio = document.getElementById('completat_si') as HTMLInputElement;
+  const completatRevisioRadio = document.getElementById('completat_pendent') as HTMLInputElement;
 
   if (fitxa?.completat === 1 && completatNoRadio) {
     completatNoRadio.checked = true;
   } else if (fitxa?.completat === 2 && completatSiRadio) {
     completatSiRadio.checked = true;
+  } else if (fitxa?.completat === 3 && completatRevisioRadio) {
+    completatRevisioRadio.checked = true;
   }
 
   // visibilitat (1 no visible // 2 visible)

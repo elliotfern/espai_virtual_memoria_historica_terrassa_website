@@ -167,6 +167,7 @@ $filiacio_politica = $data['filiacio_politica'] ?? null;
 $filiacio_sindical = $data['filiacio_sindical'] ?? null;
 $activitat_durant_guerra = $data['activitat_durant_guerra'] ?? null;
 $observacions = $data['observacions'] ?? null;
+$observacions_internes = $data['observacions_internes'] ?? null;
 $autor = $data['autor'];
 $autor2 = $data['autor2'] ?? null;
 $autor3 = $data['autor3'] ?? null;
@@ -215,7 +216,8 @@ try {
         colab1 = :colab1,
         data_actualitzacio = :data_actualitzacio,
         completat = :completat,
-        visibilitat = :visibilitat
+        visibilitat = :visibilitat,
+        observacions_internes =  :observacions_internes
     WHERE id = :id";
 
     // Preparar la consulta
@@ -254,6 +256,7 @@ try {
     $stmt->bindParam(':completat', $completat, PDO::PARAM_INT);
     $stmt->bindParam(':visibilitat', $visibilitat, PDO::PARAM_INT);
     $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->bindParam(':observacions_internes', $observacions_internes, PDO::PARAM_STR);
 
     // Supón que el ID a modificar lo pasas en el JSON también
     if (isset($data['id'])) {

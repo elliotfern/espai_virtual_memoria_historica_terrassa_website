@@ -163,6 +163,7 @@ $filiacio_politica = $data['filiacio_politica'] ?? null;
 $filiacio_sindical = $data['filiacio_sindical'] ?? null;
 $activitat_durant_guerra = $data['activitat_durant_guerra'] ?? null;
 $observacions = $data['observacions'] ?? null;
+$observacions_internes = $data['observacions_internes'] ?? null;
 $autor = $data['autor'];
 $autor2 = $data['autor2'] ?? null;
 $autor3 = $data['autor3'] ?? null;
@@ -184,13 +185,13 @@ try {
     municipi_defuncio, tipologia_lloc_defuncio, causa_defuncio, municipi_residencia, adreca,
     estat_civil, estudis, ofici, empresa, sector, sub_sector, carrec_empresa, filiacio_politica,
     filiacio_sindical, activitat_durant_guerra, observacions, autor, data_creacio,
-    data_actualitzacio, completat, visibilitat, autor2, autor3, colab1
+    data_actualitzacio, completat, visibilitat, autor2, autor3, colab1, observacions_internes
     ) VALUES (
         :nom, :cognom1, :cognom2, :categoria, :sexe, :data_naixement, :data_defuncio, :municipi_naixement,
         :municipi_defuncio, :tipologia_lloc_defuncio, :causa_defuncio, :municipi_residencia, :adreca,
         :estat_civil, :estudis, :ofici, :empresa, :sector, :sub_sector, :carrec_empresa, :filiacio_politica,
         :filiacio_sindical, :activitat_durant_guerra, :observacions, :autor, :data_creacio,
-        :data_actualitzacio, :completat, :visibilitat, :autor2, :autor3, :colab1
+        :data_actualitzacio, :completat, :visibilitat, :autor2, :autor3, :colab1, :observacions_internes
     )";
 
     // Preparar la consulta
@@ -229,6 +230,7 @@ try {
     $stmt->bindParam(':data_actualitzacio', $data_actualitzacio, PDO::PARAM_STR);
     $stmt->bindParam(':completat', $completat, PDO::PARAM_INT);
     $stmt->bindParam(':visibilitat', $visibilitat, PDO::PARAM_INT);
+    $stmt->bindParam(':observacions_internes', $observacions_internes, PDO::PARAM_STR);
 
     // Ejecutar la consulta
     $stmt->execute();

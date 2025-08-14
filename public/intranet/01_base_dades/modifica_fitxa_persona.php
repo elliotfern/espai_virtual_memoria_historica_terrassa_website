@@ -523,7 +523,7 @@ if ($pagina === "modifica-fitxa") {
         <h3>Altres dades</h3>
 
         <div class="col-md-12">
-          <label for="observacions" class="form-label negreta">Observacions:</label>
+          <label for="observacions" class="form-label negreta">Observacions (aquest text apareix al web ):</label>
           <textarea class="form-control" id="observacions" name="observacions" value="" rows="3"></textarea>
         </div>
 
@@ -565,6 +565,11 @@ if ($pagina === "modifica-fitxa") {
         </div>
 
         <hr style="margin-top:25px">
+
+        <div class="col-md-12">
+          <label for="observacions_internes" class="form-label negreta">Notes internes fitxa (aquest text NO apareix al web ):</label>
+          <textarea class="form-control" id="observacions_internes" name="observacions_internes" value="" rows="4"></textarea>
+        </div>
 
         <div class="form-group">
           <label for="completat" class="form-label negreta">Estat de la fitxa:</label><br>
