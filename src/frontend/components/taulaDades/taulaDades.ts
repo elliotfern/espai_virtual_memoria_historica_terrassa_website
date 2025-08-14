@@ -157,7 +157,7 @@ export async function cargarTabla(pag: string, context: number, completat: numbe
           const tdModificar = document.createElement('td');
           const btnModificar = document.createElement('button');
           btnModificar.textContent = 'CAL REVISIÓ';
-          btnModificar.classList.add('btn', 'btn-sm', 'btn-secondary');
+          btnModificar.classList.add('btn', 'btn-sm', 'btn-danger');
           tdModificar.appendChild(btnModificar);
           tr.appendChild(tdModificar);
         } else if (estatFitxa === 2) {

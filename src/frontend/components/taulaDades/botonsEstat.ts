@@ -25,7 +25,7 @@ export function botonsEstat(pag: string) {
     // Crear botón "cal revisio"
     const botonRevisio = document.createElement('button');
     botonRevisio.innerText = 'Cal revisió';
-    botonRevisio.classList.add('btn', 'btn-secondarys', 'mr-2'); // Clases de Bootstrap
+    botonRevisio.classList.add('btn', 'btn-danger', 'mr-2'); // Clases de Bootstrap
     botonRevisio.onclick = function () {
       cargarTabla(pag, 2, 4); // Filtrar por completado (2)
     };
