@@ -207,7 +207,7 @@
         </div>
 
         <div class="col-12 col-md-6 d-flex justify-content-center">
-            <a class="btn-div" href="#filtre">
+            <a class="btn-div" href="<?php echo $langCode2 === 'ca' ? '/' : '/' . $langCode2 . '/'; ?>base-dades/exiliats-deportats/#filtre">
                 <span class="lora mitja">Exiliats<br>i deportats</span>
             </a>
         </div>
