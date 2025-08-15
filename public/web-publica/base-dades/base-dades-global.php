@@ -60,28 +60,44 @@ $translate = $translations['benvinguda'] ?? [];
 </div>
 
 
-<div class="container" id="filtre" style="margin-top: 50px;margin-bottom:50px;">
 
-    <input type="text" id="searchInput" placeholder="Cercar...">
+<span id="filtre"></span>
+<div class="container my-5" id="filtre">
+    <div class="row g-4">
+        <!-- Columna filtros -->
+        <div class="col-lg-3">
+            <div id="filtros-panel" class="bg-white p-3 border rounded">
+                <input
+                    type="text"
+                    id="buscador-nom"
+                    placeholder="Cerca per nom o cognoms"
+                    class="form-control mb-3" />
+                <h3 class="h6">Filtres</h3>
+                <div id="filtros"></div>
+                <div class="mt-3">
+                    <button id="btn-reset" type="button" class="btn btn-outline-secondary w-100">
+                        Restableix filtres
+                    </button>
+                </div>
+            </div>
+        </div>
 
-    <div class="table-responsive" style="margin-top:30px">
-        <table class="table table-striped table-hover" id="represaliatsTable">
-            <thead class="table-dark">
-                <tr>
-                    <th>Nom complet</th>
-                    <th>Dades naixement</th>
-                    <th>Dades defunció</th>
-                    <th>Col·lectiu represaliat</th>
-                </tr>
-            </thead>
-            <tbody id="represaliatsBody">
-                <!-- Aquí se insertarán las filas de la tabla dinámicamente -->
-            </tbody>
-        </table>
-        <div id="pagination" style="margin-bottom:50px">
-            <button id="prevPage" disabled>Anterior</button>
-            <span id="currentPage">1</span> de <span id="totalPages">1</span>
-            <button id="nextPage">Següent</button>
+        <!-- Columna resultados -->
+        <div class="col-lg-9">
+            <div id="resultados">
+                <h3 class="h6">Resultats</h3>
+                <div id="tabla-resultados" aria-live="polite"></div>
+                <div id="contador-resultados" class="text-muted mt-3"></div>
+                <div id="paginacion" class="d-flex gap-2 align-items-center mt-3">
+                    <button id="prevPage" class="btn btn-outline-primary btn-sm" aria-label="Anterior">
+                        Anterior
+                    </button>
+                    <span id="pageInfo" style="min-width:120px;text-align:center"></span>
+                    <button id="nextPage" class="btn btn-outline-primary btn-sm" aria-label="Següent">
+                        Següent
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 </div>

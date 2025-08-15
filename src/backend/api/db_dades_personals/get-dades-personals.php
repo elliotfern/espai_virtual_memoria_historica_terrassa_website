@@ -869,6 +869,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
     $db = new Database();
     $catNum1 = 10;
     $catNum2 = 2;
+    $lang = isset($_GET['lang']) ? $_GET['lang'] : 'ca'; // Valor por defecto 'ca'
 
     $query = "SELECT 
                 a.id,
@@ -898,7 +899,8 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
           LEFT JOIN aux_dades_municipis AS e1 ON a.municipi_naixement = e1.id
           LEFT JOIN aux_dades_municipis AS e2 ON a.municipi_defuncio = e2.id
           LEFT JOIN db_exiliats AS ex ON a.id = ex.idPersona
-          WHERE (
+          WHERE a.visibilitat = 2
+            AND (
                  FIND_IN_SET(:catNum1, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
                  OR FIND_IN_SET(:catNum2, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
           )
@@ -971,7 +973,8 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
           LEFT JOIN aux_dades_municipis AS e1 ON a.municipi_naixement = e1.id
           LEFT JOIN aux_dades_municipis AS e2 ON a.municipi_defuncio = e2.id
           LEFT JOIN db_exiliats AS ex ON a.id = ex.idPersona
-          WHERE (
+          WHERE a.visibilitat = 2
+            AND (
                  FIND_IN_SET(:catNum1, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
                  OR FIND_IN_SET(:catNum2, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
                  OR FIND_IN_SET(:catNum3, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
@@ -987,6 +990,73 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
         ];
 
         $result = $db->getData($query, $params, false);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
+
+    // 4) Llistat filtre General
+    // ruta GET => "https://memoriaterrassa.cat/api/dades_personals/get/?type=filtreGeneral"
+} elseif (isset($_GET['type']) && $_GET['type'] == 'filtreGeneral') {
+    $db = new Database();
+    $catNum1 = 3;
+    $catNum2 = 4;
+    $catNum3 = 5;
+
+    $query = "SELECT 
+                a.id,
+                a.cognom1,
+                a.cognom2,
+                a.nom, 
+                a.data_naixement,
+                a.data_defuncio,
+                e1.ciutat,
+                a.municipi_naixement,
+                a.municipi_defuncio,
+                REPLACE(REPLACE(a.categoria, '{', '['), '}', ']') AS categoria,
+                e2.ciutat AS ciutat2, 
+                a.slug,
+                a.sexe,
+                REPLACE(REPLACE(a.filiacio_politica, '{', '['), '}', ']') AS filiacio_politica,
+                REPLACE(REPLACE(a.filiacio_sindical, '{', '['), '}', ']') AS filiacio_sindical,
+                a.estat_civil,
+                a.estudis,
+                a.ofici,
+                a.causa_defuncio,
+                ex.data_exili,
+                ex.primer_desti_exili,
+                ex.deportat,
+                ex.participacio_resistencia
+          FROM db_dades_personals AS a
+          LEFT JOIN aux_dades_municipis AS e1 ON a.municipi_naixement = e1.id
+          LEFT JOIN aux_dades_municipis AS e2 ON a.municipi_defuncio = e2.id
+          LEFT JOIN db_exiliats AS ex ON a.id = ex.idPersona
+          WHERE a.visibilitat = 2
+          ORDER BY a.cognom1 ASC;";
+
+    try {
+        // Pasamos los valores como array en el mismo orden de los placeholders
+
+        $result = $db->getData($query);
 
         if (empty($result)) {
             Response::error(

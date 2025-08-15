@@ -901,6 +901,7 @@ if ($slug === "exiliats") {
                 CONCAT(a.cognom1, ' ', a.cognom2, ', ', a.nom) AS nom_complet,
                 a.observacions_internes,
                a.categoria,
+               a.slug
                 FROM db_dades_personals AS a
                 WHERE completat = 3
                 ORDER BY a.cognom1 ASC;";
