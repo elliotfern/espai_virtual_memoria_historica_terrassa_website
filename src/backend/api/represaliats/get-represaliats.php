@@ -121,8 +121,23 @@ if ($slug === "exiliats") {
         ON p.nom = dups.nom AND p.cognom1 = dups.cognom1 AND p.cognom2 = dups.cognom2
         ORDER BY p.nom, p.cognom1, p.cognom2;";
 
+
+    $query3 = "SELECT t.*
+FROM db_dades_personals t
+JOIN (
+    SELECT 
+        cognom1,
+        cognom2
+    FROM db_dades_personals
+    GROUP BY cognom1, cognom2
+    HAVING COUNT(*) > 1
+) dup
+ON t.cognom1 = dup.cognom1
+AND t.cognom2 = dup.cognom2
+ORDER BY t.cognom1, t.cognom2, t.nom;";
+
     try {
-        $result = $db->getData($query2);
+        $result = $db->getData($query3);
 
         if (empty($result)) {
             Response::error(

@@ -66,7 +66,7 @@ export const fitxaTipusRepressio = async (categoriaNumerica: string, fitxa2: Fit
       const nomCamp = dada.deportacio_nom_camp && dada.deportacio_nom_camp.trim() !== '' ? dada.deportacio_nom_camp : 'Desconegut';
       const dataEntradaCamp = dada.deportacio_data_entrada && dada.deportacio_data_entrada.trim() !== '' ? formatDatesForm(dada.deportacio_data_entrada) : 'Desconeguda';
       const numeroMatriculaCamp = dada.deportacio_num_matricula && dada.deportacio_num_matricula.trim() !== '' ? dada.deportacio_num_matricula : 'Desconegut';
-      const nomSubCamp = dada.deportacio_nom_sub && dada.deportacio_nom_sub.trim() !== '' ? dada.deportacio_nom_sub : 'Desconegut';
+      const nomSubCamp = dada.deportacio_nom_subcamp && dada.deportacio_nom_subcamp.trim() !== '' ? dada.deportacio_nom_subcamp : 'Desconegut';
       const dataEntradaSubCamp = dada.deportacio_data_entrada_subcamp && dada.deportacio_data_entrada_subcamp.trim() !== '' ? dada.deportacio_data_entrada_subcamp : 'Desconegut';
       const numeroMatriculaSubCamp = dada.deportacio_nom_matricula_subcamp && dada.deportacio_nom_matricula_subcamp.trim() !== '' ? dada.deportacio_nom_matricula_subcamp : 'Desconegut';
 

@@ -1087,9 +1087,21 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
     // ruta GET => "https://memoriaterrassa.cat/api/dades_personals/get/?type=filtreRepresaliats"
 } elseif (isset($_GET['type']) && $_GET['type'] == 'filtreRepresaliats') {
     $db = new Database();
-    $catNum1 = 3;
-    $catNum2 = 4;
-    $catNum3 = 5;
+    $catNum1 = 1;
+    $catNum2 = 6;
+    $catNum3 = 7;
+    $catNum4 = 8;
+    $catNum5 = 10;
+    $catNum6 = 11;
+    $catNum7 = 12;
+    $catNum8 = 15;
+    $catNum9 = 14;
+    $catNum10 = 15;
+    $catNum11 = 16;
+    $catNum12 = 17;
+    $catNum13 = 18;
+    $catNum14 = 19;
+    $catNum15 = 20;
 
     $query = "SELECT 
                 a.id,
@@ -1121,18 +1133,45 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
           LEFT JOIN db_exiliats AS ex ON a.id = ex.idPersona
           WHERE a.visibilitat = 2
             AND a.completat = 2
-            AND (FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
-                    OR FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
-                    OR FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0
-                    OR FIND_IN_SET(?, REPLACE(REPLACE(categoria, '{', ''), '}', '')) > 0)
+            AND 
+                (
+                    FIND_IN_SET(:catNum1,  REPLACE(REPLACE(a.categoria, '{', ''), '}', '')) > 0 OR
+                    FIND_IN_SET(:catNum2,  REPLACE(REPLACE(a.categoria, '{', ''), '}', '')) > 0 OR
+                    FIND_IN_SET(:catNum3,  REPLACE(REPLACE(a.categoria, '{', ''), '}', '')) > 0 OR
+                    FIND_IN_SET(:catNum4,  REPLACE(REPLACE(a.categoria, '{', ''), '}', '')) > 0 OR
+                    FIND_IN_SET(:catNum5,  REPLACE(REPLACE(a.categoria, '{', ''), '}', '')) > 0 OR
+                    FIND_IN_SET(:catNum6,  REPLACE(REPLACE(a.categoria, '{', ''), '}', '')) > 0 OR
+                    FIND_IN_SET(:catNum7,  REPLACE(REPLACE(a.categoria, '{', ''), '}', '')) > 0 OR
+                    FIND_IN_SET(:catNum8,  REPLACE(REPLACE(a.categoria, '{', ''), '}', '')) > 0 OR
+                    FIND_IN_SET(:catNum9,  REPLACE(REPLACE(a.categoria, '{', ''), '}', '')) > 0 OR
+                    FIND_IN_SET(:catNum10, REPLACE(REPLACE(a.categoria, '{', ''), '}', '')) > 0 OR
+                    FIND_IN_SET(:catNum11, REPLACE(REPLACE(a.categoria, '{', ''), '}', '')) > 0 OR
+                    FIND_IN_SET(:catNum12, REPLACE(REPLACE(a.categoria, '{', ''), '}', '')) > 0 OR
+                    FIND_IN_SET(:catNum13, REPLACE(REPLACE(a.categoria, '{', ''), '}', '')) > 0 OR
+                    FIND_IN_SET(:catNum14, REPLACE(REPLACE(a.categoria, '{', ''), '}', '')) > 0 OR
+                    FIND_IN_SET(:catNum15, REPLACE(REPLACE(a.categoria, '{', ''), '}', '')) > 0
+                )
           ORDER BY a.cognom1 ASC;";
+
 
     try {
         // Pasamos los valores como array en el mismo orden de los placeholders
         $params = [
-            ':catNum1' => $catNum1,
-            ':catNum2' => $catNum2,
-            ':catNum3' => $catNum3,
+            ':catNum1'  => $catNum1,
+            ':catNum2'  => $catNum2,
+            ':catNum3'  => $catNum3,
+            ':catNum4'  => $catNum4,
+            ':catNum5'  => $catNum5,
+            ':catNum6'  => $catNum6,
+            ':catNum7'  => $catNum7,
+            ':catNum8'  => $catNum8,
+            ':catNum9'  => $catNum9,
+            ':catNum10' => $catNum10,
+            ':catNum11' => $catNum11,
+            ':catNum12' => $catNum12,
+            ':catNum13' => $catNum13,
+            ':catNum14' => $catNum14,
+            ':catNum15' =>  $catNum15
         ];
 
         $result = $db->getData($query, $params, false);

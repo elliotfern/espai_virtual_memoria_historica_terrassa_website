@@ -142,6 +142,21 @@ if ($pagina === "modifica-fitxa") {
                   </label>
                 </div>
 
+                <div class="form-check me-3">
+                  <input class="form-check-input" type="checkbox" id="categoria19" name="categoria" value="categoria19">
+                  <label class="form-check-label" for="categoria19">
+                    Detingut Camps de treball
+                  </label>
+                </div>
+
+
+                <div class="form-check me-3">
+                  <input class="form-check-input" type="checkbox" id="categoria20" name="categoria" value="categoria20">
+                  <label class="form-check-label" for="categoria20">
+                    Detingut Batalló de presos
+                  </label>
+                </div>
+
               </div>
             </div> <!-- Fi bloc repressio 1939-79 -->
 
