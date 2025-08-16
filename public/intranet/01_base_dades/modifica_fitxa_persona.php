@@ -34,6 +34,13 @@ if ($pagina === "modifica-fitxa") {
     <h2 id="fitxaNomCognoms"></h2>
   <?php } else { ?>
     <h2>Creació de fitxa repressaliat</h2>
+
+    <?php if (!$isAdmin): ?>
+
+      <p>omés poden crear noves fitxes els usuaris administradors.</p>
+
+    <?php endif; ?>
+
   <?php } ?>
 
   <div class="tab">
@@ -544,6 +551,12 @@ if ($pagina === "modifica-fitxa") {
             <input type="text" class="form-control" id="slug" name="slug" value="">
           </div>
 
+        <?php else: ?>
+          <div class="col-md-4 mb-4">
+            <label for="slug" class="form-label negreta">Slug URL:</label>
+            <div id="slug2"></div>
+          </div>
+
         <?php endif; ?>
 
         <div class="col-md-12">
@@ -658,9 +671,12 @@ if ($pagina === "modifica-fitxa") {
           Modificar dades
         </button>';
         } else {
-          echo '<button type="submit" class="btn btn-primary" id="btnEnviaFitxa">
-          Envia dades
-        </button>';
+
+          if ($isAdmin):
+            echo '<button type="submit" class="btn btn-primary" id="btnEnviaFitxa">
+              Crea nova fitxa
+            </button>';
+          endif;
         }
         ?>
       </div>
