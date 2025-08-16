@@ -537,6 +537,15 @@ if ($pagina === "modifica-fitxa") {
       <div class="row g-3">
         <h3>Altres dades</h3>
 
+        <?php if ($isAdmin): ?>
+
+          <div class="col-md-4 mb-4">
+            <label for="slug" class="form-label negreta">Slug URL:</label>
+            <input type="text" class="form-control" id="slug" name="slug" value="">
+          </div>
+
+        <?php endif; ?>
+
         <div class="col-md-12">
           <label for="observacions" class="form-label negreta">Observacions (aquest text apareix al web ):</label>
           <textarea class="form-control" id="observacions" name="observacions" value="" rows="3"></textarea>

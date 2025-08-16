@@ -108,6 +108,10 @@ if (empty($data['completat'])) {
     $errors[] = ValidacioErrors::requerit('completat');
 }
 
+if (empty($data['slug'])) {
+    $errors[] = ValidacioErrors::requerit('slug');
+}
+
 $data_naixementRaw = $data['data_naixement'] ?? '';
 if (!empty($data_naixementRaw)) {
     $data_naixementFormat = convertirDataFormatMysql($data_naixementRaw, 3);
@@ -172,6 +176,7 @@ $data_creacio =  date('Y-m-d');
 $data_actualitzacio = date('Y-m-d');
 $completat = $data['completat'] ?? 1;
 $visibilitat = $data['visibilitat'] ?? 1;
+$slug = $data['slug'] ?? null;
 
 // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
 try {
@@ -185,13 +190,13 @@ try {
     municipi_defuncio, tipologia_lloc_defuncio, causa_defuncio, municipi_residencia, adreca,
     estat_civil, estudis, ofici, empresa, sector, sub_sector, carrec_empresa, filiacio_politica,
     filiacio_sindical, activitat_durant_guerra, observacions, autor, data_creacio,
-    data_actualitzacio, completat, visibilitat, autor2, autor3, colab1, observacions_internes
+    data_actualitzacio, completat, visibilitat, autor2, autor3, colab1, observacions_internes, slug
     ) VALUES (
         :nom, :cognom1, :cognom2, :categoria, :sexe, :data_naixement, :data_defuncio, :municipi_naixement,
         :municipi_defuncio, :tipologia_lloc_defuncio, :causa_defuncio, :municipi_residencia, :adreca,
         :estat_civil, :estudis, :ofici, :empresa, :sector, :sub_sector, :carrec_empresa, :filiacio_politica,
         :filiacio_sindical, :activitat_durant_guerra, :observacions, :autor, :data_creacio,
-        :data_actualitzacio, :completat, :visibilitat, :autor2, :autor3, :colab1, :observacions_internes
+        :data_actualitzacio, :completat, :visibilitat, :autor2, :autor3, :colab1, :observacions_internes, :slug
     )";
 
     // Preparar la consulta
@@ -231,6 +236,7 @@ try {
     $stmt->bindParam(':completat', $completat, PDO::PARAM_INT);
     $stmt->bindParam(':visibilitat', $visibilitat, PDO::PARAM_INT);
     $stmt->bindParam(':observacions_internes', $observacions_internes, PDO::PARAM_STR);
+    $stmt->bindParam(':slug', $slug, PDO::PARAM_STR);
 
     // Ejecutar la consulta
     $stmt->execute();

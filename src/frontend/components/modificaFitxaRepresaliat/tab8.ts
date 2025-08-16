@@ -3,6 +3,11 @@ import { Fitxa } from '../../types/types';
 import { auxiliarSelect } from '../../services/fetchData/auxiliarSelect';
 
 export function tab8(fitxa?: Fitxa) {
+  const slug = document.getElementById('slug') as HTMLInputElement | null;
+  if (slug) {
+    slug.value = fitxa?.slug ?? '';
+  }
+
   const observacionsInput = document.getElementById('observacions') as HTMLInputElement | null;
   if (observacionsInput) {
     observacionsInput.value = fitxa?.observacions ?? '';

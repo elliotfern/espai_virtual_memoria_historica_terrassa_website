@@ -34,7 +34,7 @@ if ($slug === "municipis") {
             LEFT JOIN aux_dades_municipis_provincia AS p ON m.provincia = p.id
             LEFT JOIN aux_dades_municipis_comunitat AS co ON m.comunitat = co.id
             LEFT JOIN aux_dades_municipis_estat AS e ON m.estat = e.id
-            ORDER BY m.ciutat ASC";
+            ORDER BY ciutat ASC";
 
     try {
         $result = $db->getData($query);
