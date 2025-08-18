@@ -9,7 +9,8 @@ export function tab8(fitxa?: Fitxa) {
     slug.value = fitxa?.slug ?? '';
   }
   const el = document.querySelector<HTMLInputElement>('#slug2');
-  if (!el) return;
+
+  //if (!el) return;
 
   // cuando ya tengas `fitxa` cargada:
   if (el && fitxa) {
