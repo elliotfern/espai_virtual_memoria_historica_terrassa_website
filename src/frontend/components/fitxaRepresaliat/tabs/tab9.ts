@@ -39,10 +39,12 @@ export function renderTab9(fitxa: Fitxa, label: string): void {
   // Validaciones mínimas
   const lat = Number(fitxa.lat);
   const lng = Number(fitxa.lng);
+  const adreca = fitxa.adreca;
+  const municipi = fitxa.ciutat_residencia;
   const tieneCoords = Number.isFinite(lat) && Number.isFinite(lng);
 
   if (!tieneCoords) {
-    if (msg) msg.textContent = 'No hay coordenadas disponibles para esta persona.';
+    if (msg) msg.textContent = 'No hi ha coordenades disponibles per aquesta persona.';
     return;
   }
 
@@ -55,7 +57,7 @@ export function renderTab9(fitxa: Fitxa, label: string): void {
   const container = document.getElementById(mapId)!;
   const map = L.map(container, {
     center: [lat, lng],
-    zoom: 12,
+    zoom: 16,
     preferCanvas: true,
   });
 
@@ -72,15 +74,16 @@ export function renderTab9(fitxa: Fitxa, label: string): void {
   const popupHtml = `
     <div style="min-width:200px">
       <strong>${nombre}</strong><br/>
-      ${urlFicha ? `<a href="${urlFicha}" target="_blank" rel="noopener">Ver ficha</a>` : ''}
+       ${adreca ? `<div style="margin:6px 0 2px 0; line-height:1.35">${adreca}, ${municipi}</div>` : ''}
+      ${urlFicha ? `<a href="${urlFicha}" rel="noopener">Veure fitxa</a>` : ''}
     </div>
   `.trim();
 
   marker.bindPopup(popupHtml);
 
-  // Asegurar render correcto si la pestaña estaba oculta
-  setTimeout(() => map.invalidateSize(), 0);
-
-  // Ajuste fino del zoom si lo quieres más cercano/lejos, o si cambias el icono
-  map.setView([lat, lng], 13);
+  // Asegura cálculo correcto del tamaño y luego vuela al zoom deseado
+  setTimeout(() => {
+    map.invalidateSize();
+    map.flyTo([lat, lng], 16, { duration: 0.6 }); // zoom calle
+  }, 0);
 }

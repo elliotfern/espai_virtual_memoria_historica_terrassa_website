@@ -560,7 +560,9 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
             bio.biografiaEs,
             dp.visibilitat,
             dp.slug,
-            dp.observacions_internes
+            dp.observacions_internes,
+            dp.lat,
+            dp.lng
             FROM db_dades_personals AS dp
             LEFT JOIN aux_dades_municipis AS m1 ON dp.municipi_naixement = m1.id
             LEFT JOIN aux_dades_municipis_comarca AS m1a ON m1.comarca = m1a.id
@@ -696,7 +698,9 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
             bio.biografiaCa,
             bio.biografiaEs,
             dp.visibilitat,
-            dp.slug
+            dp.slug,
+            dp.lat,
+            dp.lng
             FROM db_dades_personals AS dp
             LEFT JOIN aux_dades_municipis AS m1 ON dp.municipi_naixement = m1.id
             LEFT JOIN aux_dades_municipis_comarca AS m1a ON m1.comarca = m1a.id

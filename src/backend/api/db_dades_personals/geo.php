@@ -22,8 +22,8 @@ $BATCH_LIMIT = 200;   // cuántos por pasada
 $SLEEP_MS    = 1100;  // ~1.1s entre llamadas (Nominatim)
 
 // ===== Identificación Nominatim =====
-$USER_AGENT    = 'MemoriaTerrassa/1.0 (contacto: geocoding@tu-dominio.tld)';
-$CONTACT_EMAIL = 'geocoding@tu-dominio.tld';
+$USER_AGENT    = 'MemoriaTerrassa/1.0 (contacto: memoria@memoriaterrassa.cat)';
+$CONTACT_EMAIL = 'memoria@memoriaterrassa.cat';
 
 
 $conn = DatabaseConnection::getConnection();
