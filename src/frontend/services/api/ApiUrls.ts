@@ -74,7 +74,7 @@ export const ENDPOINTS = {
   PRESO: 'preso',
   PRESONS: 'llistatPresons',
   LLISTAT_CASOS_REVISIO: 'llistatCasosRevisio',
-  LLISTAT_CASOS_REVISIO_GEOLOCALITZACIO: 'llistatSenseGeolocalitzacio',
+  LLISTAT_CASOS_REVISIO_GEOLOCALITZACIO: '?type=llistatSenseGeolocalitzacio',
 } as const;
 
 // Mapa de recursos disponibles

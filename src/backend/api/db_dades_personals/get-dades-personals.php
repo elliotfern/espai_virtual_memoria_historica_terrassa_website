@@ -1287,7 +1287,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
 
     try {
 
-        $result = $db->getData($query);
+        $result = $db->getData($query2);
 
         if (empty($result)) {
             Response::error(
