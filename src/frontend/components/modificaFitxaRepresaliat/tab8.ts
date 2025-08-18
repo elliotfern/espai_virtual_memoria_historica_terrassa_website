@@ -4,14 +4,19 @@ import { auxiliarSelect } from '../../services/fetchData/auxiliarSelect';
 
 export function tab8(fitxa?: Fitxa) {
   const slug = document.getElementById('slug') as HTMLInputElement | null;
-  const slug2 = document.getElementById('slug2') as HTMLInputElement | null;
 
-  if (slug) {
+  if (slug && fitxa) {
     slug.value = fitxa?.slug ?? '';
   }
+  const el = document.querySelector<HTMLInputElement>('#slug2');
+  if (!el) return;
 
-  if (slug2 && fitxa) {
-    slug2.value = fitxa.slug;
+  // cuando ya tengas `fitxa` cargada:
+  if (el && fitxa) {
+    const value = fitxa.slug;
+    el.value = value;
+    // opcional: también actualiza el atributo por si algo re-renderiza desde atributos
+    el.setAttribute('value', value);
   }
 
   const observacionsInput = document.getElementById('observacions') as HTMLInputElement | null;
