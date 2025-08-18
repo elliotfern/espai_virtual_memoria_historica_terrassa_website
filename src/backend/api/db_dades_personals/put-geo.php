@@ -87,6 +87,7 @@ function http_get_first_json_local(string $url, string $ua): array
 function nominatimStructured_local(
     ?string $street,
     ?string $city,
+    ?string $county,
     ?string $state,
     ?string $country,
     string $ua,
@@ -101,15 +102,17 @@ function nominatimStructured_local(
         'countrycodes'    => 'es',
         'email'           => $email
     ];
-    if ($street)  $params['street']     = $street;  // "47 Carrer Sant Leopold"
-    if ($city)    $params['city']       = $city;    // "Terrassa"
-    if ($state)   $params['state']      = $state;   // "Barcelona"
-    if ($country) $params['country']    = $country; // "España"
-    if ($postal)  $params['postalcode'] = $postal;  // si lo tienes
+    if ($street)  $params['street']  = $street;   // “Carrer Sant Leopold 47” o “47 Carrer Sant Leopold”
+    if ($city)    $params['city']    = $city;     // “Terrassa”
+    if ($county)  $params['county']  = $county;   // “Barcelona”
+    if ($state)   $params['state']   = $state;    // “Catalunya”
+    if ($country) $params['country'] = $country;  // “España”
+    if ($postal)  $params['postalcode'] = $postal;
 
     $url = 'https://nominatim.openstreetmap.org/search?' . http_build_query($params);
     return http_get_first_json_local($url, $ua);
 }
+
 
 function nominatimFree_local(string $q, string $ua, string $email): array
 {
@@ -132,26 +135,24 @@ if (!$conn) {
 }
 
 // Cargar datos de la persona
-$sql = "
-    SELECT
-        a.id AS rid,
-        a.lat, a.lng,
-        -- Campos de vía separados:
-        t.tipus_ca      AS tipus_via_ca,   -- p.ej. 'Carrer'
-        a.adreca        AS via_nom,        -- nombre de calle
-        a.adreca_num    AS via_num,        -- número (puede ser 's/n' o vacío)
-        -- Localización administrativa:
-        m.ciutat        AS ciutat,         -- 'Terrassa'
-        p.provincia     AS provincia,      -- 'Barcelona'
-        s.estat         AS estat           -- 'España'
-    FROM db_dades_personals a
-    LEFT JOIN aux_dades_municipis           m ON m.id  = a.municipi_residencia
-    LEFT JOIN aux_dades_municipis_provincia p ON p.id  = m.provincia
-    LEFT JOIN aux_dades_municipis_estat     s ON s.id  = m.estat
-    LEFT JOIN aux_tipus_via                 t ON a.tipus_via = t.id
-    WHERE a.id = :id
-    LIMIT 1
-";
+$sql = "SELECT
+  a.id AS rid,
+  a.lat, a.lng,
+   t.tipus_ca      AS tipus_via_ca,
+  a.adreca        AS via_nom, 
+  a.adreca_num    AS via_num,
+  m.ciutat        AS ciutat,
+  p.provincia     AS provincia,
+  s.estat         AS estat,
+  mc.comunitat_ca AS comunitat_ca
+FROM db_dades_personals a
+LEFT JOIN aux_dades_municipis            m  ON m.id  = a.municipi_residencia
+LEFT JOIN aux_dades_municipis_provincia  p  ON p.id  = m.provincia
+LEFT JOIN aux_dades_municipis_estat      s  ON s.id  = m.estat
+LEFT JOIN aux_dades_municipis_comunitat  mc ON mc.id = m.comunitat
+LEFT JOIN aux_tipus_via                  t  ON a.tipus_via = t.id
+WHERE a.id = :id
+LIMIT 1";
 $st = $conn->prepare($sql);
 $st->execute([':id' => $id]);
 $row = $st->fetch(\PDO::FETCH_ASSOC);
@@ -179,44 +180,80 @@ if ($latExist !== null && $lngExist !== null) {
 }
 
 // ===== Construcción de parámetros SIN normalización =====
-$viaNum  = trim((string)($row['via_num']       ?? ''));   // "47" / "s/n" / ""
-$viaType = trim((string)($row['tipus_via_ca']  ?? ''));   // "Carrer" / "Avinguda" / ""
-$viaNom  = trim((string)($row['via_nom']       ?? ''));   // "Sant Leopold" / "Cervantes" ...
+$viaNum   = trim((string)($row['via_num']       ?? ''));   // "47" o "" o "s/n"
+$viaType  = trim((string)($row['tipus_via_ca']  ?? ''));   // "Carrer"
+$viaNom   = trim((string)($row['via_nom']       ?? ''));   // "Sant Leopold"
+$city     = is_string($row['ciutat']        ?? null) ? trim($row['ciutat'])        : null; // "Terrassa"
+$county   = is_string($row['provincia']     ?? null) ? trim($row['provincia'])     : null; // "Barcelona"
+$state    = is_string($row['comunitat_ca']  ?? null) ? trim($row['comunitat_ca'])  : null; // "Catalunya"
+$country  = is_string($row['estat']         ?? null) ? trim($row['estat'])         : 'España';
 
-$city    = is_string($row['ciutat']    ?? null) ? trim($row['ciutat'])    : null; // "Terrassa"
-$state   = is_string($row['provincia'] ?? null) ? trim($row['provincia']) : null; // "Barcelona"
-$country = is_string($row['estat']     ?? null) ? trim($row['estat'])     : 'España';
-
-// street (estructurado): "<num> <tipus_via> <via_nom>" (si hay num)
-$streetParam = trim(
-    ($viaNum !== '' && strtolower($viaNum) !== 's/n' ? ($viaNum . ' ') : '') .
-        ($viaType !== '' ? ($viaType . ' ') : '') .
-        $viaNom
-);
-
-// fallback (texto libre, como pediste): "47, Sant Leopold, Terrassa[, Barcelona, España]"
-$partsFree = [];
-if ($viaNum !== '')               $partsFree[] = $viaNum;       // incluye "s/n" si lo tienes así
-if ($viaNom !== '')               $partsFree[] = $viaNom;
-if ($city)                        $partsFree[] = $city;
-if ($country)                     $partsFree[] = $country;       // opcional pero ayuda
-$freeTextAddr = implode(', ', $partsFree);
-
-// Si por lo que sea no hay nombre de vía, fallamos con 422 (evita pedir coords ambiguas)
+// Si no hay nombre de vía, abortamos
 if ($viaNom === '') {
     http_response_code(422);
+    echo json_encode(['status' => 'fail', 'message' => 'Falta el nombre de la vía (via_nom/adreca)']);
+    exit;
+}
+
+// Variantes de street para Nominatim (mejor probadas en ES)
+$variants = [];
+
+// con tipo de vía
+$variants[] = trim(($viaType ? $viaType . ' ' : '') . $viaNom . ($viaNum && strtolower($viaNum) !== 's/n' ? ' ' . $viaNum : '')); // "Carrer Sant Leopold 47"
+$variants[] = trim(($viaNum && strtolower($viaNum) !== 's/n' ? $viaNum . ' ' : '') . ($viaType ? $viaType . ' ' : '') . $viaNom); // "47 Carrer Sant Leopold"
+
+// sin tipo de vía (por si el tipo no coincide con OSM)
+$variants[] = trim($viaNom . ($viaNum && strtolower($viaNum) !== 's/n' ? ' ' . $viaNum : '')); // "Sant Leopold 47"
+$variants[] = trim(($viaNum && strtolower($viaNum) !== 's/n' ? $viaNum . ' ' : '') . $viaNom); // "47 Sant Leopold"
+
+// Texto libre (fallback)
+$freeTextAddr = implode(', ', array_filter([
+    ($viaNum !== '' ? $viaNum : null),
+    $viaNom,
+    $city,
+    $county,
+    $country
+]));
+
+$res = null;
+foreach ($variants as $streetParam) {
+    $resp = nominatimStructured_local($streetParam, $city, $county, $state, $country, $USER_AGENT, $CONTACT_EMAIL);
+    if ($resp['code'] === 429) {
+        usleep(5_000_000);
+        $resp = nominatimStructured_local($streetParam, $city, $county, $state, $country, $USER_AGENT, $CONTACT_EMAIL);
+    }
+    if (is_array($resp['result'])) {
+        $res = $resp['result'];
+        break;
+    }
+}
+
+// Fallback a texto libre si las variantes estructuradas no devolvieron nada
+if (!$res) {
+    $resp = nominatimFree_local($freeTextAddr, $USER_AGENT, $CONTACT_EMAIL);
+    if ($resp['code'] === 429) {
+        usleep(5_000_000);
+        $resp = nominatimFree_local($freeTextAddr, $USER_AGENT, $CONTACT_EMAIL);
+    }
+    $res = $resp['result'] ?? null;
+}
+
+// Manejo del resultado
+if (!is_array($res) || !isset($res['lat'], $res['lon'])) {
+    http_response_code(404);
     echo json_encode([
         'status'  => 'fail',
-        'message' => 'Falta el nombre de la vía (via_nom/adreca) para geocodificar'
+        'message' => 'No s’han trobat coordenades',
+        'debug'   => ['variants' => $variants, 'freeTextAddr' => $freeTextAddr, 'city' => $city, 'county' => $county, 'state' => $state]
     ]);
     exit;
 }
 
 // ===== 1) Nominatim estructurado
-$resp = nominatimStructured_local($streetParam, $city, $state, $country, $USER_AGENT, $CONTACT_EMAIL);
+$resp = nominatimStructured_local($streetParam, $city, $county, $state, $country, $USER_AGENT, $CONTACT_EMAIL);
 if ($resp['code'] === 429) {
     usleep(5_000_000); // 5s
-    $resp = nominatimStructured_local($streetParam, $city, $state, $country, $USER_AGENT, $CONTACT_EMAIL);
+    $resp = nominatimStructured_local($streetParam, $city, $county, $state, $country, $USER_AGENT, $CONTACT_EMAIL);
 }
 $res = $resp['result'];
 

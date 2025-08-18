@@ -1298,7 +1298,8 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
             a.cognom1,
             a.cognom2,
             a.slug,
-            v.tipus_ca
+            v.tipus_ca,
+            a.adreca_num
         FROM db_dades_personals a
         LEFT JOIN aux_dades_municipis           m ON m.id  = a.municipi_residencia
         LEFT JOIN aux_dades_municipis_provincia p ON p.id  = m.provincia

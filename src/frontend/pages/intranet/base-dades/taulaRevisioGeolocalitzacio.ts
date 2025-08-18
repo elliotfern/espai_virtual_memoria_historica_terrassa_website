@@ -20,6 +20,7 @@ interface EspaiRow {
   lat: number;
   lng: number;
   tipus_ca: string;
+  adreca_num: string;
 }
 
 type Column<T> = {
@@ -129,7 +130,7 @@ export async function taulaRevisioGeolocalitzacio() {
     {
       header: 'Adreça',
       field: 'adreca',
-      render: (_: unknown, row: EspaiRow) => `${row.tipus_ca?.trim() || ''} ${row.adreca}, ${row.ciutat}`,
+      render: (_: unknown, row: EspaiRow) => `${row.tipus_ca?.trim() || ''} ${row.adreca}, ${row.adreca_num?.trim() || ''}, ${row.ciutat}`,
     },
     { header: 'Latitud', field: 'lat', render: (_: unknown, row: EspaiRow) => `${row.lat ?? ''}` },
     { header: 'Longitud', field: 'lng', render: (_: unknown, row: EspaiRow) => `${row.lng ?? ''}` },
