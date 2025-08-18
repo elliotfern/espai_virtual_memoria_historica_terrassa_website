@@ -760,7 +760,8 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
             dp.id,
             dp.nom,
             dp.cognom1,
-            dp.cognom2
+            dp.cognom2,
+            dp.slug
             FROM db_dades_personals AS dp
             WHERE dp.id = $id";
 

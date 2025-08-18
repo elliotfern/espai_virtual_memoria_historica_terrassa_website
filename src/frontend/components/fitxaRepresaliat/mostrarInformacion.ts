@@ -7,6 +7,7 @@ import { renderTab4 } from './tabs/tab4';
 import { renderTab5 } from './tabs/tab5';
 import { renderTab6 } from './tabs/tab6';
 import { renderTab7 } from './tabs/tab7';
+import { renderTab9 } from './tabs/tab9';
 // aquí iremos importando más tabs: tab2, tab3, etc.
 
 export function mostrarInformacion(tabId: string, id: number, label: string): void {
@@ -61,6 +62,9 @@ export function mostrarInformacion(tabId: string, id: number, label: string): vo
       break;
     case 'tab6':
       renderTab6(fitxa);
+      break;
+    case 'tab9':
+      renderTab9(fitxa, label);
       break;
     case 'tab7':
       renderTab7(fitxa, label);

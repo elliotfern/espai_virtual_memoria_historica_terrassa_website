@@ -11,6 +11,7 @@ export async function loadTranslations(lang: string): Promise<Record<string, str
         tab6: 'Fonts documentals',
         tab7: 'Altres dades',
         tab8: 'Multimèdia',
+        tab9: 'Geolocalització',
       };
     case 'es': // Español
       return {
@@ -22,6 +23,7 @@ export async function loadTranslations(lang: string): Promise<Record<string, str
         tab6: 'Fuentes documentales',
         tab7: 'Otros datos',
         tab8: 'Multimedia',
+        tab9: 'Geolocalitzación',
       };
     case 'en': // English
       return {

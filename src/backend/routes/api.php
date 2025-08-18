@@ -69,6 +69,10 @@ $routes = [
 
     '/api/dades_personals/delete/{slug}' => ['view' => 'src/backend/api/db_dades_personals/delete-dades-personals.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
 
+
+    '/api/dades_personals/geo' => ['view' => 'src/backend/api/db_dades_personals/geo.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+
+
     // API db_exiliats
     '/api/exiliats/get/{slug}' => ['view' => 'src/backend/api/db_exiliats/get-exiliats.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
 

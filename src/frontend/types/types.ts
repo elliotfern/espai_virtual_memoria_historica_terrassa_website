@@ -92,6 +92,8 @@ export interface Fitxa {
   visibilitat: number;
   slug: string;
   observacions_internes: string;
+  lat: number;
+  lng: number;
 }
 
 export interface FitxaJudicial {

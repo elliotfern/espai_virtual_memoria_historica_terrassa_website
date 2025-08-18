@@ -9,6 +9,7 @@ export function initTabs(translations: Record<string, string>, idPersona: number
     { id: 'tab5', label: translations.tab5 },
     { id: 'tab6', label: translations.tab6 },
     { id: 'tab8', label: translations.tab8 },
+    { id: 'tab9', label: translations.tab9 },
     { id: 'tab7', label: translations.tab7 },
   ];
 
