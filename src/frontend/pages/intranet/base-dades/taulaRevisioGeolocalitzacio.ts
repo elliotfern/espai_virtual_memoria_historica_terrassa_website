@@ -28,7 +28,7 @@ type Column<T> = {
 };
 
 // ==== Configura aquí TU endpoint real ====
-const GEOCODE_ENDPOINT = `https://memoriaterrassa.cat/api/dades_personals/geo/put/`;
+const GEOCODE_ENDPOINT = `https://memoriaterrassa.cat/api/dades_personals/geo/put`;
 
 type GeoSuccess = {
   status: 'success';
@@ -40,7 +40,7 @@ function isGeoSuccess(x: unknown): x is GeoSuccess {
 }
 
 async function geocodePersona(id: number): Promise<GeoSuccess> {
-  const url = `${GEOCODE_ENDPOINT}?id=${encodeURIComponent(String(id))}`;
+  const url = `${GEOCODE_ENDPOINT}/?id=${encodeURIComponent(String(id))}`;
   const res = await fetch(url, {
     method: 'PUT',
     headers: { Accept: 'application/json' },
