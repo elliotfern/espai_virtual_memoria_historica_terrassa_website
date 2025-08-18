@@ -1,6 +1,9 @@
 <?php
 
 use App\Config\DatabaseConnection;
+use App\Config\Database;
+use App\Utils\Response;
+use App\Utils\MissatgesAPI;
 
 $conn = DatabaseConnection::getConnection();
 
@@ -194,35 +197,107 @@ if ($slug === "isAdmin") {
     // URL: https://memoriaterrassa.cat/api/auth/get/llistatUsuaris
 } else if ($slug === "llistatUsuaris") {
 
+    $db = new Database();
     $query = "SELECT u.nom, u.email, u.biografia_cat, t.tipus, u.id
                 FROM auth_users AS u
                 LEFT JOIN auth_users_tipus AS t ON u.user_type = t.id
                 ORDER BY u.id ASC";
 
-    $result = getData($query);
-    echo json_encode($result);
+    try {
+        $result = $db->getData($query);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;  // o exit; según cómo funcione Response::error
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
 
     // GET: consulta llistat de tipus d'usuaris
     // URL: https://memoriaterrassa.cat/api/auth/get/tipusUsuaris
 } else if ($slug === "tipusUsuaris") {
 
+    $db = new Database();
     $query = "SELECT u.id, u.tipus
                 FROM auth_users_tipus AS u
                 ORDER BY u.id";
 
-    $result = getData($query);
-    echo json_encode($result);
+    try {
+        $result = $db->getData($query);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;  // o exit; según cómo funcione Response::error
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
 
     // GET: consulta informacio sobre un usuari
     // URL: https://memoriaterrassa.cat/api/auth/get/usuari
 } else if ($slug === "usuari") {
 
+    $db = new Database();
+
     $query = "SELECT u.nom, u.email, u.biografia_cat, u.user_type, u.id, u.avatar
                 FROM auth_users AS u
                 WHERE u.id = :id";
 
-    $result = getData($query, ['id' => $id], true);
-    echo json_encode($result);
+    try {
+        $params = [':id' => $id];
+        $result = $db->getData($query, $params, true);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;  // o exit; según cómo funcione Response::error
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
 } else {
     echo json_encode(['error' => 'No hi ha cap consulta disponible']);
 }

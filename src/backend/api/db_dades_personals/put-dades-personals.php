@@ -64,9 +64,12 @@ if (empty($data['categoria'])) {
 }
 
 
-if (empty(trim($data['categoria']))) {
-    $errors[] = ValidacioErrors::requerit('categoria');
+$slug = $data['slug'] ?? $data['slug2'] ?? null;
+
+if (empty($slug)) {
+    $errors[] = ValidacioErrors::requerit('slug');
 }
+
 
 if (empty($data['sexe'])) {
     $errors[] = ValidacioErrors::requerit('sexe');
@@ -174,7 +177,6 @@ $autor3 = $data['autor3'] ?? null;
 $colab1 = $data['colab1'] ?? null;
 $completat = $data['completat'] ?? 1;
 $visibilitat = $data['visibilitat'] ?? 1;
-$slug = $data['slug'];
 
 $data_actualitzacio = date('Y-m-d');
 $id = $data['id'];
