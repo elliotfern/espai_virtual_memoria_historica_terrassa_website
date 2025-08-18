@@ -69,7 +69,7 @@ export async function taulaRevisioGeolocalitzacio() {
   }
 
   renderTaulaCercadorFiltres<EspaiRow>({
-    url: API_URLS + '/dades_personals/get/?type=llistatSenseGeolocalitzacio',
+    url: API_URLS.GET.LLISTAT_CASOS_REVISIO_GEOLOCALITZACIO,
     containerId: 'taulaLlistatRevisioGeolocalitzacio',
     columns,
     filterKeys: ['nom_complet'],
