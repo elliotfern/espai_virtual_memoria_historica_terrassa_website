@@ -18,6 +18,11 @@ export async function tab2(fitxa?: Fitxa) {
     sexeSelect.value = fitxa.sexe;
   }
 
+  const adreca_antic = document.getElementById('adreca_antic') as HTMLSelectElement;
+  if (adreca_antic && fitxa?.adreca_antic) {
+    adreca_antic.value = fitxa.adreca_antic;
+  }
+
   const dataNaixementInput = document.getElementById('data_naixement') as HTMLInputElement;
   const dataDefuncioInput = document.getElementById('data_defuncio') as HTMLInputElement;
   if (fitxa && dataNaixementInput && dataDefuncioInput) {
@@ -31,6 +36,8 @@ export async function tab2(fitxa?: Fitxa) {
   await auxiliarSelect(fitxa?.ciutat_naixement_id ?? 252, 'municipis', 'municipi_naixement', 'ciutat', '252');
   await auxiliarSelect(fitxa?.ciutat_defuncio_id ?? 252, 'municipis', 'municipi_defuncio', 'ciutat', '252');
   await auxiliarSelect(fitxa?.ciutat_residencia_id ?? 252, 'municipis', 'municipi_residencia', 'ciutat', '252');
+
+  await auxiliarSelect(fitxa?.tipus_via ?? 1, 'tipusVia', 'tipus_via', 'tipus_ca', '1');
 
   const adrecaInput = document.getElementById('adreca') as HTMLInputElement;
   if (adrecaInput) adrecaInput.value = fitxa?.adreca ?? '';

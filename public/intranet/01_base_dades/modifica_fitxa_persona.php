@@ -312,6 +312,10 @@ if ($pagina === "modifica-fitxa") {
           </div>
         </div>
 
+        <hr>
+
+        <h5>Dades residència (abans de la guerra pels exiliats/deportats o combatents i durant la dictadura per la resta)</h5>
+
         <div class="col-md-4 mb-4">
           <label for="ciutat_residencia" class="form-label negreta">Ciutat de residència abans de la guerra:</label>
           <select class="form-select" name="municipi_residencia" id="municipi_residencia" value="">
@@ -328,9 +332,22 @@ if ($pagina === "modifica-fitxa") {
         </div>
 
         <div class="col-md-4 mb-4">
-          <label for="adreca" class="form-label negreta">Adreça residència:</label>
+          <label for="tipus_via" class="form-label negreta">Tipus de via</label>
+          <select class="form-select" id="tipus_via" value="" name="tipus_via">
+          </select>
+        </div>
+
+        <div class="col-md-4 mb-4">
+          <label for="adreca" class="form-label negreta">Nom actual de la via de residència:</label>
           <input type="text" class="form-control" id="adreca" name="adreca" value="">
         </div>
+
+        <div class="col-md-4 mb-4">
+          <label for="adreca_antic" class="form-label negreta">Nom antic de la via de residència (tal com apareix als registres històrics):</label>
+          <input type="text" class="form-control" id="adreca_antic" name="adreca_antic" value="">
+        </div>
+
+        <hr>
 
         <div class="col-md-4 mb-4">
           <label for="tipologia_lloc_defuncio" class="form-label negreta">Tipologia lloc de defunció:</label>
@@ -555,6 +572,11 @@ if ($pagina === "modifica-fitxa") {
           <div class="col-md-4 mb-4">
             <label for="slug2" class="form-label negreta">Slug URL:</label>
             <input type="text" class="form-control" id="slug2" name="slug2" value="" readonly>
+
+            <div class="avis-form">
+              * Camp obligatori (només els usuaris administradors poden canviar aquest valor)
+            </div>
+
           </div>
 
         <?php endif; ?>

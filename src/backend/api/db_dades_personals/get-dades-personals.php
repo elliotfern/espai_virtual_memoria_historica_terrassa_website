@@ -562,7 +562,9 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
             dp.slug,
             dp.observacions_internes,
             dp.lat,
-            dp.lng
+            dp.lng,
+            dp.tipus_via,
+            dp.adreca_antic
             FROM db_dades_personals AS dp
             LEFT JOIN aux_dades_municipis AS m1 ON dp.municipi_naixement = m1.id
             LEFT JOIN aux_dades_municipis_comarca AS m1a ON m1.comarca = m1a.id
@@ -700,7 +702,9 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
             dp.visibilitat,
             dp.slug,
             dp.lat,
-            dp.lng
+            dp.lng,
+            dp.tipus_via,
+            dp.adreca_antic
             FROM db_dades_personals AS dp
             LEFT JOIN aux_dades_municipis AS m1 ON dp.municipi_naixement = m1.id
             LEFT JOIN aux_dades_municipis_comarca AS m1a ON m1.comarca = m1a.id
@@ -1215,6 +1219,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
             a.cognom2,
             a.slug,
             a.adreca,
+            a.tipus_via,
             a.lat,
             a.lng,
             COALESCE(m.ciutat_ca, m.ciutat) AS ciutat
@@ -1266,7 +1271,8 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
             a.adreca,
             a.lat,
             a.lng,
-            COALESCE(m.ciutat_ca, m.ciutat) AS ciutat
+            COALESCE(m.ciutat_ca, m.ciutat) AS ciutat,
+            a.tipus_via
           FROM db_dades_personals AS a
           LEFT JOIN aux_dades_municipis AS m ON a.municipi_residencia = m.id
           WHERE a.lat IS NULL AND a.lng IS NULL
@@ -1275,13 +1281,14 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
     $query2 = "SELECT
             a.id                                   AS id,
             a.adreca                               AS adreca,
-            m.ciutat                               AS ciutat,
+            COALESCE(m.ciutat_ca, m.ciutat)        AS ciutat,
             p.provincia                            AS provincia,
             s.estat                                AS estat,
             a.nom,
             a.cognom1,
             a.cognom2,
-            a.slug
+            a.slug,
+            tipus_via
         FROM db_dades_personals a
         LEFT JOIN aux_dades_municipis           m ON m.id  = a.municipi_residencia
         LEFT JOIN aux_dades_municipis_provincia p ON p.id  = m.provincia

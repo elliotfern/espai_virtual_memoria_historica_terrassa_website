@@ -1404,6 +1404,40 @@ if ($slug === "municipis") {
         $options,
         200
     );
+
+    // GET: consulta llistat de tipus de via
+    // URL: https://memoriaterrassa.cat/api/auxiliars/get/tipusVia
+} else if ($slug === "tipusVia") {
+
+    $db = new Database();
+    $query = "SELECT id, tipus_ca
+                FROM aux_tipus_via
+                ORDER BY id";
+
+    try {
+        $result = $db->getData($query);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;  // o exit; según cómo funcione Response::error
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
 } else {
     // Si el parámetro 'type' no coincide con ninguno de los casos anteriores, mostramos un error
     echo json_encode(["error" => "Tipo no válido"]);

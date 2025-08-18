@@ -94,6 +94,8 @@ export interface Fitxa {
   observacions_internes: string;
   lat: number;
   lng: number;
+  adreca_antic: string;
+  tipus_via: number;
 }
 
 export interface FitxaJudicial {
