@@ -1223,8 +1223,10 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
             a.lat,
             a.lng,
             COALESCE(m.ciutat_ca, m.ciutat) AS ciutat
+            v.tipus_ca
           FROM db_dades_personals AS a
           LEFT JOIN aux_dades_municipis AS m ON a.municipi_residencia = m.id
+          LEFT JOIN aux_tipus_via AS v ON a.tipus_via = v.id
          WHERE a.lat IS NOT NULL
             AND a.lng IS NOT NULL
             AND a.lat BETWEEN -90 AND 90
@@ -1272,9 +1274,10 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
             a.lat,
             a.lng,
             COALESCE(m.ciutat_ca, m.ciutat) AS ciutat,
-            a.tipus_via
+            v.tipus_ca
           FROM db_dades_personals AS a
           LEFT JOIN aux_dades_municipis AS m ON a.municipi_residencia = m.id
+          LEFT JOIN aux_tipus_via AS v ON a.tipus_via = v.id
           WHERE a.lat IS NULL AND a.lng IS NULL
           ORDER BY a.cognom1 ASC";
 
@@ -1288,11 +1291,12 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
             a.cognom1,
             a.cognom2,
             a.slug,
-            tipus_via
+            v.tipus_ca
         FROM db_dades_personals a
         LEFT JOIN aux_dades_municipis           m ON m.id  = a.municipi_residencia
         LEFT JOIN aux_dades_municipis_provincia p ON p.id  = m.provincia
         LEFT JOIN aux_dades_municipis_estat     s ON s.id  = m.estat
+        LEFT JOIN aux_tipus_via AS v ON a.tipus_via = v.id
         WHERE (a.lat IS NULL OR a.lng IS NULL)
             AND (COALESCE(a.adreca,'') <> '' OR a.municipi_residencia IS NOT NULL);";
 

@@ -22,6 +22,8 @@ interface PersonGeo {
   lng: number;
   adreca?: string;
   ciutat?: string;
+  tipus_ca?: string;
+  tipus_via?: string;
 }
 
 const API_URL = 'https://memoriaterrassa.cat/api/dades_personals/get/?type=geolocalitzacio';
@@ -71,8 +73,9 @@ function toPersonGeo(obj: unknown): PersonGeo | null {
   const cognom2 = typeof r['cognom2'] === 'string' ? r['cognom2'] : '';
   const adreca = typeof r['adreca'] === 'string' ? r['adreca'] : undefined;
   const ciutat = typeof r['ciutat'] === 'string' ? r['ciutat'] : undefined;
+  const tipus_via = typeof r['tipus_ca'] === 'string' ? r['tipus_ca'] : undefined;
 
-  return { id: idNum, slug, nom, cognom1, cognom2, lat: latNum, lng: lngNum, adreca, ciutat };
+  return { id: idNum, slug, nom, cognom1, cognom2, lat: latNum, lng: lngNum, adreca, ciutat, tipus_via };
 }
 
 async function fetchAllPeople(): Promise<PersonGeo[]> {
@@ -100,7 +103,7 @@ function fullName(p: PersonGeo): string {
 function buildPopupHtml(p: PersonGeo): string {
   const name = fullName(p);
   const url = p.slug ? `https://memoriaterrassa.cat/fitxa/${encodeURIComponent(p.slug)}` : '';
-  const addrLine = p.adreca && p.ciutat ? `${p.adreca}, ${p.ciutat}` : p.adreca ? p.adreca : p.ciutat ? p.ciutat : '';
+  const addrLine = p.adreca && p.ciutat ? `${p.tipus_ca ?? ''} ${p.adreca}, ${p.ciutat}` : p.adreca ? p.adreca : p.ciutat ? p.ciutat : '';
 
   return `
     <div style="min-width:220px">
