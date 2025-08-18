@@ -22,8 +22,7 @@ interface PersonGeo {
   lng: number;
   adreca?: string;
   ciutat?: string;
-  tipus_ca?: string;
-  tipus_via?: string;
+  tipus_ca?: string; // ← usa este único nombre
 }
 
 const API_URL = 'https://memoriaterrassa.cat/api/dades_personals/get/?type=geolocalitzacio';
@@ -73,9 +72,9 @@ function toPersonGeo(obj: unknown): PersonGeo | null {
   const cognom2 = typeof r['cognom2'] === 'string' ? r['cognom2'] : '';
   const adreca = typeof r['adreca'] === 'string' ? r['adreca'] : undefined;
   const ciutat = typeof r['ciutat'] === 'string' ? r['ciutat'] : undefined;
-  const tipus_via = typeof r['tipus_ca'] === 'string' ? r['tipus_ca'] : undefined;
+  const tipus_ca = typeof r['tipus_ca'] === 'string' && r['tipus_ca'].trim() !== '' ? r['tipus_ca'].trim() : typeof r['tipus_via_ca'] === 'string' && r['tipus_via_ca'].trim() !== '' ? r['tipus_via_ca'].trim() : typeof r['tipus_via'] === 'string' && r['tipus_via'].trim() !== '' ? r['tipus_via'].trim() : undefined;
 
-  return { id: idNum, slug, nom, cognom1, cognom2, lat: latNum, lng: lngNum, adreca, ciutat, tipus_via };
+  return { id: idNum, slug, nom, cognom1, cognom2, lat: latNum, lng: lngNum, adreca, ciutat, tipus_ca };
 }
 
 async function fetchAllPeople(): Promise<PersonGeo[]> {
