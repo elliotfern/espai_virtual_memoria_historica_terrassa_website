@@ -1273,11 +1273,15 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
           ORDER BY a.cognom1 ASC";
 
     $query2 = "SELECT
-            a.id                                   AS rid,
+            a.id                                   AS id,
             a.adreca                               AS adreca,
             m.ciutat                               AS ciutat,
             p.provincia                            AS provincia,
-            s.estat                                AS estat
+            s.estat                                AS estat,
+            a.nom,
+            a.cognom1,
+            a.cognom2,
+            a.slug
         FROM db_dades_personals a
         LEFT JOIN aux_dades_municipis           m ON m.id  = a.municipi_residencia
         LEFT JOIN aux_dades_municipis_provincia p ON p.id  = m.provincia
