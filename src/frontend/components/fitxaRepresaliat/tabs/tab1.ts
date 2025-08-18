@@ -25,7 +25,8 @@ export function renderTab1(fitxa: Fitxa, label: string): void {
 
   const adreca = valorTextDesconegut(fitxa.adreca, 3);
   const ciutatResidencia = valorTextDesconegut(fitxa.ciutat_residencia, 2);
-  const adrecaText = joinValors([adreca, ciutatResidencia]);
+  const tipusViaResidencia = valorTextDesconegut(fitxa.tipus_ca, 3);
+  const adrecaText = joinValors([tipusViaResidencia, adreca, ciutatResidencia]);
 
   const comarcaResidencia = valorTextDesconegut(fitxa.comarca_residencia, 3);
   const provinciaResidencia = valorTextDesconegut(fitxa.provincia_residencia, 3);

@@ -563,7 +563,6 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
             dp.observacions_internes,
             dp.lat,
             dp.lng,
-            dp.tipus_via_id,
             dp.tipus_via AS tipus_via_id,
             dp.adreca_antic
             FROM db_dades_personals AS dp
