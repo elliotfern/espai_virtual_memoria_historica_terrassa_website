@@ -617,7 +617,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
 
 
     // 4) Pagina informacio fitxa Represaliat - web publica
-    // ruta GET => "https://memoriaterrassa.cat/api/represaliats/get/?type=fitxa&id=35"
+    // ruta GET => "https://memoriaterrassa.cat/api/dades_personals/get/?type=fitxa&id=35"
 } elseif (isset($_GET['type']) && $_GET['type'] == 'fitxaRepresaliat' && isset($_GET['slug'])) {
     $slug = $_GET['slug'];
 
