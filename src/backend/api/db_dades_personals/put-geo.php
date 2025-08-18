@@ -14,27 +14,32 @@ set_time_limit(0);
 
 use App\Config\DatabaseConnection;
 
-// Configuración de cabeceras para aceptar JSON y responder JSON
-header("Content-Type: application/json");
-header("Access-Control-Allow-Origin: https://memoriaterrassa.cat");
-header("Access-Control-Allow-Methods: PUT");
+// ===== CORS =====
+$allowedOrigins = ['https://memoriaterrassa.cat', 'https://www.memoriaterrassa.cat'];
+$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+if ($origin && in_array($origin, $allowedOrigins, true)) {
+    header("Access-Control-Allow-Origin: $origin");
+    header("Vary: Origin");
+    header("Access-Control-Allow-Credentials: true");
+} else {
+    // Si no hay Origin (misma origen), igual devolvemos un origen por defecto
+    header("Access-Control-Allow-Origin: https://memoriaterrassa.cat");
+    header("Access-Control-Allow-Credentials: true");
+}
+header("Access-Control-Allow-Methods: GET, PUT, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With, Accept");
+header("Content-Type: application/json; charset=utf-8");
 
-// Dominio permitido (modifica con tu dominio)
-$allowed_origin = "https://memoriaterrassa.cat";
-
-// Verificar el encabezado 'Origin'
-if (isset($_SERVER['HTTP_ORIGIN'])) {
-    if ($_SERVER['HTTP_ORIGIN'] !== $allowed_origin) {
-        http_response_code(403); // Respuesta 403 Forbidden
-        echo json_encode(["error" => "Acceso denegado. Origen no permitido."]);
-        exit;
-    }
+// Preflight
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(204);
+    exit;
 }
 
-// Verificar que el método HTTP sea PUT
-if ($_SERVER['REQUEST_METHOD'] !== 'PUT') {
-    http_response_code(405); // Método no permitido
-    echo json_encode(["error" => "Método no permitido. Se requiere PUT."]);
+// Acepta GET o PUT (tu frontend usa PUT con ?id=...)
+if ($_SERVER['REQUEST_METHOD'] !== 'GET' && $_SERVER['REQUEST_METHOD'] !== 'PUT') {
+    http_response_code(405);
+    echo json_encode(['status' => 'fail', 'message' => 'Método no permitido']);
     exit;
 }
 
@@ -50,7 +55,10 @@ if (!$userId) {
 $USER_AGENT    = 'MemoriaTerrassa/1.0 (contacto: memoria@memoriaterrassa.cat)';
 $CONTACT_EMAIL = 'memoria@memoriaterrassa.cat';
 
-$id = (int)($_GET['id'] ?? 0);
+// === id desde query o cuerpo JSON ===
+$raw = file_get_contents('php://input');
+$body = json_decode($raw ?: 'null', true);
+$id = isset($_GET['id']) ? (int)$_GET['id'] : (int)($body['id'] ?? 0);
 if ($id <= 0) {
     http_response_code(400);
     echo json_encode(['status' => 'fail', 'message' => 'id inválido']);

@@ -10,8 +10,8 @@ export function tab8(fitxa?: Fitxa) {
     slug.value = fitxa?.slug ?? '';
   }
 
-  if (slug2) {
-    slug2.innerText = fitxa?.slug ?? '';
+  if (slug2 && fitxa) {
+    slug2.innerText = fitxa.slug;
   }
 
   const observacionsInput = document.getElementById('observacions') as HTMLInputElement | null;

@@ -553,7 +553,7 @@ if ($pagina === "modifica-fitxa") {
 
         <?php else: ?>
           <div class="col-md-4 mb-4">
-            <label for="slug" class="form-label negreta">Slug URL:</label>
+            <label for="slug2" class="form-label negreta">Slug URL:</label>
             <div id="slug2"></div>
           </div>
 

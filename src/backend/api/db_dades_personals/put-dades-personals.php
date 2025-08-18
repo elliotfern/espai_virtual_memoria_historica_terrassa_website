@@ -174,7 +174,7 @@ $autor3 = $data['autor3'] ?? null;
 $colab1 = $data['colab1'] ?? null;
 $completat = $data['completat'] ?? 1;
 $visibilitat = $data['visibilitat'] ?? 1;
-$slug = $data['slug'] ?? null;
+$slug = $data['slug'];
 
 $data_actualitzacio = date('Y-m-d');
 $id = $data['id'];
@@ -218,7 +218,7 @@ try {
         data_actualitzacio = :data_actualitzacio,
         completat = :completat,
         visibilitat = :visibilitat,
-        observacions_internes =  :observacions_internes,
+        observacions_internes = :observacions_internes,
         slug = :slug
     WHERE id = :id";
 
