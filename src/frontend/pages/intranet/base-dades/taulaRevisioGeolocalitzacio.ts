@@ -40,7 +40,7 @@ function isGeoSuccess(x: unknown): x is GeoSuccess {
 }
 
 async function geocodePersona(id: number): Promise<GeoSuccess> {
-  const url = `${GEOCODE_ENDPOINT}&id=${encodeURIComponent(String(id))}`;
+  const url = `${GEOCODE_ENDPOINT}?id=${encodeURIComponent(String(id))}`;
   const res = await fetch(url, {
     method: 'PUT',
     headers: { Accept: 'application/json' },
