@@ -75,7 +75,7 @@ if (isset($_GET['type']) && $_GET['type'] === 'geocodePersona' && isset($_GET['i
         $reps = [
             '/^\s*(c\/|c\.|cl\/|cl\.|calle)\b/iu'                    => $ca ? 'Carrer '   : 'Calle ',
             '/^\s*(Avda\.?|av\.?|avenida)\b/iu'                      => $ca ? 'Avinguda ' : 'Avenida ',
-            '/^\s*(Pg\.?|pº|paseo|ps\.?|pso\.?)\b/iu'                => $ca ? 'Passeig '  : 'Paseo ',
+            '/^\s*(Psg\.?|pº|paseo|ps\.?|pso\.?)\b/iu'                => $ca ? 'Passeig '  : 'Paseo ',
             '/^\s*(Pl\.?|plaza)\b/iu'                                => $ca ? 'Plaça '    : 'Plaza ',
             '/^\s*(rda\.?|ronda)\b/iu'                               => 'Ronda ',
             '/^\s*(Ctra\.?|carretera)\b/iu'                          => 'Carretera ',

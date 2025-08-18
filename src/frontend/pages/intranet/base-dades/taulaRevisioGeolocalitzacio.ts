@@ -28,7 +28,7 @@ type Column<T> = {
 };
 
 // ==== Configura aquí TU endpoint real ====
-const GEOCODE_ENDPOINT = `https://memoriaterrassa.cat/api/dades_personals/geo/put/?type=geocodePersona`;
+const GEOCODE_ENDPOINT = `https://memoriaterrassa.cat/api/dades_personals/geo/put/`;
 
 type GeoSuccess = {
   status: 'success';
