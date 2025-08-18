@@ -96,6 +96,7 @@ export interface Fitxa {
   lng: number;
   adreca_antic: string;
   tipus_via: number;
+  tipus_ca: string;
 }
 
 export interface FitxaJudicial {

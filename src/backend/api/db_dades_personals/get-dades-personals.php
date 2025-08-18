@@ -563,7 +563,8 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
             dp.observacions_internes,
             dp.lat,
             dp.lng,
-            dp.tipus_via,
+            dp.tipus_via_id,
+            dp.tipus_via AS tipus_via_id,
             dp.adreca_antic
             FROM db_dades_personals AS dp
             LEFT JOIN aux_dades_municipis AS m1 ON dp.municipi_naixement = m1.id
@@ -601,6 +602,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
             LEFT JOIN aux_imatges AS img ON dp.img = img.id
             LEFT JOIN db_biografies AS bio ON dp.id = bio.idRepresaliat
             LEFT JOIN aux_empreses AS em ON dp.empresa = em.id
+            LEFT JOIN aux_tipus_via AS v ON dp.tipus_via = v.id
             WHERE dp.id = $id";
 
 
@@ -703,7 +705,8 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
             dp.slug,
             dp.lat,
             dp.lng,
-            dp.tipus_via,
+            dp.tipus_via AS tipus_via_id,
+            v.tipus_ca,
             dp.adreca_antic
             FROM db_dades_personals AS dp
             LEFT JOIN aux_dades_municipis AS m1 ON dp.municipi_naixement = m1.id
@@ -741,6 +744,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
             LEFT JOIN aux_imatges AS img ON dp.img = img.id
             LEFT JOIN db_biografies AS bio ON dp.id = bio.idRepresaliat
             LEFT JOIN aux_empreses AS em ON dp.empresa = em.id
+            LEFT JOIN aux_tipus_via AS v ON dp.tipus_via = v.id
             WHERE dp.slug = '$slug'";
 
 
