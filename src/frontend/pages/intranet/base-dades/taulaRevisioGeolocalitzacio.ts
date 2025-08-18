@@ -129,7 +129,7 @@ export async function taulaRevisioGeolocalitzacio() {
     {
       header: 'Adreça',
       field: 'adreca',
-      render: (_: unknown, row: EspaiRow) => `${row.tipus_ca ?? ''} ${row.adreca}, ${row.ciutat}`,
+      render: (_: unknown, row: EspaiRow) => `${row.tipus_ca?.trim() || ''} ${row.adreca}, ${row.ciutat}`,
     },
     { header: 'Latitud', field: 'lat', render: (_: unknown, row: EspaiRow) => `${row.lat ?? ''}` },
     { header: 'Longitud', field: 'lng', render: (_: unknown, row: EspaiRow) => `${row.lng ?? ''}` },

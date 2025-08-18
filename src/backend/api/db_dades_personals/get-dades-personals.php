@@ -1226,7 +1226,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
             a.tipus_via,
             a.lat,
             a.lng,
-            COALESCE(m.ciutat_ca, m.ciutat) AS ciutat
+            COALESCE(m.ciutat_ca, m.ciutat) AS ciutat,
             v.tipus_ca
           FROM db_dades_personals AS a
           LEFT JOIN aux_dades_municipis AS m ON a.municipi_residencia = m.id

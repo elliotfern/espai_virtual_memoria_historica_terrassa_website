@@ -103,7 +103,7 @@ function fullName(p: PersonGeo): string {
 function buildPopupHtml(p: PersonGeo): string {
   const name = fullName(p);
   const url = p.slug ? `https://memoriaterrassa.cat/fitxa/${encodeURIComponent(p.slug)}` : '';
-  const addrLine = p.adreca && p.ciutat ? `${p.tipus_ca ?? ''} ${p.adreca}, ${p.ciutat}` : p.adreca ? p.adreca : p.ciutat ? p.ciutat : '';
+  const addrLine = p.adreca && p.ciutat ? `${p.tipus_ca?.trim() || ''} ${p.adreca}, ${p.ciutat}` : p.adreca ? p.adreca : p.ciutat ? p.ciutat : '';
 
   return `
     <div style="min-width:220px">
