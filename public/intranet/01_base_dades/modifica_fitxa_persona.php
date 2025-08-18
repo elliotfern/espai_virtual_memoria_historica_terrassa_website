@@ -554,7 +554,7 @@ if ($pagina === "modifica-fitxa") {
         <?php else: ?>
           <div class="col-md-4 mb-4">
             <label for="slug2" class="form-label negreta">Slug URL:</label>
-            <div id="slug2"></div>
+            <input type="text" class="form-control" id="slug2" name="slug2" value="" readonly>
           </div>
 
         <?php endif; ?>

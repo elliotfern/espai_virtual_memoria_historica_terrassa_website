@@ -4,14 +4,14 @@ import { auxiliarSelect } from '../../services/fetchData/auxiliarSelect';
 
 export function tab8(fitxa?: Fitxa) {
   const slug = document.getElementById('slug') as HTMLInputElement | null;
-  const slug2 = document.getElementById('slug2');
+  const slug2 = document.getElementById('slug2') as HTMLInputElement | null;
 
   if (slug) {
     slug.value = fitxa?.slug ?? '';
   }
 
   if (slug2 && fitxa) {
-    slug2.innerText = fitxa.slug;
+    slug2.value = fitxa.slug;
   }
 
   const observacionsInput = document.getElementById('observacions') as HTMLInputElement | null;
