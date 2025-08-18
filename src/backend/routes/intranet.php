@@ -37,6 +37,10 @@ $routes = [
         'view' => BACKEND_URL . $urlIntranetDir['base_dades'] . '/llistat-revisio.php'
     ]),
 
+    APP_INTRANET . '/base-dades/general/llistat-revisio-geolocalitzacio' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['base_dades'] . '/llistat-geolocalitzacio.php'
+    ]),
+
     // Grup 2: Exiliats
     APP_INTRANET . '/base-dades/exiliats-deportats' => array_merge($defaultProtectedConfig, [
         'view' => BACKEND_URL . $urlIntranetDir['base_dades'] . '/llistat_exiliats.php'

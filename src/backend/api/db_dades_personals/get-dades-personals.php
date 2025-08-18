@@ -1251,6 +1251,65 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
             500
         );
     }
+
+    // 4) Llistat persones sense geolocalitzacioo
+    // ruta GET => "https://memoriaterrassa.cat/api/dades_personals/get/?type=llistatSenseGeolocalitzacio"
+} elseif (isset($_GET['type']) && $_GET['type'] == 'llistatSenseGeolocalitzacio') {
+    $db = new Database();
+
+    $query = "SELECT 
+            a.id,
+            a.nom,
+            a.cognom1,
+            a.cognom2,
+            a.slug,
+            a.adreca,
+            a.lat,
+            a.lng,
+            COALESCE(m.ciutat_ca, m.ciutat) AS ciutat
+          FROM db_dades_personals AS a
+          LEFT JOIN aux_dades_municipis AS m ON a.municipi_residencia = m.id
+          WHERE a.lat IS NULL AND a.lng IS NULL
+          ORDER BY a.cognom1 ASC";
+
+    $query2 = "SELECT
+            a.id                                   AS rid,
+            a.adreca                               AS adreca,
+            m.ciutat                               AS ciutat,
+            p.provincia                            AS provincia,
+            s.estat                                AS estat
+        FROM db_dades_personals a
+        LEFT JOIN aux_dades_municipis           m ON m.id  = a.municipi_residencia
+        LEFT JOIN aux_dades_municipis_provincia p ON p.id  = m.provincia
+        LEFT JOIN aux_dades_municipis_estat     s ON s.id  = m.estat
+        WHERE (a.lat IS NULL OR a.lng IS NULL)
+            AND (COALESCE(a.adreca,'') <> '' OR a.municipi_residencia IS NOT NULL);";
+
+    try {
+
+        $result = $db->getData($query);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
 } else {
     // Si 'type', 'id' o 'token' están ausentes o 'type' no es 'user' en la URL
     header('HTTP/1.1 403 Forbidden');

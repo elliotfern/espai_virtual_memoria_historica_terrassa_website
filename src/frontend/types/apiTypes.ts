@@ -42,6 +42,7 @@ export type ApiUrls = {
     GRUPS_REPRESSIO: string;
     PRESONS: string;
     LLISTAT_CASOS_REVISIO: string;
+    LLISTAT_CASOS_REVISIO_GEOLOCALITZACIO: string;
   };
   POST: {
     MUNICIPI: string;

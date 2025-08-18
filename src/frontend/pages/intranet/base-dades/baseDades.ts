@@ -19,6 +19,7 @@ import { formPresoModel } from './tipusRepressio/presoModel';
 import { formcomiteSolidaritat } from './tipusRepressio/comiteSolidaritat';
 import { formcomiteRelacionsSolidaritat } from './tipusRepressio/comiteRelacionsSolidaritat';
 import { taulaRevisio } from './taulaRevisio';
+import { taulaRevisioGeolocalitzacio } from './taulaRevisioGeolocalitzacio';
 
 export function baseDadesIntranet() {
   const url = window.location.href;
@@ -76,6 +77,8 @@ export function baseDadesIntranet() {
       taulaQuadreGeneral();
     } else if (sub === 'llistat-revisio') {
       taulaRevisio();
+    } else if (sub === 'llistat-revisio-geolocalitzacio') {
+      taulaRevisioGeolocalitzacio();
     }
     return;
   }
