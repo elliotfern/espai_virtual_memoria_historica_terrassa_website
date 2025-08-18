@@ -5,9 +5,12 @@ import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
 import L from 'leaflet';
 import 'leaflet.markercluster';
 
-import 'leaflet/dist/leaflet.css';
-import 'leaflet.markercluster/dist/MarkerCluster.css';
-import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
+interface ApiResponseData {
+  status: string;
+  message: string;
+  errors: unknown[];
+  data: unknown[];
+}
 
 interface PersonGeo {
   id: number;
@@ -17,6 +20,8 @@ interface PersonGeo {
   cognom2: string;
   lat: number;
   lng: number;
+  adreca?: string;
+  ciutat?: string;
 }
 
 const API_URL = 'https://memoriaterrassa.cat/api/dades_personals/get/?type=geolocalitzacio';
@@ -41,49 +46,75 @@ function createPersonIcon(): L.Icon {
 function isFiniteNumber(x: unknown): x is number {
   return typeof x === 'number' && Number.isFinite(x);
 }
+
 function toNumber(x: unknown): number | null {
-  const n = typeof x === 'string' ? Number(x) : (x as number);
-  return Number.isFinite(n) ? n : null;
+  if (typeof x === 'number' && Number.isFinite(x)) return x;
+  if (typeof x === 'string') {
+    const n = Number(x);
+    return Number.isFinite(n) ? n : null;
+  }
+  return null;
 }
 
 function toPersonGeo(obj: unknown): PersonGeo | null {
   if (typeof obj !== 'object' || obj === null) return null;
   const r = obj as Record<string, unknown>;
 
-  const idNum = toNumber(r.id);
-  const latNum = toNumber(r.lat);
-  const lngNum = toNumber(r.lng);
-
-  const slug = typeof r.slug === 'string' ? r.slug : '';
-  const nom = typeof r.nom === 'string' ? r.nom : '';
-  const cognom1 = typeof r.cognom1 === 'string' ? r.cognom1 : '';
-  const cognom2 = typeof r.cognom2 === 'string' ? r.cognom2 : '';
-
+  const idNum = toNumber(r['id']);
+  const latNum = toNumber(r['lat']);
+  const lngNum = toNumber(r['lng']);
   if (idNum === null || latNum === null || lngNum === null) return null;
 
-  return { id: idNum, slug, nom, cognom1, cognom2, lat: latNum, lng: lngNum };
+  const slug = typeof r['slug'] === 'string' ? r['slug'] : '';
+  const nom = typeof r['nom'] === 'string' ? r['nom'] : '';
+  const cognom1 = typeof r['cognom1'] === 'string' ? r['cognom1'] : '';
+  const cognom2 = typeof r['cognom2'] === 'string' ? r['cognom2'] : '';
+  const adreca = typeof r['adreca'] === 'string' ? r['adreca'] : undefined;
+  const ciutat = typeof r['ciutat'] === 'string' ? r['ciutat'] : undefined;
+
+  return { id: idNum, slug, nom, cognom1, cognom2, lat: latNum, lng: lngNum, adreca, ciutat };
 }
 
 async function fetchAllPeople(): Promise<PersonGeo[]> {
   const res = await fetch(API_URL, { headers: { 'Content-Type': 'application/json' } });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  const data: unknown = await res.json();
 
-  const arr = Array.isArray((data as Record<string, unknown>)?.['items']) ? ((data as Record<string, unknown>)['items'] as unknown[]) : Array.isArray(data) ? (data as unknown[]) : [];
+  const raw: unknown = await res.json();
 
-  const ok = arr.map(toPersonGeo).filter((p): p is PersonGeo => p !== null);
-  return ok.filter((p) => isFiniteNumber(p.lat) && isFiniteNumber(p.lng) && p.lat >= -90 && p.lat <= 90 && p.lng >= -180 && p.lng <= 180);
+  let arrRaw: unknown[] = [];
+  if (typeof raw === 'object' && raw !== null && Array.isArray((raw as ApiResponseData).data)) {
+    arrRaw = (raw as ApiResponseData).data;
+  } else if (Array.isArray(raw)) {
+    arrRaw = raw as unknown[];
+  }
+
+  const parsed = arrRaw.map(toPersonGeo).filter((p): p is PersonGeo => p !== null);
+
+  return parsed.filter((p) => isFiniteNumber(p.lat) && isFiniteNumber(p.lng) && p.lat >= -90 && p.lat <= 90 && p.lng >= -180 && p.lng <= 180);
 }
 
 function fullName(p: PersonGeo): string {
   return [p.nom, p.cognom1, p.cognom2].filter(Boolean).join(' ') || 'Sense nom';
 }
 
+function buildPopupHtml(p: PersonGeo): string {
+  const name = fullName(p);
+  const url = p.slug ? `https://memoriaterrassa.cat/fitxa/${encodeURIComponent(p.slug)}` : '';
+  const addrLine = p.adreca && p.ciutat ? `${p.adreca}, ${p.ciutat}` : p.adreca ? p.adreca : p.ciutat ? p.ciutat : '';
+
+  return `
+    <div style="min-width:220px">
+      <strong>${name}</strong><br/>
+      ${addrLine ? `<div style="margin:6px 0 2px; line-height:1.35">${addrLine}</div>` : ''}
+      ${url ? `<a href="${url}" target="_blank" rel="noopener">Ver fitxa</a>` : ''}
+    </div>
+  `.trim();
+}
+
 export async function renderMapaGeolocalitzacio(): Promise<void> {
   const root = document.getElementById('geolocalitzacio');
   if (!root) return;
 
-  // Estructura interna del contenedor
   const mapId = 'map-all-persons';
   const msgId = `${mapId}-msg`;
 
@@ -95,7 +126,6 @@ export async function renderMapaGeolocalitzacio(): Promise<void> {
   const mapEl = document.getElementById(mapId)!;
   const msgEl = document.getElementById(msgId)!;
 
-  // Mapa base
   const map = L.map(mapEl, {
     center: [41.6, 1.8], // centro aprox. de Catalunya; se ajustará con fitBounds
     zoom: 7,
@@ -107,7 +137,6 @@ export async function renderMapaGeolocalitzacio(): Promise<void> {
     maxZoom: 19,
   }).addTo(map);
 
-  // Datos
   let people: PersonGeo[] = [];
   try {
     people = await fetchAllPeople();
@@ -126,39 +155,25 @@ export async function renderMapaGeolocalitzacio(): Promise<void> {
   const cluster = L.markerClusterGroup({
     spiderfyOnMaxZoom: true,
     showCoverageOnHover: false,
-    disableClusteringAtZoom: 16, // a partir de 16, marcadores individuales
+    disableClusteringAtZoom: 16,
   });
 
   for (const p of people) {
-    const name = fullName(p);
-    const url = p.slug ? `https://memoriaterrassa.cat/fitxa/${encodeURIComponent(p.slug)}` : '';
-
-    const popupHtml = `
-      <div style="min-width:220px">
-        <strong>${name}</strong><br/>
-        ${url ? `<a href="${url}" target="_blank" rel="noopener">Ver fitxa</a>` : ''}
-      </div>
-    `.trim();
-
-    const m = L.marker([p.lat, p.lng], { icon }).bindPopup(popupHtml);
+    const m = L.marker([p.lat, p.lng], { icon }).bindPopup(buildPopupHtml(p));
     cluster.addLayer(m);
   }
 
   map.addLayer(cluster);
 
-  // Encajar a todos los puntos
   const bounds = cluster.getBounds();
   if (bounds.isValid()) {
     map.fitBounds(bounds.pad(0.2));
   }
 
-  // Corregir tamaño si el contenedor se pintó oculto
   setTimeout(() => map.invalidateSize(), 0);
 
-  // Info
   msgEl.textContent = `S’estan mostrant ${people.length} persona(es) al mapa.`;
 
-  // Opcional: mantener el mapa correcto en resizes
   const ro = new ResizeObserver(() => map.invalidateSize());
   ro.observe(mapEl);
 }

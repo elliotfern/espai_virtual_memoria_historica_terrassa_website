@@ -1212,7 +1212,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
             a.id,
             a.nom,
             a.cognom1,
-            a.cogmom2,
+            a.cognom2,
             a.slug,
             a.adreca,
             a.lat,
@@ -1220,8 +1220,10 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
             COALESCE(m.ciutat_ca, m.ciutat) AS ciutat
           FROM db_dades_personals AS a
           LEFT JOIN aux_dades_municipis AS m ON a.municipi_residencia = m.id
-          WHERE 
-          ORDER BY a.cognom1 ASC;";
+         WHERE a.lat IS NOT NULL
+            AND a.lng IS NOT NULL
+            AND a.lat BETWEEN -90 AND 90
+            AND a.lng BETWEEN -180 AND 180";
 
 
     try {
