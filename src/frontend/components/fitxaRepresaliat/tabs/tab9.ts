@@ -32,7 +32,7 @@ export function renderTab9(fitxa: Fitxa, label: string): void {
     <h3 class="titolSeccio">${label}</h3>
 
     <div style="margin-top:20px;margin-bottom:5px">
-        <p><span class='blau1'>En aquest mapa apareix l'adreça coneguda de residència del represaliat abans de l'esclat de la Guerra Civil (en el cas dels exiliats, deportats o morts civils/militats) o durant la dictadura franquista.</p>
+        <p><span class='blau1'>En aquest mapa apareix l'adreça coneguda de residència del represaliat abans de l'esclat de la Guerra Civil (en el cas dels exiliats, deportats o morts civils/militars) o durant la dictadura franquista.</p>
     </div>
 
     <div id="${mapId}" style="width:100%;height:60vh;border-radius:10px;overflow:hidden;margin-top:30px"></div>

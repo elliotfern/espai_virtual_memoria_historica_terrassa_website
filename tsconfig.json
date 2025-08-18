@@ -11,6 +11,7 @@
     "lib": ["es2017", "dom"],      // Incluir las bibliotecas necesarias
     "forceConsistentCasingInFileNames": true,
     "incremental": true,
+    "types": ["leaflet", "leaflet.markercluster"],
     "typeRoots": [
       "node_modules/@types",
       "src/frontend/types",

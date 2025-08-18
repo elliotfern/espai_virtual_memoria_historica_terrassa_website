@@ -168,6 +168,7 @@ $langCode2 = getLanguageFromUrl();
                                         <li><a class="dropdown-item" href="<?php echo $langCode2 === 'ca' ? '/' : '/' . $langCode2 . '/'; ?>base-dades/cost-huma"> <?php echo $translate['cost-huma']; ?></a></li>
                                         <li><a class="dropdown-item" href="<?php echo $langCode2 === 'ca' ? '/' : '/' . $langCode2 . '/'; ?>base-dades/exiliats-deportats"> <?php echo $translate['exiliats']; ?></a></li>
                                         <li><a class="dropdown-item" href="<?php echo $langCode2 === 'ca' ? '/' : '/' . $langCode2 . '/'; ?>base-dades/represaliats"> <?php echo $translate['represaliats']; ?></a></li>
+                                        <li><a class="dropdown-item" href="<?php echo $langCode2 === 'ca' ? '/' : '/' . $langCode2 . '/'; ?>base-dades/geolocalitzacio"> <?php echo $translate['geolocalitzacio']; ?></a></li>
                                     </ul>
                                 </li>
                                 <li class="nav-item"><a class="nav-link" href="<?php echo $langCode2 === 'ca' ? '/' : '/' . $langCode2 . '/'; ?>documents-estudis"> <?php echo $translate['estudis']; ?></a></li>

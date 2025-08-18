@@ -2,6 +2,7 @@ import { iniciarBuscadorCostHuma } from '../../../components/filtreRecerca/pages
 import { iniciarBuscadorExiliats } from '../../../components/filtreRecerca/pages/exili';
 import { iniciarBuscadorGeneral } from '../../../components/filtreRecerca/pages/general';
 import { iniciarBuscadorRepresaliats } from '../../../components/filtreRecerca/pages/represaliats';
+import { renderMapaGeolocalitzacio } from '../../../components/geolocalitzacio/mapaGeneral';
 import { getPageType } from '../../../services/url/splitUrl';
 
 export function baseDadesWebPublica() {
@@ -16,5 +17,7 @@ export function baseDadesWebPublica() {
     iniciarBuscadorExiliats();
   } else if (pageType[1] === 'cost-huma' || pageType[1] === 'cost-huma#filtre') {
     iniciarBuscadorCostHuma();
+  } else if (pageType[1] === 'geolocalitzacio') {
+    renderMapaGeolocalitzacio();
   }
 }
