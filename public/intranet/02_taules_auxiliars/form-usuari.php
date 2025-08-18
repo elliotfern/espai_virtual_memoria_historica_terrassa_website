@@ -1,50 +1,12 @@
 <?php
-
-use App\Config\DatabaseConnection;
-
-$conn = DatabaseConnection::getConnection();
-
-if (!$conn) {
-    die("No se pudo establecer conexión a la base de datos.");
-}
 require_once APP_ROOT . '/public/intranet/includes/header.php';
-
-// Obtener la URL completa
-$url = $_SERVER['REQUEST_URI'];
-
-// Dividir la URL en partes usando '/' como delimitador
-$urlParts = explode('/', $url);
-
-// Obtener la parte deseada (en este caso, la cuarta parte)
-$categoriaId = $urlParts[3] ?? '';
-
-if ($categoriaId === "modifica-usuari") {
-    $modificaBtn = 1;
-    $id = $routeParams[0];
-    $titol = "Modificació usuari";
-?>
-    <script type="module">
-        formUpdate("<?php echo $id; ?>");
-    </script>
-<?php
-} else {
-    $modificaBtn = 2;
-    $titol = "Creació de nou usuari";
-?>
-    <script type="module">
-        // Llenar selects con opciones
-        selectOmplirDades("/api/auth/get/tipusUsuaris", "", "user_type", "tipus");
-        selectOmplirDades("/api/auxiliars/get/avatarsUsuaris", "", "avatar", "nomImatge");
-    </script>
-<?php
-}
 ?>
 
 <div class="container" style="margin-bottom:50px;border: 1px solid gray;border-radius: 10px;padding:25px;background-color:#eaeaea">
     <div class="container">
         <div class="row">
             <h2>Gestió base de dades auxiliars: usuaris</h2>
-            <h4><?php echo $titol; ?></h4>
+            <div id="titolForm"></div>
             <?php if (isUserAdmin()) : ?>
 
                 <form id="usuariForm">
@@ -103,13 +65,7 @@ if ($categoriaId === "modifica-usuari") {
                             </div>
                             <div class="col d-flex justify-content-end align-items-center">
 
-                                <?php
-                                if ($modificaBtn === 1) {
-                                    echo '<button class="btn btn-primary" id="btnModificar" type="submit">Modificar dades</button>';
-                                } else {
-                                    echo '<button class="btn btn-primary" id="btnInserir" type="submit">Inserir dades</button>';
-                                }
-                                ?>
+                                <button class="btn btn-primary" id="btnUsuari" type="submit">Modificar dades</button>
                             </div>
                         </div>
                     </div>
@@ -119,66 +75,3 @@ if ($categoriaId === "modifica-usuari") {
         </div>
     </div>
 </div>
-
-<script>
-    function formUpdate(id) {
-        let urlAjax = "/api/auth/get/usuari?id=" + id;
-
-        fetch(urlAjax, {
-                method: "GET",
-            })
-            .then(response => response.json())
-            .then(data => {
-                // Establecer valores en los campos del formulario
-                document.getElementById("id").value = data.id;
-                document.getElementById("nom").value = data.nom;
-                document.getElementById('email').value = data.email;
-                document.getElementById('biografia_cat').value = data.biografia_cat;
-
-                // Llenar selects con opciones
-                selectOmplirDades("/api/auth/get/tipusUsuaris", data.user_type, "user_type", "tipus");
-                selectOmplirDades("/api/auxiliars/get/avatarsUsuaris", data.avatar, "avatar", "nomImatge");
-            })
-            .catch(error => console.error("Error al obtener los datos:", error));
-    }
-
-    async function selectOmplirDades(url, selectedValue, selectId, textField) {
-        try {
-            const response = await fetch(url);
-            if (!response.ok) {
-                throw new Error('Error en la sol·licitud AJAX');
-            }
-
-            const data = await response.json();
-            const selectElement = document.getElementById(selectId);
-            if (!selectElement) {
-                console.error(`Select element with id ${selectId} not found`);
-                return;
-            }
-
-            // Netejar les opcions actuals
-            selectElement.innerHTML = '';
-
-            // Afegir opció per defecte
-            const defaultOption = document.createElement('option');
-            defaultOption.value = '';
-            defaultOption.text = 'Selecciona una opció:';
-            defaultOption.disabled = false;
-            defaultOption.selected = !selectedValue; // si no hi ha valor seleccionat, aquesta es selecciona
-            selectElement.appendChild(defaultOption);
-
-            // Afegir les noves opcions
-            data.forEach((item) => {
-                const option = document.createElement('option');
-                option.value = item.id;
-                option.text = item[textField];
-                if (item.id === selectedValue) {
-                    option.selected = true;
-                }
-                selectElement.appendChild(option);
-            });
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    }
-</script>

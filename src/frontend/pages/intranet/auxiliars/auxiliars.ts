@@ -39,6 +39,7 @@ import { taulaGrupsRepressio } from './taulaGrupsRepressio';
 import { fetchDataGet } from '../../../services/fetchData/fetchDataGet';
 import { auxiliarSelect } from '../../../services/fetchData/auxiliarSelect';
 import { taulaPresons } from './taulaPresons';
+import { formUsuaris } from './formUsuaris';
 
 export async function auxiliars() {
   const url = window.location.href;
@@ -47,19 +48,9 @@ export async function auxiliars() {
   if (pageType[2] === 'llistat-usuaris') {
     taulaDadesUsuaris();
   } else if (pageType[2] === 'nou-usuari') {
-    const peli = document.getElementById('usuariForm');
-    if (peli) {
-      peli.addEventListener('submit', function (event) {
-        transmissioDadesDB(event, 'POST', 'usuariForm', '/api/auxiliars/post/usuari', true);
-      });
-    }
+    formUsuaris(false);
   } else if (pageType[2] === 'modifica-usuari') {
-    const peli = document.getElementById('usuariForm');
-    if (peli) {
-      peli.addEventListener('submit', function (event) {
-        transmissioDadesDB(event, 'PUT', 'usuariForm', '/api/auxiliars/put/usuari');
-      });
-    }
+    formUsuaris(true, Number(pageType[3]));
   } else if (pageType[2] === 'llistat-municipis') {
     taulaMunicipis();
   } else if (pageType[2] === 'llistat-partits-politics') {
