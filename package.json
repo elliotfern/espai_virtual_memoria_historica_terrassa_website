@@ -40,7 +40,8 @@
     "bootstrap": "^5.3.3",
     "choices.js": "^11.1.0",
     "dayjs": "^1.11.13",
-    "leaflet": "^1.9.4"
+    "leaflet": "^1.9.4",
+    "leaflet.markercluster": "^1.5.3"
   },
   "lint-staged": {
     "*.js": "eslint --fix",
