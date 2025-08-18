@@ -264,9 +264,10 @@ if ($slug === "isAdmin") {
 
 
     // GET: consulta informacio sobre un usuari
-    // URL: https://memoriaterrassa.cat/api/auth/get/usuari
+    // URL: https://memoriaterrassa.cat/api/auth/get/usuari?id=${id}
 } else if ($slug === "usuari") {
 
+    $id = $_GET['id'] ?? null;
     $db = new Database();
 
     $query = "SELECT u.nom, u.email, u.biografia_cat, u.user_type, u.id, u.avatar

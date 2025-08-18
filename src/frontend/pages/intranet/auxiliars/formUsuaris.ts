@@ -41,7 +41,7 @@ export async function formUsuaris(isUpdate: boolean, id?: number) {
   if (!btn1 || !divTitol || !btnUsuari || !usuariForm) return;
 
   if (id && isUpdate) {
-    const response = await fetchDataGet<ApiResponse<Fitxa>>(API_URLS.GET.ESPAI_ID(id), true);
+    const response = await fetchDataGet<ApiResponse<Fitxa>>(API_URLS.GET.USUARI_ID(id), true);
 
     if (!response || !response.data) return;
     data = response.data;

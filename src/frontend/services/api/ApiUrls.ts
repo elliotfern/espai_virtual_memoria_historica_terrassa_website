@@ -75,6 +75,7 @@ export const ENDPOINTS = {
   PRESONS: 'llistatPresons',
   LLISTAT_CASOS_REVISIO: 'llistatCasosRevisio',
   LLISTAT_CASOS_REVISIO_GEOLOCALITZACIO: '?type=llistatSenseGeolocalitzacio',
+  USUARI_ID: 'usuari',
 } as const;
 
 // Mapa de recursos disponibles
@@ -84,6 +85,7 @@ const RESOURCES = {
   FONTS_DOCUMENTALS: 'fonts',
   REPRESALIATS: 'represaliats',
   DETINGUTS_GU: 'detinguts_guardia_urbana',
+  AUTH: 'auth',
 } as const;
 
 const TIPUS = {
@@ -138,6 +140,7 @@ export const API_URLS: ApiUrls = {
     PRESONS: `${BASE_URL}/${API}/${RESOURCES.AUXILIARS}/${TIPUS.GET}/${ENDPOINTS.PRESONS}`,
     LLISTAT_CASOS_REVISIO: `${BASE_URL}/${API}/${RESOURCES.REPRESALIATS}/${TIPUS.GET}/${ENDPOINTS.LLISTAT_CASOS_REVISIO}`,
     LLISTAT_CASOS_REVISIO_GEOLOCALITZACIO: `${BASE_URL}/${API}/${RESOURCES.DADES_PERSONALS}/${TIPUS.GET}/${ENDPOINTS.LLISTAT_CASOS_REVISIO_GEOLOCALITZACIO}`,
+    USUARI_ID: (id: number) => `${BASE_URL}/${API}/${RESOURCES.AUTH}/${TIPUS.GET}/${ENDPOINTS.USUARI_ID}?id=${id}`,
   },
 
   POST: {

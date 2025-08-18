@@ -43,6 +43,7 @@ export type ApiUrls = {
     PRESONS: string;
     LLISTAT_CASOS_REVISIO: string;
     LLISTAT_CASOS_REVISIO_GEOLOCALITZACIO: string;
+    USUARI_ID: (id: number) => string;
   };
   POST: {
     MUNICIPI: string;

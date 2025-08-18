@@ -61,6 +61,41 @@ if ($slug === "municipis") {
         );
     }
 
+
+    // GET: consulta llistat de tipus d'usuaris
+    // URL: https://memoriaterrassa.cat/api/auxiliars/get/tipusUsuaris
+} else if ($slug === "tipusUsuaris") {
+
+    $db = new Database();
+    $query = "SELECT u.id, u.tipus
+                FROM auth_users_tipus AS u
+                ORDER BY u.id";
+
+    try {
+        $result = $db->getData($query);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;  // o exit; según cómo funcione Response::error
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
     // GET : Municipi per ID
     // URL: https://memoriaterrassa.cat/api/auxiliars/get/municipi?id=${id}
 } else if ($slug === "municipi") {
