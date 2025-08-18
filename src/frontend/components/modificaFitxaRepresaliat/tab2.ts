@@ -18,11 +18,6 @@ export async function tab2(fitxa?: Fitxa) {
     sexeSelect.value = fitxa.sexe;
   }
 
-  const adreca_antic = document.getElementById('adreca_antic') as HTMLSelectElement;
-  if (adreca_antic && fitxa?.adreca_antic) {
-    adreca_antic.value = fitxa.adreca_antic;
-  }
-
   const dataNaixementInput = document.getElementById('data_naixement') as HTMLInputElement;
   const dataDefuncioInput = document.getElementById('data_defuncio') as HTMLInputElement;
   if (fitxa && dataNaixementInput && dataDefuncioInput) {
@@ -41,6 +36,12 @@ export async function tab2(fitxa?: Fitxa) {
 
   const adrecaInput = document.getElementById('adreca') as HTMLInputElement;
   if (adrecaInput) adrecaInput.value = fitxa?.adreca ?? '';
+
+  const adreca_num = document.getElementById('adreca_num') as HTMLInputElement;
+  if (adreca_num) adreca_num.value = fitxa?.adreca_num ?? '';
+
+  const adreca_antic = document.getElementById('adreca_antic') as HTMLInputElement;
+  if (adreca_antic) adreca_antic.value = fitxa?.adreca_antic ?? '';
 
   // Agregar eventos a los botones de refresco
   const refreshButton1 = document.getElementById('refreshButton1');

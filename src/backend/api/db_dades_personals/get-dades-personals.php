@@ -564,7 +564,8 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
             dp.lat,
             dp.lng,
             dp.tipus_via AS tipus_via_id,
-            dp.adreca_antic
+            dp.adreca_antic,
+            dp.adreca_num
             FROM db_dades_personals AS dp
             LEFT JOIN aux_dades_municipis AS m1 ON dp.municipi_naixement = m1.id
             LEFT JOIN aux_dades_municipis_comarca AS m1a ON m1.comarca = m1a.id
@@ -706,7 +707,8 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
             dp.lng,
             dp.tipus_via AS tipus_via_id,
             v.tipus_ca,
-            dp.adreca_antic
+            dp.adreca_antic,
+            dp.adreca_num
             FROM db_dades_personals AS dp
             LEFT JOIN aux_dades_municipis AS m1 ON dp.municipi_naixement = m1.id
             LEFT JOIN aux_dades_municipis_comarca AS m1a ON m1.comarca = m1a.id
@@ -1226,7 +1228,8 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
             a.lat,
             a.lng,
             COALESCE(m.ciutat_ca, m.ciutat) AS ciutat,
-            v.tipus_ca
+            v.tipus_ca,
+            a.adreca_num
           FROM db_dades_personals AS a
           LEFT JOIN aux_dades_municipis AS m ON a.municipi_residencia = m.id
           LEFT JOIN aux_tipus_via AS v ON a.tipus_via = v.id
@@ -1277,7 +1280,8 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
             a.lat,
             a.lng,
             COALESCE(m.ciutat_ca, m.ciutat) AS ciutat,
-            v.tipus_ca
+            v.tipus_ca,
+            a.adreca_num
           FROM db_dades_personals AS a
           LEFT JOIN aux_dades_municipis AS m ON a.municipi_residencia = m.id
           LEFT JOIN aux_tipus_via AS v ON a.tipus_via = v.id

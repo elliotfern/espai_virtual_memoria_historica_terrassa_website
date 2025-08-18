@@ -317,7 +317,7 @@ if ($pagina === "modifica-fitxa") {
         <h5>Dades residència (abans de la guerra pels exiliats/deportats o combatents i durant la dictadura per la resta)</h5>
 
         <div class="col-md-4 mb-4">
-          <label for="ciutat_residencia" class="form-label negreta">Ciutat de residència abans de la guerra:</label>
+          <label for="ciutat_residencia" class="form-label negreta">Ciutat de residència:</label>
           <select class="form-select" name="municipi_residencia" id="municipi_residencia" value="">
           </select>
           <div class="avis-form">
@@ -331,7 +331,7 @@ if ($pagina === "modifica-fitxa") {
 
         </div>
 
-        <div class="col-md-4 mb-4">
+        <div class="col-md-2 mb-4">
           <label for="tipus_via" class="form-label negreta">Tipus de via</label>
           <select class="form-select" id="tipus_via" value="" name="tipus_via">
           </select>
@@ -342,6 +342,11 @@ if ($pagina === "modifica-fitxa") {
           <input type="text" class="form-control" id="adreca" name="adreca" value="">
         </div>
 
+        <div class="col-md-1 mb-4">
+          <label for="adreca_num" class="form-label negreta">Número:</label>
+          <input type="number" class="form-control" id="adreca_num" name="adreca_num" value="">
+        </div>
+
         <div class="col-md-4 mb-4">
           <label for="adreca_antic" class="form-label negreta">Nom antic de la via de residència (tal com apareix als registres històrics):</label>
           <input type="text" class="form-control" id="adreca_antic" name="adreca_antic" value="">
@@ -349,7 +354,7 @@ if ($pagina === "modifica-fitxa") {
 
         <hr>
 
-        <div class="col-md-4 mb-4">
+        <div class="col-md- mb-4">
           <label for="tipologia_lloc_defuncio" class="form-label negreta">Tipologia lloc de defunció:</label>
           <select class="form-select" id="tipologia_lloc_defuncio" value="" name="tipologia_lloc_defuncio">
           </select>

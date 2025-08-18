@@ -179,6 +179,7 @@ $completat = $data['completat'] ?? 1;
 $visibilitat = $data['visibilitat'] ?? 1;
 $tipus_via = $data['tipus_via'] ?? null;
 $adreca_antic = $data['adreca_antic'] ?? null;
+$adreca_num = $data['adreca_num'] ?? null;
 
 $data_actualitzacio = date('Y-m-d');
 $id = $data['id'];
@@ -225,7 +226,8 @@ try {
         observacions_internes = :observacions_internes,
         slug = :slug,
         tipus_via = :tipus_via,
-        adreca_antic = :adreca_antic
+        adreca_antic = :adreca_antic,
+        adreca_num = :adreca_num
     WHERE id = :id";
 
     // Preparar la consulta
@@ -268,6 +270,7 @@ try {
     $stmt->bindParam(':slug', $slug, PDO::PARAM_STR);
     $stmt->bindParam(':tipus_via', $tipus_via, PDO::PARAM_STR);
     $stmt->bindParam(':adreca_antic', $adreca_antic, PDO::PARAM_STR);
+    $stmt->bindParam(':adreca_num', $adreca_num, PDO::PARAM_INT);
 
     // Supón que el ID a modificar lo pasas en el JSON también
     if (isset($data['id'])) {
