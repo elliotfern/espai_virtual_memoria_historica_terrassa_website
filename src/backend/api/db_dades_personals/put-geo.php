@@ -199,7 +199,6 @@ $partsFree = [];
 if ($viaNum !== '')               $partsFree[] = $viaNum;       // incluye "s/n" si lo tienes así
 if ($viaNom !== '')               $partsFree[] = $viaNom;
 if ($city)                        $partsFree[] = $city;
-if ($state)                       $partsFree[] = $state;         // opcional pero ayuda
 if ($country)                     $partsFree[] = $country;       // opcional pero ayuda
 $freeTextAddr = implode(', ', $partsFree);
 
