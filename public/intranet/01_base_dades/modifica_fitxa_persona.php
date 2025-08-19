@@ -352,6 +352,12 @@ if ($pagina === "modifica-fitxa") {
           <input type="text" class="form-control" id="adreca_antic" name="adreca_antic" value="">
         </div>
 
+        <?php if ($isAdmin): ?>
+          <div class="col-md-4 mb-4" id="geolocalitzacioBtn">
+          </div>
+
+        <?php endif; ?>
+
         <hr>
 
         <div class="col-md-4 mb-4">

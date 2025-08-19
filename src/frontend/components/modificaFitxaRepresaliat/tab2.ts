@@ -43,6 +43,89 @@ export async function tab2(fitxa?: Fitxa) {
   const adreca_antic = document.getElementById('adreca_antic') as HTMLInputElement;
   if (adreca_antic) adreca_antic.value = fitxa?.adreca_antic ?? '';
 
+  // === Usa el mismo endpoint que en tu código principal ===
+  const GEOCODE_ENDPOINT = `https://memoriaterrassa.cat/api/dades_personals/geo/put`;
+
+  type GeoSuccess = {
+    status: 'success';
+    message?: string;
+    data?: { lat?: number; lng?: number };
+  };
+
+  function isGeoSuccess(x: unknown): x is GeoSuccess {
+    return typeof x === 'object' && x !== null && (x as { status?: string }).status === 'success';
+  }
+
+  async function geocodePersona(id: number): Promise<GeoSuccess> {
+    const url = `${GEOCODE_ENDPOINT}/?id=${encodeURIComponent(String(id))}`;
+    const res = await fetch(url, {
+      method: 'PUT',
+      headers: { Accept: 'application/json' },
+      credentials: 'include',
+    });
+    if (!res.ok) {
+      const text = await res.text();
+      throw new Error(`HTTP ${res.status} ${res.statusText} - ${text}`);
+    }
+    const data: unknown = await res.json();
+    if (!isGeoSuccess(data)) {
+      throw new Error('Resposta inesperada del servidor');
+    }
+    return data;
+  }
+
+  function renderGeoButton(id: number) {
+    const container = document.getElementById('geolocalitzacioBtn');
+    if (!container) return;
+
+    // Insertamos el botón en el DIV
+    container.innerHTML = `
+    <button type="button" class="btn btn-primary btn-sm js-geo" data-id="${id}">
+      Calcular coordenades
+    </button>
+  `;
+
+    const btn = container.querySelector<HTMLButtonElement>('.js-geo');
+    if (!btn) return;
+
+    btn.addEventListener('click', async () => {
+      const originalHtml = btn.innerHTML;
+      btn.disabled = true;
+      btn.innerHTML = 'Calculant...';
+
+      try {
+        const resp = await geocodePersona(id);
+        if (resp.data) {
+          btn.title = `LAT: ${resp.data.lat ?? '—'} | LNG: ${resp.data.lng ?? '—'}`;
+        }
+
+        btn.classList.remove('btn-primary');
+        btn.classList.add('btn-outline-success');
+        btn.innerHTML = 'Fet ✓';
+      } catch (err) {
+        console.error(err);
+        btn.classList.remove('btn-primary');
+        btn.classList.add('btn-danger');
+        btn.innerHTML = 'Error';
+        setTimeout(() => {
+          btn.classList.remove('btn-danger', 'btn-outline-success');
+          btn.classList.add('btn-primary');
+          btn.innerHTML = originalHtml;
+          btn.disabled = false;
+        }, 2000);
+        return;
+      }
+
+      setTimeout(() => {
+        btn.disabled = false;
+      }, 500);
+    });
+  }
+
+  if (fitxa) {
+    renderGeoButton(fitxa.id);
+  }
+
   // Agregar eventos a los botones de refresco
   const refreshButton1 = document.getElementById('refreshButton1');
   if (refreshButton1) {
