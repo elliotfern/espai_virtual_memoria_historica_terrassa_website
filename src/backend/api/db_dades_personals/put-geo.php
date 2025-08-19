@@ -1,9 +1,9 @@
 <?php
 
 /**
- * geocode_persones_paginat.php (1 id)
- * - Construye la dirección a partir de campos separados: tipus_via_ca, adreca(adreça = nombre vía), adreca_num
- * - Geocodifica con Nominatim (estructurado + fallback)
+ * geocode_persones_paginat_icgc.php (1 id)
+ * - Construye la dirección a partir de BD: tipus_via_ca (tipo vía), adreca (nombre vía), adreca_num (portal)
+ * - Geocodifica con ICGC (cerca)
  * - Guarda lat/lng en db_dades_personals
  */
 
@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 // Acepta GET o PUT (tu frontend usa PUT con ?id=...)
-if ($_SERVER['REQUEST_METHOD'] !== 'GET' && $_SERVER['REQUEST_METHOD'] !== 'PUT') {
+if (!in_array($_SERVER['REQUEST_METHOD'], ['GET', 'PUT'], true)) {
     http_response_code(405);
     echo json_encode(['status' => 'fail', 'message' => 'Método no permitido']);
     exit;
@@ -48,9 +48,9 @@ if (!$userId) {
     exit;
 }
 
-// === Config geocoder ===
-$USER_AGENT    = 'MemoriaTerrassa/1.0 (contacto: memoria@memoriaterrassa.cat)';
-$CONTACT_EMAIL = 'memoria@memoriaterrassa.cat';
+// === Config ICGC ===
+const ICGC_BASE = 'https://eines.icgc.cat/geocodificador/cerca';
+const UA_HEADER = 'User-Agent: MemoriaTerrassa/1.0 (memoria@memoriaterrassa.cat)';
 
 // === id desde query o cuerpo JSON ===
 $raw  = file_get_contents('php://input');
@@ -62,89 +62,25 @@ if ($id <= 0) {
     exit;
 }
 
-// ===== Helpers HTTP/OSM =====
-function http_get_first_json_local(string $url, string $ua): array
-{
-    $ch = curl_init();
-    curl_setopt_array($ch, [
-        CURLOPT_URL => $url,
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_CONNECTTIMEOUT => 10,
-        CURLOPT_TIMEOUT => 20,
-        CURLOPT_HTTPHEADER => ['User-Agent: ' . $ua],
-    ]);
-    $body = curl_exec($ch);
-    $err  = curl_error($ch);
-    $code = curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
-    curl_close($ch);
-    if ($err || $code !== 200 || !$body) {
-        return ['code' => $code ?: 0, 'result' => null];
-    }
-    $json = json_decode($body, true);
-    return (is_array($json) && !empty($json)) ? ['code' => $code, 'result' => $json[0]] : ['code' => $code, 'result' => null];
-}
-
-function nominatimStructured_local(
-    ?string $street,
-    ?string $city,
-    ?string $county,
-    ?string $state,
-    ?string $country,
-    string $ua,
-    string $email,
-    ?string $postal = null
-): array {
-    $params = [
-        'format'          => 'jsonv2',
-        'limit'           => 1,
-        'addressdetails'  => 1,
-        'accept-language' => 'ca,es,en',
-        'countrycodes'    => 'es',
-        'email'           => $email
-    ];
-    if ($street)  $params['street']  = $street;   // “Carrer Sant Leopold 47” o “47 Carrer Sant Leopold”
-    if ($city)    $params['city']    = $city;     // “Terrassa”
-    if ($county)  $params['county']  = $county;   // “Barcelona”
-    if ($state)   $params['state']   = $state;    // “Catalunya”
-    if ($country) $params['country'] = $country;  // “España”
-    if ($postal)  $params['postalcode'] = $postal;
-
-    $url = 'https://nominatim.openstreetmap.org/search?' . http_build_query($params);
-    return http_get_first_json_local($url, $ua);
-}
-
-
-function nominatimFree_local(string $q, string $ua, string $email): array
-{
-    $url = 'https://nominatim.openstreetmap.org/search?' . http_build_query([
-        'format'          => 'jsonv2',
-        'q'               => $q,       // "47, Sant Leopold, Terrassa, Barcelona, España"
-        'limit'           => 1,
-        'addressdetails'  => 1,
-        'accept-language' => 'ca,es,en',
-        'countrycodes'    => 'es',
-        'email'           => $email
-    ]);
-    return http_get_first_json_local($url, $ua);
-}
-
 // ============== Conexión ==============
 $conn = DatabaseConnection::getConnection();
 if (!$conn) {
-    die("No se pudo establecer conexión a la base de datos.\n");
+    http_response_code(500);
+    echo json_encode(['status' => 'fail', 'message' => 'No se pudo establecer conexión a la base de datos']);
+    exit;
 }
 
 // Cargar datos de la persona
 $sql = "SELECT
   a.id AS rid,
   a.lat, a.lng,
-   t.tipus_ca      AS tipus_via_ca,
-  a.adreca        AS via_nom, 
-  a.adreca_num    AS via_num,
-  m.ciutat        AS ciutat,
-  p.provincia     AS provincia,
-  s.estat         AS estat,
-  mc.comunitat_ca AS comunitat_ca
+  t.tipus_ca       AS tipus_via_ca,   -- tipo de vía (Carrer, Passeig, ...)
+  a.adreca         AS via_nom,        -- nombre vía
+  a.adreca_num     AS via_num,        -- número portal
+  m.ciutat         AS ciutat,
+  p.provincia      AS provincia,
+  s.estat          AS estat,
+  mc.comunitat_ca  AS comunitat_ca
 FROM db_dades_personals a
 LEFT JOIN aux_dades_municipis            m  ON m.id  = a.municipi_residencia
 LEFT JOIN aux_dades_municipis_provincia  p  ON p.id  = m.provincia
@@ -179,112 +115,160 @@ if ($latExist !== null && $lngExist !== null) {
     }
 }
 
-// ===== Construcción de parámetros SIN normalización =====
-$viaNum   = trim((string)($row['via_num']       ?? ''));   // "47" o "" o "s/n"
-$viaType  = trim((string)($row['tipus_via_ca']  ?? ''));   // "Carrer"
-$viaNom   = trim((string)($row['via_nom']       ?? ''));   // "Sant Leopold"
-$city     = is_string($row['ciutat']        ?? null) ? trim($row['ciutat'])        : null; // "Terrassa"
-$county   = is_string($row['provincia']     ?? null) ? trim($row['provincia'])     : null; // "Barcelona"
-$state    = is_string($row['comunitat_ca']  ?? null) ? trim($row['comunitat_ca'])  : null; // "Catalunya"
-$country  = is_string($row['estat']         ?? null) ? trim($row['estat'])         : 'España';
+// ===== Helpers ICGC =====
+/**
+ * Llama al geocodificador del ICGC con el formato recomendado:
+ *  - text: "<tipus_via> <adreca> <adreca_num>, <ciutat>"  (si hay número)
+ *          "<tipus_via> <adreca>, <ciutat>"               (si no hay número)
+ * Filtra por layers=address y size=1.
+ *
+ * @return array|null  [
+ *   'lat' => float, 'lng' => float,
+ *   'precision' => 'house'|'street',
+ *   'icgc' => [...props útiles...],
+ *   'text' => string  // consulta enviada
+ * ]
+ */
+function icgcGeocodeAddress(string $tipus_via, string $adreca, ?string $adreca_num, string $ciutat): ?array
+{
+    $hasNum = $adreca_num !== null && $adreca_num !== '' && strtolower($adreca_num) !== 's/n';
 
-// Si no hay nombre de vía, abortamos
+    // 1) Intento con número (si existe) y exigimos coincidencia exacta de portal
+    if ($hasNum) {
+        $textHouse = trim($tipus_via . ' ' . $adreca . ' ' . $adreca_num) . ', ' . $ciutat;
+        $resHouse  = icgcRequest($textHouse);
+        if ($resHouse && isset($resHouse['features'][0])) {
+            $feat  = $resHouse['features'][0];
+            $props = $feat['properties'] ?? [];
+            $portalResp = isset($props['portal']) ? trim((string)$props['portal']) : '';
+
+            if ($portalResp !== '' && strcasecmp($portalResp, (string)$adreca_num) === 0) {
+                [$lng, $lat] = $feat['geometry']['coordinates'];
+                return [
+                    'lat' => (float)$lat,
+                    'lng' => (float)$lng,
+                    'precision' => 'house',
+                    'icgc' => [
+                        'etiqueta'   => $props['etiqueta'] ?? null,
+                        'tipus_via'  => $props['tipus_via'] ?? null,
+                        'nom'        => $props['nom'] ?? null,
+                        'portal'     => $props['portal'] ?? null,
+                        'municipi'   => $props['municipi'] ?? null,
+                        'comarca'    => $props['comarca'] ?? null,
+                    ],
+                    'text' => $textHouse
+                ];
+            }
+            // si no coincide portal, continuamos a calle
+        }
+    }
+
+    // 2) Intento sin número (nivel calle)
+    $textStreet = trim($tipus_via . ' ' . $adreca) . ', ' . $ciutat;
+    $resStreet  = icgcRequest($textStreet);
+    if ($resStreet && isset($resStreet['features'][0])) {
+        $feat = $resStreet['features'][0];
+        if (isset($feat['geometry']['coordinates'][0], $feat['geometry']['coordinates'][1])) {
+            [$lng, $lat] = $feat['geometry']['coordinates'];
+            $props = $feat['properties'] ?? [];
+            return [
+                'lat' => (float)$lat,
+                'lng' => (float)$lng,
+                'precision' => 'street',
+                'icgc' => [
+                    'etiqueta'   => $props['etiqueta'] ?? null,
+                    'tipus_via'  => $props['tipus_via'] ?? null,
+                    'nom'        => $props['nom'] ?? null,
+                    'portal'     => $props['portal'] ?? null, // normalmente vacío en calle
+                    'municipi'   => $props['municipi'] ?? null,
+                    'comarca'    => $props['comarca'] ?? null,
+                ],
+                'text' => $textStreet
+            ];
+        }
+    }
+
+    return null;
+}
+
+/**
+ * Petición HTTP al endpoint ICGC `cerca` devolviendo el JSON como array.
+ * Usa layers=address y size=1 para obtener la mejor coincidencia de dirección postal.
+ */
+function icgcRequest(string $text): ?array
+{
+    $query = http_build_query([
+        'text'   => $text,
+        'layers' => 'address',
+        'size'   => 1
+        // Consejo: si trabajas sólo en Terrassa puedes añadir 'mun' => 'Terrassa'
+    ]);
+
+    $url = ICGC_BASE . '?' . $query;
+
+    $ch = curl_init();
+    curl_setopt_array($ch, [
+        CURLOPT_URL => $url,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_CONNECTTIMEOUT => 10,
+        CURLOPT_TIMEOUT => 20,
+        CURLOPT_HTTPHEADER => [UA_HEADER],
+    ]);
+    $body = curl_exec($ch);
+    $err  = curl_error($ch);
+    $code = curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
+    curl_close($ch);
+
+    if ($err || $code !== 200 || !$body) return null;
+
+    $json = json_decode($body, true);
+    if (!is_array($json)) return null;
+    return $json;
+}
+
+// ===== Construcción directa desde BD (sin normalizar ni variantes) =====
+$viaNom  = trim((string)($row['via_nom']      ?? ''));   // nombre calle
+$viaType = trim((string)($row['tipus_via_ca'] ?? ''));   // tipo vía (Carrer, Passeig, ...)
+$viaNum  = trim((string)($row['via_num']      ?? ''));   // número
+$city    = is_string($row['ciutat']        ?? null) ? trim($row['ciutat'])        : '';
+$county  = is_string($row['provincia']     ?? null) ? trim($row['provincia'])     : '';
+$state   = is_string($row['comunitat_ca']  ?? null) ? trim($row['comunitat_ca'])  : '';
+$country = is_string($row['estat']         ?? null) ? trim($row['estat'])         : 'España';
+
 if ($viaNom === '') {
     http_response_code(422);
-    echo json_encode(['status' => 'fail', 'message' => 'Falta el nombre de la vía (via_nom/adreca)']);
+    echo json_encode(['status' => 'fail', 'message' => 'Falta el nombre de la vía (adreca/via_nom)']);
+    exit;
+}
+if ($city === '') {
+    http_response_code(422);
+    echo json_encode(['status' => 'fail', 'message' => 'Falta la ciutat en la ficha (municipi_residencia)']);
     exit;
 }
 
-// Variantes de street para Nominatim (mejor probadas en ES)
-$variants = [];
+// ===== Llamada ICGC =====
+$result = icgcGeocodeAddress($viaType, $viaNom, $viaNum, $city);
 
-// con tipo de vía
-$variants[] = trim(($viaType ? $viaType . ' ' : '') . $viaNom . ($viaNum && strtolower($viaNum) !== 's/n' ? ' ' . $viaNum : '')); // "Carrer Sant Leopold 47"
-$variants[] = trim(($viaNum && strtolower($viaNum) !== 's/n' ? $viaNum . ' ' : '') . ($viaType ? $viaType . ' ' : '') . $viaNom); // "47 Carrer Sant Leopold"
-
-// sin tipo de vía (por si el tipo no coincide con OSM)
-$variants[] = trim($viaNom . ($viaNum && strtolower($viaNum) !== 's/n' ? ' ' . $viaNum : '')); // "Sant Leopold 47"
-$variants[] = trim(($viaNum && strtolower($viaNum) !== 's/n' ? $viaNum . ' ' : '') . $viaNom); // "47 Sant Leopold"
-
-// Texto libre (fallback)
-$freeTextAddr = implode(', ', array_filter([
-    ($viaNum !== '' ? $viaNum : null),
-    $viaNom,
-    $city,
-    $county,
-    $country
-]));
-
-$res = null;
-foreach ($variants as $streetParam) {
-    $resp = nominatimStructured_local($streetParam, $city, $county, $state, $country, $USER_AGENT, $CONTACT_EMAIL);
-    if ($resp['code'] === 429) {
-        usleep(5_000_000);
-        $resp = nominatimStructured_local($streetParam, $city, $county, $state, $country, $USER_AGENT, $CONTACT_EMAIL);
-    }
-    if (is_array($resp['result'])) {
-        $res = $resp['result'];
-        break;
-    }
-}
-
-// Fallback a texto libre si las variantes estructuradas no devolvieron nada
-if (!$res) {
-    $resp = nominatimFree_local($freeTextAddr, $USER_AGENT, $CONTACT_EMAIL);
-    if ($resp['code'] === 429) {
-        usleep(5_000_000);
-        $resp = nominatimFree_local($freeTextAddr, $USER_AGENT, $CONTACT_EMAIL);
-    }
-    $res = $resp['result'] ?? null;
-}
-
-// Manejo del resultado
-if (!is_array($res) || !isset($res['lat'], $res['lon'])) {
+if (!$result) {
     http_response_code(404);
     echo json_encode([
         'status'  => 'fail',
-        'message' => 'No s’han trobat coordenades',
-        'debug'   => ['variants' => $variants, 'freeTextAddr' => $freeTextAddr, 'city' => $city, 'county' => $county, 'state' => $state]
-    ]);
-    exit;
-}
-
-// ===== 1) Nominatim estructurado
-$resp = nominatimStructured_local($streetParam, $city, $county, $state, $country, $USER_AGENT, $CONTACT_EMAIL);
-if ($resp['code'] === 429) {
-    usleep(5_000_000); // 5s
-    $resp = nominatimStructured_local($streetParam, $city, $county, $state, $country, $USER_AGENT, $CONTACT_EMAIL);
-}
-$res = $resp['result'];
-
-// ===== 2) Fallback a texto libre
-if (!$res) {
-    $resp = nominatimFree_local($freeTextAddr, $USER_AGENT, $CONTACT_EMAIL);
-    if ($resp['code'] === 429) {
-        usleep(5_000_000); // 5s
-        $resp = nominatimFree_local($freeTextAddr, $USER_AGENT, $CONTACT_EMAIL);
-    }
-    $res = $resp['result'];
-}
-
-if (!is_array($res) || !isset($res['lat'], $res['lon'])) {
-    http_response_code(404);
-    echo json_encode([
-        'status'  => 'fail',
-        'message' => 'No s’han trobat coordenades',
+        'message' => 'No s’han trobat coordenades al ICGC',
         'debug'   => [
-            'streetParam'   => $streetParam,
-            'freeTextAddr'  => $freeTextAddr,
-            'city'          => $city,
-            'state'         => $state,
-            'country'       => $country
+            'tipus_via_ca' => $viaType,
+            'via_nom'      => $viaNom,
+            'via_num'      => $viaNum,
+            'ciutat'       => $city,
+            'provincia'    => $county,
+            'comunitat_ca' => $state,
+            'estat'        => $country
         ]
     ]);
     exit;
 }
 
-$lat = (float)$res['lat'];
-$lng = (float)$res['lon'];
+$lat = (float)$result['lat'];
+$lng = (float)$result['lng'];
 
 // Guardar en BD
 $upd = $conn->prepare("UPDATE db_dades_personals SET lat = :lat, lng = :lng WHERE id = :id");
@@ -292,13 +276,13 @@ $upd->execute([':lat' => $lat, ':lng' => $lng, ':id' => $id]);
 
 echo json_encode([
     'status'  => 'success',
-    'message' => 'Coordenades actualitzades',
+    'message' => 'Coordenades actualitzades (ICGC)',
     'data'    => [
-        'lat' => $lat,
-        'lng' => $lng,
-        // útil para verificar qué se consultó
-        'streetParam'  => $streetParam,
-        'freeTextAddr' => $freeTextAddr,
+        'lat'        => $lat,
+        'lng'        => $lng,
+        'precision'  => $result['precision'] ?? null,
+        'query_text' => $result['text'] ?? null,
+        'icgc'       => $result['icgc'] ?? null
     ],
 ]);
 exit;

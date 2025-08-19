@@ -354,7 +354,7 @@ if ($pagina === "modifica-fitxa") {
 
         <hr>
 
-        <div class="col-md- mb-4">
+        <div class="col-md-4 mb-4">
           <label for="tipologia_lloc_defuncio" class="form-label negreta">Tipologia lloc de defunció:</label>
           <select class="form-select" id="tipologia_lloc_defuncio" value="" name="tipologia_lloc_defuncio">
           </select>

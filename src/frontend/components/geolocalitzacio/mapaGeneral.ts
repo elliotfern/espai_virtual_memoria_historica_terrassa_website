@@ -22,7 +22,8 @@ interface PersonGeo {
   lng: number;
   adreca?: string;
   ciutat?: string;
-  tipus_ca?: string; // ← usa este único nombre
+  tipus_ca?: string;
+  adreca_num?: string; // <-- mantenemos esta
 }
 
 const API_URL = 'https://memoriaterrassa.cat/api/dades_personals/get/?type=geolocalitzacio';
@@ -72,9 +73,15 @@ function toPersonGeo(obj: unknown): PersonGeo | null {
   const cognom2 = typeof r['cognom2'] === 'string' ? r['cognom2'] : '';
   const adreca = typeof r['adreca'] === 'string' ? r['adreca'] : undefined;
   const ciutat = typeof r['ciutat'] === 'string' ? r['ciutat'] : undefined;
+
+  // Acepta número como string o number:
+  let adreca_num: string | undefined;
+  if (typeof r['adreca_num'] === 'string') adreca_num = r['adreca_num'].trim();
+  else if (typeof r['adreca_num'] === 'number' && Number.isFinite(r['adreca_num'])) adreca_num = String(r['adreca_num']);
+
   const tipus_ca = typeof r['tipus_ca'] === 'string' && r['tipus_ca'].trim() !== '' ? r['tipus_ca'].trim() : typeof r['tipus_via_ca'] === 'string' && r['tipus_via_ca'].trim() !== '' ? r['tipus_via_ca'].trim() : typeof r['tipus_via'] === 'string' && r['tipus_via'].trim() !== '' ? r['tipus_via'].trim() : undefined;
 
-  return { id: idNum, slug, nom, cognom1, cognom2, lat: latNum, lng: lngNum, adreca, ciutat, tipus_ca };
+  return { id: idNum, slug, nom, cognom1, cognom2, lat: latNum, lng: lngNum, adreca, ciutat, tipus_ca, adreca_num };
 }
 
 async function fetchAllPeople(): Promise<PersonGeo[]> {
@@ -105,8 +112,11 @@ function buildPopupHtml(p: PersonGeo): string {
   const tipus = p.tipus_ca?.trim();
   const adreca = p.adreca?.trim();
   const ciutat = p.ciutat?.trim();
+  const num = p.adreca_num?.trim();
+  const showNum = num && num.toLowerCase() !== 's/n' ? num : '';
 
-  const street = [tipus, adreca].filter(Boolean).join(' ');
+  // "Carrer Sant Pere 47"
+  const street = [tipus, adreca, showNum].filter(Boolean).join(' ');
   const addrLine = [street, ciutat].filter(Boolean).join(', ');
 
   return `
