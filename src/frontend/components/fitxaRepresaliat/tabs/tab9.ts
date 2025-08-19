@@ -81,7 +81,7 @@ export function renderTab9(fitxa: Fitxa, label: string): void {
   const popupHtml = `
     <div style="min-width:200px">
       <strong>${nombre}</strong><br/>
-       ${adreca ? `<div style="margin:6px 0 2px 0; line-height:1.35">${tipus_ca?.trim() || ''} ${adreca}, ${num?.trim() || ''} - ${municipi}</div>` : ''}
+       ${adreca ? `<div style="margin:6px 0 2px 0; line-height:1.35">${tipus_ca?.trim() || ''} ${adreca}, ${num || ''} - ${municipi}</div>` : ''}
       ${urlFicha ? `<a href="${urlFicha}" rel="noopener">Veure fitxa</a>` : ''}
     </div>
   `.trim();
