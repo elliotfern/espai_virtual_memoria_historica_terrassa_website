@@ -542,6 +542,41 @@ if ($slug === "municipis") {
         );
     }
 
+    // GET : Causa defuncio - tots els casos (per formulari fitxa dades personals)
+    // URL: /api/auxiliars/get/causa_defuncio_detalls
+} elseif ($slug === "causa_defuncio_detalls") {
+
+    $db = new Database();
+    $query = "SELECT id, defuncio_detalls_ca
+              FROM aux_causa_defuncio_detalls
+              ORDER BY defuncio_detalls_ca ASC";
+    try {
+
+        $result = $db->getData($query);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
+
     // GET : Causa defuncio - per formulari morts civils
     // tipus 1 > morts militars / tipus 2 > morts civils / tipus 3 > tots
     // URL: /api/auxiliars/get/causa_defuncio_repressio?tipus=1

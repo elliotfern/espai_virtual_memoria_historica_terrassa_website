@@ -49,6 +49,7 @@ export function renderTab1(fitxa: Fitxa, label: string): void {
   const tipologiaEspaiDefuncio = fitxa.tipologia_espai_ca === '' || fitxa.tipologia_espai_ca === null || fitxa.tipologia_espai_ca === undefined ? 'Desconeguda' : fitxa.tipologia_espai_ca;
   const observacionsTipologiaEspacioDefuncio = fitxa.observacions_espai === '' || fitxa.observacions_espai === null || fitxa.observacions_espai === undefined ? 'Desconeguda' : fitxa.observacions_espai;
   const causaDefuncio = fitxa.causa_defuncio_ca === '' || fitxa.causa_defuncio_ca === null || fitxa.causa_defuncio_ca === undefined ? 'Desconeguda' : fitxa.causa_defuncio_ca;
+  const causa_defuncio_detalls = fitxa.defuncio_detalls_ca === '' || fitxa.defuncio_detalls_ca === null || fitxa.defuncio_detalls_ca === undefined ? 'Desconegut' : fitxa.defuncio_detalls_ca;
 
   const sexeText = parseInt(fitxa.sexe, 10) === 1 ? 'Home' : parseInt(fitxa.sexe, 10) === 2 ? 'Dona' : 'desconegut';
 
@@ -79,5 +80,6 @@ export function renderTab1(fitxa: Fitxa, label: string): void {
         <p><span class='marro2'>Tipologia espai de defunció:</span> <span class='blau1'>${tipologiaEspaiDefuncio}</span></p>
         <p><span class='marro2'>Observacions espai de defunció:</span> <span class='blau1'>${observacionsTipologiaEspacioDefuncio}</span></p>
         <p><span class='marro2'>Causa de la defunció:</span> <span class='blau1'>${causaDefuncio}</span></p>
+        <p><span class='marro2'>Detalls causa de la defunció:</span> <span class='blau1'>${causa_defuncio_detalls}</span></p>
       `;
 }

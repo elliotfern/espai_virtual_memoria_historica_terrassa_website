@@ -79,6 +79,7 @@ export async function tab2(fitxa?: Fitxa) {
   }
 
   auxiliarSelect(fitxa?.causa_defuncio_id ?? 2, 'causa_defuncio', 'causa_defuncio', 'causa_defuncio_ca', '2');
+  auxiliarSelect(fitxa?.causa_defuncio_detalls, 'causa_defuncio_detalls', 'causa_defuncio_detalls', 'defuncio_detalls_ca');
 
   const refreshButton5 = document.getElementById('refreshButton5');
   if (refreshButton5) {

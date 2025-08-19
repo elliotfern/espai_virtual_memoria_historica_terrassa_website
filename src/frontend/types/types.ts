@@ -99,6 +99,8 @@ export interface Fitxa {
   tipus_ca: string;
   tipus_via_id: number;
   adreca_num: string;
+  defuncio_detalls_ca: string;
+  causa_defuncio_detalls: number;
 }
 
 export interface FitxaJudicial {

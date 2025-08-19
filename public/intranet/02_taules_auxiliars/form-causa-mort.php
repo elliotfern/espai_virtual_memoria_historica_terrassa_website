@@ -55,94 +55,98 @@ if ($pag === "modifica-causa-mort") {
 }
 ?>
 
-<div class="container" style="margin-bottom:50px;border: 1px solid gray;border-radius: 10px;padding:25px;background-color:#eaeaea">
-    <form id="causaMortForm">
-        <div class="container">
-            <div class="row g-3">
-                <?php if ($btnModificar === 1) {
-                    echo '<h2>Crear nova causa de mort</h2>';
-                } else {
-                    echo '<h2>Modifica causa de mort: ' . $causa_defuncio_ca_old . '</h2>';
-                }
-                ?>
+<?php if ($isAdmin): ?>
 
-                <div class="alert alert-success" role="alert" id="okMessage" style="display:none">
-                    <div id="okText"></div>
-                </div>
+    <div class="container" style="margin-bottom:50px;border: 1px solid gray;border-radius: 10px;padding:25px;background-color:#eaeaea">
+        <form id="causaMortForm">
+            <div class="container">
+                <div class="row g-3">
+                    <?php if ($btnModificar === 1) {
+                        echo '<h2>Crear nova causa de mort</h2>';
+                    } else {
+                        echo '<h2>Modifica causa de mort: ' . $causa_defuncio_ca_old . '</h2>';
+                    }
+                    ?>
 
-                <div class="alert alert-danger" role="alert" id="errMessage" style="display:none">
-                    <div id="errText"></div>
-                </div>
-
-                <input type="hidden" name="id" id="id" value="<?php echo $id_old; ?>">
-
-                <div class="col-md-4 mb-4">
-                    <label for="causa_defuncio_ca" class="form-label negreta">Causa de mort (català):</label>
-                    <input type="text" class="form-control" id="causa_defuncio_ca" name="causa_defuncio_ca" value="<?php echo $causa_defuncio_ca_old; ?>">
-                    <div class="avis-form">
-                        * Camp obligatori
+                    <div class="alert alert-success" role="alert" id="okMessage" style="display:none">
+                        <div id="okText"></div>
                     </div>
-                </div>
 
-                <div class="col-md-4 mb-4">
-                    <label for="cat" class="form-label">Selecciona una categoria:</label>
-                    <select class="form-select" id="cat" name="cat">
-                        <option selected disabled>Escull una opció</option>
-                        <option value="1">Combatent al front</option>
-                        <option value="2">Mort civil</option>
-                        <option value="3">General</option>
-                    </select>
-                </div>
+                    <div class="alert alert-danger" role="alert" id="errMessage" style="display:none">
+                        <div id="errText"></div>
+                    </div>
 
-                <?php if (isUserAdmin()) : ?>
-                    <hr>
+                    <input type="hidden" name="id" id="id" value="<?php echo $id_old; ?>">
 
                     <div class="col-md-4 mb-4">
-                        <label for="causa_defuncio_es" class="form-label negreta">Causa de mort (castellà):</label>
-                        <input type="text" class="form-control" id="causa_defuncio_es" name="causa_defuncio_es" value="<?php echo $causa_defuncio_es_old; ?>">
+                        <label for="causa_defuncio_ca" class="form-label negreta">Causa de mort (català):</label>
+                        <input type="text" class="form-control" id="causa_defuncio_ca" name="causa_defuncio_ca" value="<?php echo $causa_defuncio_ca_old; ?>">
+                        <div class="avis-form">
+                            * Camp obligatori
+                        </div>
                     </div>
 
                     <div class="col-md-4 mb-4">
-                        <label for="causa_defuncio_en" class="form-label negreta">Causa de mort (anglès):</label>
-                        <input type="text" class="form-control" id="causa_defuncio_en" name="causa_defuncio_en" value="<?php echo $causa_defuncio_en_old; ?>">
+                        <label for="cat" class="form-label">Selecciona una categoria:</label>
+                        <select class="form-select" id="cat" name="cat">
+                            <option selected disabled>Escull una opció</option>
+                            <option value="1">Combatent al front</option>
+                            <option value="2">Mort civil</option>
+                            <option value="3">General</option>
+                        </select>
                     </div>
 
-                    <div class="col-md-4 mb-4">
-                        <label for="causa_defuncio_fr" class="form-label negreta">Causa de mort (francès):</label>
-                        <input type="text" class="form-control" id="causa_defuncio_fr" name="causa_defuncio_fr" value="<?php echo $causa_defuncio_fr_old; ?>">
-                    </div>
+                    <?php if (isUserAdmin()) : ?>
+                        <hr>
 
-                    <div class="col-md-4 mb-4">
-                        <label for="causa_defuncio_it" class="form-label negreta">Causa de mort (italià):</label>
-                        <input type="text" class="form-control" id="causa_defuncio_it" name="causa_defuncio_it" value="<?php echo $causa_defuncio_it_old; ?>">
-                    </div>
+                        <div class="col-md-4 mb-4">
+                            <label for="causa_defuncio_es" class="form-label negreta">Causa de mort (castellà):</label>
+                            <input type="text" class="form-control" id="causa_defuncio_es" name="causa_defuncio_es" value="<?php echo $causa_defuncio_es_old; ?>">
+                        </div>
 
-                    <div class="col-md-4 mb-4">
-                        <label for="causa_defuncio_pt" class="form-label negreta">Causa de mort (portuguès):</label>
-                        <input type="text" class="form-control" id="causa_defuncio_pt" name="causa_defuncio_pt" value="<?php echo $causa_defuncio_pt_old; ?>">
-                    </div>
+                        <div class="col-md-4 mb-4">
+                            <label for="causa_defuncio_en" class="form-label negreta">Causa de mort (anglès):</label>
+                            <input type="text" class="form-control" id="causa_defuncio_en" name="causa_defuncio_en" value="<?php echo $causa_defuncio_en_old; ?>">
+                        </div>
 
-                <?php endif; ?>
+                        <div class="col-md-4 mb-4">
+                            <label for="causa_defuncio_fr" class="form-label negreta">Causa de mort (francès):</label>
+                            <input type="text" class="form-control" id="causa_defuncio_fr" name="causa_defuncio_fr" value="<?php echo $causa_defuncio_fr_old; ?>">
+                        </div>
 
-                <div class="row espai-superior" style="border-top: 1px solid black;padding-top:25px">
-                    <div class="col"></div>
+                        <div class="col-md-4 mb-4">
+                            <label for="causa_defuncio_it" class="form-label negreta">Causa de mort (italià):</label>
+                            <input type="text" class="form-control" id="causa_defuncio_it" name="causa_defuncio_it" value="<?php echo $causa_defuncio_it_old; ?>">
+                        </div>
 
-                    <div class="col d-flex justify-content-end align-items-center">
+                        <div class="col-md-4 mb-4">
+                            <label for="causa_defuncio_pt" class="form-label negreta">Causa de mort (portuguès):</label>
+                            <input type="text" class="form-control" id="causa_defuncio_pt" name="causa_defuncio_pt" value="<?php echo $causa_defuncio_pt_old; ?>">
+                        </div>
 
-                        <?php
-                        if ($btnModificar === 2) {
-                            echo '<button class="btn btn-primary" type="submit">Modificar dades</button>';
-                        } else {
-                            echo '<button class="btn btn-primary" type="submit">Inserir dades</button>';
-                        }
-                        ?>
+                    <?php endif; ?>
+
+                    <div class="row espai-superior" style="border-top: 1px solid black;padding-top:25px">
+                        <div class="col"></div>
+
+                        <div class="col d-flex justify-content-end align-items-center">
+
+                            <?php
+                            if ($btnModificar === 2) {
+                                echo '<button class="btn btn-primary" type="submit">Modificar dades</button>';
+                            } else {
+                                echo '<button class="btn btn-primary" type="submit">Inserir dades</button>';
+                            }
+                            ?>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </form>
-</div>
-
+        </form>
+    </div>
+<?php else: ?>
+    <p>Només els usuaris administratius poden crear nous ítems</p>
+<?php endif; ?>
 <script>
     // Simulamos que este valor viene de una API
     const bandol_id_from_api = "<?php echo $cat_old; ?>";

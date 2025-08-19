@@ -180,6 +180,7 @@ $slug = $data['slug'] ?? null;
 $tipus_via = $data['tipus_via'] ?? null;
 $adreca_antic = $data['adreca_antic'] ?? null;
 $adreca_num = $data['adreca_num'] ?? null;
+$causa_defuncio_detalls = $data['causa_defuncio_detalls'] ?? null;
 
 // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
 try {
@@ -193,13 +194,13 @@ try {
     municipi_defuncio, tipologia_lloc_defuncio, causa_defuncio, municipi_residencia, adreca,
     estat_civil, estudis, ofici, empresa, sector, sub_sector, carrec_empresa, filiacio_politica,
     filiacio_sindical, activitat_durant_guerra, observacions, autor, data_creacio,
-    data_actualitzacio, completat, visibilitat, autor2, autor3, colab1, observacions_internes, slug, tipus_via, adreca_antic, adreca_num
+    data_actualitzacio, completat, visibilitat, autor2, autor3, colab1, observacions_internes, slug, tipus_via, adreca_antic, adreca_num, causa_defuncio_detalls
     ) VALUES (
         :nom, :cognom1, :cognom2, :categoria, :sexe, :data_naixement, :data_defuncio, :municipi_naixement,
         :municipi_defuncio, :tipologia_lloc_defuncio, :causa_defuncio, :municipi_residencia, :adreca,
         :estat_civil, :estudis, :ofici, :empresa, :sector, :sub_sector, :carrec_empresa, :filiacio_politica,
         :filiacio_sindical, :activitat_durant_guerra, :observacions, :autor, :data_creacio,
-        :data_actualitzacio, :completat, :visibilitat, :autor2, :autor3, :colab1, :observacions_internes, :slug, :tipus_via, :adreca_antic, :adreca_num
+        :data_actualitzacio, :completat, :visibilitat, :autor2, :autor3, :colab1, :observacions_internes, :slug, :tipus_via, :adreca_antic, :adreca_num, :causa_defuncio_detalls
     )";
 
     // Preparar la consulta
@@ -243,6 +244,7 @@ try {
     $stmt->bindParam(':tipus_via', $tipus_via, PDO::PARAM_STR);
     $stmt->bindParam(':adreca_antic', $adreca_antic, PDO::PARAM_STR);
     $stmt->bindParam(':adreca_num', $adreca_num, PDO::PARAM_INT);
+    $stmt->bindParam(':causa_defuncio_detalls', $causa_defuncio_detalls, PDO::PARAM_INT);
 
     // Ejecutar la consulta
     $stmt->execute();

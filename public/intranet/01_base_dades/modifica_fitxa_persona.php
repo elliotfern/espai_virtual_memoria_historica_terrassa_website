@@ -359,7 +359,7 @@ if ($pagina === "modifica-fitxa") {
           <select class="form-select" id="tipologia_lloc_defuncio" value="" name="tipologia_lloc_defuncio">
           </select>
           <div class="avis-form">
-            * Camp obligatori
+            * Camp obligatori.
           </div>
           <div class="mt-2">
             <a href="<?php echo APP_WEB . APP_INTRANET . $url['auxiliars'] ?>/nova-tipologia-espai" target="_blank" class="btn btn-secondary btn-sm" id="afegirMunicipi4">Afegir tipologia espai</a>
@@ -373,12 +373,22 @@ if ($pagina === "modifica-fitxa") {
           <select class="form-select" id="causa_defuncio" value="" name="causa_defuncio">
           </select>
           <div class="avis-form">
-            * Camp obligatori
+            * Camp obligatori. Només els usuaris amb permisos d'administració poden crear nous ítems.
           </div>
-          <div class="mt-2">
-            <a href="<?php echo APP_WEB . APP_INTRANET . $url['auxiliars'] ?>/nova-causa-mort" target="_blank" class="btn btn-secondary btn-sm" id="afegirMunicipi5">Afegir causa de mort</a>
-            <button id="refreshButton5" class="btn btn-primary btn-sm">Actualitzar llistat</button>
-          </div>
+
+          <?php if ($isAdmin): ?>
+            <div class="mt-2">
+              <a href="<?php echo APP_WEB . APP_INTRANET . $url['auxiliars'] ?>/nova-causa-mort" target="_blank" class="btn btn-secondary btn-sm" id="afegirMunicipi5">Afegir causa de mort</a>
+              <button id="refreshButton5" class="btn btn-primary btn-sm">Actualitzar llistat</button>
+            </div>
+
+          <?php endif; ?>
+        </div>
+
+        <div class="col-md-4 mb-4">
+          <label for="causa_defuncio_detalls" class="form-label negreta">Detalls causa de la defunció:</label>
+          <select class="form-select" id="causa_defuncio_detalls" value="" name="causa_defuncio_detalls">
+          </select>
         </div>
 
       </div>

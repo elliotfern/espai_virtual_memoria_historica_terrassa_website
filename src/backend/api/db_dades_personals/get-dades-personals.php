@@ -565,7 +565,8 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
             dp.lng,
             dp.tipus_via AS tipus_via_id,
             dp.adreca_antic,
-            dp.adreca_num
+            dp.adreca_num,
+            dp.causa_defuncio_detalls
             FROM db_dades_personals AS dp
             LEFT JOIN aux_dades_municipis AS m1 ON dp.municipi_naixement = m1.id
             LEFT JOIN aux_dades_municipis_comarca AS m1a ON m1.comarca = m1a.id
@@ -708,7 +709,9 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
             dp.tipus_via AS tipus_via_id,
             v.tipus_ca,
             dp.adreca_antic,
-            dp.adreca_num
+            dp.adreca_num,
+            dp.causa_defuncio_detalls,
+            causaDD.defuncio_detalls_ca
             FROM db_dades_personals AS dp
             LEFT JOIN aux_dades_municipis AS m1 ON dp.municipi_naixement = m1.id
             LEFT JOIN aux_dades_municipis_comarca AS m1a ON m1.comarca = m1a.id
@@ -730,6 +733,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
 
             LEFT JOIN aux_tipologia_espais AS tespai ON dp.tipologia_lloc_defuncio = tespai.id
             LEFT JOIN aux_causa_defuncio AS causaD ON dp.causa_defuncio = causaD.id
+            LEFT JOIN aux_causa_defuncio_detalls AS causaDD ON dp.causa_defuncio_detalls = causaDD.id
             LEFT JOIN aux_filiacio_politica AS fp ON dp.filiacio_politica = fp.id
             LEFT JOIN aux_estudis AS es ON dp.estudis = es.id
             LEFT JOIN aux_oficis AS o ON dp.ofici = o.id 
