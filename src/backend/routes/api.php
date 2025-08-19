@@ -74,6 +74,10 @@ $routes = [
 
     '/api/dades_personals/geo/put' => ['view' => 'src/backend/api/db_dades_personals/put-geo.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
 
+    '/api/dades_personals/geo/tots' => ['view' => 'src/backend/api/db_dades_personals/tots-geo.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+
+    '/api/dades_personals/adreces' => ['view' => 'src/backend/api/db_dades_personals/adreces.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+
 
     // API db_exiliats
     '/api/exiliats/get/{slug}' => ['view' => 'src/backend/api/db_exiliats/get-exiliats.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],

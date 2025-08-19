@@ -179,7 +179,9 @@ $completat = $data['completat'] ?? 1;
 $visibilitat = $data['visibilitat'] ?? 1;
 $tipus_via = $data['tipus_via'] ?? null;
 $adreca_antic = $data['adreca_antic'] ?? null;
-$adreca_num = $data['adreca_num'] ?? null;
+$adreca_num = isset($data['adreca_num']) && $data['adreca_num'] !== '' && $data['adreca_num'] !== '0'
+    ? (int)$data['adreca_num']
+    : null;
 $causa_defuncio_detalls = $data['causa_defuncio_detalls'] ?? null;
 
 $data_actualitzacio = date('Y-m-d');

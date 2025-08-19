@@ -179,7 +179,9 @@ $visibilitat = $data['visibilitat'] ?? 1;
 $slug = $data['slug'] ?? null;
 $tipus_via = $data['tipus_via'] ?? null;
 $adreca_antic = $data['adreca_antic'] ?? null;
-$adreca_num = $data['adreca_num'] ?? null;
+$adreca_num = isset($data['adreca_num']) && $data['adreca_num'] !== '' && $data['adreca_num'] !== '0'
+    ? (int)$data['adreca_num']
+    : null;
 $causa_defuncio_detalls = $data['causa_defuncio_detalls'] ?? null;
 
 // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
