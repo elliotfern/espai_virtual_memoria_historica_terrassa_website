@@ -17,49 +17,27 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
 
                 <input type="hidden" name="id" id="id" value="">
 
+
                 <div class="col-md-4 mb-4">
-                    <label for="preso_tipus" class="form-label negreta">Tipus de presó:</label>
-                    <select class="form-select" name="preso_tipus" id="preso_tipus" value="">
+                    <label for="tipus" class="form-label negreta">Tipus de presó:</label>
+                    <select class="form-select" name="tipus" id="tipus" value="">
                     </select>
                 </div>
 
                 <div class="col-md-4 mb-4">
-                    <label for="preso_nom" class="form-label negreta">Nom de la presó:</label>
-                    <input type="text" class="form-control" id="preso_nom" name="preso_nom" value="">
+                    <label for="nom" class="form-label negreta">Nom de la presó o camp de detenció:</label>
+                    <input type="text" class="form-control" id="nom" name="nom" value="">
                 </div>
 
-                <?php if (isUserAdmin()) : ?>
-                    <hr>
-
-                    <div class="col-md-4 mb-4">
-                        <label for="empresa_es" class="form-label negreta">Nom empresa o institució pública (castellà):</label>
-                        <input type="text" class="form-control" id="empresa_es" name="empresa_es" value="">
+                <div class="col-md-4 mb-4">
+                    <label for="municipi" class="form-label negreta">Municipi de la presó:</label>
+                    <select class="form-select" id="municipi" value="" name="municipi">
+                    </select>
+                    <div class="mt-2">
+                        <a href="<?php echo APP_WEB . APP_INTRANET . $url['auxiliars'] ?>/nou-municipi" target="_blank" class="btn btn-secondary btn-sm" id="afegir">Afegir municipi</a>
+                        <button id="refreshButton" class="btn btn-primary btn-sm">Actualitzar llistat</button>
                     </div>
-
-                    <div class="col-md-4 mb-4">
-                        <label for="empresa_en" class="form-label negreta">Nom empresa o institució pública (anglès):</label>
-                        <input type="text" class="form-control" id="empresa_en" name="empresa_en" value="">
-
-                    </div>
-
-                    <div class="col-md-4 mb-4">
-                        <label for="empresa_fr" class="form-label negreta">Nom empresa o institució pública (francès):</label>
-                        <input type="text" class="form-control" id="empresa_fr" name="empresa_fr" value="">
-
-                    </div>
-
-                    <div class="col-md-4 mb-4">
-                        <label for="empresa_it" class="form-label negreta">Nom empresa o institució pública (italià):</label>
-                        <input type="text" class="form-control" id="empresa_it" name="empresa_it" value="">
-
-                    </div>
-
-                    <div class="col-md-4 mb-4">
-                        <label for="empresa_pt" class="form-label negreta">Nom empresa o institució pública (portuguès):</label>
-                        <input type="text" class="form-control" id="empresa_pt" name="empresa_pt" value="">
-                    </div>
-
-                <?php endif; ?>
+                </div>
 
                 <div class="row espai-superior" style="border-top: 1px solid black;padding-top:25px">
                     <div class="col"></div>

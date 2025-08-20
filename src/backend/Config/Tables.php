@@ -54,6 +54,7 @@ final class Tables
     public const AUX_SISTEMA_REPRESSIU = 'aux_sistema_repressiu';
     public const CONTROL_REGISTRE_CANVIS = 'control_registre_canvis';
     public const AUX_PRESONS = 'aux_presons';
+    public const AUX_PRESONS_CAMPS = 'aux_deportacio_preso';
 
     public const DB_AFUSELLATS = 'db_afusellats';
     public const DB_PROCESSATS = 'db_processats';

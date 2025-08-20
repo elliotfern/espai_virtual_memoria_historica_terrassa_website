@@ -25,7 +25,7 @@ interface ApiResponse<T> {
 }
 
 export async function formCampPreso(isUpdate: boolean, id?: number) {
-  //const btn1 = document.getElementById('campPresoForm');
+  const btn1 = document.getElementById('refreshButton');
   const divTitol = document.getElementById('titolForm') as HTMLDivElement;
   const btnEspai = document.getElementById('btnSubmitCampPreso') as HTMLButtonElement;
   const espaiForm = document.getElementById('campPresoForm');
@@ -37,7 +37,7 @@ export async function formCampPreso(isUpdate: boolean, id?: number) {
     estat: 0,
   };
 
-  if (!divTitol || !btnEspai || !espaiForm) return;
+  if (!btn1 || !divTitol || !btnEspai || !espaiForm) return;
 
   if (id && isUpdate) {
     const response = await fetchDataGet<ApiResponse<Fitxa>>(API_URLS.GET.CAMP_DETENCIO_ID(id), true);
@@ -66,10 +66,8 @@ export async function formCampPreso(isUpdate: boolean, id?: number) {
   await auxiliarSelect(data.municipi ?? 0, 'municipis', 'municipi', 'ciutat');
   await auxiliarSelect(data.tipus ?? 0, 'tipus_presons', 'tipus', 'tipus_preso_ca');
 
-  /*
   btn1.addEventListener('click', function (event) {
     event.preventDefault();
     auxiliarSelect(data.municipi ?? 0, 'municipis', 'municipi', 'ciutat');
   });
-  */
 }
