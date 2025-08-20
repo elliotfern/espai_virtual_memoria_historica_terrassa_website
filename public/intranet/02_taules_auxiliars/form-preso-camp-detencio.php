@@ -65,7 +65,7 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
                     <div class="col"></div>
 
                     <div class="col d-flex justify-content-end align-items-center">
-                        <button class="btn btn-primary" id="btnSubmitEmpresa" type="submit">Modificar dades</button>
+                        <button class="btn btn-primary" id="btnSubmitCampPreso" type="submit">Modificar dades</button>
                     </div>
                 </div>
             </div>

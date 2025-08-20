@@ -53,7 +53,7 @@
                     <select class="form-select" name="situacioFranca" id="situacioFranca" value="">
                     </select>
                     <div class="mt-2">
-                        <a href="https://memoriaterrassa.cat/gestio/auxiliars/nou-camp-franca" target="_blank" class="btn btn-secondary btn-sm" id="afegirCamp1">Afegir presó/camp</a>
+                        <a href="https://memoriaterrassa.cat/gestio/auxiliars/nou-camp-detencio" target="_blank" class="btn btn-secondary btn-sm" id="afegirCamp1">Afegir presó/camp</a>
                         <button id="refreshButton1" class="btn btn-primary btn-sm">Actualitzar llistat</button>
                     </div>
                 </div>
@@ -85,7 +85,7 @@
                     <select class="form-select" name="presoClasificacio1" id="presoClasificacio1" value="">
                     </select>
                     <div class="mt-2">
-                        <a href="https://memoriaterrassa.cat/gestio/auxiliars/nou-camp-franca" target="_blank" class="btn btn-secondary btn-sm" id="afegirCamp2">Afegir presó/camp</a>
+                        <a href="https://memoriaterrassa.cat/gestio/auxiliars/nou-camp-detencio" target="_blank" class="btn btn-secondary btn-sm" id="afegirCamp2">Afegir presó/camp</a>
                         <button id="refreshButton2" class="btn btn-primary btn-sm">Actualitzar llistat</button>
                     </div>
                 </div>
@@ -101,7 +101,7 @@
                     <select class="form-select" name="presoClasificacio2" id="presoClasificacio2" value="">
                     </select>
                     <div class="mt-2">
-                        <a href="https://memoriaterrassa.cat/gestio/auxiliars/nou-camp-franca" target="_blank" class="btn btn-secondary btn-sm" id="afegirCamp3">Afegir presó/camp</a>
+                        <a href="https://memoriaterrassa.cat/gestio/auxiliars/nou-camp-detencio" target="_blank" class="btn btn-secondary btn-sm" id="afegirCamp3">Afegir presó/camp</a>
                         <button id="refreshButton3" class="btn btn-primary btn-sm">Actualitzar llistat</button>
                     </div>
                 </div>

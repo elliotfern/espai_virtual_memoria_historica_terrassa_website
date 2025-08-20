@@ -564,6 +564,34 @@ $routes = [
         'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-preso.php'
     ]),
 
+
+    // Camps de detencio i presons
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/llistat-camps-detencio' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/llistat-camps-detencio.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/nou-camp-detencio' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-preso-camp-detencio.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/modifica-camp-detencio/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-preso-camp-detencio.php'
+    ]),
+
+    // Camps de concentracio i extermini
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/llistat-camps-concentracio' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/llistat-camps-concentracio.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/nou-camp-concentracio' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-camp-concentracio.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/modifica-camp-concentracio/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-camp-concentracio.php'
+    ]),
+
+
     // Gestió familiars
     APP_INTRANET . $urlIntranet['familiars'] . '/modifica-familiar/{id}/{id}' => array_merge($defaultProtectedConfig, [
         'view' => BACKEND_URL . $urlIntranetDir['familiars'] . '/form-familiar.php'
