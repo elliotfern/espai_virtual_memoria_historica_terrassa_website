@@ -113,14 +113,14 @@ export const fitxaTipusRepressio = async (categoriaNumerica: string, fitxa2: Fit
 
       <div style="margin-top:25px">
         <h5><span class="negreta blau1">3) Camp de classificació/detenció previ a la deportació al camp de concentració:</span></h5>
-
-            <h6><span class="blau1">Primera presó/camp de classificació</span><h6>
+            <br>
+            <h6><span class="blau1 negreta">Primera presó/camp de classificació</span></h6>
                 <p><span class='marro2'>Tipus de Presó/camp de detenció: </span> <span class='blau1'>${tipusPreso1}</span></p>
                 <p><span class='marro2'>Nom de la Presó/camp de detenció: </span> <span class='blau1'>${nomPreso1}   </span></p>
                 <p><span class='marro2'>Municipi de la Presó/camp de detenció: </span> <span class='blau1'>${ciutatPreso1}   </span></p>
                 <p><span class='marro2'>Data de la sortida de la presó: </span> <span class='blau1'>${presoClasificacioData1}   </span></p>
-
-            <h6><span class="blau1">Segona presó/camp de classificació</span><h6>
+            <br>
+            <h6><span class="blau1 negreta">Segona presó/camp de classificació</span></h6>
                 <p><span class='marro2'>Tipus de Presó/camp de detenció: </span> <span class='blau1'>${tipusPreso2}   </span></p>
                 <p><span class='marro2'>Nom de la Presó/camp de detenció: </span> <span class='blau1'>${nomPreso2}   </span></p>
                 <p><span class='marro2'>Municipi de la Presó/camp de detenció: </span> <span class='blau1'>${ciutatPreso2}   </span></p>
@@ -129,21 +129,24 @@ export const fitxaTipusRepressio = async (categoriaNumerica: string, fitxa2: Fit
 
       <div style="margin-top:25px">
         <h5><span class="negreta blau1">4) Dades sobre la deportació al camp de concentració/extermini:</span></h5>
-         <h6><span class="blau1">Dades sobre el camp de concentració:</span><h6>
+        <br>
+         <h6><span class="blau1 negreta">Dades sobre el camp de concentració:</span></h6>
               <p><span class='marro2'>Nom del camp de deportació: </span> <span class='blau1'>${nomCamp1}</span></p>
               <p><span class='marro2'>Tipus de camp: </span> <span class='blau1'>${tipusCamp1}</span></p>
               <p><span class='marro2'>Municipi del camp: </span> <span class='blau1'>${ciutatCamp1}</span></p>
               <p><span class='marro2'>Data d'entrada al camp: </span> <span class='blau1'>${deportacio_data_entrada}</span></p>
               <p><span class='marro2'>Número de matrícula:</span> <span class='blau1'>${numeroMatriculaCamp}</span></p>
 
-          <h6><span class="blau1">Dades sobre el subcamp:</span><h6>
+              <br>
+          <h6><span class="blau1 negreta">Dades sobre el subcamp:</span></h6>
               <p><span class='marro2'>Nom del subcamp :</span> <span class='blau1'>${nomSubCamp}</span></p>
               <p><span class='marro2'>Tipus de subcamp: </span> <span class='blau1'>${tipusCamp2}</span></p>
               <p><span class='marro2'>Municipi del subcamp: </span> <span class='blau1'>${ciutatCamp2}</span></p>
               <p><span class='marro2'>Data d'entrada al subcamp:</span> <span class='blau1'>${dataEntradaSubCamp}</span></p>
               <p><span class='marro2'>Número de matrícula del subcamp:</span> <span class='blau1'>${numeroMatriculaSubCamp}</span></p>
 
-          <h6><span class="blau1">Altres informacions:</span><h6>
+              <br>
+          <h6><span class="blau1 negreta">Altres informacions:</span></h6>
               <p><span class='marro2'>Observacions:</span> <span class='blau1'>${deportacio_observacions}</span></p>
         </div>
     </div>
