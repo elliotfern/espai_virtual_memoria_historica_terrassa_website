@@ -55,6 +55,7 @@ final class Tables
     public const CONTROL_REGISTRE_CANVIS = 'control_registre_canvis';
     public const AUX_PRESONS = 'aux_presons';
     public const AUX_PRESONS_CAMPS = 'aux_deportacio_preso';
+    public const AUX_CAMPS_CONCENTRACIO = 'aux_camps_concentracio';
 
     public const DB_AFUSELLATS = 'db_afusellats';
     public const DB_PROCESSATS = 'db_processats';

@@ -25,11 +25,11 @@ interface ApiResponse<T> {
   data: T;
 }
 
-export async function formCampPreso(isUpdate: boolean, id?: number) {
+export async function formCampConcentracio(isUpdate: boolean, id?: number) {
   const btn1 = document.getElementById('refreshButton');
   const divTitol = document.getElementById('titolForm') as HTMLDivElement;
-  const btnEspai = document.getElementById('btnSubmitCampPreso') as HTMLButtonElement;
-  const espaiForm = document.getElementById('campPresoForm');
+  const btnEspai = document.getElementById('btnSubmitCamp') as HTMLButtonElement;
+  const espaiForm = document.getElementById('campForm');
 
   let data: Partial<Fitxa> = {
     comarca: 0,
@@ -41,26 +41,26 @@ export async function formCampPreso(isUpdate: boolean, id?: number) {
   if (!btn1 || !divTitol || !btnEspai || !espaiForm) return;
 
   if (id && isUpdate) {
-    const response = await fetchDataGet<ApiResponse<Fitxa>>(API_URLS.GET.CAMP_DETENCIO_ID(id), true);
+    const response = await fetchDataGet<ApiResponse<Fitxa>>(API_URLS.GET.CAMP_CONCENTRACIO_ID(id), true);
 
     if (!response || !response.data) return;
     data = response.data;
 
-    divTitol.innerHTML = `<h2>Modificació Camp/presó: ${data.nom}</h2>`;
+    divTitol.innerHTML = `<h2>Modificació Camp de concentració: ${data.nom}</h2>`;
 
     renderFormInputs(data);
 
     btnEspai.textContent = 'Modificar dades';
 
     espaiForm.addEventListener('submit', function (event) {
-      transmissioDadesDB(event, 'PUT', 'campPresoForm', API_URLS.PUT.PRESO_DETENCIO);
+      transmissioDadesDB(event, 'PUT', 'campForm', API_URLS.PUT.CAMP_CONCENTRACIO);
     });
   } else {
-    divTitol.innerHTML = `<h2>Creació de nova presó/camp de detenció</h2>`;
+    divTitol.innerHTML = `<h2>Creació de nou camp de concentració</h2>`;
     btnEspai.textContent = 'Inserir dades';
 
     espaiForm.addEventListener('submit', function (event) {
-      transmissioDadesDB(event, 'POST', 'campPresoForm', API_URLS.POST.PRESO_DETENCIO, true);
+      transmissioDadesDB(event, 'POST', 'campForm', API_URLS.POST.CAMP_CONCENTRACIO, true);
     });
   }
 

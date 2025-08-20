@@ -42,6 +42,8 @@ import { taulaPresons } from './taulaPresons';
 import { formUsuaris } from './formUsuaris';
 import { formCampPreso } from './formCampPreso';
 import { taulaCampsDetencio } from './taulaCampsDetencio';
+import { taulaCampsConcentracio } from './taulaCampsConcentracio';
+import { formCampConcentracio } from './formCampConcentracio';
 
 export async function auxiliars() {
   const url = window.location.href;
@@ -495,5 +497,11 @@ export async function auxiliars() {
     formCampPreso(true, Number(pageType[3]));
   } else if (pageType[2] === 'nou-camp-detencio') {
     formCampPreso(false);
+  } else if (pageType[2] === 'llistat-camps-concentracio') {
+    taulaCampsConcentracio();
+  } else if (pageType[2] === 'modifica-camp-concentracio') {
+    formCampConcentracio(true, Number(pageType[3]));
+  } else if (pageType[2] === 'nou-camp-concentracio') {
+    formCampConcentracio(false);
   }
 }

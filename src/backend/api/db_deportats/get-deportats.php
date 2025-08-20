@@ -240,6 +240,78 @@ if ($slug === "llistatComplet") {
             500
         );
     }
+
+    // 2) Informacio Llistat camps de concentracio
+    // ruta GET => "/api/deportats/get/llistatCamps
+} else if ($slug === "llistatCamps") {
+    $db = new Database();
+
+    $query = "SELECT d.id, d.nom, m.ciutat, t.tipus_preso_ca
+            FROM aux_camps_concentracio AS d
+            LEFT JOIN aux_dades_municipis AS m ON d.municipi = m.id
+            LEFT JOIN aux_tipus_presons AS t ON d.tipus = t.id
+            ORDER BY d.nom";
+    try {
+        $result = $db->getData($query);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
+
+    // 2) Informacio Camp concentració ID
+    // ruta GET => "/api/deportats/get/campConcentracio?id=${id}
+} else if ($slug === "campConcentracio") {
+    $db = new Database();
+    $id = $_GET['id'] ?? null;
+
+    $query = "SELECT id, tipus, nom, municipi
+            FROM  aux_camps_concentracio
+            WHERE id = :id";
+
+    try {
+        $params = [':id' => $id];
+        $result = $db->getData($query, $params, true);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
 } else {
     // Si 'type', 'id' o 'token' están ausentes o 'type' no es 'user' en la URL
     header('HTTP/1.1 403 Forbidden');

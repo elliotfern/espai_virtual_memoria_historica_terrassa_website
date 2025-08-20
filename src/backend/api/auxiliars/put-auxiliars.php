@@ -2925,6 +2925,95 @@ if ($slug === "municipi") {
         );
     }
 
+    // 4) PUT Camp concentracio
+    // ruta PUT => "/api/auxiliars/put/campConcentracio"
+} else if ($slug === "campConcentracio") {
+    $inputData = file_get_contents('php://input');
+    $data = json_decode($inputData, true);
+
+    // Inicializar un array para los errores
+    $errors = [];
+
+    // Validación de los datos recibidos
+    if (empty($data['nom'])) {
+        $errors[] =  ValidacioErrors::requerit('nom camp en català');
+    }
+
+    // Validación de los datos recibidos
+    if (empty($data['id'])) {
+        $errors[] =  ValidacioErrors::requerit('id');
+    }
+
+    // Si hay errores, devolver una respuesta con los errores
+    if (!empty($errors)) {
+        Response::error(
+            MissatgesAPI::error('validacio'),
+            $errors,
+            400
+        );
+    }
+
+    // Si no hay errores, crear las variables PHP y preparar la consulta PDO
+    $tipus     = !empty($data['tipus']) ? $data['tipus'] : null;
+    $nom       = $data['nom'];
+    $id       = $data['id'];
+    $municipi  = !empty($data['municipi']) ? $data['municipi'] : null;
+
+    // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
+    try {
+
+        global $conn;
+        /** @var PDO $conn */
+
+        $sql = "UPDATE aux_camps_concentracio
+        SET 
+            tipus = :tipus,
+            nom = :nom,
+            municipi = :municipi
+        WHERE id = :id";
+
+        // Preparar la consulta
+        $stmt = $conn->prepare($sql);
+
+        // Enlazar los parámetros con los valores de las variables PHP
+        $stmt->bindParam(':tipus', $tipus, PDO::PARAM_INT);
+        $stmt->bindParam(':nom', $nom, PDO::PARAM_STR);
+        $stmt->bindParam(':municipi', $municipi, PDO::PARAM_INT);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+
+        // Ejecutar la consulta
+        $stmt->execute();
+
+        // Recuperar el ID del registro creado
+        $tipusOperacio = "UPDATE";
+        $detalls =  "Modificació camp de concentracio: " . $nom;
+
+        // Si la inserció té èxit, cal registrar la inserció en la base de control de canvis
+
+        Audit::registrarCanvi(
+            $conn,
+            $userId,                      // ID del usuario que hace el cambio
+            $tipusOperacio,             // Tipus operacio
+            $detalls,                       // Descripción de la operación
+            Tables::AUX_CAMPS_CONCENTRACIO,  // Nombre de la tabla afectada
+            $id                           // ID del registro modificado
+        );
+
+        // Respuesta de éxito
+        Response::success(
+            MissatgesAPI::success('update'),
+            ['id' => $id],
+            200
+        );
+    } catch (PDOException $e) {
+        // En caso de error en la conexión o ejecución de la consulta
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
     // Fi endpoints   
 } else {
     Response::error(
