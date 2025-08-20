@@ -108,18 +108,42 @@ export async function deportat(idRepresaliat: number) {
       });
     }
   } else {
+    const btn = document.getElementById('refreshButton');
     const btn1 = document.getElementById('refreshButton1');
     const btn2 = document.getElementById('refreshButton2');
+    const btn3 = document.getElementById('refreshButton3');
+    const btn4 = document.getElementById('refreshButton4');
+    const btn5 = document.getElementById('refreshButton5');
 
-    if (btn1 && btn2) {
+    if (btn && btn1 && btn2 && btn3 && btn4 && btn5) {
+      btn.addEventListener('click', function (event) {
+        event.preventDefault();
+        auxiliarSelect(data.lloc_mort_alliberament, 'municipis', 'lloc_mort_alliberament', 'ciutat');
+      });
+
       btn1.addEventListener('click', function (event) {
         event.preventDefault();
-        auxiliarSelect(data.preso_localitat, 'municipis', 'preso_localitat', 'ciutat');
+        auxiliarSelect(data.situacioFranca, 'deportacioPreso', 'situacioFranca', 'nom_camp');
       });
 
       btn2.addEventListener('click', function (event) {
         event.preventDefault();
-        auxiliarSelect(data.lloc_mort_alliberament, 'municipis', 'lloc_mort_alliberament', 'ciutat');
+        auxiliarSelect(data.presoClasificacio1, 'deportacioPreso', 'presoClasificacio1', 'nom_camp');
+      });
+
+      btn3.addEventListener('click', function (event) {
+        event.preventDefault();
+        auxiliarSelect(data.presoClasificacio2, 'deportacioPreso', 'presoClasificacio2', 'nom_camp');
+      });
+
+      btn4.addEventListener('click', function (event) {
+        event.preventDefault();
+        auxiliarSelect(data.deportacio_camp, 'campsConcentracio', 'deportacio_camp', 'nom_camp');
+      });
+
+      btn5.addEventListener('click', function (event) {
+        event.preventDefault();
+        auxiliarSelect(data.deportacio_subcamp, 'campsConcentracio', 'deportacio_subcamp', 'nom_camp');
       });
     }
 
@@ -136,9 +160,9 @@ export async function deportat(idRepresaliat: number) {
 
     renderFormInputs(data);
 
-    const btn = document.getElementById('btnDeportats') as HTMLButtonElement;
-    if (btn) {
-      btn.textContent = 'Modificar dades';
+    const btnForm = document.getElementById('btnDeportats') as HTMLButtonElement;
+    if (btnForm) {
+      btnForm.textContent = 'Modificar dades';
     }
 
     const deportatForm = document.getElementById('deportatForm');

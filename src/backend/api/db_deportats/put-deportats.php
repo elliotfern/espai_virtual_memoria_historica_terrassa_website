@@ -97,6 +97,26 @@ if (!empty($deportacio_data_entrada_subcampRaw)) {
     }
 }
 
+
+$presoClasificacioData1Raw = $data['presoClasificacioData1'] ?? '';
+if (!empty($presoClasificacioData1Raw)) {
+    $presoClasificacioData1Format = convertirDataFormatMysql($presoClasificacioData1Raw, 2);
+
+    if (!$presoClasificacioData1Format) {
+        $errors[] = "El format de data no és vàlid. Format esperat: DD/MM/YYYY, amb anys entre 1936 i 1939";
+    }
+}
+
+$presoClasificacioData2Raw = $data['presoClasificacioData2'] ?? '';
+if (!empty($presoClasificacioData2Raw)) {
+    $presoClasificacioData2Format = convertirDataFormatMysql($presoClasificacioData2Raw, 2);
+
+    if (!$presoClasificacioData2Format) {
+        $errors[] = "El format de data no és vàlid. Format esperat: DD/MM/YYYY, amb anys entre 1936 i 1939";
+    }
+}
+
+
 // Si hay errores, devolver una respuesta con los errores
 if (!empty($errors)) {
     http_response_code(400); // Bad Request
@@ -107,14 +127,17 @@ if (!empty($errors)) {
 // Si no hay errores, crear las variables PHP y preparar la consulta PDO
 $situacio = !empty($data['situacio']) ? $data['situacio'] : NULL;
 $lloc_mort_alliberament = !empty($data['lloc_mort_alliberament']) ? $data['lloc_mort_alliberament'] : NULL;
-$preso_tipus = !empty($data['preso_tipus']) ? $data['preso_tipus'] : NULL;
-$preso_nom = !empty($data['preso_nom']) ? $data['preso_nom'] : NULL;
-$preso_localitat = !empty($data['preso_localitat']) ? $data['preso_localitat'] : NULL;
-$preso_num_matricula = !empty($data['preso_num_matricula']) ? $data['preso_num_matricula'] : NULL;
-$deportacio_nom_camp = !empty($data['deportacio_nom_camp']) ? $data['deportacio_nom_camp'] : NULL;
+$situacioFranca = !empty($data['situacioFranca']) ? $data['situacioFranca'] : NULL;
+$situacioFranca_sortida = !empty($data['situacioFranca_sortida']) ? $data['situacioFranca_sortida'] : NULL;
+$situacioFranca_num_matricula = !empty($data['situacioFranca_num_matricula']) ? $data['situacioFranca_num_matricula'] : NULL;
+$situacioFrancaObservacions = !empty($data['situacioFrancaObservacions']) ? $data['situacioFrancaObservacions'] : NULL;
+$presoClasificacio1 = !empty($data['presoClasificacio1']) ? $data['presoClasificacio1'] : NULL;
+$presoClasificacio2 = !empty($data['presoClasificacio2']) ? $data['presoClasificacio2'] : NULL;
+$deportacio_camp = !empty($data['deportacio_camp']) ? $data['deportacio_camp'] : NULL;
+$deportacio_subcamp = !empty($data['deportacio_subcamp']) ? $data['deportacio_subcamp'] : NULL;
 $deportacio_num_matricula = !empty($data['deportacio_num_matricula']) ? $data['deportacio_num_matricula'] : NULL;
-$deportacio_nom_subcamp = !empty($data['deportacio_nom_subcamp']) ? $data['deportacio_nom_subcamp'] : NULL;
 $deportacio_nom_matricula_subcamp = !empty($data['deportacio_nom_matricula_subcamp']) ? $data['deportacio_nom_matricula_subcamp'] : NULL;
+
 $idPersona = $data['idPersona'];
 $id = $data['id'];
 
@@ -124,23 +147,26 @@ try {
     global $conn;
     /** @var PDO $conn */
 
-    // Crear la consulta SQL
-    $sql = "UPDATE db_deportats SET 
+    // Consulta UPDATE
+    $sql = "UPDATE db_deportats SET
+        idPersona = :idPersona,
         situacio = :situacio,
         data_alliberament = :data_alliberament,
         lloc_mort_alliberament = :lloc_mort_alliberament,
-        preso_tipus = :preso_tipus,
-        preso_nom = :preso_nom,
-        preso_data_sortida = :preso_data_sortida,
-        preso_localitat = :preso_localitat,
-        preso_num_matricula = :preso_num_matricula,
-        deportacio_nom_camp = :deportacio_nom_camp,
+        situacioFranca = :situacioFranca,
+        situacioFranca_sortida = :situacioFranca_sortida,
+        situacioFranca_num_matricula = :situacioFranca_num_matricula,
+        situacioFrancaObservacions = :situacioFrancaObservacions,
+        presoClasificacio1 = :presoClasificacio1,
+        presoClasificacioData1 = :presoClasificacioData1,
+        presoClasificacio2 = :presoClasificacio2,
+        presoClasificacioData2 = :presoClasificacioData2,
+        deportacio_camp = :deportacio_camp,
         deportacio_data_entrada = :deportacio_data_entrada,
         deportacio_num_matricula = :deportacio_num_matricula,
-        deportacio_nom_subcamp = :deportacio_nom_subcamp,
+        deportacio_subcamp = :deportacio_subcamp,
         deportacio_data_entrada_subcamp = :deportacio_data_entrada_subcamp,
-        deportacio_nom_matricula_subcamp = :deportacio_nom_matricula_subcamp,
-        idPersona = :idPersona
+        deportacio_nom_matricula_subcamp = :deportacio_nom_matricula_subcamp
     WHERE id = :id";
 
     // Preparar la consulta
@@ -150,15 +176,20 @@ try {
     $stmt->bindParam(':situacio', $situacio, PDO::PARAM_INT);
     $stmt->bindParam(':data_alliberament', $data_alliberamentFormat, PDO::PARAM_STR);
     $stmt->bindParam(':lloc_mort_alliberament', $lloc_mort_alliberament, PDO::PARAM_INT);
-    $stmt->bindParam(':preso_tipus', $preso_tipus, PDO::PARAM_INT);
-    $stmt->bindParam(':preso_nom', $preso_nom, PDO::PARAM_STR);
-    $stmt->bindParam(':preso_data_sortida', $preso_data_sortidaFormat, PDO::PARAM_STR);
-    $stmt->bindParam(':preso_localitat', $preso_localitat, PDO::PARAM_INT);
-    $stmt->bindParam(':preso_num_matricula', $preso_num_matricula, PDO::PARAM_STR);
-    $stmt->bindParam(':deportacio_nom_camp', $deportacio_nom_camp, PDO::PARAM_STR);
+    $stmt->bindParam(':situacioFranca', $situacioFranca, PDO::PARAM_INT);
+    $stmt->bindParam(':situacioFranca_sortida', $situacioFranca_sortida, PDO::PARAM_STR);
+    $stmt->bindParam(':situacioFranca_num_matricula', $situacioFranca_num_matricula, PDO::PARAM_STR);
+    $stmt->bindParam(':situacioFrancaObservacions', $situacioFrancaObservacions, PDO::PARAM_STR);
+
+    $stmt->bindParam(':presoClasificacio1', $presoClasificacio1, PDO::PARAM_INT);
+    $stmt->bindParam(':presoClasificacioData1', $presoClasificacioData1Format, PDO::PARAM_STR);
+    $stmt->bindParam(':presoClasificacio2', $presoClasificacio2, PDO::PARAM_INT);
+    $stmt->bindParam(':presoClasificacioData2', $presoClasificacioData2Format, PDO::PARAM_STR);
+
+    $stmt->bindParam(':deportacio_camp', $deportacio_camp, PDO::PARAM_INT);
     $stmt->bindParam(':deportacio_data_entrada', $deportacio_data_entradaFormat, PDO::PARAM_STR);
     $stmt->bindParam(':deportacio_num_matricula', $deportacio_num_matricula, PDO::PARAM_STR);
-    $stmt->bindParam(':deportacio_nom_subcamp', $deportacio_nom_subcamp, PDO::PARAM_STR);
+    $stmt->bindParam(':deportacio_subcamp', $deportacio_subcamp, PDO::PARAM_INT);
     $stmt->bindParam(':deportacio_data_entrada_subcamp', $deportacio_data_entrada_subcampFormat, PDO::PARAM_STR);
     $stmt->bindParam(':deportacio_nom_matricula_subcamp', $deportacio_nom_matricula_subcamp, PDO::PARAM_STR);
     $stmt->bindParam(':idPersona', $idPersona, PDO::PARAM_INT);
