@@ -81,6 +81,9 @@
             <h4>3. Exiliats / Deportats</h4>
             <ul>
                 <li>aux_situacions_deportats</li>
+
+                <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['auxiliars']; ?>/llistat-camps-detencio">Taula llistat camps i centres de detenció dels deportats</a></li>
+                <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['auxiliars']; ?>/llistat-camps-concentracio">Taula llistat camps de concentració i extermini</a></li>
             </ul>
 
             <h4>4. Cost humà guerra civil</h4>

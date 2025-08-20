@@ -45,6 +45,7 @@ export type ApiUrls = {
     LLISTAT_CASOS_REVISIO_GEOLOCALITZACIO: string;
     USUARI_ID: (id: number) => string;
     CAMP_DETENCIO_ID: (id: number) => string;
+    LLISTAT_PRESONS_CAMPS: string;
   };
   POST: {
     MUNICIPI: string;

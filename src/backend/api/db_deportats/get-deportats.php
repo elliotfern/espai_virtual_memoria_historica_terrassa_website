@@ -205,6 +205,41 @@ if ($slug === "llistatComplet") {
             500
         );
     }
+
+    // 2) Informacio Preso camp detencio
+    // ruta GET => "/api/deportats/get/llistatCampsPresons
+} else if ($slug === "llistatCampsPresons") {
+    $db = new Database();
+
+    $query = "SELECT d.id, d.nom, m.ciutat, t.tipus_preso_ca
+            FROM aux_deportacio_preso AS d
+            LEFT JOIN aux_dades_municipis AS m ON d.municipi = m.id
+            LEFT JOIN aux_tipus_presons AS t ON d.tipus = t.id
+            ORDER BY d.nom";
+    try {
+        $result = $db->getData($query);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
 } else {
     // Si 'type', 'id' o 'token' están ausentes o 'type' no es 'user' en la URL
     header('HTTP/1.1 403 Forbidden');

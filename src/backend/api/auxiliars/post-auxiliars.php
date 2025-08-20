@@ -3321,11 +3321,11 @@ if ($slug === "municipi") {
         $sql = "INSERT INTO aux_deportacio_preso (
             tipus,
             nom,
-            municipi,
+            municipi
         ) VALUES (
             :tipus,
             :nom,
-            :municipi,
+            :municipi
         )";
 
         // Preparar la consulta

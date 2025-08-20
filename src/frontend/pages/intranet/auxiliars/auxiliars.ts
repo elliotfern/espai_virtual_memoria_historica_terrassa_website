@@ -41,6 +41,7 @@ import { auxiliarSelect } from '../../../services/fetchData/auxiliarSelect';
 import { taulaPresons } from './taulaPresons';
 import { formUsuaris } from './formUsuaris';
 import { formCampPreso } from './formCampPreso';
+import { taulaCampsDetencio } from './taulaCampsDetencio';
 
 export async function auxiliars() {
   const url = window.location.href;
@@ -488,6 +489,8 @@ export async function auxiliars() {
     }
   } else if (pageType[2] === 'llistat-presons') {
     taulaPresons();
+  } else if (pageType[2] === 'llistat-camps-detencio') {
+    taulaCampsDetencio();
   } else if (pageType[2] === 'modifica-camp-detencio') {
     formCampPreso(true, Number(pageType[3]));
   } else if (pageType[2] === 'nou-camp-detencio') {
