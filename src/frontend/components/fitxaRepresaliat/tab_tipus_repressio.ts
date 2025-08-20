@@ -57,45 +57,94 @@ export const fitxaTipusRepressio = async (categoriaNumerica: string, fitxa2: Fit
 
       const dataAlliberament = dada.data_alliberament && dada.data_alliberament.trim() !== '' ? formatDatesForm(dada.data_alliberament) : 'Desconeguda';
       const municipiAlliberament = dada.ciutat_mort_alliberament && dada.ciutat_mort_alliberament.trim() !== '' ? dada.ciutat_mort_alliberament : 'Desconegut';
-      const tipusPreso = dada.preso_tipus && dada.preso_tipus.trim() !== '' ? dada.preso_tipus : 'Desconeguda';
-      const nomPreso = dada.preso_nom && dada.preso_nom.trim() !== '' ? dada.preso_nom : 'Desconeguda';
-      const dataSortidaPreso = dada.preso_data_sortida && dada.preso_data_sortida.trim() !== '' ? formatDatesForm(dada.preso_data_sortida) : 'Desconeguda';
-      const municipiPreso = dada.preso_localitat && dada.preso_localitat.trim() !== '' ? dada.preso_localitat : 'Desconegut';
-      const numMatriculaPreso = dada.preso_num_matricula && dada.preso_num_matricula.trim() !== '' ? dada.preso_num_matricula : 'Desconegut';
 
-      const nomCamp = dada.deportacio_nom_camp && dada.deportacio_nom_camp.trim() !== '' ? dada.deportacio_nom_camp : 'Desconegut';
-      const dataEntradaCamp = dada.deportacio_data_entrada && dada.deportacio_data_entrada.trim() !== '' ? formatDatesForm(dada.deportacio_data_entrada) : 'Desconeguda';
+      const tipusPreso = dada.tipusPresoFranca && dada.tipusPresoFranca.trim() !== '' ? dada.tipusPresoFranca : 'Desconeguda';
+      const nomPreso = dada.situacioFrancaNom && dada.situacioFrancaNom.trim() !== '' ? dada.situacioFrancaNom : 'Desconeguda';
+      const dataSortidaPresoFranca = dada.situacioFranca_sortida && dada.situacioFranca_sortida.trim() !== '' ? formatDatesForm(dada.situacioFranca_sortida) : 'Desconeguda';
+      const municipiPreso = dada.ciutat_situacioFranca_preso && dada.ciutat_situacioFranca_preso.trim() !== '' ? dada.ciutat_situacioFranca_preso : 'Desconegut';
+      const numMatriculaPreso = dada.situacioFranca_num_matricula && dada.situacioFranca_num_matricula.trim() !== '' ? dada.situacioFranca_num_matricula : 'Desconegut';
+      const situacioFrancaObservacions = dada.situacioFrancaObservacions && dada.situacioFrancaObservacions.trim() !== '' ? dada.situacioFrancaObservacions : 'Sense dades';
+
+      const estat_mort_allibertament = dada.estat_mort_allibertament;
+
+      const tipusPreso1 = dada.tipusPreso1 && dada.tipusPreso1.trim() !== '' ? dada.tipusPreso1 : 'Sense dades';
+      const nomPreso1 = dada.nomPreso1 && dada.nomPreso1.trim() !== '' ? dada.nomPreso1 : 'Sense dades';
+      const ciutatPreso1 = dada.ciutatPreso1 && dada.ciutatPreso1.trim() !== '' ? dada.ciutatPreso1 : 'Sense dades';
+      const presoClasificacioData1 = dada.presoClasificacioData1 && dada.presoClasificacioData1.trim() !== '' ? formatDatesForm(dada.presoClasificacioData1) : 'Sense dades';
+
+      const tipusPreso2 = dada.tipusPreso2 && dada.tipusPreso2.trim() !== '' ? dada.tipusPreso2 : 'Sense dades';
+      const nomPreso2 = dada.nomPreso2 && dada.nomPreso2.trim() !== '' ? dada.nomPreso2 : 'Sense dades';
+      const ciutatPreso2 = dada.ciutatPreso2 && dada.ciutatPreso2.trim() !== '' ? dada.ciutatPreso2 : 'Sense dades';
+      const presoClasificacioData2 = dada.presoClasificacioData2 && dada.presoClasificacioData2.trim() !== '' ? formatDatesForm(dada.presoClasificacioData2) : 'Sense dades';
+
+      const deportacio_observacions = dada.deportacio_observacions && dada.deportacio_observacions.trim() !== '' ? dada.deportacio_observacions : 'Sense dades';
+
+      const tipusCamp1 = dada.tipusCamp1 && dada.tipusCamp1.trim() !== '' ? dada.tipusCamp1 : 'Sense dades';
+      const ciutatCamp1 = dada.ciutatCamp1 && dada.ciutatCamp1.trim() !== '' ? dada.ciutatCamp1 : 'Sense dades';
+
+      const nomCamp1 = dada.nomCamp1 && dada.nomCamp1.trim() !== '' ? dada.nomCamp1 : 'Desconegut';
+      const deportacio_data_entrada = dada.deportacio_data_entrada && dada.deportacio_data_entrada.trim() !== '' ? formatDatesForm(dada.deportacio_data_entrada) : 'Desconeguda';
       const numeroMatriculaCamp = dada.deportacio_num_matricula && dada.deportacio_num_matricula.trim() !== '' ? dada.deportacio_num_matricula : 'Desconegut';
-      const nomSubCamp = dada.deportacio_nom_subcamp && dada.deportacio_nom_subcamp.trim() !== '' ? dada.deportacio_nom_subcamp : 'Desconegut';
+
+      const tipusCamp2 = dada.tipusCamp2 && dada.tipusCamp2.trim() !== '' ? dada.tipusCamp2 : 'Sense dades';
+      const ciutatCamp2 = dada.ciutatCamp2 && dada.ciutatCamp2.trim() !== '' ? dada.ciutatCamp2 : 'Sense dades';
+      const nomSubCamp = dada.nomCamp2 && dada.nomCamp2.trim() !== '' ? dada.nomCamp2 : 'Desconegut';
       const dataEntradaSubCamp = dada.deportacio_data_entrada_subcamp && dada.deportacio_data_entrada_subcamp.trim() !== '' ? formatDatesForm(dada.deportacio_data_entrada_subcamp) : 'Desconegut';
       const numeroMatriculaSubCamp = dada.deportacio_nom_matricula_subcamp && dada.deportacio_nom_matricula_subcamp.trim() !== '' ? dada.deportacio_nom_matricula_subcamp : 'Desconegut';
 
       htmlContent += `
     <div class="negreta raleway">
       <div style="margin-top:25px">
-        <h5><span class="negreta blau1">1) Dades bàsiques:</span></h5>
+        <h5><span class="negreta blau1">1) Dades bàsiques sobre la deportació:</span></h5> 
           <p><span class='marro2'>Situació del deportat: </span> <span class='blau1'>${situacioDeportat}</span></p>
           <p><span class='marro2'>${alliberamentMort}:</span> <span class='blau1'>${dataAlliberament}</span></p>
-          <p><span class='marro2'>${municipiMort}:</span> <span class='blau1'>${municipiAlliberament}</span></p>
+          <p><span class='marro2'>${municipiMort}:</span> <span class='blau1'>${municipiAlliberament} (${estat_mort_allibertament})</span></p>
         </div>
 
-      <div style="margin-top:25px">
-        <h5><span class="negreta blau1">2) Dades sobre l'empresonament (previ a la deportació):</span></h5>
-          <p><span class='marro2'>Tipus de presó: </span> <span class='blau1'>${tipusPreso}</span></p>
-          <p><span class='marro2'>Nom de la presó:</span> <span class='blau1'>${nomPreso}</span></p>
-          <p><span class='marro2'>Data de la sortida de la presó:</span> <span class='blau1'>${dataSortidaPreso}</span></p>
-          <p><span class='marro2'>Municipi de la presó:</span> <span class='blau1'>${municipiPreso}</span></p>
+        <div style="margin-top:25px">
+        <h5><span class="negreta blau1">2) Dades sobre la situació a França, prèvia a la deportació:</span></h5>
+          <p><span class='marro2'>Tipus de Presó/camp de detenció: </span> <span class='blau1'>${tipusPreso}</span></p>
+          <p><span class='marro2'>Nom de la presó/camp: </span> <span class='blau1'>${nomPreso}</span></p>
+          <p><span class='marro2'>Municipi de la presó/camp: </span> <span class='blau1'>${municipiPreso}</span></p>
+          <p><span class='marro2'>Data de la sortida de la presó/camp: </span> <span class='blau1'>${dataSortidaPresoFranca}</span></p>
           <p><span class='marro2'>Número de matrícula presó:</span> <span class='blau1'>${numMatriculaPreso}</span></p>
+          <p><span class='marro2'>Descripció situació a França: </span> <span class='blau1'> ${situacioFrancaObservacions}</span></p>
         </div>
 
       <div style="margin-top:25px">
-        <h5><span class="negreta blau1">3) Dades sobre la deportació:</span></h5>
-          <p><span class='marro2'>Nom del camp de deportació : </span> <span class='blau1'>${nomCamp}</span></p>
-          <p><span class='marro2'>Data d'entrada al camp</span> <span class='blau1'>${dataEntradaCamp}</span></p>
-          <p><span class='marro2'>Número de matrícula:</span> <span class='blau1'>${numeroMatriculaCamp}</span></p>
-          <p><span class='marro2'>Nom del subcamp :</span> <span class='blau1'>${nomSubCamp}</span></p>
-          <p><span class='marro2'>Data d'entrada al subcamp:</span> <span class='blau1'>${dataEntradaSubCamp}</span></p>
-          <p><span class='marro2'>Número de matrícula del subcamp:</span> <span class='blau1'>${numeroMatriculaSubCamp}</span></p>
+        <h5><span class="negreta blau1">3) Camp de classificació/detenció previ a la deportació al camp de concentració:</span></h5>
+
+            <h6><span class="blau1">Primera presó/camp de classificació</span><h6>
+                <p><span class='marro2'>Tipus de Presó/camp de detenció: </span> <span class='blau1'>${tipusPreso1}</span></p>
+                <p><span class='marro2'>Nom de la Presó/camp de detenció: </span> <span class='blau1'>${nomPreso1}   </span></p>
+                <p><span class='marro2'>Municipi de la Presó/camp de detenció: </span> <span class='blau1'>${ciutatPreso1}   </span></p>
+                <p><span class='marro2'>Data de la sortida de la presó: </span> <span class='blau1'>${presoClasificacioData1}   </span></p>
+
+            <h6><span class="blau1">Segona presó/camp de classificació</span><h6>
+                <p><span class='marro2'>Tipus de Presó/camp de detenció: </span> <span class='blau1'>${tipusPreso2}   </span></p>
+                <p><span class='marro2'>Nom de la Presó/camp de detenció: </span> <span class='blau1'>${nomPreso2}   </span></p>
+                <p><span class='marro2'>Municipi de la Presó/camp de detenció: </span> <span class='blau1'>${ciutatPreso2}   </span></p>
+                <p><span class='marro2'>Data de la sortida de la presó: </span> <span class='blau1'>${presoClasificacioData2}    </span></p>
+        </div>
+
+      <div style="margin-top:25px">
+        <h5><span class="negreta blau1">4) Dades sobre la deportació al camp de concentració/extermini:</span></h5>
+         <h6><span class="blau1">Dades sobre el camp de concentració:</span><h6>
+              <p><span class='marro2'>Nom del camp de deportació: </span> <span class='blau1'>${nomCamp1}</span></p>
+              <p><span class='marro2'>Tipus de camp: </span> <span class='blau1'>${tipusCamp1}</span></p>
+              <p><span class='marro2'>Municipi del camp: </span> <span class='blau1'>${ciutatCamp1}</span></p>
+              <p><span class='marro2'>Data d'entrada al camp: </span> <span class='blau1'>${deportacio_data_entrada}</span></p>
+              <p><span class='marro2'>Número de matrícula:</span> <span class='blau1'>${numeroMatriculaCamp}</span></p>
+
+          <h6><span class="blau1">Dades sobre el subcamp:</span><h6>
+              <p><span class='marro2'>Nom del subcamp :</span> <span class='blau1'>${nomSubCamp}</span></p>
+              <p><span class='marro2'>Tipus de subcamp: </span> <span class='blau1'>${tipusCamp2}</span></p>
+              <p><span class='marro2'>Municipi del subcamp: </span> <span class='blau1'>${ciutatCamp2}</span></p>
+              <p><span class='marro2'>Data d'entrada al subcamp:</span> <span class='blau1'>${dataEntradaSubCamp}</span></p>
+              <p><span class='marro2'>Número de matrícula del subcamp:</span> <span class='blau1'>${numeroMatriculaSubCamp}</span></p>
+
+          <h6><span class="blau1">Altres informacions:</span><h6>
+              <p><span class='marro2'>Observacions:</span> <span class='blau1'>${deportacio_observacions}</span></p>
         </div>
     </div>
         `;

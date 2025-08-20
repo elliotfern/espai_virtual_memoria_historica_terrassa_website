@@ -4,30 +4,49 @@ use App\Config\Tables;
 use App\Config\Audit;
 use App\Config\DatabaseConnection;
 
-$conn = DatabaseConnection::getConnection();
+/** Helpers para binds */
+function bindDateOrNull(PDOStatement $stmt, string $param, ?string $val): void
+{
+    $stmt->bindValue($param, $val, $val !== null ? PDO::PARAM_STR : PDO::PARAM_NULL);
+}
+function bindIntOrNull(PDOStatement $stmt, string $param, $val): void
+{
+    $stmt->bindValue($param, $val, $val !== null ? PDO::PARAM_INT : PDO::PARAM_NULL);
+}
+function bindStrOrNull(PDOStatement $stmt, string $param, $val): void
+{
+    $stmt->bindValue($param, $val, $val !== null && $val !== '' ? PDO::PARAM_STR : PDO::PARAM_NULL);
+}
 
+$conn = DatabaseConnection::getConnection();
 if (!$conn) {
+    http_response_code(500);
     die("No se pudo establecer conexión a la base de datos.");
 }
 
+/** CORS / headers */
+header("Content-Type: application/json; charset=utf-8");
+header("Access-Control-Allow-Methods: POST, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
+header("Access-Control-Allow-Origin: " . DOMAIN);
 
-// Configuración de cabeceras para aceptar JSON y responder JSON
-header("Content-Type: application/json");
-header("Access-Control-Allow-Methods: POST");
-
-// Definir el dominio permitido
-$allowedOrigin = DOMAIN;
-
-// Llamar a la función para verificar el referer
-checkReferer($allowedOrigin);
-
-// Verificar que el método de la solicitud sea GET
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header('HTTP/1.1 405 Method Not Allowed');
-    echo json_encode(['error' => 'Method not allowed']);
-    exit();
+// Preflight
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(204);
+    exit;
 }
 
+// Referer (si procede)
+checkReferer(DOMAIN);
+
+// Método
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    http_response_code(405);
+    echo json_encode(['error' => 'Method not allowed']);
+    exit;
+}
+
+// Auth
 $userId = getAuthenticatedUserId();
 if (!$userId) {
     http_response_code(401);
@@ -35,220 +54,196 @@ if (!$userId) {
     exit;
 }
 
-// inici
+// Input
 $inputData = file_get_contents('php://input');
-$data = json_decode($inputData, true);
+$data = json_decode($inputData, true) ?? [];
 
-if (!$data['idPersona']) {
-    http_response_code(400); // Bad Request
-    echo json_encode(["status" => 'error', 'message' => 'Falta IDPersona']);
+// idPersona obligatorio
+if (empty($data['idPersona'])) {
+    http_response_code(400);
+    echo json_encode(["status" => 'error', 'message' => 'Falta idPersona']);
     exit;
 }
+$idPersona = (int)$data['idPersona'];
 
-$idPersona = $data['idPersona'];
-
-// Comprobación directa en la misma sección del PUT
-global $conn;
-/** @var PDO $conn */
+// Duplicados por idPersona
 $stmtCheck = $conn->prepare("SELECT COUNT(*) FROM db_deportats WHERE idPersona = :idPersona");
-$stmtCheck->execute(['idPersona' => $idPersona]);
-$errorDuplicat = $stmtCheck->fetchColumn() > 0;
-
-if ($errorDuplicat) {
-    http_response_code(409); // Conflict
-    echo json_encode(['status' => 'error', 'message' => 'Ja existeix un registre d\'aquest represaliat a la base de dades']);
+$stmtCheck->execute([':idPersona' => $idPersona]);
+if ($stmtCheck->fetchColumn() > 0) {
+    http_response_code(409);
+    echo json_encode(['status' => 'error', 'message' => "Ja existeix un registre d'aquest represaliat a la base de dades"]);
     exit;
 }
 
-// Inicializar un array para los errores
+// Errores de validación
 $errors = [];
 
-// Validación de los datos recibidos
+// Campos obligatorios (ajusta si alguno puede ser NULL)
 if (empty($data['situacio'])) {
     $errors[] = "El camp 'situacio' és obligatori";
 }
-
-if (empty($data['data_alliberament'])) {
-    $errors[] = "El camp 'data de l'alliberament o mort' és obligatori";
-}
-
 if (empty($data['lloc_mort_alliberament'])) {
-    $errors[] = "El camp 'lloc de la mort o alliberament' obligatori";
+    $errors[] = "El camp 'lloc de la mort o alliberament' és obligatori";
 }
 
+// Fechas que aceptan vacío => NULL
 $data_alliberamentRaw = $data['data_alliberament'] ?? '';
-if (!empty($data_alliberamentRaw)) {
-    $data_alliberamentFormat = convertirDataFormatMysql($data_alliberamentRaw, 2);
-
-    if (!$data_alliberamentFormat) {
-        $errors[] = "El format de data no és vàlid. Format esperat: DD/MM/YYYY, amb anys entre 1936 i 1939";
-    }
+if ($data_alliberamentRaw !== '') {
+    $data_alliberamentFormat = convertirDataFormatMysql($data_alliberamentRaw, 3);
+    if (!$data_alliberamentFormat) $errors[] = "Data alliberament: format no vàlid. Esperat: DD/MM/YYYY";
 } else {
     $data_alliberamentFormat = null;
 }
 
-
-$preso_data_sortidaRaw = $data['preso_data_sortida'] ?? '';
-if (!empty($preso_data_sortidaRaw)) {
-    $preso_data_sortidaFormat = convertirDataFormatMysql($preso_data_sortidaRaw, 2);
-
-    if (!$preso_data_sortidaFormat) {
-        $errors[] = "El format de data no és vàlid. Format esperat: DD/MM/YYYY, amb anys entre 1936 i 1939";
-    }
+$situacioFranca_sortidaRaw = $data['situacioFranca_sortida'] ?? '';
+if ($situacioFranca_sortidaRaw !== '') {
+    $situacioFranca_sortidaFormat = convertirDataFormatMysql($situacioFranca_sortidaRaw, 3);
+    if (!$situacioFranca_sortidaFormat) $errors[] = "Data sortida presó: format no vàlid. Esperat: DD/MM/YYYY";
+} else {
+    $situacioFranca_sortidaFormat = null;
 }
 
 $deportacio_data_entradaRaw = $data['deportacio_data_entrada'] ?? '';
-if (!empty($deportacio_data_entradaRaw)) {
-    $deportacio_data_entradaFormat = convertirDataFormatMysql($deportacio_data_entradaRaw, 2);
-
-    if (!$deportacio_data_entradaFormat) {
-        $errors[] = "El format de data no és vàlid. Format esperat: DD/MM/YYYY, amb anys entre 1936 i 1939";
-    }
+if ($deportacio_data_entradaRaw !== '') {
+    $deportacio_data_entradaFormat = convertirDataFormatMysql($deportacio_data_entradaRaw, 3);
+    if (!$deportacio_data_entradaFormat) $errors[] = "Data entrada (deportacio): format no vàlid. Esperat: DD/MM/YYYY";
+} else {
+    $deportacio_data_entradaFormat = null;
 }
 
 $deportacio_data_entrada_subcampRaw = $data['deportacio_data_entrada_subcamp'] ?? '';
-if (!empty($deportacio_data_entrada_subcampRaw)) {
-    $deportacio_data_entrada_subcampFormat = convertirDataFormatMysql($deportacio_data_entrada_subcampRaw, 2);
-
-    if (!$deportacio_data_entrada_subcampFormat) {
-        $errors[] = "El format de data no és vàlid. Format esperat: DD/MM/YYYY, amb anys entre 1936 i 1939";
-    }
+if ($deportacio_data_entrada_subcampRaw !== '') {
+    $deportacio_data_entrada_subcampFormat = convertirDataFormatMysql($deportacio_data_entrada_subcampRaw, 3);
+    if (!$deportacio_data_entrada_subcampFormat) $errors[] = "Data entrada subcamp: format no vàlid. Esperat: DD/MM/YYYY";
+} else {
+    $deportacio_data_entrada_subcampFormat = null;
 }
 
 $presoClasificacioData1Raw = $data['presoClasificacioData1'] ?? '';
-if (!empty($presoClasificacioData1Raw)) {
-    $presoClasificacioData1Format = convertirDataFormatMysql($presoClasificacioData1Raw, 2);
-
-    if (!$presoClasificacioData1Format) {
-        $errors[] = "El format de data no és vàlid. Format esperat: DD/MM/YYYY, amb anys entre 1936 i 1939";
-    }
+if ($presoClasificacioData1Raw !== '') {
+    $presoClasificacioData1Format = convertirDataFormatMysql($presoClasificacioData1Raw, 3);
+    if (!$presoClasificacioData1Format) $errors[] = "Data presó (1): format no vàlid. Esperat: DD/MM/YYYY";
+} else {
+    $presoClasificacioData1Format = null;
 }
 
 $presoClasificacioData2Raw = $data['presoClasificacioData2'] ?? '';
-if (!empty($presoClasificacioData2Raw)) {
-    $presoClasificacioData2Format = convertirDataFormatMysql($presoClasificacioData2Raw, 2);
-
-    if (!$presoClasificacioData2Format) {
-        $errors[] = "El format de data no és vàlid. Format esperat: DD/MM/YYYY, amb anys entre 1936 i 1939";
-    }
+if ($presoClasificacioData2Raw !== '') {
+    $presoClasificacioData2Format = convertirDataFormatMysql($presoClasificacioData2Raw, 3);
+    if (!$presoClasificacioData2Format) $errors[] = "Data presó (2): format no vàlid. Esperat: DD/MM/YYYY";
+} else {
+    $presoClasificacioData2Format = null;
 }
 
-// Si hay errores, devolver una respuesta con los errores
+// Si hay errores
 if (!empty($errors)) {
-    http_response_code(400); // Bad Request
+    http_response_code(400);
     echo json_encode(["status" => "error", "message" => $errors]);
     exit;
 }
 
-// Si no hay errores, crear las variables PHP y preparar la consulta PDO
-$situacio = !empty($data['situacio']) ? $data['situacio'] : NULL;
-$lloc_mort_alliberament = !empty($data['lloc_mort_alliberament']) ? $data['lloc_mort_alliberament'] : NULL;
-$situacioFranca = !empty($data['situacioFranca']) ? $data['situacioFranca'] : NULL;
-$situacioFranca_sortida = !empty($data['situacioFranca_sortida']) ? $data['situacioFranca_sortida'] : NULL;
-$situacioFranca_num_matricula = !empty($data['situacioFranca_num_matricula']) ? $data['situacioFranca_num_matricula'] : NULL;
-$situacioFrancaObservacions = !empty($data['situacioFrancaObservacions']) ? $data['situacioFrancaObservacions'] : NULL;
-$presoClasificacio1 = !empty($data['presoClasificacio1']) ? $data['presoClasificacio1'] : NULL;
-$presoClasificacio2 = !empty($data['presoClasificacio2']) ? $data['presoClasificacio2'] : NULL;
-$deportacio_camp = !empty($data['deportacio_camp']) ? $data['deportacio_camp'] : NULL;
-$deportacio_subcamp = !empty($data['deportacio_subcamp']) ? $data['deportacio_subcamp'] : NULL;
-$deportacio_num_matricula = !empty($data['deportacio_num_matricula']) ? $data['deportacio_num_matricula'] : NULL;
-$deportacio_nom_matricula_subcamp = !empty($data['deportacio_nom_matricula_subcamp']) ? $data['deportacio_nom_matricula_subcamp'] : NULL;
+// Escalares / nulos
+$situacio = $data['situacio'] ?? null;
+$lloc_mort_alliberament = $data['lloc_mort_alliberament'] ?? null;
+$situacioFranca = $data['situacioFranca'] ?? null;
+$situacioFranca_num_matricula = $data['situacioFranca_num_matricula'] ?? null;
+$situacioFrancaObservacions = $data['situacioFrancaObservacions'] ?? null;
+$presoClasificacio1 = $data['presoClasificacio1'] ?? null;
+$presoClasificacio2 = $data['presoClasificacio2'] ?? null;
+$deportacio_camp = $data['deportacio_camp'] ?? null;
+$deportacio_subcamp = $data['deportacio_subcamp'] ?? null;
+$deportacio_num_matricula = $data['deportacio_num_matricula'] ?? null;
+$deportacio_nom_matricula_subcamp = $data['deportacio_nom_matricula_subcamp'] ?? null;
+$deportacio_observacions = $data['deportacio_observacions'] ?? null;
 
-// Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
 try {
-
-    global $conn;
     /** @var PDO $conn */
-
-    // Consulta INSERT
     $sql = "INSERT INTO db_deportats (
-            idPersona,
-            situacio,
-            data_alliberament,
-            lloc_mort_alliberament,
-            situacioFranca,
-            situacioFranca_sortida,
-            situacioFranca_num_matricula,
-            situacioFrancaObservacions,
-            presoClasificacio1,
-            presoClasificacioData1,
-            presoClasificacio2,
-            presoClasificacioData2,
-            deportacio_camp,
-            deportacio_data_entrada,
-            deportacio_num_matricula,
-            deportacio_subcamp,
-            deportacio_data_entrada_subcamp,
-            deportacio_nom_matricula_subcamp
-        ) VALUES (
-            :idPersona,
-            :situacio,
-            :data_alliberament,
-            :lloc_mort_alliberament,
-            :situacioFranca,
-            :situacioFranca_sortida,
-            :situacioFranca_num_matricula,
-            :situacioFrancaObservacions,
-            :presoClasificacio1,
-            :presoClasificacioData1,
-            :presoClasificacio2,
-            :presoClasificacioData2,
-            :deportacio_camp,
-            :deportacio_data_entrada,
-            :deportacio_num_matricula,
-            :deportacio_subcamp,
-            :deportacio_data_entrada_subcamp,
-            :deportacio_nom_matricula_subcamp
-        )";
+        idPersona,
+        situacio,
+        data_alliberament,
+        lloc_mort_alliberament,
+        situacioFranca,
+        situacioFranca_sortida,
+        situacioFranca_num_matricula,
+        situacioFrancaObservacions,
+        presoClasificacio1,
+        presoClasificacioData1,
+        presoClasificacio2,
+        presoClasificacioData2,
+        deportacio_camp,
+        deportacio_data_entrada,
+        deportacio_num_matricula,
+        deportacio_subcamp,
+        deportacio_data_entrada_subcamp,
+        deportacio_nom_matricula_subcamp,
+        deportacio_observacions
+    ) VALUES (
+        :idPersona,
+        :situacio,
+        :data_alliberament,
+        :lloc_mort_alliberament,
+        :situacioFranca,
+        :situacioFranca_sortida,
+        :situacioFranca_num_matricula,
+        :situacioFrancaObservacions,
+        :presoClasificacio1,
+        :presoClasificacioData1,
+        :presoClasificacio2,
+        :presoClasificacioData2,
+        :deportacio_camp,
+        :deportacio_data_entrada,
+        :deportacio_num_matricula,
+        :deportacio_subcamp,
+        :deportacio_data_entrada_subcamp,
+        :deportacio_nom_matricula_subcamp,
+        :deportacio_observacions
+    )";
 
-    // Preparar la consulta
     $stmt = $conn->prepare($sql);
 
-    // Enlazar los parámetros con los valores de las variables PHP
-    $stmt->bindParam(':situacio', $situacio, PDO::PARAM_INT);
-    $stmt->bindParam(':data_alliberament', $data_alliberamentFormat, PDO::PARAM_STR);
-    $stmt->bindParam(':lloc_mort_alliberament', $lloc_mort_alliberament, PDO::PARAM_INT);
-    $stmt->bindParam(':situacioFranca', $situacioFranca, PDO::PARAM_INT);
-    $stmt->bindParam(':situacioFranca_sortida', $situacioFranca_sortida, PDO::PARAM_STR);
-    $stmt->bindParam(':situacioFranca_num_matricula', $situacioFranca_num_matricula, PDO::PARAM_STR);
-    $stmt->bindParam(':situacioFrancaObservacions', $situacioFrancaObservacions, PDO::PARAM_STR);
+    // INT obligatorios
+    $stmt->bindValue(':idPersona', $idPersona, PDO::PARAM_INT);
 
-    $stmt->bindParam(':presoClasificacio1', $presoClasificacio1, PDO::PARAM_INT);
-    $stmt->bindParam(':presoClasificacioData1', $presoClasificacioData1Format, PDO::PARAM_STR);
-    $stmt->bindParam(':presoClasificacio2', $presoClasificacio2, PDO::PARAM_INT);
-    $stmt->bindParam(':presoClasificacioData2', $presoClasificacioData2Format, PDO::PARAM_STR);
+    // INT (permiten NULL si llega null)
+    bindIntOrNull($stmt, ':situacio', $situacio);
+    bindIntOrNull($stmt, ':lloc_mort_alliberament', $lloc_mort_alliberament);
+    bindIntOrNull($stmt, ':situacioFranca', $situacioFranca);
+    bindIntOrNull($stmt, ':presoClasificacio1', $presoClasificacio1);
+    bindIntOrNull($stmt, ':presoClasificacio2', $presoClasificacio2);
+    bindIntOrNull($stmt, ':deportacio_camp', $deportacio_camp);
+    bindIntOrNull($stmt, ':deportacio_subcamp', $deportacio_subcamp);
 
-    $stmt->bindParam(':deportacio_camp', $deportacio_camp, PDO::PARAM_INT);
-    $stmt->bindParam(':deportacio_data_entrada', $deportacio_data_entradaFormat, PDO::PARAM_STR);
-    $stmt->bindParam(':deportacio_num_matricula', $deportacio_num_matricula, PDO::PARAM_STR);
-    $stmt->bindParam(':deportacio_subcamp', $deportacio_subcamp, PDO::PARAM_INT);
-    $stmt->bindParam(':deportacio_data_entrada_subcamp', $deportacio_data_entrada_subcampFormat, PDO::PARAM_STR);
-    $stmt->bindParam(':deportacio_nom_matricula_subcamp', $deportacio_nom_matricula_subcamp, PDO::PARAM_STR);
-    $stmt->bindParam(':idPersona', $idPersona, PDO::PARAM_INT);
+    // TEXT / VARCHAR
+    bindStrOrNull($stmt, ':situacioFranca_num_matricula', $situacioFranca_num_matricula);
+    bindStrOrNull($stmt, ':situacioFrancaObservacions', $situacioFrancaObservacions);
+    bindStrOrNull($stmt, ':deportacio_num_matricula', $deportacio_num_matricula);
+    bindStrOrNull($stmt, ':deportacio_nom_matricula_subcamp', $deportacio_nom_matricula_subcamp);
+    bindStrOrNull($stmt, ':deportacio_observacions', $deportacio_observacions);
 
-    // Ejecutar la consulta
+    // FECHAS (string o NULL)
+    bindDateOrNull($stmt, ':data_alliberament', $data_alliberamentFormat);
+    bindDateOrNull($stmt, ':situacioFranca_sortida', $situacioFranca_sortidaFormat);
+    bindDateOrNull($stmt, ':presoClasificacioData1', $presoClasificacioData1Format);
+    bindDateOrNull($stmt, ':presoClasificacioData2', $presoClasificacioData2Format);
+    bindDateOrNull($stmt, ':deportacio_data_entrada', $deportacio_data_entradaFormat);
+    bindDateOrNull($stmt, ':deportacio_data_entrada_subcamp', $deportacio_data_entrada_subcampFormat);
+
     $stmt->execute();
 
-    // Recuperar el ID del registro creado
-    $id = $conn->lastInsertId();
-
-    // Si la inserció té èxit, cal registrar la inserció en la base de control de canvis
-    $detalls = "Creació fitxa grup repressió deportats";
-    $tipusOperacio = "INSERT";
+    $idInsert = $conn->lastInsertId();
 
     Audit::registrarCanvi(
         $conn,
-        $userId,                      // ID del usuario que hace el cambio
-        $tipusOperacio,             // Tipus operacio
-        $detalls,                       // Descripción de la operación
-        Tables::DB_DEPORTATS,  // Nombre de la tabla afectada
-        $id                           // ID del registro modificada
+        $userId,
+        "INSERT",
+        "Creació fitxa grup repressió deportats",
+        Tables::DB_DEPORTATS,
+        $idInsert
     );
 
-    // Respuesta de éxito
-    echo json_encode(["status" => "success", "message" => "Les dades s'han actualitzat correctament a la base de dades."]);
+    echo json_encode(["status" => "success", "message" => "Les dades s'han creat correctament a la base de dades.", "id" => $idInsert]);
 } catch (PDOException $e) {
-    // En caso de error en la conexión o ejecución de la consulta
-    http_response_code(500); // Internal Server Error
-    echo json_encode(["status" => "error", "message" => "S'ha produit un error a la base de dades: " . $e->getMessage()]);
+    http_response_code(500);
+    echo json_encode(["status" => "error", "message" => "S'ha produït un error a la base de dades: " . $e->getMessage()]);
 }

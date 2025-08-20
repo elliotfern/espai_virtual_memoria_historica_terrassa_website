@@ -157,6 +157,11 @@
                     <input type="text" class="form-control" id="deportacio_nom_matricula_subcamp" name="deportacio_nom_matricula_subcamp" value="">
                 </div>
 
+                <div class="col-md-12 mb-4">
+                    <label for="deportacio_observacions" class="form-label negreta">Altra informació rellevant deportació:</label>
+                    <textarea class="form-control" id="deportacio_observacions" name="deportacio_observacions" rows="3"></textarea>
+                </div>
+
                 <div class="row espai-superior" style="border-top: 1px solid black;padding-top:25px">
                     <div class="col"></div>
                     <div class="col d-flex justify-content-end align-items-center">

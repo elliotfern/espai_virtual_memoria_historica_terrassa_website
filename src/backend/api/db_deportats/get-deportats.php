@@ -46,7 +46,7 @@ if ($slug === "llistatComplet") {
     $result = getData2($query);
     echo json_encode($result);
 
-    // 2) Pagina informacio fitxa deportat
+    // 2) Pagina informacio fitxa deportat - web publica
     // ruta GET => "/api/deportats/get/fitxaId?id=${id}
 } else if ($slug === "fitxaId") {
     $db = new Database();
@@ -58,24 +58,25 @@ if ($slug === "llistatComplet") {
                 d.data_alliberament,
                 sd.situacio_ca AS situacio,
                 sd.id AS situacioId,
-                m1.ciutat AS ciutat_mort_alliberament,
+                COALESCE(m1.ciutat_ca, m1.ciutat) AS ciutat_mort_alliberament,
+                e1.estat_ca AS estat_mort_allibertament,
 
                 d.situacioFranca AS situacioFranca_id,
                 tp1.tipus_preso_ca AS tipusPresoFranca,
                 p1.nom AS situacioFrancaNom,
-                m3.ciutat AS ciutat_situacioFranca_preso,
+                COALESCE(m3.ciutat_ca, m3.ciutat) AS ciutat_situacioFranca_preso,
                 d.situacioFranca_sortida,
                 d.situacioFranca_num_matricula,
                 d.situacioFrancaObservacions,
 
                 tp2.tipus_preso_ca AS tipusPreso1,
                 p2.nom AS nomPreso1,
-                m4.ciutat AS ciutatPreso1,
+                COALESCE(m4.ciutat_ca, m4.ciutat) AS ciutatPreso1,
                 d.presoClasificacioData1,
 
                 tp3.tipus_preso_ca AS tipusPreso2,
                 p3.nom AS nomPreso2,
-                m5.ciutat AS ciutatPreso2,
+                COALESCE(m5.ciutat_ca, m5.ciutat) AS ciutatPreso2,
                 d.presoClasificacioData2,
 
                 pce1.tipus_preso_ca AS tipusCamp1,
@@ -88,10 +89,13 @@ if ($slug === "llistatComplet") {
                 c2.nom AS nomCamp2,
                 mc2.ciutat AS ciutatCamp2,
                 d.deportacio_data_entrada_subcamp,
-                d.deportacio_nom_matricula_subcamp
+                d.deportacio_nom_matricula_subcamp,
+                d.deportacio_observacions
             FROM db_deportats AS d
             LEFT JOIN aux_situacions_deportats AS sd ON d.situacio = sd.id
             LEFT JOIN aux_dades_municipis AS m1 ON d.lloc_mort_alliberament = m1.id
+            LEFT JOIN aux_dades_municipis_estat AS e1 ON m1.estat = e1.id
+
             LEFT JOIN aux_deportacio_preso AS p1 ON d.situacioFranca = p1.id
             LEFT JOIN aux_tipus_presons AS tp1 ON p1.tipus = tp1.id
             LEFT JOIN aux_dades_municipis AS m3 ON p1.municipi = m3.id
@@ -163,7 +167,8 @@ if ($slug === "llistatComplet") {
             d.deportacio_num_matricula,
             d.deportacio_subcamp,
             d.deportacio_data_entrada_subcamp,
-            d.deportacio_nom_matricula_subcamp
+            d.deportacio_nom_matricula_subcamp,
+            d.deportacio_observacions
             FROM db_deportats AS d
             WHERE d.idPersona = :idPersona";
 

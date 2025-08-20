@@ -233,6 +233,30 @@ export interface FitxaJudicial {
 
   reaparegut: number;
   aparegut_observacions: string;
+  estat_mort_allibertament: string;
+  tipusPresoFranca: string;
+  situacioFrancaNom: string;
+  ciutat_situacioFranca_preso: string;
+  situacioFranca_num_matricula: string;
+  situacioFrancaObservacions: string;
+  situacioFranca_sortida: string;
+  tipusPreso1: string;
+  nomPreso1: string;
+  ciutatPreso1: string;
+  presoClasificacioData1: string;
+
+  tipusPreso2: string;
+  nomPreso2: string;
+  ciutatPreso2: string;
+  presoClasificacioData2: string;
+  deportacio_observacions: string;
+
+  tipusCamp1: string;
+  nomCamp1: string;
+  ciutatCamp1: string;
+  tipusCamp2: string;
+  nomCamp2: string;
+  ciutatCamp2: string;
 }
 
 // Interfaces para los datos
