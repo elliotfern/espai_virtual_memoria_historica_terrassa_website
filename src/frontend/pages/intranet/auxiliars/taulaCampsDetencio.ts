@@ -38,7 +38,7 @@ export async function taulaCampsDetencio() {
     columns.push({
       header: 'Accions',
       field: 'id',
-      render: (_: unknown, row: EspaiRow) => `<a id="${row.id}" title="Modifica" href="https://${window.location.hostname}/gestio/auxiliars/modifica-preso/${row.id}"><button type="button" class="btn btn-warning btn-sm">Modifica</button></a>`,
+      render: (_: unknown, row: EspaiRow) => `<a id="${row.id}" title="Modifica" href="https://${window.location.hostname}/gestio/auxiliars/modifica-camp-detencio/${row.id}"><button type="button" class="btn btn-warning btn-sm">Modifica</button></a>`,
     });
   }
 
