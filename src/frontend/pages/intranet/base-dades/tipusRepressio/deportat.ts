@@ -23,6 +23,11 @@ interface Fitxa {
   deportacio_nom_subcamp: string;
   deportacio_data_entrada_subcamp: string;
   deportacio_nom_matricula_subcamp: string;
+  situacioFranca: number;
+  presoClasificacio1: number;
+  presoClasificacio2: number;
+  deportacio_camp: number;
+  deportacio_subcamp: number;
 }
 
 export async function deportat(idRepresaliat: number) {
@@ -46,25 +51,55 @@ export async function deportat(idRepresaliat: number) {
   }
 
   if (!data || data.status === 'error') {
+    const btn = document.getElementById('refreshButton');
     const btn1 = document.getElementById('refreshButton1');
     const btn2 = document.getElementById('refreshButton2');
+    const btn3 = document.getElementById('refreshButton3');
+    const btn4 = document.getElementById('refreshButton4');
+    const btn5 = document.getElementById('refreshButton5');
 
-    if (btn1 && btn2) {
+    if (btn && btn1 && btn2 && btn3 && btn4 && btn5) {
+      btn.addEventListener('click', function (event) {
+        event.preventDefault();
+        auxiliarSelect(data?.lloc_mort_alliberament, 'municipis', 'lloc_mort_alliberament', 'ciutat');
+      });
+
       btn1.addEventListener('click', function (event) {
         event.preventDefault();
-        auxiliarSelect(data?.preso_localitat, 'municipis', 'preso_localitat', 'ciutat');
+        auxiliarSelect(data?.situacioFranca, 'deportacioPreso', 'situacioFranca', 'nom_camp');
       });
 
       btn2.addEventListener('click', function (event) {
         event.preventDefault();
-        auxiliarSelect(data?.lloc_mort_alliberament, 'municipis', 'lloc_mort_alliberament', 'ciutat');
+        auxiliarSelect(data?.presoClasificacio1, 'deportacioPreso', 'presoClasificacio1', 'nom_camp');
+      });
+
+      btn3.addEventListener('click', function (event) {
+        event.preventDefault();
+        auxiliarSelect(data?.presoClasificacio2, 'deportacioPreso', 'presoClasificacio2', 'nom_camp');
+      });
+
+      btn4.addEventListener('click', function (event) {
+        event.preventDefault();
+        auxiliarSelect(data?.deportacio_camp, 'campsConcentracio', 'deportacio_camp', 'nom_camp');
+      });
+
+      btn5.addEventListener('click', function (event) {
+        event.preventDefault();
+        auxiliarSelect(data?.deportacio_subcamp, 'campsConcentracio', 'deportacio_subcamp', 'nom_camp');
       });
     }
 
     auxiliarSelect(data?.situacio, 'situacions_deportats', 'situacio', 'situacio_ca');
     auxiliarSelect(data?.lloc_mort_alliberament, 'municipis', 'lloc_mort_alliberament', 'ciutat');
-    auxiliarSelect(data?.preso_tipus, 'tipus_presons', 'preso_tipus', 'tipus_preso_ca');
-    auxiliarSelect(data?.preso_localitat, 'municipis', 'preso_localitat', 'ciutat');
+
+    auxiliarSelect(data?.situacioFranca, 'deportacioPreso', 'situacioFranca', 'nom_camp');
+
+    auxiliarSelect(data?.presoClasificacio1, 'deportacioPreso', 'presoClasificacio1', 'nom_camp');
+    auxiliarSelect(data?.presoClasificacio2, 'deportacioPreso', 'presoClasificacio2', 'nom_camp');
+
+    auxiliarSelect(data?.deportacio_camp, 'campsConcentracio', 'deportacio_camp', 'nom_camp');
+    auxiliarSelect(data?.deportacio_subcamp, 'campsConcentracio', 'deportacio_subcamp', 'nom_camp');
 
     const deportatForm = document.getElementById('deportatForm');
     if (deportatForm) {
@@ -90,8 +125,14 @@ export async function deportat(idRepresaliat: number) {
 
     auxiliarSelect(data.situacio, 'situacions_deportats', 'situacio', 'situacio_ca');
     auxiliarSelect(data.lloc_mort_alliberament, 'municipis', 'lloc_mort_alliberament', 'ciutat');
-    auxiliarSelect(data.preso_tipus, 'tipus_presons', 'preso_tipus', 'tipus_preso_ca');
-    auxiliarSelect(data.preso_localitat, 'municipis', 'preso_localitat', 'ciutat');
+
+    auxiliarSelect(data.situacioFranca, 'deportacioPreso', 'situacioFranca', 'nom_camp');
+
+    auxiliarSelect(data.presoClasificacio1, 'deportacioPreso', 'presoClasificacio1', 'nom_camp');
+    auxiliarSelect(data.presoClasificacio2, 'deportacioPreso', 'presoClasificacio2', 'nom_camp');
+
+    auxiliarSelect(data.deportacio_camp, 'campsConcentracio', 'deportacio_camp', 'nom_camp');
+    auxiliarSelect(data.deportacio_subcamp, 'campsConcentracio', 'deportacio_subcamp', 'nom_camp');
 
     renderFormInputs(data);
 

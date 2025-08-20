@@ -16,7 +16,7 @@
                 <input type="hidden" name="id" id="id" value="">
 
                 <div class="col-md-4 mb-4">
-                    <label for="situacio" class="form-label negreta">Situació del deportat:</label>
+                    <label for="situacio" class="form-label negreta">Situació final del deportat:</label>
                     <select class="form-select" name="situacio" id="situacio" value="">
                     </select>
                     <div class="avis-form">
@@ -40,52 +40,91 @@
                         * Camp obligatori
                     </div>
                     <div class="mt-2">
-                        <a href="https://memoriaterrassa.cat/gestio/auxiliars/nou-municipi" target="_blank" class="btn btn-secondary btn-sm" id="afegirMunicipi1">Afegir municipi</a>
-                        <button id="refreshButton1" class="btn btn-primary btn-sm">Actualitzar llistat Municipis</button>
+                        <a href="https://memoriaterrassa.cat/gestio/auxiliars/nou-municipi" target="_blank" class="btn btn-secondary btn-sm" id="afegirMunicipi">Afegir municipi</a>
+                        <button id="refreshButton" class="btn btn-primary btn-sm">Actualitzar llistat Municipis</button>
                     </div>
                 </div>
 
                 <hr style="margin-top:25px">
-                <h4>Empresonament:</h4>
+                <h4>Situació a França:</h4>
 
                 <div class="col-md-4 mb-4">
-                    <label for="preso_tipus" class="form-label negreta">Tipus de presó:</label>
-                    <select class="form-select" name="preso_tipus" id="preso_tipus" value="">
-                    </select>
-                </div>
-
-                <div class="col-md-4 mb-4">
-                    <label for="preso_nom" class="form-label negreta">Nom de la presó:</label>
-                    <input type="text" class="form-control" id="preso_nom" name="preso_nom" value="">
-                </div>
-
-                <div class="col-md-4 mb-4">
-                    <label for="preso_data_sortida" class="form-label negreta">Data de la sortida de la presó:</label>
-                    <input type="text" class="form-control" id="preso_data_sortida" name="preso_data_sortida" value="">
-                </div>
-
-                <div class="col-md-4 mb-4">
-                    <label for="preso_localitat" class="form-label negreta">Municipi de la presó:</label>
-                    <select class="form-select" name="preso_localitat" id="preso_localitat" value="">
+                    <label for="situacioFranca" class="form-label negreta">Presó/camp de detenció:</label>
+                    <select class="form-select" name="situacioFranca" id="situacioFranca" value="">
                     </select>
                     <div class="mt-2">
-                        <a href="https://memoriaterrassa.cat/gestio/auxiliars/nou-municipi" target="_blank" class="btn btn-secondary btn-sm" id="afegirMunicipi2">Afegir municipi</a>
-                        <button id="refreshButton2" class="btn btn-primary btn-sm">Actualitzar llistat Municipis</button>
+                        <a href="https://memoriaterrassa.cat/gestio/auxiliars/nou-camp-franca" target="_blank" class="btn btn-secondary btn-sm" id="afegirCamp1">Afegir presó/camp</a>
+                        <button id="refreshButton1" class="btn btn-primary btn-sm">Actualitzar llistat</button>
                     </div>
                 </div>
 
                 <div class="col-md-4 mb-4">
-                    <label for="preso_num_matricula" class="form-label negreta">Número de matrícula presó:</label>
-                    <input type="text" class="form-control" id="preso_num_matricula" name="preso_num_matricula" value="">
+                    <label for="situacioFranca_sortida" class="form-label negreta">Data de la sortida de la presó:</label>
+                    <input type="text" class="form-control" id="situacioFranca_sortida" name="situacioFranca_sortida" value="">
+                    <div class="avis-form">
+                        * Format data: dia/mes/any
+                    </div>
                 </div>
-
-                <hr style="margin-top:25px">
-                <h4>Deportació:</h4>
 
                 <div class="col-md-4 mb-4">
-                    <label for="deportacio_nom_camp" class="form-label negreta">Nom cap de deportació</label>
-                    <input type="text" class="form-control" id="deportacio_nom_camp" name="deportacio_nom_camp" value="">
+                    <label for="situacioFranca_num_matricula" class="form-label negreta">Número de matrícula presó (si el sabem):</label>
+                    <input type="text" class="form-control" id="situacioFranca_num_matricula" name="situacioFranca_num_matricula" value="">
                 </div>
+
+                <div class="col-md-12 mb-4">
+                    <label for="situacioFrancaObservacions" class="form-label negreta">Descripció situació a França:</label>
+                    <textarea class="form-control" id="situacioFrancaObservacions" name="situacioFrancaObservacions" rows="3"></textarea>
+                </div>
+
+
+                <hr style="margin-top:25px">
+                <h4>Camp de classificació/detenció previ a la deportació al camp de concentració:</h4>
+
+                <div class="col-md-6 mb-4">
+                    <label for="presoClasificacio1" class="form-label negreta">Primera Presó/camp de detenció:</label>
+                    <select class="form-select" name="presoClasificacio1" id="presoClasificacio1" value="">
+                    </select>
+                    <div class="mt-2">
+                        <a href="https://memoriaterrassa.cat/gestio/auxiliars/nou-camp-franca" target="_blank" class="btn btn-secondary btn-sm" id="afegirCamp2">Afegir presó/camp</a>
+                        <button id="refreshButton2" class="btn btn-primary btn-sm">Actualitzar llistat</button>
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-4">
+                    <label for="presoClasificacioData1" class="form-label negreta">Data de la sortida de la presó:</label>
+                    <input type="text" class="form-control" id="presoClasificacioData1" name="presoClasificacioData1" value="">
+                </div>
+
+
+                <div class="col-md-6 mb-4">
+                    <label for="presoClasificacio2" class="form-label negreta">Segona Presó/camp de detenció:</label>
+                    <select class="form-select" name="presoClasificacio2" id="presoClasificacio2" value="">
+                    </select>
+                    <div class="mt-2">
+                        <a href="https://memoriaterrassa.cat/gestio/auxiliars/nou-camp-franca" target="_blank" class="btn btn-secondary btn-sm" id="afegirCamp3">Afegir presó/camp</a>
+                        <button id="refreshButton3" class="btn btn-primary btn-sm">Actualitzar llistat</button>
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-4">
+                    <label for="presoClasificacioData2" class="form-label negreta">Data de la sortida de la presó:</label>
+                    <input type="text" class="form-control" id="presoClasificacioData2" name="presoClasificacioData2" value="">
+                </div>
+
+
+                <hr style="margin-top:25px">
+                <h4>Deportació. Dades sobre el camp de concentració/extermini:</h4>
+
+                <div class="col-md-4 mb-4">
+                    <label for="deportacio_camp" class="form-label negreta">Camp de concentració/extermini de deportació:</label>
+                    <select class="form-select" name="deportacio_camp" id="deportacio_camp" value="">
+                    </select>
+                    <div class="mt-2">
+                        <a href="https://memoriaterrassa.cat/gestio/auxiliars/nou-camp-concentracio" target="_blank" class="btn btn-secondary btn-sm" id="afegirCamp4">Afegir camp</a>
+                        <button id="refreshButton4" class="btn btn-primary btn-sm">Actualitzar llistat</button>
+                    </div>
+                </div>
+
 
                 <div class="col-md-4 mb-4">
                     <label for="deportacio_data_entrada" class="form-label negreta">Data d'entrada</label>
@@ -99,8 +138,13 @@
                 </div>
 
                 <div class="col-md-4 mb-4">
-                    <label for="deportacio_nom_subcamp" class="form-label negreta">Nom del subcamp</label>
-                    <input type="text" class="form-control" id="deportacio_nom_subcamp" name="deportacio_nom_subcamp" value="">
+                    <label for="deportacio_subcamp" class="form-label negreta">SubCamp de concentració:</label>
+                    <select class="form-select" name="deportacio_subcamp" id="deportacio_subcamp" value="">
+                    </select>
+                    <div class="mt-2">
+                        <a href="https://memoriaterrassa.cat/gestio/auxiliars/nou-camp-concentracio" target="_blank" class="btn btn-secondary btn-sm" id="afegirCamp5">Afegir camp</a>
+                        <button id="refreshButton5" class="btn btn-primary btn-sm">Actualitzar llistat</button>
+                    </div>
                 </div>
 
                 <div class="col-md-4 mb-4">

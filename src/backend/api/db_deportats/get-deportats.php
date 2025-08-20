@@ -56,25 +56,61 @@ if ($slug === "llistatComplet") {
              	d.id,
                 d.idPersona,
                 d.data_alliberament,
-                d.preso_nom,
-                d.preso_data_sortida,
-                d.preso_num_matricula,
-                d.deportacio_nom_camp,
-                d.deportacio_data_entrada,
-                d.deportacio_num_matricula,
-                d.deportacio_nom_subcamp,
-                d.deportacio_data_entrada_subcamp,
-                d.deportacio_nom_matricula_subcamp,
                 sd.situacio_ca AS situacio,
                 sd.id AS situacioId,
                 m1.ciutat AS ciutat_mort_alliberament,
-                m2.ciutat AS preso_localitat,
-                tp.tipus_preso_ca AS preso_tipus
+
+                d.situacioFranca AS situacioFranca_id,
+                tp1.tipus_preso_ca AS tipusPresoFranca,
+                p1.nom AS situacioFrancaNom,
+                m3.ciutat AS ciutat_situacioFranca_preso,
+                d.situacioFranca_sortida,
+                d.situacioFranca_num_matricula,
+                d.situacioFrancaObservacions,
+
+                tp2.tipus_preso_ca AS tipusPreso1,
+                p2.nom AS nomPreso1,
+                m4.ciutat AS ciutatPreso1,
+                d.presoClasificacioData1,
+
+                tp3.tipus_preso_ca AS tipusPreso2,
+                p3.nom AS nomPreso2,
+                m5.ciutat AS ciutatPreso2,
+                d.presoClasificacioData2,
+
+                pce1.tipus_preso_ca AS tipusCamp1,
+                c1.nom AS nomCamp1,
+                mc1.ciutat AS ciutatCamp1,
+                d.deportacio_data_entrada,
+                d.deportacio_num_matricula,
+
+                pce2.tipus_preso_ca AS tipusCamp2,
+                c2.nom AS nomCamp2,
+                mc2.ciutat AS ciutatCamp2,
+                d.deportacio_data_entrada_subcamp,
+                d.deportacio_nom_matricula_subcamp
             FROM db_deportats AS d
             LEFT JOIN aux_situacions_deportats AS sd ON d.situacio = sd.id
             LEFT JOIN aux_dades_municipis AS m1 ON d.lloc_mort_alliberament = m1.id
-            LEFT JOIN aux_dades_municipis AS m2 ON d.preso_localitat = m2.id
-            LEFT JOIN aux_tipus_presons AS tp ON d.preso_tipus = tp.id
+            LEFT JOIN aux_deportacio_preso AS p1 ON d.situacioFranca = p1.id
+            LEFT JOIN aux_tipus_presons AS tp1 ON p1.tipus = tp1.id
+            LEFT JOIN aux_dades_municipis AS m3 ON p1.municipi = m3.id
+
+            LEFT JOIN aux_deportacio_preso AS p2 ON p2.id = d.presoClasificacio1
+            LEFT JOIN aux_tipus_presons AS tp2 ON p2.tipus = tp2.id
+            LEFT JOIN aux_dades_municipis AS m4 ON p2.municipi = m4.id
+
+            LEFT JOIN aux_deportacio_preso AS p3 ON p3.id = d.presoClasificacio2
+            LEFT JOIN aux_tipus_presons AS tp3 ON p3.tipus = tp3.id
+            LEFT JOIN aux_dades_municipis AS m5 ON p3.municipi = m5.id
+
+            LEFT JOIN aux_camps_concentracio AS c1 ON d.deportacio_camp = c1.id
+            LEFT JOIN aux_tipus_presons AS pce1 ON c1.tipus = pce1.id
+            LEFT JOIN aux_dades_municipis AS mc1 ON c1.municipi = mc1.id
+
+            LEFT JOIN aux_camps_concentracio AS c2 ON d.deportacio_camp = c2.id
+            LEFT JOIN aux_tipus_presons AS pce2 ON c2.tipus = pce2.id
+            LEFT JOIN aux_dades_municipis AS mc2 ON c2.municipi = mc2.id
             WHERE d.idPersona = :idPersona";
 
     try {
@@ -109,24 +145,27 @@ if ($slug === "llistatComplet") {
     $id = $_GET['id'] ?? null;
 
     $query = "SELECT 
-            id,
-            idPersona,
-            situacio,
-            data_alliberament,
-            lloc_mort_alliberament,
-            preso_tipus,
-            preso_nom,
-            preso_data_sortida,
-            preso_localitat,
-            preso_num_matricula,
-            deportacio_nom_camp,
-            deportacio_data_entrada,
-            deportacio_num_matricula,
-            deportacio_nom_subcamp,
-            deportacio_data_entrada_subcamp,
-            deportacio_nom_matricula_subcamp
-            FROM db_deportats
-            WHERE idPersona = :idPersona";
+            d.id,
+            d.idPersona,
+            d.situacio,
+            d.data_alliberament,
+            d.lloc_mort_alliberament,
+            d.situacioFranca,
+            d.situacioFranca_sortida,
+            d.situacioFranca_num_matricula,
+            d.situacioFrancaObservacions,
+            d.presoClasificacio1,
+            d.presoClasificacioData1,
+            d.presoClasificacio2,
+            d.presoClasificacioData2,
+            d.deportacio_camp,
+            d.deportacio_data_entrada,
+            d.deportacio_num_matricula,
+            d.deportacio_subcamp,
+            d.deportacio_data_entrada_subcamp,
+            d.deportacio_nom_matricula_subcamp
+            FROM db_deportats AS d
+            WHERE d.idPersona = :idPersona";
 
     $result = getData2($query, ['idPersona' => $id], true);
     echo json_encode($result);

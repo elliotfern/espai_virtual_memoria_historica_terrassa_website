@@ -1497,6 +1497,76 @@ if ($slug === "municipis") {
             500
         );
     }
+
+    // GET : Camps de preso frança
+    // URL: /api/auxiliars/get/deportacioPreso
+} elseif ($slug === "deportacioPreso") {
+
+    $db = new Database();
+    $query = "SELECT p.id, CONCAT(p.nom, ' - ', m.ciutat) AS nom_camp
+              LEFT JOIN aux_dades_municipis as m ON p.municipi = m.id
+              FROM aux_deportacio_preso AS p
+              ORDER BY nom ASC";
+    try {
+
+        $result = $db->getData($query);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
+    // GET : Camps de concentracio/extermini
+    // URL: /api/auxiliars/get/campsConcentracio
+} elseif ($slug === "campsConcentracio") {
+
+    $db = new Database();
+    $query = "SELECT p.id, CONCAT(p.nom, ' - ', m.ciutat) AS nom_camp
+              LEFT JOIN aux_dades_municipis as m ON p.municipi = m.id
+              FROM aux_camps_concentracio AS p
+              ORDER BY nom ASC";
+    try {
+
+        $result = $db->getData($query);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
 } else {
     // Si el parámetro 'type' no coincide con ninguno de los casos anteriores, mostramos un error
     echo json_encode(["error" => "Tipo no válido"]);
