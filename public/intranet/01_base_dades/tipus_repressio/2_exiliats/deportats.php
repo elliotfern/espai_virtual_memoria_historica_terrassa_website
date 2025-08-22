@@ -49,7 +49,7 @@
                 <h4>Situació a França:</h4>
 
                 <div class="col-md-4 mb-4">
-                    <label for="situacioFranca" class="form-label negreta">Presó/camp de detenció:</label>
+                    <label for="situacioFranca" class="form-label negreta">Presó/camp de detenció/Altres:</label>
                     <select class="form-select" name="situacioFranca" id="situacioFranca" value="">
                     </select>
                     <div class="mt-2">
@@ -59,7 +59,7 @@
                 </div>
 
                 <div class="col-md-4 mb-4">
-                    <label for="situacioFranca_sortida" class="form-label negreta">Data de la sortida de la presó:</label>
+                    <label for="situacioFranca_sortida" class="form-label negreta">Data de la sortida de la presó/camp/altres:</label>
                     <input type="text" class="form-control" id="situacioFranca_sortida" name="situacioFranca_sortida" value="">
                     <div class="avis-form">
                         * Format data: dia/mes/any
@@ -78,9 +78,9 @@
 
 
                 <hr style="margin-top:25px">
-                <h4>Camp de classificació/detenció previ a la deportació al camp de concentració:</h4>
+                <h4>Camp de classificació/detenció/altres previ a la deportació al camp de concentració:</h4>
 
-                <div class="col-md-6 mb-4">
+                <div class="col-md-3 mb-4">
                     <label for="presoClasificacio1" class="form-label negreta">Primera Presó/camp de detenció:</label>
                     <select class="form-select" name="presoClasificacio1" id="presoClasificacio1" value="">
                     </select>
@@ -90,13 +90,23 @@
                     </div>
                 </div>
 
-                <div class="col-md-6 mb-4">
-                    <label for="presoClasificacioData1" class="form-label negreta">Data de la sortida de la presó:</label>
+                <div class="col-md-3 mb-4">
+                    <label for="presoClasificacioDataEntrada1" class="form-label negreta">Data entrada presó:</label>
+                    <input type="text" class="form-control" id="presoClasificacioDataEntrada1" name="presoClasificacioDataEntrada1" value="">
+                </div>
+
+                <div class="col-md-3 mb-4">
+                    <label for="presoClasificacioData1" class="form-label negreta">Data sortida presó:</label>
                     <input type="text" class="form-control" id="presoClasificacioData1" name="presoClasificacioData1" value="">
                 </div>
 
+                <div class="col-md-3 mb-4">
+                    <label for="presoClasificacioMatr1" class="form-label negreta">Núm. matrícula:</label>
+                    <input type="text" class="form-control" id="presoClasificacioMatr1" name="presoClasificacioMatr1" value="">
+                </div>
 
-                <div class="col-md-6 mb-4">
+
+                <div class="col-md-3 mb-4">
                     <label for="presoClasificacio2" class="form-label negreta">Segona Presó/camp de detenció:</label>
                     <select class="form-select" name="presoClasificacio2" id="presoClasificacio2" value="">
                     </select>
@@ -106,9 +116,20 @@
                     </div>
                 </div>
 
-                <div class="col-md-6 mb-4">
-                    <label for="presoClasificacioData2" class="form-label negreta">Data de la sortida de la presó:</label>
+
+                <div class="col-md-3 mb-4">
+                    <label for="presoClasificacioDataEntrada2" class="form-label negreta">Data entrada presó:</label>
+                    <input type="text" class="form-control" id="presoClasificacioDataEntrada2" name="presoClasificacioDataEntrada2" value="">
+                </div>
+
+                <div class="col-md-3 mb-4">
+                    <label for="presoClasificacioData2" class="form-label negreta">Data sortida presó:</label>
                     <input type="text" class="form-control" id="presoClasificacioData2" name="presoClasificacioData2" value="">
+                </div>
+
+                <div class="col-md-3 mb-4">
+                    <label for="presoClasificacioMatr2" class="form-label negreta">Núm. matrícula:</label>
+                    <input type="text" class="form-control" id="presoClasificacioMatr2" name="presoClasificacioMatr2" value="">
                 </div>
 
 

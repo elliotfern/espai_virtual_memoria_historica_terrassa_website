@@ -129,6 +129,22 @@ if ($presoClasificacioData2Raw !== '') {
     $presoClasificacioData2Format = null;
 }
 
+$presoClasificacioDataEntrada2Raw = $data['presoClasificacioDataEntrada2'] ?? '';
+if ($presoClasificacioDataEntrada2Raw !== '') {
+    $presoClasificacioDataEntrada2Format = convertirDataFormatMysql($presoClasificacioDataEntrada2Raw, 3);
+    if (!$presoClasificacioDataEntrada2Format) $errors[] = "Data entrada presó (2): format no vàlid. Esperat: DD/MM/YYYY";
+} else {
+    $presoClasificacioDataEntrada2Format = null;
+}
+
+$presoClasificacioDataEntrada1Raw = $data['presoClasificacioDataEntrada1'] ?? '';
+if ($presoClasificacioDataEntrada1Raw !== '') {
+    $presoClasificacioDataEntrada1Format = convertirDataFormatMysql($presoClasificacioDataEntrada1Raw, 3);
+    if (!$presoClasificacioDataEntrada1Format) $errors[] = "Data entrada presó (1): format no vàlid. Esperat: DD/MM/YYYY";
+} else {
+    $presoClasificacioDataEntrada1Format = null;
+}
+
 // Si hay errores
 if (!empty($errors)) {
     http_response_code(400);
@@ -152,6 +168,9 @@ $deportacio_subcamp = $data['deportacio_subcamp'] ?? null;
 $deportacio_num_matricula = $data['deportacio_num_matricula'] ?? null;
 $deportacio_nom_matricula_subcamp = $data['deportacio_nom_matricula_subcamp'] ?? null;
 $deportacio_observacions = $data['deportacio_observacions'] ?? null;
+$presoClasificacioMatr1 = $data['presoClasificacioMatr1'] ?? null;
+$presoClasificacioMatr2 = $data['presoClasificacioMatr2'] ?? null;
+
 
 try {
     /** @var PDO $conn */
@@ -174,7 +193,11 @@ try {
         deportacio_subcamp = :deportacio_subcamp,
         deportacio_data_entrada_subcamp = :deportacio_data_entrada_subcamp,
         deportacio_nom_matricula_subcamp = :deportacio_nom_matricula_subcamp,
-        deportacio_observacions = :deportacio_observacions
+        deportacio_observacions = :deportacio_observacions,
+        presoClasificacioDataEntrada1 = :presoClasificacioDataEntrada1,
+        presoClasificacioDataEntrada2 = :presoClasificacioDataEntrada2,
+        presoClasificacioMatr1 = :presoClasificacioMatr1,
+        presoClasificacioMatr2 = :presoClasificacioMatr2
     WHERE id = :id";
 
     $stmt = $conn->prepare($sql);
@@ -198,6 +221,8 @@ try {
     $stmt->bindValue(':deportacio_num_matricula', $deportacio_num_matricula, $deportacio_num_matricula !== null ? PDO::PARAM_STR : PDO::PARAM_NULL);
     $stmt->bindValue(':deportacio_nom_matricula_subcamp', $deportacio_nom_matricula_subcamp, $deportacio_nom_matricula_subcamp !== null ? PDO::PARAM_STR : PDO::PARAM_NULL);
     $stmt->bindValue(':deportacio_observacions', $deportacio_observacions, $deportacio_observacions !== null ? PDO::PARAM_STR : PDO::PARAM_NULL);
+    $stmt->bindValue(':presoClasificacioMatr1', $presoClasificacioMatr1, $presoClasificacioMatr1 !== null ? PDO::PARAM_STR : PDO::PARAM_NULL);
+    $stmt->bindValue(':presoClasificacioMatr2', $presoClasificacioMatr2, $presoClasificacioMatr2 !== null ? PDO::PARAM_STR : PDO::PARAM_NULL);
 
     // FECHAS (string o NULL)
     bindDateOrNull($stmt, ':data_alliberament', $data_alliberamentFormat);
@@ -206,6 +231,8 @@ try {
     bindDateOrNull($stmt, ':presoClasificacioData2', $presoClasificacioData2Format);
     bindDateOrNull($stmt, ':deportacio_data_entrada', $deportacio_data_entradaFormat);
     bindDateOrNull($stmt, ':deportacio_data_entrada_subcamp', $deportacio_data_entrada_subcampFormat);
+    bindDateOrNull($stmt, ':presoClasificacioDataEntrada1', $presoClasificacioDataEntrada1Format);
+    bindDateOrNull($stmt, ':presoClasificacioDataEntrada2', $presoClasificacioDataEntrada2Format);
 
     $stmt->execute();
 

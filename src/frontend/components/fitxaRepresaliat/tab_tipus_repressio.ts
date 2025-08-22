@@ -72,6 +72,12 @@ export const fitxaTipusRepressio = async (categoriaNumerica: string, fitxa2: Fit
       const ciutatPreso1 = dada.ciutatPreso1 && dada.ciutatPreso1.trim() !== '' ? dada.ciutatPreso1 : 'Sense dades';
       const presoClasificacioData1 = dada.presoClasificacioData1 && dada.presoClasificacioData1.trim() !== '' ? formatDatesForm(dada.presoClasificacioData1) : 'Sense dades';
 
+      const presoClasificacioDataEntrada1 = dada.presoClasificacioDataEntrada1 && dada.presoClasificacioDataEntrada1.trim() !== '' ? formatDatesForm(dada.presoClasificacioDataEntrada1) : 'Sense dades';
+      const presoClasificacioMatr1 = dada.presoClasificacioMatr1 && dada.presoClasificacioMatr1.trim() !== '' ? dada.presoClasificacioMatr1 : 'Sense dades';
+
+      const presoClasificacioDataEntrada2 = dada.presoClasificacioDataEntrada2 && dada.presoClasificacioDataEntrada2.trim() !== '' ? formatDatesForm(dada.presoClasificacioDataEntrada2) : 'Sense dades';
+      const presoClasificacioMatr2 = dada.presoClasificacioMatr2 && dada.presoClasificacioMatr2.trim() !== '' ? dada.presoClasificacioMatr2 : 'Sense dades';
+
       const tipusPreso2 = dada.tipusPreso2 && dada.tipusPreso2.trim() !== '' ? dada.tipusPreso2 : 'Sense dades';
       const nomPreso2 = dada.nomPreso2 && dada.nomPreso2.trim() !== '' ? dada.nomPreso2 : 'Sense dades';
       const ciutatPreso2 = dada.ciutatPreso2 && dada.ciutatPreso2.trim() !== '' ? dada.ciutatPreso2 : 'Sense dades';
@@ -118,13 +124,17 @@ export const fitxaTipusRepressio = async (categoriaNumerica: string, fitxa2: Fit
                 <p><span class='marro2'>Tipus de Presó/camp de detenció: </span> <span class='blau1'>${tipusPreso1}</span></p>
                 <p><span class='marro2'>Nom de la Presó/camp de detenció: </span> <span class='blau1'>${nomPreso1}   </span></p>
                 <p><span class='marro2'>Municipi de la Presó/camp de detenció: </span> <span class='blau1'>${ciutatPreso1}   </span></p>
+                <p><span class='marro2'>Data d'entrada de la presó: </span> <span class='blau1'>${presoClasificacioDataEntrada1}   </span></p>
                 <p><span class='marro2'>Data de la sortida de la presó: </span> <span class='blau1'>${presoClasificacioData1}   </span></p>
+                 <p><span class='marro2'>Número de matrícula: </span> <span class='blau1'>${presoClasificacioMatr1} </span></p>
             <br>
             <h6><span class="blau1 negreta">Segona presó/camp de classificació</span></h6>
-                <p><span class='marro2'>Tipus de Presó/camp de detenció: </span> <span class='blau1'>${tipusPreso2}   </span></p>
-                <p><span class='marro2'>Nom de la Presó/camp de detenció: </span> <span class='blau1'>${nomPreso2}   </span></p>
-                <p><span class='marro2'>Municipi de la Presó/camp de detenció: </span> <span class='blau1'>${ciutatPreso2}   </span></p>
-                <p><span class='marro2'>Data de la sortida de la presó: </span> <span class='blau1'>${presoClasificacioData2}    </span></p>
+                <p><span class='marro2'>Tipus de Presó/camp de detenció: </span> <span class='blau1'>${tipusPreso2} </span></p>
+                <p><span class='marro2'>Nom de la Presó/camp de detenció: </span> <span class='blau1'>${nomPreso2} </span></p>
+                <p><span class='marro2'>Municipi de la Presó/camp de detenció: </span> <span class='blau1'>${ciutatPreso2} </span></p>
+                 <p><span class='marro2'>Data d'entrada de la presó: </span> <span class='blau1'>${presoClasificacioDataEntrada2} </span></p>
+                <p><span class='marro2'>Data de la sortida de la presó: </span> <span class='blau1'>${presoClasificacioData2} </span></p>
+                <p><span class='marro2'>Número de matrícula: </span> <span class='blau1'>${presoClasificacioMatr2} </span></p>
         </div>
 
       <div style="margin-top:25px">

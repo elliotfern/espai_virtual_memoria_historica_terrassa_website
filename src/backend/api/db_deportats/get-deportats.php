@@ -73,11 +73,15 @@ if ($slug === "llistatComplet") {
                 p2.nom AS nomPreso1,
                 COALESCE(m4.ciutat_ca, m4.ciutat) AS ciutatPreso1,
                 d.presoClasificacioData1,
+                d.presoClasificacioDataEntrada1,
+                d.presoClasificacioMatr1,
 
                 tp3.tipus_preso_ca AS tipusPreso2,
                 p3.nom AS nomPreso2,
                 COALESCE(m5.ciutat_ca, m5.ciutat) AS ciutatPreso2,
                 d.presoClasificacioData2,
+                d.presoClasificacioDataEntrada2,
+                d.presoClasificacioMatr2,
 
                 pce1.tipus_preso_ca AS tipusCamp1,
                 c1.nom AS nomCamp1,
@@ -112,7 +116,7 @@ if ($slug === "llistatComplet") {
             LEFT JOIN aux_tipus_presons AS pce1 ON c1.tipus = pce1.id
             LEFT JOIN aux_dades_municipis AS mc1 ON c1.municipi = mc1.id
 
-            LEFT JOIN aux_camps_concentracio AS c2 ON d.deportacio_camp = c2.id
+            LEFT JOIN aux_camps_concentracio AS c2 ON d.deportacio_subcamp = c2.id
             LEFT JOIN aux_tipus_presons AS pce2 ON c2.tipus = pce2.id
             LEFT JOIN aux_dades_municipis AS mc2 ON c2.municipi = mc2.id
             WHERE d.idPersona = :idPersona";
@@ -160,8 +164,12 @@ if ($slug === "llistatComplet") {
             d.situacioFrancaObservacions,
             d.presoClasificacio1,
             d.presoClasificacioData1,
+            d.presoClasificacioDataEntrada1,
+            d.presoClasificacioMatr1,
             d.presoClasificacio2,
             d.presoClasificacioData2,
+            d.presoClasificacioDataEntrada2,
+            d.presoClasificacioMatr2,
             d.deportacio_camp,
             d.deportacio_data_entrada,
             d.deportacio_num_matricula,

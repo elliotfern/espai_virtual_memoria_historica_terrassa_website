@@ -257,6 +257,10 @@ export interface FitxaJudicial {
   tipusCamp2: string;
   nomCamp2: string;
   ciutatCamp2: string;
+  presoClasificacioDataEntrada1: string;
+  presoClasificacioDataEntrada2: string;
+  presoClasificacioMatr1: string;
+  presoClasificacioMatr2: string;
 }
 
 // Interfaces para los datos
