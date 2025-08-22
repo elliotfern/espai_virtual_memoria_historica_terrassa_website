@@ -75,6 +75,7 @@ if ($slug === "llistatComplet") {
                 d.presoClasificacioData1,
                 d.presoClasificacioDataEntrada1,
                 d.presoClasificacioMatr1,
+                e2.estat_ca AS estat_preso1,
 
                 tp3.tipus_preso_ca AS tipusPreso2,
                 p3.nom AS nomPreso2,
@@ -82,6 +83,7 @@ if ($slug === "llistatComplet") {
                 d.presoClasificacioData2,
                 d.presoClasificacioDataEntrada2,
                 d.presoClasificacioMatr2,
+                e3.estat_ca AS estat_preso2,
 
                 pce1.tipus_preso_ca AS tipusCamp1,
                 c1.nom AS nomCamp1,
@@ -107,10 +109,12 @@ if ($slug === "llistatComplet") {
             LEFT JOIN aux_deportacio_preso AS p2 ON p2.id = d.presoClasificacio1
             LEFT JOIN aux_tipus_presons AS tp2 ON p2.tipus = tp2.id
             LEFT JOIN aux_dades_municipis AS m4 ON p2.municipi = m4.id
+            LEFT JOIN aux_dades_municipis_estat AS e2 ON m4.estat = e2.id
 
             LEFT JOIN aux_deportacio_preso AS p3 ON p3.id = d.presoClasificacio2
             LEFT JOIN aux_tipus_presons AS tp3 ON p3.tipus = tp3.id
             LEFT JOIN aux_dades_municipis AS m5 ON p3.municipi = m5.id
+            LEFT JOIN aux_dades_municipis_estat AS e3 ON m5.estat = e3.id
 
             LEFT JOIN aux_camps_concentracio AS c1 ON d.deportacio_camp = c1.id
             LEFT JOIN aux_tipus_presons AS pce1 ON c1.tipus = pce1.id

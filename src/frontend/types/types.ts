@@ -261,6 +261,8 @@ export interface FitxaJudicial {
   presoClasificacioDataEntrada2: string;
   presoClasificacioMatr1: string;
   presoClasificacioMatr2: string;
+  estat_preso1: string;
+  estat_preso2: string;
 }
 
 // Interfaces para los datos

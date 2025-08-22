@@ -98,6 +98,9 @@ export const fitxaTipusRepressio = async (categoriaNumerica: string, fitxa2: Fit
       const dataEntradaSubCamp = dada.deportacio_data_entrada_subcamp && dada.deportacio_data_entrada_subcamp.trim() !== '' ? formatDatesForm(dada.deportacio_data_entrada_subcamp) : 'Desconegut';
       const numeroMatriculaSubCamp = dada.deportacio_nom_matricula_subcamp && dada.deportacio_nom_matricula_subcamp.trim() !== '' ? dada.deportacio_nom_matricula_subcamp : 'Desconegut';
 
+      const estat_preso1 = dada.estat_preso1 && dada.estat_preso1.trim() !== '' ? dada.estat_preso1 : '';
+      const estat_preso2 = dada.estat_preso2 && dada.estat_preso2.trim() !== '' ? dada.estat_preso2 : '';
+
       htmlContent += `
     <div class="negreta raleway">
       <div style="margin-top:25px">
@@ -123,7 +126,7 @@ export const fitxaTipusRepressio = async (categoriaNumerica: string, fitxa2: Fit
             <h6><span class="blau1 negreta">Primera presó/camp de classificació</span></h6>
                 <p><span class='marro2'>Tipus de Presó/camp de detenció: </span> <span class='blau1'>${tipusPreso1}</span></p>
                 <p><span class='marro2'>Nom de la Presó/camp de detenció: </span> <span class='blau1'>${nomPreso1}   </span></p>
-                <p><span class='marro2'>Municipi de la Presó/camp de detenció: </span> <span class='blau1'>${ciutatPreso1}   </span></p>
+                <p><span class='marro2'>Municipi de la Presó/camp de detenció: </span> <span class='blau1'>${ciutatPreso1}  - ${estat_preso1}</span></p>
                 <p><span class='marro2'>Data d'entrada de la presó: </span> <span class='blau1'>${presoClasificacioDataEntrada1}   </span></p>
                 <p><span class='marro2'>Data de la sortida de la presó: </span> <span class='blau1'>${presoClasificacioData1}   </span></p>
                  <p><span class='marro2'>Número de matrícula: </span> <span class='blau1'>${presoClasificacioMatr1} </span></p>
@@ -131,7 +134,7 @@ export const fitxaTipusRepressio = async (categoriaNumerica: string, fitxa2: Fit
             <h6><span class="blau1 negreta">Segona presó/camp de classificació</span></h6>
                 <p><span class='marro2'>Tipus de Presó/camp de detenció: </span> <span class='blau1'>${tipusPreso2} </span></p>
                 <p><span class='marro2'>Nom de la Presó/camp de detenció: </span> <span class='blau1'>${nomPreso2} </span></p>
-                <p><span class='marro2'>Municipi de la Presó/camp de detenció: </span> <span class='blau1'>${ciutatPreso2} </span></p>
+                <p><span class='marro2'>Municipi de la Presó/camp de detenció: </span> <span class='blau1'>${ciutatPreso2} - ${estat_preso2}</span></p>
                  <p><span class='marro2'>Data d'entrada de la presó: </span> <span class='blau1'>${presoClasificacioDataEntrada2} </span></p>
                 <p><span class='marro2'>Data de la sortida de la presó: </span> <span class='blau1'>${presoClasificacioData2} </span></p>
                 <p><span class='marro2'>Número de matrícula: </span> <span class='blau1'>${presoClasificacioMatr2} </span></p>
