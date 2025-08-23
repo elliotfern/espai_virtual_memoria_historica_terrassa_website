@@ -61,4 +61,26 @@ $id = $routeParams[0];
         border-right: 1px solid #C2AF96B2;
         border-bottom: 1px solid #C2AF96B2;
     }
+
+    /* Para móvil */
+    @media (max-width: 767.98px) {
+
+        .fitxaRepresaliat {
+            padding-left: 15px !important;
+            padding-right: 15px !important;
+        }
+
+        .fitxaRepresaliat2 {
+            padding-left: 15px !important;
+            padding-right: 15px !important;
+        }
+    }
+
+    /* Para tablets y arriba, quitar si molesta */
+    @media (min-width: 768px) {
+        .fitxaRepresaliat2 {
+            padding-left: 40px !important;
+            padding-right: 40px !important;
+        }
+    }
 </style>
