@@ -1,5 +1,6 @@
 // src/pages/fitxa/tabs/tab10.ts
 import { Fitxa } from '../../types/types';
+// src/pages/fitxa/tabs/tab10.ts
 
 type UploadResponse = {
   status: 'ok' | 'error';
@@ -9,35 +10,61 @@ type UploadResponse = {
 
 const API_UPLOAD = `https://${window.location.hostname}/api/aux_imatges/upload`;
 
+// ===== API =====
 export function tab10(containerId: string, fitxa?: Fitxa | null): void {
   const container = document.getElementById(containerId);
   if (!container) return;
 
-  const hiddenSelector = '#imatgePerfilHidden';
-  const hidden = document.querySelector<HTMLInputElement>(hiddenSelector) || null;
-
-  // Si el hidden global está vacío y la API ya nos da un ID, lo reflejamos
-  if (hidden && (!hidden.value || hidden.value.trim().length === 0) && typeof fitxa?.imatgePerfil === 'number' && fitxa.imatgePerfil > 0) {
+  // 1) Sincroniza el hidden global con el ID que venga de la API (si no hay ya uno)
+  const hidden = getHidden();
+  if (hidden && !hidden.value && fitxa?.imatgePerfil && fitxa.imatgePerfil > 0) {
     hidden.value = String(fitxa.imatgePerfil);
   }
 
-  const nomComplet = [fitxa?.nom, fitxa?.cognom1, fitxa?.cognom2].filter(Boolean).join(' ').trim() || (fitxa?.id ? `ID ${fitxa.id}` : 'Nova fitxa');
+  // 2) Render
+  const displayUrl = getDisplayUrlFromFitxa(fitxa);
+  const hasServerImage = !!displayUrl;
+  const titleName = getNomComplet(fitxa);
+  container.innerHTML = renderCard({ displayUrl, hasServerImage, titleName, fitxa });
 
-  // Autoridad para mostrar imagen: fitxa.img (URL string)
-  const serverHasImage: boolean = typeof fitxa?.img === 'string' && !!fitxa.img && fitxa.img.trim().length > 0;
-  const imageUrlToShow: string = serverHasImage ? (fitxa!.img as string) : '';
+  // 3) Wiring
+  const nodes = queryNodes(container);
+  if (!nodes.form || !nodes.btn) return; // guard
 
-  container.innerHTML = `
+  wirePreview(nodes.fileInput, nodes.preview);
+  wireSubmit({
+    form: nodes.form,
+    btn: nodes.btn,
+    okBox: nodes.okBox,
+    okText: nodes.okText,
+    errBox: nodes.errBox,
+    errText: nodes.errText,
+    formTitle: nodes.formTitle,
+    imgWrapper: nodes.imgWrapper,
+    hidden,
+    titleName,
+  });
+}
+
+// ===== Render =====
+function renderCard(args: { displayUrl: string | null; hasServerImage: boolean; titleName: string; fitxa?: Fitxa | null }): string {
+  const { displayUrl, hasServerImage, titleName, fitxa } = args;
+  const titleSuffix = hasServerImage ? ` de ${titleName}` : '';
+  const buttonClass = hasServerImage ? 'btn-primary' : 'btn-success';
+  const buttonText = hasServerImage ? 'Substituir imatge' : 'Pujar imatge';
+  const placeholderName = `retrat_${fitxa?.id ?? 'nou'}`;
+
+  return `
     <div class="card shadow-sm border-0">
       <div class="card-body">
-        <h5 class="card-title mb-3">Imatge de perfil${serverHasImage ? ` de ${nomComplet}` : ''}</h5>
+        <h5 class="card-title mb-3">Imatge de perfil${titleSuffix}</h5>
 
         <div class="mb-3" id="imgWrapper">
           ${
-            serverHasImage
+            displayUrl
               ? `<img id="perfilImg"
-                       src="https://memoriaterrassa.cat/public/img/represaliats/${imageUrlToShow}.jpg"
-                       alt="Imatge de perfil de ${nomComplet}"
+                       src="${displayUrl}"
+                       alt="Imatge de perfil de ${titleName}"
                        class="img-fluid rounded"
                        style="max-height: 360px; object-fit: cover;"
                        loading="lazy" />`
@@ -49,7 +76,7 @@ export function tab10(containerId: string, fitxa?: Fitxa | null): void {
           <form id="imatgePerfilForm" enctype="multipart/form-data" novalidate>
             <div class="row g-3">
               <div class="col-12">
-                <h6 class="mb-2" id="formTitle">${serverHasImage ? 'Substituir imatge' : 'Pujar nova imatge'}</h6>
+                <h6 class="mb-2" id="formTitle">${buttonText}</h6>
               </div>
 
               <div class="alert alert-success d-none" role="alert" id="okMessage">
@@ -59,14 +86,12 @@ export function tab10(containerId: string, fitxa?: Fitxa | null): void {
                 <div id="errText"></div>
               </div>
 
-              <!-- Este hidden (id=imatgePerfilHidden, name=imatgePerfil) está en el FORM maestro -->
-
               <input type="hidden" name="tipus" value="1">
 
               <div class="col-md-4">
                 <label for="nomImatge" class="form-label">Nom imatge</label>
                 <input type="text" class="form-control" id="nomImatge" name="nomImatge"
-                       required maxlength="120" placeholder="p. ex., retrat_${fitxa?.id ?? 'nou'}">
+                       required maxlength="120" placeholder="p. ex., ${placeholderName}">
                 <div class="invalid-feedback">Indica un nom per a la imatge.</div>
               </div>
 
@@ -78,8 +103,8 @@ export function tab10(containerId: string, fitxa?: Fitxa | null): void {
               </div>
 
               <div class="col-md-3 d-flex align-items-end">
-                <button class="btn ${serverHasImage ? 'btn-primary' : 'btn-success'} w-100" id="btnImatgePerfil" type="submit">
-                  ${serverHasImage ? 'Substituir imatge' : 'Pujar imatge'}
+                <button class="btn ${buttonClass} w-100" id="btnImatgePerfil" type="submit">
+                  ${buttonText}
                 </button>
               </div>
 
@@ -97,35 +122,28 @@ export function tab10(containerId: string, fitxa?: Fitxa | null): void {
       </div>
     </div>
   `;
+}
 
-  // ------ wiring (tipado estricto) ------
-  const form = container.querySelector('#imatgePerfilForm') as HTMLFormElement;
-  const okBox = container.querySelector('#okMessage') as HTMLDivElement;
-  const okText = container.querySelector('#okText') as HTMLDivElement;
-  const errBox = container.querySelector('#errMessage') as HTMLDivElement;
-  const errText = container.querySelector('#errText') as HTMLDivElement;
-  const btn = container.querySelector('#btnImatgePerfil') as HTMLButtonElement;
-  const fileInput = container.querySelector('#nomArxiu') as HTMLInputElement;
-  const preview = container.querySelector('#previewImagen') as HTMLImageElement;
-  const imgWrapper = container.querySelector('#imgWrapper') as HTMLDivElement;
-  const formTitle = container.querySelector('#formTitle') as HTMLHeadingElement;
+// ===== Query helpers =====
+function queryNodes(root: HTMLElement) {
+  const form = root.querySelector<HTMLFormElement>('#imatgePerfilForm');
+  return {
+    form,
+    btn: root.querySelector<HTMLButtonElement>('#btnImatgePerfil') ?? null,
+    okBox: root.querySelector<HTMLDivElement>('#okMessage') ?? null,
+    okText: root.querySelector<HTMLDivElement>('#okText') ?? null,
+    errBox: root.querySelector<HTMLDivElement>('#errMessage') ?? null,
+    errText: root.querySelector<HTMLDivElement>('#errText') ?? null,
+    fileInput: form?.querySelector<HTMLInputElement>('#nomArxiu') ?? null,
+    preview: root.querySelector<HTMLImageElement>('#previewImagen') ?? null,
+    imgWrapper: root.querySelector<HTMLDivElement>('#imgWrapper') ?? null,
+    formTitle: root.querySelector<HTMLHeadingElement>('#formTitle') ?? null,
+  };
+}
 
-  const showOk = (msg: string): void => {
-    okText.textContent = msg;
-    okBox.classList.remove('d-none');
-    errBox.classList.add('d-none');
-  };
-  const showErr = (msg: string): void => {
-    errText.textContent = msg;
-    errBox.classList.remove('d-none');
-    okBox.classList.add('d-none');
-  };
-  const setBusy = (busy: boolean): void => {
-    btn.disabled = busy;
-    btn.innerHTML = busy ? `<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Pujant…` : serverHasImage ? 'Substituir imatge' : 'Pujar imatge';
-  };
-
-  // Vista prèvia
+// ===== Preview =====
+function wirePreview(fileInput: HTMLInputElement | null, preview: HTMLImageElement | null): void {
+  if (!fileInput || !preview) return;
   fileInput.addEventListener('change', () => {
     const file: File | null = fileInput.files?.item(0) ?? null;
     if (file) {
@@ -136,7 +154,11 @@ export function tab10(containerId: string, fitxa?: Fitxa | null): void {
       preview.classList.add('d-none');
     }
   });
+}
 
+// ===== Submit =====
+function wireSubmit(ctx: { form: HTMLFormElement; btn: HTMLButtonElement | null; okBox: HTMLDivElement | null; okText: HTMLDivElement | null; errBox: HTMLDivElement | null; errText: HTMLDivElement | null; formTitle: HTMLHeadingElement | null; imgWrapper: HTMLDivElement | null; hidden: HTMLInputElement | null; titleName: string }): void {
+  const { form, btn } = ctx;
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -144,60 +166,111 @@ export function tab10(containerId: string, fitxa?: Fitxa | null): void {
       form.classList.add('was-validated');
       return;
     }
+    setBusy(btn, true);
 
     try {
-      setBusy(true);
-      const fd = new FormData(form); // nomImatge, nomArxiu, tipus=1
-
+      const fd = new FormData(form);
       const res = await fetch(API_UPLOAD, { method: 'POST', body: fd });
       const json = (await res.json()) as UploadResponse;
 
       if (!res.ok || json.status !== 'ok' || !json.data || typeof json.data.id !== 'number') {
-        const message = json.message && json.message.length > 0 ? json.message : 'Error pujant la imatge';
-        throw new Error(message);
+        throw new Error(json.message && json.message.length > 0 ? json.message : 'Error pujant la imatge');
       }
 
-      // 1) Escribimos el ID en el hidden global (form maestro)
-      if (hidden) hidden.value = String(json.data.id);
+      // Guarda ID en el hidden global (se enviará al guardar la fitxa)
+      if (ctx.hidden) ctx.hidden.value = String(json.data.id);
 
-      // 2) Actualizamos la imagen mostrada: si el backend devuelve url, úsala tal cual
-      const finalUrl: string = json.data.url && json.data.url.length > 0 ? `${json.data.url}?ts=${Date.now()}` : ''; // si tu backend siempre devuelve url, esto no se usará
-
-      const existingImg = container.querySelector('#perfilImg') as HTMLImageElement | null;
-      if (finalUrl) {
-        if (existingImg) {
-          existingImg.src = finalUrl;
-        } else {
-          const img = document.createElement('img');
-          img.id = 'perfilImg';
-          img.src = finalUrl;
-          img.alt = `Imatge de perfil de ${nomComplet}`;
-          img.className = 'img-fluid rounded';
-          img.style.maxHeight = '360px';
-          img.style.objectFit = 'cover';
-          img.loading = 'lazy';
-          imgWrapper.innerHTML = '';
-          imgWrapper.appendChild(img);
-        }
+      // Actualiza UI con la URL devuelta (siempre preferible)
+      if (json.data.url && json.data.url.length > 0) {
+        updateImagePreview(ctx.imgWrapper, ctx.titleName, `${json.data.url}?ts=${Date.now()}`);
+        switchToReplaceMode(ctx.btn, ctx.formTitle);
       }
 
-      // Cambiamos UI a “ya hay imagen” (aunque la ficha aún no esté guardada)
-      btn.classList.remove('btn-success');
-      btn.classList.add('btn-primary');
-      btn.textContent = 'Substituir imatge';
-      formTitle.textContent = 'Substituir imatge';
-
-      // Limpiar form y preview
       form.reset();
       form.classList.remove('was-validated');
-      preview.classList.add('d-none');
-
-      showOk('Imatge pujada. Es vincularà en guardar la fitxa.');
+      hideError(ctx.errBox, ctx.errText);
+      showOk(ctx.okBox, ctx.okText, 'Imatge pujada. Es vincularà en guardar la fitxa.');
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'Hi ha hagut un error pujant la imatge.';
-      showErr(message);
+      hideOk(ctx.okBox, ctx.okText);
+      showErr(ctx.errBox, ctx.errText, message);
     } finally {
-      setBusy(false);
+      setBusy(btn, false);
     }
   });
+}
+
+// ===== UI helpers =====
+function updateImagePreview(wrapper: HTMLDivElement | null, altName: string, url: string): void {
+  if (!wrapper) return;
+  const existing = wrapper.querySelector<HTMLImageElement>('#perfilImg');
+  if (existing) {
+    existing.src = url;
+  } else {
+    const img = document.createElement('img');
+    img.id = 'perfilImg';
+    img.src = url;
+    img.alt = `Imatge de perfil de ${altName}`;
+    img.className = 'img-fluid rounded';
+    img.style.maxHeight = '360px';
+    img.style.objectFit = 'cover';
+    img.loading = 'lazy';
+    wrapper.innerHTML = '';
+    wrapper.appendChild(img);
+  }
+}
+
+function switchToReplaceMode(btn: HTMLButtonElement | null, title: HTMLHeadingElement | null): void {
+  if (btn) {
+    btn.classList.remove('btn-success');
+    btn.classList.add('btn-primary');
+    btn.textContent = 'Substituir imatge';
+  }
+  if (title) title.textContent = 'Substituir imatge';
+}
+
+function showOk(box: HTMLDivElement | null, text: HTMLDivElement | null, msg: string): void {
+  if (!box || !text) return;
+  text.textContent = msg;
+  box.classList.remove('d-none');
+}
+
+function hideOk(box: HTMLDivElement | null, text: HTMLDivElement | null): void {
+  if (!box || !text) return;
+  text.textContent = '';
+  box.classList.add('d-none');
+}
+
+function showErr(box: HTMLDivElement | null, text: HTMLDivElement | null, msg: string): void {
+  if (!box || !text) return;
+  text.textContent = msg;
+  box.classList.remove('d-none');
+}
+
+function hideError(box: HTMLDivElement | null, text: HTMLDivElement | null): void {
+  if (!box || !text) return;
+  text.textContent = '';
+  box.classList.add('d-none');
+}
+
+function setBusy(btn: HTMLButtonElement | null, busy: boolean): void {
+  if (!btn) return;
+  btn.disabled = busy;
+  btn.innerHTML = busy ? `<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Pujant…` : btn.textContent || 'Pujar imatge';
+}
+
+// ===== Utils =====
+function getHidden(): HTMLInputElement | null {
+  return document.querySelector<HTMLInputElement>('#imatgePerfilHidden');
+}
+
+function getNomComplet(fitxa?: Fitxa | null): string {
+  const parts = [fitxa?.nom, fitxa?.cognom1, fitxa?.cognom2].filter(Boolean) as string[];
+  return parts.join(' ').trim() || (fitxa?.id ? `ID ${fitxa.id}` : 'Nova fitxa');
+}
+
+/** Autoridad para mostrar imagen: fitxa.img (URL completa). */
+function getDisplayUrlFromFitxa(fitxa?: Fitxa | null): string | null {
+  const url = (fitxa?.img ?? '').trim();
+  return url.length > 0 ? url : null;
 }

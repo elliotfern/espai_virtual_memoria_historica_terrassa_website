@@ -708,7 +708,7 @@ if ($pagina === "modifica-fitxa") {
         <h3>Imatge fitxa represaliat</h3>
 
         <div id="imatgePerfil"></div>
-        <input type="hidden" id="imgIdHidden" name="imag" value="">
+        <input type="hidden" id="imatgePerfilHidden" name="imatgePerfil" value="">
 
       </div>
     </div> <!-- Fi tab10 -->
