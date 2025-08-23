@@ -20,17 +20,23 @@ export function tab10(containerId: string, fitxa?: Fitxa | null): void {
   const container = document.getElementById(containerId);
   if (!container) return;
 
-  // hidden global que viaja al guardar la ficha (id de imagen)
   const hidden = document.querySelector<HTMLInputElement>('#imatgePerfilHidden') || null;
   if (hidden && !hidden.value && fitxa?.imatgePerfil && fitxa.imatgePerfil > 0) {
     hidden.value = String(fitxa.imatgePerfil);
   }
 
+  // idPersona SOLO si estamos modificando una ficha existente
   const idPersona: number | null = typeof fitxa?.id === 'number' && fitxa.id > 0 ? fitxa.id : null;
 
   const titleName = getNomComplet(fitxa);
   const displayUrl = getDisplayUrlFromFitxa(fitxa);
-  container.innerHTML = renderCard({ titleName, displayUrl, fitxa });
+
+  container.innerHTML = renderCard({
+    titleName,
+    displayUrl,
+    fitxa,
+    canDelete: !!displayUrl && !!idPersona, // eliminar solo en modo modificar con imagen
+  });
 
   const nodes = queryNodes(container);
   wirePreview(nodes.fileInput, nodes.preview);
@@ -45,13 +51,13 @@ export function tab10(containerId: string, fitxa?: Fitxa | null): void {
     errText: nodes.errText,
     formTitle: nodes.formTitle,
     imgWrapper: nodes.imgWrapper,
-    hidden, // aquí vive el idImatge actual
+    hidden,
     titleName,
-    idPersona, // <- lo pasamos para el bindeo del botón eliminar si se crea dinámicamente
+    idPersona, // <- se enviará SOLO si no es null
   });
 
   wireDelete({
-    btnDelete: nodes.btnDelete, // puede no existir si no hay imagen al arrancar
+    btnDelete: nodes.btnDelete, // puede no existir si no hay imagen/canDelete=false
     btnUpload: nodes.btn,
     imgWrapper: nodes.imgWrapper,
     okBox: nodes.okBox,
@@ -59,14 +65,14 @@ export function tab10(containerId: string, fitxa?: Fitxa | null): void {
     errBox: nodes.errBox,
     errText: nodes.errText,
     formTitle: nodes.formTitle,
-    hidden,
-    idPersona, // <- enviamos idPersona al backend
+    hidden, // vaciamos idImatge tras borrar
+    idPersona, // <- enviado al backend
   });
 }
 
 /* ---------- Render ---------- */
-function renderCard(args: { titleName: string; displayUrl: string | null; fitxa?: Fitxa | null }): string {
-  const { titleName, displayUrl, fitxa } = args;
+function renderCard(args: { titleName: string; displayUrl: string | null; fitxa?: Fitxa | null; canDelete: boolean }): string {
+  const { titleName, displayUrl, fitxa, canDelete } = args;
   const hasImage = !!displayUrl;
   const buttonClass = hasImage ? 'btn-primary' : 'btn-success';
   const buttonText = hasImage ? 'Substituir imatge' : 'Pujar imatge';
@@ -90,7 +96,7 @@ function renderCard(args: { titleName: string; displayUrl: string | null; fitxa?
           <div class="row g-3">
             <div class="col-12 d-flex align-items-center justify-content-between">
               <h6 class="mb-2" id="formTitle">${buttonText}</h6>
-              ${hasImage ? `<button class="btn btn-outline-danger btn-sm" id="btnEliminarImatge" type="button">Eliminar imatge</button>` : ''}
+              ${canDelete ? `<button class="btn btn-outline-danger btn-sm" id="btnEliminarImatge" type="button">Eliminar imatge</button>` : ''}
             </div>
 
             <div class="alert alert-success d-none" role="alert" id="okMessage" aria-live="polite">
@@ -182,7 +188,7 @@ function wireUpload(ctx: {
   imgWrapper: HTMLDivElement | null;
   hidden: HTMLInputElement | null; // #imatgePerfilHidden (idImatge actual)
   titleName: string;
-  idPersona: number | null; // <- lo necesitaremos al crear el botón eliminar
+  idPersona: number | null; // SOLO se envía si no es null
 }): void {
   const { btn, nomImatge, fileInput } = ctx;
   if (!btn || !nomImatge || !fileInput) return;
@@ -207,6 +213,9 @@ function wireUpload(ctx: {
       fd.append('nomImatge', nameVal);
       fd.append('nomArxiu', file);
       fd.append('tipus', '1');
+      if (ctx.idPersona && ctx.idPersona > 0) {
+        fd.append('idPersona', String(ctx.idPersona)); // <-- se adjunta SOLO en modificar
+      }
 
       const res = await fetch(API_UPLOAD, { method: 'POST', body: fd });
       const json = (await res.json()) as UploadResponse;
@@ -215,47 +224,38 @@ function wireUpload(ctx: {
         throw new Error(json.message && json.message.length > 0 ? json.message : 'Error pujant la imatge');
       }
 
-      // Guardar idImatge en el hidden global (lo usará el save de la fitxa)
       if (ctx.hidden) ctx.hidden.value = String(json.data.id);
 
-      // Actualizar preview y modo
       if (json.data.url && json.data.url.length > 0) {
         updateImagePreview(ctx.imgWrapper, ctx.titleName, `${json.data.url}?ts=${Date.now()}`);
         switchToReplaceMode(btn, ctx.formTitle);
 
-        // si no existía botón eliminar, créalo y bindea su click con idPersona
-        let del = document.getElementById('btnEliminarImatge') as HTMLButtonElement | null;
-        if (!del) {
-          const titleBar = document.getElementById('formTitle')?.parentElement;
-          if (titleBar) {
-            del = document.createElement('button');
-            del.id = 'btnEliminarImatge';
-            del.type = 'button';
-            del.className = 'btn btn-outline-danger btn-sm';
-            del.textContent = 'Eliminar imatge';
-            titleBar.appendChild(del);
+        // crea botón eliminar solo si hay idPersona (modificar)
+        if (ctx.idPersona && ctx.idPersona > 0) {
+          let del = document.getElementById('btnEliminarImatge') as HTMLButtonElement | null;
+          if (!del) {
+            const titleBar = document.getElementById('formTitle')?.parentElement;
+            if (titleBar) {
+              del = document.createElement('button');
+              del.id = 'btnEliminarImatge';
+              del.type = 'button';
+              del.className = 'btn btn-outline-danger btn-sm';
+              del.textContent = 'Eliminar imatge';
+              titleBar.appendChild(del);
 
-            // si no tenemos idPersona en ctx (alta de ficha), intentamos leerlo del form maestro
-            let idPersona = ctx.idPersona;
-            if (!idPersona || idPersona <= 0) {
-              const idInput = document.querySelector<HTMLInputElement>('[name="id"]');
-              const val = (idInput?.value ?? '').trim();
-              const n = Number(val);
-              idPersona = Number.isFinite(n) && n > 0 ? n : null;
+              wireDelete({
+                btnDelete: del,
+                btnUpload: btn,
+                imgWrapper: ctx.imgWrapper,
+                okBox: ctx.okBox,
+                okText: ctx.okText,
+                errBox: ctx.errBox,
+                errText: ctx.errText,
+                formTitle: ctx.formTitle,
+                hidden: ctx.hidden,
+                idPersona: ctx.idPersona, // ya validado arriba
+              });
             }
-
-            wireDelete({
-              btnDelete: del,
-              btnUpload: btn,
-              imgWrapper: ctx.imgWrapper,
-              okBox: ctx.okBox,
-              okText: ctx.okText,
-              errBox: ctx.errBox,
-              errText: ctx.errText,
-              formTitle: ctx.formTitle,
-              hidden: ctx.hidden,
-              idPersona, // <- importante
-            });
           }
         }
       }
@@ -263,11 +263,9 @@ function wireUpload(ctx: {
       hideError(ctx.errBox, ctx.errText);
       showOk(ctx.okBox, ctx.okText, 'Imatge pujada. Es vincularà en guardar la fitxa.');
 
-      // limpiar inputs
       nomImatge.value = '';
       fileInput.value = '';
-      const preview = document.querySelector<HTMLImageElement>('#previewImagen');
-      if (preview) preview.classList.add('d-none');
+      document.querySelector<HTMLImageElement>('#previewImagen')?.classList.add('d-none');
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Hi ha hagut un error pujant la imatge.';
       hideOk(ctx.okBox, ctx.okText);
@@ -289,29 +287,16 @@ function wireDelete(ctx: {
   errText: HTMLDivElement | null;
   formTitle: HTMLHeadingElement | null;
   hidden: HTMLInputElement | null; // limpiamos el idImatge aquí
-  idPersona: number | null; // <- enviamos este valor al backend
+  idPersona: number | null; // enviado al backend
 }): void {
   const b = ctx.btnDelete;
   if (!b) return;
+  if (!ctx.idPersona || ctx.idPersona <= 0) return; // no bindeamos si no hay idPersona (crear ficha)
 
-  // evita doble binding
   if (b.dataset.bound === '1') return;
   b.dataset.bound = '1';
 
   b.addEventListener('click', async () => {
-    // idPersona puede venir en ctx; si no, intentamos leer del form maestro
-    let idPersona = ctx.idPersona;
-    if (!idPersona || idPersona <= 0) {
-      const idInput = document.querySelector<HTMLInputElement>('[name="id"]');
-      const val = (idInput?.value ?? '').trim();
-      const n = Number(val);
-      idPersona = Number.isFinite(n) && n > 0 ? n : null;
-    }
-
-    if (!idPersona || idPersona <= 0) {
-      return showErr(ctx.errBox, ctx.errText, 'No hi ha ID de la fitxa.');
-    }
-
     const ok = window.confirm('Vols eliminar la imatge d’aquesta fitxa?');
     if (!ok) return;
 
@@ -320,7 +305,7 @@ function wireDelete(ctx: {
       const res = await fetch(API_CLEAR, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ idPersona }), // <- enviamos idPersona
+        body: JSON.stringify({ idPersona: ctx.idPersona }), // <-- idPersona
       });
       const json = (await res.json()) as ClearResponse;
 
@@ -328,7 +313,6 @@ function wireDelete(ctx: {
         throw new Error(json.message || 'No s’ha pogut eliminar la imatge.');
       }
 
-      // limpiar hidden y UI
       if (ctx.hidden) ctx.hidden.value = '';
       if (ctx.imgWrapper) {
         ctx.imgWrapper.innerHTML = `<p class="text-muted mb-0">Cap imatge associada encara.</p>`;
@@ -340,7 +324,6 @@ function wireDelete(ctx: {
       }
       if (ctx.formTitle) ctx.formTitle.textContent = 'Pujar imatge';
 
-      // ocultar botón eliminar
       b.remove();
 
       hideError(ctx.errBox, ctx.errText);

@@ -40,7 +40,7 @@ try {
     $idPersona = isset($data['idPersona']) ? (int)$data['idPersona']
         : (isset($_POST['idPersona']) ? (int)$_POST['idPersona'] : 0);
 
-    if ($idImatge <= 0) {
+    if ($idPersona <= 0) {
         throw new RuntimeException('idPersona invàlid.');
     }
 
@@ -48,7 +48,7 @@ try {
     if (!$conn) throw new RuntimeException('Sense connexió a BD.');
 
     // (Opcional) comprueba que existe
-    $chk = $conn->prepare('SELECT id FROM db_dades_personals WHERE idPersona=:idPersona');
+    $chk = $conn->prepare('SELECT id FROM db_dades_personals WHERE id=:id');
     $chk->execute([':id' => $idPersona]);
     if (!$chk->fetchColumn()) {
         throw new RuntimeException('La fitxa no existeix.');
@@ -57,7 +57,7 @@ try {
     // Desvincular imagen (ambos campos a NULL)
     // Si SOLO quieres poner a NULL 'img' y NO 'imatgePerfil',
     // usa esta query en su lugar:
-    $upd = $conn->prepare("UPDATE db_dades_personals SET img = NULL WHERE idPersona = :idPersona");
+    $upd = $conn->prepare("UPDATE db_dades_personals SET img = NULL WHERE id = :id");
 
     $upd->execute([':id' => $idPersona]);
 
