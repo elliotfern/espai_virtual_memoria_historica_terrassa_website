@@ -1,6 +1,6 @@
 import { Fitxa } from '../../types/types';
 
-const base = `https://memoriaterrassa.cat/gestio/imatge-represaliat/fitxa/`;
+const base = `https://memoriaterrassa.cat/gestio/imatge-represaliat`;
 
 /** Renderiza la pestaña 10 (imagen de perfil + acciones) en el contenedor dado */
 export function tab10(fitxa: Fitxa): void {
@@ -15,7 +15,7 @@ export function tab10(fitxa: Fitxa): void {
   const htmlWhenHasImage = `
     <div class="card shadow-sm border-0">
       <div class="card-body">
-        <h5 class="card-title mb-3">Imatge de perfil de ${nomComplet}/h5>
+        <h5 class="card-title mb-3">Imatge de perfil de ${nomComplet}</h5>
 
         <div class="mb-3">
           <img
