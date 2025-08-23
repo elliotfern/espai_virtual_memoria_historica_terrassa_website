@@ -227,6 +227,9 @@ $routes = [
 
     '/api/form_contacte/post' => ['view' => 'src/backend/api/db_form_contacte/post-form-contacte.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
 
+    // AUX imatges
+    '/api/aux_imatges/upload' => ['view' => 'src/backend/api/aux_imatges/post-imatges.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+
 ];
 
 return $routes;

@@ -85,13 +85,13 @@ function renderCard(args: { titleName: string; displayUrl: string | null; fitxa?
 
             <div class="col-md-4">
               <label for="nomImatge" class="form-label">Nom imatge</label>
-              <input type="text" class="form-control" id="nomImatge" required maxlength="120" placeholder="p. ex., ${placeholder}">
+              <input type="text" class="form-control" id="nomImatge" maxlength="120" placeholder="p. ex., ${placeholder}">
               <div class="invalid-feedback">Indica un nom per a la imatge.</div>
             </div>
 
             <div class="col-md-5">
               <label for="nomArxiu" class="form-label">Selecciona la imatge</label>
-              <input class="form-control" type="file" id="nomArxiu" accept="image/*" required>
+              <input class="form-control" type="file" id="nomArxiu" accept="image/*">
               <div class="form-text">Formats: JPG, PNG, WebP.</div>
               <div class="invalid-feedback">Puja un fitxer d'imatge.</div>
             </div>
