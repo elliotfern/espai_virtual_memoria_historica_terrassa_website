@@ -101,6 +101,7 @@ export interface Fitxa {
   adreca_num: string;
   defuncio_detalls_ca: string;
   causa_defuncio_detalls: number;
+  imatgePerfil?: string | null; // indicador de que hay imagen
 }
 
 export interface FitxaJudicial {

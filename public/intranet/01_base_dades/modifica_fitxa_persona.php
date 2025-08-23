@@ -703,6 +703,15 @@ if ($pagina === "modifica-fitxa") {
       </div>
     </div> <!-- Fi tab9 -->
 
+    <div id="tab10" class="tabcontent">
+      <div class="row g-3">
+        <h3>Imatge fitxa represaliat</h3>
+
+        <div id="imatgePerfil"></div>
+
+      </div>
+    </div> <!-- Fi tab10 -->
+
     <div class="row espai-superior" style="border-top: 1px solid black;padding-top:25px">
       <div class="col">
         <a class="btn btn-secondary" role="button" aria-disabled="true" onclick="goBack()">Cancel·lar els canvis</a>
