@@ -230,6 +230,8 @@ $routes = [
     // AUX imatges
     '/api/aux_imatges/upload' => ['view' => 'src/backend/api/aux_imatges/post-imatges.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
 
+    '/api/aux_imatges/clear-image' => ['view' => 'src/backend/api/aux_imatges/delete-imatge-id.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+
 ];
 
 return $routes;

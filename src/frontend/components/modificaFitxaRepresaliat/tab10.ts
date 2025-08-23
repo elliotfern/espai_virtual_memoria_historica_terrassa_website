@@ -10,7 +10,7 @@ type UploadResponse = {
 type ClearResponse = { status: 'ok' | 'error'; message?: string };
 
 const API_UPLOAD = `https://${window.location.hostname}/api/aux_imatges/upload`;
-const API_CLEAR = `https://${window.location.hostname}/api/dades_personals/clear-image`;
+const API_CLEAR = `https://${window.location.hostname}/api/aux_imatges/clear-image`;
 const IMATGE_URL = `https://memoriaterrassa.cat/public/img/represaliats/`;
 const MAX_BYTES = 3 * 1024 * 1024; // 3 MB
 const JPG_MIME = 'image/jpeg';
