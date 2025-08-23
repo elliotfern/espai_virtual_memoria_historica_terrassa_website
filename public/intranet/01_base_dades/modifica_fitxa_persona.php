@@ -51,6 +51,8 @@ if ($pagina === "modifica-fitxa") {
     <button class="tablinks" data-tab="tab5">Dades polítiques i sindicals</button>
     <button class="tablinks" data-tab="tab6">Biografia</button>
     <button class="tablinks" data-tab="tab7">Fonts documentals</button>
+    <button class="tablinks" data-tab="tab10">Imatge perfil</button>
+    <button class="tablinks" data-tab="tab11">Multimèdia</button>
     <button class="tablinks" data-tab="tab8">Altres dades</button>
     <button class="tablinks" data-tab="tab9">Registre canvis</button>
   </div>

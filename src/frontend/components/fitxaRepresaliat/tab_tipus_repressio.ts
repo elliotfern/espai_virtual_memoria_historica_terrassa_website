@@ -126,15 +126,15 @@ export const fitxaTipusRepressio = async (categoriaNumerica: string, fitxa2: Fit
             <h6><span class="blau1 negreta">Primera presó/camp de classificació</span></h6>
                 <p><span class='marro2'>Tipus de Presó/camp de detenció: </span> <span class='blau1'>${tipusPreso1}</span></p>
                 <p><span class='marro2'>Nom de la Presó/camp de detenció: </span> <span class='blau1'>${nomPreso1}   </span></p>
-                <p><span class='marro2'>Municipi de la Presó/camp de detenció: </span> <span class='blau1'>${ciutatPreso1}  - ${estat_preso1}</span></p>
-                <p><span class='marro2'>Data d'entrada de la presó: </span> <span class='blau1'>${presoClasificacioDataEntrada1}   </span></p>
-                <p><span class='marro2'>Data de la sortida de la presó: </span> <span class='blau1'>${presoClasificacioData1}   </span></p>
+                <p><span class='marro2'>Municipi de la Presó/camp de detenció: </span> <span class='blau1'>${ciutatPreso1} (${estat_preso1})</span></p>
+                <p><span class='marro2'>Data d'entrada de la presó: </span> <span class='blau1'>${presoClasificacioDataEntrada1} </span></p>
+                <p><span class='marro2'>Data de la sortida de la presó: </span> <span class='blau1'>${presoClasificacioData1}  </span></p>
                  <p><span class='marro2'>Número de matrícula: </span> <span class='blau1'>${presoClasificacioMatr1} </span></p>
             <br>
             <h6><span class="blau1 negreta">Segona presó/camp de classificació</span></h6>
                 <p><span class='marro2'>Tipus de Presó/camp de detenció: </span> <span class='blau1'>${tipusPreso2} </span></p>
                 <p><span class='marro2'>Nom de la Presó/camp de detenció: </span> <span class='blau1'>${nomPreso2} </span></p>
-                <p><span class='marro2'>Municipi de la Presó/camp de detenció: </span> <span class='blau1'>${ciutatPreso2} - ${estat_preso2}</span></p>
+                <p><span class='marro2'>Municipi de la Presó/camp de detenció: </span> <span class='blau1'>${ciutatPreso2} (${estat_preso2})</span></p>
                  <p><span class='marro2'>Data d'entrada de la presó: </span> <span class='blau1'>${presoClasificacioDataEntrada2} </span></p>
                 <p><span class='marro2'>Data de la sortida de la presó: </span> <span class='blau1'>${presoClasificacioData2} </span></p>
                 <p><span class='marro2'>Número de matrícula: </span> <span class='blau1'>${presoClasificacioMatr2} </span></p>
