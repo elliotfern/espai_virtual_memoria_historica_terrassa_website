@@ -7,43 +7,36 @@ type UploadResponse = {
   data?: { id: number; url?: string; filename?: string };
 };
 
-const IMG_BASE_URL = `https://memoriaterrassa.cat/public/img/represaliats`;
 const API_UPLOAD = `https://${window.location.hostname}/api/aux_imatges/upload`;
 
-export function tab10(containerId: string, fitxa?: Fitxa): void {
+export function tab10(containerId: string, fitxa?: Fitxa | null): void {
   const container = document.getElementById(containerId);
   if (!container) return;
 
-  const hiddenSelector = '#imgIdHidden';
+  const hiddenSelector = '#imatgePerfilHidden';
   const hidden = document.querySelector<HTMLInputElement>(hiddenSelector) || null;
 
-  // --- 1) Decisiones de estado ---
+  // Si el hidden global está vacío y la API ya nos da un ID, lo reflejamos
+  if (hidden && (!hidden.value || hidden.value.trim().length === 0) && typeof fitxa?.imatgePerfil === 'number' && fitxa.imatgePerfil > 0) {
+    hidden.value = String(fitxa.imatgePerfil);
+  }
+
   const nomComplet = [fitxa?.nom, fitxa?.cognom1, fitxa?.cognom2].filter(Boolean).join(' ').trim() || (fitxa?.id ? `ID ${fitxa.id}` : 'Nova fitxa');
 
-  // a) ID ya subido en esta sesión (hidden) —no está aún en servidor
-  const draftImgId: number | null = hidden && hidden.value.trim() ? Number(hidden.value) : null;
+  // Autoridad para mostrar imagen: fitxa.img (URL string)
+  const serverHasImage: boolean = typeof fitxa?.img === 'string' && !!fitxa.img && fitxa.img.trim().length > 0;
+  const imageUrlToShow: string = serverHasImage ? (fitxa!.img as string) : '';
 
-  // b) ID existente en servidor, decidido por imatgePerfil (autoridad)
-  const serverImageId: number | null = typeof fitxa?.imatgePerfil === 'number' && fitxa.imatgePerfil > 0 ? fitxa.imatgePerfil : typeof fitxa?.img === 'number' && fitxa.img > 0 ? fitxa.img : null;
-
-  // Mostrar: prioriza lo subido en esta sesión; si no, lo del servidor
-  const imageIdToShow: number | null = draftImgId ?? serverImageId;
-  const imageUrl: string = imageIdToShow !== null ? `${IMG_BASE_URL}/${imageIdToShow}.jpg` : '';
-
-  // Para textos/botón usamos SOLO si el servidor ya tiene imagen
-  const hasServerImage: boolean = serverImageId !== null;
-
-  // --- 2) Render ---
   container.innerHTML = `
     <div class="card shadow-sm border-0">
       <div class="card-body">
-        <h5 class="card-title mb-3">Imatge de perfil${imageUrl ? ` de ${nomComplet}` : ''}</h5>
+        <h5 class="card-title mb-3">Imatge de perfil${serverHasImage ? ` de ${nomComplet}` : ''}</h5>
 
         <div class="mb-3" id="imgWrapper">
           ${
-            imageUrl
+            serverHasImage
               ? `<img id="perfilImg"
-                       src="${imageUrl}"
+                       src="https://memoriaterrassa.cat/public/img/represaliats/${imageUrlToShow}.jpg"
                        alt="Imatge de perfil de ${nomComplet}"
                        class="img-fluid rounded"
                        style="max-height: 360px; object-fit: cover;"
@@ -56,7 +49,7 @@ export function tab10(containerId: string, fitxa?: Fitxa): void {
           <form id="imatgePerfilForm" enctype="multipart/form-data" novalidate>
             <div class="row g-3">
               <div class="col-12">
-                <h6 class="mb-2" id="formTitle">${hasServerImage ? 'Substituir imatge' : 'Pujar nova imatge'}</h6>
+                <h6 class="mb-2" id="formTitle">${serverHasImage ? 'Substituir imatge' : 'Pujar nova imatge'}</h6>
               </div>
 
               <div class="alert alert-success d-none" role="alert" id="okMessage">
@@ -66,8 +59,7 @@ export function tab10(containerId: string, fitxa?: Fitxa): void {
                 <div id="errText"></div>
               </div>
 
-              <!-- Este hidden global NO se crea aquí: está en el formulario maestro con name="img" -->
-              <!-- <input type="hidden" id="imgIdHidden" name="img"> -->
+              <!-- Este hidden (id=imatgePerfilHidden, name=imatgePerfil) está en el FORM maestro -->
 
               <input type="hidden" name="tipus" value="1">
 
@@ -86,8 +78,8 @@ export function tab10(containerId: string, fitxa?: Fitxa): void {
               </div>
 
               <div class="col-md-3 d-flex align-items-end">
-                <button class="btn ${hasServerImage ? 'btn-primary' : 'btn-success'} w-100" id="btnImatgePerfil" type="submit">
-                  ${hasServerImage ? 'Substituir imatge' : 'Pujar imatge'}
+                <button class="btn ${serverHasImage ? 'btn-primary' : 'btn-success'} w-100" id="btnImatgePerfil" type="submit">
+                  ${serverHasImage ? 'Substituir imatge' : 'Pujar imatge'}
                 </button>
               </div>
 
@@ -106,7 +98,7 @@ export function tab10(containerId: string, fitxa?: Fitxa): void {
     </div>
   `;
 
-  // --- 3) Wiring (tipado estricto) ---
+  // ------ wiring (tipado estricto) ------
   const form = container.querySelector('#imatgePerfilForm') as HTMLFormElement;
   const okBox = container.querySelector('#okMessage') as HTMLDivElement;
   const okText = container.querySelector('#okText') as HTMLDivElement;
@@ -130,10 +122,10 @@ export function tab10(containerId: string, fitxa?: Fitxa): void {
   };
   const setBusy = (busy: boolean): void => {
     btn.disabled = busy;
-    btn.innerHTML = busy ? `<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Pujant…` : hasServerImage ? 'Substituir imatge' : 'Pujar imatge';
+    btn.innerHTML = busy ? `<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Pujant…` : serverHasImage ? 'Substituir imatge' : 'Pujar imatge';
   };
 
-  // Vista prèvia (sin destructuring)
+  // Vista prèvia
   fileInput.addEventListener('change', () => {
     const file: File | null = fileInput.files?.item(0) ?? null;
     if (file) {
@@ -156,6 +148,7 @@ export function tab10(containerId: string, fitxa?: Fitxa): void {
     try {
       setBusy(true);
       const fd = new FormData(form); // nomImatge, nomArxiu, tipus=1
+
       const res = await fetch(API_UPLOAD, { method: 'POST', body: fd });
       const json = (await res.json()) as UploadResponse;
 
@@ -164,34 +157,37 @@ export function tab10(containerId: string, fitxa?: Fitxa): void {
         throw new Error(message);
       }
 
-      // Escribimos el ID en el hidden global (se enviará al guardar la fitxa)
+      // 1) Escribimos el ID en el hidden global (form maestro)
       if (hidden) hidden.value = String(json.data.id);
 
-      // Actualizamos la imagen mostrada (prioriza url del backend si viene)
-      const finalUrl: string = json.data.url && json.data.url.length > 0 ? `${json.data.url}?ts=${Date.now()}` : `${IMG_BASE_URL}/${json.data.id}.jpg?ts=${Date.now()}`;
+      // 2) Actualizamos la imagen mostrada: si el backend devuelve url, úsala tal cual
+      const finalUrl: string = json.data.url && json.data.url.length > 0 ? `${json.data.url}?ts=${Date.now()}` : ''; // si tu backend siempre devuelve url, esto no se usará
 
       const existingImg = container.querySelector('#perfilImg') as HTMLImageElement | null;
-      if (existingImg) {
-        existingImg.src = finalUrl;
-      } else {
-        const img = document.createElement('img');
-        img.id = 'perfilImg';
-        img.src = finalUrl;
-        img.alt = `Imatge de perfil de ${nomComplet}`;
-        img.className = 'img-fluid rounded';
-        img.style.maxHeight = '360px';
-        img.style.objectFit = 'cover';
-        img.loading = 'lazy';
-        imgWrapper.innerHTML = '';
-        imgWrapper.appendChild(img);
+      if (finalUrl) {
+        if (existingImg) {
+          existingImg.src = finalUrl;
+        } else {
+          const img = document.createElement('img');
+          img.id = 'perfilImg';
+          img.src = finalUrl;
+          img.alt = `Imatge de perfil de ${nomComplet}`;
+          img.className = 'img-fluid rounded';
+          img.style.maxHeight = '360px';
+          img.style.objectFit = 'cover';
+          img.loading = 'lazy';
+          imgWrapper.innerHTML = '';
+          imgWrapper.appendChild(img);
+        }
       }
 
-      // Tras una subida exitosa, a efectos de UI ya “hay imagen en servidor”
+      // Cambiamos UI a “ya hay imagen” (aunque la ficha aún no esté guardada)
       btn.classList.remove('btn-success');
       btn.classList.add('btn-primary');
       btn.textContent = 'Substituir imatge';
       formTitle.textContent = 'Substituir imatge';
 
+      // Limpiar form y preview
       form.reset();
       form.classList.remove('was-validated');
       preview.classList.add('d-none');
