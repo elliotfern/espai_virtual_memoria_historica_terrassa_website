@@ -55,7 +55,7 @@ export async function fitxaRepressaliat(idRepressaliat?: number): Promise<void> 
     tab9(fitxa);
 
     // tab10 - Imatge fitxa represaliat
-    tab10(fitxa);
+    tab10('imatgePerfil', fitxa);
 
     // Escolta event
     const form = document.getElementById('formFitxaRepressaliat') as HTMLFormElement | null;

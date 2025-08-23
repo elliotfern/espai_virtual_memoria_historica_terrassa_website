@@ -667,6 +667,16 @@ $routes = [
         'view' => BACKEND_URL . $urlIntranetDir['biografies'] . '/form-biografia.php'
     ]),
 
+    // Imatge perfil
+    APP_INTRANET . $urlIntranet['imatgeRepresaliat'] . '/nova-imatge/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['imatgeRepresaliat'] . '/form-imatge-represaliat.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['imatgeRepresaliat'] . '/modifica-imatge/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['imatgeRepresaliat'] . '/form-imatge-represaliat.php'
+    ]),
+
+
 ];
 
 return $routes;

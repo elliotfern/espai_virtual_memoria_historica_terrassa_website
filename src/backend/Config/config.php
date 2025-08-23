@@ -43,6 +43,7 @@ $urlIntranetDir = [
     'fonts' => '/03_fonts_documentals',
     'familiars' => '/04_familiars',
     'biografies' => '/05_biografies',
+    'imatgeRepresaliat' => '/06_imatges_represaliats',
 ];
 
 $urlIntranet = [
@@ -53,7 +54,9 @@ $urlIntranet = [
     'cronologia' => '/cronologia',
     'familiars' => '/familiars',
     'biografies' => '/biografies',
+    'imatgeRepresaliat' => '/imatge-represaliat',
 ];
+
 
 $urlApi = [
     'fonts' => '/fonts_documentals',
