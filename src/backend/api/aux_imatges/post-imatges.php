@@ -68,6 +68,7 @@ try {
     // Campos del form
     $nomImatge = trim($_POST['nomImatge'] ?? '');
     $file      = $_FILES['nomArxiu'] ?? null;
+    $idPersona = isset($_POST['idPersona']) ? (int)$_POST['idPersona'] : null;
 
     if ($nomImatge === '' || !$file || $file['error'] !== UPLOAD_ERR_OK) {
         throw new RuntimeException('Falten camps o fitxer invàlid.');
@@ -105,7 +106,7 @@ try {
 
     if (!is_dir($targetDir)) {
         if (!mkdir($targetDir, 0755, true) && !is_dir($targetDir)) {
-            throw new RuntimeException('No s’ha pogut crear el directori de destinació.');
+            throw new RuntimeException('No s\'ha pogut crear el directori de destinació.');
         }
     }
 
@@ -120,6 +121,7 @@ try {
     $stmt->execute([
         ':nomArxiu'  => $nomArxiu,
         ':nomImatge' => $nomImatge,
+        ':idPersona' => $idPersona ?: null,
     ]);
     $id = (int)$conn->lastInsertId();
     if ($id <= 0) {

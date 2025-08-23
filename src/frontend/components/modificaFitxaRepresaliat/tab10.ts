@@ -1,6 +1,5 @@
 // src/pages/fitxa/tabs/tab10.ts
 import { Fitxa } from '../../types/types';
-// src/pages/fitxa/tabs/tab10.ts
 
 type UploadResponse = {
   status: 'ok' | 'error';
@@ -8,30 +7,34 @@ type UploadResponse = {
   data?: { id: number; url?: string; filename?: string };
 };
 
+type ClearResponse = { status: 'ok' | 'error'; message?: string };
+
 const API_UPLOAD = `https://${window.location.hostname}/api/aux_imatges/upload`;
+const API_CLEAR = `https://${window.location.hostname}/api/dades_personals/clear-image`;
 const IMATGE_URL = `https://memoriaterrassa.cat/public/img/represaliats/`;
-const MAX_BYTES = 3 * 1024 * 1024; // <- 3 MB
-const JPG_MIME = 'image/jpeg'; // <- solo JPG
+const MAX_BYTES = 3 * 1024 * 1024; // 3 MB
+const JPG_MIME = 'image/jpeg';
 
 // ===== API =====
 export function tab10(containerId: string, fitxa?: Fitxa | null): void {
   const container = document.getElementById(containerId);
   if (!container) return;
 
-  // hidden global que viaja al guardar la ficha
+  // hidden global que viaja al guardar la ficha (id de imagen)
   const hidden = document.querySelector<HTMLInputElement>('#imatgePerfilHidden') || null;
   if (hidden && !hidden.value && fitxa?.imatgePerfil && fitxa.imatgePerfil > 0) {
     hidden.value = String(fitxa.imatgePerfil);
   }
 
-  // Render
+  const idPersona: number | null = typeof fitxa?.id === 'number' && fitxa.id > 0 ? fitxa.id : null;
+
   const titleName = getNomComplet(fitxa);
   const displayUrl = getDisplayUrlFromFitxa(fitxa);
   container.innerHTML = renderCard({ titleName, displayUrl, fitxa });
 
-  // Wiring
   const nodes = queryNodes(container);
   wirePreview(nodes.fileInput, nodes.preview);
+
   wireUpload({
     btn: nodes.btn,
     nomImatge: nodes.nomImatge,
@@ -42,9 +45,22 @@ export function tab10(containerId: string, fitxa?: Fitxa | null): void {
     errText: nodes.errText,
     formTitle: nodes.formTitle,
     imgWrapper: nodes.imgWrapper,
-    hidden,
+    hidden, // aquí vive el idImatge actual
     titleName,
-    idPersona: typeof fitxa?.id === 'number' ? fitxa!.id! : null, // <- mandamos idPersona
+    idPersona, // <- lo pasamos para el bindeo del botón eliminar si se crea dinámicamente
+  });
+
+  wireDelete({
+    btnDelete: nodes.btnDelete, // puede no existir si no hay imagen al arrancar
+    btnUpload: nodes.btn,
+    imgWrapper: nodes.imgWrapper,
+    okBox: nodes.okBox,
+    okText: nodes.okText,
+    errBox: nodes.errBox,
+    errText: nodes.errText,
+    formTitle: nodes.formTitle,
+    hidden,
+    idPersona, // <- enviamos idPersona al backend
   });
 }
 
@@ -70,17 +86,17 @@ function renderCard(args: { titleName: string; displayUrl: string | null; fitxa?
           }
         </div>
 
-        <!-- NO FORM aquí (evitamos formularios anidados) -->
         <div id="imatgePerfilBox" class="container" style="margin-bottom:12px;border:1px solid #ced4da;border-radius:10px;padding:16px;background-color:#f8f9fa">
           <div class="row g-3">
-            <div class="col-12">
+            <div class="col-12 d-flex align-items-center justify-content-between">
               <h6 class="mb-2" id="formTitle">${buttonText}</h6>
+              ${hasImage ? `<button class="btn btn-outline-danger btn-sm" id="btnEliminarImatge" type="button">Eliminar imatge</button>` : ''}
             </div>
 
-            <div class="alert alert-success d-none" role="alert" id="okMessage">
+            <div class="alert alert-success d-none" role="alert" id="okMessage" aria-live="polite">
               <div id="okText"></div>
             </div>
-            <div class="alert alert-danger d-none" role="alert" id="errMessage">
+            <div class="alert alert-danger d-none" role="alert" id="errMessage" aria-live="polite">
               <div id="errText"></div>
             </div>
 
@@ -89,14 +105,12 @@ function renderCard(args: { titleName: string; displayUrl: string | null; fitxa?
             <div class="col-md-4">
               <label for="nomImatge" class="form-label">Nom imatge</label>
               <input type="text" class="form-control" id="nomImatge" maxlength="120" placeholder="p. ex., ${placeholder}">
-              <div class="invalid-feedback">Indica un nom per a la imatge.</div>
             </div>
 
             <div class="col-md-5">
-              <label for="nomArxiu" class="form-label">Selecciona la imatge</label>
-              <input class="form-control" type="file" id="nomArxiu"  accept="image/jpeg">
-              <div class="form-text">Formats: JPG</div>
-              <div class="invalid-feedback">Puja un fitxer d'imatge.</div>
+              <label for="nomArxiu" class="form-label">Selecciona la imatge (JPG, ≤ 3 MB)</label>
+              <input class="form-control" type="file" id="nomArxiu" accept="image/jpeg">
+              <div class="form-text">Només es permet JPG. Mida màxima: 3 MB.</div>
             </div>
 
             <div class="col-md-3 d-flex align-items-end">
@@ -124,6 +138,7 @@ function renderCard(args: { titleName: string; displayUrl: string | null; fitxa?
 function queryNodes(root: HTMLElement) {
   return {
     btn: root.querySelector<HTMLButtonElement>('#btnImatgePerfil'),
+    btnDelete: root.querySelector<HTMLButtonElement>('#btnEliminarImatge'),
     okBox: root.querySelector<HTMLDivElement>('#okMessage'),
     okText: root.querySelector<HTMLDivElement>('#okText'),
     errBox: root.querySelector<HTMLDivElement>('#errMessage'),
@@ -149,14 +164,12 @@ function wirePreview(fileInput: HTMLInputElement | null, preview: HTMLImageEleme
       preview.classList.add('d-none');
     }
   });
-
-  // Enter en inputs no debe enviar el form maestro
   fileInput.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') e.preventDefault();
   });
 }
 
-/* ---------- Upload (click, no submit) ---------- */
+/* ---------- Upload ---------- */
 function wireUpload(ctx: {
   btn: HTMLButtonElement | null;
   nomImatge: HTMLInputElement | null;
@@ -167,44 +180,33 @@ function wireUpload(ctx: {
   errText: HTMLDivElement | null;
   formTitle: HTMLHeadingElement | null;
   imgWrapper: HTMLDivElement | null;
-  hidden: HTMLInputElement | null; // #imatgePerfilHidden (form maestro)
+  hidden: HTMLInputElement | null; // #imatgePerfilHidden (idImatge actual)
   titleName: string;
-  idPersona: number | null; // <- NUEVO: lo mandamos al backend
+  idPersona: number | null; // <- lo necesitaremos al crear el botón eliminar
 }): void {
   const { btn, nomImatge, fileInput } = ctx;
   if (!btn || !nomImatge || !fileInput) return;
 
-  // Evita que Enter en el campo texto envíe el form maestro
   nomImatge.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') e.preventDefault();
   });
 
   btn.addEventListener('click', async () => {
-    // Validación mínima
     const nameVal = (nomImatge.value || '').trim();
     const file: File | null = fileInput.files?.item(0) ?? null;
 
-    // Validaciones front: nombre, archivo, tipo y tamaño
     if (!nameVal) return showErr(ctx.errBox, ctx.errText, 'Indica un nom per a la imatge.');
     if (!file) return showErr(ctx.errBox, ctx.errText, 'Selecciona un fitxer d’imatge.');
-    if (file.type !== JPG_MIME) {
-      return showErr(ctx.errBox, ctx.errText, 'Només es permet JPG (.jpg).');
-    }
-    if (file.size > MAX_BYTES) {
-      return showErr(ctx.errBox, ctx.errText, 'La imatge supera 3 MB.');
-    }
+    if (file.type !== JPG_MIME) return showErr(ctx.errBox, ctx.errText, 'Només es permet JPG (.jpg).');
+    if (file.size > MAX_BYTES) return showErr(ctx.errBox, ctx.errText, 'La imatge supera 3 MB.');
 
     setBusy(btn, true);
 
     try {
-      // Montamos FormData manualmente
       const fd = new FormData();
       fd.append('nomImatge', nameVal);
       fd.append('nomArxiu', file);
       fd.append('tipus', '1');
-      if (ctx.idPersona && ctx.idPersona > 0) {
-        fd.append('idPersona', String(ctx.idPersona)); // <- enviar idPersona
-      }
 
       const res = await fetch(API_UPLOAD, { method: 'POST', body: fd });
       const json = (await res.json()) as UploadResponse;
@@ -213,19 +215,55 @@ function wireUpload(ctx: {
         throw new Error(json.message && json.message.length > 0 ? json.message : 'Error pujant la imatge');
       }
 
-      // Guardamos ID en el hidden global del form maestro
+      // Guardar idImatge en el hidden global (lo usará el save de la fitxa)
       if (ctx.hidden) ctx.hidden.value = String(json.data.id);
 
-      // Actualizamos preview con la URL devuelta
+      // Actualizar preview y modo
       if (json.data.url && json.data.url.length > 0) {
         updateImagePreview(ctx.imgWrapper, ctx.titleName, `${json.data.url}?ts=${Date.now()}`);
         switchToReplaceMode(btn, ctx.formTitle);
+
+        // si no existía botón eliminar, créalo y bindea su click con idPersona
+        let del = document.getElementById('btnEliminarImatge') as HTMLButtonElement | null;
+        if (!del) {
+          const titleBar = document.getElementById('formTitle')?.parentElement;
+          if (titleBar) {
+            del = document.createElement('button');
+            del.id = 'btnEliminarImatge';
+            del.type = 'button';
+            del.className = 'btn btn-outline-danger btn-sm';
+            del.textContent = 'Eliminar imatge';
+            titleBar.appendChild(del);
+
+            // si no tenemos idPersona en ctx (alta de ficha), intentamos leerlo del form maestro
+            let idPersona = ctx.idPersona;
+            if (!idPersona || idPersona <= 0) {
+              const idInput = document.querySelector<HTMLInputElement>('[name="id"]');
+              const val = (idInput?.value ?? '').trim();
+              const n = Number(val);
+              idPersona = Number.isFinite(n) && n > 0 ? n : null;
+            }
+
+            wireDelete({
+              btnDelete: del,
+              btnUpload: btn,
+              imgWrapper: ctx.imgWrapper,
+              okBox: ctx.okBox,
+              okText: ctx.okText,
+              errBox: ctx.errBox,
+              errText: ctx.errText,
+              formTitle: ctx.formTitle,
+              hidden: ctx.hidden,
+              idPersona, // <- importante
+            });
+          }
+        }
       }
 
       hideError(ctx.errBox, ctx.errText);
       showOk(ctx.okBox, ctx.okText, 'Imatge pujada. Es vincularà en guardar la fitxa.');
 
-      // Limpiamos inputs
+      // limpiar inputs
       nomImatge.value = '';
       fileInput.value = '';
       const preview = document.querySelector<HTMLImageElement>('#previewImagen');
@@ -236,6 +274,83 @@ function wireUpload(ctx: {
       showErr(ctx.errBox, ctx.errText, msg);
     } finally {
       setBusy(btn, false);
+    }
+  });
+}
+
+/* ---------- Delete (por idPersona) ---------- */
+function wireDelete(ctx: {
+  btnDelete: HTMLButtonElement | null;
+  btnUpload: HTMLButtonElement | null;
+  imgWrapper: HTMLDivElement | null;
+  okBox: HTMLDivElement | null;
+  okText: HTMLDivElement | null;
+  errBox: HTMLDivElement | null;
+  errText: HTMLDivElement | null;
+  formTitle: HTMLHeadingElement | null;
+  hidden: HTMLInputElement | null; // limpiamos el idImatge aquí
+  idPersona: number | null; // <- enviamos este valor al backend
+}): void {
+  const b = ctx.btnDelete;
+  if (!b) return;
+
+  // evita doble binding
+  if (b.dataset.bound === '1') return;
+  b.dataset.bound = '1';
+
+  b.addEventListener('click', async () => {
+    // idPersona puede venir en ctx; si no, intentamos leer del form maestro
+    let idPersona = ctx.idPersona;
+    if (!idPersona || idPersona <= 0) {
+      const idInput = document.querySelector<HTMLInputElement>('[name="id"]');
+      const val = (idInput?.value ?? '').trim();
+      const n = Number(val);
+      idPersona = Number.isFinite(n) && n > 0 ? n : null;
+    }
+
+    if (!idPersona || idPersona <= 0) {
+      return showErr(ctx.errBox, ctx.errText, 'No hi ha ID de la fitxa.');
+    }
+
+    const ok = window.confirm('Vols eliminar la imatge d’aquesta fitxa?');
+    if (!ok) return;
+
+    b.disabled = true;
+    try {
+      const res = await fetch(API_CLEAR, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ idPersona }), // <- enviamos idPersona
+      });
+      const json = (await res.json()) as ClearResponse;
+
+      if (!res.ok || json.status !== 'ok') {
+        throw new Error(json.message || 'No s’ha pogut eliminar la imatge.');
+      }
+
+      // limpiar hidden y UI
+      if (ctx.hidden) ctx.hidden.value = '';
+      if (ctx.imgWrapper) {
+        ctx.imgWrapper.innerHTML = `<p class="text-muted mb-0">Cap imatge associada encara.</p>`;
+      }
+      if (ctx.btnUpload) {
+        ctx.btnUpload.classList.remove('btn-primary');
+        ctx.btnUpload.classList.add('btn-success');
+        ctx.btnUpload.textContent = 'Pujar imatge';
+      }
+      if (ctx.formTitle) ctx.formTitle.textContent = 'Pujar imatge';
+
+      // ocultar botón eliminar
+      b.remove();
+
+      hideError(ctx.errBox, ctx.errText);
+      showOk(ctx.okBox, ctx.okText, 'Imatge eliminada de la fitxa.');
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : 'Error eliminant la imatge.';
+      hideOk(ctx.okBox, ctx.okText);
+      showErr(ctx.errBox, ctx.errText, msg);
+    } finally {
+      b.disabled = false;
     }
   });
 }
@@ -258,7 +373,6 @@ function updateImagePreview(wrapper: HTMLDivElement | null, altName: string, url
     wrapper.appendChild(img);
   }
 }
-
 function switchToReplaceMode(btn: HTMLButtonElement | null, title: HTMLHeadingElement | null): void {
   if (btn) {
     btn.classList.remove('btn-success');
@@ -267,31 +381,26 @@ function switchToReplaceMode(btn: HTMLButtonElement | null, title: HTMLHeadingEl
   }
   if (title) title.textContent = 'Substituir imatge';
 }
-
 function showOk(box: HTMLDivElement | null, text: HTMLDivElement | null, msg: string): void {
   if (!box || !text) return;
   text.textContent = msg;
   box.classList.remove('d-none');
 }
-
 function hideOk(box: HTMLDivElement | null, text: HTMLDivElement | null): void {
   if (!box || !text) return;
   text.textContent = '';
   box.classList.add('d-none');
 }
-
 function showErr(box: HTMLDivElement | null, text: HTMLDivElement | null, msg: string): void {
   if (!box || !text) return;
   text.textContent = msg;
   box.classList.remove('d-none');
 }
-
 function hideError(box: HTMLDivElement | null, text: HTMLDivElement | null): void {
   if (!box || !text) return;
   text.textContent = '';
   box.classList.add('d-none');
 }
-
 function setBusy(btn: HTMLButtonElement | null, busy: boolean): void {
   if (!btn) return;
   btn.disabled = busy;
@@ -303,7 +412,6 @@ function getNomComplet(fitxa?: Fitxa | null): string {
   const parts = [fitxa?.nom, fitxa?.cognom1, fitxa?.cognom2].filter(Boolean) as string[];
   return parts.join(' ').trim() || (fitxa?.id ? `ID ${fitxa.id}` : 'Nova fitxa');
 }
-
 function getDisplayUrlFromFitxa(fitxa?: Fitxa | null): string | null {
   const url = (fitxa?.img ?? '').trim();
   return url.length > 0 ? url : null;
