@@ -1,13 +1,6 @@
 import { Fitxa } from '../../types/types';
 
-/** Construye la URL del editor/subida de imagen en tu intranet */
-function buildImageEditorUrl(fitxa: Fitxa): string {
-  const base = `https://memoriaterrassa.cat/gestio/imatge-represaliat/fitxa/`;
-  const params = new URLSearchParams();
-  if (fitxa.id != null) params.set('id', String(fitxa.id));
-  if (fitxa.slug) params.set('slug', fitxa.slug);
-  return `${base}?${params.toString()}`;
-}
+const base = `https://memoriaterrassa.cat/gestio/imatge-represaliat/fitxa/`;
 
 /** Renderiza la pestaña 10 (imagen de perfil + acciones) en el contenedor dado */
 export function tab10(fitxa: Fitxa): void {
@@ -15,7 +8,6 @@ export function tab10(fitxa: Fitxa): void {
   if (!container || !fitxa) return;
 
   const hasImage = !!fitxa.imatgePerfil; // existe valor no nulo/undefined
-  const editorUrl = buildImageEditorUrl(fitxa);
 
   const nomComplet = [fitxa.nom, fitxa.cognom1, fitxa.cognom2].filter(Boolean).join(' ').trim() || `ID ${fitxa.id}`;
 
@@ -23,7 +15,7 @@ export function tab10(fitxa: Fitxa): void {
   const htmlWhenHasImage = `
     <div class="card shadow-sm border-0">
       <div class="card-body">
-        <h5 class="card-title mb-3">Imatge de perfil</h5>
+        <h5 class="card-title mb-3">Imatge de perfil de ${nomComplet}/h5>
 
         <div class="mb-3">
           <img
@@ -35,7 +27,7 @@ export function tab10(fitxa: Fitxa): void {
           />
         </div>
 
-        <a href="${editorUrl}/modifica-imatge/${fitxa.id}" target="_blank" rel="noopener"
+        <a href="${base}/modifica-imatge/${fitxa.id}" target="_blank" rel="noopener"
            class="btn btn-primary">
           Modificar imatge
         </a>
@@ -48,7 +40,7 @@ export function tab10(fitxa: Fitxa): void {
       <div class="card-body">
         <h5 class="card-title mb-3">Imatge de perfil</h5>
         <p class="text-muted mb-3">No hi ha cap imatge de perfil.</p>
-        <a href="${editorUrl}/nova-imatge/${fitxa.id}" target="_blank" rel="noopener"
+        <a href="${base}/nova-imatge/${fitxa.id}" target="_blank" rel="noopener"
            class="btn btn-outline-primary">
           Subir imatge
         </a>
