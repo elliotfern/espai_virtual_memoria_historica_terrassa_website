@@ -1,3 +1,4 @@
+import { scrollToTabContentOnce } from '../../utils/observer';
 import { mostrarInformacion } from './mostrarInformacion';
 
 export function initTabs(translations: Record<string, string>, idPersona: number): void {
@@ -52,6 +53,9 @@ export function initTabs(translations: Record<string, string>, idPersona: number
 
       // Mostrar la información correspondiente
       mostrarInformacion(tab.id, idPersona, tab.label);
+
+      // desplazar en móvil hacia el contenido
+      scrollToTabContentOnce();
     });
 
     tabsContainer.appendChild(btn);
