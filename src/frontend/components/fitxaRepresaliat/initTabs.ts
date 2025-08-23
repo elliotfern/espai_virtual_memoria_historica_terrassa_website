@@ -25,7 +25,7 @@ export function initTabs(translations: Record<string, string>, idPersona: number
     const btn = document.createElement('button');
 
     // Clases base para estilo y layout
-    btn.classList.add('tablinks', 'col-12 col-md');
+    btn.classList.add('tablinks', 'col-12', 'col-md');
 
     // Alternar colores: azul (colorBtn1) para índices pares, gris (colorBtn2) para impares
     if (index % 2 === 0) {
