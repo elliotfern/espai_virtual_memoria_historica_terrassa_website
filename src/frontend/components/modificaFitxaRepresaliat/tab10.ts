@@ -9,32 +9,31 @@ type UploadResponse = {
 };
 
 const API_UPLOAD = `https://${window.location.hostname}/api/aux_imatges/upload`;
+const IMATGE_URL = `https://memoriaterrassa.cat/public/img/represaliats/`;
 
 // ===== API =====
 export function tab10(containerId: string, fitxa?: Fitxa | null): void {
   const container = document.getElementById(containerId);
   if (!container) return;
 
-  // 1) Sincroniza el hidden global con el ID que venga de la API (si no hay ya uno)
-  const hidden = getHidden();
+  // hidden global que viaja al guardar la ficha
+  const hidden = document.querySelector<HTMLInputElement>('#imatgePerfilHidden') || null;
   if (hidden && !hidden.value && fitxa?.imatgePerfil && fitxa.imatgePerfil > 0) {
     hidden.value = String(fitxa.imatgePerfil);
   }
 
-  // 2) Render
-  const displayUrl = getDisplayUrlFromFitxa(fitxa);
-  const hasServerImage = !!displayUrl;
+  // Render
   const titleName = getNomComplet(fitxa);
-  container.innerHTML = renderCard({ displayUrl, hasServerImage, titleName, fitxa });
+  const displayUrl = getDisplayUrlFromFitxa(fitxa);
+  container.innerHTML = renderCard({ titleName, displayUrl, fitxa });
 
-  // 3) Wiring
+  // Wiring
   const nodes = queryNodes(container);
-  if (!nodes.form || !nodes.btn) return; // guard
-
   wirePreview(nodes.fileInput, nodes.preview);
-  wireSubmit({
-    form: nodes.form,
+  wireUpload({
     btn: nodes.btn,
+    nomImatge: nodes.nomImatge,
+    fileInput: nodes.fileInput,
     okBox: nodes.okBox,
     okText: nodes.okText,
     errBox: nodes.errBox,
@@ -46,74 +45,68 @@ export function tab10(containerId: string, fitxa?: Fitxa | null): void {
   });
 }
 
-// ===== Render =====
-function renderCard(args: { displayUrl: string | null; hasServerImage: boolean; titleName: string; fitxa?: Fitxa | null }): string {
-  const { displayUrl, hasServerImage, titleName, fitxa } = args;
-  const titleSuffix = hasServerImage ? ` de ${titleName}` : '';
-  const buttonClass = hasServerImage ? 'btn-primary' : 'btn-success';
-  const buttonText = hasServerImage ? 'Substituir imatge' : 'Pujar imatge';
-  const placeholderName = `retrat_${fitxa?.id ?? 'nou'}`;
+/* ---------- Render ---------- */
+function renderCard(args: { titleName: string; displayUrl: string | null; fitxa?: Fitxa | null }): string {
+  const { titleName, displayUrl, fitxa } = args;
+  const hasImage = !!displayUrl;
+  const buttonClass = hasImage ? 'btn-primary' : 'btn-success';
+  const buttonText = hasImage ? 'Substituir imatge' : 'Pujar imatge';
+  const placeholder = `retrat_${fitxa?.id ?? 'nou'}`;
 
   return `
     <div class="card shadow-sm border-0">
       <div class="card-body">
-        <h5 class="card-title mb-3">Imatge de perfil${titleSuffix}</h5>
+        <h5 class="card-title mb-3">Imatge de perfil${hasImage ? ` de ${titleName}` : ''}</h5>
 
         <div class="mb-3" id="imgWrapper">
           ${
-            displayUrl
-              ? `<img id="perfilImg"
-                       src="${displayUrl}"
-                       alt="Imatge de perfil de ${titleName}"
-                       class="img-fluid rounded"
-                       style="max-height: 360px; object-fit: cover;"
-                       loading="lazy" />`
+            hasImage
+              ? `<img id="perfilImg" src="${IMATGE_URL}${displayUrl!}.jpg" alt="Imatge de perfil de ${titleName}"
+                     class="img-fluid rounded" style="max-height:360px;object-fit:cover" loading="lazy">`
               : `<p class="text-muted mb-0">Cap imatge associada encara.</p>`
           }
         </div>
 
-        <div class="container" style="margin-bottom:12px;border:1px solid #ced4da;border-radius:10px;padding:16px;background-color:#f8f9fa">
-          <form id="imatgePerfilForm" enctype="multipart/form-data" novalidate>
-            <div class="row g-3">
-              <div class="col-12">
-                <h6 class="mb-2" id="formTitle">${buttonText}</h6>
-              </div>
-
-              <div class="alert alert-success d-none" role="alert" id="okMessage">
-                <div id="okText"></div>
-              </div>
-              <div class="alert alert-danger d-none" role="alert" id="errMessage">
-                <div id="errText"></div>
-              </div>
-
-              <input type="hidden" name="tipus" value="1">
-
-              <div class="col-md-4">
-                <label for="nomImatge" class="form-label">Nom imatge</label>
-                <input type="text" class="form-control" id="nomImatge" name="nomImatge"
-                       required maxlength="120" placeholder="p. ex., ${placeholderName}">
-                <div class="invalid-feedback">Indica un nom per a la imatge.</div>
-              </div>
-
-              <div class="col-md-5">
-                <label for="nomArxiu" class="form-label">Selecciona la imatge</label>
-                <input class="form-control" type="file" id="nomArxiu" name="nomArxiu" accept="image/*" required>
-                <div class="form-text">Formats: JPG, PNG, WebP.</div>
-                <div class="invalid-feedback">Puja un fitxer d'imatge.</div>
-              </div>
-
-              <div class="col-md-3 d-flex align-items-end">
-                <button class="btn ${buttonClass} w-100" id="btnImatgePerfil" type="submit">
-                  ${buttonText}
-                </button>
-              </div>
-
-              <div class="col-12">
-                <img id="previewImagen" class="img-thumbnail d-none mt-2" alt="Vista prèvia"
-                     style="max-height: 220px; object-fit: cover;">
-              </div>
+        <!-- NO FORM aquí (evitamos formularios anidados) -->
+        <div id="imatgePerfilBox" class="container" style="margin-bottom:12px;border:1px solid #ced4da;border-radius:10px;padding:16px;background-color:#f8f9fa">
+          <div class="row g-3">
+            <div class="col-12">
+              <h6 class="mb-2" id="formTitle">${buttonText}</h6>
             </div>
-          </form>
+
+            <div class="alert alert-success d-none" role="alert" id="okMessage">
+              <div id="okText"></div>
+            </div>
+            <div class="alert alert-danger d-none" role="alert" id="errMessage">
+              <div id="errText"></div>
+            </div>
+
+            <input type="hidden" id="tipusHidden" value="1">
+
+            <div class="col-md-4">
+              <label for="nomImatge" class="form-label">Nom imatge</label>
+              <input type="text" class="form-control" id="nomImatge" required maxlength="120" placeholder="p. ex., ${placeholder}">
+              <div class="invalid-feedback">Indica un nom per a la imatge.</div>
+            </div>
+
+            <div class="col-md-5">
+              <label for="nomArxiu" class="form-label">Selecciona la imatge</label>
+              <input class="form-control" type="file" id="nomArxiu" accept="image/*" required>
+              <div class="form-text">Formats: JPG, PNG, WebP.</div>
+              <div class="invalid-feedback">Puja un fitxer d'imatge.</div>
+            </div>
+
+            <div class="col-md-3 d-flex align-items-end">
+              <button class="btn ${buttonClass} w-100" id="btnImatgePerfil" type="button">
+                ${buttonText}
+              </button>
+            </div>
+
+            <div class="col-12">
+              <img id="previewImagen" class="img-thumbnail d-none mt-2" alt="Vista prèvia"
+                   style="max-height:220px;object-fit:cover">
+            </div>
+          </div>
           <small class="text-muted d-block mt-2">
             La imatge pujada <strong>encara no està vinculada</strong> a la fitxa.
             Es vincularà quan premis “Guardar fitxa”.
@@ -124,24 +117,23 @@ function renderCard(args: { displayUrl: string | null; hasServerImage: boolean; 
   `;
 }
 
-// ===== Query helpers =====
+/* ---------- Query helpers ---------- */
 function queryNodes(root: HTMLElement) {
-  const form = root.querySelector<HTMLFormElement>('#imatgePerfilForm');
   return {
-    form,
-    btn: root.querySelector<HTMLButtonElement>('#btnImatgePerfil') ?? null,
-    okBox: root.querySelector<HTMLDivElement>('#okMessage') ?? null,
-    okText: root.querySelector<HTMLDivElement>('#okText') ?? null,
-    errBox: root.querySelector<HTMLDivElement>('#errMessage') ?? null,
-    errText: root.querySelector<HTMLDivElement>('#errText') ?? null,
-    fileInput: form?.querySelector<HTMLInputElement>('#nomArxiu') ?? null,
-    preview: root.querySelector<HTMLImageElement>('#previewImagen') ?? null,
-    imgWrapper: root.querySelector<HTMLDivElement>('#imgWrapper') ?? null,
-    formTitle: root.querySelector<HTMLHeadingElement>('#formTitle') ?? null,
+    btn: root.querySelector<HTMLButtonElement>('#btnImatgePerfil'),
+    okBox: root.querySelector<HTMLDivElement>('#okMessage'),
+    okText: root.querySelector<HTMLDivElement>('#okText'),
+    errBox: root.querySelector<HTMLDivElement>('#errMessage'),
+    errText: root.querySelector<HTMLDivElement>('#errText'),
+    nomImatge: root.querySelector<HTMLInputElement>('#nomImatge'),
+    fileInput: root.querySelector<HTMLInputElement>('#nomArxiu'),
+    preview: root.querySelector<HTMLImageElement>('#previewImagen'),
+    imgWrapper: root.querySelector<HTMLDivElement>('#imgWrapper'),
+    formTitle: root.querySelector<HTMLHeadingElement>('#formTitle'),
   };
 }
 
-// ===== Preview =====
+/* ---------- Preview ---------- */
 function wirePreview(fileInput: HTMLInputElement | null, preview: HTMLImageElement | null): void {
   if (!fileInput || !preview) return;
   fileInput.addEventListener('change', () => {
@@ -154,22 +146,51 @@ function wirePreview(fileInput: HTMLInputElement | null, preview: HTMLImageEleme
       preview.classList.add('d-none');
     }
   });
+
+  // Enter en inputs no debe enviar el form maestro
+  fileInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') e.preventDefault();
+  });
 }
 
-// ===== Submit =====
-function wireSubmit(ctx: { form: HTMLFormElement; btn: HTMLButtonElement | null; okBox: HTMLDivElement | null; okText: HTMLDivElement | null; errBox: HTMLDivElement | null; errText: HTMLDivElement | null; formTitle: HTMLHeadingElement | null; imgWrapper: HTMLDivElement | null; hidden: HTMLInputElement | null; titleName: string }): void {
-  const { form, btn } = ctx;
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (!form.checkValidity()) {
-      form.classList.add('was-validated');
-      return;
-    }
+/* ---------- Upload (click, no submit) ---------- */
+function wireUpload(ctx: {
+  btn: HTMLButtonElement | null;
+  nomImatge: HTMLInputElement | null;
+  fileInput: HTMLInputElement | null;
+  okBox: HTMLDivElement | null;
+  okText: HTMLDivElement | null;
+  errBox: HTMLDivElement | null;
+  errText: HTMLDivElement | null;
+  formTitle: HTMLHeadingElement | null;
+  imgWrapper: HTMLDivElement | null;
+  hidden: HTMLInputElement | null; // #imatgePerfilHidden (form maestro)
+  titleName: string;
+}): void {
+  const { btn, nomImatge, fileInput } = ctx;
+  if (!btn || !nomImatge || !fileInput) return;
+
+  // Evita que Enter en el campo texto envíe el form maestro
+  nomImatge.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') e.preventDefault();
+  });
+
+  btn.addEventListener('click', async () => {
+    // Validación mínima
+    const nameVal = (nomImatge.value || '').trim();
+    const file: File | null = fileInput.files?.item(0) ?? null;
+    if (!nameVal) return showErr(ctx.errBox, ctx.errText, 'Indica un nom per a la imatge.');
+    if (!file) return showErr(ctx.errBox, ctx.errText, 'Selecciona un fitxer d’imatge.');
+
     setBusy(btn, true);
 
     try {
-      const fd = new FormData(form);
+      // Montamos FormData manualmente
+      const fd = new FormData();
+      fd.append('nomImatge', nameVal);
+      fd.append('nomArxiu', file);
+      fd.append('tipus', '1');
+
       const res = await fetch(API_UPLOAD, { method: 'POST', body: fd });
       const json = (await res.json()) as UploadResponse;
 
@@ -177,36 +198,39 @@ function wireSubmit(ctx: { form: HTMLFormElement; btn: HTMLButtonElement | null;
         throw new Error(json.message && json.message.length > 0 ? json.message : 'Error pujant la imatge');
       }
 
-      // Guarda ID en el hidden global (se enviará al guardar la fitxa)
+      // Guardamos ID en el hidden global del form maestro
       if (ctx.hidden) ctx.hidden.value = String(json.data.id);
 
-      // Actualiza UI con la URL devuelta (siempre preferible)
+      // Actualizamos preview con la URL devuelta
       if (json.data.url && json.data.url.length > 0) {
         updateImagePreview(ctx.imgWrapper, ctx.titleName, `${json.data.url}?ts=${Date.now()}`);
-        switchToReplaceMode(ctx.btn, ctx.formTitle);
+        switchToReplaceMode(btn, ctx.formTitle);
       }
 
-      form.reset();
-      form.classList.remove('was-validated');
       hideError(ctx.errBox, ctx.errText);
       showOk(ctx.okBox, ctx.okText, 'Imatge pujada. Es vincularà en guardar la fitxa.');
+
+      // Limpiamos inputs
+      nomImatge.value = '';
+      fileInput.value = '';
+      const preview = document.querySelector<HTMLImageElement>('#previewImagen');
+      if (preview) preview.classList.add('d-none');
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Hi ha hagut un error pujant la imatge.';
+      const msg = err instanceof Error ? err.message : 'Hi ha hagut un error pujant la imatge.';
       hideOk(ctx.okBox, ctx.okText);
-      showErr(ctx.errBox, ctx.errText, message);
+      showErr(ctx.errBox, ctx.errText, msg);
     } finally {
       setBusy(btn, false);
     }
   });
 }
 
-// ===== UI helpers =====
+/* ---------- UI helpers ---------- */
 function updateImagePreview(wrapper: HTMLDivElement | null, altName: string, url: string): void {
   if (!wrapper) return;
   const existing = wrapper.querySelector<HTMLImageElement>('#perfilImg');
-  if (existing) {
-    existing.src = url;
-  } else {
+  if (existing) existing.src = url;
+  else {
     const img = document.createElement('img');
     img.id = 'perfilImg';
     img.src = url;
@@ -259,17 +283,12 @@ function setBusy(btn: HTMLButtonElement | null, busy: boolean): void {
   btn.innerHTML = busy ? `<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Pujant…` : btn.textContent || 'Pujar imatge';
 }
 
-// ===== Utils =====
-function getHidden(): HTMLInputElement | null {
-  return document.querySelector<HTMLInputElement>('#imatgePerfilHidden');
-}
-
+/* ---------- Utils ---------- */
 function getNomComplet(fitxa?: Fitxa | null): string {
   const parts = [fitxa?.nom, fitxa?.cognom1, fitxa?.cognom2].filter(Boolean) as string[];
   return parts.join(' ').trim() || (fitxa?.id ? `ID ${fitxa.id}` : 'Nova fitxa');
 }
 
-/** Autoridad para mostrar imagen: fitxa.img (URL completa). */
 function getDisplayUrlFromFitxa(fitxa?: Fitxa | null): string | null {
   const url = (fitxa?.img ?? '').trim();
   return url.length > 0 ? url : null;
