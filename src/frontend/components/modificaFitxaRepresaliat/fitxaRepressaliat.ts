@@ -61,30 +61,11 @@ export async function fitxaRepressaliat(idRepressaliat?: number): Promise<void> 
     const form = document.getElementById('formFitxaRepressaliat') as HTMLFormElement | null;
 
     if (form) {
-      // 1) log de invalid para ver si algo bloquea
-      form.addEventListener(
-        'invalid',
-        (ev) => {
-          const t = ev.target as HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
-          console.warn('[fitxa] Control inválido bloqueando submit:', t.name || t.id, t);
-        },
-        true
-      ); // captura
-
       // 2) log de click en tus botones submit
       form.addEventListener('submit', (event) => {
-        console.log('[fitxa] click btnModificarFitxa');
         enviarDadesFormFitxaRepressaliat(event, 'PUT');
       });
     }
-
-    /*
-    if (form) {
-      form.addEventListener('submit', (event) => {
-        enviarDadesFormFitxaRepressaliat(event, 'PUT');
-      });
-    }
-      */
   } else {
     // tab1 - Categories repressió
     tab1();
@@ -112,6 +93,9 @@ export async function fitxaRepressaliat(idRepressaliat?: number): Promise<void> 
 
     // tab9 - Registre canvis
     tab9();
+
+    // tab10 - Imatge fitxa represaliat
+    tab10('imatgePerfil');
 
     // Escolta event
     const form = document.getElementById('formFitxaRepressaliat') as HTMLFormElement | null;

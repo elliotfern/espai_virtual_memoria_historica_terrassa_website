@@ -74,9 +74,10 @@ try {
     }
 
     // Validar tamaño (opcional)
-    $maxBytes = 10 * 1024 * 1024; // 10MB
+    // Solo JPG y max 3MB
+    $maxBytes = 3 * 1024 * 1024;
     if (!isset($file['size']) || (int)$file['size'] <= 0 || (int)$file['size'] > $maxBytes) {
-        throw new RuntimeException('Mida de fitxer no vàlida (màxim 10MB).');
+        throw new RuntimeException('La mida supera el límit de 3MB.');
     }
 
     // Validar MIME real (no fiarse de la extensió)
@@ -84,11 +85,9 @@ try {
     $mime  = $finfo->file($file['tmp_name']);
     $allowed = [
         'image/jpeg' => 'jpg',
-        'image/png'  => 'png',
-        'image/webp' => 'webp',
     ];
     if (!isset($allowed[$mime])) {
-        throw new RuntimeException('Format no permès. Usa JPG, PNG o WebP.');
+        throw new RuntimeException('Format no permès. Usa JPG');
     }
     $ext = $allowed[$mime];
 
@@ -115,8 +114,8 @@ try {
 
     // INSERT (tipus forçat a 1, dateCreated = NOW())
     $stmt = $conn->prepare("
-    INSERT INTO aux_imatges (nomArxiu, nomImatge, tipus, dateCreated, dateModified)
-    VALUES (:nomArxiu, :nomImatge, 1, NOW(), NULL)
+    INSERT INTO aux_imatges (nomArxiu, nomImatge, tipus, dateCreated, dateModified, idPersona)
+    VALUES (:nomArxiu, :nomImatge, 1, NOW(), NULL, :idPersona)
   ");
     $stmt->execute([
         ':nomArxiu'  => $nomArxiu,

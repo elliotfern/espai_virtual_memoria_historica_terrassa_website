@@ -183,6 +183,9 @@ $adreca_num = isset($data['adreca_num']) && $data['adreca_num'] !== '' && $data[
     ? (int)$data['adreca_num']
     : null;
 $causa_defuncio_detalls = $data['causa_defuncio_detalls'] ?? null;
+$img = isset($data['img']) && $data['img'] !== '' && $data['img'] !== '0'
+    ? (int)$data['img']
+    : null;
 
 $data_actualitzacio = date('Y-m-d');
 $id = $data['id'];
@@ -231,7 +234,8 @@ try {
         tipus_via = :tipus_via,
         adreca_antic = :adreca_antic,
         adreca_num = :adreca_num,
-        causa_defuncio_detalls = :causa_defuncio_detalls
+        causa_defuncio_detalls = :causa_defuncio_detalls,
+        img = :img
     WHERE id = :id";
 
     // Preparar la consulta
@@ -276,6 +280,8 @@ try {
     $stmt->bindParam(':adreca_antic', $adreca_antic, PDO::PARAM_STR);
     $stmt->bindParam(':adreca_num', $adreca_num, PDO::PARAM_INT);
     $stmt->bindParam(':causa_defuncio_detalls', $causa_defuncio_detalls, PDO::PARAM_INT);
+    $stmt->bindParam(':img', $img, PDO::PARAM_INT);
+
 
     // Supón que el ID a modificar lo pasas en el JSON también
     if (isset($data['id'])) {

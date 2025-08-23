@@ -10,6 +10,8 @@ type UploadResponse = {
 
 const API_UPLOAD = `https://${window.location.hostname}/api/aux_imatges/upload`;
 const IMATGE_URL = `https://memoriaterrassa.cat/public/img/represaliats/`;
+const MAX_BYTES = 3 * 1024 * 1024; // <- 3 MB
+const JPG_MIME = 'image/jpeg'; // <- solo JPG
 
 // ===== API =====
 export function tab10(containerId: string, fitxa?: Fitxa | null): void {
@@ -42,6 +44,7 @@ export function tab10(containerId: string, fitxa?: Fitxa | null): void {
     imgWrapper: nodes.imgWrapper,
     hidden,
     titleName,
+    idPersona: typeof fitxa?.id === 'number' ? fitxa!.id! : null, // <- mandamos idPersona
   });
 }
 
@@ -91,8 +94,8 @@ function renderCard(args: { titleName: string; displayUrl: string | null; fitxa?
 
             <div class="col-md-5">
               <label for="nomArxiu" class="form-label">Selecciona la imatge</label>
-              <input class="form-control" type="file" id="nomArxiu" accept="image/*">
-              <div class="form-text">Formats: JPG, PNG, WebP.</div>
+              <input class="form-control" type="file" id="nomArxiu"  accept="image/jpeg">
+              <div class="form-text">Formats: JPG</div>
               <div class="invalid-feedback">Puja un fitxer d'imatge.</div>
             </div>
 
@@ -166,6 +169,7 @@ function wireUpload(ctx: {
   imgWrapper: HTMLDivElement | null;
   hidden: HTMLInputElement | null; // #imatgePerfilHidden (form maestro)
   titleName: string;
+  idPersona: number | null; // <- NUEVO: lo mandamos al backend
 }): void {
   const { btn, nomImatge, fileInput } = ctx;
   if (!btn || !nomImatge || !fileInput) return;
@@ -179,8 +183,16 @@ function wireUpload(ctx: {
     // Validación mínima
     const nameVal = (nomImatge.value || '').trim();
     const file: File | null = fileInput.files?.item(0) ?? null;
+
+    // Validaciones front: nombre, archivo, tipo y tamaño
     if (!nameVal) return showErr(ctx.errBox, ctx.errText, 'Indica un nom per a la imatge.');
     if (!file) return showErr(ctx.errBox, ctx.errText, 'Selecciona un fitxer d’imatge.');
+    if (file.type !== JPG_MIME) {
+      return showErr(ctx.errBox, ctx.errText, 'Només es permet JPG (.jpg).');
+    }
+    if (file.size > MAX_BYTES) {
+      return showErr(ctx.errBox, ctx.errText, 'La imatge supera 3 MB.');
+    }
 
     setBusy(btn, true);
 
@@ -190,6 +202,9 @@ function wireUpload(ctx: {
       fd.append('nomImatge', nameVal);
       fd.append('nomArxiu', file);
       fd.append('tipus', '1');
+      if (ctx.idPersona && ctx.idPersona > 0) {
+        fd.append('idPersona', String(ctx.idPersona)); // <- enviar idPersona
+      }
 
       const res = await fetch(API_UPLOAD, { method: 'POST', body: fd });
       const json = (await res.json()) as UploadResponse;
