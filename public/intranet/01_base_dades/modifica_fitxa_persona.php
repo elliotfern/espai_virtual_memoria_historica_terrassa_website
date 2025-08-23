@@ -722,13 +722,13 @@ if ($pagina === "modifica-fitxa") {
 
         <?php
         if ($modificaBtn === 1) {
-          echo '<button type="submit" class="btn btn-primary" id="btnModificarFitxa">
+          echo '<button type="submit" form="formFitxaRepressaliat" class="btn btn-primary" id="btnModificarFitxa">
           Modificar dades
         </button>';
         } else {
 
           if ($isAdmin):
-            echo '<button type="submit" class="btn btn-primary" id="btnEnviaFitxa">
+            echo '<button type="submit" form="formFitxaRepressaliat" class="btn btn-primary" id="btnEnviaFitxa">
               Crea nova fitxa
             </button>';
           endif;

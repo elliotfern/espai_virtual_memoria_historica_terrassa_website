@@ -59,11 +59,34 @@ export async function fitxaRepressaliat(idRepressaliat?: number): Promise<void> 
 
     // Escolta event
     const form = document.getElementById('formFitxaRepressaliat') as HTMLFormElement | null;
+
+    if (form) {
+      // 1) log de invalid para ver si algo bloquea
+      form.addEventListener(
+        'invalid',
+        (ev) => {
+          const t = ev.target as HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
+          console.warn('[fitxa] Control inválido bloqueando submit:', t.name || t.id, t);
+        },
+        true
+      ); // captura
+
+      // 2) log de click en tus botones submit
+      document.getElementById('btnModificarFitxa')?.addEventListener('click', () => {
+        console.log('[fitxa] click btnModificarFitxa');
+      });
+      document.getElementById('btnEnviaFitxa')?.addEventListener('click', () => {
+        console.log('[fitxa] click btnEnviaFitxa');
+      });
+    }
+
+    /*
     if (form) {
       form.addEventListener('submit', (event) => {
         enviarDadesFormFitxaRepressaliat(event, 'PUT');
       });
     }
+      */
   } else {
     // tab1 - Categories repressió
     tab1();
