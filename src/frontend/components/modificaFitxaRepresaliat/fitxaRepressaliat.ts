@@ -72,11 +72,9 @@ export async function fitxaRepressaliat(idRepressaliat?: number): Promise<void> 
       ); // captura
 
       // 2) log de click en tus botones submit
-      document.getElementById('btnModificarFitxa')?.addEventListener('click', () => {
+      form.addEventListener('submit', (event) => {
         console.log('[fitxa] click btnModificarFitxa');
-      });
-      document.getElementById('btnEnviaFitxa')?.addEventListener('click', () => {
-        console.log('[fitxa] click btnEnviaFitxa');
+        enviarDadesFormFitxaRepressaliat(event, 'PUT');
       });
     }
 
