@@ -1,17 +1,15 @@
 // src/pages/fitxaRepresaliat/index.ts
-import { fetchDataFitxaRepresaliat } from '../../services/api/fetchDataFitxaRepresaliat';
-import { fetchDataFitxaRepresaliatFamiliar } from '../../services/api/fetchDataFitxaRepresaliatFamiliar';
 import { cache } from './cache';
 import { initButtons } from './initButtons';
 import type { Fitxa, FitxaFamiliars } from '../../types/types';
+import { getApiArray, getApiFirst } from '../../services/api/http';
+import { DOMAIN_API } from '../../config/constants';
 
 function showNotFound(msg: string): void {
-  // Oculta las fichas normales
+  // Oculta las fichas normales (menos el contenedor de error)
   const containers = document.querySelectorAll<HTMLDivElement>('.container.fitxaRepresaliat');
   containers.forEach((el) => {
-    if (el.id !== 'fitxaRepresaliat_error') {
-      el.style.display = 'none';
-    }
+    if (el.id !== 'fitxaRepresaliat_error') el.style.display = 'none';
   });
 
   // Muestra el div de error
@@ -19,7 +17,7 @@ function showNotFound(msg: string): void {
   if (errorDiv) {
     errorDiv.style.display = 'block';
     errorDiv.innerHTML = `
-      <div class="fitxa-persona marro2 raleway">
+      <div class="fitxa-persona blau1 raleway">
         ${msg || 'No hi ha resultats disponibles per a aquesta fitxa.'}
       </div>`;
   }
@@ -27,22 +25,28 @@ function showNotFound(msg: string): void {
 
 export async function fitxaRepresaliat(slug: string): Promise<void> {
   try {
-    const fitxa = await fetchDataFitxaRepresaliat(slug);
+    // 1) Detalle por slug → usamos getApiFirst<Fitxa>
+    const fitxaUrl = `${DOMAIN_API}/api/dades_personals/get/?type=fitxaRepresaliat&slug=${encodeURIComponent(slug)}`;
+    const fitxa = await getApiFirst<Fitxa>(fitxaUrl);
+
     if (!fitxa) {
-      showNotFound('Ho sentim però la adreça web introduïda no es correspon amb cap fitxa de represaliat.');
+      showNotFound('Ho sentim, però l’adreça web introduïda no es correspon amb cap fitxa de represaliat.');
       return;
     }
 
-    cache.setFitxa(fitxa as Fitxa);
+    cache.setFitxa(fitxa);
 
+    // 2) Familiares por id → usamos getApiArray<FitxaFamiliars>
     try {
-      const familiars = await fetchDataFitxaRepresaliatFamiliar(fitxa.id);
-      cache.setFitxaFam(Array.isArray(familiars) ? (familiars as FitxaFamiliars[]) : []);
+      const familiarsUrl = `${DOMAIN_API}/api/dades_personals/get/?type=familiars&id=${fitxa.id}`;
+      const familiars = await getApiArray<FitxaFamiliars>(familiarsUrl);
+      cache.setFitxaFam(familiars);
     } catch (err) {
       console.warn('Error al obtenir familiars:', err);
       cache.setFitxaFam([]);
     }
 
+    // 3) Iniciar UI
     await initButtons(fitxa.id);
   } catch (error) {
     console.error('fitxaRepresaliat - error:', error);

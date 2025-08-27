@@ -811,24 +811,38 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
     // ruta GET => "https://memoriaterrassa.cat/api/represaliats/get/?type=fitxaDadesFamiliars&id=35"
 } elseif (isset($_GET['type']) && $_GET['type'] == 'fitxaDadesFamiliars' && isset($_GET['id'])) {
     $id = $_GET['id'];
-    global $conn;
-    /** @var PDO $conn */
+    $db = new Database();
+
     $query = "SELECT f.id as idFamiliar, f.nom AS nomFamiliar, f.cognom1 AS cognomFamiliar1, f.cognom2 AS cognomFamiliar2, idParent, r.relacio_parentiu, f.anyNaixement AS anyNaixementFamiliar
         FROM aux_familiars AS f
         LEFT JOIN aux_familiars_relacio as r ON f.relacio_parentiu = r.id
-        WHERE f.idParent = $id";
+        WHERE f.idParent = :id";
 
-    $stmt = $conn->prepare($query);
-    $stmt->execute();
 
-    if ($stmt->rowCount() === 0) {
-        header("Content-Type: application/json");
-        echo json_encode(null);  // Devuelve un objeto JSON nulo si no hay resultados
-    } else {
-        // Solo obtenemos la primera fila ya que parece ser una búsqueda por ID
-        $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        header("Content-Type: application/json");
-        echo json_encode($row);  // Codifica la fila como un objeto JSON
+    try {
+        $params = [':id' => $id];
+        $result = $db->getData($query, $params, false);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
     }
 
     // 4) Per obtenir nom, cognom1 i cognom2 al cercador homepage Texts complets

@@ -36,7 +36,7 @@ $id = $routeParams[0];
     </div>
 </div>
 
-<div id="fitxaRepresaliat_error" class="container fitxaRepresaliat" style="display:none">
+<div id="fitxaRepresaliat_error" class="container" style="display:none; padding:50px;margin-bottom:100px">
 </div>
 
 <style>
