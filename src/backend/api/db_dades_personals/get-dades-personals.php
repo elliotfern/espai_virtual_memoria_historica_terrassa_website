@@ -626,9 +626,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
     // ruta GET => "https://memoriaterrassa.cat/api/dades_personals/get/?type=fitxa&id=35"
 } elseif (isset($_GET['type']) && $_GET['type'] == 'fitxaRepresaliat' && isset($_GET['slug'])) {
     $slug = $_GET['slug'];
-
-    global $conn;
-    /** @var PDO $conn */
+    $db = new Database();
     $query = "SELECT 
             dp.id,
             dp.nom,
@@ -752,20 +750,32 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
             LEFT JOIN db_biografies AS bio ON dp.id = bio.idRepresaliat
             LEFT JOIN aux_empreses AS em ON dp.empresa = em.id
             LEFT JOIN aux_tipus_via AS v ON dp.tipus_via = v.id
-            WHERE dp.slug = '$slug'";
+            WHERE dp.slug = :slug";
 
+    try {
+        $params = [':slug' => $slug];
+        $result = $db->getData($query, $params, false);
 
-    $stmt = $conn->prepare($query);
-    $stmt->execute();
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
 
-    if ($stmt->rowCount() === 0) {
-        header("Content-Type: application/json");
-        echo json_encode(null);  // Devuelve un objeto JSON nulo si no hay resultados
-    } else {
-        // Solo obtenemos la primera fila ya que parece ser una búsqueda por ID
-        $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        header("Content-Type: application/json");
-        echo json_encode($row);  // Codifica la fila como un objeto JSON
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
     }
 
     // 4) Nom i cognoms del represaliat

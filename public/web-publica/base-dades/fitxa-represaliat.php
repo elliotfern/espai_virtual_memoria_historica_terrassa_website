@@ -36,6 +36,8 @@ $id = $routeParams[0];
     </div>
 </div>
 
+<div class="container fitxaRepresaliat_error" style="display:none"> </div>
+
 <style>
     .row {
         margin-top: 0px !important;

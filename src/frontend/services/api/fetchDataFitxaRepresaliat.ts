@@ -1,10 +1,11 @@
+import { DOMAIN_API } from '../../config/constants';
 import { Fitxa } from '../../types/types';
 import { fetchData } from './api';
 
 export async function fetchDataFitxaRepresaliat(slug: string) {
   // Si los datos aún no están en cache, realizamos la consulta a la API
 
-  const devDirectory = `https://${window.location.hostname}`;
+  const devDirectory = DOMAIN_API;
 
   const url = `${devDirectory}/api/dades_personals/get/?type=fitxaRepresaliat&slug=${slug}`;
 
