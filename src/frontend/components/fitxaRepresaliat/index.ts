@@ -19,7 +19,7 @@ function showNotFound(msg: string): void {
   if (errorDiv) {
     errorDiv.style.display = 'block';
     errorDiv.innerHTML = `
-      <div class="alert alert-warning mt-4 mb-4" role="alert">
+      <div class="fitxa-persona marro2 raleway">
         ${msg || 'No hi ha resultats disponibles per a aquesta fitxa.'}
       </div>`;
   }
@@ -29,7 +29,7 @@ export async function fitxaRepresaliat(slug: string): Promise<void> {
   try {
     const fitxa = await fetchDataFitxaRepresaliat(slug);
     if (!fitxa) {
-      showNotFound("No s'ha trobat el registre sol·licitat.");
+      showNotFound('Ho sentim però la adreça web introduïda no es correspon amb cap fitxa de represaliat.');
       return;
     }
 
