@@ -1,4 +1,5 @@
 // src/pages/fitxaRepresaliat/mostrarInformacion.ts
+import { DOMAIN_IMG } from '../../config/constants';
 import { cache } from './cache';
 import { renderTab1 } from './tabs/tab1';
 import { renderTab2 } from './tabs/tab2';
@@ -28,9 +29,9 @@ export function mostrarInformacion(tabId: string, id: number, label: string): vo
 
   // Comprobamos si la variable fitxa.img tiene un valor válido
   if (fitxa.img && fitxa.img !== '' && fitxa.img !== null && imagen) {
-    imagen.src = `https://${window.location.hostname}/public/img/represaliats/${fitxa.img}.jpg`; // Si es válida, usamos la imagen de la variable
+    imagen.src = DOMAIN_IMG + `/assets_represaliats/img/${fitxa.img}.jpg`; // Si es válida, usamos la imagen de la variable
   } else {
-    imagen.src = `https://${window.location.hostname}/public/img/foto_defecte.jpg`; // Si no, mostramos la imagen por defecto
+    imagen.src = DOMAIN_IMG + `/assets_represaliats/img/foto_defecte.jpg`; // Si no, mostramos la imagen por defecto
   }
 
   // Aquí puedes mantener el contenido de divAdditionalInfo si es necesario
@@ -40,9 +41,7 @@ export function mostrarInformacion(tabId: string, id: number, label: string): vo
   const cognom2 = fitxa.cognom2 !== null ? fitxa.cognom2 : '';
   const nombreCompleto = `${nom} ${cognom1} ${cognom2 ?? ''}`;
 
-  divAdditionalInfo.innerHTML = `
-      <h4 class="titolRepresaliat"> ${nombreCompleto}</h4>
-    `; // No se limpia el contenido
+  divAdditionalInfo.innerHTML = `<h4 class="titolRepresaliat"> ${nombreCompleto}</h4>`; // No se limpia el contenido
 
   switch (tabId) {
     case 'tab1':

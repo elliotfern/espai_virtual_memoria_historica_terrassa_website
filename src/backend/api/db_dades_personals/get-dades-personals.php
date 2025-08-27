@@ -827,7 +827,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
 
     global $conn;
     /** @var PDO $conn */
-    $query = "SELECT d.id, d.nom, d.cognom1, d.cognom2
+    $query = "SELECT d.id, d.nom, d.cognom1, d.cognom2, d.slug
         FROM db_dades_personals AS d";
 
     $stmt = $conn->prepare($query);

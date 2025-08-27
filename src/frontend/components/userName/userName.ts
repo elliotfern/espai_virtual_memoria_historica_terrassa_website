@@ -1,7 +1,8 @@
+import { DOMAIN_IMG, DOMAIN_WEB } from '../../config/constants';
 import { logout } from '../../services/auth/logOut';
 
 export async function nameUser(): Promise<void> {
-  const devDirectory = `https://${window.location.hostname}`;
+  const devDirectory = DOMAIN_WEB;
   const urlAjax = `${devDirectory}/api/auth/get/nomUsuari`;
 
   const userLoggedDiv = document.getElementById('userLogged');
@@ -31,7 +32,7 @@ export async function nameUser(): Promise<void> {
       // HTML dinámico con avatar, nombre y botón logout
       userLoggedDiv.innerHTML = `
       <div class="d-flex align-items-center gap-2 flex-wrap">
-        <img src="https://memoriaterrassa.cat/public/img/usuaris-avatars/${data.avatar}.jpg" alt="Avatar de ${data.username}" class="rounded-circle" width="40" height="40">
+        <img src="${DOMAIN_IMG}/assets_usuaris/${data.avatar}.jpg" alt="Avatar de ${data.username}" class="rounded-circle" width="40" height="40">
         <span class="fw-bold text-white">${data.username}</span>
        <button id="btnSortir" class="btn btn-sm btn-outline-light">Sortir</button>
       </div>

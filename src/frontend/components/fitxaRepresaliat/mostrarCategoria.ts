@@ -1,3 +1,4 @@
+import { DOMAIN_WEB } from '../../config/constants';
 import { fetchData } from '../../services/api/api';
 import { ApiResponse, FitxaJudicial } from '../../types/types';
 import { fitxaTipusRepressio } from './tab_tipus_repressio';
@@ -11,7 +12,7 @@ export async function mostrarCategoria(categoriaNumerica: string, idPersona: num
   divInfo.innerHTML = '';
   divInfo.dataset.categoria = categoriaNumerica;
 
-  const devDirectory = `https://${window.location.hostname}`;
+  const devDirectory = DOMAIN_WEB;
   const urlAjax2 = getApiUrlForCategoria(categoriaNumerica, idPersona, devDirectory);
   if (urlAjax2 === null) {
     console.error('Categoria no válida:', categoriaNumerica);

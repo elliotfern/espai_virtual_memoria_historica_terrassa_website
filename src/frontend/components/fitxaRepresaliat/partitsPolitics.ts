@@ -1,8 +1,10 @@
+import { DOMAIN_WEB } from '../../config/constants';
+
 // src/pages/fitxaRepresaliat/partitsPolitics.ts
 type ApiWrapper<T> = { status?: string; message?: string; errors?: unknown[]; data?: T[] };
 type Partit = { id: number; partit_politic: string; sigles?: string | null };
 
-const base = window.location.origin;
+const base = DOMAIN_WEB;
 
 async function fetchAux<T>(endpoint: string): Promise<T[]> {
   const res = await fetch(`${base}/api/auxiliars/get/${endpoint}`);

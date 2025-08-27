@@ -1,4 +1,5 @@
 // src/pages/fitxa/tabs/tab10.ts
+import { DOMAIN_IMG, DOMAIN_WEB } from '../../config/constants';
 import { Fitxa } from '../../types/types';
 
 type UploadResponse = {
@@ -9,9 +10,9 @@ type UploadResponse = {
 
 type ClearResponse = { status: 'ok' | 'error'; message?: string };
 
-const API_UPLOAD = `https://${window.location.hostname}/api/aux_imatges/upload`;
-const API_CLEAR = `https://${window.location.hostname}/api/aux_imatges/clear-image`;
-const IMATGE_URL = `https://memoriaterrassa.cat/public/img/represaliats/`;
+const API_UPLOAD = DOMAIN_WEB + `/api/aux_imatges/upload`;
+const API_CLEAR = DOMAIN_WEB + `/api/aux_imatges/clear-image`;
+const IMATGE_URL = DOMAIN_IMG + `/assets_represaliats/img/`;
 const MAX_BYTES = 3 * 1024 * 1024; // 3 MB
 const JPG_MIME = 'image/jpeg';
 

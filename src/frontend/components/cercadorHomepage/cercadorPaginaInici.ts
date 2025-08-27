@@ -1,3 +1,4 @@
+import { DOMAIN_WEB } from '../../config/constants';
 import { normalizeText } from '../../services/formatDates/formatText';
 
 interface Persona {
@@ -5,12 +6,14 @@ interface Persona {
   cognom1: string;
   cognom2: string;
   id: number;
+  slug: string;
 }
 
 // Simulación de llamada a API (reemplázala con fetch real)
 async function fetchPersones(): Promise<Persona[]> {
+  const webApi = DOMAIN_WEB;
   try {
-    const response = await fetch('https://memoriaterrassa.cat/api/dades_personals/get/?llistatPersonesCercador');
+    const response = await fetch(webApi + '/api/dades_personals/get/?llistatPersonesCercador');
     if (!response.ok) throw new Error(`Error a l'API: ${response.status}`);
     return await response.json();
   } catch (error) {
@@ -22,6 +25,7 @@ async function fetchPersones(): Promise<Persona[]> {
 // Mostrar resultados
 
 function mostrarResultats(resultats: Persona[], resultsDiv: HTMLElement) {
+  const webApi = DOMAIN_WEB;
   if (resultats.length === 0) {
     resultsDiv.innerHTML = "<p>No s'ha trobat cap coincidència.</p>";
     return;
@@ -30,7 +34,7 @@ function mostrarResultats(resultats: Persona[], resultsDiv: HTMLElement) {
   resultsDiv.innerHTML = resultats
     .map(
       (p) =>
-        `<a href="https://memoriaterrassa.cat/fitxa/${p.id}" class="card p-2 mb-2 text-decoration-none text-dark">
+        `<a href="${webApi}/fitxa/${p.slug}" class="card p-2 mb-2 text-decoration-none text-dark">
           <strong>${p.nom}</strong> ${p.cognom1} ${p.cognom2}
         </a>`
     )
