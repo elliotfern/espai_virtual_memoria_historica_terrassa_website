@@ -1,25 +1,35 @@
-//import { Fitxa, FitxaJudicial, FitxaFamiliars, ApiResponse } from '../../types/types';
+// src/services/api/fetchDataFitxaRepresaliatFamiliar.ts
+import { DOMAIN_API } from '../../config/constants';
+import type { FitxaFamiliars } from '../../types/types';
 import { fetchData } from './api';
 
-export async function fetchDataFitxaRepresaliatFamiliar(id: number) {
-  // Si los datos aún no están en cache, realizamos la consulta a la API
+type ApiResponseSuccess<T> = {
+  status: 'success';
+  message: string;
+  errors: unknown[];
+  data: T[]; // supongo array de familiares
+};
 
-  const devDirectory = `https://${window.location.hostname}`;
-  const url2 = `${devDirectory}/api/dades_personals/get/?type=fitxaDadesFamiliars&id=${id}`;
+type ApiResponseError = {
+  status: 'error';
+  message: string;
+  errors: unknown[];
+  data: null;
+};
+
+type ApiResponse<T> = ApiResponseSuccess<T> | ApiResponseError;
+
+export async function fetchDataFitxaRepresaliatFamiliar(idPersona: number): Promise<FitxaFamiliars[]> {
+  const url = `${DOMAIN_API}/api/dades_personals/get/?type=fitxaDadesFamiliars&id=${idPersona}`;
 
   try {
-    const dataFamiliars = await fetchData(url2);
-
-    if (Array.isArray(dataFamiliars)) {
-      return dataFamiliars; // Devuelve array aunque esté vacío
-    } else if (dataFamiliars === null) {
-      // La API devuelve null si no hay datos, retornamos array vacío
-      return [];
-    } else {
-      throw new Error('La API no devolvió un array ni null.');
+    const res = (await fetchData(url)) as ApiResponse<FitxaFamiliars>;
+    if (res.status === 'success' && Array.isArray(res.data)) {
+      return res.data;
     }
+    return [];
   } catch (error) {
-    console.error('Error al obtener la información:', error);
+    console.warn('Error al obtenir familiars:', error);
     return [];
   }
 }

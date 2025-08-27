@@ -1,24 +1,39 @@
+// src/services/api/fetchDataFitxaRepresaliat.ts
 import { DOMAIN_API } from '../../config/constants';
-import { Fitxa } from '../../types/types';
+import type { Fitxa } from '../../types/types';
 import { fetchData } from './api';
 
-export async function fetchDataFitxaRepresaliat(slug: string) {
-  // Si los datos aún no están en cache, realizamos la consulta a la API
+type ApiResponseSuccess<T> = {
+  status: 'success';
+  message: string;
+  errors: unknown[];
+  data: T[]; // tu API devuelve data como array
+};
 
-  const devDirectory = DOMAIN_API;
+type ApiResponseError = {
+  status: 'error';
+  message: string;
+  errors: unknown[];
+  data: null;
+};
 
-  const url = `${devDirectory}/api/dades_personals/get/?type=fitxaRepresaliat&slug=${slug}`;
+type ApiResponse<T> = ApiResponseSuccess<T> | ApiResponseError;
+
+export async function fetchDataFitxaRepresaliat(slug: string): Promise<Fitxa | null> {
+  const url = `${DOMAIN_API}/api/dades_personals/get/?type=fitxaRepresaliat&slug=${encodeURIComponent(slug)}`;
 
   try {
-    const data = await fetchData(url);
+    const res = (await fetchData(url)) as ApiResponse<Fitxa>;
 
-    if (Array.isArray(data)) {
-      return data[0] as Fitxa;
-    } else {
-      throw new Error('La API no devolvió un array.');
+    if (res.status === 'error' || !res.data || !Array.isArray(res.data) || res.data.length === 0) {
+      // puedes loguear res.message si quieres
+      return null;
     }
+
+    // tu endpoint devuelve data como array con un único elemento
+    return res.data[0] ?? null;
   } catch (error) {
-    console.error('Error al obtener la información:', error);
-    return;
+    console.error('Error al obtener la fitxa:', error);
+    return null;
   }
 }
