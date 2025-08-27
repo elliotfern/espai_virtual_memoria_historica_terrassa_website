@@ -30,7 +30,7 @@ export async function fitxaRepresaliat(slug: string): Promise<void> {
     const fitxa = await getApiFirst<Fitxa>(fitxaUrl);
 
     if (!fitxa) {
-      showNotFound('Ho sentim, però l’adreça web introduïda no es correspon amb cap fitxa de represaliat.');
+      showNotFound("Ho sentim, però l'adreça web introduïda no es correspon amb cap fitxa de represaliat.");
       return;
     }
 

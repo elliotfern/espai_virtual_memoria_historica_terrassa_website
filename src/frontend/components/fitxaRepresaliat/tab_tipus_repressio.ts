@@ -22,6 +22,7 @@ export const fitxaTipusRepressio = async (categoriaNumerica: string, fitxa2: Fit
     return acc;
   }, {} as { [key: string]: string });
 
+  console.log(fitxa2);
   const dades = Array.isArray(fitxa2) ? fitxa2 : [fitxa2];
 
   // 4. Reemplaza el contenido del div con la info final (quitando spinner)
