@@ -38,7 +38,7 @@ export async function fitxaRepresaliat(slug: string): Promise<void> {
 
     // 2) Familiares por id → usamos getApiArray<FitxaFamiliars>
     try {
-      const familiarsUrl = `${DOMAIN_API}/api/dades_personals/get/?type=familiars&id=${fitxa.id}`;
+      const familiarsUrl = `${DOMAIN_API}/api/dades_personals/get/?type=fitxaDadesFamiliars&id=${fitxa.id}`;
       const familiars = await getApiArray<FitxaFamiliars>(familiarsUrl);
       cache.setFitxaFam(familiars);
     } catch (err) {
