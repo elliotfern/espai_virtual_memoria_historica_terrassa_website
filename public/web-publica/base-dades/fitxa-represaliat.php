@@ -36,7 +36,11 @@ $id = $routeParams[0];
     </div>
 </div>
 
-<div class="container fitxaRepresaliat_error" style="display:none"> </div>
+<div id="fitxaRepresaliat_error" class="container fitxaRepresaliat" style="display:none">
+    <div class="fitxa-persona marro2 raleway" style="margin-top:20px;margin-bottom:20px">
+        <p>Ho sentim però la adreça web introduïda no es correspon amb cap fitxa de represaliat.</p>
+    </div>
+</div>
 
 <style>
     .row {

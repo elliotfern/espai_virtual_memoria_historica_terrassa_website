@@ -6,11 +6,16 @@ import { initButtons } from './initButtons';
 import type { Fitxa, FitxaFamiliars } from '../../types/types';
 
 function showNotFound(msg: string): void {
+  // Oculta las fichas normales
   const containers = document.querySelectorAll<HTMLDivElement>('.container.fitxaRepresaliat');
   containers.forEach((el) => {
-    if (el.id !== 'fitxaRepresaliatError') el.style.display = 'none';
+    if (el.id !== 'fitxaRepresaliat_error') {
+      el.style.display = 'none';
+    }
   });
-  const errorDiv = document.getElementById('fitxaRepresaliatError') as HTMLDivElement | null;
+
+  // Muestra el div de error
+  const errorDiv = document.getElementById('fitxaRepresaliat_error') as HTMLDivElement | null;
   if (errorDiv) {
     errorDiv.style.display = 'block';
     errorDiv.innerHTML = `
