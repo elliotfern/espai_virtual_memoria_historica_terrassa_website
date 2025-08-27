@@ -1,4 +1,5 @@
-import { DOMAIN_WEB } from '../../config/constants';
+import { DOMAIN_API, DOMAIN_WEB } from '../../config/constants';
+import { getApiArray } from '../../services/api/http';
 import { normalizeText } from '../../services/formatDates/formatText';
 
 interface Persona {
@@ -9,17 +10,12 @@ interface Persona {
   slug: string;
 }
 
-// Simulación de llamada a API (reemplázala con fetch real)
-async function fetchPersones(): Promise<Persona[]> {
-  const webApi = DOMAIN_WEB;
-  try {
-    const response = await fetch(webApi + '/api/dades_personals/get/?llistatPersonesCercador');
-    if (!response.ok) throw new Error(`Error a l'API: ${response.status}`);
-    return await response.json();
-  } catch (error) {
-    console.error("Error carregant dades de l'API:", error);
-    return [];
-  }
+// Listado para el buscador
+export async function fetchPersones(): Promise<Persona[]> {
+  const url = `${DOMAIN_API}/api/dades_personals/get/?llistatPersonesCercador`;
+
+  // Devuelve siempre un array tipado (vacío si error o sin datos)
+  return getApiArray<Persona>(url);
 }
 
 // Mostrar resultados

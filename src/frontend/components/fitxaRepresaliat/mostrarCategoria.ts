@@ -1,6 +1,6 @@
 import { DOMAIN_WEB } from '../../config/constants';
-import { fetchData } from '../../services/api/api';
-import { ApiResponse, FitxaJudicial } from '../../types/types';
+import { getApiArray } from '../../services/api/http';
+import { FitxaJudicial } from '../../types/types';
 import { fitxaTipusRepressio } from './tab_tipus_repressio';
 
 const categoriaCache: { [key: string]: FitxaJudicial | FitxaJudicial[] } = {};
@@ -27,18 +27,18 @@ export async function mostrarCategoria(categoriaNumerica: string, idPersona: num
     </div>`;
 
     try {
-      const response = (await fetchData(urlAjax2)) as ApiResponse<FitxaJudicial | FitxaJudicial[]>;
+      const fitxes: FitxaJudicial[] = await getApiArray<FitxaJudicial>(urlAjax2);
 
-      if (response.status === 'error' || !response.data) {
-        divInfo.innerHTML = `<p class="text-danger">⚠️ ${response.message || "No s'han trobat dades."}</p>`;
+      if (fitxes.length === 0) {
+        divInfo.innerHTML = `<p class="text-danger">⚠️ No s'han trobat dades.</p>`;
+        categoriaCache[categoriaNumerica] = [];
         return;
       }
 
-      const fitxaArray = Array.isArray(response.data) ? response.data : [response.data];
       divInfo.innerHTML = '';
-      categoriaCache[categoriaNumerica] = fitxaArray;
+      categoriaCache[categoriaNumerica] = fitxes;
 
-      fitxaTipusRepressio(categoriaNumerica, fitxaArray);
+      fitxaTipusRepressio(categoriaNumerica, fitxes);
     } catch (error) {
       console.error('Error al obtenir la informació de la categoria:', error);
       divInfo.innerHTML = '<p class="text-danger">⚠️ Error al carregar les dades. Torna-ho a intentar més tard.</p>';

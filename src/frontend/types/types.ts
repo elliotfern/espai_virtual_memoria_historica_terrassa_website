@@ -105,6 +105,7 @@ export interface Fitxa {
 }
 
 export interface FitxaJudicial {
+  data: [];
   procediment_cat: string;
   ciutat_consellGuerra: string;
   data_sentencia: string; // o Date si prefieres
