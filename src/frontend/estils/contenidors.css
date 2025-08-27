@@ -9,7 +9,7 @@
 }
 
 .bg-image2 {
-  background-image: url('../assets/monument_caidos.jpg');
+  background-image: url('https://media.memoriaterrassa.cat/assets_web/monument_caidos.jpg');
   background-size: cover;
   background-position: center;
   position: relative;
@@ -84,7 +84,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url('../assets/monument_caidos.jpg');
+  background-image: url('https://media.memoriaterrassa.cat/assets_web/monument_caidos.jpg');
   background-size: cover;
   background-position: center;
   filter: blur(1px); /* Aplica el desenfoque */

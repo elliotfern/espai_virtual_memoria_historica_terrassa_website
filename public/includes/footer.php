@@ -5,7 +5,7 @@
                 Un projecte de:
             </div>
             <div class="col-12">
-                <a href="https://cehterrassa.cat/" target="_blank"><img src="<?php echo APP_WEB; ?>/public/img/logo-ceht2.png" alt="Logo" class="logosFooter"></a>
+                <a href="https://cehterrassa.cat/" target="_blank"><img src="<?php echo IMG_DOMAIN; ?>/assets_web/logo-ceht2.png" alt="Logo" class="logosFooter"></a>
             </div>
 
             <div class="col-12" style="margin-top:25px">
@@ -13,19 +13,19 @@
             </div>
             <div class="row gx-3 gy-3">
                 <div class="col-12 col-md-4 col-lg-3">
-                    <a href="https://diba.cat" target="_blank"> <img src="<?php echo APP_WEB; ?>/public/img/logo-diba.svg" alt="Logo" class="logosFooter"></a>
+                    <a href="https://diba.cat" target="_blank"> <img src="<?php echo IMG_DOMAIN; ?>/assets_web/logo-diba.svg" alt="Logo" class="logosFooter"></a>
                 </div>
 
                 <div class="col-12 col-md-4 col-lg-3">
-                    <a href="https://terrassa.cat" target="_blank"> <img src="<?php echo APP_WEB; ?>/public/img/ajterrassa.png" alt="Logo" class="logosFooter"></a>
+                    <a href="https://terrassa.cat" target="_blank"> <img src="<?php echo IMG_DOMAIN; ?>/assets_web/ajterrassa.png" alt="Logo" class="logosFooter"></a>
                 </div>
 
 
                 <div class="col-12 col-md-4 col-lg-3">
-                    <a href="https://www.consellvallesoccidental.cat/" target="_blank"><img src="<?php echo APP_WEB; ?>/public/img/logo-ccvoc.svg" alt="Logo" class="logosFooter"></a>
+                    <a href="https://www.consellvallesoccidental.cat/" target="_blank"><img src="<?php echo IMG_DOMAIN; ?>/assets_web/logo-ccvoc.svg" alt="Logo" class="logosFooter"></a>
                 </div>
                 <div class="col-12 col-md-4 col-lg-3">
-                    <a href="https://xac.gencat.cat/ca/llista_arxius_comarcals/valles_occ/" target="_blank"><img src="<?php echo APP_WEB; ?>/public/img/logo-ahct.jpg" alt="Logo" class="logosFooter"></a>
+                    <a href="https://xac.gencat.cat/ca/llista_arxius_comarcals/valles_occ/" target="_blank"><img src="<?php echo IMG_DOMAIN; ?>/assets_web/logo-ahct.jpg" alt="Logo" class="logosFooter"></a>
                 </div>
             </div>
 
@@ -50,7 +50,7 @@
     <div class="container" style="margin-top: 5px;padding-bottom: 20px;">
         <div class="row gx-3 gy-3">
             <div class="col-12">
-                <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.ca" target="_blank"><img src="<?php echo APP_WEB; ?>/public/img/cc-by-nc-sa.png" alt="Logo" width="100px"></a>
+                <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.ca" target="_blank"><img src="<?php echo IMG_DOMAIN; ?>/assets_web/cc-by-nc-sa.png" alt="Logo" width="100px"></a>
             </div>
             <div class="col-12">
                 <small> Aquesta pàgina web està subjecta a una llicència de Reconeixement-No comercial-Compartir Igual. Sou lliure de Compartir — copiar i redistribuir el material en qualsevol mitjà i format i Adaptar — remesclar, transformar i crear a partir del material.</small>

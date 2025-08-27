@@ -102,7 +102,7 @@ try {
 
     // Directorio destino
     // Configuración de rutas
-    $targetDir = '/home/epgylzqu/memoriaterrassa.cat/public/img/represaliats/';
+    $targetDir = '/home/epgylzqu/media.memoriaterrassa.cat/assets_represaliats/img/';
 
     if (!is_dir($targetDir)) {
         if (!mkdir($targetDir, 0755, true) && !is_dir($targetDir)) {
@@ -140,9 +140,8 @@ try {
     $conn->commit();
 
     // Construir URL pública
-    $scheme  = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https://' : 'http://';
-    $baseUrl = $scheme . $_SERVER['HTTP_HOST'];
-    $url     = $baseUrl . '/public/img/represaliats/' . $filename;
+    $baseUrl = "https://media.memoriaterrassa.cat";
+    $url     = $baseUrl . '/assets_represaliats/img/' . $filename;
 
     echo json_encode([
         'status' => 'ok',

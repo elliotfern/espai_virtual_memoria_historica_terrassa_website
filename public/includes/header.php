@@ -1,5 +1,5 @@
 <?php
-$favicon = "/public/img/icon.png";
+$favicon = "https://media.memoriaterrassa.cat/assets_web/icon.png";
 ?>
 
 <!DOCTYPE html>
@@ -14,7 +14,7 @@ $favicon = "/public/img/icon.png";
   <meta name="distribution" content="global" />
 
   <link rel="profile" href="http://gmpg.org/xfn/11">
-  <link rel="shortcut icon" href="<?php echo $favicon; ?>">
+  <link rel="icon" href="<?php echo $favicon; ?>" sizes="16x16 32x32" type="image/x-icon">
   <title>Espai Virtual de la Memòria Històrica de Terrassa</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">

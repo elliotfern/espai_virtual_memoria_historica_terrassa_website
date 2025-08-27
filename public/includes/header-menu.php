@@ -109,19 +109,19 @@ $langCode2 = getLanguageFromUrl();
             <!-- Redes sociales -->
             <div class="d-flex align-items-center gap-2">
                 <a class="nav-link" href="https://bsky.app/profile/terrassamemoria.bsky.social" target="_blank">
-                    <img src="<?php echo APP_WEB; ?>/public/img/bluesky.png" alt="Bluesky" class="logoXarxes">
+                    <img src="<?php echo IMG_DOMAIN; ?>/assets_web/bluesky.png" alt="Bluesky" class="logoXarxes">
                 </a>
                 <a class="nav-link" href="https://x.com/terrassaMemoria" target="_blank">
-                    <img src="<?php echo APP_WEB; ?>/public/img/x2.png" alt="X" class="logoXarxes">
+                    <img src="<?php echo IMG_DOMAIN; ?>/assets_web/x2.png" alt="X" class="logoXarxes">
                 </a>
                 <a class="nav-link" href="https://bsky.app/profile/terrassamemoria.bsky.social" target="_blank">
-                    <img src="<?php echo APP_WEB; ?>/public/img/mastodon.png" alt="Mastodon" class="logoXarxes">
+                    <img src="<?php echo IMG_DOMAIN; ?>/assets_web/mastodon.png" alt="Mastodon" class="logoXarxes">
                 </a>
                 <a class="nav-link" href="#" target="_blank">
-                    <img src="<?php echo APP_WEB; ?>/public/img/instagram2.png" alt="Instagram" class="logoXarxes">
+                    <img src="<?php echo IMG_DOMAIN; ?>/assets_web/instagram2.png" alt="Instagram" class="logoXarxes">
                 </a>
                 <a class="nav-link" href="#" target="_blank">
-                    <img src="<?php echo APP_WEB; ?>/public/img/linkedin2.png" alt="Linkedin" class="logoXarxes">
+                    <img src="<?php echo IMG_DOMAIN; ?>/assets_web/linkedin2.png" alt="Linkedin" class="logoXarxes">
                 </a>
             </div>
 
@@ -135,7 +135,7 @@ $langCode2 = getLanguageFromUrl();
             <!-- Logo -->
             <div class="col-8 col-md-4 d-flex justify-content-center justify-content-md-start">
                 <a class="nav-link" href="<?php echo $langCode2 === 'ca' ? '/inici' : '/' . $langCode2 . '/inici'; ?>">
-                    <img src="<?php echo APP_WEB; ?>/public/img/logo_web.png" alt="Logo" class="logoPetit">
+                    <img src="<?php echo IMG_DOMAIN; ?>/assets_web/logo_web.png" alt="Logo" class="logoPetit">
                 </a>
             </div>
 

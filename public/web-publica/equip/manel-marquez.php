@@ -47,7 +47,7 @@ $translate2 = $translations['cerca-avan'] ?? [];
 
         <!-- Imagen a la derecha -->
         <div class="col-md-4 text-center">
-            <img src="<?php echo APP_WEB; ?>/public/img/manel_marquez_gran.jpg" class="img-fluid " alt="Manel Márquez Berrocal">
+            <img src="<?php echo IMG_DOMAIN; ?>/assets_usuaris/manel_marquez_gran.jpg" class="img-fluid " alt="Manel Márquez Berrocal">
 
         </div>
     </div>

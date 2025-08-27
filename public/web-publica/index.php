@@ -11,7 +11,7 @@ $translate = $translations['benvinguda'] ?? [];
 ?>
 
 <div class="container-fluid full-screen bg-image">
-    <img src="../public/img/logo-gran.png" alt="Logo" class="logo">
+    <img src="<?php echo IMG_DOMAIN; ?>/assets_web/logo-gran.png" alt="Logo" class="logo">
     <a href=".<?php echo $lang2; ?>/inici"><button class="bottom-right-button"><?php echo $translate['boto'] ?></button></a>
 </div>
 
@@ -29,7 +29,7 @@ $translate = $translations['benvinguda'] ?? [];
 
 
     .bg-image {
-        background-image: url('../public/img/cartells_republica.jpg');
+        background-image: url('https://media.memoriaterrassa.cat/assets_web/cartells_republica.jpg');
         /* Cambia 'tu-imagen.jpg' por la URL de tu imagen */
         background-size: cover;
         /* Imagen cubre todo el área */

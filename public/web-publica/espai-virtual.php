@@ -37,25 +37,25 @@ $translate2 = $translations['cerca-avan'] ?? [];
         <div class="row row-cols-4 g-4 text-center">
             <div class="col">
                 <div class=" p-4">
-                    <img src="<?php echo APP_WEB; ?>/public/img/icon1.png" class="mb-3 w-6" alt="Imagen 1">
+                    <img src="<?php echo IMG_DOMAIN; ?>/assets_web/icon1.png" class="mb-3 w-6" alt="Imagen 1">
                     <h5 class="lora blau2">Històries personals de les represaliades <br>i represaliats</h5>
                 </div>
             </div>
             <div class="col">
                 <div class="p-4">
-                    <img src="<?php echo APP_WEB; ?>/public/img/icon2.png" class="mb-3 w-6" alt="Imagen 2">
+                    <img src="<?php echo IMG_DOMAIN; ?>/assets_web/icon2.png" class="mb-3 w-6" alt="Imagen 2">
                     <h5 class="lora blau2">Eines de cerca avançada<br> per explorar arxius</h5>
                 </div>
             </div>
             <div class="col">
                 <div class="p-4">
-                    <img src="<?php echo APP_WEB; ?>/public/img/icon3.png" class="mb-3 w-6" alt="Imagen 3">
+                    <img src="<?php echo IMG_DOMAIN; ?>/assets_web/icon3.png" class="mb-3 w-6" alt="Imagen 3">
                     <h5 class="lora blau2">Bases de dades detallades<br> segons el tipus de repressió</h5>
                 </div>
             </div>
             <div class="col">
                 <div class="p-4">
-                    <img src="<?php echo APP_WEB; ?>/public/img/icon4.png" class="mb-3 w-6" alt="Imagen 4">
+                    <img src="<?php echo IMG_DOMAIN; ?>/assets_web/icon4.png" class="mb-3 w-6" alt="Imagen 4">
                     <h5 class="lora blau2">Fonts documentals<br> verificades i accessibles</h5>
                 </div>
             </div>
@@ -241,7 +241,7 @@ $translate2 = $translations['cerca-avan'] ?? [];
 
             <!-- Imagen a la derecha -->
             <div class="col-md-4 text-center">
-                <img src="<?php echo APP_WEB; ?>/public/img/llibre_combat_per_la_llibertat.jpg" class="img-fluid " alt="Elliot Fernandez">
+                <img src="<?php echo IMG_DOMAIN; ?>/assets_web/llibre_combat_per_la_llibertat.jpg" class="img-fluid " alt="Elliot Fernandez">
 
             </div>
         </div>
@@ -252,7 +252,7 @@ $translate2 = $translations['cerca-avan'] ?? [];
 
             <!-- Imagen a la derecha -->
             <div class="col-md-4 text-center">
-                <img src="<?php echo APP_WEB; ?>/public/img/conferencies_valles_2016.jpg" class="img-fluid " alt="Elliot Fernandez">
+                <img src="<?php echo IMG_DOMAIN; ?>/assets_web/conferencies_valles_2016.jpg" class="img-fluid " alt="Elliot Fernandez">
 
             </div>
             <!-- Texto a la izquierda -->
@@ -289,7 +289,7 @@ $translate2 = $translations['cerca-avan'] ?? [];
 
             <!-- Imagen a la derecha -->
             <div class="col-md-4 text-center">
-                <img src="<?php echo APP_WEB; ?>/public/img/espai_memoria_democratica_2017.jpg" class="img-fluid " alt="Elliot Fernandez">
+                <img src="<?php echo APP_WEB; ?>/assets_web/espai_memoria_democratica_2017.jpg" class="img-fluid " alt="Elliot Fernandez">
 
             </div>
         </div>
@@ -318,15 +318,15 @@ $translate2 = $translations['cerca-avan'] ?? [];
 
             <!-- Imagen a la derecha -->
             <div class="col-md-4 text-center">
-                <img src="<?php echo APP_WEB; ?>/public/img/llibre_terrassa_exiliada.jpg" class="img-fluid " alt="Elliot Fernandez">
+                <img src="<?php echo IMG_DOMAIN; ?>/assets_web/llibre_terrassa_exiliada.jpg" class="img-fluid " alt="Elliot Fernandez">
 
             </div>
             <!-- Texto a la izquierda -->
             <div id="esde5" class="col-md-8 raleway d-flex flex-column d-grid gap-2">
                 <span class="titol gran lora negreta">2021</span>
-                <span class="titol italic-text gran lora">Treball d’investigació sobre l’exili terrassenc</span>
+                <span class="titol italic-text gran lora">Treball d'investigació sobre l'exili terrassenc</span>
                 <p>
-                    L’any <strong>2021</strong> es va realitzar un treball d’investigació sobre l’exili terrassenc, a càrrec de l’historiador <strong>Juan Antonio Olivares</strong>, projecte que encara continua actualitzant-se i que va donar com a resultat un primer treball:
+                    L'any <strong>2021</strong> es va realitzar un treball d'investigació sobre l’exili terrassenc, a càrrec de l’historiador <strong>Juan Antonio Olivares</strong>, projecte que encara continua actualitzant-se i que va donar com a resultat un primer treball:
                 </p>
                 <p>
                     <strong>OLIVARES ABAD, Juan Antonio, <em>Terrassa exiliada</em></strong>. Granada, Taller del Sur, <strong>2021</strong>.
@@ -345,28 +345,28 @@ $translate2 = $translations['cerca-avan'] ?? [];
         <div class="row">
             <div class="col-12 col-md-3">
                 <div class="btn-div d-flex flex-column">
-                    <img class="img-m" src="<?php echo APP_WEB; ?>/public/img/icon5.png" alt="Icono 1">
+                    <img class="img-m" src="<?php echo IMG_DOMAIN; ?>/assets_web/icon5.png" alt="Icono 1">
                     <span class="lora mitja">Fitxes <br>detallades</span>
                 </div>
             </div>
 
             <div class="col-12 col-md-3">
                 <div class="btn-div d-flex flex-column">
-                    <img class="img-m" src="<?php echo APP_WEB; ?>/public/img/icon6.png" alt="Icono 1">
+                    <img class="img-m" src="<?php echo IMG_DOMAIN; ?>/assets_web/icon6.png" alt="Icono 1">
                     <span class="lora mitja">Base de dades <br>relacionals</span>
                 </div>
             </div>
 
             <div class="col-12 col-md-3">
                 <div class="btn-div d-flex flex-column">
-                    <img class="img-m" src="<?php echo APP_WEB; ?>/public/img/icon7.png" alt="Icono 1">
+                    <img class="img-m" src="<?php echo IMG_DOMAIN; ?>/assets_web/icon7.png" alt="Icono 1">
                     <span class="lora mitja">Documentació <br>històrica</span>
                 </div>
             </div>
 
             <div class="col-12 col-md-3">
                 <div class="btn-div d-flex flex-column">
-                    <img class="img-m" src="<?php echo APP_WEB; ?>/public/img/icon8.png" alt="Icono 1">
+                    <img class="img-m" src="<?php echo IMG_DOMAIN; ?>/assets_web/icon8.png" alt="Icono 1">
                     <span class="lora mitja">Testimonis <br>audiovisuals</span>
                 </div>
             </div>

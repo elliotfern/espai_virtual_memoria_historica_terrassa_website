@@ -28,10 +28,10 @@ $translate2 = $translations['cerca-avan'] ?? [];
                 </div>
                 <div class="col-md-4 d-flex align-items-center">
                     <div class="col-md-10">
-                        <img src="<?php echo APP_WEB; ?>/public/img/manel_marquez.png" class="rounded-circle img-petita" alt="Foto">
+                        <img src="<?php echo IMG_DOMAIN; ?>/assets_usuaris/manel_marquez.jpg" class="rounded-circle img-petita" alt="Foto">
                     </div>
                     <div class="col-md-2">
-                        <img src="<?php echo APP_WEB; ?>/public/img/vector.png" class="img-s" alt="Foto">
+                        <img src="<?php echo IMG_DOMAIN; ?>/assets_web/vector.png" class="img-s" alt="Foto">
                     </div>
                 </div>
             </div>
@@ -45,10 +45,10 @@ $translate2 = $translations['cerca-avan'] ?? [];
                 </div>
                 <div class="col-md-4 d-flex align-items-center">
                     <div class="col-md-10">
-                        <img src="<?php echo APP_WEB; ?>/public/img/jose_antonio_olivares2.jpg" class="rounded-circle img-petita" alt="Foto">
+                        <img src="<?php echo IMG_DOMAIN; ?>/assets_usuaris/jose_antonio_olivares.jpg" class="rounded-circle img-petita" alt="Foto">
                     </div>
                     <div class="col-md-2">
-                        <img src="<?php echo APP_WEB; ?>/public/img/vector.png" class="img-s" alt="Foto">
+                        <img src="<?php echo IMG_DOMAIN; ?>/assets_web/vector.png" class="img-s" alt="Foto">
                     </div>
                 </div>
             </div>
@@ -64,10 +64,10 @@ $translate2 = $translations['cerca-avan'] ?? [];
                 </div>
                 <div class="col-md-4 d-flex align-items-center">
                     <div class="col-md-10">
-                        <img src="<?php echo APP_WEB; ?>/public/img/josep_lluis_lacueva.jpg" class="rounded-circle img-petita" alt="Foto">
+                        <img src="<?php echo IMG_DOMAIN; ?>/assets_usuaris/josep_lluis_lacueva.jpg" class="rounded-circle img-petita" alt="Foto">
                     </div>
                     <div class="col-md-2">
-                        <img src="<?php echo APP_WEB; ?>/public/img/vector.png" class="img-s" alt="Foto">
+                        <img src="<?php echo IMG_DOMAIN; ?>/assets_web/vector.png" class="img-s" alt="Foto">
                     </div>
                 </div>
             </div>
@@ -82,10 +82,10 @@ $translate2 = $translations['cerca-avan'] ?? [];
                 </div>
                 <div class="col-md-4 d-flex align-items-center">
                     <div class="col-md-10">
-                        <img src="<?php echo APP_WEB; ?>/public/img/elliot_fernandez2.jpg" class="rounded-circle img-petita" alt="Foto">
+                        <img src="<?php echo IMG_DOMAIN; ?>/assets_usuaris/elliot_fernandez.jpg" class="rounded-circle img-petita" alt="Foto">
                     </div>
                     <div class="col-md-2">
-                        <img src="<?php echo APP_WEB; ?>/public/img/vector.png" class="img-s" alt="Foto">
+                        <img src="<?php echo IMG_DOMAIN; ?>/assets_web/vector.png" class="img-s" alt="Foto">
                     </div>
                 </div>
             </div>

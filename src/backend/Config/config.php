@@ -17,6 +17,7 @@ define('BASE_URL', $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST']);
 define('APP_ROOT', $_SERVER['DOCUMENT_ROOT']);
 
 define('DOMAIN', "https://memoriaterrassa.cat");
+define('IMG_DOMAIN', "https://media.memoriaterrassa.cat");
 
 $base_url = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'];
 define("APP_WEB", $base_url);

@@ -79,41 +79,41 @@ $translate = $translations['benvinguda'] ?? [];
             <div class="carousel-inner" role="listbox">
                 <div class="carousel-item active gap">
                     <div class="col-md-4">
-                        <img src="<?php echo APP_WEB; ?>/public/img/foto_memoria1.jpg" class="img-fluid">
+                        <img src="<?php echo IMG_DOMAIN; ?>/assets_web/foto_memoria1.jpg" class="img-fluid">
                     </div>
                 </div>
                 <div class="carousel-item gap">
                     <div class="col-md-4">
 
-                        <img src="<?php echo APP_WEB; ?>/public/img/foto_memoria2.jpg" class="img-fluid">
-
-                    </div>
-                </div>
-                <div class="carousel-item gap">
-                    <div class="col-md-4">
-
-                        <img src="<?php echo APP_WEB; ?>/public/img/foto_memoria3.jpg" class="img-fluid">
+                        <img src="<?php echo IMG_DOMAIN; ?>/assets_web/foto_memoria2.jpg" class="img-fluid">
 
                     </div>
                 </div>
                 <div class="carousel-item gap">
                     <div class="col-md-4">
 
-                        <img src="<?php echo APP_WEB; ?>/public/img/foto_memoria4.jpg" class=" img-fluid">
+                        <img src="<?php echo IMG_DOMAIN; ?>/assets_web/foto_memoria3.jpg" class="img-fluid">
 
                     </div>
                 </div>
                 <div class="carousel-item gap">
                     <div class="col-md-4">
 
-                        <img src="<?php echo APP_WEB; ?>/public/img/foto_memoria5.jpg" class="img-fluid">
+                        <img src="<?php echo IMG_DOMAIN; ?>/assets_web/foto_memoria4.jpg" class=" img-fluid">
 
                     </div>
                 </div>
                 <div class="carousel-item gap">
                     <div class="col-md-4">
 
-                        <img src="<?php echo APP_WEB; ?>/public/img/foto_memoria1.jpg" class="img-fluid">
+                        <img src="<?php echo IMG_DOMAIN; ?>/assets_web/foto_memoria5.jpg" class="img-fluid">
+
+                    </div>
+                </div>
+                <div class="carousel-item gap">
+                    <div class="col-md-4">
+
+                        <img src="<?php echo IMG_DOMAIN; ?>/assets_web/foto_memoria1.jpg" class="img-fluid">
 
                     </div>
                 </div>
@@ -141,26 +141,26 @@ $translate = $translations['benvinguda'] ?? [];
         <div class="col-md-3 column-hover">
             <a href="../<?php echo empty($language) ? '' : $language . '/'; ?>base-dades/general" class="full-link">
                 <h2 class="column-title lora">Base de dades<br>General</h2>
-                <div class="hover-bg" style="background-image: url('https://memoriaterrassa.cat/src/frontend/assets/monument_caidos.jpg');"></div>
+                <div class="hover-bg" style="background-image: url('https://media.memoriaterrassa.cat/assets_web/monument_caidos.jpg');"></div>
             </a>
         </div>
         <div class="col-md-3 column-hover">
             <a href="../<?php echo empty($language) ? '' : $language . '/'; ?>base-dades/cost-huma" class="full-link">
                 <h2 class="column-title lora">Cost humà <br>de la Guerra civil</h2>
-                <div class="hover-bg" style="background-image: url('https://memoriaterrassa.cat/src/frontend/assets/monument_caidos.jpg');"></div>
+                <div class="hover-bg" style="background-image: url('https://media.memoriaterrassa.cat/assets_web/monument_caidos.jpg');"></div>
             </a>
         </div>
         <div class="col-md-3 column-hover">
             <a href="../<?php echo empty($language) ? '' : $language . '/'; ?>base-dades/exiliats-deportats" class="full-link">
                 <h2 class="column-title lora">Exiliats i<br> deportats</h2>
-                <div class="hover-bg" style="background-image: url('https://memoriaterrassa.cat/src/frontend/assets/monument_caidos.jpg');"></div>
+                <div class="hover-bg" style="background-image: url('https://media.memoriaterrassa.cat/assets_web/monument_caidos.jpg');"></div>
             </a>
 
         </div>
         <div class="col-md-3 column-hover">
             <a href="../<?php echo empty($language) ? '' : $language . '/'; ?>base-dades/represaliats" class="full-link">
                 <h2 class="column-title lora">Represaliats <br>de la dictadura</h2>
-                <div class="hover-bg" style="background-image: url('https://memoriaterrassa.cat/src/frontend/assets/monument_caidos.jpg');"></div>
+                <div class="hover-bg" style="background-image: url('https://media.memoriaterrassa.cat/assets_web/monument_caidos.jpg');"></div>
             </a>
         </div>
     </div>
@@ -176,25 +176,25 @@ $translate = $translations['benvinguda'] ?? [];
         <div class="row row-cols-2 g-4 text-center">
             <div class="col">
                 <div class=" p-4">
-                    <img src="<?php echo APP_WEB; ?>/public/img/icon1.png" class="mb-3 w-6" alt="Imagen 1">
+                    <img src="<?php echo IMG_DOMAIN; ?>/assets_web/icon1.png" class="mb-3 w-6" alt="Imagen 1">
                     <h5 class="lora blau2">Històries personals de les represaliades <br>i represaliats</h5>
                 </div>
             </div>
             <div class="col">
                 <div class="p-4">
-                    <img src="<?php echo APP_WEB; ?>/public/img/icon2.png" class="mb-3 w-6" alt="Imagen 2">
+                    <img src="<?php echo IMG_DOMAIN; ?>/assets_web/icon2.png" class="mb-3 w-6" alt="Imagen 2">
                     <h5 class="lora blau2">Eines de cerca avançada<br> per explorar arxius</h5>
                 </div>
             </div>
             <div class="col">
                 <div class="p-4">
-                    <img src="<?php echo APP_WEB; ?>/public/img/icon3.png" class="mb-3 w-6" alt="Imagen 3">
+                    <img src="<?php echo IMG_DOMAIN; ?>/assets_web/icon3.png" class="mb-3 w-6" alt="Imagen 3">
                     <h5 class="lora blau2">Bases de dades detallades<br> segons el tipus de repressió</h5>
                 </div>
             </div>
             <div class="col">
                 <div class="p-4">
-                    <img src="<?php echo APP_WEB; ?>/public/img/icon4.png" class="mb-3 w-6" alt="Imagen 4">
+                    <img src="<?php echo IMG_DOMAIN; ?>/assets_web/icon4.png" class="mb-3 w-6" alt="Imagen 4">
                     <h5 class="lora blau2">Fonts documentals<br> verificades i accessibles</h5>
                 </div>
             </div>
@@ -210,6 +210,8 @@ $translate = $translations['benvinguda'] ?? [];
         <span class="text1 mitja raleway"><span class="negreta">Qui hi ha darrere del projecte?</span> Aquest projecte és possible gràcies a la col·laboració d'entitats i professionals dedicats a la recuperació de la memòria històrica</span>
 
         <div class="container my-5">
+            <span class="titol italic-text gran lora">Membres recerca històrica:</span>
+
             <div class="row mt-4 gy-4 gx-4">
                 <!-- Primera fila -->
                 <div class="col-md-6 d-flex align-items-center px-3">
@@ -220,10 +222,10 @@ $translate = $translations['benvinguda'] ?? [];
                     </div>
                     <div class="col-md-4 d-flex align-items-center">
                         <div class="col-md-10">
-                            <img src="<?php echo APP_WEB; ?>/public/img/manel_marquez.png" class="rounded-circle img-petita" alt="Foto">
+                            <img src="<?php echo IMG_DOMAIN; ?>/assets_usuaris/manel_marquez.jpg" class="rounded-circle img-petita" alt="Foto">
                         </div>
                         <div class="col-md-2">
-                            <img src="<?php echo APP_WEB; ?>/public/img/vector.png" class="img-s" alt="Foto">
+                            <img src="<?php echo IMG_DOMAIN; ?>/assets_web/vector.png" class="img-s" alt="Foto">
                         </div>
                     </div>
                 </div>
@@ -237,10 +239,10 @@ $translate = $translations['benvinguda'] ?? [];
                     </div>
                     <div class="col-md-4 d-flex align-items-center">
                         <div class="col-md-10">
-                            <img src="<?php echo APP_WEB; ?>/public/img/jose_antonio_olivares2.jpg" class="rounded-circle img-petita" alt="Foto">
+                            <img src="<?php echo IMG_DOMAIN; ?>/assets_usuaris/jose_antonio_olivares.jpg" class="rounded-circle img-petita" alt="Foto">
                         </div>
                         <div class="col-md-2">
-                            <img src="<?php echo APP_WEB; ?>/public/img/vector.png" class="img-s" alt="Foto">
+                            <img src="<?php echo IMG_DOMAIN; ?>/assets_web/vector.png" class="img-s" alt="Foto">
                         </div>
                     </div>
                 </div>
@@ -256,16 +258,23 @@ $translate = $translations['benvinguda'] ?? [];
                     </div>
                     <div class="col-md-4 d-flex align-items-center">
                         <div class="col-md-10">
-                            <img src="<?php echo APP_WEB; ?>/public/img/josep_lluis_lacueva.jpg" class="rounded-circle img-petita" alt="Foto">
+                            <img src="<?php echo IMG_DOMAIN; ?>/assets_usuaris/josep_lluis_lacueva.jpg" class="rounded-circle img-petita" alt="Foto">
                         </div>
                         <div class="col-md-2">
-                            <img src="<?php echo APP_WEB; ?>/public/img/vector.png" class="img-s" alt="Foto">
+                            <img src="<?php echo IMG_DOMAIN; ?>/assets_web/vector.png" class="img-s" alt="Foto">
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
 
+        <!-- equip web -->
+        <div class="container my-5">
+            <span class="titol italic-text gran lora">Equip pàgina web:</span>
 
-                <!-- quarta fila -->
+            <div class="row mt-4 gy-4 gx-4">
+
+                <!-- primera fila -->
                 <div class="col-md-6 d-flex align-items-center px-3  border-start">
                     <div class="col-md-6 d-flex flex-column g-3">
                         <h3 class="fw-bold lora gran blau1">Elliot Fernández <br>Hernández</h3>
@@ -274,14 +283,71 @@ $translate = $translations['benvinguda'] ?? [];
                     </div>
                     <div class="col-md-4 d-flex align-items-center">
                         <div class="col-md-10">
-                            <img src="<?php echo APP_WEB; ?>/public/img/elliot_fernandez2.jpg" class="rounded-circle img-petita" alt="Foto">
+                            <img src="<?php echo IMG_DOMAIN; ?>/assets_usuaris/elliot_fernandez.jpg" class="rounded-circle img-petita" alt="Foto">
                         </div>
                         <div class="col-md-2">
-                            <img src="<?php echo APP_WEB; ?>/public/img/vector.png" class="img-s" alt="Foto">
+                            <img src="<?php echo IMG_DOMAIN; ?>/assets_web/vector.png" class="img-s" alt="Foto">
                         </div>
                     </div>
                 </div>
 
+                <div class="col-md-6 d-flex align-items-center px-3  border-start">
+                    <div class="col-md-6 d-flex flex-column g-3">
+                        <h3 class="fw-bold lora gran blau1">Kimberly <br>Sánchez</h3>
+                        <span class="marro1 lora italic-text">Dissenyadora<br> gràfica.</span>
+                        <a href="../<?php echo empty($language) ? '' : $language . '/'; ?>equip/kimberly-sanchez" class="btn btn-primary btn-custom-2 w-auto align-self-start" style="margin-top:15px">Veure biografia</a>
+                    </div>
+                    <div class="col-md-4 d-flex align-items-center">
+                        <div class="col-md-10">
+                            <img src="<?php echo IMG_DOMAIN; ?>/assets_usuaris/kimberly_sanchez.jpg" class="rounded-circle img-petita" alt="Foto">
+                        </div>
+                        <div class="col-md-2">
+                            <img src="<?php echo IMG_DOMAIN; ?>/assets_web/vector.png" class="img-s" alt="Foto">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- col·laboradors -->
+        <div class="container my-5">
+            <span class="titol italic-text gran lora">Col·laboradores introducció i processament de dades:</span>
+
+            <div class="row mt-4 gy-4 gx-4">
+
+                <!-- primera fila -->
+                <div class="col-md-6 d-flex align-items-center px-3  border-start">
+                    <div class="col-md-6 d-flex flex-column g-3">
+                        <h3 class="fw-bold lora gran blau1">Natàlia Trullàs<br>Ubach</h3>
+                        <span class="marro1 lora italic-text"><br>.</span>
+                        <a href="../<?php echo empty($language) ? '' : $language . '/'; ?>equip/" class="btn btn-primary btn-custom-2 w-auto align-self-start" style="margin-top:15px">Veure biografia</a>
+                    </div>
+                    <div class="col-md-4 d-flex align-items-center">
+                        <div class="col-md-10">
+                            <img src="<?php echo IMG_DOMAIN; ?>/assets_usuaris/avatar-defecte.jpg" class="rounded-circle img-petita" alt="Foto">
+                        </div>
+                        <div class="col-md-2">
+                            <img src="<?php echo IMG_DOMAIN; ?>/assets_web/vector.png" class="img-s" alt="Foto">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 d-flex align-items-center px-3  border-start">
+                    <div class="col-md-6 d-flex flex-column g-3">
+                        <h3 class="fw-bold lora gran blau1">Ariadna<br>Closa</h3>
+                        <span class="marro1 lora italic-text">Historiadora.</span>
+                        <a href="../<?php echo empty($language) ? '' : $language . '/'; ?>equip/" class="btn btn-primary btn-custom-2 w-auto align-self-start" style="margin-top:15px">Veure biografia</a>
+                    </div>
+                    <div class="col-md-4 d-flex align-items-center">
+                        <div class="col-md-10">
+                            <img src="<?php echo IMG_DOMAIN; ?>/assets_usuaris/avatar-defecte.jpg" class="rounded-circle img-petita" alt="Foto">
+                        </div>
+                        <div class="col-md-2">
+                            <img src="<?php echo IMG_DOMAIN; ?>/assets_web/vector.png" class="img-s" alt="Foto">
+                        </div>
+                    </div>
+                </div>
 
             </div>
         </div>
