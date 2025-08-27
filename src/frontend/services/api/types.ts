@@ -3,7 +3,7 @@ export type ApiResponseSuccess<T> = {
   status: 'success';
   message: string;
   errors: unknown[];
-  data: T[]; // Tu API siempre usa array en `data`
+  data: T | T[]; // 👈 antes solo T[], ahora T | T[]
 };
 
 export type ApiResponseError = {
@@ -12,7 +12,6 @@ export type ApiResponseError = {
   errors: unknown[];
   data: null;
 };
-
 export type ApiResponse<T> = ApiResponseSuccess<T> | ApiResponseError;
 
 export function isApiResponse<T>(v: unknown): v is ApiResponse<T> {
