@@ -391,12 +391,30 @@ function buildQuery(string $type, string $q): array
     }
 
     if ($type === 'filtreCostHuma') {
+        $params = [];
+        $joins  = [];
         $wl = [
-            'categories' => ['p.categoria', 'csvset'],
-            'fronts'     => ['c.front_id',  'in'],
-            'situacions' => ['c.situacio',  'in'],
+            // COMUNES (como en General)
+            'categories'           => ['p.categoria',          'csvset'],
+            'sexes'                => ['p.sexe',               'in'],
+            'provincies'           => ['m1b.provincia',        'in_text'],  // nombre prov. por municipi_naixement
+            'municipis_naixement'  => ['p.municipi_naixement', 'in'],
+            'anys_naixement'       => ['YEAR(p.data_naixement)', 'in'],
+            'anys_defuncio'        => ['YEAR(p.data_defuncio)', 'in'],
+
+            // ESPECÍFICOS DE TU cost-huma.ts
+            'anys_ferits'          => ['YEAR(p.data_ferits)',  'in'],  // <- si la columna existe
+            'va_morir'             => ['p.va_morir',           'in'],  // 1/2
         ];
-        $joins[] = "LEFT JOIN cost_huma c ON c.persona_id = p.id";
+
+        // Legacy opcional: si usas tabla cost_huma con fronts/situacions
+        if (getArray('fronts') || getArray('situacions')) {
+            $wl += [
+                'fronts'     => ['c.front_id',  'in'],
+                'situacions' => ['c.situacio',  'in'],
+            ];
+            $joins[] = "LEFT JOIN db_cost_huma_morts_front c ON c.persona_id = p.id";
+        }
 
         $where = buildWhere($wl, $params);
         if ($q !== '') {
@@ -407,14 +425,14 @@ function buildQuery(string $type, string $q): array
 
         $headers = commonHeaders();
         $sql = "
-      SELECT DISTINCT base.*
-      FROM (
-        " . baseSelect() . "
-        " . implode("\n", $joins) . "
-        $where
-      ) AS base
-      ORDER BY base.id ASC
-    ";
+    SELECT DISTINCT base.*
+    FROM (
+      " . baseSelect() . "
+      " . implode("\n", $joins) . "
+      $where
+    ) AS base
+    ORDER BY base.id ASC
+  ";
         return [$headers, $sql, $params];
     }
 

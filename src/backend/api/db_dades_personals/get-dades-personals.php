@@ -921,8 +921,8 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
     }
 
     // 4) Llistat exiliats i deportats
-    // ruta GET => "https://memoriaterrassa.cat/api/dades_personals/get/?type=filtreExiliats"
-} elseif (isset($_GET['type']) && $_GET['type'] == 'filtreExiliats') {
+    // ruta GET => "https://memoriaterrassa.cat/api/dades_personals/get/?type=filtreExili"
+} elseif (isset($_GET['type']) && $_GET['type'] == 'filtreExili') {
     $db = new Database();
     $catNum1 = 10;
     $catNum2 = 2;
