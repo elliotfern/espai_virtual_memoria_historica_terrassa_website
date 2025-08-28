@@ -3,6 +3,7 @@ import { BuscadorController } from '../controller';
 import { GENERAL_FILTERS } from '../filters/registry-general';
 import { mountExportToolbar } from '../utils/export';
 import 'choices.js/public/assets/styles/choices.min.css';
+import type { FilterSpec } from './types';
 
 export async function iniciarBuscadorGeneral() {
   const ctrl = new BuscadorController(GENERAL_FILTERS, {
@@ -26,3 +27,8 @@ export async function iniciarBuscadorGeneral() {
   // Lee filtros + texto + type en el momento del clic
   mountExportToolbar(container, () => ctrl.getExportPayload());
 }
+
+// Aquí puedes añadir filtros específicos de “General” si los hay.
+export const GENERAL_FILTERS_ONLY: FilterSpec[] = [
+  // Ejemplo: FILTER_ALGO,
+];
