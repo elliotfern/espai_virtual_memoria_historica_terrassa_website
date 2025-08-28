@@ -7,7 +7,7 @@ import { afusellat } from './afusellat';
 import { processat } from './processat';
 import { empresonatsPresoModel } from './presoModel';
 import { depurats } from './depurats';
-import { detingutsGuardiaUrbana } from './ detingutsGuardiaUrbana';
+import { detingutsGuardiaUrbana } from './detingutsGuardiaUrbana';
 import { responsabilitatsPolitiques } from './responsabilitatsPolitiques';
 import { top } from './top';
 import { comiteSolidaritat } from './comiteSolidaritat';

@@ -14,7 +14,7 @@ import { taulaProcessats } from './taulaProcessats';
 import { taulaAfusellats } from './taulaAfusellats';
 import { taulaQuadreGeneral } from './taulaQuadreGeneral';
 import { taulaPresoModel } from './taulaPresoModel';
-import { formDetingutsGuardiaUrbana } from './tipusRepressio/ detingutsGuardiaUrbana';
+import { formDetingutsGuardiaUrbana } from './tipusRepressio/detingutsGuardiaUrbana';
 import { formPresoModel } from './tipusRepressio/presoModel';
 import { formcomiteSolidaritat } from './tipusRepressio/comiteSolidaritat';
 import { formcomiteRelacionsSolidaritat } from './tipusRepressio/comiteRelacionsSolidaritat';

@@ -10,14 +10,6 @@ interface Persona {
   slug: string;
 }
 
-// Listado para el buscador
-export async function fetchPersones(): Promise<Persona[]> {
-  const url = `${DOMAIN_API}/api/dades_personals/get/?llistatPersonesCercador`;
-
-  // Devuelve siempre un array tipado (vacío si error o sin datos)
-  return getApiArray<Persona>(url);
-}
-
 // Mostrar resultados
 
 function mostrarResultats(resultats: Persona[], resultsDiv: HTMLElement) {
@@ -57,7 +49,8 @@ export async function initBuscador() {
   const searchInput = document.getElementById('searchInput') as HTMLInputElement;
   const resultsDiv = document.getElementById('results') as HTMLElement;
 
-  const persones = await fetchPersones();
+  const url = `${DOMAIN_API}/api/dades_personals/get/?llistatPersonesCercador`;
+  const persones = await getApiArray<Persona>(url);
 
   searchInput.addEventListener('input', () => {
     const term = searchInput.value.trim();
@@ -67,6 +60,6 @@ export async function initBuscador() {
       return;
     }
 
-    filtrarPersones(term, persones, resultsDiv); // 👈 ESTA línea faltaba
+    filtrarPersones(term, persones, resultsDiv);
   });
 }

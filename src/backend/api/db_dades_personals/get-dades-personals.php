@@ -849,23 +849,36 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
     // ruta GET => "https://memoriaterrassa.cat/api/dades_personals/get/?llistatPersonesCercador"
 } elseif (isset($_GET['llistatPersonesCercador'])) {
 
-    global $conn;
-    /** @var PDO $conn */
+    $db = new Database();
     $query = "SELECT d.id, d.nom, d.cognom1, d.cognom2, d.slug
         FROM db_dades_personals AS d";
 
-    $stmt = $conn->prepare($query);
-    $stmt->execute();
+    try {
 
-    if ($stmt->rowCount() === 0) {
-        header("Content-Type: application/json");
-        echo json_encode(null);  // Devuelve un objeto JSON nulo si no hay resultados
-    } else {
-        // Solo obtenemos la primera fila ya que parece ser una búsqueda por ID
-        $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        header("Content-Type: application/json");
-        echo json_encode($row);  // Codifica la fila como un objeto JSON
+        $result = $db->getData($query);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
     }
+
 
     // 4) Registre edicions fitxa represaliat
     // ruta GET => "https://memoriaterrassa.cat/api/dades_personals/get/?type=registreEdicions&id=35"

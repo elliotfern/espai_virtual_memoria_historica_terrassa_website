@@ -4,21 +4,14 @@ import 'choices.js/public/assets/styles/choices.min.css';
 
 type Item = { id: number; [key: string]: unknown };
 
-// guardamos instancias para destruirlas si rehidratamos
 const choicesRegistry = new Map<string, Choices>();
 
-/**
- * Rellena un <select> con datos de la API y lo mejora con Choices.js
- */
 export async function auxiliarSelect(idAux: number | null | undefined, api: string, elementId: string, valorText: string, fallbackValue?: string, config?: Partial<Choices['config']>): Promise<Choices | void> {
   const devDirectory = `https://${window.location.hostname}`;
   const urlAjax = `${devDirectory}/api/auxiliars/get/${api}`;
 
   try {
-    const response = await fetch(urlAjax, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-    });
+    const response = await fetch(urlAjax, { method: 'GET', headers: { 'Content-Type': 'application/json' } });
     if (!response.ok) throw new Error('Error en la solicitud');
 
     const jsonResponse = await response.json();
@@ -27,56 +20,55 @@ export async function auxiliarSelect(idAux: number | null | undefined, api: stri
     const selectElement = document.getElementById(elementId) as HTMLSelectElement | null;
     if (!selectElement) return;
 
-    // Si ya estaba inicializado, lo destruimos para evitar fugas/eventos duplicados
+    // destruir instancia anterior
     const prev = choicesRegistry.get(elementId);
     if (prev) {
       prev.destroy();
       choicesRegistry.delete(elementId);
     }
 
-    // Limpiamos el select base y añadimos placeholder (Choices lo usará)
+    // limpiar y añadir placeholder (NO disabled)
     selectElement.innerHTML = '';
     const placeholder = document.createElement('option');
     placeholder.value = '';
     placeholder.text = 'Selecciona una opció:';
     placeholder.setAttribute('selected', '');
-    placeholder.setAttribute('disabled', '');
-    placeholder.setAttribute('hidden', '');
+    // 👇 no uses disabled/hidden en el placeholder
+    // placeholder.setAttribute('disabled', '');
+    // placeholder.setAttribute('hidden', '');
     selectElement.appendChild(placeholder);
 
-    // Creamos Choices
+    // calcular selección inicial
+    const initial = idAux !== null && idAux !== undefined && idAux !== 0 ? String(idAux) : fallbackValue !== undefined ? String(fallbackValue) : '';
+
+    // crear Choices (sin removeItemButton para single select)
     const choices = new Choices(selectElement, {
-      removeItemButton: true,
       searchEnabled: true,
-      allowHTML: false,
       shouldSort: true,
+      allowHTML: false,
       placeholder: true,
       placeholderValue: 'Selecciona una opció:',
-      ...config, // permite sobreescribir desde fuera
+      removeItemButton: false, // ← importante para single select
+      ...config,
     });
 
-    // Cargamos opciones
+    // cargar opciones
     const options = data.map((item) => {
       const raw = item[valorText];
       const label = typeof raw === 'string' ? raw : String(raw ?? '');
-      return {
-        value: String(item.id),
-        label,
-        selected: false,
-        disabled: false,
-      };
+      return { value: String(item.id), label };
     });
 
-    // Reemplazamos todas las opciones del componente
-    choices.clearStore();
+    // reemplazar opciones correctamente
+    choices.clearChoices();
     choices.setChoices(options, 'value', 'label', true);
 
-    // Selección inicial (idAux > 0 o fallback)
-    const initial = idAux !== null && idAux !== undefined && idAux !== 0 ? String(idAux) : fallbackValue !== undefined ? String(fallbackValue) : '';
     if (initial) {
+      // seleccionar valor inicial
       choices.setChoiceByValue(initial);
     } else {
-      // Garantiza que el placeholder esté visible
+      // garantizar placeholder (valor vacío) cuando no hay selección
+      selectElement.value = '';
       choices.removeActiveItems();
     }
 
