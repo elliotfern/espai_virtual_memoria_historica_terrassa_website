@@ -3,7 +3,6 @@ import Choices from 'choices.js';
 import 'choices.js/public/assets/styles/choices.min.css';
 
 type Item = { id: number; [key: string]: unknown };
-
 const choicesRegistry = new Map<string, Choices>();
 
 export async function auxiliarSelect(idAux: number | null | undefined, api: string, elementId: string, valorText: string, fallbackValue?: string, config?: Partial<Choices['config']>): Promise<Choices | void> {
@@ -27,50 +26,57 @@ export async function auxiliarSelect(idAux: number | null | undefined, api: stri
       choicesRegistry.delete(elementId);
     }
 
-    // limpiar y añadir placeholder (NO disabled)
+    // limpiar y añadir placeholder (NO disabled, y como primera opción)
     selectElement.innerHTML = '';
     const placeholder = document.createElement('option');
     placeholder.value = '';
     placeholder.text = 'Selecciona una opció:';
     placeholder.setAttribute('selected', '');
-    // 👇 no uses disabled/hidden en el placeholder
-    // placeholder.setAttribute('disabled', '');
-    // placeholder.setAttribute('hidden', '');
+    // importante: no disabled / no hidden → se puede volver a "vaciar"
     selectElement.appendChild(placeholder);
 
     // calcular selección inicial
     const initial = idAux !== null && idAux !== undefined && idAux !== 0 ? String(idAux) : fallbackValue !== undefined ? String(fallbackValue) : '';
 
-    // crear Choices (sin removeItemButton para single select)
+    // crear Choices: sin orden alfabético y con botón de eliminar
     const choices = new Choices(selectElement, {
       searchEnabled: true,
-      shouldSort: true,
       allowHTML: false,
+      shouldSort: false, // mantiene el placeholder primero
       placeholder: true,
       placeholderValue: 'Selecciona una opció:',
-      removeItemButton: false, // ← importante para single select
+      removeItemButton: true, // recupera la “x” para limpiar
+      itemSelectText: '',
+      noResultsText: 'Sense resultats',
       ...config,
     });
 
-    // cargar opciones
+    // construir opciones (respetando orden recibido)
     const options = data.map((item) => {
       const raw = item[valorText];
       const label = typeof raw === 'string' ? raw : String(raw ?? '');
       return { value: String(item.id), label };
     });
 
-    // reemplazar opciones correctamente
-    choices.clearChoices();
-    choices.setChoices(options, 'value', 'label', true);
+    // IMPORTANTE: no reemplazar para conservar el placeholder que ya existe
+    choices.setChoices(options, 'value', 'label', false);
 
+    // seleccionar inicial si corresponde
     if (initial) {
-      // seleccionar valor inicial
       choices.setChoiceByValue(initial);
     } else {
-      // garantizar placeholder (valor vacío) cuando no hay selección
+      // mantener vacío/placeholder visible
       selectElement.value = '';
       choices.removeActiveItems();
     }
+
+    // al pulsar la “x”, dejar el select en vacío y notificar cambio
+    selectElement.addEventListener('removeItem', () => {
+      choices.removeActiveItems();
+      selectElement.value = '';
+      // notifica a listeners (por si guardas/validas en 'change')
+      selectElement.dispatchEvent(new Event('change', { bubbles: true }));
+    });
 
     choicesRegistry.set(elementId, choices);
     return choices;

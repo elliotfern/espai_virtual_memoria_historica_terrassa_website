@@ -3,26 +3,20 @@
 use App\Config\Tables;
 use App\Config\Audit;
 
-// Configuración de cabeceras para aceptar JSON y responder JSON
+// Cabeceras
 header("Content-Type: application/json");
 header("Access-Control-Allow-Origin: https://memoriaterrassa.cat");
 header("Access-Control-Allow-Methods: PUT");
 
-// Dominio permitido (modifica con tu dominio)
 $allowed_origin = "https://memoriaterrassa.cat";
-
-// Verificar el encabezado 'Origin'
-if (isset($_SERVER['HTTP_ORIGIN'])) {
-    if ($_SERVER['HTTP_ORIGIN'] !== $allowed_origin) {
-        http_response_code(403); // Respuesta 403 Forbidden
-        echo json_encode(["error" => "Acceso denegado. Origen no permitido."]);
-        exit;
-    }
+if (isset($_SERVER['HTTP_ORIGIN']) && $_SERVER['HTTP_ORIGIN'] !== $allowed_origin) {
+    http_response_code(403);
+    echo json_encode(["error" => "Acceso denegado. Origen no permitido."]);
+    exit;
 }
 
-// Verificar que el método HTTP sea PUT
 if ($_SERVER['REQUEST_METHOD'] !== 'PUT') {
-    http_response_code(405); // Método no permitido
+    http_response_code(405);
     echo json_encode(["error" => "Método no permitido. Se requiere PUT."]);
     exit;
 }
@@ -37,32 +31,39 @@ if (!$userId) {
 $inputData = file_get_contents('php://input');
 $data = json_decode($inputData, true);
 
-if (!$data['idPersona'] || !$data['id']) {
-    http_response_code(400); // Bad Request
+// --- helpers para normalizar ---
+/**
+ * Devuelve NULL si el valor es '', null, '0' o 0; si es numérico, devuelve (int)
+ */
+function intOrNull($v): ?int
+{
+    if ($v === '' || $v === null) return null;
+    if ($v === '0' || $v === 0) return null;
+    if (is_numeric($v)) return (int)$v;
+    return null; // valor no válido → NULL
+}
+/**
+ * Devuelve NULL si la cadena está vacía; si no, string recortado
+ */
+function strOrNull($v): ?string
+{
+    if ($v === null) return null;
+    $v = is_string($v) ? trim($v) : $v;
+    return ($v === '' ? null : (string)$v);
+}
+
+if (empty($data['idPersona']) || empty($data['id'])) {
+    http_response_code(400);
     echo json_encode(["status" => 'error', 'message' => 'Falta ID i IDPersona']);
     exit;
 }
 
-// Inicializar un array para los errores
+// Validaciones de fecha (como ya tenías)
 $errors = [];
 
-// Validación de los datos recibidos
-if (empty($data['circumstancia_mort'])) {
-    $errors[] = "El camp 'circumstancia_mort' és obligatori";
-}
-
-if (empty($data['condicio'])) {
-    $errors[] = "El camp 'condicio' és obligatori";
-}
-
-if (empty($data['bandol'])) {
-    $errors[] = "El camp 'bandol' és obligatori";
-}
-
 $desaparegut_dataRaw = $data['desaparegut_data'] ?? '';
-if (!empty($desaparegut_dataRaw)) {
+if ($desaparegut_dataRaw !== '') {
     $desaparegut_dataFormat = convertirDataFormatMysql($desaparegut_dataRaw, 1);
-
     if (!$desaparegut_dataFormat) {
         $errors[] = "El format de data no és vàlid. Format esperat: DD/MM/YYYY, amb anys entre 1936 i 1939";
     }
@@ -71,9 +72,8 @@ if (!empty($desaparegut_dataRaw)) {
 }
 
 $desaparegut_data_aparicioRaw = $data['desaparegut_data_aparicio'] ?? '';
-if (!empty($desaparegut_data_aparicioRaw)) {
+if ($desaparegut_data_aparicioRaw !== '') {
     $desaparegut_data_aparicioFormat = convertirDataFormatMysql($desaparegut_data_aparicioRaw, 1);
-
     if (!$desaparegut_data_aparicioFormat) {
         $errors[] = "El format de data no és vàlid. Format esperat: DD/MM/YYYY, amb anys entre 1936 i 1939.";
     }
@@ -81,39 +81,40 @@ if (!empty($desaparegut_data_aparicioRaw)) {
     $desaparegut_data_aparicioFormat = null;
 }
 
-// Si hay errores, devolver una respuesta con los errores
+// Normaliza INTs: ""/0 → NULL; numérico → int
+$condicio                  = intOrNull($data['condicio'] ?? null);
+$bandol                    = intOrNull($data['bandol'] ?? null);
+$cos                       = intOrNull($data['cos'] ?? null);
+$circumstancia_mort        = intOrNull($data['circumstancia_mort'] ?? null);
+$desaparegut_lloc          = intOrNull($data['desaparegut_lloc'] ?? null);
+$desaparegut_lloc_aparicio = intOrNull($data['desaparegut_lloc_aparicio'] ?? null);
+$reaparegut                = intOrNull($data['reaparegut'] ?? null);
+$idPersona                 = intOrNull($data['idPersona'] ?? null);
+$id                        = intOrNull($data['id'] ?? null);
+
+// Si mantienes estos campos como obligatorios, valida sobre las variables normalizadas:
+if ($circumstancia_mort === null) $errors[] = "El camp 'circumstancia_mort' és obligatori";
+if ($condicio === null)           $errors[] = "El camp 'condicio' és obligatori";
+if ($bandol === null)             $errors[] = "El camp 'bandol' és obligatori";
+
 if (!empty($errors)) {
-    http_response_code(400); // Bad Request
-    header('Content-Type: application/json');
+    http_response_code(400);
     echo json_encode(["status" => "error", "message" => $errors]);
     exit;
 }
 
-// Si no hay errores, crear las variables PHP y preparar la consulta PDO
-$condicio = $data['condicio'];
-$bandol = $data['bandol'];
-$any_lleva = !empty($data['any_lleva']) ? $data['any_lleva'] : NULL;
-$unitat_inicial = !empty($data['unitat_inicial']) ? $data['unitat_inicial'] : NULL;
-$cos = !empty($data['cos']) ? $data['cos'] : NULL;
-$unitat_final = !empty($data['unitat_final']) ? $data['unitat_final'] : NULL;
-$graduacio_final = !empty($data['graduacio_final']) ? $data['graduacio_final'] : NULL;
-$periple_militar = !empty($data['periple_militar']) ? $data['periple_militar'] : NULL;
-$circumstancia_mort = $data['circumstancia_mort'];
-$desaparegut_lloc = !empty($data['desaparegut_lloc']) ? $data['desaparegut_lloc'] : NULL;
-$desaparegut_data_aparicio = !empty($data['desaparegut_data_aparicio']) ? $data['desaparegut_data_aparicio'] : NULL;
-$idPersona = $data['idPersona'];
-$desaparegut_lloc_aparicio = !empty($data['desaparegut_lloc_aparicio']) ? $data['desaparegut_lloc_aparicio'] : NULL;
-$aparegut_observacions = !empty($data['aparegut_observacions']) ? $data['aparegut_observacions'] : NULL;
-$reaparegut = !empty($data['reaparegut']) ? $data['reaparegut'] : NULL;
-$id = $data['id'];
+// Cadenas opcionales: "" → NULL
+$any_lleva           = strOrNull($data['any_lleva'] ?? null);
+$unitat_inicial      = strOrNull($data['unitat_inicial'] ?? null);
+$unitat_final        = strOrNull($data['unitat_final'] ?? null);
+$graduacio_final     = strOrNull($data['graduacio_final'] ?? null);
+$periple_militar     = strOrNull($data['periple_militar'] ?? null);
+$aparegut_observacions = strOrNull($data['aparegut_observacions'] ?? null);
 
-// Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
 try {
-
     global $conn;
     /** @var PDO $conn */
 
-    // Crear la consulta SQL
     $sql = "UPDATE db_cost_huma_morts_front SET 
             condicio = :condicio,
             bandol = :bandol,
@@ -133,57 +134,46 @@ try {
             reaparegut = :reaparegut
         WHERE id = :id";
 
-    /*
-	id 	idPersona 	condicio 	bandol 	any_lleva 	unitat_inicial 	cos 	unitat_final 	graduacio_final 	periple_militar 	circumstancia_mort 	desaparegut_data 	desaparegut_lloc 	reaparegut 	desaparegut_data_aparicio 	desaparegut_lloc_aparicio 	aparegut_observacions 	
-*/
-
-    // Preparar la consulta
     $stmt = $conn->prepare($sql);
 
-    // Enlazar los parámetros con los valores de las variables PHP
-    $stmt->bindParam(':condicio', $condicio, PDO::PARAM_INT);
-    $stmt->bindParam(':bandol', $bandol, PDO::PARAM_INT);
-    $stmt->bindParam(':any_lleva', $any_lleva, PDO::PARAM_STR);
-    $stmt->bindParam(':unitat_inicial', $unitat_inicial, PDO::PARAM_STR);
-    $stmt->bindParam(':cos', $cos, PDO::PARAM_INT);
-    $stmt->bindParam(':unitat_final', $unitat_final, PDO::PARAM_STR);
-    $stmt->bindParam(':graduacio_final', $graduacio_final, PDO::PARAM_STR);
-    $stmt->bindParam(':periple_militar', $periple_militar, PDO::PARAM_STR);
-    $stmt->bindParam(':circumstancia_mort', $circumstancia_mort, PDO::PARAM_INT);
-    $stmt->bindParam(':desaparegut_data', $desaparegut_dataFormat, PDO::PARAM_STR);
-    $stmt->bindParam(':desaparegut_lloc', $desaparegut_lloc, PDO::PARAM_INT);
-    $stmt->bindParam(':desaparegut_data_aparicio', $desaparegut_data_aparicioFormat, PDO::PARAM_STR);
-    $stmt->bindParam(':desaparegut_lloc_aparicio', $desaparegut_lloc_aparicio, PDO::PARAM_INT);
-    $stmt->bindParam(':aparegut_observacions', $aparegut_observacions, PDO::PARAM_STR);
-    $stmt->bindParam(':reaparegut', $reaparegut, PDO::PARAM_INT);
-    $stmt->bindParam(':idPersona', $idPersona, PDO::PARAM_INT);
+    // INTs: bind NULL vs INT
+    $stmt->bindValue(':condicio',           $condicio,           $condicio === null ? PDO::PARAM_NULL : PDO::PARAM_INT);
+    $stmt->bindValue(':bandol',             $bandol,             $bandol === null ? PDO::PARAM_NULL : PDO::PARAM_INT);
+    $stmt->bindValue(':cos',                $cos,                $cos === null ? PDO::PARAM_NULL : PDO::PARAM_INT);
+    $stmt->bindValue(':circumstancia_mort', $circumstancia_mort, $circumstancia_mort === null ? PDO::PARAM_NULL : PDO::PARAM_INT);
+    $stmt->bindValue(':desaparegut_lloc',   $desaparegut_lloc,   $desaparegut_lloc === null ? PDO::PARAM_NULL : PDO::PARAM_INT);
+    $stmt->bindValue(':desaparegut_lloc_aparicio', $desaparegut_lloc_aparicio, $desaparegut_lloc_aparicio === null ? PDO::PARAM_NULL : PDO::PARAM_INT);
+    $stmt->bindValue(':reaparegut',         $reaparegut,         $reaparegut === null ? PDO::PARAM_NULL : PDO::PARAM_INT);
+    $stmt->bindValue(':idPersona',          $idPersona,          $idPersona === null ? PDO::PARAM_NULL : PDO::PARAM_INT);
+    $stmt->bindValue(':id',                 $id,                 $id === null ? PDO::PARAM_NULL : PDO::PARAM_INT);
 
-    // Supón que el ID a modificar lo pasas en el JSON también
-    if (isset($id)) {
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-    }
+    // Strings / fechas: bind NULL vs STR
+    $stmt->bindValue(':any_lleva',              $any_lleva,              $any_lleva === null ? PDO::PARAM_NULL : PDO::PARAM_STR);
+    $stmt->bindValue(':unitat_inicial',         $unitat_inicial,         $unitat_inicial === null ? PDO::PARAM_NULL : PDO::PARAM_STR);
+    $stmt->bindValue(':unitat_final',           $unitat_final,           $unitat_final === null ? PDO::PARAM_NULL : PDO::PARAM_STR);
+    $stmt->bindValue(':graduacio_final',        $graduacio_final,        $graduacio_final === null ? PDO::PARAM_NULL : PDO::PARAM_STR);
+    $stmt->bindValue(':periple_militar',        $periple_militar,        $periple_militar === null ? PDO::PARAM_NULL : PDO::PARAM_STR);
+    $stmt->bindValue(':aparegut_observacions',  $aparegut_observacions,  $aparegut_observacions === null ? PDO::PARAM_NULL : PDO::PARAM_STR);
 
-    // Ejecutar la consulta
+    $stmt->bindValue(':desaparegut_data',          $desaparegut_dataFormat,          $desaparegut_dataFormat === null ? PDO::PARAM_NULL : PDO::PARAM_STR);
+    $stmt->bindValue(':desaparegut_data_aparicio', $desaparegut_data_aparicioFormat, $desaparegut_data_aparicioFormat === null ? PDO::PARAM_NULL : PDO::PARAM_STR);
+
     $stmt->execute();
 
-    // Si la inserció té èxit, cal registrar la inserció en la base de control de canvis
+    // Audit
     $detalls = "Modificació fitxa repressió cost humà morts al front";
     $tipusOperacio = "UPDATE";
-
     Audit::registrarCanvi(
         $conn,
-        $userId,                      // ID del usuario que hace el cambio
-        $tipusOperacio,             // Tipus operacio
-        $detalls,                       // Descripción de la operación
-        Tables::DB_COST_HUMA_MORTS_FRONT,  // Nombre de la tabla afectada
-        $id                           // ID del registro modificada
+        $userId,
+        $tipusOperacio,
+        $detalls,
+        Tables::DB_COST_HUMA_MORTS_FRONT,
+        $id
     );
 
-
-    // Respuesta de éxito
     echo json_encode(["status" => "success", "message" => "Les dades s'han actualitzat correctament a la base de dades."]);
 } catch (PDOException $e) {
-    // En caso de error en la conexión o ejecución de la consulta
-    http_response_code(500); // Internal Server Error
+    http_response_code(500);
     echo json_encode(["status" => "error", "message" => "S'ha produit un error a la base de dades: " . $e->getMessage()]);
 }
