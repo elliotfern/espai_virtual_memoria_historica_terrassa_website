@@ -150,8 +150,3 @@
         </form>
     </div>
 </div>
-
-
-id idPersona condicio bandol any_lleva unitat_inicial cos unitat_final graduacio_final periple_militar circumstancia_mort desaparegut_data desaparegut_lloc
-
-reaparegut desaparegut_data_aparicio desaparegut_lloc_aparicio aparegut_observacions

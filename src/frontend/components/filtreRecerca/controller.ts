@@ -8,6 +8,7 @@ import { FilterSpec } from './filters/types';
 import type { FetchPersonasOptions, FetchOpcionesOptions } from './api';
 import { setMuniToProv } from './prov-map';
 import { renderActiveChips } from './chips';
+import type { Selection as ExportSelection } from './utils/export';
 
 // Extiende Persona con campo precalculado para búsqueda
 type PersonaIndexed = Persona & { __search: string };
@@ -348,6 +349,32 @@ export class BuscadorController {
   }
 
   // ——————————————————— API pública ———————————————————
+
+  /** Selección lista para exportar: filtros + q + type (página) */
+  /** Selección lista para exportar: filtros + q + type (página) */
+  getExportPayload(): ExportSelection {
+    const base: ExportSelection = {};
+
+    // copiar SelectionState (string[]) → ExportSelection (acepta string[])
+    const sel = this.getSelection();
+    const entries = Object.entries(sel) as Array<[string, string[]]>;
+    for (const [k, v] of entries) {
+      base[k] = v; // v: string[]
+    }
+
+    // texto libre
+    const q = (document.getElementById('buscador-nom') as HTMLInputElement | null)?.value?.trim();
+    if (q) base.q = q;
+
+    // tipo de página (general, represaliats, exili, cost-huma…)
+    base.type = this.config.personas.type;
+
+    return base;
+  }
+
+  getSelection(): SelectionState {
+    return this.selection;
+  }
 
   updateSort(key: SortKey): void {
     this.sortKey = key;

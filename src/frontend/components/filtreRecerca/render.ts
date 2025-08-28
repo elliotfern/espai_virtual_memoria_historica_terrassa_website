@@ -54,7 +54,7 @@ export function renderResultsPaginated(personas: Persona[], opciones: OpcionesFi
         const datesStr = [birthStr, defStr].filter(Boolean).join(' / ');
         const href = `https://memoriaterrassa.cat/fitxa/${p.slug}`;
         return `
-          <div class="fila-persona">
+          <div class="fila-persona" style="margin-top:20px">
             <div>
               <strong><a href="${href}" target="_blank" rel="noopener noreferrer">${fullName(p)}</a></strong><br/>
               <small>${datesStr}</small>

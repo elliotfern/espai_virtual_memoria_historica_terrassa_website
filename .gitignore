@@ -11,6 +11,7 @@ Thumbs.db
 /node_modules/
 /public/img/
 /.vscode/
+/.composer/
 
 # Ignorar archivos de configuración local (ejemplo para PHP)
 .env.dev
