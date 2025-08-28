@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 use App\Config\DatabaseConnection;
 
-require __DIR__ . '/../../../vendor/autoload.php';
-
 header('Content-Type: text/csv; charset=UTF-8');
 header('Content-Disposition: attachment; filename="memoriaterrassa_export_' . date('Ymd_His') . '.csv"');
 header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
@@ -16,20 +14,39 @@ if (!$pdo) {
     exit('DB error');
 }
 
-$g = $_GET;
-$type = isset($g['type']) ? (string)$g['type'] : 'filtreGeneral';  // viene del controller
-$q = '';
+$type = getScalar('type') ?: 'filtreGeneral';
+$q    = getScalar('q');
+
 if (!empty($g['q'])) {
     $q = is_array($g['q']) ? (string)($g['q'][0] ?? '') : (string)$g['q'];
     $q = trim($q);
 }
 
 // -------- helpers genéricos ----------
+// Reemplaza getArray y lecturas sueltas de $_GET por esto:
+
+/** Devuelve el valor crudo de una clave (prioriza POST, luego GET) */
+function rq(string $key)
+{
+    return $_POST[$key] ?? $_GET[$key] ?? null;
+}
+
+/** Devuelve array limpio (acepta 'key=value1&key=value2' y 'key[]=v1&key[]=v2') */
 function getArray(string $key): array
 {
-    $v = $_GET[$key] ?? [];
-    if (!is_array($v)) $v = [$v];
+    $raw = rq($key);
+    if ($raw === null) return [];
+    $v = is_array($raw) ? $raw : [$raw];
     return array_values(array_filter(array_map(fn($x) => trim((string)$x), $v), fn($x) => $x !== ''));
+}
+
+/** Texto simple (first-or-empty) */
+function getScalar(string $key): string
+{
+    $raw = rq($key);
+    if ($raw === null) return '';
+    if (is_array($raw)) return trim((string)($raw[0] ?? ''));
+    return trim((string)$raw);
 }
 
 /** Construye WHERE y params a partir de un whitelist */

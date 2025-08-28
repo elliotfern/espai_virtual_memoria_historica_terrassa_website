@@ -139,6 +139,7 @@
         <!-- Columna resultados -->
         <div class="col-lg-9">
             <div id="resultados">
+                <div id="exportToolbar" class="mb-2"></div>
                 <h3 class="h6">Resultats</h3>
                 <div id="tabla-resultados" aria-live="polite"></div>
                 <div id="contador-resultados" class="text-muted mt-3"></div>

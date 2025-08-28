@@ -1,62 +1,75 @@
-// utils/export.ts
-type SelValue = string | number | boolean | null | undefined | (string | number | boolean)[];
-export type Selection = Record<string, SelValue>;
+// src/utils/export.ts
+type SelScalar = string | number | boolean;
+type SelArray = SelScalar[];
+export type Selection = Record<string, SelScalar | SelArray | null | undefined>;
 
-/** Convierte tu selection a querystring (?k=1&k=6...) */
-function selectionToSearchParams(selection: Selection): URLSearchParams {
-  const sp = new URLSearchParams();
+/** Construye <input type="hidden"> y lo añade al form */
+function addHidden(form: HTMLFormElement, name: string, value: SelScalar) {
+  const inp = document.createElement('input');
+  inp.type = 'hidden';
+  inp.name = name;
+  inp.value = String(value);
+  form.appendChild(inp);
+}
+
+/** Envia la selección por POST (arrays con name="key[]") */
+function postDownload(url: string, selection: Selection) {
+  const form = document.createElement('form');
+  form.method = 'POST';
+  form.action = url;
+  form.style.display = 'none';
+
+  // Copiamos solo claves con valor
   Object.entries(selection ?? {}).forEach(([key, val]) => {
     if (val === null || val === undefined) return;
     if (Array.isArray(val)) {
-      val.forEach((v) => v !== null && v !== undefined && sp.append(key, String(v)));
+      if (val.length === 0) return;
+      val.forEach((v) => addHidden(form, `${key}[]`, v));
     } else {
-      sp.set(key, String(val));
+      addHidden(form, key, val);
     }
   });
-  // nunca exportamos paginación
-  sp.delete('page');
-  sp.delete('limit');
-  return sp;
+
+  document.body.appendChild(form);
+  form.submit();
+  form.remove();
 }
 
-/** Construye la URL del endpoint de export según formato */
-function buildExportUrl(fmt: 'csv' | 'xlsx', qs: string): string {
-  const base = fmt === 'csv' ? `https://${window.location.hostname}/api/export/persones_csv` : `https://${window.location.hostname}/api/export/persones_xlsx`;
-  return qs ? `${base}?${qs}` : base;
+/** Construye la URL del endpoint según formato */
+function buildExportUrl(fmt: 'csv' | 'xlsx'): string {
+  const host = `https://${window.location.hostname}`;
+  // Usa tus rutas reales (PHP ejecutable)
+  return fmt === 'csv' ? `${host}/api/export/persones_csv` : `${host}/api/export/persones_xlsx`;
 }
-/** Dispara la descarga por GET (preferido para archivos) */
+
+/** API pública: dispara la descarga (POST) */
 export function downloadExportFromSelection(selection: Selection, fmt: 'csv' | 'xlsx' = 'csv'): void {
-  const qs = selectionToSearchParams(selection).toString();
-  const url = buildExportUrl(fmt, qs);
-  window.location.href = url;
+  const url = buildExportUrl(fmt);
+  postDownload(url, selection);
 }
 
-/** Monta dos botones “Exportar” en el contenedor dado */
+/** UI helper: inserta los dos botones */
 export function mountExportToolbar(container: HTMLElement, getSelection: () => Selection): void {
   if (!container) return;
+  container.querySelector('[data-export-toolbar]')?.remove();
 
-  // Evitar duplicados si rehidratáis la vista
-  const existing = container.querySelector('[data-export-toolbar]');
-  if (existing) existing.remove();
+  const wrap = document.createElement('div');
+  wrap.setAttribute('data-export-toolbar', 'true');
+  wrap.className = 'd-flex gap-2 flex-wrap my-2';
 
-  const wrapper = document.createElement('div');
-  wrapper.setAttribute('data-export-toolbar', 'true');
-  wrapper.className = 'd-flex gap-2 flex-wrap my-2';
+  const b1 = document.createElement('button');
+  b1.type = 'button';
+  b1.className = 'btn btn-outline-primary';
+  b1.textContent = 'Exportar CSV';
+  b1.addEventListener('click', () => downloadExportFromSelection(getSelection(), 'csv'));
 
-  const btnCsv = document.createElement('button');
-  btnCsv.type = 'button';
-  btnCsv.className = 'btn btn-outline-primary';
-  btnCsv.textContent = 'Exportar CSV';
+  const b2 = document.createElement('button');
+  b2.type = 'button';
+  b2.className = 'btn btn-outline-success';
+  b2.textContent = 'Exportar Excel';
+  b2.addEventListener('click', () => downloadExportFromSelection(getSelection(), 'xlsx'));
 
-  const btnXlsx = document.createElement('button');
-  btnXlsx.type = 'button';
-  btnXlsx.className = 'btn btn-outline-success';
-  btnXlsx.textContent = 'Exportar Excel';
-
-  btnCsv.addEventListener('click', () => downloadExportFromSelection(getSelection(), 'csv'));
-  btnXlsx.addEventListener('click', () => downloadExportFromSelection(getSelection(), 'xlsx'));
-
-  wrapper.appendChild(btnCsv);
-  wrapper.appendChild(btnXlsx);
-  container.appendChild(wrapper);
+  wrap.appendChild(b1);
+  wrap.appendChild(b2);
+  container.appendChild(wrap);
 }
