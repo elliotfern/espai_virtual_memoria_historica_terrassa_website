@@ -12,9 +12,15 @@ export async function iniciarBuscadorGeneral() {
 
   await ctrl.init();
 
-  const container = document.getElementById('exportToolbar');
-  if (container) {
-    // leerá la selección y el texto ‘q’ justo al hacer clic
-    mountExportToolbar(container, () => ctrl.getSelectionForExport());
+  // Monta la barra de exportación
+  let container = document.getElementById('exportToolbar');
+  if (!container) {
+    container = document.createElement('div');
+    container.id = 'exportToolbar';
+    container.className = 'mb-2';
+    document.getElementById('filtros')?.prepend(container);
   }
+
+  // Usa SIEMPRE el método del controller
+  mountExportToolbar(container, () => ctrl.getExportPayload());
 }
