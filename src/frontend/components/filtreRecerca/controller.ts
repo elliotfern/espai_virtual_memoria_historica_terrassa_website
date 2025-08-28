@@ -372,6 +372,11 @@ export class BuscadorController {
     return base;
   }
 
+  // Alias de compatibilidad para cualquier sitio que aún llame al método antiguo:
+  getSelectionForExport(): ExportSelection {
+    return this.getExportPayload();
+  }
+
   getSelection(): SelectionState {
     return this.selection;
   }

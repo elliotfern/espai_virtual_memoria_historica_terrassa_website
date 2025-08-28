@@ -24,7 +24,7 @@ export async function iniciarBuscadorGeneral() {
     document.getElementById('filtros')?.prepend(container);
   }
 
-  // Lee filtros + texto + type en el momento del clic
+  // usa SIEMPRE el método nuevo
   mountExportToolbar(container, () => ctrl.getExportPayload());
 }
 
