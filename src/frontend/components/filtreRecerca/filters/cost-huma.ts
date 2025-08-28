@@ -78,9 +78,5 @@ export const FILTER_VA_MORIR: FilterSpec = {
 
 export const COST_HUMA_ONLY_FILTERS: FilterSpec[] = [
   // Añade aquí los filtros específicos que realmente uses.
-  FILTER_ANY_FERITS,
   FILTER_VA_MORIR,
 ];
-
-// al final de cost-huma.ts
-export const COST_HUMA_FILTERS_ONLY: FilterSpec[] = [FILTER_ANY_FERITS, FILTER_VA_MORIR];
