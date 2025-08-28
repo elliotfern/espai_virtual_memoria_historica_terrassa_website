@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 /**
  * /src/backend/api/export/persones_xlsx.php
- * Genera un Excel (XLSX) con los resultados filtrados.
- * - Recibe filtros por querystring (arrays permitidos) + q (texto) + type (filtreGeneral|filtreRepresaliats|filtreExili|filtreCostHuma)
- * - Evita setCellValueByColumnAndRow: usa Coordinate::stringFromColumnIndex
+ * Genera un Excel (XLSX) con los resultados filtrados (versión “completa”).
+ * - Filtros por POST o GET (arrays con key[]=v).
  */
 
 use App\Config\DatabaseConnection;
@@ -18,7 +17,6 @@ use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
 header('Content-Disposition: attachment; filename="memoriaterrassa_export_' . date('Ymd_His') . '.xlsx"');
 header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
-
 set_time_limit(0);
 
 // -------- Conexión BD --------
@@ -28,18 +26,15 @@ if (!$pdo) {
   echo "DB error";
   exit;
 }
+// ampliar por si hay muchas filiaciones
+@$pdo->exec("SET SESSION group_concat_max_len = 8192");
 
-// -------- Helpers --------
-/** Devuelve un array de strings (limpios) para una clave GET que puede venir como escalar o array. */
-// Reemplaza getArray y lecturas sueltas de $_GET por esto:
-
-/** Devuelve el valor crudo de una clave (prioriza POST, luego GET) */
+// -------- Helpers (POST/GET seguros) --------
 function rq(string $key)
 {
   return $_POST[$key] ?? $_GET[$key] ?? null;
 }
 
-/** Devuelve array limpio (acepta 'key=value1&key=value2' y 'key[]=v1&key[]=v2') */
 function getArray(string $key): array
 {
   $raw = rq($key);
@@ -48,7 +43,6 @@ function getArray(string $key): array
   return array_values(array_filter(array_map(fn($x) => trim((string)$x), $v), fn($x) => $x !== ''));
 }
 
-/** Texto simple (first-or-empty) */
 function getScalar(string $key): string
 {
   $raw = rq($key);
@@ -60,17 +54,11 @@ function getScalar(string $key): string
 /**
  * Construye WHERE y $params a partir de un whitelist:
  *   $wl = ['claveState' => ['columna_sql', 'in|in_text|eq|like|csvset']]
- * - in:       IN (?, ?, ?)
- * - in_text:  IN sobre LOWER(columna) con valores ya lowercased
- * - eq:       =
- * - like:     LIKE '%valor%'
- * - csvset:   campo string con '{1,6,7}' → OR de FIND_IN_SET sobre el string sin llaves
  */
 function buildWhere(array $wl, array &$params): string
 {
   $where = [];
   foreach ($wl as $key => $def) {
-    if (!isset($_GET[$key])) continue;
     $vals = getArray($key);
     if (!$vals) continue;
 
@@ -93,11 +81,11 @@ function buildWhere(array $wl, array &$params): string
       }
       $where[] = "LOWER($col) IN (" . implode(',', $ph) . ")";
     } elseif ($mode === 'csvset') {
+      // Campo string con '{1,6,7}' → busca cada valor con FIND_IN_SET sobre el string sin llaves
       $ors = [];
       foreach ($vals as $i => $v) {
         $name = ":{$key}_$i";
         $params[$name] = (string)$v;
-        // REPLACE llaves para dejar "1,6,7" y usar FIND_IN_SET
         $ors[] = "FIND_IN_SET($name, REPLACE(REPLACE($col,'{',''),'}','')) > 0";
       }
       $where[] = '(' . implode(' OR ', $ors) . ')';
@@ -109,7 +97,7 @@ function buildWhere(array $wl, array &$params): string
         $ors[] = "$col LIKE $name";
       }
       $where[] = '(' . implode(' OR ', $ors) . ')';
-    } else { // eq
+    } else { // eq (por defecto)
       $name = ":$key";
       $params[$name] = ctype_digit($vals[0]) ? (int)$vals[0] : $vals[0];
       $where[] = "$col = $name";
@@ -118,29 +106,66 @@ function buildWhere(array $wl, array &$params): string
   return $where ? ('WHERE ' . implode(' AND ', $where)) : '';
 }
 
+// === Traducciones ===
+$SEXE_MAP = [
+  '1' => 'Home',
+  '2' => 'Dona',
+];
+
+$CATEGORY_MAP = [
+  '1'  => 'Afusellat',
+  '2'  => 'Deportat',
+  '3'  => 'Mort/desaparegut en combat',
+  '4'  => 'Mort civil',
+  '5'  => 'Represàlia republicana',
+  '6'  => 'Detingut/Processat',
+  '7'  => 'Depurat',
+  '8'  => 'Dona',
+  '9'  => 'Sense assignar',
+  '10' => 'Exiliat',
+  '11' => 'Represaliats pendents classificació',
+  '12' => 'Empresonat Presó Model',
+  '13' => 'Detingut Guàrdia Urbana',
+  '14' => 'Detingut Comitè Solidaritat (1971-1977)',
+  '15' => 'Llei Responsabilitats Polítiques',
+  '16' => 'Empresonat dipòsit municipal Sant Llàtzer (1951-19...)',
+  '17' => 'Processat Tribunal Orden Público',
+  '18' => 'Detingut Comitè Relacions de Solidaritat (1939-194...)',
+  '19' => 'Camps de treball',
+  '20' => 'Batalló de presos',
+];
+
+function parseSetIds(?string $raw): array
+{
+  if ($raw === null) return [];
+  $raw = trim(str_replace(['{', '}', ' '], '', $raw));
+  if ($raw === '') return [];
+  return array_values(array_filter(explode(',', $raw), fn($x) => $x !== ''));
+}
+
+function categoriesToNames(?string $raw, array $map): string
+{
+  $ids = parseSetIds($raw);
+  if (!$ids) return '';
+  $names = [];
+  foreach ($ids as $id) $names[] = $map[$id] ?? $id;
+  return implode(' | ', $names);
+}
+
 // -------- Entrada --------
 $type = getScalar('type') ?: 'filtreGeneral';
-$q    = getScalar('q');
-
-if (!empty($_GET['q'])) {
-  $q = is_array($_GET['q']) ? (string)($_GET['q'][0] ?? '') : (string)$_GET['q'];
-  $q = trim($q);
-}
+$q    = getScalar('q'); // texto libre nom/cognoms
 
 // -------- Whitelists y JOINs por tipo --------
 $params = [];
-$joins  = [];
+$joins  = []; // se añaden SOLO joins para filtros adicionales (exili/cost_huma…)
 $wl     = [];
 
-/**
- * Ajusta las claves a tus stateKey reales.
- * Si tus columnas de año no son DATE y están en string, YEAR(...) puede seguir funcionando si el formato es yyyy-mm-dd;
- * si no, crea columnas normalizadas (any_naixement/any_defuncio) o ajusta el filtro a tu realidad.
- */
 if ($type === 'filtreGeneral') {
   $wl = [
     'municipis_naixement' => ['p.municipi_naixement', 'in'],
-    'provincies'          => ['m.provincia',          'in_text'], // en el front es nombre, no id
+    // Provincia por NOMBRE desde la provincia del municipi de NAIXEMENT (m1b.provincia)
+    'provincies'          => ['m1b.provincia',        'in_text'],
     'anys_naixement'      => ['YEAR(p.data_naixement)', 'in'],
     'anys_defuncio'       => ['YEAR(p.data_defuncio)', 'in'],
     'estats'              => ['p.estat_civil',        'in'],
@@ -153,8 +178,7 @@ if ($type === 'filtreGeneral') {
     'causes'              => ['p.causa_defuncio',     'in'],
     'categories'          => ['p.categoria',          'csvset'],
   ];
-  $joins[] = "LEFT JOIN aux_dades_municipis m ON m.id = p.municipi_naixement";
-  $joins[] = "LEFT JOIN aux_tipus_via tv ON tv.id = p.tipus_via";
+  // OJO: NO añadimos joins aquí; el SELECT “completo” ya trae m1..m1d/m1b.
 } elseif ($type === 'filtreRepresaliats') {
   $wl = [
     'categories'           => ['p.categoria', 'csvset'],
@@ -165,8 +189,6 @@ if ($type === 'filtreGeneral') {
     'sexes'                => ['p.sexe', 'in'],
   ];
   $joins[] = "LEFT JOIN represalia r ON r.persona_id = p.id";
-  $joins[] = "LEFT JOIN aux_dades_municipis m ON m.id = p.municipi_naixement";
-  $joins[] = "LEFT JOIN aux_tipus_via tv ON tv.id = p.tipus_via";
 } elseif ($type === 'filtreExili') {
   $wl = [
     'categories'   => ['p.categoria', 'csvset'],
@@ -176,9 +198,6 @@ if ($type === 'filtreGeneral') {
     'sexes'        => ['p.sexe',      'in'],
   ];
   $joins[] = "LEFT JOIN exili e ON e.persona_id = p.id";
-  $joins[] = "LEFT JOIN aux_tipus_via tv ON tv.id = p.tipus_via";
-  // municipis si necesitas ciutat:
-  $joins[] = "LEFT JOIN aux_dades_municipis m ON m.id = p.municipi_naixement";
 } elseif ($type === 'filtreCostHuma') {
   $wl = [
     'categories' => ['p.categoria', 'csvset'],
@@ -186,81 +205,197 @@ if ($type === 'filtreGeneral') {
     'situacions' => ['c.situacio',  'in'],
   ];
   $joins[] = "LEFT JOIN cost_huma c ON c.persona_id = p.id";
-  $joins[] = "LEFT JOIN aux_tipus_via tv ON tv.id = p.tipus_via";
-  $joins[] = "LEFT JOIN aux_dades_municipis m ON m.id = p.municipi_naixement";
 } else {
-  // fallback mínimo
   $wl = ['categories' => ['p.categoria', 'csvset']];
-  $joins[] = "LEFT JOIN aux_dades_municipis m ON m.id = p.municipi_naixement";
-  $joins[] = "LEFT JOIN aux_tipus_via tv ON tv.id = p.tipus_via";
 }
 
-// WHERE por whitelist
 $where = buildWhere($wl, $params);
 
-// Texto libre q sobre nom/cognoms
+// Texto libre sobre nom/cognoms
 if ($q !== '') {
   $where .= ($where ? ' AND ' : 'WHERE ')
     . "(LOWER(p.nom) LIKE :q OR LOWER(p.cognom1) LIKE :q OR LOWER(p.cognom2) LIKE :q)";
   $params[':q'] = '%' . mb_strtolower($q, 'UTF-8') . '%';
 }
 
-// -------- Consulta --------
-// (Añade/quita columnas a gusto; aquí incluyo 'tipus_via' como en el CSV)
+// -------- SELECT “completo” --------
+$headers = [
+  'id',
+  'nom',
+  'cognom1',
+  'cognom2',
+  'categoria',
+  'sexe',
+  'data_naixement',
+  'data_defuncio',
+  'ciutat_naixement',
+  'comarca_naixement',
+  'provincia_naixement',
+  'comunitat_naixement',
+  'pais_naixement',
+  'ciutat_residencia',
+  'comarca_residencia',
+  'provincia_residencia',
+  'comunitat_residencia',
+  'pais_residencia',
+  'ciutat_defuncio',
+  'comarca_defuncio',
+  'provincia_defuncio',
+  'comunitat_defuncio',
+  'pais_defuncio',
+  'adreca',
+  'tipologia_espai_ca',
+  'observacions_espai',
+  'causa_defuncio_ca',
+  'estat_civil',
+  'estudi_cat',
+  'ofici_cat',
+  'empresa',
+  'filiacio_politica_noms',
+  'filiacio_sindical_noms',
+  'activitat_durant_guerra',
+  'sector_cat',
+  'sub_sector_cat',
+  'carrec_cat',
+  'data_creacio',
+  'data_actualitzacio',
+  'observacions',
+  'biografiaCa',
+  'biografiaEs',
+  'lat',
+  'lng',
+  'adreca_antic',
+  'adreca_num',
+  'causa_defuncio_detalls'
+];
+
 $sql = "
 SELECT
   p.id,
-  p.slug,
   p.nom,
   p.cognom1,
   p.cognom2,
-  COALESCE(m.ciutat_ca, m.ciutat)     AS ciutat,
- COALESCE(tv.tipus_ca, '') AS tipus_via,
+  p.categoria,
+  p.sexe,
+  p.data_naixement,
+  p.data_defuncio,
+
+  m1.ciutat                    AS ciutat_naixement,
+  m1a.comarca                  AS comarca_naixement,
+  m1b.provincia                AS provincia_naixement,
+  m1c.comunitat_ca             AS comunitat_naixement,
+  m1d.estat_ca                 AS pais_naixement,
+
+  m2.ciutat                    AS ciutat_residencia,
+  m2a.comarca                  AS comarca_residencia,
+  m2b.provincia                AS provincia_residencia,
+  m2c.comunitat_ca             AS comunitat_residencia,
+  m2d.estat_ca                 AS pais_residencia,
+
+  m3.ciutat                    AS ciutat_defuncio,
+  m3a.comarca                  AS comarca_defuncio,
+  m3b.provincia                AS provincia_defuncio,
+  m3c.comunitat_ca             AS comunitat_defuncio,
+  m3d.estat_ca                 AS pais_defuncio,
+
   p.adreca,
-  p.adreca_num,
+  tespai.tipologia_espai_ca    AS tipologia_espai_ca,
+  tespai.observacions          AS observacions_espai,
+  causaD.causa_defuncio_ca     AS causa_defuncio_ca,
+  ec.estat_cat                 AS estat_civil,
+  es.estudi_cat,
+  o.ofici_cat,
+  em.empresa_ca                AS empresa,
+
+  (SELECT GROUP_CONCAT(fp.partit_politic ORDER BY fp.partit_politic SEPARATOR ' | ')
+     FROM aux_filiacio_politica fp
+    WHERE FIND_IN_SET(fp.id, REPLACE(REPLACE(p.filiacio_politica,'{',''),'}','')) > 0
+  ) AS filiacio_politica_noms,
+
+  (SELECT GROUP_CONCAT(fs.sindicat ORDER BY fs.sindicat SEPARATOR ' | ')
+     FROM aux_filiacio_sindical fs
+    WHERE FIND_IN_SET(fs.id, REPLACE(REPLACE(p.filiacio_sindical,'{',''),'}','')) > 0
+  ) AS filiacio_sindical_noms,
+
+  p.activitat_durant_guerra,
+  se.sector_cat,
+  sse.sub_sector_cat,
+  oc.carrec_cat,
+  p.data_creacio,
+  p.data_actualitzacio,
+  p.observacions,
+  bio.biografiaCa,
+  bio.biografiaEs,
   p.lat,
   p.lng,
-  REPLACE(REPLACE(p.categoria,'{',''),'}','') AS categoria_ids
+  p.adreca_antic,
+  p.adreca_num,
+  p.causa_defuncio_detalls
+
 FROM db_dades_personals p
-" . implode("\n", $joins) . "
-$where
+  LEFT JOIN aux_dades_municipis           m1  ON p.municipi_naixement = m1.id
+  LEFT JOIN aux_dades_municipis_comarca   m1a ON m1.comarca          = m1a.id
+  LEFT JOIN aux_dades_municipis_provincia m1b ON m1.provincia        = m1b.id
+  LEFT JOIN aux_dades_municipis_comunitat m1c ON m1.comunitat        = m1c.id
+  LEFT JOIN aux_dades_municipis_estat     m1d ON m1.estat            = m1d.id
+
+  LEFT JOIN aux_dades_municipis           m2  ON p.municipi_residencia = m2.id
+  LEFT JOIN aux_dades_municipis_comarca   m2a ON m2.comarca          = m2a.id
+  LEFT JOIN aux_dades_municipis_provincia m2b ON m2.provincia        = m2b.id
+  LEFT JOIN aux_dades_municipis_comunitat m2c ON m2.comunitat        = m2c.id
+  LEFT JOIN aux_dades_municipis_estat     m2d ON m2.estat            = m2d.id
+
+  LEFT JOIN aux_dades_municipis           m3  ON p.municipi_defuncio = m3.id
+  LEFT JOIN aux_dades_municipis_comarca   m3a ON m3.comarca          = m3a.id
+  LEFT JOIN aux_dades_municipis_provincia m3b ON m3.provincia        = m3b.id
+  LEFT JOIN aux_dades_municipis_comunitat m3c ON m3.comunitat        = m3c.id
+  LEFT JOIN aux_dades_municipis_estat     m3d ON m3.estat            = m3d.id
+
+  LEFT JOIN aux_tipologia_espais          tespai ON p.tipologia_lloc_defuncio = tespai.id
+  LEFT JOIN aux_causa_defuncio            causaD ON p.causa_defuncio          = causaD.id
+  LEFT JOIN aux_estudis                   es     ON p.estudis                 = es.id
+  LEFT JOIN aux_oficis                    o      ON p.ofici                   = o.id
+  LEFT JOIN aux_estat_civil               ec     ON p.estat_civil             = ec.id
+  LEFT JOIN aux_sector_economic           se     ON p.sector                  = se.id
+  LEFT JOIN aux_sub_sector_economic       sse    ON p.sub_sector              = sse.id
+  LEFT JOIN aux_ofici_carrec              oc     ON p.carrec_empresa          = oc.id
+  LEFT JOIN aux_empreses                  em     ON p.empresa                 = em.id
+  LEFT JOIN db_biografies                 bio    ON p.id                      = bio.idRepresaliat
+
+  " . implode("\n", $joins) . "
+  $where
 ORDER BY p.id ASC
 ";
 
+// -------- Ejecutar --------
 $stmt = $pdo->prepare($sql);
 foreach ($params as $k => $v) {
-  $stmt->bindValue($k, is_int($v) ? PDO::PARAM_INT : PDO::PARAM_STR);
+  $stmt->bindValue($k, $v, is_int($v) ? \PDO::PARAM_INT : \PDO::PARAM_STR);
 }
 $stmt->execute();
 
 // -------- Generar XLSX --------
-$headers = [
-  'id',
-  'slug',
-  'nom',
-  'cognom1',
-  'cognom2',
-  'ciutat',
-  'tipus_via',
-  'adreca',
-  'adreca_num',
-  'lat',
-  'lng',
-  'categoria_ids'
-];
-
 $spreadsheet = new Spreadsheet();
 $sheet = $spreadsheet->getActiveSheet();
 
-// Cabeceras (fila 1)
+// Cabeceras
 for ($i = 0; $i < count($headers); $i++) {
-  $col = Coordinate::stringFromColumnIndex($i + 1); // 1→A, 2→B...
+  $col = Coordinate::stringFromColumnIndex($i + 1);
   $sheet->setCellValue($col . '1', $headers[$i]);
 }
 
-// Datos (desde fila 2)
+// Filas
 $r = 2;
-while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+  // Traducciones
+  if (array_key_exists('sexe', $row)) {
+    $row['sexe'] = $SEXE_MAP[(string)($row['sexe'] ?? '')] ?? (string)($row['sexe'] ?? '');
+  }
+  if (array_key_exists('categoria', $row)) {
+    $row['categoria'] = categoriesToNames($row['categoria'], $CATEGORY_MAP);
+  }
+
+  // Escribir en el orden de $headers
   for ($i = 0; $i < count($headers); $i++) {
     $h = $headers[$i];
     $col = Coordinate::stringFromColumnIndex($i + 1);
