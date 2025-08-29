@@ -8,13 +8,11 @@ import { getIsAdmin } from '../../services/auth/getIsAdmin';
 import { getIsAutor } from '../../services/auth/getIsAutor';
 
 function showNotFound(msg: string): void {
-  // Oculta las fichas normales (menos el contenedor de error)
-  const containers = document.querySelectorAll<HTMLDivElement>('.container.fitxaRepresaliat');
-  containers.forEach((el) => {
-    if (el.id !== 'fitxaRepresaliat_error') el.style.display = 'none';
+  // Oculta posibles contenedores de la ficha (ajusta IDs/clases reales)
+  document.querySelectorAll<HTMLElement>('.container.fitxaRepresaliat, #fitxaRepresaliat_main, .fitxaRepresaliat').forEach((el) => {
+    el.style.display = 'none';
   });
 
-  // Muestra el div de error
   const errorDiv = document.getElementById('fitxaRepresaliat_error') as HTMLDivElement | null;
   if (errorDiv) {
     errorDiv.style.display = 'block';
@@ -37,14 +35,14 @@ export async function fitxaRepresaliat(slug: string): Promise<void> {
     }
 
     // 2) Validar visibilidad
-    const isAdmin = getIsAdmin();
-    const isAutor = getIsAutor();
+    const isAdmin = await Promise.resolve(getIsAdmin());
+    const isAutor = await Promise.resolve(getIsAutor());
 
-    const completat = Number(fitxa.completat ?? 0);
-    const visibilitat = Number(fitxa.visibilitat ?? 0);
+    const completat = Number(fitxa.completat);
+    const visibilitat = Number(fitxa.visibilitat);
 
     const esVisiblePublicament = completat === 2 && visibilitat === 2;
-    const tePermisos = isAdmin || isAutor;
+    const tePermisos = Boolean(isAdmin || isAutor);
 
     if (!(esVisiblePublicament || tePermisos)) {
       showNotFound('Aquesta fitxa no està disponible públicament.');
