@@ -39,7 +39,11 @@ export async function fitxaRepresaliat(slug: string): Promise<void> {
     // 2) Validar visibilidad
     const isAdmin = getIsAdmin();
     const isAutor = getIsAutor();
-    if (!(isAdmin || isAutor) && !(fitxa.completat === 2 && fitxa.visibilitat === 2)) {
+
+    const esVisiblePublicament = fitxa.completat === 2 && fitxa.visibilitat === 2;
+    const tePermisos = isAdmin || isAutor;
+
+    if (!(esVisiblePublicament || tePermisos)) {
       showNotFound('Aquesta fitxa no està disponible públicament.');
       return;
     }
