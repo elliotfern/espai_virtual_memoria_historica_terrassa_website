@@ -40,7 +40,7 @@ export async function fitxaRepresaliat(slug: string): Promise<void> {
     const isAdmin = getIsAdmin();
     const isAutor = getIsAutor();
 
-    const esVisiblePublicament = fitxa.completat === 2 && fitxa.visibilitat === 2;
+    const esVisiblePublicament = fitxa.completat === 1 && fitxa.visibilitat === 1;
     const tePermisos = isAdmin || isAutor;
 
     if (!(esVisiblePublicament || tePermisos)) {
