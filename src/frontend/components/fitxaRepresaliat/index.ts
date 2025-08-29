@@ -45,7 +45,7 @@ export async function fitxaRepresaliat(slug: string): Promise<void> {
     const tePermisos = Boolean(isAdmin || isAutor);
 
     if (!(esVisiblePublicament || tePermisos)) {
-      showNotFound('Aquesta fitxa no està disponible públicament.');
+      showNotFound("Ho sentim, però encara estem treballant en el processament de les dades d'aquesta fitxa. Quan hàgim acabat, estarà disponible públicament.");
       return;
     }
 
