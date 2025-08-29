@@ -477,7 +477,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
     }
 
 
-    // 4) Pagina informacio fitxa Represaliat
+    // 4) Pagina informacio fitxa Represaliat - INTRANET
     // ruta GET => "https://memoriaterrassa.cat/api/represaliats/get/?type=fitxa&id=35"
 } elseif (isset($_GET['type']) && $_GET['type'] == 'fitxa' && isset($_GET['id'])) {
     $id = $_GET['id'];
@@ -622,7 +622,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
     }
 
 
-    // 4) Pagina informacio fitxa Represaliat - web publica
+    // 4) Pagina informacio fitxa Represaliat - WEB PUBLICA
     // ruta GET => "https://memoriaterrassa.cat/api/dades_personals/get/?type=fitxa&id=35"
 } elseif (isset($_GET['type']) && $_GET['type'] == 'fitxaRepresaliat' && isset($_GET['slug'])) {
     $slug = $_GET['slug'];
@@ -697,12 +697,12 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
             dp.data_creacio,
             dp.data_actualitzacio,
             dp.observacions,
-            dp.completat,
+            dp.completat, 
+            dp.visibilitat,
             img.nomArxiu AS img,
             dp.img AS imatgePerfil,
             bio.biografiaCa,
             bio.biografiaEs,
-            dp.visibilitat,
             dp.slug,
             dp.lat,
             dp.lng,

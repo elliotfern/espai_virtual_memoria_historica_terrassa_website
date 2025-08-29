@@ -4,6 +4,8 @@ import { initButtons } from './initButtons';
 import type { Fitxa, FitxaFamiliars } from '../../types/types';
 import { getApiArray, getApiFirst } from '../../services/api/http';
 import { DOMAIN_API } from '../../config/constants';
+import { getIsAdmin } from '../../services/auth/getIsAdmin';
+import { getIsAutor } from '../../services/auth/getIsAutor';
 
 function showNotFound(msg: string): void {
   // Oculta las fichas normales (menos el contenedor de error)
@@ -34,6 +36,14 @@ export async function fitxaRepresaliat(slug: string): Promise<void> {
       return;
     }
 
+    // 2) Validar visibilidad
+    const isAdmin = getIsAdmin();
+    const isAutor = getIsAutor();
+    if (!(isAdmin || isAutor) && !(fitxa.completat === 2 && fitxa.visibilitat === 2)) {
+      showNotFound('Aquesta fitxa no està disponible públicament.');
+      return;
+    }
+
     cache.setFitxa(fitxa);
 
     // 2) Familiares por id → usamos getApiArray<FitxaFamiliars>
@@ -50,6 +60,9 @@ export async function fitxaRepresaliat(slug: string): Promise<void> {
     await initButtons(fitxa.id);
   } catch (error) {
     console.error('fitxaRepresaliat - error:', error);
-    showNotFound('Error carregant la fitxa.');
+    showNotFound("Ho sentim, però l'adreça web introduïda no es correspon amb cap fitxa de represaliat.");
   }
 }
+
+// a.completat = 2
+// visibilitat = 2

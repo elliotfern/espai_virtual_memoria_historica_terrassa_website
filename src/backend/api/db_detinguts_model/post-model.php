@@ -76,6 +76,17 @@ if (!empty($data_llibertat_raw)) {
     $data_llibertatFormat = null;
 }
 
+$data_trasllat_raw = $data['data_trasllat'] ?? '';
+if (!empty($data_trasllat_raw)) {
+    $data_trasllatFormat = convertirDataFormatMysql($data_trasllat_raw, 3);
+
+    if (!$data_trasllatFormat) {
+        $errors[] = ValidacioErrors::dataNoValida('data trasllat');
+    }
+} else {
+    $data_trasllatFormat = null;
+}
+
 // Si hay errores, devolver una respuesta con los errores
 if (!empty($errors)) {
     Response::error(
@@ -87,8 +98,7 @@ if (!empty($errors)) {
 
 // Si no hay errores, crear las variables PHP y preparar la consulta PDO
 $trasllats = !empty($data['trasllats']) ? $data['trasllats'] : NULL;
-$llocTrasllat = !empty($data['lloc_trasllat']) ? $data['lloc_trasllat'] : NULL;
-$dataTrasllat = !empty($data['data_trasllat']) ? $data['data_trasllat'] : NULL;
+$lloc_trasllat = !empty($data['lloc_trasllat']) ? $data['lloc_trasllat'] : NULL;
 $llibertat = !empty($data['llibertat']) ? $data['llibertat'] : NULL;
 $modalitat = isset($data['modalitat']) ? $data['modalitat'] : NULL;
 $vicissituds = !empty($data['vicissituds']) ? $data['vicissituds'] : NULL;
@@ -119,7 +129,7 @@ try {
     $stmt->bindParam(':data_empresonament', $data_empresonamentFormat, PDO::PARAM_STR);
     $stmt->bindParam(':trasllats', $trasllats, PDO::PARAM_INT);
     $stmt->bindParam(':lloc_trasllat', $lloc_trasllat, PDO::PARAM_STR);
-    $stmt->bindParam(':data_trasllat', $data_trasllat, PDO::PARAM_STR);
+    $stmt->bindParam(':data_trasllat', $data_trasllatFormat, PDO::PARAM_STR);
     $stmt->bindParam(':llibertat', $llibertat, PDO::PARAM_INT);
     $stmt->bindParam(':data_llibertat', $data_llibertatFormat, PDO::PARAM_STR);
     $stmt->bindParam(':modalitat', $modalitat, PDO::PARAM_INT);
