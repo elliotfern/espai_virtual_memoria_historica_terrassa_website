@@ -33,7 +33,6 @@ $stmt->execute();
 
 // BOM + hint separador
 echo "\xEF\xBB\xBF";
-echo "sep=,\n";
 
 $out = fopen('php://output', 'w');
 fputcsv($out, $headers);

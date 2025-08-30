@@ -189,14 +189,16 @@ $translate2 = $translations['cerca-avan'] ?? [];
             <div class="timeline-item">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title lora marro2">2021</h5>
+                        <h5 class="card-title lora marro2">26 de gener de 2021</h5>
                         <p class="card-text blanc raleway negreta">
-                            Publicació de llistats de represaliats i víctimes del franquisme.</p>
+                            Presentació pública i publicació del llistat del cost humà de la guerra civil a Terrassa.</p>
                         <span class="more-text d-none blanc raleway">
                             <p>Text.</p>
                         </span>
 
-                        <button class="btn btn-primary btn-custom-2 w-auto align-self-start btn-toggle">veure més</button>
+                        <a href="#esde7" class="btn btn-primary btn-custom-2 w-auto align-self-start">
+                            veure més
+                        </a>
                     </div>
                 </div>
             </div>
@@ -289,7 +291,7 @@ $translate2 = $translations['cerca-avan'] ?? [];
 
             <!-- Imagen a la derecha -->
             <div class="col-md-4 text-center">
-                <img src="<?php echo APP_WEB; ?>/assets_web/espai_memoria_democratica_2017.jpg" class="img-fluid " alt="Elliot Fernandez">
+                <img src="<?php echo IMG_DOMAIN; ?>/assets_web/espai_memoria_democratica_2017.jpg" class="img-fluid " alt="Elliot Fernandez">
 
             </div>
         </div>
@@ -334,6 +336,38 @@ $translate2 = $translations['cerca-avan'] ?? [];
             </div>
         </div>
     </div>
+
+    <div class="container mt-4" style="padding-top: 60px;padding-bottom:60px;">
+        <div class="row">
+            <!-- Texto a la izquierda -->
+            <div id="esde7" class="col-md-8 raleway d-flex flex-column d-grid gap-2">
+                <span class="titol gran lora negreta">26 de gener de 2021</span>
+                <span class="titol italic-text gran lora">Presentació pública i publicació del llistat del cost humà de la guerra civil a Terrassa</span>
+                <p>
+                    El <strong>Centre d’Estudis Històrics de Terrassa</strong> ha presentat l’estudi “Cost Humà de la Guerra Civil a Terrassa (1936-1939)”, que inclou la llista de totes les víctimes durant la guerra civil de tots dos bàndols i la nova llista revisada dels represaliats del conflicte. Aquesta és una síntesi de l’estudi elaborada per <strong>l’historiador Josep Lluís Lacueva></strong>.
+                </p>
+                <p>
+                    El divendres 17 de juliol de 1936 Terrassa, una població de 47.690 habitants rep rumors d’un aixecament militar feixista contra la República. Un grup de militars golpistes s’aixecava en contra d’una temuda revolució, i el que veritablement va passar, és que van provocar una guerra i una revolució. El fracàs parcial del cop d’Estat militar provoca una guerra. Les tropes que manava Franco a les Canàries es declaren rebels al règim republicà. S’inicia així tot un pla per a exterminar la república que no abandonaran els franquistes amb la seva victòria militar. Es perllongarà més enllà del 1939.</p>
+
+                <p>Precisament tal dia com avui, un 26 de gener de fa 82 anys, al migdia, el front arriba a Terrassa i la ciutat es ocupada per les tropes franquistes. Començava una llarga negra nit on una justícia arbitraria escamparà molta por entre la ciutadania. El passat novembre, el company historiador i amic Manel Màrquez, juntament amb Joan Soler director de l’AHT, presentaven ací mateix una llista de més de 3.600 víctimes de la dictadura franquista. Tot un exercici de dignitat i memòria.
+                </p>
+                <a
+                    href=" https://malarrassa.cat/cultura/historia-local/el-cost-huma-de-la-guerra-civil-a-terrassa/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="btn btn-primary btn-custom-2 w-auto align-self-start btn-toggle">
+                    més informació
+                </a>
+            </div>
+
+            <!-- Imagen a la derecha -->
+            <div class="col-md-4 text-center">
+                <img src="<?php echo IMG_DOMAIN; ?>/assets_web/presentacio-estudi-cost-huma-guerra-civil.jpg" class="img-fluid " alt="Presentació Cost Humà">
+
+            </div>
+        </div>
+    </div>
+
 
 </div>
 

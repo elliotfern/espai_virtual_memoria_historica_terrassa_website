@@ -79,6 +79,13 @@ function buildWhere(array $wl, array &$params): string
     return $where ? ('WHERE ' . implode(' AND ', $where)) : '';
 }
 
+/** Añade el guard de visibilidad pública (completat=2 y visibilitat=2) */
+function applyPublicVisibilityGuard(string $where): string
+{
+    $guard = '(p.completat = 2 AND p.visibilitat = 2)';
+    return $where === '' ? "WHERE $guard" : "$where AND $guard";
+}
+
 /** WHERE que exige que p.categoria contenga AL MENOS uno de los $ids (ej: [2,10]) */
 function whereAnyCategoryInSet(array $ids, array &$params, string $col = 'p.categoria', string $prefix = 'defcat'): string
 {
@@ -337,6 +344,9 @@ function buildQuery(string $type, string $q): array
             $params[':q'] = '%' . mb_strtolower($q, 'UTF-8') . '%';
         }
 
+        // <-- añade esta línea
+        $where = applyPublicVisibilityGuard($where);
+
         $headers = commonHeaders();
         $sql = baseSelect() . "\n" . implode("\n", $joins) . "\n" . $where . "\nORDER BY p.id ASC";
         return [$headers, $sql, $params];
@@ -370,6 +380,9 @@ function buildQuery(string $type, string $q): array
                 . "(LOWER(p.nom) LIKE :q OR LOWER(p.cognom1) LIKE :q OR LOWER(p.cognom2) LIKE :q)";
             $params[':q'] = '%' . mb_strtolower($q, 'UTF-8') . '%';
         }
+
+        // <-- añade esta línea
+        $where = applyPublicVisibilityGuard($where);
 
         $headers = commonHeaders();
         $sql = "
@@ -431,6 +444,9 @@ function buildQuery(string $type, string $q): array
             $params[':q'] = '%' . mb_strtolower($q, 'UTF-8') . '%';
         }
 
+        // <-- añade esta línea
+        $where = applyPublicVisibilityGuard($where);
+
         $headers = commonHeaders();
         $sql = "
     SELECT DISTINCT base.*
@@ -487,6 +503,9 @@ function buildQuery(string $type, string $q): array
             $params[':q'] = '%' . mb_strtolower($q, 'UTF-8') . '%';
         }
 
+        // <-- añade esta línea
+        $where = applyPublicVisibilityGuard($where);
+
         $headers = commonHeaders();
         $sql = "
     SELECT DISTINCT base.*
@@ -504,6 +523,9 @@ function buildQuery(string $type, string $q): array
     // fallback
     $headers = commonHeaders();
     $where = buildWhere(['categories' => ['p.categoria', 'csvset']], $params);
+
+    // <-- añade esta línea
+    $where = applyPublicVisibilityGuard($where);
     $sql = baseSelect() . "\n$where\nORDER BY p.id ASC";
     return [$headers, $sql, $params];
 }

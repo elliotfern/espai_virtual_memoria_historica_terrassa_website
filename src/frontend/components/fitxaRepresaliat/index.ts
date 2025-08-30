@@ -44,8 +44,18 @@ export async function fitxaRepresaliat(slug: string): Promise<void> {
     const esVisiblePublicament = completat === 2 && visibilitat === 2;
     const tePermisos = Boolean(isAdmin || isAutor);
 
+    const nom = fitxa.nom !== null ? fitxa.nom : '';
+    const cognom1 = fitxa.cognom1 !== null ? fitxa.cognom1 : '';
+    const cognom2 = fitxa.cognom2 !== null ? fitxa.cognom2 : '';
+    const nombreCompleto = `${nom} ${cognom1} ${cognom2 ?? ''}`;
+
     if (!(esVisiblePublicament || tePermisos)) {
-      showNotFound("Ho sentim, però encara estem treballant en el processament de les dades d'aquesta fitxa. Quan hàgim acabat, estarà disponible públicament.");
+      showNotFound(`
+      <h4 class="titolRepresaliat"> ${nombreCompleto}</h4>
+        <h3>Ho sentim!</h3>
+        <p>Encara estem treballant en el processament de les dades d'aquesta fitxa.</p>
+        <a href="/contacte" class="btn btn-primary" rel="noopener">Necessites contactar amb nosaltres?</a>
+      `);
       return;
     }
 
