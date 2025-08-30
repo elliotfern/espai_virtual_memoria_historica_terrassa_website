@@ -54,7 +54,7 @@ export async function fitxaRepresaliat(slug: string): Promise<void> {
       <h4 class="titolRepresaliat"> ${nombreCompleto}</h4>
         <h3>Ho sentim!</h3>
         <p>Encara estem treballant en el processament de les dades d'aquesta fitxa.</p>
-        <a href="/contacte" class="btn btn-primary" rel="noopener">Necessites contactar amb nosaltres?</a>
+        <a href="/contacte" class="btn btn-primary btn-custom-3" rel="noopener">Necessites contactar amb nosaltres?</a>
       `);
       return;
     }
