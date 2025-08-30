@@ -235,18 +235,18 @@ if ($slug === "municipis") {
     // URL: https://memoriaterrassa.cat/api/auxiliars/get/provincies
 } else if ($slug === "provincies") {
 
-    $query = "SELECT p.id,
-         CONCAT(
-            COALESCE(p.provincia_ca, p.provincia),
-            ' (',
-            e.estat_ca,
-            ')'
-        ) AS provincia
-        FROM aux_dades_municipis_provincia AS p
-        LEFT JOIN aux_dades_municipis AS co ON p.id = co.provincia
-        LEFT JOIN aux_dades_municipis_estat AS e ON co.estat = e.id
-        GROUP BY p.id
-        ORDER BY p.provincia ASC";
+    $query = "SELECT
+            p.id,
+            CONCAT_WS(
+                '',
+                COALESCE(p.provincia_ca, p.provincia),
+                CONCAT(' (', NULLIF(MAX(e.estat_ca), ''), ')')
+            ) AS provincia
+            FROM aux_dades_municipis_provincia AS p
+            LEFT JOIN aux_dades_municipis AS co ON p.id = co.provincia
+            LEFT JOIN aux_dades_municipis_estat AS e ON co.estat = e.id
+            GROUP BY p.id
+            ORDER BY COALESCE(p.provincia_ca, p.provincia) ASC;";
 
     $result = getData2($query);
     echo json_encode($result);
