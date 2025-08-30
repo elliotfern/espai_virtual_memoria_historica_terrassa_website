@@ -8,32 +8,66 @@ import { getIsLogged } from '../../services/auth/getIsLogged';
 import { formatDatesForm } from '../../services/formatDates/dates';
 import { registerDeleteCallback } from '../../services/fetchData/handleDelete';
 import { initDeleteHandlers } from '../../services/fetchData/handleDelete';
+import { DOMAIN_WEB } from '../../config/constants';
 
 export async function cargarTabla(pag: string, context: number, completat: number | null = null) {
-  const devDirectory = `https://${window.location.hostname}`;
+  const devDirectory = DOMAIN_WEB;
 
   const isAdmin = await getIsAdmin();
   const isAutor = await getIsAutor();
   const isLogged = await getIsLogged();
   const colectiusRepressio = await categoriesRepressio('ca');
 
-  // Validar el parámetro 'completat': si no es 1 o 2, asignar 3
-  // completat 1 = PENDENT > visibilitat = 1
-  // completat 2 = COMPLETADA > visibilitat = 2
-  // completat 3 = TOTES
-  // completat 4 = cal revisio
-  // error: completat 1 > visibilitat 2
-  // cal fer un endpoint independent per web publica i intranet
+  // --- Helpers de búsqueda (NUEVO) ---
+  function stripDiacritics(s: string): string {
+    return s.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  }
+  function normalizeText(s: string): string {
+    return stripDiacritics(s)
+      .toLowerCase()
+      .replace(/[^a-z0-9\s]/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+  function buildNameVariants(row: Represeliat): string[] {
+    const nom = row.nom ?? '';
+    const c1 = row.cognom1 ?? '';
+    const c2 = row.cognom2 ?? '';
+    return [
+      normalizeText(`${c1} ${c2} ${nom}`), // "cognom1 cognom2 nom"
+      normalizeText(`${nom} ${c1} ${c2}`), // "nom cognom1 cognom2"
+    ];
+  }
+  let nameIndex: Record<number, string[]> = {};
+  function reindexNames(list: Represeliat[]): void {
+    nameIndex = {};
+    for (const row of list) nameIndex[row.id] = buildNameVariants(row);
+  }
+  function matchesName(row: Represeliat, qNorm: string): boolean {
+    const variants = nameIndex[row.id] ?? buildNameVariants(row);
+    const tokens = qNorm.split(' ').filter(Boolean);
+    if (tokens.length === 0) return true;
+    // Debe haber una variante que contenga TODOS los tokens
+    return variants.some((v) => tokens.every((t) => v.includes(t)));
+  }
+  function debounce<T extends (...args: unknown[]) => void>(fn: T, wait = 150): T {
+    let t: number | undefined;
+    return function (this: unknown, ...args: unknown[]) {
+      if (t) window.clearTimeout(t);
+      t = window.setTimeout(() => fn.apply(this, args), wait);
+    } as T;
+  }
+  // --- Fin helpers de búsqueda ---
 
-  let webFitxa: string = '';
-  let webTarget: string = '';
-  let urlAjax: string = '';
+  // Validar el parámetro 'completat'
+  let webFitxa = '';
+  let webTarget = '';
+  let urlAjax = '';
 
   const pagNet = pag.split('#')[0];
 
   // context:
-  // context = 1 > es per la web publica (mostrar només fitxes amb visibilitat 2 i completat 2)
-  // context = 2 > es per la intranet (mostrar només fitxes amb visibilitat 1 i completat 1)
+  // 1 => web pública, 2 => intranet
   if (context === 1) {
     webFitxa = `/fitxa/`;
     webTarget = '_self';
@@ -61,18 +95,21 @@ export async function cargarTabla(pag: string, context: number, completat: numbe
   }
 
   let currentPage = 1;
-  const rowsPerPage = 10; // Número de filas por página
+  const rowsPerPage = 10;
   let totalPages = 1;
   let datos: Represeliat[] = [];
   let filteredData: Represeliat[] = [];
+  let searchActive = false; // NUEVO: para no volver a 'datos' cuando no hay resultados
 
   // Función para obtener los datos
   async function obtenerDatos() {
     try {
-      datos = (await fetchData(urlAjax)) as Represeliat[]; // Usa la función fetchData
-      totalPages = Math.ceil(datos.length / rowsPerPage); // Calculamos el número total de páginas
-      document.getElementById('totalPages')!.textContent = totalPages.toString(); // Actualizamos el número total de páginas
-      renderizarTabla(currentPage); // Renderizamos la tabla para la página actual
+      datos = (await fetchData(urlAjax)) as Represeliat[];
+      reindexNames(datos); // NUEVO: índice de búsqueda
+      searchActive = false; // restablecer al cargar
+      totalPages = Math.ceil(datos.length / rowsPerPage);
+      document.getElementById('totalPages')!.textContent = totalPages.toString();
+      renderizarTabla(currentPage);
     } catch (error) {
       console.error('Error al obtener los datos: ', (error as Error).message);
     }
@@ -81,10 +118,13 @@ export async function cargarTabla(pag: string, context: number, completat: numbe
   // Función para renderizar la tabla con paginación
   function renderizarTabla(page: number) {
     const tbody = document.getElementById('represaliatsBody')!;
-    tbody.innerHTML = ''; // Limpiar el contenido actual
+    tbody.innerHTML = '';
     const start = (page - 1) * rowsPerPage;
     const end = start + rowsPerPage;
-    const datosPaginados = filteredData.length > 0 ? filteredData.slice(start, end) : datos.slice(start, end); // Obtener el rango de datos para esta página
+
+    // NUEVO: usar dataSource en función del estado de búsqueda
+    const dataSource = searchActive ? filteredData : datos;
+    const datosPaginados = dataSource.slice(start, end);
 
     datosPaginados.forEach((row) => {
       const tr = document.createElement('tr');
@@ -100,14 +140,12 @@ export async function cargarTabla(pag: string, context: number, completat: numbe
 
       // Municipio nacimiento
       const municipiNaixement = `${formatDatesForm(row.data_naixement) ?? 'Data desconeguda'} (${row.ciutat && row.ciutat !== '0' ? row.ciutat : 'Municipi desconegut'})`;
-
       const tdMunicipiNaixement = document.createElement('td');
       tdMunicipiNaixement.textContent = municipiNaixement;
       tr.appendChild(tdMunicipiNaixement);
 
       // Municipio defunció
       const municipiDefuncio = `${formatDatesForm(row.data_defuncio) ?? 'Data desconeguda'} (${row.ciutat2 && row.ciutat2 !== '0' ? row.ciutat2 : 'Municipi desconegut'})`;
-
       const tdMunicipiDefuncio = document.createElement('td');
       tdMunicipiDefuncio.textContent = municipiDefuncio;
       tr.appendChild(tdMunicipiDefuncio);
@@ -117,34 +155,22 @@ export async function cargarTabla(pag: string, context: number, completat: numbe
       tdCollectiu.textContent = traduirCategoriesRepressio(row.categoria, colectiusRepressio);
       tr.appendChild(tdCollectiu);
 
-      // COLUMNA ESTAT FITXA NOMES PELS USUARIS REGISTRATS
-
-      // COLUMNA FONT DADES, NOMES USUARIS REGISTRATS
-      // Verificar si el usuario es el admin con id 1
-      // mostrar nomes a la intranet context === 2
+      // COLUMNA FONT DADES (sólo intranet)
       if (context === 2 && (isAdmin || isAutor || isLogged)) {
-        // Botó estat
         const fontInterna: number = row.font_intern;
-
         const fontTextMap: { [key: number]: string } = {
           0: 'Manel/Juan Antonio/José Luís',
           1: 'Llistat Represaliats Ajuntament',
           2: 'Manel: base dades antifranquista',
           3: 'Arxiu',
         };
-
         const tdModificar = document.createElement('td');
-        tdModificar.textContent = fontTextMap[fontInterna] || 'Altres'; // Busca el valor en el objeto
+        tdModificar.textContent = fontTextMap[fontInterna] || 'Altres';
         tr.appendChild(tdModificar);
-      } else if (context === 1) {
-        // nada
-      } else {
-        // Crear la fila vacía
       }
 
-      // Verificar si el usuario es el admin con id 1
+      // COLUMNA ESTAT FITXA (sólo intranet)
       if (context === 2 && (isAdmin || isAutor || isLogged)) {
-        // Botó estat
         const estatFitxa = row.completat;
         if (estatFitxa === 1) {
           const tdModificar = document.createElement('td');
@@ -168,15 +194,10 @@ export async function cargarTabla(pag: string, context: number, completat: numbe
           tdModificar.appendChild(btnModificar);
           tr.appendChild(tdModificar);
         }
-      } else if (context === 1) {
-        // nada
-      } else {
-        // Crear la fila vacía
       }
 
-      // Verificar si el usuario es el admin con id 1
+      // COLUMNA VISIBILITAT FITXA (sólo intranet)
       if (context === 2 && (isAdmin || isAutor || isLogged)) {
-        // Botó VISIBILITAT FITXA
         const visibilitatFitxa = row.visibilitat;
         if (visibilitatFitxa === 2) {
           const tdvisibilitat = document.createElement('td');
@@ -193,15 +214,10 @@ export async function cargarTabla(pag: string, context: number, completat: numbe
           tdvisibilitat.appendChild(btnVisibilitat);
           tr.appendChild(tdvisibilitat);
         }
-      } else if (context === 1) {
-        // nada
-      } else {
-        // Crear la fila vacía
       }
 
-      // Verificar si el usuario es el admin con id 1
+      // Botón Modificar (sólo intranet)
       if (context === 2 && (isAdmin || isAutor || isLogged)) {
-        // Botón Modificar
         const tdModificar = document.createElement('td');
         const btnModificar = document.createElement('button');
         btnModificar.textContent = 'Modificar dades';
@@ -214,13 +230,9 @@ export async function cargarTabla(pag: string, context: number, completat: numbe
         };
         tdModificar.appendChild(btnModificar);
         tr.appendChild(tdModificar);
-      } else if (context === 1) {
-        // nada
-      } else {
-        // Crear la fila vacía
       }
 
-      // Botón Eliminar
+      // Botón Eliminar (sólo admin en intranet)
       if (context === 2 && isAdmin) {
         const reloadKey = 'reload-taula-taulaLlistat';
         const tdEliminar = document.createElement('td');
@@ -237,22 +249,14 @@ export async function cargarTabla(pag: string, context: number, completat: numbe
         `;
         tr.appendChild(tdEliminar);
 
-        // Registra el callback con una clave única
         registerDeleteCallback(reloadKey, () => obtenerDatos());
-
-        // Inicia el listener una sola vez
         initDeleteHandlers();
-      } else if (context === 1) {
-        // nada
-      } else {
-        // Crear la fila vacía
       }
 
-      // Añadir la fila a la tabla
       tbody.appendChild(tr);
     });
 
-    // Actualizar el estado de la paginación
+    // Actualizar paginación
     const currentPageElement = document.getElementById('currentPage')!;
     currentPageElement.textContent = currentPage.toString();
 
@@ -263,47 +267,35 @@ export async function cargarTabla(pag: string, context: number, completat: numbe
     nextPageButton.disabled = currentPage === totalPages;
   }
 
-  // Función para buscar en todos los datos
+  // BÚSQUEDA: sólo por nombre completo (nom + cognoms), acentos/orden ignorados (NUEVO)
   function buscarEnTodosLosDatos() {
     const input = document.getElementById('searchInput') as HTMLInputElement;
-    const query = input.value.toLowerCase().trim();
+    const query = input.value;
+    const qNorm = normalizeText(query);
 
-    if (query === '') {
-      // Si el campo de búsqueda está vacío, renderizar la tabla con paginación
+    if (qNorm === '') {
       filteredData = [];
+      searchActive = false;
       currentPage = 1;
       totalPages = Math.ceil(datos.length / rowsPerPage);
       document.getElementById('totalPages')!.textContent = totalPages.toString();
       renderizarTabla(currentPage);
-    } else {
-      // Filtrar los datos que coincidan con la búsqueda
-      filteredData = datos.filter((row) => {
-        const nombreCompleto = `${row.cognom1} ${row.cognom2 ?? ''}, ${row.nom}`.toLowerCase();
-        const municipiNaixement = `${formatDatesForm(row.data_naixement) ?? 'Desconegut'} (${row.ciutat ?? 'Desconegut'})`.toLowerCase();
-        const municipiDefuncio = `${formatDatesForm(row.data_defuncio) ?? 'Desconegut'} (${row.ciutat2 ?? 'Desconegut'})`.toLowerCase();
-        const categoriasIds = row.categoria ? row.categoria.replace(/[{}]/g, '').split(',').map(Number) : [];
-        const collectiuTexto = categoriasIds
-          .map((num) => colectiusRepressio[num] || '')
-          .filter(Boolean)
-          .join(', ')
-          .toLowerCase();
-
-        // Verifica si alguno de los campos coincide con la búsqueda
-        return nombreCompleto.includes(query) || municipiNaixement.includes(query) || municipiDefuncio.includes(query) || collectiuTexto.includes(query);
-      });
-
-      // Calcular el número total de páginas para los resultados filtrados
-      totalPages = Math.ceil(filteredData.length / rowsPerPage);
-      document.getElementById('totalPages')!.textContent = totalPages.toString();
-
-      // Renderizar la primera página de los resultados filtrados
-      currentPage = 1;
-      renderizarTabla(currentPage);
+      return;
     }
+
+    filteredData = datos.filter((row) => matchesName(row, qNorm));
+    searchActive = true;
+
+    totalPages = Math.ceil(filteredData.length / rowsPerPage);
+    document.getElementById('totalPages')!.textContent = totalPages.toString();
+    currentPage = 1;
+    renderizarTabla(currentPage);
   }
 
-  // Eventos
-  document.getElementById('searchInput')!.addEventListener('input', buscarEnTodosLosDatos);
+  // Eventos (con debounce en el buscador)
+  const onSearch = debounce(buscarEnTodosLosDatos, 150);
+  document.getElementById('searchInput')!.addEventListener('input', onSearch);
+
   document.getElementById('prevPage')!.addEventListener('click', () => {
     if (currentPage > 1) {
       currentPage--;
