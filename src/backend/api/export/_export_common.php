@@ -276,7 +276,8 @@ SELECT
   p.lng,
   p.adreca_antic,
   p.adreca_num,
-  p.causa_defuncio_detalls
+  p.causa_defuncio_detalls,
+  p.slug
 
 FROM db_dades_personals p
   LEFT JOIN aux_dades_municipis           m1  ON p.municipi_naixement = m1.id
