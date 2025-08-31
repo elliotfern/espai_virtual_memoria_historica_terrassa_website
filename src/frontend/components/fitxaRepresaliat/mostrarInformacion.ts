@@ -68,8 +68,8 @@ export function mostrarInformacion(tabId: string, id: number, label: string): vo
   }
 
   // ==== Botones de exportación (individual) ====
-  const EXPORT_CSV_URL = DOMAIN_API + 'api/export/persones_csv';
-  const EXPORT_XLSX_URL = DOMAIN_API + 'api/export/persones_xlsx';
+  const EXPORT_CSV_URL = DOMAIN_API + '/api/export/persones_csv';
+  const EXPORT_XLSX_URL = DOMAIN_API + '/api/export/persones_xlsx';
 
   // evita duplicados si se re-renderiza
   const oldInline = divAdditionalInfo.querySelector('.export-inline');
@@ -112,14 +112,14 @@ export function mostrarInformacion(tabId: string, id: number, label: string): vo
   const btnCsv = document.createElement('button');
   btnCsv.type = 'button';
   btnCsv.className = 'btn btn-primary btn-custom-2';
-  btnCsv.textContent = 'Descarregar CSV';
+  btnCsv.textContent = 'Descarregar dades en CSV';
   btnCsv.addEventListener('click', () => postExport(EXPORT_CSV_URL));
 
   // botón Excel
   const btnXlsx = document.createElement('button');
   btnXlsx.type = 'button';
   btnXlsx.className = 'btn btn-primary btn-custom-2';
-  btnXlsx.textContent = 'Descarregar Excel';
+  btnXlsx.textContent = 'Descarregar dades en Excel';
   btnXlsx.addEventListener('click', () => postExport(EXPORT_XLSX_URL));
 
   // deshabilita si no hay identificador disponible
