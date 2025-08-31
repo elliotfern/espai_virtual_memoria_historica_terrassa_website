@@ -237,6 +237,8 @@ $routes = [
 
     '/api/export/persones_xlsx' => ['view' => 'src/backend/api/export/persones_xlsx.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
 
+    '/api/export/persones_pdf' => ['view' => 'src/backend/api/export/persones_pdf.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+
 ];
 
 return $routes;

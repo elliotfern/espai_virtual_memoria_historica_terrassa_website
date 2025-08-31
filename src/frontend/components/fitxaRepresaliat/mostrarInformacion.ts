@@ -70,6 +70,7 @@ export function mostrarInformacion(tabId: string, id: number, label: string): vo
   // ==== Botones de exportación (individual) ====
   const EXPORT_CSV_URL = DOMAIN_API + '/api/export/persones_csv';
   const EXPORT_XLSX_URL = DOMAIN_API + '/api/export/persones_xlsx';
+  const EXPORT_PDF_URL = DOMAIN_API + '/api/export/persones_pdf';
 
   // evita duplicados si se re-renderiza
   const oldInline = divAdditionalInfo.querySelector('.export-inline');
@@ -131,6 +132,42 @@ export function mostrarInformacion(tabId: string, id: number, label: string): vo
 
   exportWrap.append(btnCsv, btnXlsx);
   divAdditionalInfo.appendChild(exportWrap);
+
+  // boto PDF
+  // crea botón PDF
+  const btnPdf = document.createElement('button');
+  btnPdf.type = 'button';
+  btnPdf.className = 'btn btn-primary btn-custom-2';
+  btnPdf.textContent = 'Descarregar fitxa en PDF';
+  btnPdf.addEventListener('click', () => {
+    if (personaId === undefined && !personaSlug) return;
+
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = EXPORT_PDF_URL;
+
+    const add = (name: string, value: string) => {
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = name;
+      input.value = value;
+      form.appendChild(input);
+    };
+
+    // El backend usa filtreIndividual internamente
+    add('type', 'filtreIndividual');
+    if (personaId !== undefined) add('ids[]', String(personaId));
+    else if (personaSlug) add('slugs[]', personaSlug);
+
+    document.body.appendChild(form);
+    form.submit();
+    form.remove();
+  });
+
+  // añade el botón PDF a tu contenedor existente junto a CSV/XLSX:
+  exportWrap.appendChild(btnPdf);
+
+  // fi botons exportacio dades
 
   switch (tabId) {
     case 'tab1':
