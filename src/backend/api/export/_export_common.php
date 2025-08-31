@@ -320,6 +320,37 @@ function buildQuery(string $type, string $q): array
     $joins  = [];
     $wl     = [];
 
+    /* ------- filtreIndividual (1 persona o unas pocas por id/slug) ------- */
+    if ($type === 'filtreIndividual') {
+        $params = [];
+        $joins  = []; // baseSelect ya trae los joins estándar
+
+        // Sólo escuchamos identificadores; no tiene sentido mezclar más filtros aquí.
+        $wl = [
+            'ids'   => ['p.id',   'in'],  // ids[]=123&ids[]=456
+            'id'    => ['p.id',   'eq'],  // id=123
+            'slugs' => ['p.slug', 'in_text'], // slugs[]=jaime-artiola...
+            'slug'  => ['p.slug', 'in_text'], // slug=jaime-artiola...
+        ];
+
+        $where = buildWhere($wl, $params);
+
+        // Guard-rail: si no vino ningún identificador, no devolvemos nada.
+        if ($where === '') {
+            $where = 'WHERE 1=0';
+        }
+
+        // (Opcional) permitir también q sobre nom/cognoms SI hubo algún id/slug:
+        if ($q !== '' && $where !== 'WHERE 1=0') {
+            $where .= " AND (LOWER(p.nom) LIKE :q OR LOWER(p.cognom1) LIKE :q OR LOWER(p.cognom2) LIKE :q)";
+            $params[':q'] = '%' . mb_strtolower($q, 'UTF-8') . '%';
+        }
+
+        $headers = commonHeaders();
+        $sql = baseSelect() . "\n" . $where . "\nORDER BY p.id ASC";
+        return [$headers, $sql, $params];
+    }
+
     if ($type === 'filtreGeneral') {
         $wl = [
             'municipis_naixement' => ['p.municipi_naixement', 'in'],
