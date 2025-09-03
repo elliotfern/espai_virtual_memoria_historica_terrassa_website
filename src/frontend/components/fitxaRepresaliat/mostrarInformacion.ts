@@ -42,6 +42,7 @@ export function mostrarInformacion(tabId: string, id: number, label: string): vo
   const nombreCompleto = `${nom} ${cognom1} ${cognom2 ?? ''}`;
 
   divAdditionalInfo.innerHTML = `<h4 class="titolRepresaliat"> ${nombreCompleto}</h4>`; // No se limpia el contenido
+  document.title = `${nombreCompleto} - Espai Virtual de la Memòria Històrica de Terrassa`;
 
   // Boto exportar
   // ==== Tipado seguro de "fitxa" (sin any) ====
