@@ -22,6 +22,13 @@ interface ApiResponse<T> {
   data: T;
 }
 
+type ApiResponse2<T> = {
+  status: 'success' | 'error';
+  message: string;
+  errors: unknown[];
+  data: T;
+};
+
 export async function formBiografies(isUpdate: boolean, id?: number) {
   const divTitol = document.getElementById('titolForm') as HTMLDivElement;
   const btnBiografies = document.getElementById('btnBiografies') as HTMLButtonElement;
@@ -52,13 +59,21 @@ export async function formBiografies(isUpdate: boolean, id?: number) {
     btnBiografies.textContent = 'Modificar dades';
   } else {
     if (id) {
-      const response = await fetchDataGet<ApiResponse<Fitxa>>(API_URLS.GET.REPRESALIAT_ID(id), true);
+      // Nota: ahora esperamos un ARRAY de Fitxa
+      const response = await fetchDataGet<ApiResponse2<Fitxa[]>>(API_URLS.GET.REPRESALIAT_ID(id), true);
+      if (!response?.data || response.data.length === 0) return;
 
-      if (!response || !response.data) return;
-      data = response.data;
+      const fitxa = response.data[0]; // toma el primero (o adapta tu API a devolver un objeto)
+      const nomComplet = [fitxa.nom, fitxa.cognom1, fitxa.cognom2].filter(Boolean).join(' ');
 
-      divTitol.innerHTML = `<h2>Biografies: creació de nova biografia</h2>
-           <h4>Fitxa represaliat: <a href="https://memoriaterrassa.cat/fitxa/${data.slug}>" target="_blank">${data.nom} ${data.cognom1} ${data.cognom2}</a></h4>`;
+      divTitol.innerHTML = `
+    <h2>Biografies: creació de nova biografia</h2>
+    <h4>
+      Fitxa represaliat:
+      <a href="https://memoriaterrassa.cat/fitxa/${fitxa.slug}" target="_blank" rel="noopener noreferrer">
+        ${nomComplet}
+      </a>
+    </h4>`;
 
       btnBiografies.textContent = 'Inserir dades';
     }

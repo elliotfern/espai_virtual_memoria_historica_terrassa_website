@@ -75,6 +75,10 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
 
 <script>
     /*
+    https://memoriaterrassa.cat/api/dades_personals/get?type=fitxaRepresaliat&slug=amat-vilaplana-cerda
+	https://memoriaterrassa.cat/api/dades_personals/get/nomRepresaliat?type=nomRepresaliat&id=1
+
+    
     function goBack() {
         window.history.back();
     }

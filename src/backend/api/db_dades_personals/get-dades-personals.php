@@ -821,7 +821,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
             dp.cognom2,
             dp.slug
             FROM db_dades_personals AS dp
-            WHERE dp.id = $id";
+            WHERE dp.id = :id";
 
     try {
         $params = [':id' => $id];
