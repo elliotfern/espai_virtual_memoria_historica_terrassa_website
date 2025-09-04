@@ -807,6 +807,48 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
         echo json_encode($row);  // Codifica la fila como un objeto JSON
     }
 
+    // 4) Nom i cognoms del represaliat - ENDPOINT NOU
+    // ruta GET => "https://memoriaterrassa.cat/api/dades_personals/get/?type=nomRepresaliat&id=35"
+} elseif (isset($_GET['type']) && $_GET['type'] == 'nomRepresaliat' && isset($_GET['id'])) {
+
+    $id = $_GET['id'];
+    $db = new Database();
+
+    $query = "SELECT 
+            dp.id,
+            dp.nom,
+            dp.cognom1,
+            dp.cognom2,
+            dp.slug
+            FROM db_dades_personals AS dp
+            WHERE dp.id = $id";
+
+    try {
+        $params = [':id' => $id];
+        $result = $db->getData($query, $params, false);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
     // 3) Pagina informacio fitxa Represaliat > Dades familiars
     // ruta GET => "https://memoriaterrassa.cat/api/represaliats/get/?type=fitxaDadesFamiliars&id=35"
 } elseif (isset($_GET['type']) && $_GET['type'] == 'fitxaDadesFamiliars' && isset($_GET['id'])) {

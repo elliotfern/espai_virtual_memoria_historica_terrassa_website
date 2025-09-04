@@ -1,6 +1,9 @@
 <?php
 
 use App\Config\DatabaseConnection;
+use App\Config\Database;
+use App\Utils\Response;
+use App\Utils\MissatgesAPI;
 
 $conn = DatabaseConnection::getConnection();
 
@@ -27,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
     exit();
 }
 
-// GET : Fitxa repressialiat > relació de biografies
+// GET : Fitxa repressialiat > relació de biografies (web publica)
 // URL: https://memoriaterrassa.cat/api/biografia/get/fitxaBiografia?id=${id}
 if ($slug === "fitxaBiografia") {
     $id = $_GET['id'] ?? null;
@@ -39,4 +42,50 @@ if ($slug === "fitxaBiografia") {
 
     $result = getData2($query, ['idRepresaliat' => $id], false);
     echo json_encode($result);
+
+    // GET : relació de biografies (intranet)
+    // URL: https://memoriaterrassa.cat/api/biografia/get/biografies?id=${idRepresaliat}
+} else if ($slug === "biografies") {
+
+    $id = $_GET['id'];
+    $db = new Database();
+
+    $query = "SELECT 
+    d.nom,
+    d.cognom1,
+    d.cognom2,
+    d.slug,
+    b.biografiaCa,
+    b.biografiaEs,
+    b.biografiaEn,
+    b.id AS idBiografia
+    FROM db_dades_personals AS d
+    LEFT JOIN db_biografies AS b ON d.id = b.idRepresaliat
+    WHERE b.idRepresaliat = :idRepresaliat";
+
+    try {
+        $params = [':idRepresaliat' => $id];
+        $result = $db->getData($query, $params, false);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
 }

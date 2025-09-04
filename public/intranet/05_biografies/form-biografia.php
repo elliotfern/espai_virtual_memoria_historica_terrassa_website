@@ -1,88 +1,6 @@
 <?php
 
-use App\Config\DatabaseConnection;
-
-$conn = DatabaseConnection::getConnection();
-
-if (!$conn) {
-    die("No se pudo establecer conexión a la base de datos.");
-}
-
-// Obtener la URL completa
-$url = $_SERVER['REQUEST_URI'];
-
-// Dividir la URL en partes usando '/' como delimitador
-$urlParts = explode('/', $url);
-
-// Obtener la parte deseada (en este caso, la cuarta parte)
-$categoriaId = $urlParts[3] ?? '';
-
 require_once APP_ROOT . '/public/intranet/includes/header.php';
-
-$modificaBtn = "";
-$idPersona = "";
-$idBiografia_old = "";
-$biografiaCa_old = "";
-$biografiaEs_old = "";
-
-if ($categoriaId === "modifica-biografia") {
-    $modificaBtn = 1;
-    $idPersona = $routeParams[0];
-} else {
-    $modificaBtn = 2;
-    $idPersona = $routeParams[0];
-}
-
-if ($modificaBtn === 1) {
-    // Verificar si la ID existe en la base de datos
-    $query = "SELECT 
-    d.nom,
-    d.cognom1,
-    d.cognom2,
-    b.biografiaCa,
-    b.biografiaEs,
-    b.biografiaEn,
-    b.id AS idBiografia
-    FROM db_dades_personals AS d
-    LEFT JOIN db_biografies AS b ON d.id = b.idRepresaliat
-    WHERE d.id = :id";
-
-    $stmt = $conn->prepare($query);
-    $stmt->bindParam(':id', $idPersona, PDO::PARAM_INT);
-    $stmt->execute();
-
-    if ($stmt->rowCount() > 0) {
-        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            // Acceder a las variables de la consulta
-            $idBiografia_old = $row['idBiografia'] ?? "";
-            $nom = $row['nom'] ?? "";
-            $cognom1 = $row['cognom1'] ?? "";
-            $cognom2 = $row['cognom2'] ?? "";
-            $biografiaCa_old = $row['biografiaCa'] ?? "";
-            $biografiaEs_old = $row['biografiaEs'] ?? "";
-            $biografiaEn_old = $row['biografiaEn'] ?? "";
-        }
-    }
-} else {
-    $query = "SELECT d.id,
-    d.nom,
-    d.cognom1,
-    d.cognom2
-    FROM db_dades_personals AS d
-    WHERE d.id = :id";
-    $stmt = $conn->prepare($query);
-    $stmt->bindParam(':id', $idPersona, PDO::PARAM_INT);
-    $stmt->execute();
-
-    if ($stmt->rowCount() > 0) {
-        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $nom = $row['nom'] ?? "";
-            $cognom1 = $row['cognom1'] ?? "";
-            $cognom2 = $row['cognom2'] ?? "";
-            $idPersona = $idPersona;
-        }
-    }
-}
 ?>
 
 <!-- Incluir el CSS de Trix -->
@@ -105,36 +23,27 @@ if ($modificaBtn === 1) {
 
 
 <div class="container" style="margin-bottom:50px;border: 1px solid gray;border-radius: 10px;padding:25px;background-color:#eaeaea">
-    <form id="familiarForm">
+    <form id="BiografiesForm">
         <div class="container">
             <div class="row">
-                <?php if ($modificaBtn === 1) { ?>
-                    <h2>Modificació biografia</h2>
-                    <h4 id="fitxaNomCognoms">Fitxa represaliat: <a href="https://memoriaterrassa.cat/fitxa/<?php echo $idPersona; ?>" target="_blank"><?php echo $nom . " " . $cognom1 . " " . $cognom2; ?></a></h4>
-                <?php } else { ?>
-                    <h2>Inserció biografia</h2>
-                    <h4 id="fitxaNomCognoms">Fitxa represaliat: <a href="https://memoriaterrassa.cat/fitxa/<?php echo $idPersona; ?>" target="_blank"><?php echo $nom . " " . $cognom1 . " " . $cognom2; ?></a></h4>
-
-                <?php } ?>
+                <div id="titolForm"></div>
 
                 <div class="alert alert-success" role="alert" id="okMessage" style="display:none">
-                    <h4 class="alert-heading"><strong>Modificació correcte!</strong></h4>
                     <div id="okText"></div>
                 </div>
 
                 <div class="alert alert-danger" role="alert" id="errMessage" style="display:none">
-                    <h4 class="alert-heading"><strong>Error en les dades!</strong></h4>
                     <div id="errText"></div>
                 </div>
 
-                <input type="hidden" name="idRepresaliat" id="idRepresaliat" value="<?php echo $idPersona; ?>">
-                <input type="hidden" name="id" id="id" value="<?php echo $idBiografia_old; ?>">
+                <input type="hidden" name="idRepresaliat" id="idRepresaliat" value="">
+                <input type="hidden" name="id" id="id" value="">
 
                 <!-- Crear el editor de texto -->
                 <div class="col-md-12">
                     <label for="tema" class="form-label negreta">Biografia (català):</label>
                     <!-- Campo oculto que almacena el valor de Trix -->
-                    <input id="biografiaCa" type="hidden" name="biografiaCa" value="<?php echo htmlspecialchars($biografiaCa_old); ?>">
+                    <input id="biografiaCa" type="hidden" name="biografiaCa" value="">
 
                     <!-- Editor Trix -->
                     <trix-editor input="biografiaCa"></trix-editor>
@@ -144,7 +53,7 @@ if ($modificaBtn === 1) {
                 <div class="col-md-12">
                     <label for="tema" class="form-label negreta">Biografia (castellà):</label>
                     <!-- Campo oculto que almacena el valor de Trix -->
-                    <input id="biografiaEs" type="hidden" name="biografiaEs" value="<?php echo htmlspecialchars($biografiaEs_old); ?>">
+                    <input id="biografiaEs" type="hidden" name="biografiaEs" value="">
 
                     <!-- Editor Trix -->
                     <trix-editor input="biografiaEs"></trix-editor>
@@ -152,17 +61,10 @@ if ($modificaBtn === 1) {
 
                 <div class="row espai-superior" style="border-top: 1px solid black;padding-top:25px">
                     <div class="col">
-                        <a class="btn btn-secondary" role="button" aria-disabled="true" onclick="goBack()">Tornar enrere</a>
+
                     </div>
                     <div class="col d-flex justify-content-end align-items-center">
-
-                        <?php
-                        if ($modificaBtn === 1) {
-                            echo '<button class="btn btn-primary" id="btnModificarDades" type="submit">Modificar dades</button>';
-                        } else {
-                            echo '<button class="btn btn-primary" id="btnInserirDades" type="submit">Inserir dades</button>';
-                        }
-                        ?>
+                        <button class="btn btn-primary" id="btnBiografies" type="submit">Modificar dades</button>
                     </div>
                 </div>
     </form>
@@ -170,7 +72,10 @@ if ($modificaBtn === 1) {
 </div>
 </div>
 
+
+
 <script>
+    /*
     function goBack() {
         window.history.back();
     }
@@ -372,5 +277,5 @@ if ($modificaBtn === 1) {
             // Manejar errores
             console.error("Error:", error);
         }
-    }
+    }*/
 </script>

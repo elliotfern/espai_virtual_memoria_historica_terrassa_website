@@ -4,6 +4,7 @@ import { auxiliars } from './auxiliars/auxiliars';
 import { transmissioDadesDB } from '../../services/fetchData/transmissioDades';
 import { baseDadesIntranet } from './base-dades/baseDades';
 import { fontsDocumentals } from './fonts-documentals/fontsDocumentals';
+import { formBiografies } from './biografies/formBiografies';
 
 export function intranet() {
   const url = window.location.href;
@@ -25,5 +26,13 @@ export function intranet() {
     }
   } else if (pageType[1] === 'fonts-documentals') {
     fontsDocumentals();
+  } else if (pageType[1] === 'biografies') {
+    const idPersona = Number.parseInt(pageType?.[3] ?? '', 10);
+
+    if (pageType[2] === 'nova-biografia') {
+      formBiografies(false, idPersona);
+    } else if (pageType[2] === 'modifica-biografia') {
+      formBiografies(true, idPersona);
+    }
   }
 }

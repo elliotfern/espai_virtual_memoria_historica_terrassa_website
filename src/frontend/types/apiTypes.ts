@@ -48,6 +48,8 @@ export type ApiUrls = {
     LLISTAT_PRESONS_CAMPS: string;
     LLISTAT_CAMPS: string;
     CAMP_CONCENTRACIO_ID: (id: number) => string;
+    BIOGRAFIES_ID: (id: number) => string;
+    REPRESALIAT_ID: (id: number) => string;
   };
   POST: {
     MUNICIPI: string;
@@ -81,6 +83,7 @@ export type ApiUrls = {
     PRESO: string;
     PRESO_DETENCIO: string;
     CAMP_CONCENTRACIO: string;
+    BIOGRAFIES: string;
   };
   PUT: {
     MUNICIPI: string;
@@ -114,6 +117,7 @@ export type ApiUrls = {
     PRESO: string;
     PRESO_DETENCIO: string;
     CAMP_CONCENTRACIO: string;
+    BIOGRAFIES: string;
   };
   DELETE: {
     MUNICIPI: string;
