@@ -66,7 +66,7 @@ if ($slug === "fitxaBiografia") {
 
     try {
         $params = [':idRepresaliat' => $id];
-        $result = $db->getData($query, $params, false);
+        $result = $db->getData($query, $params, true);
 
         if (empty($result)) {
             Response::error(

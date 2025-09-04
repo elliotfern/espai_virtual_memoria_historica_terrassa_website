@@ -51,7 +51,7 @@ export async function formBiografies(isUpdate: boolean, id?: number) {
     if (!response || !response.data) return;
     data = response.data;
 
-    divTitol.innerHTML = `<h2>Biografies: modificació de biografies:
+    divTitol.innerHTML = `<h2>Biografies: modificació de biografies
      <h4>Fitxa represaliat: <a href="https://memoriaterrassa.cat/fitxa/${data.slug}>" target="_blank">${data.nom} ${data.cognom1} ${data.cognom2}</a></h4>`;
 
     renderFormInputs(data);
@@ -74,6 +74,8 @@ export async function formBiografies(isUpdate: boolean, id?: number) {
         ${nomComplet}
       </a>
     </h4>`;
+
+      renderFormInputs(fitxa);
 
       btnBiografies.textContent = 'Inserir dades';
     }
