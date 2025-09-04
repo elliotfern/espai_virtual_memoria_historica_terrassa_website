@@ -85,7 +85,7 @@ export async function formBiografies(isUpdate: boolean, id?: number) {
     }
 
     biografiesForm.addEventListener('submit', function (event) {
-      transmissioDadesDB(event, 'POST', 'BiografiesForm', API_URLS.POST.BIOGRAFIES, true);
+      transmissioDadesDB(event, 'POST', 'BiografiesForm', API_URLS.POST.BIOGRAFIES, false, 'hide');
     });
   }
 }

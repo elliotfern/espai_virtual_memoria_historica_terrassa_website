@@ -2,7 +2,17 @@ import { missatgesBackend } from './missatgesBackend';
 import { resetForm } from './resetForm';
 import { Missatges } from '../textosIdiomes/missatges';
 
-export async function transmissioDadesDB(event: Event, tipus: string, formId: string, urlAjax: string, neteja?: boolean): Promise<void> {
+// Comportamiento genérico en éxito
+type SuccessBehavior = 'none' | 'hide' | 'disable';
+
+export async function transmissioDadesDB(
+  event: Event,
+  tipus: string,
+  formId: string,
+  urlAjax: string,
+  neteja?: boolean, // mantiene compatibilidad
+  successBehavior: SuccessBehavior = 'none' // NUEVO: 'none' | 'hide' | 'disable'
+): Promise<void> {
   event.preventDefault();
 
   const form = document.getElementById(formId) as HTMLFormElement;
@@ -49,9 +59,21 @@ export async function transmissioDadesDB(event: Event, tipus: string, formId: st
           altreContenidor: errMessageDiv,
         });
 
-        if (neteja) {
+        // === NUEVO: comportamiento genérico en éxito ===
+        if (successBehavior === 'hide') {
+          form.hidden = true; // oculta el formulario
+          history.replaceState({}, document.title, window.location.pathname);
+        } else if (successBehavior === 'disable') {
+          form.querySelectorAll<HTMLElement>('input,select,textarea,button,[contenteditable],trix-editor').forEach((el) => el.setAttribute('disabled', 'true')); // lo deja visible pero inerte
+          history.replaceState({}, document.title, window.location.pathname);
+        } else if (neteja) {
+          // Comportamiento anterior (limpiar) si así lo pides
           resetForm(formId);
         }
+
+        // Dispara un evento genérico para que cada página haga lo suyo (enlaces, navegación, etc.)
+        const ev = new CustomEvent('form:success', { detail: data });
+        form.dispatchEvent(ev);
       } else {
         const missatge = `
           ${data.message ? `<p>${data.message}</p>` : ''}
