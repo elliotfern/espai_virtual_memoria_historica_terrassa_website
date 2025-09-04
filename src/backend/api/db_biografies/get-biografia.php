@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
 }
 
 // GET : Fitxa repressialiat > relació de biografies (web publica)
-// URL: https://memoriaterrassa.cat/api/biografia/get/fitxaBiografia?id=${id}
+// URL: https://memoriaterrassa.cat/api/biografies/get/fitxaBiografia?id=${id}
 if ($slug === "fitxaBiografia") {
     $id = $_GET['id'] ?? null;
 
@@ -44,7 +44,8 @@ if ($slug === "fitxaBiografia") {
     echo json_encode($result);
 
     // GET : relació de biografies (intranet)
-    // URL: https://memoriaterrassa.cat/api/biografia/get/biografies?id=${idRepresaliat}
+    // URL: https://memoriaterrassa.cat/api/biografies/get/biografies?id=${idRepresaliat}
+    //      https://memoriaterrassa.cat/api/biografies/get/biografies?id=51
 } else if ($slug === "biografies") {
 
     $id = $_GET['id'];

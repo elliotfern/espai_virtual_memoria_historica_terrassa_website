@@ -95,7 +95,7 @@ const RESOURCES = {
   DETINGUTS_GU: 'detinguts_guardia_urbana',
   AUTH: 'auth',
   DEPORTATS: 'deportats',
-  BIOGRAFIES: 'biografia',
+  BIOGRAFIES: 'biografies',
 } as const;
 
 const TIPUS = {
