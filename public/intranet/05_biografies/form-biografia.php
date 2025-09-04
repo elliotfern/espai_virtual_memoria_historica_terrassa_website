@@ -67,12 +67,11 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
                         <button class="btn btn-primary" id="btnBiografies" type="submit">Modificar dades</button>
                     </div>
                 </div>
+            </div>
+        </div>
     </form>
-</div>
-</div>
-</div>
 
-
+</div>
 
 <script>
     /*

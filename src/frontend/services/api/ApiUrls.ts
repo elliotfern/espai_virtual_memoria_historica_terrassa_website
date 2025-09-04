@@ -83,7 +83,7 @@ export const ENDPOINTS = {
   CAMP_CONCENTRACIO_ID: 'campConcentracio',
   CAMP_CONCENTRACIO: 'campConcentracio',
   BIOGRAFIES_ID: 'biografies',
-  REPRESALIAT_ID: 'nomRepresaliat',
+  REPRESALIAT_ID: '?type=nomRepresaliat',
 } as const;
 
 // Mapa de recursos disponibles
@@ -156,7 +156,7 @@ export const API_URLS: ApiUrls = {
     LLISTAT_CAMPS: `${BASE_URL}/${API}/${RESOURCES.DEPORTATS}/${TIPUS.GET}/${ENDPOINTS.LLISTAT_CAMPS}`,
     CAMP_CONCENTRACIO_ID: (id: number) => `${BASE_URL}/${API}/${RESOURCES.DEPORTATS}/${TIPUS.GET}/${ENDPOINTS.CAMP_CONCENTRACIO_ID}?id=${id}`,
     BIOGRAFIES_ID: (id: number) => `${BASE_URL}/${API}/${RESOURCES.BIOGRAFIES}/${TIPUS.GET}/${ENDPOINTS.BIOGRAFIES_ID}?id=${id}`,
-    REPRESALIAT_ID: (id: number) => `${BASE_URL}/${API}/${RESOURCES.DADES_PERSONALS}/${TIPUS.GET}/${ENDPOINTS.REPRESALIAT_ID}?type=nomRepresaliat&id=${id}`,
+    REPRESALIAT_ID: (id: number) => `${BASE_URL}/${API}/${RESOURCES.DADES_PERSONALS}/${TIPUS.GET}/${ENDPOINTS.REPRESALIAT_ID}&id=${id}`,
   },
 
   POST: {
