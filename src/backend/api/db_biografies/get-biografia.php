@@ -56,10 +56,11 @@ if ($slug === "fitxaBiografia") {
     d.cognom1,
     d.cognom2,
     d.slug,
+    d.id AS idRepresaliat,
     b.biografiaCa,
     b.biografiaEs,
     b.biografiaEn,
-    b.id AS idBiografia
+    b.id
     FROM db_dades_personals AS d
     LEFT JOIN db_biografies AS b ON d.id = b.idRepresaliat
     WHERE b.idRepresaliat = :idRepresaliat";

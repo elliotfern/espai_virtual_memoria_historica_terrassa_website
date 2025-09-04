@@ -78,17 +78,59 @@ if ($stmtCheck->fetchColumn() == 0) {
     exit;
 }
 
-// Si hay errores, devolver una respuesta con los errores
+// —— Helpers ——
+// Devuelve texto “plano” para validar si hay contenido real (quita etiquetas, &nbsp;, espacios…)
+function plainTextFromHtml(?string $html): string
+{
+    if ($html === null) return '';
+    $s = html_entity_decode((string)$html, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    $s = strip_tags($s);
+    // elimina NBSP y comprime espacios
+    $s = preg_replace('/\x{A0}/u', ' ', $s);
+    $s = preg_replace('/\s+/u', ' ', $s);
+    return trim($s);
+}
+
+// —— Recoger campos —— 
+$rawCa = $data['biografiaCa'] ?? null;
+$rawEs = $data['biografiaEs'] ?? null;
+$rawEn = $data['biografiaEn'] ?? null;
+
+$errors = [];
+
+// —— Validación: al menos una biografía con texto real (CA o ES) ——
+$hasCa = plainTextFromHtml($rawCa) !== '';
+$hasEs = plainTextFromHtml($rawEs) !== '';
+if (!$hasCa && !$hasEs) {
+    $errors[] = "Cal escriure almenys una biografia (català o castellà).";
+}
+
+// —— Validación: idRepresaliat válido y existente ——
+if ($idRepresaliat <= 0) {
+    $errors[] = "Falta un idRepresaliat vàlid.";
+} else {
+    $stmt = $conn->prepare("SELECT 1 FROM db_dades_personals WHERE id = :id LIMIT 1");
+    $stmt->execute([':id' => $idRepresaliat]);
+    if (!$stmt->fetchColumn()) {
+        $errors[] = "No existeix el represaliat indicat (idRepresaliat=$idRepresaliat).";
+    }
+}
+
+// —— Si hay errores, corta aquí ——
 if (!empty($errors)) {
-    http_response_code(400); // Bad Request
-    echo json_encode(["status" => "error", "message" => "S'han produït errors en la validació", "errors" => $errors]);
+    http_response_code(400);
+    echo json_encode([
+        "status"  => "error",
+        "message" => "S'han produït errors en la validació",
+        "errors"  => $errors
+    ]);
     exit;
 }
 
 // Si no hay errores, crear las variables PHP y preparar la consulta PDO
-$biografiaCa = !empty($data['biografiaCa']) ? sanitizeHtml($data['biografiaCa']) : NULL;
-$biografiaEs = !empty($data['biografiaEs']) ? sanitizeHtml($data['biografiaEs']) : NULL;
-$biografiaEn = !empty($data['biografiaEn']) ? sanitizeHtml($data['biografiaEn']) : NULL;
+$biografiaCa = $hasCa ? sanitizeTrixHtml($rawCa) : null;
+$biografiaEs = $hasEs ? sanitizeTrixHtml($rawEs) : null;
+$biografiaEn = plainTextFromHtml($rawEn) !== '' ? sanitizeTrixHtml($rawEn) : null;
 
 
 // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)

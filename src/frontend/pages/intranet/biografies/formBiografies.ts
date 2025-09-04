@@ -57,6 +57,10 @@ export async function formBiografies(isUpdate: boolean, id?: number) {
     renderFormInputs(data);
 
     btnBiografies.textContent = 'Modificar dades';
+
+    biografiesForm.addEventListener('submit', function (event) {
+      transmissioDadesDB(event, 'PUT', 'BiografiesForm', API_URLS.PUT.BIOGRAFIES);
+    });
   } else {
     if (id) {
       // Nota: ahora esperamos un ARRAY de Fitxa

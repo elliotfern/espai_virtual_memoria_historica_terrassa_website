@@ -815,7 +815,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
     $db = new Database();
 
     $query = "SELECT 
-            dp.id,
+            dp.id AS idRepresaliat,
             dp.nom,
             dp.cognom1,
             dp.cognom2,

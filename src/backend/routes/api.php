@@ -212,15 +212,14 @@ $routes = [
 
     '/api/cronologia/get/esdeveniment' => ['view' => 'src/backend/api/cronologia/get-cronologia-esd.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
 
-    // API db_biografies
-    '/api/biografia/post' => ['view' => 'src/backend/api/db_biografies/post-biografia.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
-
-    '/api/biografia/put' => ['view' => 'src/backend/api/db_biografies/put-biografia.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
-
-    // API fonts documentals
+    // API Biografies
     APP_API . $urlApi['biografies'] . '/get/{slug}' => array_merge($defaultApiConfig, [
         'view' => BACKEND_API . '/db_biografies/get-biografia.php',
     ]),
+
+    '/api/biografies/post' => ['view' => 'src/backend/api/db_biografies/post-biografia.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+
+    '/api/biografies/put' => ['view' => 'src/backend/api/db_biografies/put-biografia.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
 
     // DB Formulari de contacte
     '/api/form_contacte/get' => ['view' => 'src/backend/api/db_form_contacte/get-form-contacte.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
