@@ -1,0 +1,12 @@
+trix-toolbar [data-trix-button-group='file-tools'] {
+  display: none;
+}
+
+trix-editor {
+  min-height: 500px;
+  /* Ajusta la altura según tus necesidades */
+  max-height: 600px;
+  /* Opcional: establece una altura máxima */
+  overflow-y: auto;
+  background-color: #fff !important;
+}
