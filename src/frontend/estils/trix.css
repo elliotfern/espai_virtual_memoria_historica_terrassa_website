@@ -10,3 +10,17 @@ trix-editor {
   overflow-y: auto;
   background-color: #fff !important;
 }
+
+/* Más específico: el editor dentro de tu formulario concreto */
+#BiografiesForm trix-editor {
+  display: block;
+  min-height: 500px !important;
+  max-height: 600px !important;
+  overflow-y: auto !important;
+  background-color: #fff !important;
+}
+
+/* Ocultar grupo de archivos del toolbar */
+#BiografiesForm trix-toolbar [data-trix-button-group='file-tools'] {
+  display: none !important;
+}

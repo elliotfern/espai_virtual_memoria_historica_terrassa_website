@@ -8,6 +8,7 @@ Version: 1.1
 License: GNU General Public License v3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 */
+@import 'trix/dist/trix.css';
 
 @import './body.css';
 @import './header.css';

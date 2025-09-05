@@ -3,7 +3,6 @@ import { API_URLS } from '../../../services/api/ApiUrls';
 import { fetchDataGet } from '../../../services/fetchData/fetchDataGet';
 import { renderFormInputs } from '../../../services/fetchData/renderInputsForm';
 import 'trix'; // carga Trix (extiende el DOM con <trix-editor>)
-import 'trix/dist/trix.css'; // CSS
 
 interface Fitxa {
   [key: string]: unknown;
