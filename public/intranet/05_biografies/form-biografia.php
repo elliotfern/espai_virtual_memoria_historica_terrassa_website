@@ -3,25 +3,6 @@
 require_once APP_ROOT . '/public/intranet/includes/header.php';
 ?>
 
-<!-- Incluir el CSS de Trix -->
-<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/trix/1.3.1/trix.css">
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/trix/1.3.1/trix.js"></script>
-<style>
-    trix-toolbar [data-trix-button-group="file-tools"] {
-        display: none;
-    }
-
-    trix-editor {
-        min-height: 500px;
-        /* Ajusta la altura según tus necesidades */
-        max-height: 600px;
-        /* Opcional: establece una altura máxima */
-        overflow-y: auto;
-        background-color: #fff !important;
-    }
-</style>
-
-
 <div class="container" style="margin-bottom:50px;border: 1px solid gray;border-radius: 10px;padding:25px;background-color:#eaeaea">
     <div class="container">
         <div class="row">
