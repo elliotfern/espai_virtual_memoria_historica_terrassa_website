@@ -23,6 +23,10 @@ SetEnv APP_ENV prod
     # Redirección de rutas con idiomas (separar rutas por idioma)
     RewriteCond %{REQUEST_URI} ^/(es|fr|en|ca|it|pt)(.*)$
     RewriteRule ^(es|fr|en|ca|it|pt)(.*)$ index.php?lang=$1&uri=$2 [QSA,L]
+
+    RewriteRule ^sitemap\.xml$ - [L]
+    RewriteRule ^sitemaps/ - [L]
+
 </IfModule>
 
 <IfModule mod_headers.c>

@@ -158,7 +158,7 @@ try {
         $id
     );
 
-    echo json_encode(["status" => "success", "message" => "Les dades s'han actualitzat correctament a la base de dades.", "id" => (int)$id]);
+    echo json_encode(["status" => "success", "message" => "La biografia s'ha desat correctament a la base de dades.", "id" => (int)$id]);
 } catch (PDOException $e) {
 
     $code = $e->errorInfo[1] ?? null; // MySQL error code

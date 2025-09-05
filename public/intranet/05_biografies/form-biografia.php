@@ -23,19 +23,19 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
 
 
 <div class="container" style="margin-bottom:50px;border: 1px solid gray;border-radius: 10px;padding:25px;background-color:#eaeaea">
-    <form id="BiografiesForm">
-        <div class="container">
-            <div class="row">
-                <div id="titolForm"></div>
+    <div class="container">
+        <div class="row">
+            <div id="titolForm"></div>
 
-                <div class="alert alert-success" role="alert" id="okMessage" style="display:none">
-                    <div id="okText"></div>
-                </div>
+            <div class="alert alert-success" role="alert" id="okMessage" style="display:none">
+                <div id="okText"></div>
+            </div>
 
-                <div class="alert alert-danger" role="alert" id="errMessage" style="display:none">
-                    <div id="errText"></div>
-                </div>
+            <div class="alert alert-danger" role="alert" id="errMessage" style="display:none">
+                <div id="errText"></div>
+            </div>
 
+            <form id="BiografiesForm">
                 <input type="hidden" name="idRepresaliat" id="idRepresaliat" value="">
                 <input type="hidden" name="id" id="id" value="">
 
@@ -67,8 +67,9 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
                         <button class="btn btn-primary" id="btnBiografies" type="submit">Modificar dades</button>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
-    </form>
+    </div>
+
 
 </div>
