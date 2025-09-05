@@ -14,7 +14,8 @@ interface Fitxa {
   comunitat: number;
   estat: number;
   arxiu: string;
-  // Campos usados más abajo:
+
+  // campos que usamos para pintar título/enlace
   slug?: string;
   nom?: string;
   cognom1?: string;
@@ -26,6 +27,7 @@ interface ApiResponse<T> {
   message: string;
   data: T;
 }
+
 type ApiResponse2<T> = {
   status: 'success' | 'error';
   message: string;
@@ -33,45 +35,32 @@ type ApiResponse2<T> = {
   data: T;
 };
 
-// Utilidad: espera a que exista un selector en el DOM (máx 1s)
-async function waitForEl<T extends HTMLElement>(sel: string, timeoutMs = 1000): Promise<T> {
-  const start = performance.now();
-  while (performance.now() - start < timeoutMs) {
-    const el = document.querySelector(sel) as T | null;
-    if (el) return el;
-    await new Promise((r) => setTimeout(r, 50));
-  }
-  throw new Error(`Elemento no encontrado: ${sel}`);
+/**
+ * Inicializa mejoras de UI (Choices, datepickers, etc.) dentro del form ya renderizado.
+ * Déjalo como no-op si no usas nada, o llama aquí a tus inicializadores.
+ */
+function hydrateEnhancers(): void {
+  // Ejemplos:
+  // initChoicesWithin(root);
+  // initDatepickersWithin(root);
 }
 
-// Utilidad: intenta obtener el id del URL si no viene por parámetro
-function getIdFromURL(): number | undefined {
-  // /biografies/modificar/123  ó  ?id=123
-  const m = location.pathname.match(/(\d+)(?:\/)?$/);
-  if (m) return parseInt(m[1], 10);
-  const q = new URLSearchParams(location.search).get('id');
-  return q ? parseInt(q, 10) : undefined;
+/**
+ * Ata el submit al <form> ACTUAL (el visible tras renderFormInputs), con once:true para evitar duplicados.
+ */
+function attachSubmit(form: HTMLFormElement, method: 'POST' | 'PUT', url: string): void {
+  const handler = (event: Event) => {
+    transmissioDadesDB(event, method, 'BiografiesForm', url, method === 'POST', method === 'POST' ? 'hide' : undefined);
+  };
+  form.addEventListener('submit', handler, { once: true });
 }
 
 export async function formBiografies(isUpdate: boolean, id?: number) {
-  // 1) Asegura DOM
-  const divTitol = await waitForEl<HTMLDivElement>('#titolForm').catch(() => null);
-  const btnBiografies = await waitForEl<HTMLButtonElement>('#btnBiografies').catch(() => null);
-  const biografiesForm = await waitForEl<HTMLFormElement>('#BiografiesForm').catch(() => null);
-  if (!divTitol || !btnBiografies || !biografiesForm) return;
+  // ——— contenedor de título (mínimo requerido)
+  const divTitol = document.getElementById('titolForm') as HTMLDivElement | null;
+  if (!divTitol) return;
 
-  // 2) Asegura ID (si no vino aún)
-  let theId = id ?? getIdFromURL();
-
-  // Si estamos en update pero aún no tenemos id, espera brevemente (race con el router)
-  if (isUpdate && (theId === undefined || Number.isNaN(theId))) {
-    for (let i = 0; i < 10 && (theId === undefined || Number.isNaN(theId)); i++) {
-      await new Promise((r) => setTimeout(r, 50));
-      theId = id ?? getIdFromURL();
-    }
-  }
-
-  // Estado base
+  // Estado base por si no hay datos
   let data: Partial<Fitxa> = {
     comarca: 0,
     provincia: 0,
@@ -81,26 +70,22 @@ export async function formBiografies(isUpdate: boolean, id?: number) {
     ciutat: 0,
   };
 
-  if (isUpdate) {
-    if (!theId) {
-      // No hay id -> no podemos cargar datos de modificación
-      divTitol.innerHTML = `<h2>Biografies: modificació</h2><p>No s'ha trobat l'ID de la fitxa.</p>`;
-      return;
-    }
-
-    const response = await fetchDataGet<ApiResponse<Fitxa>>(API_URLS.GET.BIOGRAFIES_ID(theId), true);
-    if (!response || !response.data) {
+  if (id && isUpdate) {
+    // —— MODIFICAR
+    const response = await fetchDataGet<ApiResponse<Fitxa>>(API_URLS.GET.BIOGRAFIES_ID(id), true);
+    if (!response?.data) {
       divTitol.innerHTML = `<h2>Biografies: modificació</h2><p>No s'han pogut carregar les dades.</p>`;
       return;
     }
+
     data = response.data;
 
-    const nom = (data.nom as string) || '';
-    const c1 = (data.cognom1 as string) || '';
-    const c2 = (data.cognom2 as string) || '';
-    const slug = (data.slug as string) || '';
+    const nom = (data.nom as string) ?? '';
+    const c1 = (data.cognom1 as string) ?? '';
+    const c2 = (data.cognom2 as string) ?? '';
+    const slug = (data.slug as string) ?? '';
 
-    // 👇 corregido el href (comilla cerrada)
+    // ¡Comilla cerrada en href y rel seguro!
     divTitol.innerHTML = `
       <h2>Biografies: modificació de biografies</h2>
       <h4>
@@ -111,23 +96,34 @@ export async function formBiografies(isUpdate: boolean, id?: number) {
       </h4>
     `;
 
+    // Render del formulario (puede reemplazar nodos internos)
     renderFormInputs(data);
+
+    // Re-selecciona referencias AHORA (después del render)
+    const btnBiografies = document.getElementById('btnBiografies') as HTMLButtonElement | null;
+    const biografiesForm = document.getElementById('BiografiesForm') as HTMLFormElement | null;
+    if (!btnBiografies || !biografiesForm) return;
+
     btnBiografies.textContent = 'Modificar dades';
 
-    // Evita duplicar listeners si llamas a formBiografies más de una vez
-    biografiesForm.addEventListener('submit', onSubmitUpdate, { once: true });
+    // Hidrata widgets UI si procede
+    hydrateEnhancers();
+
+    // Ata submit sobre el form actual
+    attachSubmit(biografiesForm, 'PUT', API_URLS.PUT.BIOGRAFIES);
   } else {
-    // CREAR
-    if (theId) {
-      const response = await fetchDataGet<ApiResponse2<Fitxa[]>>(API_URLS.GET.REPRESALIAT_ID(theId), true);
-      if (!response?.data || response.data.length === 0) {
+    // —— CREAR
+    if (id) {
+      // Para crear con datos de la fitxa base (array en la API)
+      const response = await fetchDataGet<ApiResponse2<Fitxa[]>>(API_URLS.GET.REPRESALIAT_ID(id), true);
+      const fitxa = response?.data?.[0];
+      if (!fitxa) {
         divTitol.innerHTML = `<h2>Biografies: creació</h2><p>No s'han trobat dades de la fitxa.</p>`;
         return;
       }
 
-      const fitxa = response.data[0];
       const nomComplet = [fitxa.nom as string, fitxa.cognom1 as string, fitxa.cognom2 as string].filter(Boolean).join(' ');
-      const slug = (fitxa.slug as string) || '';
+      const slug = (fitxa.slug as string) ?? '';
 
       divTitol.innerHTML = `
         <h2>Biografies: creació de nova biografia</h2>
@@ -138,21 +134,31 @@ export async function formBiografies(isUpdate: boolean, id?: number) {
           </a>
         </h4>
       `;
+
       renderFormInputs(fitxa);
     } else {
-      // Creación sin id (p.ej. biografía genérica)
+      // Creación “en blanco”
       divTitol.innerHTML = `<h2>Biografies: creació de nova biografia</h2>`;
       renderFormInputs(data);
     }
 
+    // Re-selecciona referencias tras el render
+    const btnBiografies = document.getElementById('btnBiografies') as HTMLButtonElement | null;
+    const biografiesForm = document.getElementById('BiografiesForm') as HTMLFormElement | null;
+    if (!btnBiografies || !biografiesForm) return;
+
     btnBiografies.textContent = 'Inserir dades';
-    biografiesForm.addEventListener('submit', onSubmitCreate, { once: true });
+
+    hydrateEnhancers();
+    attachSubmit(biografiesForm, 'POST', API_URLS.POST.BIOGRAFIES);
   }
 
-  function onSubmitUpdate(event: Event) {
-    transmissioDadesDB(event, 'PUT', 'BiografiesForm', API_URLS.PUT.BIOGRAFIES);
-  }
-  function onSubmitCreate(event: Event) {
-    transmissioDadesDB(event, 'POST', 'BiografiesForm', API_URLS.POST.BIOGRAFIES, false, 'hide');
-  }
+  // Si el form vive dentro de tabs (Bootstrap), rehidrata cuando la tab se muestra
+  document.addEventListener('shown.bs.tab', (e) => {
+    const targetId = (e.target as HTMLElement)?.getAttribute?.('data-bs-target') || '';
+    if (targetId && (targetId.includes('Biografies') || targetId.includes('biografies'))) {
+      const form = document.getElementById('BiografiesForm') as HTMLFormElement | null;
+      if (form) hydrateEnhancers();
+    }
+  });
 }
