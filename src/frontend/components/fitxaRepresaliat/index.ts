@@ -6,6 +6,7 @@ import { getApiArray, getApiFirst } from '../../services/api/http';
 import { DOMAIN_API } from '../../config/constants';
 import { getIsAdmin } from '../../services/auth/getIsAdmin';
 import { getIsAutor } from '../../services/auth/getIsAutor';
+import { getIsLogged } from '../../services/auth/getIsLogged';
 
 function showNotFound(msg: string): void {
   // Oculta posibles contenedores de la ficha (ajusta IDs/clases reales)
@@ -37,12 +38,13 @@ export async function fitxaRepresaliat(slug: string): Promise<void> {
     // 2) Validar visibilidad
     const isAdmin = await Promise.resolve(getIsAdmin());
     const isAutor = await Promise.resolve(getIsAutor());
+    const isLogged = await Promise.resolve(getIsLogged());
 
     const completat = Number(fitxa.completat);
     const visibilitat = Number(fitxa.visibilitat);
 
     const esVisiblePublicament = completat === 2 && visibilitat === 2;
-    const tePermisos = Boolean(isAdmin || isAutor);
+    const tePermisos = Boolean(isAdmin || isAutor || isLogged);
 
     const nom = fitxa.nom !== null ? fitxa.nom : '';
     const cognom1 = fitxa.cognom1 !== null ? fitxa.cognom1 : '';

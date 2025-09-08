@@ -7,11 +7,11 @@ export function formatDates(fecha: string): string {
   return `${dia}-${mes}-${any}`;
 }
 
-export function formatDatesForm(fecha: string | null | undefined): string | null {
-  if (!fecha || fecha === '0000-00-00' || fecha === '1970-01-01') return null;
+export function formatDatesForm(fecha: string | null | undefined): string {
+  if (!fecha || fecha === '0000-00-00' || fecha === '1970-01-01') return '';
 
   const date = new Date(fecha);
-  if (isNaN(date.getTime())) return null;
+  if (isNaN(date.getTime())) return '';
 
   const dia = String(date.getUTCDate()).padStart(2, '0');
   const mes = String(date.getUTCMonth() + 1).padStart(2, '0');
