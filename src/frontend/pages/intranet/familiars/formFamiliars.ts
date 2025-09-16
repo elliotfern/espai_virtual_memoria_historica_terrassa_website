@@ -23,6 +23,7 @@ interface Fitxa {
   nom?: string;
   cognom1?: string;
   cognom2?: string;
+  idParent: number;
 
   idRepresaliat?: number; // si tu API lo devuelve
 }
@@ -70,6 +71,9 @@ export async function formFamiliars(isUpdate: boolean, idParent?: number, id?: n
     usuariForm.addEventListener('submit', function (event) {
       transmissioDadesDB(event, 'PUT', 'familiarForm', 'https://memoriaterrassa.cat/api/familiars/put');
     });
+
+    await auxiliarSelect(data.relacio_parantiu ?? 0, 'relacions_parentiu', 'relacio_parentiu', 'relacio_parentiu');
+    await auxiliarSelect(data.idParent ?? 0, 'llistat_complert_represaliats', 'idParent', 'nom_complert');
   } else {
     // ——— CREAR
     // Si viene un id de represaliat, precargamos su ficha básica
@@ -80,6 +84,9 @@ export async function formFamiliars(isUpdate: boolean, idParent?: number, id?: n
         divTitol.innerHTML = `<h2>Relació de dades familiars: /h2><p>No s'han trobat dades de la fitxa.</p>`;
         return;
       }
+
+      await auxiliarSelect(fitxa.relacio_parantiu ?? 0, 'relacions_parentiu', 'relacio_parentiu', 'relacio_parentiu');
+      await auxiliarSelect(fitxa.idRepresaliat ?? 0, 'llistat_complert_represaliats', 'idParent', 'nom_complert');
 
       const nomComplet = [fitxa.nom as string, fitxa.cognom1 as string, fitxa.cognom2 as string].filter(Boolean).join(' ');
       const slug = (fitxa.slug as string) ?? '';
@@ -105,10 +112,5 @@ export async function formFamiliars(isUpdate: boolean, idParent?: number, id?: n
         //scrollOffset: 96,             // si tienes un header fijo alto
       });
     }
-
-    // Llenar selects con opciones
-
-    await auxiliarSelect(data.relacio_parantiu ?? 0, 'relacions_parentiu', 'relacio_parentiu', 'relacio_parentiu');
-    await auxiliarSelect(data.idParent_old ?? data.idRepresaliat, 'llistat_complert_represaliats', 'idParent', 'nom_complert');
   }
 }
