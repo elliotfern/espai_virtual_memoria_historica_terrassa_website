@@ -63,7 +63,18 @@ export async function formFamiliars(isUpdate: boolean, idParent?: number, id?: n
     if (!response || !response.data) return;
     data = response.data;
 
-    divTitol.innerHTML = `<h2>Modificació Usuari: ${data.espai_cat}</h2>`;
+    const nomComplet = [data.nom_represaliat as string, data.cognom1_represaliat as string, data.cognom2_represaliat as string].filter(Boolean).join(' ');
+    const slug = (data.slug as string) ?? '';
+
+    divTitol.innerHTML = `
+            <h2>Relació de dades familiars: Modificació dades parent</h2>
+            <h4>
+              Fitxa represaliat:
+              <a href="https://memoriaterrassa.cat/fitxa/${slug}" target="_blank" rel="noopener noreferrer">
+                ${nomComplet}
+              </a>
+            </h4>
+          `;
 
     renderFormInputs(data);
 

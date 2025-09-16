@@ -80,7 +80,7 @@ if ($slug === "fitxaFamiliars") {
     $db = new Database();
     $id = $_GET['id'];
 
-    $query = "SELECT f.id, f.nom, f.cognom1, f.cognom2, f.anyNaixement, f.relacio_parentiu, f.idParent, d.nom AS nom_represaliat, d.cognom1 AS     cognom1_represaliat, d.cognom2 AS cognom2_represaliat
+    $query = "SELECT f.id, f.nom, f.cognom1, f.cognom2, f.anyNaixement, f.relacio_parentiu, f.idParent, d.nom AS nom_represaliat, d.cognom1 AS     cognom1_represaliat, d.cognom2 AS cognom2_represaliat, d.slug
     FROM aux_familiars AS f
     LEFT JOIN db_dades_personals AS d ON f.idParent = d.id
     WHERE f.id = :id";
