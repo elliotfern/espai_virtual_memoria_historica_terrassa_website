@@ -71,6 +71,52 @@ if (!empty($errors)) {
     exit;
 }
 
+
+$nom             = isset($data['nom'])       ? trim((string)$data['nom'])       : null;
+$cognom1         = isset($data['cognom1'])   ? trim((string)$data['cognom1'])   : null;
+$cognom2         = isset($data['cognom2'])   ? trim((string)$data['cognom2'])   : null;
+$anyNaixement    = isset($data['anyNaixement']) && $data['anyNaixement'] !== '' ? (int)$data['anyNaixement'] : null;
+$relacioParentiu = isset($data['relacio_parentiu']) ? trim((string)$data['relacio_parentiu']) : null;
+$idParent        = array_key_exists('idParent', $data) && $data['idParent'] !== '' ? (int)$data['idParent'] : null;
+
+
+// ---------- Comprobación de duplicado (normalizado + NULL-safe) ----------
+$dupSql = "SELECT id
+FROM aux_familiars
+WHERE
+  (LOWER(TRIM(nom))     <=> LOWER(TRIM(:nom))) AND
+  (LOWER(TRIM(cognom1)) <=> LOWER(TRIM(:cognom1))) AND
+  (LOWER(TRIM(cognom2)) <=> LOWER(TRIM(:cognom2))) AND
+  (anyNaixement         <=> :anyNaixement) AND
+  (idParent             <=> :idParent)
+LIMIT 1";
+
+$st = $conn->prepare($dupSql);
+$st->bindValue(':nom',       $nom,     PDO::PARAM_STR);
+$st->bindValue(':cognom1',   $cognom1, PDO::PARAM_STR);
+$st->bindValue(':cognom2',   $cognom2, PDO::PARAM_STR);
+
+// Bind NULL-safe
+if ($anyNaixement === null) $st->bindValue(':anyNaixement', null, PDO::PARAM_NULL);
+else                        $st->bindValue(':anyNaixement', $anyNaixement, PDO::PARAM_INT);
+
+if ($idParent === null)     $st->bindValue(':idParent', null, PDO::PARAM_NULL);
+else                        $st->bindValue(':idParent', $idParent, PDO::PARAM_INT);
+
+$st->execute();
+$dup = $st->fetchColumn();
+
+if ($dup !== false) {
+    http_response_code(409); // Conflict
+    echo json_encode([
+        'status'  => 'error',
+        'message' => 'Ja existeix un familiar amb els mateixos valors (nom, cognoms, any de naixement i idParent).',
+        'errors'  => ['Duplicat detectat'],
+        'data'    => ['idDuplicat' => (int)$dup]
+    ]);
+    exit;
+}
+
 // Si no hay errores, crear las variables PHP y preparar la consulta PDO
 $nom = !empty($data['nom']) ? $data['nom'] : NULL;
 $cognom1 = !empty($data['cognom1']) ? $data['cognom1'] : NULL;
@@ -124,7 +170,7 @@ try {
     );
 
     // Respuesta de éxito
-    echo json_encode(["status" => "success", "message" => "Les dades s'han actualitzat correctament a la base de dades."]);
+    echo json_encode(["status" => "success", "message" => "Les dades s'han introduït correctament a la base de dades."]);
 } catch (PDOException $e) {
     // En caso de error en la conexión o ejecución de la consulta
     http_response_code(500); // Internal Server Error

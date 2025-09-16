@@ -124,6 +124,26 @@ export async function formFamiliars(isUpdate: boolean, idParent?: number, id?: n
         //scrollOffset: 96,             // si tienes un header fijo alto
         neteja: true,
       });
+
+      // 👇 aquí enganchamos el evento de éxito
+      usuariForm.addEventListener('form:success', async () => {
+        if (!idParent) return;
+
+        try {
+          const res = await fetchDataGet<ApiResponse2<Fitxa[]>>(API_URLS.GET.REPRESALIAT_ID(idParent), true);
+          const fitxa = res?.data?.[0];
+          if (!fitxa) return;
+
+          // vuelves a repintar selects / campos
+          await auxiliarSelect(fitxa.relacio_parentiu ?? 0, 'relacions_parentiu', 'relacio_parentiu', 'relacio_parentiu');
+          await auxiliarSelect(fitxa.idRepresaliat ?? 0, 'llistat_complert_represaliats', 'idParent', 'nom_complert');
+
+          // (opcional) volver a renderizar inputs si tu helper lo soporta
+          renderFormInputs(fitxa);
+        } catch (err) {
+          console.error('Error re-cargando fitxa després de POST', err);
+        }
+      });
     }
   }
 }
