@@ -3,6 +3,9 @@
 use App\Config\Tables;
 use App\Config\Audit;
 use App\Config\DatabaseConnection;
+use App\Utils\MissatgesAPI;
+use App\Utils\Response;
+use App\Utils\ValidacioErrors;
 
 $conn = DatabaseConnection::getConnection();
 
@@ -154,9 +157,16 @@ try {
     );
 
     // Respuesta de éxito
-    echo json_encode(["status" => "success", "message" => "Les dades s'han actualitzat correctament a la base de dades."]);
+    Response::success(
+        MissatgesAPI::success('create'),
+        ['id' => $id],
+        200
+    );
 } catch (PDOException $e) {
     // En caso de error en la conexión o ejecución de la consulta
-    http_response_code(500); // Internal Server Error
-    echo json_encode(["status" => "error", "message" => "S'ha produit un error a la base de dades: " . $e->getMessage()]);
+    Response::error(
+        MissatgesAPI::error('errorBD'),
+        [$e->getMessage()],
+        500
+    );
 }

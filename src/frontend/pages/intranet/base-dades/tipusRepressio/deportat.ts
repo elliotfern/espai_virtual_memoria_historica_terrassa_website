@@ -2,6 +2,7 @@ import { fetchDataGet } from '../../../../services/fetchData/fetchDataGet';
 import { auxiliarSelect } from '../../../../services/fetchData/auxiliarSelect';
 import { renderFormInputs } from '../../../../services/fetchData/renderInputsForm';
 import { transmissioDadesDB } from '../../../../services/fetchData/transmissioDades';
+import { wireForm } from '../../../../helpers/transmissioHelper';
 
 interface Fitxa {
   [key: string]: unknown;
@@ -103,8 +104,13 @@ export async function deportat(idRepresaliat: number) {
 
     const deportatForm = document.getElementById('deportatForm');
     if (deportatForm) {
-      deportatForm.addEventListener('submit', function (event) {
-        transmissioDadesDB(event, 'POST', 'deportatForm', '/api/deportats/post');
+      // Ocultar el form en éxito y hacer scroll automático a #okMessage
+      wireForm({
+        formId: 'deportatForm',
+        urlAjax: '/api/deportats/post',
+        successBehavior: 'hide', // oculta el formulario
+        scrollOnSuccess: true, // opcional; ya se activa por defecto al usar 'hide'
+        //scrollOffset: 96,             // si tienes un header fijo alto
       });
     }
   } else {

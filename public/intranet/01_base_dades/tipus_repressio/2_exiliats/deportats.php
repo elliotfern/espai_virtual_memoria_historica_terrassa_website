@@ -1,16 +1,17 @@
 <div class="container" style="margin-bottom:50px;border: 1px solid gray;border-radius: 10px;padding:25px;background-color:#eaeaea">
-    <form id="deportatForm">
-        <div class="container">
-            <h2>Tipus de repressió: Deportat</h2>
-            <div id="fitxaNomCognoms"></div>
+    <div class="container">
+        <h2>Tipus de repressió: Deportat</h2>
+        <div id="fitxaNomCognoms"></div>
 
-            <div class="alert alert-success" role="alert" id="okMessage" style="display:none">
-                <div id="okText"></div>
-            </div>
+        <div class="alert alert-success" role="alert" id="okMessage" style="display:none">
+            <div id="okText"></div>
+        </div>
 
-            <div class="alert alert-danger" role="alert" id="errMessage" style="display:none">
-                <div id="errText"></div>
-            </div>
+        <div class="alert alert-danger" role="alert" id="errMessage" style="display:none">
+            <div id="errText"></div>
+        </div>
+
+        <form id="deportatForm">
             <div class="row g-3">
                 <input type="hidden" name="idPersona" id="idPersona" value="">
                 <input type="hidden" name="id" id="id" value="">
@@ -190,6 +191,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </form>
+        </form>
+    </div>
 </div>
