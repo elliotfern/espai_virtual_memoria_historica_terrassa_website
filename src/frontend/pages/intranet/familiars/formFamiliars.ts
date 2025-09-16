@@ -110,6 +110,7 @@ export async function formFamiliars(isUpdate: boolean, idParent?: number, id?: n
         successBehavior: 'none', // oculta el formulario
         scrollOnSuccess: true, // opcional; ya se activa por defecto al usar 'hide'
         //scrollOffset: 96,             // si tienes un header fijo alto
+        neteja: true,
       });
     }
   }
