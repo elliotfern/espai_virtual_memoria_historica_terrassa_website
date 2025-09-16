@@ -24,6 +24,7 @@ interface Fitxa {
   cognom1?: string;
   cognom2?: string;
   idParent: number;
+  relacio_parentiu: number;
 
   idRepresaliat?: number; // si tu API lo devuelve
 }
@@ -72,7 +73,7 @@ export async function formFamiliars(isUpdate: boolean, idParent?: number, id?: n
       transmissioDadesDB(event, 'PUT', 'familiarForm', 'https://memoriaterrassa.cat/api/familiars/put');
     });
 
-    await auxiliarSelect(data.relacio_parantiu ?? 0, 'relacions_parentiu', 'relacio_parentiu', 'relacio_parentiu');
+    await auxiliarSelect(data.relacio_parentiu ?? 0, 'relacions_parentiu', 'relacio_parentiu', 'relacio_parentiu');
     await auxiliarSelect(data.idParent ?? 0, 'llistat_complert_represaliats', 'idParent', 'nom_complert');
   } else {
     // ——— CREAR
