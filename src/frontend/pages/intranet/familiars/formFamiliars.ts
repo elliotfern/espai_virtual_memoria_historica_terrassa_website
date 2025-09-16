@@ -137,9 +137,6 @@ export async function formFamiliars(isUpdate: boolean, idParent?: number, id?: n
           // vuelves a repintar selects / campos
           await auxiliarSelect(fitxa.relacio_parentiu ?? 0, 'relacions_parentiu', 'relacio_parentiu', 'relacio_parentiu');
           await auxiliarSelect(fitxa.idRepresaliat ?? 0, 'llistat_complert_represaliats', 'idParent', 'nom_complert');
-
-          // (opcional) volver a renderizar inputs si tu helper lo soporta
-          renderFormInputs(fitxa);
         } catch (err) {
           console.error('Error re-cargando fitxa després de POST', err);
         }
