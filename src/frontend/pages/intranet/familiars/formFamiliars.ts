@@ -40,7 +40,7 @@ type ApiResponse2<T> = {
   data: T;
 };
 
-export async function formFamiliars(isUpdate: boolean, id?: number) {
+export async function formFamiliars(isUpdate: boolean, idParent?: number, id?: number) {
   const divTitol = document.getElementById('titolForm') as HTMLDivElement;
   const btnUsuari = document.getElementById('btnFamiliars') as HTMLButtonElement;
   const usuariForm = document.getElementById('familiarForm');
@@ -73,8 +73,8 @@ export async function formFamiliars(isUpdate: boolean, id?: number) {
   } else {
     // ——— CREAR
     // Si viene un id de represaliat, precargamos su ficha básica
-    if (id) {
-      const res = await fetchDataGet<ApiResponse2<Fitxa[]>>(API_URLS.GET.REPRESALIAT_ID(id), true);
+    if (idParent) {
+      const res = await fetchDataGet<ApiResponse2<Fitxa[]>>(API_URLS.GET.REPRESALIAT_ID(idParent), true);
       const fitxa = res?.data?.[0];
       if (!fitxa) {
         divTitol.innerHTML = `<h2>Relació de dades familiars: /h2><p>No s'han trobat dades de la fitxa.</p>`;
@@ -109,6 +109,6 @@ export async function formFamiliars(isUpdate: boolean, id?: number) {
     // Llenar selects con opciones
 
     await auxiliarSelect(data.relacio_parantiu ?? 0, 'relacions_parentiu', 'relacio_parentiu', 'relacio_parentiu');
-    await auxiliarSelect(data.idParent_old ?? 0, 'llistat_complert_represaliats', 'idParent', 'nom_complert');
+    await auxiliarSelect(data.idParent_old ?? data.idRepresaliat, 'llistat_complert_represaliats', 'idParent', 'nom_complert');
   }
 }

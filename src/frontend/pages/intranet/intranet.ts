@@ -29,7 +29,6 @@ export function intranet() {
     fontsDocumentals();
   } else if (pageType[1] === 'biografies') {
     const idPersona = Number.parseInt(pageType?.[3] ?? '', 10);
-
     if (pageType[2] === 'nova-biografia') {
       formBiografies(false, idPersona);
     } else if (pageType[2] === 'modifica-biografia') {
@@ -37,10 +36,12 @@ export function intranet() {
     }
   } else if (pageType[1] === 'familiars') {
     const idPersona = Number.parseInt(pageType?.[3] ?? '', 10);
+    const id = Number.parseInt(pageType?.[4] ?? '', 10);
+
     if (pageType[2] === 'nou-familiar') {
       formFamiliars(false, idPersona);
     } else if (pageType[2] === 'modifica-familiar') {
-      formFamiliars(true, idPersona);
+      formFamiliars(true, idPersona, id);
     }
   }
 }
