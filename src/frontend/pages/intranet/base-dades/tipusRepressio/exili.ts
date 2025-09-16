@@ -2,6 +2,7 @@ import { fetchDataGet } from '../../../../services/fetchData/fetchDataGet';
 import { auxiliarSelect } from '../../../../services/fetchData/auxiliarSelect';
 import { renderFormInputs } from '../../../../services/fetchData/renderInputsForm';
 import { transmissioDadesDB } from '../../../../services/fetchData/transmissioDades';
+import { wireForm } from '../../../../helpers/transmissioHelper';
 
 interface Fitxa {
   [key: string]: unknown;
@@ -110,8 +111,13 @@ export async function exili(idRepresaliat: number) {
 
     const exiliatForm = document.getElementById('exiliatForm');
     if (exiliatForm) {
-      exiliatForm.addEventListener('submit', function (event) {
-        transmissioDadesDB(event, 'POST', 'exiliatForm', '/api/exiliats/post', true);
+      // Ocultar el form en éxito y hacer scroll automático a #okMessage
+      wireForm({
+        formId: 'exiliatForm',
+        urlAjax: '/api/exiliats/post',
+        successBehavior: 'hide', // oculta el formulario
+        scrollOnSuccess: true, // opcional; ya se activa por defecto al usar 'hide'
+        //scrollOffset: 96,             // si tienes un header fijo alto
       });
     }
   } else {
