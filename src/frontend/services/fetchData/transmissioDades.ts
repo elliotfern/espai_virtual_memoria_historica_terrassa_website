@@ -37,6 +37,8 @@ export async function transmissioDadesDB(
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
+        'X-Requested-With': 'XMLHttpRequest',
+        'User-Agent': 'Mozilla/5.0 (WebApp MemoriaTerrassa)',
       },
       body: jsonData,
     });

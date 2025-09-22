@@ -49,7 +49,7 @@ if ($slug === "fitxaFamiliars") {
 
     try {
         $params = [':idParent' => $id];
-        $result = $db->getData($query, $params, true);
+        $result = $db->getData($query, $params, false);
 
         if (empty($result)) {
             Response::error(
