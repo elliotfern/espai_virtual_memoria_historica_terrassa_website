@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
 if ($slug === "exiliats") {
     $db = new Database();
 
-    $query = "SELECT a.id, CONCAT(a.cognom1, ' ', a.cognom2, ', ', a.nom) AS nom_complet, a.data_naixement, a.data_defuncio, a.slug,
+    $query = "SELECT a.id, CONCAT(a.cognom1, ' ', a.cognom2, ', ', a.nom) AS nom_complet, a.data_naixement, a.data_defuncio, a.slug, a.categoria,
                 CASE WHEN e.id IS NOT NULL THEN 'Fitxa creada' ELSE 'No' END AS es_exiliat
                 FROM db_dades_personals AS a
                 LEFT JOIN db_exiliats AS e ON a.id = e.idPersona
@@ -67,7 +67,7 @@ if ($slug === "exiliats") {
 } else if ($slug === "deportats") {
     $db = new Database();
 
-    $query = "SELECT a.id, CONCAT(a.cognom1, ' ', a.cognom2, ', ', a.nom) AS nom_complet, a.data_naixement, a.data_defuncio, a.slug,
+    $query = "SELECT a.id, CONCAT(a.cognom1, ' ', a.cognom2, ', ', a.nom) AS nom_complet, a.data_naixement, a.data_defuncio, a.slug, a.categoria,
                 CASE WHEN e.id IS NOT NULL THEN 'Fitxa creada' ELSE 'No' END AS es_deportat
                 FROM db_dades_personals AS a
                 LEFT JOIN db_deportats AS e ON a.id = e.idPersona
@@ -166,7 +166,7 @@ ORDER BY t.cognom1, t.cognom2, t.nom;";
 } else if ($slug === 'mortsFront') {
     $db = new Database();
 
-    $query = "SELECT a.id, CONCAT(a.cognom1, ' ', a.cognom2, ', ', a.nom) AS nom_complet, a.data_naixement, a.data_defuncio, a.slug,
+    $query = "SELECT a.id, CONCAT(a.cognom1, ' ', a.cognom2, ', ', a.nom) AS nom_complet, a.data_naixement, a.data_defuncio, a.slug, a.categoria,
                 CASE WHEN e.id IS NOT NULL THEN 'Fitxa creada' ELSE 'No' END AS es_mortFront
                 FROM db_dades_personals AS a
                 LEFT JOIN db_cost_huma_morts_front AS e ON a.id = e.idPersona
@@ -203,7 +203,7 @@ ORDER BY t.cognom1, t.cognom2, t.nom;";
 } else if ($slug === 'mortsCivils') {
     $db = new Database();
 
-    $query = "SELECT a.id, CONCAT(a.cognom1, ' ', a.cognom2, ', ', a.nom) AS nom_complet, a.data_naixement, a.data_defuncio, a.slug,
+    $query = "SELECT a.id, CONCAT(a.cognom1, ' ', a.cognom2, ', ', a.nom) AS nom_complet, a.data_naixement, a.data_defuncio, a.slug, a.categoria,
                 CASE WHEN e.id IS NOT NULL THEN 'Fitxa creada' ELSE 'No' END AS es_mortCivil
                 FROM db_dades_personals AS a
                 LEFT JOIN db_cost_huma_morts_civils AS e ON a.id = e.idPersona
@@ -240,7 +240,7 @@ ORDER BY t.cognom1, t.cognom2, t.nom;";
 } else if ($slug === 'represaliaRepublicana') {
     $db = new Database();
 
-    $query = "SELECT a.id, CONCAT(a.cognom1, ' ', a.cognom2, ', ', a.nom) AS nom_complet, a.data_naixement, a.data_defuncio, a.slug,
+    $query = "SELECT a.id, CONCAT(a.cognom1, ' ', a.cognom2, ', ', a.nom) AS nom_complet, a.data_naixement, a.data_defuncio, a.slug, a.categoria,
                 CASE WHEN e.id IS NOT NULL THEN 'Fitxa creada' ELSE 'No' END AS es_represalia
                 FROM db_dades_personals AS a
                 LEFT JOIN db_cost_huma_morts_civils AS e ON a.id = e.idPersona
@@ -277,7 +277,7 @@ ORDER BY t.cognom1, t.cognom2, t.nom;";
 } else if ($slug === 'processats') {
     $db = new Database();
 
-    $query = "SELECT a.id, CONCAT(a.cognom1, ' ', a.cognom2, ', ', a.nom) AS nom_complet, a.data_naixement, a.data_defuncio, a.slug,
+    $query = "SELECT a.id, CONCAT(a.cognom1, ' ', a.cognom2, ', ', a.nom) AS nom_complet, a.data_naixement, a.data_defuncio, a.slug, a.categoria,
                 CASE WHEN e.id IS NOT NULL THEN 'Fitxa creada' ELSE 'No' END AS es_processat
                 FROM db_dades_personals AS a
                 LEFT JOIN db_processats AS e ON a.id = e.idPersona
@@ -314,7 +314,7 @@ ORDER BY t.cognom1, t.cognom2, t.nom;";
 } else if ($slug === 'afusellats') {
     $db = new Database();
 
-    $query = "SELECT a.id, CONCAT(a.cognom1, ' ', a.cognom2, ', ', a.nom) AS nom_complet, a.data_naixement, a.data_defuncio, a.slug,
+    $query = "SELECT a.id, CONCAT(a.cognom1, ' ', a.cognom2, ', ', a.nom) AS nom_complet, a.data_naixement, a.data_defuncio, a.slug, a.categoria,
                 CASE WHEN e.id IS NOT NULL THEN 'Fitxa creada' ELSE 'No' END AS es_afusellat
                 FROM db_dades_personals AS a
                 LEFT JOIN db_afusellats AS e ON a.id = e.idPersona
@@ -874,7 +874,7 @@ ORDER BY t.cognom1, t.cognom2, t.nom;";
 } else if ($slug === 'detingutsPresoModel') {
     $db = new Database();
 
-    $query = "SELECT a.id, CONCAT(a.cognom1, ' ', a.cognom2, ', ', a.nom) AS nom_complet, a.data_naixement, a.data_defuncio, a.slug,
+    $query = "SELECT a.id, CONCAT(a.cognom1, ' ', a.cognom2, ', ', a.nom) AS nom_complet, a.data_naixement, a.data_defuncio, a.categoria, a.slug,
                 CASE WHEN e.id IS NOT NULL THEN 'Fitxa creada' ELSE 'No' END AS es_PresoModel
                 FROM db_dades_personals AS a
                 LEFT JOIN db_detinguts_model AS e ON a.id = e.idPersona
@@ -950,11 +950,7 @@ ORDER BY t.cognom1, t.cognom2, t.nom;";
     $db = new Database();
 
     $query = "SELECT 
-                a.id, 
-                CONCAT(a.cognom1, ' ', a.cognom2, ', ', a.nom) AS nom_complet,
-                a.observacions_internes,
-               a.categoria,
-               a.slug
+                a.id, CONCAT(a.cognom1, ' ', a.cognom2, ', ', a.nom) AS nom_complet, a.observacions_internes, a.categoria, a.slug
                 FROM db_dades_personals AS a
                 WHERE completat = 3
                 ORDER BY a.cognom1 ASC;";
