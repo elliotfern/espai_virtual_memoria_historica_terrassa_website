@@ -37,7 +37,7 @@ export async function taulaPresoModel() {
 
   const dictRaw: Category[] = await categoriesRepressio('ca');
   const labelById = buildLabelById(dictRaw);
-  const presoModelLabel = labelById(6);
+  const presoModelLabel = labelById(13);
 
   const blobUrl = await explodeSetToBlobUrl<EspaiRow, 'categoria_button_label'>({
     url: API_URLS.GET.LLISTAT_PRESO_MODEL,
@@ -127,7 +127,7 @@ export async function taulaPresoModel() {
     columns,
     filterKeys: ['nom_complet'],
     filterByField: 'categoria_button_label',
-    initialFilterValue: presoModelLabel, // 👈 arranca mostrando solo {6}
+    initialFilterValue: presoModelLabel,
   });
 
   // revoca el blob para liberar memoria (ya fue “fetched” por el renderer)

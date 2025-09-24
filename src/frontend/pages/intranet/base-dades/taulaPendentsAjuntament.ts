@@ -37,6 +37,7 @@ export async function taulaPendentsAjuntament(): Promise<void> {
 
   const dictRaw: Category[] = await categoriesRepressio('ca');
   const labelById = buildLabelById(dictRaw);
+  const pendentsLabel = labelById(11);
 
   const blobUrl = await explodeSetToBlobUrl<EspaiRow, 'categoria_button_label'>({
     url: API_URLS.GET.LLISTAT_PENDENTS_AJUNTAMENT,
@@ -122,6 +123,7 @@ export async function taulaPendentsAjuntament(): Promise<void> {
     columns,
     filterKeys: ['nom_complet'],
     filterByField: 'categoria_button_label',
+    initialFilterValue: pendentsLabel,
   });
 
   // revoca el blob para liberar memoria (ya fue “fetched” por el renderer)
