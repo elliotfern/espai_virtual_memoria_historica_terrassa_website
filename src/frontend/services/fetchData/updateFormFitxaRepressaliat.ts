@@ -78,8 +78,8 @@ export async function enviarDadesFormFitxaRepressaliat(event: Event, method: 'PO
             btnPost.style.display = '';
             btnTabs.style.display = 'none';
 
-            const id = String(data.id ?? '');
-            const slug = String(data.slug ?? formData['slug'] ?? '');
+            const id = String(data.data?.id ?? '');
+            const slug = String(data.data?.slug ?? formData['slug'] ?? '');
 
             // Si falta algo crítico, mostramos aviso rápido
             if (!id || !slug) {
