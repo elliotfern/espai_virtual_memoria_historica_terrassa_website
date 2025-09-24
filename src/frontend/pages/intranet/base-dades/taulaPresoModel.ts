@@ -7,6 +7,7 @@ import { getIsLogged } from '../../../services/auth/getIsLogged';
 import { formatDatesForm } from '../../../services/formatDates/dates';
 import { buildLabelById, explodeSetToBlobUrl } from '../../../services/fetchData/categories';
 import { categoriesRepressio } from '../../../components/taulaDades/categoriesRepressio';
+import { traduirCategoriesRepressio } from '../../../components/taulaDades/traduirCategoriesRepressio';
 
 type Category = { id: number; name: string };
 
@@ -36,6 +37,7 @@ export async function taulaPresoModel() {
 
   const dictRaw: Category[] = await categoriesRepressio('ca');
   const labelById = buildLabelById(dictRaw);
+  const presoModelLabel = labelById(6);
 
   const blobUrl = await explodeSetToBlobUrl<EspaiRow, 'categoria_button_label'>({
     url: API_URLS.GET.LLISTAT_PRESO_MODEL,
@@ -75,7 +77,15 @@ export async function taulaPresoModel() {
         }
       },
     },
-    { header: 'Fitxa presó model creada', field: 'es_PresoModel' },
+    { header: 'Fitxa', field: 'es_PresoModel' },
+    {
+      header: 'Categoria',
+      field: 'id',
+      render: (_value, row) => {
+        void _value;
+        return traduirCategoriesRepressio(row.categoria, dictRaw);
+      },
+    },
   ];
 
   if (isAdmin || isAutor || isLogged) {
@@ -117,6 +127,7 @@ export async function taulaPresoModel() {
     columns,
     filterKeys: ['nom_complet'],
     filterByField: 'categoria_button_label',
+    initialFilterValue: presoModelLabel, // 👈 arranca mostrando solo {6}
   });
 
   // revoca el blob para liberar memoria (ya fue “fetched” por el renderer)

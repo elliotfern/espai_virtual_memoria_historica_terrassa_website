@@ -13,3 +13,10 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
         </div>
     </div>
 </div>
+
+<style>
+    /* Oculta el primer botón (Tots) */
+    .filter-buttons .filter-btn:first-child {
+        display: none;
+    }
+</style>

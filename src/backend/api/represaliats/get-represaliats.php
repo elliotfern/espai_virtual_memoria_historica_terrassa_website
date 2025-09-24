@@ -879,6 +879,7 @@ ORDER BY t.cognom1, t.cognom2, t.nom;";
                 FROM db_dades_personals AS a
                 LEFT JOIN db_detinguts_model AS e ON a.id = e.idPersona
                 WHERE FIND_IN_SET('12', REPLACE(REPLACE(a.categoria, '{', ''), '}', '')) > 0
+                GROUP BY a.id
                 ORDER BY a.cognom1 ASC;";
 
     try {
