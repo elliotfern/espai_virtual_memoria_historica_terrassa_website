@@ -45,7 +45,7 @@ if ($pagina === "modifica-fitxa") {
 
   <div id="btnPost"></div>
 
-  <div class="tab">
+  <div class="tab" id="btnTabs">
     <button class="tablinks" data-tab="tab1">Categoria repressió</button>
     <button class="tablinks" data-tab="tab2">Dades personals</button>
     <button class="tablinks" data-tab="tab3">Dades familiars</button>
@@ -60,6 +60,7 @@ if ($pagina === "modifica-fitxa") {
   </div>
 
   <form id="formFitxaRepressaliat">
+
     <input type="hidden" name="id" id="id" value="">
     <div id="tab1" class="tabcontent">
       <div class="row">

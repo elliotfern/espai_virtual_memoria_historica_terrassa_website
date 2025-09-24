@@ -71,10 +71,12 @@ export async function enviarDadesFormFitxaRepressaliat(event: Event, method: 'PO
 
           // 2) Pintar botones dentro de #btnPost
           const btnPost = document.getElementById('btnPost');
-          if (btnPost) {
+          const btnTabs = document.getElementById('btnTabs');
+          if (btnPost && btnTabs) {
             // limpiar y mostrar el contenedor
             btnPost.innerHTML = '';
             btnPost.style.display = '';
+            btnTabs.style.display = 'none';
 
             const id = String(data.id ?? '');
             const slug = String(data.slug ?? formData['slug'] ?? '');
