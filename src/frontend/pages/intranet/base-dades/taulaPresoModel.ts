@@ -37,7 +37,7 @@ export async function taulaPresoModel() {
 
   const dictRaw: Category[] = await categoriesRepressio('ca');
   const labelById = buildLabelById(dictRaw);
-  const presoModelLabel = labelById(13);
+  const presoModelLabel = labelById(12);
 
   const blobUrl = await explodeSetToBlobUrl<EspaiRow, 'categoria_button_label'>({
     url: API_URLS.GET.LLISTAT_PRESO_MODEL,
