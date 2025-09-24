@@ -66,7 +66,6 @@ export async function taulaPendentsAjuntament() {
       field: 'id',
       render: (_: unknown, row: EspaiRow) => `${traduirCategoriesRepressio(row.categoria, colectiusRepressio)}`,
     },
-    { header: 'Fitxa creada', field: 'es_PresoModel' },
   ];
 
   if (isAdmin || isAutor || isLogged) {
@@ -74,14 +73,6 @@ export async function taulaPendentsAjuntament() {
       header: 'Accions',
       field: 'id',
       render: (_: unknown, row: EspaiRow) => `<a id="${row.id}" title="Modifica" target="_blank" href="https://${window.location.hostname}/gestio/base-dades/modifica-fitxa/${row.id}"><button type="button" class="btn btn-success btn-sm">Modifica Dades personals</button></a>`,
-    });
-  }
-
-  if (isAdmin || isAutor || isLogged) {
-    columns.push({
-      header: 'Accions',
-      field: 'id',
-      render: (_: unknown, row: EspaiRow) => `<a id="${row.id}" title="Modifica" target="_blank" href="https://${window.location.hostname}/gestio/base-dades/modifica-repressio/6/${row.id}"><button type="button" class="btn btn-warning btn-sm">Modifica repressio</button></a>`,
     });
   }
 

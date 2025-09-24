@@ -914,7 +914,7 @@ ORDER BY t.cognom1, t.cognom2, t.nom;";
     $query = "SELECT a.id, CONCAT(a.cognom1, ' ', a.cognom2, ', ', a.nom) AS nom_complet, a.data_naixement, a.data_defuncio, a.categoria
                 FROM db_dades_personals AS a
                 WHERE FIND_IN_SET(
-                    '12',
+                    '11',
                     REPLACE(REPLACE(REPLACE(a.categoria, '{',''), '}', ''), ' ', '')
                     ) > 0
                 ORDER BY a.cognom1 ASC;";
