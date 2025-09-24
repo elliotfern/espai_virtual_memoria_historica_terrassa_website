@@ -53,22 +53,34 @@ export async function taulaPendentsAjuntament(): Promise<void> {
     {
       header: 'Nom i cognoms',
       field: 'id',
-      render: (_: RowExploded[keyof RowExploded], row: RowExploded) => `<a id="${row.id}" title="Fitxa" href="https://${window.location.hostname}/fitxa/${row.slug}" target="_blank">${row.nom_complet}</a>`,
+      render: (_value, row) => {
+        void _value; // evita no-used-vars
+        return `<a id="${row.id}" title="Fitxa" href="https://${window.location.hostname}/fitxa/${row.slug}" target="_blank">${row.nom_complet}</a>`;
+      },
     },
     {
       header: 'Data naixement',
       field: 'id',
-      render: (_: RowExploded[keyof RowExploded], row: RowExploded) => (row.data_naixement && row.data_naixement !== '0000-00-00' ? formatDatesForm(row.data_naixement) ?? '' : ''),
+      render: (_value, row) => {
+        void _value;
+        return row.data_naixement && row.data_naixement !== '0000-00-00' ? formatDatesForm(row.data_naixement) ?? '' : '';
+      },
     },
     {
       header: 'Data defunció',
       field: 'id',
-      render: (_: RowExploded[keyof RowExploded], row: RowExploded) => (row.data_defuncio && row.data_defuncio !== '0000-00-00' ? formatDatesForm(row.data_defuncio) ?? '' : ''),
+      render: (_value, row) => {
+        void _value;
+        return row.data_defuncio && row.data_defuncio !== '0000-00-00' ? formatDatesForm(row.data_defuncio) ?? '' : '';
+      },
     },
     {
       header: 'Categoria',
       field: 'id',
-      render: (_: RowExploded[keyof RowExploded], row: RowExploded) => traduirCategoriesRepressio(row.categoria, dictRaw),
+      render: (_value, row) => {
+        void _value;
+        return traduirCategoriesRepressio(row.categoria, dictRaw);
+      },
     },
   ];
 
@@ -76,10 +88,12 @@ export async function taulaPendentsAjuntament(): Promise<void> {
     columns.push({
       header: 'Accions',
       field: 'id',
-      render: (_: RowExploded[keyof RowExploded], row: RowExploded) =>
-        `<a id="${row.id}" title="Modifica" target="_blank" href="https://${window.location.hostname}/gestio/base-dades/modifica-fitxa/${row.id}">
+      render: (_value, row) => {
+        void _value;
+        return `<a id="${row.id}" title="Modifica" target="_blank" href="https://${window.location.hostname}/gestio/base-dades/modifica-fitxa/${row.id}">
            <button type="button" class="btn btn-success btn-sm">Modifica Dades personals</button>
-         </a>`,
+         </a>`;
+      },
     });
   }
 

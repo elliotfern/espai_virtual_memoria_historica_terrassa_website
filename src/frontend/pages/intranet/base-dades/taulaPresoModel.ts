@@ -5,6 +5,10 @@ import { getIsAdmin } from '../../../services/auth/getIsAdmin';
 import { getIsAutor } from '../../../services/auth/getIsAutor';
 import { getIsLogged } from '../../../services/auth/getIsLogged';
 import { formatDatesForm } from '../../../services/formatDates/dates';
+import { buildLabelById, explodeSetToBlobUrl } from '../../../services/fetchData/categories';
+import { categoriesRepressio } from '../../../components/taulaDades/categoriesRepressio';
+
+type Category = { id: number; name: string };
 
 interface EspaiRow {
   id: number;
@@ -30,7 +34,20 @@ export async function taulaPresoModel() {
   const isLogged = await getIsLogged();
   const reloadKey = 'reload-taula-taulaLlistatPresoModel';
 
-  const columns: Column<EspaiRow>[] = [
+  const dictRaw: Category[] = await categoriesRepressio('ca');
+  const labelById = buildLabelById(dictRaw);
+
+  const blobUrl = await explodeSetToBlobUrl<EspaiRow, 'categoria_button_label'>({
+    url: API_URLS.GET.LLISTAT_PRESO_MODEL,
+    setField: 'categoria',
+    labelById,
+    targetField: 'categoria_button_label',
+    includeEmpty: true,
+  });
+
+  type RowExploded = EspaiRow & { categoria_button_label: string };
+
+  const columns: Column<RowExploded>[] = [
     { header: 'ID', field: 'id' },
     { header: 'Nom i cognoms', field: 'id', render: (_: unknown, row: EspaiRow) => `<a id="${row.id}" title="Fitxa" href="https://${window.location.hostname}/fitxa/${row.slug}" target="_blank">${row.nom_complet}</a>` },
     {
@@ -94,13 +111,16 @@ export async function taulaPresoModel() {
     });
   }
 
-  renderTaulaCercadorFiltres<EspaiRow>({
-    url: API_URLS.GET.LLISTAT_PRESO_MODEL,
+  await renderTaulaCercadorFiltres<RowExploded>({
+    url: blobUrl,
     containerId: 'taulaLlistatPresoModel',
     columns,
     filterKeys: ['nom_complet'],
-    filterByField: 'es_PresoModel',
+    filterByField: 'categoria_button_label',
   });
+
+  // revoca el blob para liberar memoria (ya fue “fetched” por el renderer)
+  URL.revokeObjectURL(blobUrl);
 
   // Registra el callback con una clave única
   registerDeleteCallback(reloadKey, () => taulaPresoModel());
