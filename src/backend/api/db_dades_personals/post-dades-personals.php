@@ -275,7 +275,7 @@ try {
     // Respuesta de éxito
     Response::success(
         MissatgesAPI::success('create'),
-        ['id' => $id],
+        ['id' => $id, 'slug' => $slug],
         200
     );
 } catch (PDOException $e) {

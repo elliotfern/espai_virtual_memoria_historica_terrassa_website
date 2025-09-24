@@ -21,15 +21,6 @@ if ($pagina === "modifica-fitxa") {
 
 <div class="container" style="margin-bottom:50px;border: 1px solid gray;border-radius: 10px;padding:25px;background-color:#eaeaea">
 
-  <div class="alert alert-success" role="alert" id="okMessage" style="display:none">
-    <div id="okText"></div>
-  </div>
-
-  <div class="alert alert-danger" role="alert" id="errMessage" style="display:none">
-
-    <div id="errText"></div>
-  </div>
-
   <?php if ($modificaBtn === 1) { ?>
     <h2 id="fitxaNomCognoms"></h2>
   <?php } else { ?>
@@ -42,6 +33,17 @@ if ($pagina === "modifica-fitxa") {
     <?php endif; ?>
 
   <?php } ?>
+
+  <div class="alert alert-success" role="alert" id="okMessage" style="display:none">
+    <div id="okText"></div>
+  </div>
+
+  <div class="alert alert-danger" role="alert" id="errMessage" style="display:none">
+
+    <div id="errText"></div>
+  </div>
+
+  <div id="btnPost"></div>
 
   <div class="tab">
     <button class="tablinks" data-tab="tab1">Categoria repressió</button>

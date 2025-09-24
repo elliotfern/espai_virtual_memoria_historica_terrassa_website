@@ -240,6 +240,17 @@ $routes = [
 
     // SITEMAP
     '/api/sitemaps/ca' => ['view' => 'src/backend/api/sitemaps/sitemap-ca.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+
+    // SCRIPT PHP
+    '/api/script-processats' => ['view' => 'src/backend/api/script/import-processats.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+
+    '/api/script-model' => ['view' => 'src/backend/api/script/import-model.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+
+    '/api/script/guardia-urbana' => ['view' => 'src/backend/api/script/import-guardia-urbana.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+
+    '/api/script/responsabilitats' => ['view' => 'src/backend/api/script/import-responsabilitats.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+
+    '/api/script/test' => ['view' => 'src/backend/api/script/test.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
 ];
 
 return $routes;
