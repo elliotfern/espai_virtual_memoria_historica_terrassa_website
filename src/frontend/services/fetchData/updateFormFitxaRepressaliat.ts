@@ -85,7 +85,7 @@ export async function enviarDadesFormFitxaRepressaliat(event: Event, method: 'PO
             if (!id || !slug) {
               const warn = document.createElement('div');
               warn.className = 'alert alert-warning mb-3';
-              warn.textContent = 'Creació completada, però no s’ha pogut obtenir id/slug per generar els enllaços.';
+              warn.textContent = "Creació completada, però no s'ha pogut obtenir id/slug per generar els enllaços.";
               btnPost.appendChild(warn);
             } else {
               const group = document.createElement('div');
@@ -101,8 +101,32 @@ export async function enviarDadesFormFitxaRepressaliat(event: Event, method: 'PO
               btnVeure.textContent = 'Veure fitxa';
               btnVeure.className = 'btn btn-secondary';
 
+              // 3) Botón "Introduir nova fitxa"
+              const btnNova = document.createElement('button');
+              btnNova.type = 'button';
+              btnNova.textContent = 'Introduir nova fitxa';
+              btnNova.className = 'btn btn-outline-success';
+              btnNova.addEventListener('click', () => {
+                // Opcional: resetear el formulario para empezar limpio
+                if (formId) resetForm(formId);
+
+                // Mostrar de nuevo formulario y pestañas
+                form.style.display = '';
+                if (btnTabs) btnTabs.style.display = '';
+
+                // Ocultar/limpiar contenedor de botones
+                btnPost.innerHTML = '';
+                btnPost.style.display = 'none';
+
+                // Llevar foco al primer campo y hacer scroll
+                const firstInput = form.querySelector<HTMLElement>('input, select, textarea, [contenteditable="true"]');
+                firstInput?.focus();
+                form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              });
+
               group.appendChild(btnModifica);
               group.appendChild(btnVeure);
+              group.appendChild(btnNova);
               btnPost.appendChild(group);
             }
           }
