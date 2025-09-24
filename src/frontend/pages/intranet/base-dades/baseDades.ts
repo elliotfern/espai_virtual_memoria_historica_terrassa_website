@@ -20,6 +20,7 @@ import { formcomiteSolidaritat } from './tipusRepressio/comiteSolidaritat';
 import { formcomiteRelacionsSolidaritat } from './tipusRepressio/comiteRelacionsSolidaritat';
 import { taulaRevisio } from './taulaRevisio';
 import { taulaRevisioGeolocalitzacio } from './taulaRevisioGeolocalitzacio';
+import { taulaPendentsAjuntament } from './taulaPendentsAjuntament';
 
 export function baseDadesIntranet() {
   const url = window.location.href;
@@ -90,6 +91,8 @@ export function baseDadesIntranet() {
       taulaAfusellats();
     } else if (sub === 'llistat-preso-model') {
       taulaPresoModel();
+    } else if (sub === 'llistat-pendents') {
+      taulaPendentsAjuntament();
     }
     return;
   }

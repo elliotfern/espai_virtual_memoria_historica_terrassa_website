@@ -88,6 +88,10 @@ $routes = [
         'view' => BACKEND_URL . $urlIntranetDir['base_dades'] . '/3_llistat-preso-model.php'
     ]),
 
+    APP_INTRANET . '/base-dades/represaliats/llistat-pendents' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['base_dades'] . '/3_llistat-pendents.php'
+    ]),
+
     // 01. Modificació dades de les fitxes
     APP_INTRANET . '/base-dades/modifica-fitxa/{id}' => array_merge($defaultProtectedConfig, [
         'view' => BACKEND_URL . $urlIntranetDir['base_dades'] . '/modifica_fitxa_persona.php'

@@ -906,6 +906,44 @@ ORDER BY t.cognom1, t.cognom2, t.nom;";
         );
     }
 
+    // GET : grup 1 - LListat Detinguts presó model
+    // URL: https://memoriaterrassa.cat/api/represaliats/get/pendentsAjuntament
+} else if ($slug === 'pendentsAjuntament') {
+    $db = new Database();
+
+    $query = "SELECT a.id, CONCAT(a.cognom1, ' ', a.cognom2, ', ', a.nom) AS nom_complet, a.data_naixement, a.data_defuncio, a.categoria
+                FROM db_dades_personals AS a
+                WHERE FIND_IN_SET(
+                    '12',
+                    REPLACE(REPLACE(REPLACE(a.categoria, '{',''), '}', ''), ' ', '')
+                    ) > 0
+                ORDER BY a.cognom1 ASC;";
+
+    try {
+        $result = $db->getData($query);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
     // GET : grup 1 - LListat casos cal revisio
     // URL: https://memoriaterrassa.cat/api/represaliats/get/llistatCasosRevisio
 } else if ($slug === 'llistatCasosRevisio') {

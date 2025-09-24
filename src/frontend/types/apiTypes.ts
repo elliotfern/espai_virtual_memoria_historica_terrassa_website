@@ -50,6 +50,7 @@ export type ApiUrls = {
     CAMP_CONCENTRACIO_ID: (id: number) => string;
     BIOGRAFIES_ID: (id: number) => string;
     REPRESALIAT_ID: (id: number) => string;
+    LLISTAT_PENDENTS_AJUNTAMENT: string;
   };
   POST: {
     MUNICIPI: string;
