@@ -36,21 +36,51 @@ export function baseDadesIntranet() {
   // Pagines
   if (section === 'general') {
     taulaPaginaTots();
+    if (sub === 'llistat-duplicats') {
+      taulaDuplicats();
+    } else if (sub === 'quadre-general') {
+      taulaQuadreGeneral();
+    } else if (sub === 'llistat-revisio') {
+      taulaRevisio();
+    } else if (sub === 'llistat-revisio-geolocalitzacio') {
+      taulaRevisioGeolocalitzacio();
+    }
     return;
   }
 
   if (section === 'represaliats') {
     taulaPaginaRepresaliats();
+    if (sub === 'llistat-processats') {
+      taulaProcessats();
+    } else if (sub === 'llistat-afusellats') {
+      taulaAfusellats();
+    } else if (sub === 'llistat-preso-model') {
+      taulaPresoModel();
+    } else if (sub === 'llistat-pendents') {
+      taulaPendentsAjuntament();
+    }
     return;
   }
 
   if (section === 'exiliats-deportats') {
     taulaPaginaExiliats();
+    if (sub === 'llistat-exiliats') {
+      taulaExiliats();
+    } else if (sub === 'llistat-deportats') {
+      taulaDeportats();
+    }
     return;
   }
 
   if (section === 'cost-huma') {
     taulaPaginaCostHuma();
+    if (sub === 'llistat-morts-al-front') {
+      taulaMortsFronts();
+    } else if (sub === 'llistat-morts-civils') {
+      taulaMortsCivils();
+    } else if (sub === 'llistat-represalia-republicana') {
+      taulaRepresaliaRepublicana();
+    }
     return;
   }
 
@@ -81,53 +111,6 @@ export function baseDadesIntranet() {
   }
   if (section === 'empresonaments-comite-relacions-solidaritat') {
     formcomiteRelacionsSolidaritat(Number(pageType[4]), Number(pageType[5]));
-    return;
-  }
-
-  // Subrutas específicas: pintan tablas/consultas concretas SIN volver a crear botones
-  if (section === 'general') {
-    if (sub === 'llistat-duplicats') {
-      taulaDuplicats();
-    } else if (sub === 'quadre-general') {
-      taulaQuadreGeneral();
-    } else if (sub === 'llistat-revisio') {
-      taulaRevisio();
-    } else if (sub === 'llistat-revisio-geolocalitzacio') {
-      taulaRevisioGeolocalitzacio();
-    }
-    return;
-  }
-
-  if (section === 'represaliats') {
-    if (sub === 'llistat-processats') {
-      taulaProcessats();
-    } else if (sub === 'llistat-afusellats') {
-      taulaAfusellats();
-    } else if (sub === 'llistat-preso-model') {
-      taulaPresoModel();
-    } else if (sub === 'llistat-pendents') {
-      taulaPendentsAjuntament();
-    }
-    return;
-  }
-
-  if (section === 'exiliats-deportats') {
-    if (sub === 'llistat-exiliats') {
-      taulaExiliats();
-    } else if (sub === 'llistat-deportats') {
-      taulaDeportats();
-    }
-    return;
-  }
-
-  if (section === 'cost-huma') {
-    if (sub === 'llistat-morts-al-front') {
-      taulaMortsFronts();
-    } else if (sub === 'llistat-morts-civils') {
-      taulaMortsCivils();
-    } else if (sub === 'llistat-represalia-republicana') {
-      taulaRepresaliaRepublicana();
-    }
     return;
   }
 }

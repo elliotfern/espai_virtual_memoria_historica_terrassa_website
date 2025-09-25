@@ -192,7 +192,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
     // ruta GET => "https://memoriaterrassa.cat/api/dades_personals/get/llistatRepresaliatsIntranet"
 } else if ($slug === 'llistatRepresaliatsIntranet') {
 
-    $query = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat, a.font_intern, a.visibilitat, a.slug
+    $query = "SELECT a.id, CONCAT(a.cognom1, ' ', a.cognom2, ', ', a.nom) AS nom_complet, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat, a.font_intern, a.visibilitat, a.slug
                 FROM db_dades_personals AS a
                 LEFT JOIN aux_dades_municipis AS e1 ON a.municipi_naixement = e1.id
                 LEFT JOIN aux_dades_municipis AS e2 ON a.municipi_defuncio = e2.id
@@ -231,7 +231,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
     // ruta GET => "https://memoriaterrassa.cat/api/dades_personals/get/llistatExiliatsIntranet"
 } else if ($slug === 'llistatExiliatsIntranet') {
 
-    $query = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat, a.font_intern, a.visibilitat, a.slug
+    $query = "SELECT a.id, CONCAT(a.cognom1, ' ', a.cognom2, ', ', a.nom) AS nom_complet, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat, a.font_intern, a.visibilitat, a.slug
                 FROM db_dades_personals AS a
                 LEFT JOIN aux_dades_municipis AS e1 ON a.municipi_naixement = e1.id
                 LEFT JOIN aux_dades_municipis AS e2 ON a.municipi_defuncio = e2.id
@@ -270,7 +270,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
     // ruta GET => "https://memoriaterrassa.cat/api/dades_personals/get/llistatCostHumaIntranet"
 } else if ($slug === 'llistatCostHumaIntranet') {
 
-    $query = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat, a.font_intern, a.visibilitat, a.slug
+    $query = "SELECT a.id,  CONCAT(a.cognom1, ' ', a.cognom2, ', ', a.nom) AS nom_complet, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat, a.font_intern, a.visibilitat, a.slug
                 FROM db_dades_personals AS a
                 LEFT JOIN aux_dades_municipis AS e1 ON a.municipi_naixement = e1.id
                 LEFT JOIN aux_dades_municipis AS e2 ON a.municipi_defuncio = e2.id
