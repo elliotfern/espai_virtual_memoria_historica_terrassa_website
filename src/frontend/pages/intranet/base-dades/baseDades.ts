@@ -84,23 +84,40 @@ export function baseDadesIntranet() {
   }
 
   if (section === 'exiliats-deportats') {
-    taulaPaginaExiliats();
-    if (sub === 'llistat-exiliats') {
-      taulaExiliats();
-    } else if (sub === 'llistat-deportats') {
-      taulaDeportats();
+    switch (sub) {
+      case null:
+        taulaPaginaExiliats();
+        break;
+      case 'llistat-exiliats':
+        taulaExiliats();
+        break;
+      case 'llistat-deportats':
+        taulaDeportats();
+        break;
+      default:
+        taulaPaginaExiliats(); // fallback sensato
+        break;
     }
     return;
   }
 
   if (section === 'cost-huma') {
-    taulaPaginaCostHuma();
-    if (sub === 'llistat-morts-al-front') {
-      taulaMortsFronts();
-    } else if (sub === 'llistat-morts-civils') {
-      taulaMortsCivils();
-    } else if (sub === 'llistat-represalia-republicana') {
-      taulaRepresaliaRepublicana();
+    switch (sub) {
+      case null:
+        taulaPaginaCostHuma();
+        break;
+      case 'llistat-morts-al-front':
+        taulaMortsFronts();
+        break;
+      case 'llistat-morts-civils':
+        taulaMortsCivils();
+        break;
+      case 'llistat-represalia-republicana':
+        taulaRepresaliaRepublicana();
+        break;
+      default:
+        taulaPaginaCostHuma(); // fallback sensato
+        break;
     }
     return;
   }
