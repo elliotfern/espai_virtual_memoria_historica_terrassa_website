@@ -1,7 +1,5 @@
 import { mostrarBotonsNomesAdmin } from '../../../components/mostrarBotoAdmin/mostrarBotoAdmin';
 import { getPageType } from '../../../services/url/splitUrl';
-import { cargarTabla } from '../../../components/taulaDades/taulaDades';
-import { botonsEstat } from '../../../components/taulaDades/botonsEstat';
 import { modificaFitxa } from '../../../components/modificaFitxaRepresaliat/modificaFitxa';
 import { formTipusRepressio } from './tipusRepressio/formTipusRepressio';
 import { taulaExiliats } from './taulaExiliats';
@@ -21,6 +19,8 @@ import { formcomiteRelacionsSolidaritat } from './tipusRepressio/comiteRelacions
 import { taulaRevisio } from './taulaRevisio';
 import { taulaRevisioGeolocalitzacio } from './taulaRevisioGeolocalitzacio';
 import { taulaPendentsAjuntament } from './taulaPendentsAjuntament';
+import { taulaPaginaTots } from './taulaPaginaTots';
+import { taulaPaginaRepresaliats } from './taulaPaginaRepresaliats';
 
 export function baseDadesIntranet() {
   const url = window.location.href;
@@ -30,6 +30,17 @@ export function baseDadesIntranet() {
   const sub = pageType[3]; // 'llistat-*' | 'quadre-general' | id | undefined
 
   mostrarBotonsNomesAdmin();
+
+  // Pagines
+  if (section === 'general') {
+    taulaPaginaTots();
+    return;
+  }
+
+  if (section === 'represaliats') {
+    taulaPaginaRepresaliats();
+    return;
+  }
 
   // Ramas “directas” que no son listados
   if (section === 'modifica-fitxa') {
@@ -60,15 +71,6 @@ export function baseDadesIntranet() {
     formcomiteRelacionsSolidaritat(Number(pageType[4]), Number(pageType[5]));
     return;
   }
-
-  // A partir de aquí, solo secciones de listados en INTRANET (context = 2)
-  // Llamamos UNA sola vez a los botones y al listado base de la sección
-  const context = 2;
-  botonsEstat(section);
-
-  // Valor por defecto para “completat” en intranet: 3 (totes)
-  // (ajústalo si quieres otro por defecto)
-  cargarTabla(section, context, 3);
 
   // Subrutas específicas: pintan tablas/consultas concretas SIN volver a crear botones
   if (section === 'general') {

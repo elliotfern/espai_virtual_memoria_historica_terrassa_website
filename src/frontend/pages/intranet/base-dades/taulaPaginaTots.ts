@@ -37,18 +37,18 @@ type Column<T> = {
   render?: (value: T[keyof T], row: T) => string;
 };
 
-export async function taulaPresoModel(): Promise<void> {
+export async function taulaPaginaTots(): Promise<void> {
   const isAdmin = await getIsAdmin();
   const isAutor = await getIsAutor();
   const isLogged = await getIsLogged();
-  const reloadKey = 'reload-taula-taulaLlistatPresoModel';
+  const reloadKey = 'reload-taula-represaliatsTable';
 
   // 1) Diccionario categorías
   const dictRaw: Category[] = await categoriesRepressio('ca');
   const labelById = buildLabelById(dictRaw);
 
   // 2) Carga de datos base
-  const res = await fetch(API_URLS.GET.LLISTAT_PRESO_MODEL);
+  const res = await fetch(API_URLS.GET.LLISTAT_REPRESALIATS_COMPLET_INTRANET);
   const json = await res.json();
   const base: EspaiRow[] = Array.isArray(json) ? (json as EspaiRow[]) : Array.isArray(json?.data) ? (json.data as EspaiRow[]) : json?.data ? [json.data as EspaiRow] : [];
 
@@ -132,16 +132,7 @@ export async function taulaPresoModel(): Promise<void> {
          </a>`,
     });
   }
-  if (isAdmin || isAutor || isLogged) {
-    columns.push({
-      header: 'Accions',
-      field: 'id',
-      render: (_value, row) =>
-        `<a id="${row.id}" title="Modifica" target="_blank" href="https://${window.location.hostname}/gestio/base-dades/modifica-repressio/12/${row.id}">
-           <button type="button" class="btn btn-warning btn-sm">Dades Presó</button>
-         </a>`,
-    });
-  }
+
   if (isAdmin) {
     columns.push({
       header: '',
@@ -158,15 +149,15 @@ export async function taulaPresoModel(): Promise<void> {
     });
   }
 
-  const presoModelLabel = labelById(12);
+  //const presoModelLabel = labelById(12);
 
   await renderWithSecondLevelFilters<RowExploded>({
-    containerId: 'taulaLlistatPresoModel',
+    containerId: 'represaliatsTable',
     data: baseExploded,
     columns,
     filterKeys: ['nom_complet'],
     firstLevelField: 'categoria_button_label',
-    initialFirstLevelValue: presoModelLabel,
+    //initialFirstLevelValue: presoModelLabel,
     statusField: 'completat',
     secondLevelTitle: 'Estat de les fitxes:',
     dedupeBy: (r) => r.id,
@@ -179,6 +170,6 @@ export async function taulaPresoModel(): Promise<void> {
     // },
   });
 
-  registerDeleteCallback(reloadKey, () => taulaPresoModel());
+  registerDeleteCallback(reloadKey, () => taulaPaginaTots());
   initDeleteHandlers();
 }

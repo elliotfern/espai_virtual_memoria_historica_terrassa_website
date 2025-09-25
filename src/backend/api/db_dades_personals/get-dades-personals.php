@@ -5,12 +5,14 @@ use App\Config\Database;
 use App\Utils\Response;
 use App\Utils\MissatgesAPI;
 
+$slug = $routeParams[0];
 $conn = DatabaseConnection::getConnection();
 
 if (!$conn) {
     die("No se pudo establecer conexión a la base de datos.");
 }
 
+$db = new Database();
 
 // Configuración de cabeceras para aceptar JSON y responder JSON
 header("Content-Type: application/json");
@@ -52,56 +54,40 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
     header("Content-Type: application/json");
     echo json_encode($row);  // Codifica la fila como un objeto JSON
 
-    // 2) Llistat complet represaliats (intranet) completades :dinamic
-    // ruta GET => "https://memoriaterrassa.cat/api/dades_personals/get/?type=llistatComplertIntranet&completat=3"
-} else if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertIntranet' && isset($_GET['completat'])) {
+    // 2) Llistat complet represaliats (intranet) - Pàgina general
+    // ruta GET => "https://memoriaterrassa.cat/api/dades_personals/get/llistatCompletIntranet"
+} else if ($slug === 'llistatCompletIntranet') {
 
-    // Verificamos si el parámetro 'completat' está presente
-    $completat = isset($_GET['completat']) ? $_GET['completat'] : null;
-
-    global $conn;
-    /** @var PDO $conn */
-
-    if ($completat === '3') {
-        // Caso especial: completat=3 significa completat IN (1, 2)
-        $query = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat, a.font_intern, a.visibilitat, a.slug
+    $query = "SELECT a.id, CONCAT(a.cognom1, ' ', a.cognom2, ', ', a.nom) AS nom_complet, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat, a.font_intern, a.visibilitat, a.slug
               FROM db_dades_personals AS a
               LEFT JOIN aux_dades_municipis AS e1 ON a.municipi_naixement = e1.id
               LEFT JOIN aux_dades_municipis AS e2 ON a.municipi_defuncio = e2.id
-              WHERE a.completat IN (1, 2)
               ORDER BY a.cognom1 ASC";
-        $stmt = $conn->prepare($query);
-        $stmt->execute();
-    } else if ($completat === '4') {
-        // Caso especial: completat=3 significa completat IN (1, 2)
-        $query = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat, a.font_intern, a.visibilitat, a.slug
-              FROM db_dades_personals AS a
-              LEFT JOIN aux_dades_municipis AS e1 ON a.municipi_naixement = e1.id
-              LEFT JOIN aux_dades_municipis AS e2 ON a.municipi_defuncio = e2.id
-              WHERE a.completat = 3
-              ORDER BY a.cognom1 ASC";
-        $stmt = $conn->prepare($query);
-        $stmt->execute();
-    } else {
-        // Caso normal: filtro por un solo valor
-        $query = "SELECT a.id, a.cognom1, a.cognom2, a.nom, a.data_naixement, a.data_defuncio, e1.ciutat, a.categoria, e2.ciutat AS ciutat2, a.completat, a.font_intern, a.visibilitat, a.slug
-              FROM db_dades_personals AS a
-              LEFT JOIN aux_dades_municipis AS e1 ON a.municipi_naixement = e1.id
-              LEFT JOIN aux_dades_municipis AS e2 ON a.municipi_defuncio = e2.id
-              WHERE a.completat = :completat
-              ORDER BY a.cognom1 ASC";
-        $stmt = $conn->prepare($query);
-        $stmt->bindParam(':completat', $completat, PDO::PARAM_INT);
-        $stmt->execute();
-    }
 
-    if ($stmt->rowCount() === 0) {
-        header("Content-Type: application/json");
-        echo json_encode(null);  // Devuelve un objeto JSON nulo si no hay resultados
-    } else {
-        $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        header("Content-Type: application/json");
-        echo json_encode($row);  // Codifica la fila como un objeto JSON
+    try {
+
+        $result = $db->getData($query);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
     }
 
     // 2) Llistat per categories de repressio (web publica, només mostrarem les fitxes completades 2 i amb visibilitat completada 2)

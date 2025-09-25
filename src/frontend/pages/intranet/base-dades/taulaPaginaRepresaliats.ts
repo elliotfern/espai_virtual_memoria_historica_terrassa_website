@@ -37,7 +37,7 @@ type Column<T> = {
   render?: (value: T[keyof T], row: T) => string;
 };
 
-export async function taulaPresoModel(): Promise<void> {
+export async function taulaPaginaRepresaliats(): Promise<void> {
   const isAdmin = await getIsAdmin();
   const isAutor = await getIsAutor();
   const isLogged = await getIsLogged();
@@ -179,6 +179,6 @@ export async function taulaPresoModel(): Promise<void> {
     // },
   });
 
-  registerDeleteCallback(reloadKey, () => taulaPresoModel());
+  registerDeleteCallback(reloadKey, () => taulaPaginaRepresaliats());
   initDeleteHandlers();
 }
