@@ -228,7 +228,7 @@ export async function renderWithSecondLevelFilters<T extends object>(opts: {
     for (const def of btns) {
       const btn = document.createElement('button');
       btn.type = 'button';
-      btn.className = `btn btn-sm ${def.bsClass} me-2 mb-2`;
+      btn.className = `btn ${def.bsClass} me-2 mb-2`;
       btn.textContent = def.label;
       if (def.key === currentKey) btn.classList.add('active');
       btn.addEventListener('click', () => {
