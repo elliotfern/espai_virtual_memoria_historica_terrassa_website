@@ -184,7 +184,7 @@ export async function renderWithSecondLevelFilters<T extends object>(opts: {
   function makeCategoryBtn(value: T[keyof T] | null, label: string): HTMLButtonElement {
     const btn = document.createElement('button');
     btn.type = 'button';
-    btn.className = 'btn btn-outline-secondary btn-sm me-2 mb-2 filter-btn';
+    btn.className = 'btn btn-outline-secondary me-2 mb-2 filter-btn';
     btn.textContent = label;
     const isActive = (value === null && currentCategory === null) || (value !== null && currentCategory === value);
     if (isActive) btn.classList.add('active');
