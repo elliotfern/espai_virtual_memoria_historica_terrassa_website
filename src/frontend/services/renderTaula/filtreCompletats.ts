@@ -8,19 +8,33 @@ type Column<T> = {
 };
 
 type StatusKey = 'tots' | 'completats' | 'revisio' | 'pendents';
+type NonTotsStatus = Exclude<StatusKey, 'tots'>;
 
 function toBlobUrl(payload: unknown): string {
   const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
   return URL.createObjectURL(blob);
 }
 
-function defaultMapRowToKey<T extends object>(row: T, statusField: keyof T): Exclude<StatusKey, 'tots'> {
+function defaultMapRowToKey<T extends object>(row: T, statusField: keyof T): NonTotsStatus {
   // Mapa estándar global: 1→pendents, 2→completats, 3→revisio
   const v = row[statusField];
   const n = typeof v === 'number' ? v : Number.parseInt(String(v ?? '').trim(), 10);
   if (n === 2) return 'completats';
   if (n === 3) return 'revisio';
   return 'pendents'; // por defecto 1 u otros/indefinido
+}
+
+function dedupeByKey<T>(arr: ReadonlyArray<T>, keyFn: (row: T) => PropertyKey): T[] {
+  const seen = new Set<PropertyKey>();
+  const out: T[] = [];
+  for (const r of arr) {
+    const k = keyFn(r);
+    if (!seen.has(k)) {
+      seen.add(k);
+      out.push(r);
+    }
+  }
+  return out;
 }
 
 export async function renderWithSecondLevelFilters<T extends object>(opts: {
@@ -34,7 +48,7 @@ export async function renderWithSecondLevelFilters<T extends object>(opts: {
   statusField?: keyof T;
 
   /** (Opcional) Mapeo propio si NO quieres usar el estándar del helper. */
-  mapRowToKey?: (row: T) => Exclude<StatusKey, 'tots'>;
+  mapRowToKey?: (row: T) => NonTotsStatus;
 
   /** (Opcional) Etiquetas personalizadas */
   labels?: Partial<Record<StatusKey, string>>;
@@ -44,13 +58,17 @@ export async function renderWithSecondLevelFilters<T extends object>(opts: {
   initialSearch?: string;
   initialPage?: number;
   secondLevelTitle?: string; // texto encima de los botones
+
+  /** Dedupe cuando el 1er nivel está en "Tots" */
+  dedupeBy?: (row: T) => PropertyKey; // clave para deduplicar (ej. r => r.id)
+  dedupeWhenFirstLevelAll?: boolean; // por defecto true
 }): Promise<void> {
   let currentKey: StatusKey = opts.initialKey ?? 'tots';
   let currentFirstLevel: T[keyof T] | null = opts.initialFirstLevelValue ?? null;
   let currentSearch = opts.initialSearch ?? '';
   let currentPage = opts.initialPage ?? 1;
 
-  const { containerId, firstLevelField, columns, filterKeys = [], data, statusField = 'completat' as keyof T, mapRowToKey, labels = {}, secondLevelTitle = 'Estat de les fitxes:' } = opts;
+  const { containerId, firstLevelField, columns, filterKeys = [], data, statusField = 'completat' as keyof T, mapRowToKey, labels = {}, secondLevelTitle = 'Estat de les fitxes:', dedupeBy, dedupeWhenFirstLevelAll = true } = opts;
 
   const labTots = labels.tots ?? 'Tots';
   const labCompletats = labels.completats ?? 'Completats (visibles al web)';
@@ -60,8 +78,22 @@ export async function renderWithSecondLevelFilters<T extends object>(opts: {
   const mapFn = mapRowToKey ? mapRowToKey : (row: T) => defaultMapRowToKey(row, statusField);
 
   const renderNow = async (): Promise<void> => {
-    const filtered = currentKey === 'tots' ? data : data.filter((row) => mapFn(row) === currentKey.replace(/^tots$/, ''));
+    // 1) Aplica 2º nivel (estado)
+    let filtered: ReadonlyArray<T>;
+    if (currentKey === 'tots') {
+      filtered = data;
+    } else {
+      const key = currentKey as NonTotsStatus;
+      filtered = data.filter((row) => mapFn(row) === key);
+    }
 
+    // 2) Si el 1er nivel está en "Tots", deduplicamos por la clave indicada
+    const isFirstLevelAll = currentFirstLevel === null || currentFirstLevel === undefined;
+    if (dedupeWhenFirstLevelAll && isFirstLevelAll && typeof dedupeBy === 'function') {
+      filtered = dedupeByKey(filtered, dedupeBy);
+    }
+
+    // 3) Render de la tabla
     const blobUrl = toBlobUrl({
       status: 'success' as const,
       message: 'OK',
@@ -82,6 +114,7 @@ export async function renderWithSecondLevelFilters<T extends object>(opts: {
 
     URL.revokeObjectURL(blobUrl);
 
+    // 4) Persistimos el estado del 1er nivel + search + página
     currentFirstLevel = (result.filter as T[keyof T] | null) ?? null;
     currentSearch = result.search ?? '';
     currentPage = result.page ?? 1;
@@ -120,8 +153,7 @@ export async function renderWithSecondLevelFilters<T extends object>(opts: {
     for (const def of btns) {
       const btn = document.createElement('button');
       btn.type = 'button';
-      // Bootstrap 5 spacing + variantes: se verán separados horizontalmente
-      btn.className = `btn ${def.bsClass} me-2 mb-2`;
+      btn.className = `btn btn-sm ${def.bsClass} me-2 mb-2`; // separación horizontal/vertical
       btn.textContent = def.label;
       if (def.key === currentKey) btn.classList.add('active');
       btn.addEventListener('click', () => {

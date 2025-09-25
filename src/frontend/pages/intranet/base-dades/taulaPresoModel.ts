@@ -158,14 +158,19 @@ export async function taulaPresoModel(): Promise<void> {
     });
   }
 
+  const presoModelLabel = labelById(6);
+
   await renderWithSecondLevelFilters<RowExploded>({
     containerId: 'taulaLlistatPresoModel',
     data: baseExploded,
     columns,
     filterKeys: ['nom_complet'],
     firstLevelField: 'categoria_button_label', // 1er nivel (categorías)
+    initialFirstLevelValue: presoModelLabel, // 👈 evita duplicados en el arranque
     statusField: 'completat', // usa el mapa estándar 1/2/3
     secondLevelTitle: 'Estat de les fitxes:', // título encima de los botones
+    dedupeBy: (r) => r.id, // 👈 clave única de persona
+    dedupeWhenFirstLevelAll: true, // 👈 por defecto true; explícitalo si quieres
     // labels: {                                   // (opcional) para personalizar textos
     //   tots: 'Mostrar Todos',
     //   completats: 'Completado',
