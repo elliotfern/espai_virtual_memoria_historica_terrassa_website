@@ -1,4 +1,4 @@
-// services/renderTaula/filtreCompletats.ts
+// services/renderTaula/withSecondLevelFilter.ts
 import { renderTaulaCercadorFiltres } from './renderTaulaCercadorFiltres';
 
 type Column<T> = {
@@ -7,36 +7,60 @@ type Column<T> = {
   render?: (value: T[keyof T], row: T) => string;
 };
 
-type SecondKey<K extends string> = 'tots' | K;
+type StatusKey = 'tots' | 'completats' | 'revisio' | 'pendents';
 
 function toBlobUrl(payload: unknown): string {
   const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
   return URL.createObjectURL(blob);
 }
 
-export async function renderWithSecondLevelFilters<T extends object, K extends string>(opts: {
+function defaultMapRowToKey<T extends object>(row: T, statusField: keyof T): Exclude<StatusKey, 'tots'> {
+  // Mapa estándar global: 1→pendents, 2→completats, 3→revisio
+  const v = row[statusField];
+  const n = typeof v === 'number' ? v : Number.parseInt(String(v ?? '').trim(), 10);
+  if (n === 2) return 'completats';
+  if (n === 3) return 'revisio';
+  return 'pendents'; // por defecto 1 u otros/indefinido
+}
+
+export async function renderWithSecondLevelFilters<T extends object>(opts: {
   containerId: string;
   data: ReadonlyArray<T>; // dataset completo (ya explotado si procede)
   columns: ReadonlyArray<Column<T>>;
   filterKeys?: ReadonlyArray<keyof T>; // búsqueda textual del renderer
-  firstLevelField: keyof T & string; // campo usado por el renderer para los botones de 1er nivel
-  buttons: ReadonlyArray<{ key: SecondKey<K>; label: string }>;
-  mapRowToKey: (row: T) => SecondKey<K>; // cómo mapear cada fila a una clave de 2º nivel
-  initialKey?: SecondKey<K>;
+  firstLevelField: keyof T & string; // campo de botones 1er nivel (p.ej. 'categoria_button_label')
+
+  /** Campo del estado (por defecto 'completat'). Se usa con el mapa estándar 1/2/3. */
+  statusField?: keyof T;
+
+  /** (Opcional) Mapeo propio si NO quieres usar el estándar del helper. */
+  mapRowToKey?: (row: T) => Exclude<StatusKey, 'tots'>;
+
+  /** (Opcional) Etiquetas personalizadas */
+  labels?: Partial<Record<StatusKey, string>>;
+
+  initialKey?: StatusKey;
   initialFirstLevelValue?: T[keyof T] | null;
   initialSearch?: string;
   initialPage?: number;
-  secondLevelTitle?: string; // texto encima de los botones (opcional)
+  secondLevelTitle?: string; // texto encima de los botones
 }): Promise<void> {
-  let currentKey: SecondKey<K> = opts.initialKey ?? 'tots';
+  let currentKey: StatusKey = opts.initialKey ?? 'tots';
   let currentFirstLevel: T[keyof T] | null = opts.initialFirstLevelValue ?? null;
   let currentSearch = opts.initialSearch ?? '';
   let currentPage = opts.initialPage ?? 1;
 
-  const { containerId, firstLevelField, columns } = opts;
+  const { containerId, firstLevelField, columns, filterKeys = [], data, statusField = 'completat' as keyof T, mapRowToKey, labels = {}, secondLevelTitle = 'Estat de les fitxes:' } = opts;
+
+  const labTots = labels.tots ?? 'Tots';
+  const labCompletats = labels.completats ?? 'Completats';
+  const labRevisio = labels.revisio ?? 'Cal revisió';
+  const labPendents = labels.pendents ?? 'Pendents';
+
+  const mapFn = mapRowToKey ? mapRowToKey : (row: T) => defaultMapRowToKey(row, statusField);
 
   const renderNow = async (): Promise<void> => {
-    const filtered = currentKey === 'tots' ? opts.data : opts.data.filter((row) => opts.mapRowToKey(row) === currentKey);
+    const filtered = currentKey === 'tots' ? data : data.filter((row) => mapFn(row) === currentKey.replace(/^tots$/, ''));
 
     const blobUrl = toBlobUrl({
       status: 'success' as const,
@@ -47,9 +71,9 @@ export async function renderWithSecondLevelFilters<T extends object, K extends s
 
     const result = await renderTaulaCercadorFiltres<T>({
       url: blobUrl,
-      containerId: containerId,
+      containerId,
       columns: [...columns],
-      filterKeys: (opts.filterKeys ?? []) as (keyof T)[],
+      filterKeys: filterKeys as (keyof T)[],
       filterByField: firstLevelField,
       initialFilterValue: currentFirstLevel,
       initialSearch: currentSearch,
@@ -76,22 +100,28 @@ export async function renderWithSecondLevelFilters<T extends object, K extends s
     if (old && old.parentElement) old.parentElement.removeChild(old);
 
     const wrap = document.createElement('div');
-    wrap.className = 'second-level-filter-buttons';
-    wrap.style.margin = '8px 0 12px';
+    wrap.className = 'second-level-filter-buttons d-flex flex-wrap align-items-center gap-2 my-2';
 
-    if (opts.secondLevelTitle) {
+    if (secondLevelTitle) {
       const title = document.createElement('div');
-      title.textContent = opts.secondLevelTitle;
-      title.style.fontSize = '12px';
-      title.style.opacity = '0.8';
-      title.style.marginBottom = '6px';
+      title.textContent = secondLevelTitle;
+      title.className = 'text-muted small me-2';
       wrap.appendChild(title);
     }
 
-    for (const def of opts.buttons) {
+    type BtnDef = { key: StatusKey; label: string; bsClass: string };
+    const btns: BtnDef[] = [
+      { key: 'tots', label: labTots, bsClass: 'btn-secondary' },
+      { key: 'completats', label: labCompletats, bsClass: 'btn-success' },
+      { key: 'revisio', label: labRevisio, bsClass: 'btn-danger' },
+      { key: 'pendents', label: labPendents, bsClass: 'btn-primary' },
+    ];
+
+    for (const def of btns) {
       const btn = document.createElement('button');
       btn.type = 'button';
-      btn.className = 'filter-btn second-filter-btn';
+      // Bootstrap 5 spacing + variantes: se verán separados horizontalmente
+      btn.className = `btn btn-sm ${def.bsClass} me-2 mb-2`;
       btn.textContent = def.label;
       if (def.key === currentKey) btn.classList.add('active');
       btn.addEventListener('click', () => {
