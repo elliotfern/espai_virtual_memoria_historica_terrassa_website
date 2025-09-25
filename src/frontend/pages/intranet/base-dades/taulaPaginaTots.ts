@@ -152,13 +152,15 @@ export async function taulaPaginaTots(): Promise<void> {
 
   await renderWithSecondLevelFilters<RowExploded>({
     containerId: 'represaliatsTable',
-    data: baseExploded,
+    data: baseExploded, // tu array ya explotado por categoría
     columns,
     filterKeys: ['nom_complet'],
     firstLevelField: 'categoria_button_label',
     statusField: 'completat',
+    firstLevelTitle: 'Categories:',
     secondLevelTitle: 'Estat de les fitxes:',
-    dedupeBy: (r) => r.id, // evita duplicados cuando 1er nivel está en "Tots"
+    dedupeBy: (r) => r.id, // Tots sin duplicados
+    // initialFirstLevelValue: labelById(6), // opcional: arrancar con una categoría ya activa
   });
 
   registerDeleteCallback(reloadKey, () => taulaPaginaTots());
