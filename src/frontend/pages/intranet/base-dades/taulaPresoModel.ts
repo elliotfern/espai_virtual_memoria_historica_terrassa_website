@@ -32,26 +32,6 @@ type Column<T> = {
   render?: (value: T[keyof T], row: T) => string;
 };
 
-// Mapa de completat → estado (ajusta si tus códigos difieren)
-type StatusKey = 'completats' | 'revisio' | 'pendents';
-type StatusKeyAll = 'tots' | StatusKey;
-
-const STATUS_MAP_NUM: Record<number, StatusKey> = {
-  0: 'pendents',
-  1: 'revisio',
-  2: 'completats',
-};
-function mapCompletatToStatus(v: unknown): StatusKey {
-  if (typeof v === 'number') return STATUS_MAP_NUM[v] ?? 'pendents';
-  if (typeof v === 'string') {
-    const s = v.trim().toLowerCase();
-    if (s === '2' || s.startsWith('completat')) return 'completats';
-    if (s === '1' || s.startsWith('revisi')) return 'revisio';
-    return 'pendents';
-  }
-  return 'pendents';
-}
-
 export async function taulaPresoModel(): Promise<void> {
   const isAdmin = await getIsAdmin();
   const isAutor = await getIsAutor();
@@ -139,25 +119,20 @@ export async function taulaPresoModel(): Promise<void> {
     });
   }
 
-  // 5) Botones de 2º nivel
-  const buttons: ReadonlyArray<{ key: StatusKeyAll; label: string }> = [
-    { key: 'tots', label: 'Tots' },
-    { key: 'completats', label: 'Completats' },
-    { key: 'revisio', label: 'Revisió' },
-    { key: 'pendents', label: 'Pendents' },
-  ];
-
-  await renderWithSecondLevelFilters<RowExploded, StatusKey>({
+  await renderWithSecondLevelFilters<RowExploded>({
     containerId: 'taulaLlistatPresoModel',
     data: baseExploded,
     columns,
     filterKeys: ['nom_complet'],
-    firstLevelField: 'categoria_button_label',
-    buttons,
-    mapRowToKey: (row) => mapCompletatToStatus(row.completat),
-    secondLevelTitle: 'Estat de les fitxes:',
-    // initialKey: 'tots',                     // opcional
-    // initialFirstLevelValue: labelById(6),   // opcional: arrancar ya filtrado por categoría “6”
+    firstLevelField: 'categoria_button_label', // 1er nivel (categorías)
+    statusField: 'completat', // usa el mapa estándar 1/2/3
+    secondLevelTitle: 'Estat de les fitxes:', // título encima de los botones
+    // labels: {                                   // (opcional) para personalizar textos
+    //   tots: 'Mostrar Todos',
+    //   completats: 'Completado',
+    //   revisio: 'Cal revisió',
+    //   pendents: 'No Completado',
+    // },
   });
 
   registerDeleteCallback(reloadKey, () => taulaPresoModel());
