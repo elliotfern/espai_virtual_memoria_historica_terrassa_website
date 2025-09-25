@@ -80,7 +80,7 @@ export async function taulaPresoModel(): Promise<void> {
       field: 'id',
       render: (_value, row) => (row.data_defuncio && row.data_defuncio !== '0000-00-00' ? formatDatesForm(row.data_defuncio) ?? '' : ''),
     },
-    { header: 'Fitxa presó model creada', field: 'es_PresoModel' },
+    { header: 'Fitxa', field: 'es_PresoModel' },
     {
       header: 'Categoria',
       field: 'id',
@@ -128,7 +128,7 @@ export async function taulaPresoModel(): Promise<void> {
       field: 'id',
       render: (_value, row) =>
         `<a id="${row.id}" title="Modifica" target="_blank" href="https://${window.location.hostname}/gestio/base-dades/modifica-fitxa/${row.id}">
-           <button type="button" class="btn btn-success btn-sm">Dades personals</button>
+           <button type="button" class="btn btn-secondary btn-sm">Dades personals</button>
          </a>`,
     });
   }
@@ -158,20 +158,20 @@ export async function taulaPresoModel(): Promise<void> {
     });
   }
 
-  const presoModelLabel = labelById(6);
+  const presoModelLabel = labelById(12);
 
   await renderWithSecondLevelFilters<RowExploded>({
     containerId: 'taulaLlistatPresoModel',
     data: baseExploded,
     columns,
     filterKeys: ['nom_complet'],
-    firstLevelField: 'categoria_button_label', // 1er nivel (categorías)
-    initialFirstLevelValue: presoModelLabel, // 👈 evita duplicados en el arranque
-    statusField: 'completat', // usa el mapa estándar 1/2/3
-    secondLevelTitle: 'Estat de les fitxes:', // título encima de los botones
-    dedupeBy: (r) => r.id, // 👈 clave única de persona
-    dedupeWhenFirstLevelAll: true, // 👈 por defecto true; explícitalo si quieres
-    // labels: {                                   // (opcional) para personalizar textos
+    firstLevelField: 'categoria_button_label',
+    initialFirstLevelValue: presoModelLabel,
+    statusField: 'completat',
+    secondLevelTitle: 'Estat de les fitxes:',
+    dedupeBy: (r) => r.id,
+    dedupeWhenFirstLevelAll: true,
+    // labels: {
     //   tots: 'Mostrar Todos',
     //   completats: 'Completado',
     //   revisio: 'Cal revisió',
