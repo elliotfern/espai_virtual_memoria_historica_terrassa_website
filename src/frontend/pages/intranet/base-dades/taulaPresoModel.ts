@@ -166,17 +166,11 @@ export async function taulaPresoModel(): Promise<void> {
     columns,
     filterKeys: ['nom_complet'],
     firstLevelField: 'categoria_button_label',
-    initialFirstLevelValue: presoModelLabel,
     statusField: 'completat',
     secondLevelTitle: 'Estat de les fitxes:',
-    dedupeBy: (r) => r.id,
+    dedupeBy: (r) => r.id, // evita duplicados cuando 1er nivel está en "Tots"
+    initialFirstLevelValue: presoModelLabel,
     dedupeWhenFirstLevelAll: true,
-    // labels: {
-    //   tots: 'Mostrar Todos',
-    //   completats: 'Completado',
-    //   revisio: 'Cal revisió',
-    //   pendents: 'No Completado',
-    // },
   });
 
   registerDeleteCallback(reloadKey, () => taulaPresoModel());

@@ -80,7 +80,6 @@ export async function taulaPaginaTots(): Promise<void> {
       field: 'id',
       render: (_value, row) => (row.data_defuncio && row.data_defuncio !== '0000-00-00' ? formatDatesForm(row.data_defuncio) ?? '' : ''),
     },
-    { header: 'Fitxa', field: 'es_PresoModel' },
     {
       header: 'Categoria',
       field: 'id',
@@ -157,17 +156,9 @@ export async function taulaPaginaTots(): Promise<void> {
     columns,
     filterKeys: ['nom_complet'],
     firstLevelField: 'categoria_button_label',
-    //initialFirstLevelValue: presoModelLabel,
     statusField: 'completat',
     secondLevelTitle: 'Estat de les fitxes:',
-    dedupeBy: (r) => r.id,
-    dedupeWhenFirstLevelAll: true,
-    // labels: {
-    //   tots: 'Mostrar Todos',
-    //   completats: 'Completado',
-    //   revisio: 'Cal revisió',
-    //   pendents: 'No Completado',
-    // },
+    dedupeBy: (r) => r.id, // evita duplicados cuando 1er nivel está en "Tots"
   });
 
   registerDeleteCallback(reloadKey, () => taulaPaginaTots());

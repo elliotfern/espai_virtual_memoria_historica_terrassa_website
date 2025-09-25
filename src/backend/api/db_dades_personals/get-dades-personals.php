@@ -5,7 +5,9 @@ use App\Config\Database;
 use App\Utils\Response;
 use App\Utils\MissatgesAPI;
 
-$slug = $routeParams[0];
+// No lanza notice aunque $routeParams no exista o no tenga [0]
+$slug = $routeParams[0] ?? null;
+
 $conn = DatabaseConnection::getConnection();
 
 if (!$conn) {

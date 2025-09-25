@@ -1,4 +1,3 @@
-// services/renderTaula/withSecondLevelFilter.ts
 import { renderTaulaCercadorFiltres } from './renderTaulaCercadorFiltres';
 
 type Column<T> = {
@@ -87,13 +86,26 @@ export async function renderWithSecondLevelFilters<T extends object>(opts: {
       filtered = data.filter((row) => mapFn(row) === key);
     }
 
-    // 2) Si el 1er nivel está en "Tots", deduplicamos por la clave indicada
-    const isFirstLevelAll = currentFirstLevel === null || currentFirstLevel === undefined;
+    // 2) Calcula las categorías disponibles tras el filtro de estado
+    const availableCats = new Set<unknown>();
+    for (const r of filtered) {
+      const rec = r as unknown as Record<PropertyKey, unknown>;
+      availableCats.add(rec[firstLevelField]);
+    }
+
+    // 3) Decide el valor inicial del 1er nivel para este render:
+    //    - Si teníamos categoría activa y sigue disponible → mantenla
+    //    - Si no está disponible → pásala como null para no forzar un valor inexistente
+    const initialFirstLevelValue = currentFirstLevel != null && availableCats.has(currentFirstLevel) ? currentFirstLevel : null;
+
+    // 4) Si el 1er nivel está en "Tots", deduplicamos por la clave indicada
+    const isFirstLevelAll = initialFirstLevelValue === null || initialFirstLevelValue === undefined;
+
     if (dedupeWhenFirstLevelAll && isFirstLevelAll && typeof dedupeBy === 'function') {
       filtered = dedupeByKey(filtered, dedupeBy);
     }
 
-    // 3) Render de la tabla
+    // 5) Render de la tabla
     const blobUrl = toBlobUrl({
       status: 'success' as const,
       message: 'OK',
@@ -107,14 +119,14 @@ export async function renderWithSecondLevelFilters<T extends object>(opts: {
       columns: [...columns],
       filterKeys: filterKeys as (keyof T)[],
       filterByField: firstLevelField,
-      initialFilterValue: currentFirstLevel,
+      initialFilterValue: initialFirstLevelValue, // 👈 valor coherente con lo disponible
       initialSearch: currentSearch,
       initialPage: currentPage,
     });
 
     URL.revokeObjectURL(blobUrl);
 
-    // 4) Persistimos el estado del 1er nivel + search + página
+    // 6) Persistimos el estado devuelto por el renderer
     currentFirstLevel = (result.filter as T[keyof T] | null) ?? null;
     currentSearch = result.search ?? '';
     currentPage = result.page ?? 1;
