@@ -874,7 +874,7 @@ ORDER BY t.cognom1, t.cognom2, t.nom;";
 } else if ($slug === 'detingutsPresoModel') {
     $db = new Database();
 
-    $query = "SELECT a.id, CONCAT(a.cognom1, ' ', a.cognom2, ', ', a.nom) AS nom_complet, a.data_naixement, a.data_defuncio, a.categoria, a.slug,
+    $query = "SELECT a.id, CONCAT(a.cognom1, ' ', a.cognom2, ', ', a.nom) AS nom_complet, a.data_naixement, a.data_defuncio, a.categoria, a.slug, a.completat, a.visibilitat, a.font_intern,
                 CASE WHEN e.id IS NOT NULL THEN 'Fitxa creada' ELSE 'No' END AS es_PresoModel
                 FROM db_dades_personals AS a
                 LEFT JOIN db_detinguts_model AS e ON a.id = e.idPersona

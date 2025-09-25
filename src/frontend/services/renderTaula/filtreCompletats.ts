@@ -53,7 +53,7 @@ export async function renderWithSecondLevelFilters<T extends object>(opts: {
   const { containerId, firstLevelField, columns, filterKeys = [], data, statusField = 'completat' as keyof T, mapRowToKey, labels = {}, secondLevelTitle = 'Estat de les fitxes:' } = opts;
 
   const labTots = labels.tots ?? 'Tots';
-  const labCompletats = labels.completats ?? 'Completats';
+  const labCompletats = labels.completats ?? 'Completats (visibles al web)';
   const labRevisio = labels.revisio ?? 'Cal revisió';
   const labPendents = labels.pendents ?? 'Pendents';
 
@@ -121,7 +121,7 @@ export async function renderWithSecondLevelFilters<T extends object>(opts: {
       const btn = document.createElement('button');
       btn.type = 'button';
       // Bootstrap 5 spacing + variantes: se verán separados horizontalmente
-      btn.className = `btn btn-sm ${def.bsClass} me-2 mb-2`;
+      btn.className = `btn ${def.bsClass} me-2 mb-2`;
       btn.textContent = def.label;
       if (def.key === currentKey) btn.classList.add('active');
       btn.addEventListener('click', () => {

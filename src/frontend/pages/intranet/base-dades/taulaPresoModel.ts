@@ -8,6 +8,9 @@ import { buildLabelById, parseSet } from '../../../services/fetchData/categories
 import { categoriesRepressio } from '../../../components/taulaDades/categoriesRepressio';
 import { traduirCategoriesRepressio } from '../../../components/taulaDades/traduirCategoriesRepressio';
 import { renderWithSecondLevelFilters } from '../../../services/renderTaula/filtreCompletats';
+import { estatButtonHTML } from '../../../services/renderTaula/estatBotons';
+import { fontInternTextHTML } from '../../../services/renderTaula/fontIntern';
+import { maybeVisibilitatButtonHTML } from '../../../services/renderTaula/estatVisibilitat';
 
 type Category = { id: number; name: string };
 
@@ -22,6 +25,8 @@ interface EspaiRow {
   es_PresoModel: string;
   slug: string;
   completat: number | string; // viene de la API
+  font_intern: number;
+  visibilitat: number;
 }
 
 type RowExploded = EspaiRow & { categoria_button_label: string };
@@ -81,6 +86,40 @@ export async function taulaPresoModel(): Promise<void> {
       field: 'id',
       render: (_value, row) => traduirCategoriesRepressio(row.categoria, dictRaw),
     },
+
+    {
+      header: 'Dades',
+      field: 'id',
+      render: (_value, row) => {
+        void _value;
+        return fontInternTextHTML(row.font_intern); // solo texto
+      },
+    },
+
+    {
+      header: 'Estat',
+      field: 'id',
+      render: (_value, row) => {
+        void _value; // evita warning eslint de arg sin uso
+        // añade data-id por si luego quieres enganchar eventos delegados
+        return estatButtonHTML(row.completat, {
+          size: 'sm',
+          attrs: { 'data-id': row.id, title: `Estat: ${row.completat}` },
+        });
+      },
+    },
+
+    {
+      header: 'Visibilitat',
+      field: 'id',
+      render: (_value, row) => {
+        void _value;
+        return maybeVisibilitatButtonHTML(row.visibilitat, {
+          size: 'sm',
+          attrs: { 'data-id': row.id, title: `Visibilitat: ${row.visibilitat}` },
+        });
+      },
+    },
   ];
 
   if (isAdmin || isAutor || isLogged) {
@@ -89,7 +128,7 @@ export async function taulaPresoModel(): Promise<void> {
       field: 'id',
       render: (_value, row) =>
         `<a id="${row.id}" title="Modifica" target="_blank" href="https://${window.location.hostname}/gestio/base-dades/modifica-fitxa/${row.id}">
-           <button type="button" class="btn btn-success btn-sm">Modifica Dades personals</button>
+           <button type="button" class="btn btn-success btn-sm">Dades personals</button>
          </a>`,
     });
   }
@@ -99,7 +138,7 @@ export async function taulaPresoModel(): Promise<void> {
       field: 'id',
       render: (_value, row) =>
         `<a id="${row.id}" title="Modifica" target="_blank" href="https://${window.location.hostname}/gestio/base-dades/modifica-repressio/6/${row.id}">
-           <button type="button" class="btn btn-warning btn-sm">Modifica repressio</button>
+           <button type="button" class="btn btn-warning btn-sm">Dades Presó</button>
          </a>`,
     });
   }
