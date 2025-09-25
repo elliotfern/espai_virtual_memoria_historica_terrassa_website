@@ -3,7 +3,12 @@ $id = $routeParams[0];
 ?>
 
 <div class="container fitxaRepresaliat">
+    <?php if ($isAdmin || $isAutor || $isLogged): ?>
+        <div class="row" id="botonsAdmin"></div>
+    <?php endif; ?>
+
     <div class="row" id="botons1"></div>
+
     <div class="container fitxaRepresaliat2" style="padding: 100px">
         <div id="info"> </div>
 
