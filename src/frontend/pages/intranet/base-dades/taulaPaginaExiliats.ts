@@ -37,18 +37,18 @@ type Column<T> = {
   render?: (value: T[keyof T], row: T) => string;
 };
 
-export async function taulaPaginaRepresaliats(): Promise<void> {
+export async function taulaPaginaExiliats(): Promise<void> {
   const isAdmin = await getIsAdmin();
   const isAutor = await getIsAutor();
   const isLogged = await getIsLogged();
-  const reloadKey = 'reload-taula-taulaLlistatPresoModel';
+  const reloadKey = 'reload-taula-taulaExiliats';
 
   // 1) Diccionario categorías
   const dictRaw: Category[] = await categoriesRepressio('ca');
   const labelById = buildLabelById(dictRaw);
 
   // 2) Carga de datos base
-  const res = await fetch(API_URLS.GET.LLISTAT_REPRESALIATS_INTRANET);
+  const res = await fetch(API_URLS.GET.LLISTAT_EXILIATS_INTRANET);
   const json = await res.json();
   const base: EspaiRow[] = Array.isArray(json) ? (json as EspaiRow[]) : Array.isArray(json?.data) ? (json.data as EspaiRow[]) : json?.data ? [json.data as EspaiRow] : [];
 
@@ -80,7 +80,6 @@ export async function taulaPaginaRepresaliats(): Promise<void> {
       field: 'id',
       render: (_value, row) => (row.data_defuncio && row.data_defuncio !== '0000-00-00' ? formatDatesForm(row.data_defuncio) ?? '' : ''),
     },
-
     {
       header: 'Categoria',
       field: 'id',
@@ -149,8 +148,10 @@ export async function taulaPaginaRepresaliats(): Promise<void> {
     });
   }
 
+  //const presoModelLabel = labelById(12);
+
   await renderWithSecondLevelFilters<RowExploded>({
-    containerId: 'taulaRepresaliats',
+    containerId: 'taulaExiliats',
     data: baseExploded, // tu array ya explotado por categoría
     columns,
     filterKeys: ['nom_complet'],
@@ -162,6 +163,6 @@ export async function taulaPaginaRepresaliats(): Promise<void> {
     // initialFirstLevelValue: labelById(6), // opcional: arrancar con una categoría ya activa
   });
 
-  registerDeleteCallback(reloadKey, () => taulaPaginaRepresaliats());
+  registerDeleteCallback(reloadKey, () => taulaPaginaExiliats());
   initDeleteHandlers();
 }

@@ -48,7 +48,7 @@ export async function taulaPaginaTots(): Promise<void> {
   const labelById = buildLabelById(dictRaw);
 
   // 2) Carga de datos base
-  const res = await fetch(API_URLS.GET.LLISTAT_REPRESALIATS_COMPLET_INTRANET);
+  const res = await fetch(API_URLS.GET.LLISTAT_COMPLET_INTRANET);
   const json = await res.json();
   const base: EspaiRow[] = Array.isArray(json) ? (json as EspaiRow[]) : Array.isArray(json?.data) ? (json.data as EspaiRow[]) : json?.data ? [json.data as EspaiRow] : [];
 

@@ -51,7 +51,10 @@ export type ApiUrls = {
     BIOGRAFIES_ID: (id: number) => string;
     REPRESALIAT_ID: (id: number) => string;
     LLISTAT_PENDENTS_AJUNTAMENT: string;
-    LLISTAT_REPRESALIATS_COMPLET_INTRANET: string;
+    LLISTAT_COMPLET_INTRANET: string;
+    LLISTAT_REPRESALIATS_INTRANET: string;
+    LLISTAT_EXILIATS_INTRANET: string;
+    LLISTAT_COSTHUMA_INTRANET: string;
   };
   POST: {
     MUNICIPI: string;

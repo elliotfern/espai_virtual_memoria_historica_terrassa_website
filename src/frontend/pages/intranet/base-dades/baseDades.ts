@@ -21,6 +21,8 @@ import { taulaRevisioGeolocalitzacio } from './taulaRevisioGeolocalitzacio';
 import { taulaPendentsAjuntament } from './taulaPendentsAjuntament';
 import { taulaPaginaTots } from './taulaPaginaTots';
 import { taulaPaginaRepresaliats } from './taulaPaginaRepresaliats';
+import { taulaPaginaExiliats } from './taulaPaginaExiliats';
+import { taulaPaginaCostHuma } from './taulaPaginaCostHuma';
 
 export function baseDadesIntranet() {
   const url = window.location.href;
@@ -39,6 +41,16 @@ export function baseDadesIntranet() {
 
   if (section === 'represaliats') {
     taulaPaginaRepresaliats();
+    return;
+  }
+
+  if (section === 'exiliats-deportats') {
+    taulaPaginaExiliats();
+    return;
+  }
+
+  if (section === 'cost-huma') {
+    taulaPaginaCostHuma();
     return;
   }
 
