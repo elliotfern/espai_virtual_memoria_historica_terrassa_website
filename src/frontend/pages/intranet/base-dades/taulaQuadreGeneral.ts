@@ -31,7 +31,7 @@ export async function taulaQuadreGeneral() {
     { url: '/api/represaliats/get/totalAfusellats', idBase: 'totalAfusellats' },
     { url: '/api/represaliats/get/totalProcessats', idBase: 'totalProcessats' },
     // Si tienes un endpoint para el total general, añádelo aquí:
-    // { url: '/api/represaliats/get/totalGeneral', idBase: 'totalGeneral' },
+    { url: '/api/represaliats/get/totalGeneral', idBase: 'totalGeneral' },
   ];
 
   await Promise.all(endpoints.map((e) => fetchAndUpdatePair(e.url, e.idBase)));

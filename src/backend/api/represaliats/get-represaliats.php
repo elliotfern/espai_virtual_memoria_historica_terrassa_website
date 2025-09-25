@@ -389,12 +389,12 @@ ORDER BY t.cognom1, t.cognom2, t.nom;";
     $db = new Database();
 
     $query = "SELECT 
-        SUM(a.completat = 2) AS total_completades,
+        SUM(d.completat = 2) AS total_completades,
         COUNT(*)             AS total
         FROM db_cost_huma_morts_front AS a
-        WHERE
-        WHERE condicio IN (2, 4, 1)
-        AND bandol = 1";
+        INNER JOIN db_dades_personals AS d ON a.idPersona = d.id
+        WHERE a.condicio IN (2, 4, 1)
+        AND a.bandol = 1;";
 
     try {
         $result = $db->getData($query);
@@ -426,10 +426,13 @@ ORDER BY t.cognom1, t.cognom2, t.nom;";
 } else if ($slug === 'totalCombatentsSollevats') {
     $db = new Database();
 
-    $query = "SELECT COUNT(*) AS total
-        FROM db_cost_huma_morts_front
-        WHERE condicio = 1
-        AND bandol = 2";
+    $query = "SELECT 
+        SUM(d.completat = 2) AS total_completades,
+        COUNT(*)             AS total
+        FROM db_cost_huma_morts_front AS a
+        INNER JOIN db_dades_personals AS d ON a.idPersona = d.id
+        WHERE a.condicio IN (1)
+        AND a.bandol = 2;";
 
     try {
         $result = $db->getData($query);
@@ -461,10 +464,13 @@ ORDER BY t.cognom1, t.cognom2, t.nom;";
 } else if ($slug === 'totalCombatentsSenseDefinir') {
     $db = new Database();
 
-    $query = "SELECT COUNT(*) AS total
-        FROM db_cost_huma_morts_front
-        WHERE condicio IN (2, 4, 3, 1)
-        AND bandol = 3";
+    $query = "SELECT 
+        SUM(d.completat = 2) AS total_completades,
+        COUNT(*)             AS total
+        FROM db_cost_huma_morts_front AS a
+        INNER JOIN db_dades_personals AS d ON a.idPersona = d.id
+        WHERE a.condicio IN (2, 4, 3, 1)
+        AND a.bandol = 3;";
 
     try {
         $result = $db->getData($query);
@@ -496,8 +502,11 @@ ORDER BY t.cognom1, t.cognom2, t.nom;";
 } else if ($slug === 'totalCivilsBombardeigs') {
     $db = new Database();
 
-    $query = "SELECT COUNT(*) AS total
-        FROM db_cost_huma_morts_civils
+    $query = "SELECT 
+        SUM(d.completat = 2) AS total_completades,
+        COUNT(*)             AS total
+        FROM db_cost_huma_morts_civils AS a
+        INNER JOIN db_dades_personals AS d ON a.idPersona = d.id
         WHERE cirscumstancies_mort IN (4, 5, 2)";
 
     try {
@@ -530,9 +539,13 @@ ORDER BY t.cognom1, t.cognom2, t.nom;";
 } else if ($slug === 'totalCivilsRepresaliaRepublicana') {
     $db = new Database();
 
-    $query = "SELECT COUNT(*) AS total
-        FROM db_dades_personals
-        WHERE categoria LIKE '%{5}%'";
+    $query = "SELECT 
+        SUM(a.completat = 2) AS total_completades,
+        COUNT(*)             AS total
+        FROM db_dades_personals AS a
+        WHERE
+        REPLACE(REPLACE(REPLACE(COALESCE(a.categoria,''), '{',''), '}',''), ' ', '')
+        REGEXP '(^|,)(5)(,|$)'";
 
     try {
         $result = $db->getData($query);
@@ -666,9 +679,13 @@ ORDER BY t.cognom1, t.cognom2, t.nom;";
 } else if ($slug === 'totalExiliatsTotal') {
     $db = new Database();
 
-    $query = "SELECT COUNT(*) AS total
-        FROM db_dades_personals
-        WHERE categoria LIKE '%{10}%'";
+    $query = "SELECT 
+        SUM(a.completat = 2) AS total_completades,
+        COUNT(*)             AS total
+        FROM db_dades_personals AS a
+        WHERE
+        REPLACE(REPLACE(REPLACE(COALESCE(a.categoria,''), '{',''), '}',''), ' ', '')
+        REGEXP '(^|,)(10)(,|$)'";
 
     try {
         $result = $db->getData($query);
@@ -700,9 +717,13 @@ ORDER BY t.cognom1, t.cognom2, t.nom;";
 } else if ($slug === 'totalExiliatsDeportatsTotal') {
     $db = new Database();
 
-    $query = "SELECT COUNT(*) AS total
-                FROM db_dades_personals
-                WHERE categoria LIKE '%{10}%' OR categoria LIKE '%{10,2}%'";
+    $query = "SELECT 
+        SUM(a.completat = 2) AS total_completades,
+        COUNT(*)             AS total
+        FROM db_dades_personals AS a
+        WHERE
+        REPLACE(REPLACE(REPLACE(COALESCE(a.categoria,''), '{',''), '}',''), ' ', '')
+        REGEXP '(^|,)(10|2)(,|$)'";
 
     try {
         $result = $db->getData($query);
@@ -734,48 +755,13 @@ ORDER BY t.cognom1, t.cognom2, t.nom;";
 } else if ($slug === 'totalRepresaliats') {
     $db = new Database();
 
-    $query = "SELECT COUNT(*) AS total
-            FROM db_dades_personals
-            WHERE categoria LIKE '{1}%' 
-            OR categoria LIKE '%{1}%' 
-            OR categoria LIKE '%,{1}%' 
-            OR categoria LIKE '{1,%'
-            OR categoria LIKE '{6}%' 
-            OR categoria LIKE '%{6}%' 
-            OR categoria LIKE '%,{6}%' 
-            OR categoria LIKE '{6,%'
-            OR categoria LIKE '{7}%' 
-            OR categoria LIKE '%{7}%' 
-            OR categoria LIKE '%,{7}%' 
-            OR categoria LIKE '{7,%'
-            OR categoria LIKE '{11}%' 
-            OR categoria LIKE '%{11}%' 
-            OR categoria LIKE '%,{11}%' 
-            OR categoria LIKE '{11,%'
-            OR categoria LIKE '{12}%' 
-            OR categoria LIKE '%{12}%' 
-            OR categoria LIKE '%,{12}%' 
-            OR categoria LIKE '{12,%'
-            OR categoria LIKE '{13}%' 
-            OR categoria LIKE '%{13}%' 
-            OR categoria LIKE '%,{13}%' 
-            OR categoria LIKE '{13,%'
-            OR categoria LIKE '{14}%' 
-            OR categoria LIKE '%{14}%' 
-            OR categoria LIKE '%,{14}%' 
-            OR categoria LIKE '{14,%'
-            OR categoria LIKE '{15}%' 
-            OR categoria LIKE '%{15}%' 
-            OR categoria LIKE '%,{15}%' 
-            OR categoria LIKE '{15,%'
-            OR categoria LIKE '{16}%' 
-            OR categoria LIKE '%{16}%' 
-            OR categoria LIKE '%,{16}%' 
-            OR categoria LIKE '{16,%'
-            OR categoria LIKE '{17}%' 
-            OR categoria LIKE '%{17}%' 
-            OR categoria LIKE '%,{17}%' 
-            OR categoria LIKE '{17,%';";
+    $query = "SELECT 
+        SUM(a.completat = 2) AS total_completades,
+        COUNT(*)             AS total
+        FROM db_dades_personals AS a
+        WHERE
+        REPLACE(REPLACE(REPLACE(COALESCE(a.categoria,''), '{',''), '}',''), ' ', '')
+         REGEXP '(^|,)(6|7|11|12|13|14|15|16|17|18|19|20)(,|$)'";
 
     try {
         $result = $db->getData($query);
@@ -807,12 +793,13 @@ ORDER BY t.cognom1, t.cognom2, t.nom;";
 } else if ($slug === 'totalProcessats') {
     $db = new Database();
 
-    $query = "SELECT COUNT(*) AS total
-                FROM db_dades_personals
-                WHERE categoria LIKE '{6}%'
-                OR categoria LIKE '%{6}%'
-                OR categoria LIKE '%,{6}%'
-                OR categoria LIKE '{6,%';";
+    $query = "SELECT 
+        SUM(a.completat = 2) AS total_completades,
+        COUNT(*)             AS total
+        FROM db_dades_personals AS a
+        WHERE
+        REPLACE(REPLACE(REPLACE(COALESCE(a.categoria,''), '{',''), '}',''), ' ', '')
+         REGEXP '(^|,)(6)(,|$)'";
 
     try {
         $result = $db->getData($query);
@@ -844,12 +831,48 @@ ORDER BY t.cognom1, t.cognom2, t.nom;";
 } else if ($slug === 'totalAfusellats') {
     $db = new Database();
 
-    $query = "SELECT COUNT(*) AS total
-                FROM db_dades_personals
-                WHERE categoria LIKE '{1}%'
-                OR categoria LIKE '%{1}%'
-                OR categoria LIKE '%,{1}%'
-                OR categoria LIKE '{1,%';";
+    $query = "SELECT 
+        SUM(a.completat = 2) AS total_completades,
+        COUNT(*)             AS total
+        FROM db_dades_personals AS a
+        WHERE
+        REPLACE(REPLACE(REPLACE(COALESCE(a.categoria,''), '{',''), '}',''), ' ', '')
+         REGEXP '(^|,)(1)(,|$)'";
+
+    try {
+        $result = $db->getData($query);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
+    // GET : Comptador: TOTAL WEB
+    // URL: https://memoriaterrassa.cat/api/represaliats/get/totalGeneral
+} else if ($slug === 'totalGeneral') {
+    $db = new Database();
+
+    $query = "SELECT 
+        SUM(a.completat = 2) AS total_completades,
+        COUNT(*)             AS total
+        FROM db_dades_personals AS a";
 
     try {
         $result = $db->getData($query);
