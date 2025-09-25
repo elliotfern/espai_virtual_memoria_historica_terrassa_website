@@ -421,7 +421,6 @@ function buildQuery(string $type, string $q): array
     SELECT DISTINCT base.*
     FROM (
       " . baseSelect() . "
-      " . implode("\n", $joins) . "
       $where
     ) AS base
     ORDER BY base.id ASC
