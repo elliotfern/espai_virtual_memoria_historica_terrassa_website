@@ -27,37 +27,58 @@ import { taulaPaginaCostHuma } from './taulaPaginaCostHuma';
 export function baseDadesIntranet() {
   const url = window.location.href;
   const pageType = getPageType(url);
-  // Estructura esperada: [ 'gestio', 'base-dades', section, sub? , ... ]
-  const section = pageType[2]; // 'general' | 'represaliats' | 'exiliats-deportats' | 'cost-huma' | ...
-  const sub = pageType[3]; // 'llistat-*' | 'quadre-general' | id | undefined
+
+  const section = pageType[2];
+  const sub = pageType[3];
 
   mostrarBotonsNomesAdmin();
 
   // Pagines
+
   if (section === 'general') {
-    taulaPaginaTots();
-    if (sub === 'llistat-duplicats') {
-      taulaDuplicats();
-    } else if (sub === 'quadre-general') {
-      taulaQuadreGeneral();
-    } else if (sub === 'llistat-revisio') {
-      taulaRevisio();
-    } else if (sub === 'llistat-revisio-geolocalitzacio') {
-      taulaRevisioGeolocalitzacio();
+    switch (sub) {
+      case null:
+        taulaPaginaTots();
+        break;
+      case 'llistat-duplicats':
+        taulaDuplicats();
+        break;
+      case 'quadre-general':
+        taulaQuadreGeneral();
+        break;
+      case 'llistat-revisio':
+        taulaRevisio();
+        break;
+      case 'llistat-revisio-geolocalitzacio':
+        taulaRevisioGeolocalitzacio();
+        break;
+      default:
+        taulaPaginaTots(); // fallback sensato
+        break;
     }
     return;
   }
 
   if (section === 'represaliats') {
-    taulaPaginaRepresaliats();
-    if (sub === 'llistat-processats') {
-      taulaProcessats();
-    } else if (sub === 'llistat-afusellats') {
-      taulaAfusellats();
-    } else if (sub === 'llistat-preso-model') {
-      taulaPresoModel();
-    } else if (sub === 'llistat-pendents') {
-      taulaPendentsAjuntament();
+    switch (sub) {
+      case null:
+        taulaPaginaRepresaliats();
+        break;
+      case 'llistat-processats':
+        taulaProcessats();
+        break;
+      case 'llistat-afusellats':
+        taulaAfusellats();
+        break;
+      case 'llistat-preso-model':
+        taulaPresoModel();
+        break;
+      case 'llistat-pendents':
+        taulaPendentsAjuntament();
+        break;
+      default:
+        taulaPaginaRepresaliats(); // fallback sensato
+        break;
     }
     return;
   }
