@@ -13,7 +13,7 @@
             </ul>
             <hr>
         <?php endif; ?>
-        <div id="TaulaGeneral"></div>
+        <div id="taulaGeneral"></div>
 
     <?php else: ?>
         <p><strong>L'accés a aquesta pàgina està restringit només a usuaris administratius.</strong></p>

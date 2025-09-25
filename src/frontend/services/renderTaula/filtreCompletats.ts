@@ -123,7 +123,7 @@ export async function renderWithSecondLevelFilters<T extends object>(opts: {
       containerId,
       columns: [...columns],
       filterKeys: filterKeys as (keyof T)[],
-      // 👇 No pasamos filterByField: los botones de 1er nivel los controlamos nosotros
+      // ⚠️ No pasamos filterByField: los botones de 1er nivel los controlamos nosotros
       initialSearch: currentSearch,
       initialPage: currentPage,
       showSearch: true,
@@ -148,9 +148,8 @@ export async function renderWithSecondLevelFilters<T extends object>(opts: {
     const container = getContainer();
     if (!container) return;
 
-    // Ancla: después del input de búsqueda (que crea el renderer)
-    const searchInput = container.querySelector('input[type="text"]');
-    const anchor = searchInput?.parentElement ?? container;
+    // Ancla: el propio input de búsqueda
+    const searchInput = container.querySelector<HTMLInputElement>('input[type="text"]');
 
     // Limpia anterior
     q<HTMLDivElement>('.fixed-first-level-buttons')?.remove();
@@ -173,18 +172,19 @@ export async function renderWithSecondLevelFilters<T extends object>(opts: {
       wrap.appendChild(makeCategoryBtn(cat, String(cat)));
     }
 
-    // Insertar
-    if (anchor.nextSibling) {
-      anchor.parentElement?.insertBefore(wrap, anchor.nextSibling);
+    // ✅ Insertar DENTRO del container, justo después del input de búsqueda
+    if (searchInput && searchInput.parentElement === container) {
+      container.insertBefore(wrap, searchInput.nextSibling);
     } else {
-      anchor.parentElement?.appendChild(wrap);
+      // Fallback: al principio del container
+      container.insertBefore(wrap, container.firstChild);
     }
   }
 
   function makeCategoryBtn(value: T[keyof T] | null, label: string): HTMLButtonElement {
     const btn = document.createElement('button');
     btn.type = 'button';
-    btn.className = 'btn btn-outline-secondary me-2 mb-2 filter-btn';
+    btn.className = 'btn btn-outline-secondary btn-sm me-2 mb-2 filter-btn';
     btn.textContent = label;
     const isActive = (value === null && currentCategory === null) || (value !== null && currentCategory === value);
     if (isActive) btn.classList.add('active');
@@ -228,7 +228,7 @@ export async function renderWithSecondLevelFilters<T extends object>(opts: {
     for (const def of btns) {
       const btn = document.createElement('button');
       btn.type = 'button';
-      btn.className = `btn ${def.bsClass} me-2 mb-2`;
+      btn.className = `btn btn-sm ${def.bsClass} me-2 mb-2`;
       btn.textContent = def.label;
       if (def.key === currentKey) btn.classList.add('active');
       btn.addEventListener('click', () => {
@@ -239,10 +239,11 @@ export async function renderWithSecondLevelFilters<T extends object>(opts: {
       wrap.appendChild(btn);
     }
 
-    if (firstLevel.nextSibling) {
-      firstLevel.parentElement?.insertBefore(wrap, firstLevel.nextSibling);
+    // ✅ Insertar DENTRO del container, justo después del bloque de 1er nivel
+    if (firstLevel && firstLevel.parentElement === container) {
+      container.insertBefore(wrap, firstLevel.nextSibling);
     } else {
-      firstLevel.parentElement?.appendChild(wrap);
+      container.appendChild(wrap);
     }
   }
 
@@ -258,12 +259,14 @@ export async function renderWithSecondLevelFilters<T extends object>(opts: {
     const msg = document.createElement('div');
     msg.className = 'no-results-message alert alert-info my-2';
     msg.textContent = 'No hi ha resultats a mostrar';
-    // Insertar debajo del segundo nivel
-    const after = q<HTMLDivElement>('.second-level-filter-buttons') ?? q<HTMLDivElement>('.fixed-first-level-buttons') ?? container;
-    if (after.nextSibling) {
-      after.parentElement?.insertBefore(msg, after.nextSibling);
+
+    // Insertar debajo del segundo nivel, dentro del container
+    const after = q<HTMLDivElement>('.second-level-filter-buttons') ?? q<HTMLDivElement>('.fixed-first-level-buttons');
+
+    if (after && after.parentElement === container) {
+      container.insertBefore(msg, after.nextSibling);
     } else {
-      after.parentElement?.appendChild(msg);
+      container.appendChild(msg);
     }
   }
 
