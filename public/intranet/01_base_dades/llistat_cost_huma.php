@@ -1,6 +1,6 @@
 <?php require_once APP_ROOT . '/public/intranet/includes/header.php'; ?>
 
-<div class="container">
+<div class="container" style="margin-bottom:55px">
     <?php if ($isAdmin || $isAutor || $isUserCostHuma): ?>
         <h2>Cost humà de la Guerra Civil (1936-1939):</h2>
         <ul>

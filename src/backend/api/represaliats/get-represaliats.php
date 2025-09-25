@@ -351,10 +351,13 @@ ORDER BY t.cognom1, t.cognom2, t.nom;";
 } else if ($slug === 'totalCostHuma') {
     $db = new Database();
 
-    $query = "SELECT COUNT(*) AS total
-        FROM db_dades_personals
-        WHERE categoria LIKE '%{3}%' OR categoria LIKE '%{4}%' OR categoria LIKE '%{5}%'";
-
+    $query = "SELECT
+        SUM(a.completat = 2) AS total_completades,
+        COUNT(*)             AS total
+        FROM db_dades_personals AS a
+        WHERE
+        REPLACE(REPLACE(REPLACE(COALESCE(a.categoria,''), '{',''), '}',''), ' ', '')
+        REGEXP '(^|,)(3|4|5)(,|$)'";
     try {
         $result = $db->getData($query);
 
@@ -385,8 +388,11 @@ ORDER BY t.cognom1, t.cognom2, t.nom;";
 } else if ($slug === 'totalCombatentsRepublica') {
     $db = new Database();
 
-    $query = "SELECT COUNT(*) AS total
-        FROM db_cost_huma_morts_front
+    $query = "SELECT 
+        SUM(a.completat = 2) AS total_completades,
+        COUNT(*)             AS total
+        FROM db_cost_huma_morts_front AS a
+        WHERE
         WHERE condicio IN (2, 4, 1)
         AND bandol = 1";
 

@@ -1,58 +1,71 @@
 import { fetchData } from '../../../services/api/api';
 import { formatNumberSpanish } from '../../../services/formatDates/formatNumber';
 
-interface ApiTotalResponse {
+interface ApiTotalsRow {
+  total: number;
+  total_completades: number;
+}
+interface ApiTotalsResponse {
   status: string;
   message: string;
-  errors: unknown[]; // Aquí puedes especificar el tipo de error si es necesario
-  data: { total: number }[]; // Un array de objetos con la propiedad 'total'
+  errors: unknown[];
+  data: ApiTotalsRow[]; // una fila con total y total_completades
 }
 
 export async function taulaQuadreGeneral() {
-  // Llamada reutilizable para obtener los datos y actualizar los elementos
-  await fetchAndUpdateData('/api/represaliats/get/totalCostHuma', 'totalCostHuma');
-  await fetchAndUpdateData('/api/represaliats/get/totalCombatentsRepublica', 'totalCombatentsRepublica');
-  await fetchAndUpdateData('/api/represaliats/get/totalCombatentsSollevats', 'totalCombatentsSollevats');
-  await fetchAndUpdateData('/api/represaliats/get/totalCombatentsSenseDefinir', 'totalCombatentsSenseDefinir');
-  await fetchAndUpdateData('/api/represaliats/get/totalCivilsBombardeigs', 'totalCivilsBombardeigs');
-  await fetchAndUpdateData('/api/represaliats/get/totalCivilsRepresaliaRepublicana', 'totalCivilsRepresaliaRepublicana');
-  await fetchAndUpdateData('/api/represaliats/get/totalDeportatsMorts', 'totalDeportatsMorts');
-  await fetchAndUpdateData('/api/represaliats/get/totalDeportatsAlliberats', 'totalDeportatsAlliberats');
-  await fetchAndUpdateData('/api/represaliats/get/totalDeportatsTotal', 'totalDeportatsTotal');
-  await fetchAndUpdateData('/api/represaliats/get/totalExiliatsTotal', 'totalExiliatsTotal');
-  await fetchAndUpdateData('/api/represaliats/get/totalExiliatsDeportatsTotal', 'totalExiliatsDeportatsTotal');
-  await fetchAndUpdateData('/api/represaliats/get/totalRepresaliats', 'totalRepresaliats');
-  await fetchAndUpdateData('/api/represaliats/get/totalAfusellats', 'totalAfusellats');
-  await fetchAndUpdateData('/api/represaliats/get/totalProcessats', 'totalProcessats');
+  // Mapa “endpoint -> id base” (id base = el que usas en la columna Total)
+  // Para la columna Completats se usará el mismo id base con sufijo "_completades"
+  const endpoints: Array<{ url: string; idBase: string }> = [
+    { url: '/api/represaliats/get/totalCostHuma', idBase: 'totalCostHuma' },
+    { url: '/api/represaliats/get/totalCombatentsRepublica', idBase: 'totalCombatentsRepublica' },
+    { url: '/api/represaliats/get/totalCombatentsSollevats', idBase: 'totalCombatentsSollevats' },
+    { url: '/api/represaliats/get/totalCombatentsSenseDefinir', idBase: 'totalCombatentsSenseDefinir' },
+    { url: '/api/represaliats/get/totalCivilsBombardeigs', idBase: 'totalCivilsBombardeigs' },
+    { url: '/api/represaliats/get/totalCivilsRepresaliaRepublicana', idBase: 'totalCivilsRepresaliaRepublicana' },
+    { url: '/api/represaliats/get/totalDeportatsMorts', idBase: 'totalDeportatsMorts' },
+    { url: '/api/represaliats/get/totalDeportatsAlliberats', idBase: 'totalDeportatsAlliberats' },
+    { url: '/api/represaliats/get/totalDeportatsTotal', idBase: 'totalDeportatsTotal' },
+    { url: '/api/represaliats/get/totalExiliatsTotal', idBase: 'totalExiliatsTotal' },
+    { url: '/api/represaliats/get/totalExiliatsDeportatsTotal', idBase: 'totalExiliatsDeportatsTotal' },
+    { url: '/api/represaliats/get/totalRepresaliats', idBase: 'totalRepresaliats' },
+    { url: '/api/represaliats/get/totalAfusellats', idBase: 'totalAfusellats' },
+    { url: '/api/represaliats/get/totalProcessats', idBase: 'totalProcessats' },
+    // Si tienes un endpoint para el total general, añádelo aquí:
+    // { url: '/api/represaliats/get/totalGeneral', idBase: 'totalGeneral' },
+  ];
+
+  await Promise.all(endpoints.map((e) => fetchAndUpdatePair(e.url, e.idBase)));
 }
 
-// Función que hace la consulta y actualiza el valor en el elemento con el id proporcionado
-async function fetchAndUpdateData(url: string, elementId: string) {
+// Hace la consulta y actualiza ambas columnas (Completats y Total)
+async function fetchAndUpdatePair(url: string, idBase: string): Promise<void> {
   try {
-    const response = await fetchData<ApiTotalResponse>(url);
+    const response = await fetchData<ApiTotalsResponse>(url);
 
-    // Verificamos que la respuesta es correcta
     if (response && response.data && response.data.length > 0) {
-      const total = response.data[0].total; // Accedemos al valor de 'total' del primer objeto
-      updateTotals(total, elementId);
+      const row = response.data[0];
+      const total = Number(row.total ?? 0);
+      const completades = Number(row.total_completades ?? 0);
+
+      updateTotalsDOM(idBase, total, completades);
     } else {
-      console.error('No se encontraron datos o la estructura es incorrecta.');
+      console.error(`[${url}] Respuesta vacía o estructura incorrecta.`);
     }
   } catch (error) {
-    console.error('Error al realizar la consulta:', error);
+    console.error(`[${url}] Error al realizar la consulta:`, error);
   }
 }
 
-function updateTotals(total: number, divId: string) {
-  // Obtener el elemento <span> por su id
-  const totalElement = document.getElementById(divId);
+function updateTotalsDOM(idBase: string, total: number, completades: number): void {
+  // Columna “Total” (usa el id original)
+  const totalEl = document.getElementById(idBase);
+  if (totalEl) {
+    totalEl.textContent = formatNumberSpanish(total);
+  }
 
-  // Verificar que el elemento exista antes de intentar actualizar su contenido
-  if (totalElement) {
-    // Actualizar el contenido del <span> con el total recibido de la API
-    const totalNumber = Number(total);
-
-    const totalCostHumaFormat = formatNumberSpanish(totalNumber);
-    totalElement.innerHTML = `${totalCostHumaFormat}`;
+  // Columna “Completats” (mismo id con sufijo _completades)
+  const completadesEl = document.getElementById(`${idBase}_completades`);
+  if (completadesEl) {
+    completadesEl.textContent = formatNumberSpanish(completades);
   }
 }

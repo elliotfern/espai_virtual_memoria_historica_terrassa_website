@@ -1,3 +1,5 @@
+import { DOMAIN_WEB } from '../../config/constants';
+
 // admin/renderBotonsAdminSimple.ts
 type Ctx = {
   id: number;
@@ -64,9 +66,7 @@ export function renderBotonsAdminSimple(ctx: Ctx): void {
   editLink.target = '_blank';
   editLink.rel = 'noopener';
   // Usa el host actual para que funcione en dev/test/prod
-  editLink.href = `https://${window.location.hostname}/gestio/base-dades/modifica-fitxa/${ctx.id}`;
-  // Si prefieres fijar dominio explícito, usa:
-  // editLink.href = `https://memoriaterrassa.cat/gestio/base-dades/modifica-fitxa/${ctx.id}`;
+  editLink.href = `${DOMAIN_WEB}/gestio/base-dades/modifica-fitxa/${ctx.id}`;
   editLink.textContent = 'Modifica la fitxa';
 
   const colEdit = document.createElement('div');

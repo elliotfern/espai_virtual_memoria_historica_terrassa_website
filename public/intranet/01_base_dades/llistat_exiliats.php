@@ -1,6 +1,6 @@
 <?php require_once APP_ROOT . '/public/intranet/includes/header.php'; ?>
 
-<div class="container">
+<div class="container" style="margin-bottom:55px">
     <?php if ($isAdmin || $isAutor || $isUserExili): ?>
         <h2>Llistat d'exiliats i deportats:</h2>
         <ul>
