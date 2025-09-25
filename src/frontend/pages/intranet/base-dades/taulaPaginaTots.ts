@@ -41,7 +41,7 @@ export async function taulaPaginaTots(): Promise<void> {
   const isAdmin = await getIsAdmin();
   const isAutor = await getIsAutor();
   const isLogged = await getIsLogged();
-  const reloadKey = 'reload-taula-represaliatsTable';
+  const reloadKey = 'reload-taula-taulaGeneral';
 
   // 1) Diccionario categorías
   const dictRaw: Category[] = await categoriesRepressio('ca');
@@ -151,7 +151,7 @@ export async function taulaPaginaTots(): Promise<void> {
   //const presoModelLabel = labelById(12);
 
   await renderWithSecondLevelFilters<RowExploded>({
-    containerId: 'represaliatsTable',
+    containerId: 'taulaGeneral',
     data: baseExploded, // tu array ya explotado por categoría
     columns,
     filterKeys: ['nom_complet'],
