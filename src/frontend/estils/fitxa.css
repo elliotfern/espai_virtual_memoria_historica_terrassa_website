@@ -2,10 +2,8 @@
 #avisContacte {
   background-color: #c2af96;
   font-size: 15px;
-}
-
-/* (Opcional pero recomendado) algo de aire y layout */
-#avisContacte {
+  margin-top: 35px;
+  width: 50%;
   padding: 12px 16px;
   border-radius: 8px;
   display: flex;
@@ -17,21 +15,4 @@
 #avisContacte .avis-text {
   margin: 0;
   line-height: 1.45;
-}
-
-/* Botón como enlace */
-#avisContacte .btn-contacte {
-  display: inline-block;
-  padding: 8px 14px;
-  border-radius: 6px;
-  background: #2b2b2b;
-  color: #fff;
-  text-decoration: none;
-  font-weight: 600;
-}
-
-#avisContacte .btn-contacte:hover,
-#avisContacte .btn-contacte:focus {
-  filter: brightness(1.1);
-  outline: none;
 }

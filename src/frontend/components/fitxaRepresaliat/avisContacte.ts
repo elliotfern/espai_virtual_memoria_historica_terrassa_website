@@ -14,7 +14,7 @@ export function renderAvisContacte(): void {
     <p class="avis-text">
       Per aportar noves informacions sobre aquest represaliat/da, siguin documents, fotografies o noves dades, o vols sol·licitar una correcció de dades, pots posar-te en contacte amb l'equip de l'Espai Virtual de la Memòria Històrica de Terrassa a través del nostre formulari:
     </p>
-    <a class="btn-contacte" href="${DOMAIN_WEB}/contacte" rel="noopener noreferrer">
+    <a class="botoCategoriaRepresio" href="${DOMAIN_WEB}/contacte" rel="noopener noreferrer">
       Contact'ns
     </a>
   `;
