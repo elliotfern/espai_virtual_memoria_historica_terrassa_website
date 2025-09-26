@@ -115,78 +115,78 @@
                     </tr>
 
                     <tr>
-                        <td id="grup2"><strong>2) Exiliats i deportats:</strong></td>
-                        <td id="email-2"></td>
+                        <td><strong>2) Exiliats i deportats:</strong></td>
+                        <td></td>
                         <td><strong><span id="totalExiliatsDeportatsTotal_completades"></span></strong></td>
                         <td><strong><span id="totalExiliatsDeportatsTotal"></span></strong></td>
                     </tr>
 
                     <tr>
-                        <td id="grup2"></td>
-                        <td id="email-2">Exiliats</td>
+                        <td></td>
+                        <td>Exiliats</td>
                         <td><strong><span id="totalExiliatsTotal_completades"></span></strong></td>
                         <td><strong><span id="totalExiliatsTotal"></span></strong></td>
                     </tr>
 
                     <tr>
-                        <td id="grup2"></td>
-                        <td id="email-2">Deportats (total)</td>
+                        <td></td>
+                        <td>Deportats (total)</td>
                         <td><strong><span id="totalDeportatsTotal_completades"></span></strong></td>
                         <td><strong><span id="totalDeportatsTotal"></span></strong></td>
                     </tr>
 
                     <tr>
-                        <td id="grup2"></td>
-                        <td id="email-2">Deportats (morts)</td>
+                        <td></td>
+                        <td>Deportats (morts)</td>
                         <td><strong><span id="totalDeportatsMorts_completades"></span></strong></td>
                         <td><strong><span id="totalDeportatsMorts"></span></strong></td>
                     </tr>
 
                     <tr>
-                        <td id="grup2"></td>
-                        <td id="email-2">Deportats (alliberats)</td>
+                        <td></td>
+                        <td>Deportats (alliberats)</td>
                         <td><strong><span id="totalDeportatsAlliberats_completades"></span></strong></td>
                         <td><strong><span id="totalDeportatsAlliberats"></span></strong></td>
                     </tr>
 
                     <tr>
-                        <td id="grup3"><strong>4) Cost humà guerra civil:</strong></td>
-                        <td id="email-3"></td>
+                        <td><strong>4) Cost humà guerra civil:</strong></td>
+                        <td></td>
                         <td><strong><span id="totalCostHuma_completades"></span></strong></td>
                         <td><strong><span id="totalCostHuma"></span></strong></td>
                     </tr>
 
                     <tr>
-                        <td id="grup3"><strong></strong></td>
-                        <td id="email-3">Milicians i combatents de l'exèrcit de la República</td>
+                        <td><strong></strong></td>
+                        <td>Milicians i combatents de l'exèrcit de la República</td>
                         <td><strong><span id="totalCombatentsRepublica_completades"></span></strong></td>
                         <td><strong><span id="totalCombatentsRepublica"></span></strong></td>
                     </tr>
 
                     <tr>
-                        <td id="grup3"><strong></strong></td>
-                        <td id="email-3">Combatents de l'exèrcit sollevat</td>
+                        <td><strong></strong></td>
+                        <td>Combatents de l'exèrcit sollevat</td>
                         <td><strong><span id="totalCombatentsSollevats_completades"></span></strong></td>
                         <td><strong><span id="totalCombatentsSollevats"></span></strong></td>
                     </tr>
 
                     <tr>
-                        <td id="grup3"><strong></strong></td>
-                        <td id="email-3">Sense definir bàndol</td>
+                        <td><strong></strong></td>
+                        <td>Sense definir bàndol</td>
                         <td><strong><span id="totalCombatentsSenseDefinir_completades"></span></strong></td>
                         <td><strong><span id="totalCombatentsSenseDefinir"></span></strong></td>
                     </tr>
 
                     <tr>
-                        <td id="grup3"><strong></strong></td>
-                        <td id="email-3">Víctimes civils de bombardeigos, accidents i altres causes desconegudes derivades de la guerra</td>
+                        <td><strong></strong></td>
+                        <td>Víctimes civils de bombardeigos, accidents i altres causes desconegudes derivades de la guerra</td>
                         <td><strong><span id="totalCivilsBombardeigs_completades"></span></strong></td>
                         <td><strong><span id="totalCivilsBombardeigs"></span></strong></td>
                     </tr>
 
                     <tr>
-                        <td id="grup3"><strong></strong></td>
-                        <td id="email-3">Acció incontrolats - violència revolucionària - repressió rereguarda</td>
+                        <td><strong></strong></td>
+                        <td>Acció incontrolats - violència revolucionària - repressió rereguarda</td>
                         <td><strong><span id="totalCivilsRepresaliaRepublicana_completades"></span></strong></td>
                         <td><strong><span id="totalCivilsRepresaliaRepublicana"></span></strong></td>
                     </tr>

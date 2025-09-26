@@ -1,5 +1,6 @@
 export async function fetchData<T>(url: string): Promise<T> {
   const response = await fetch(url, {
+    cache: 'no-store',
     method: 'GET',
     headers: {
       'Cache-Control': 'no-store, no-cache, must-revalidate',
