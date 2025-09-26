@@ -22,15 +22,27 @@ export async function taulaQuadreGeneral() {
     { url: '/api/represaliats/get/totalCombatentsSenseDefinir', idBase: 'totalCombatentsSenseDefinir' },
     { url: '/api/represaliats/get/totalCivilsBombardeigs', idBase: 'totalCivilsBombardeigs' },
     { url: '/api/represaliats/get/totalCivilsRepresaliaRepublicana', idBase: 'totalCivilsRepresaliaRepublicana' },
+
     { url: '/api/represaliats/get/totalDeportatsMorts', idBase: 'totalDeportatsMorts' },
     { url: '/api/represaliats/get/totalDeportatsAlliberats', idBase: 'totalDeportatsAlliberats' },
     { url: '/api/represaliats/get/totalDeportatsTotal', idBase: 'totalDeportatsTotal' },
     { url: '/api/represaliats/get/totalExiliatsTotal', idBase: 'totalExiliatsTotal' },
     { url: '/api/represaliats/get/totalExiliatsDeportatsTotal', idBase: 'totalExiliatsDeportatsTotal' },
+
     { url: '/api/represaliats/get/totalRepresaliats', idBase: 'totalRepresaliats' },
     { url: '/api/represaliats/get/totalAfusellats', idBase: 'totalAfusellats' },
-    { url: '/api/represaliats/get/totalProcessats', idBase: 'totalProcessats' },
+    //{ url: '/api/represaliats/get/totalProcessats', idBase: 'totalProcessats' },
     { url: '/api/represaliats/get/totalProcessatsConsellGuerra', idBase: 'totalProcessatsConsellGuerra' },
+    { url: '/api/represaliats/get/totalPresoModel', idBase: 'totalPresoModel' },
+    { url: '/api/represaliats/get/totalGUTerrassa', idBase: 'totalGUTerrassa' },
+    { url: '/api/represaliats/get/totalResponsabilitats', idBase: 'totalResponsabilitats' },
+    { url: '/api/represaliats/get/totalTPO', idBase: 'totalTPO' },
+    { url: '/api/represaliats/get/totalComiteRelacions', idBase: 'totalComiteRelacions' },
+    { url: '/api/represaliats/get/totalComiteSolidaritat', idBase: 'totalComiteSolidaritat' },
+    { url: '/api/represaliats/get/totalCampsTreball', idBase: 'totalCampsTreball' },
+    { url: '/api/represaliats/get/totalBatallonsPresos', idBase: 'totalBatallonsPresos' },
+    { url: '/api/represaliats/get/totalRepresaliatsPendents', idBase: 'totalRepresaliatsPendents' },
+
     // Si tienes un endpoint para el total general, añádelo aquí:
     { url: '/api/represaliats/get/totalGeneral', idBase: 'totalGeneral' },
   ];

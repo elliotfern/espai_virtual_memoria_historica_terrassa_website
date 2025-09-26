@@ -10,6 +10,9 @@ $slug = $routeParams[0];
 // Configuración de cabeceras para aceptar JSON y responder JSON
 header("Content-Type: application/json");
 header("Access-Control-Allow-Methods: GET");
+header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+header('Pragma: no-cache');
+header('Expires: 0');
 
 
 // Definir el dominio permitido
@@ -954,6 +957,22 @@ ORDER BY t.cognom1, t.cognom2, t.nom;";
             500
         );
     }
+
+    /*
+
+        totalPresoModel
+
+    totalGUTerrassa
+    totalResponsabilitats
+    totalTPO
+    totalComiteRelacions
+    totalComiteSolidaritat
+    totalCampsTreball
+    totalBatallonsPresos
+    totalRepresaliatsPendents
+
+    */
+
     // GET : grup 1 - LListat Detinguts presó model
     // URL: https://memoriaterrassa.cat/api/represaliats/get/detingutsPresoModel
 } else if ($slug === 'detingutsPresoModel') {

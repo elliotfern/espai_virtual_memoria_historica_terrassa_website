@@ -17,31 +17,94 @@
                 <tbody>
                     <!-- Las filas serán llenadas por JavaScript -->
                     <tr>
-                        <td id="grup1"><strong>1) Represaliats 1939-1979:</strong></td>
-                        <td id="email-1"></td>
+                        <td><strong>1) Represaliats 1939-1979:</strong></td>
+                        <td></td>
                         <td><strong><span id="totalRepresaliats_completades"></span></strong></td>
                         <td><strong><span id="totalRepresaliats"></span></strong></td>
                     </tr>
 
                     <tr>
-                        <td id="grup1"></td>
-                        <td id="email-1">a) Processats / Detinguts</td>
+                        <td></td>
+                        <td>a) Processats / Detinguts</td>
                         <td><strong><span id="totalProcessats_completades"></span></strong></td>
                         <td><strong><span id="totalProcessats"></span></strong></td>
                     </tr>
 
                     <tr>
-                        <td id="grup1"></td>
-                        <td id="email-1">a.1) Processats en Consell de Guerra</td>
+                        <td></td>
+                        <td>a.1) Processats en Consell de Guerra</td>
                         <td><strong><span id="totalProcessatsConsellGuerra_completades"></span></strong></td>
                         <td><strong><span id="totalProcessatsConsellGuerra"></span></strong></td>
                     </tr>
 
                     <tr>
-                        <td id="grup1"></td>
-                        <td id="email-1">b) Afusellats</td>
+                        <td></td>
+                        <td>b) Afusellats</td>
                         <td><strong><span id="totalAfusellats_completades"></span></strong></td>
                         <td><strong><span id="totalAfusellats"></span></strong></td>
+                    </tr>
+
+                    <tr>
+                        <td></td>
+                        <td>c) Empresonats Presó Model de Barcelona</td>
+                        <td><strong><span id="totalPresoModel_completades"></span></strong></td>
+                        <td><strong><span id="totalPresoModel"></span></strong></td>
+                    </tr>
+
+                    <tr>
+                        <td></td>
+                        <td>d) Detinguts Guàrdia Urbana de Terrassa / dipòsit de Sant Llàtzer</td>
+                        <td><strong><span id="totalGUTerrassa_completades"></span></strong></td>
+                        <td><strong><span id="totalGUTerrassa"></span></strong></td>
+                    </tr>
+
+                    <tr>
+                        <td></td>
+                        <td>e) Afectats Llei Responsabilitats Polítiques</td>
+                        <td><strong><span id="totalResponsabilitats_completades"></span></strong></td>
+                        <td><strong><span id="totalResponsabilitats"></span></strong></td>
+                    </tr>
+
+                    <tr>
+                        <td></td>
+                        <td>f) Processats Tribunal Orden Público</td>
+                        <td><strong><span id="totalTPO_completades"></span></strong></td>
+                        <td><strong><span id="totalTPO"></span></strong></td>
+                    </tr>
+
+                    <tr>
+                        <td></td>
+                        <td>g) Detinguts Comitè Relacions de Solidaritat (1939-1940)</td>
+                        <td><strong><span id="totalComiteRelacions_completades"></span></strong></td>
+                        <td><strong><span id="totalComiteRelacions"></span></strong></td>
+                    </tr>
+
+                    <tr>
+                        <td></td>
+                        <td>h) Detinguts Comitè Solidaritat (1971-1977)</td>
+                        <td><strong><span id="totalComiteSolidaritat_completades"></span></strong></td>
+                        <td><strong><span id="totalComiteSolidaritat"></span></strong></td>
+                    </tr>
+
+                    <tr>
+                        <td></td>
+                        <td>i) Detinguts Camps de treball</td>
+                        <td><strong><span id="totalCampsTreball_completades"></span></strong></td>
+                        <td><strong><span id="totalCampsTreball"></span></strong></td>
+                    </tr>
+
+                    <tr>
+                        <td></td>
+                        <td>j) Detinguts Batallons disciplinaris de presos</td>
+                        <td><strong><span id="totalBatallonsPresos_completades"></span></strong></td>
+                        <td><strong><span id="totalBatallonsPresos"></span></strong></td>
+                    </tr>
+
+                    <tr>
+                        <td></td>
+                        <td>k) Represaliats pendents classificació </td>
+                        <td><strong><span id="totalRepresaliatsPendents_completades"></span></strong></td>
+                        <td><strong><span id="totalRepresaliatsPendents"></span></strong></td>
                     </tr>
 
                     <tr>
@@ -122,8 +185,8 @@
                     </tr>
 
                     <tr>
-                        <td id="grup1"><strong>Total repressió 1939-1979:</strong></td>
-                        <td id="email-1"></td>
+                        <td><strong>Total repressió 1939-1979:</strong></td>
+                        <td></td>
                         <td><strong><span id="totalGeneral_completades"></span></strong></td>
                         <td><strong><span id="totalGeneral"></span></strong></td>
                     </tr>
