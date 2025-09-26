@@ -577,8 +577,11 @@ ORDER BY t.cognom1, t.cognom2, t.nom;";
 } else if ($slug === 'totalDeportatsMorts') {
     $db = new Database();
 
-    $query = "SELECT COUNT(*) AS total
-        FROM db_deportats
+    $query = "SELECT 
+        SUM(a.completat = 2) AS total_completades,
+        COUNT(*)             AS total
+        FROM db_deportats AS d
+        INNER JOIN db_dades_personals AS a ON d.idPersona = a.id
         WHERE situacio = 1";
 
     try {
@@ -611,8 +614,12 @@ ORDER BY t.cognom1, t.cognom2, t.nom;";
 } else if ($slug === 'totalDeportatsAlliberats') {
     $db = new Database();
 
-    $query = "SELECT COUNT(*) AS total
-        FROM db_deportats
+
+    $query = "SELECT 
+        SUM(a.completat = 2) AS total_completades,
+        COUNT(*)             AS total
+        FROM db_deportats AS d
+        INNER JOIN db_dades_personals AS a ON d.idPersona = a.id
         WHERE situacio = 2";
 
     try {
@@ -644,10 +651,12 @@ ORDER BY t.cognom1, t.cognom2, t.nom;";
     // URL: https://memoriaterrassa.cat/api/represaliats/get/totalDeportatsTotal
 } else if ($slug === 'totalDeportatsTotal') {
     $db = new Database();
-
-    $query = "SELECT COUNT(*) AS total
-        FROM db_dades_personals
-        WHERE categoria LIKE '%{10,2}%'";
+    $query = "SELECT 
+        SUM(a.completat = 2) AS total_completades,
+        COUNT(*)             AS total
+        FROM db_dades_personals AS a
+        WHERE REPLACE(REPLACE(REPLACE(COALESCE(a.categoria,''), '{',''), '}',''), ' ', '')
+        REGEXP '(^|,)(2)(,|$)'";
 
     try {
         $result = $db->getData($query);
@@ -680,12 +689,17 @@ ORDER BY t.cognom1, t.cognom2, t.nom;";
     $db = new Database();
 
     $query = "SELECT 
-        SUM(a.completat = 2) AS total_completades,
+        SUM(t.completat = 2) AS total_completades,
         COUNT(*)             AS total
+        FROM (
+        SELECT 
+            a.completat,
+            REPLACE(REPLACE(REPLACE(COALESCE(a.categoria,''), '{',''), '}',''), ' ', '') AS cat_clean
         FROM db_dades_personals AS a
+        ) t
         WHERE
-        REPLACE(REPLACE(REPLACE(COALESCE(a.categoria,''), '{',''), '}',''), ' ', '')
-        REGEXP '(^|,)(10)(,|$)'";
+        t.cat_clean REGEXP '(^|,)10(,|$)'
+        AND NOT (t.cat_clean REGEXP '(^|,)2(,|$)')";
 
     try {
         $result = $db->getData($query);
@@ -794,12 +808,54 @@ ORDER BY t.cognom1, t.cognom2, t.nom;";
     $db = new Database();
 
     $query = "SELECT 
+        SUM(t.completat = 2) AS total_completades,
+        COUNT(*)             AS total
+        FROM (
+        SELECT 
+            a.completat,
+            REPLACE(REPLACE(REPLACE(COALESCE(a.categoria,''), '{',''), '}',''), ' ', '') AS cat_clean
+        FROM db_dades_personals AS a
+        ) t
+        WHERE
+        t.cat_clean REGEXP '(^|,)6(,|$)'
+        AND NOT (t.cat_clean REGEXP '(^|,)1,2,3,4,5,7,8,9,10,11,12,13,14,15,16,17,18,19,20(,|$)')";
+
+    try {
+        $result = $db->getData($query);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
+    // GET : Comptador: grup 1 - total processats  consell de guerra
+    // URL: https://memoriaterrassa.cat/api/represaliats/get/totalProcessatsConsellGuerra
+} else if ($slug === 'totalProcessatsConsellGuerra') {
+    $db = new Database();
+
+    $query = "SELECT 
         SUM(a.completat = 2) AS total_completades,
         COUNT(*)             AS total
         FROM db_dades_personals AS a
-        WHERE
-        REPLACE(REPLACE(REPLACE(COALESCE(a.categoria,''), '{',''), '}',''), ' ', '')
-         REGEXP '(^|,)(6)(,|$)'";
+        INNER JOIN db_processats AS p ON a.id = p.idPersona
+        WHERE p.tipus_judici = 1";
 
     try {
         $result = $db->getData($query);

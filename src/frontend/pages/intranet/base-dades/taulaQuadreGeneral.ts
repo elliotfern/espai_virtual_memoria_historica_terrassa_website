@@ -30,6 +30,7 @@ export async function taulaQuadreGeneral() {
     { url: '/api/represaliats/get/totalRepresaliats', idBase: 'totalRepresaliats' },
     { url: '/api/represaliats/get/totalAfusellats', idBase: 'totalAfusellats' },
     { url: '/api/represaliats/get/totalProcessats', idBase: 'totalProcessats' },
+    { url: '/api/represaliats/get/totalProcessatsConsellGuerra', idBase: 'totalProcessatsConsellGuerra' },
     // Si tienes un endpoint para el total general, añádelo aquí:
     { url: '/api/represaliats/get/totalGeneral', idBase: 'totalGeneral' },
   ];

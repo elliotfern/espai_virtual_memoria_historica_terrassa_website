@@ -25,14 +25,21 @@
 
                     <tr>
                         <td id="grup1"></td>
-                        <td id="email-1">Processats / Detinguts</td>
+                        <td id="email-1">a) Processats / Detinguts</td>
                         <td><strong><span id="totalProcessats_completades"></span></strong></td>
                         <td><strong><span id="totalProcessats"></span></strong></td>
                     </tr>
 
                     <tr>
                         <td id="grup1"></td>
-                        <td id="email-1">Afusellats</td>
+                        <td id="email-1">a.1) Processats en Consell de Guerra</td>
+                        <td><strong><span id="totalProcessatsConsellGuerra_completades"></span></strong></td>
+                        <td><strong><span id="totalProcessatsConsellGuerra"></span></strong></td>
+                    </tr>
+
+                    <tr>
+                        <td id="grup1"></td>
+                        <td id="email-1">b) Afusellats</td>
                         <td><strong><span id="totalAfusellats_completades"></span></strong></td>
                         <td><strong><span id="totalAfusellats"></span></strong></td>
                     </tr>
