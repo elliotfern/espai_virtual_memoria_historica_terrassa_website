@@ -1,16 +1,20 @@
-export async function fetchData<T>(url: string): Promise<T> {
-  const response = await fetch(url, {
-    cache: 'no-store',
-    method: 'GET',
+export async function fetchData<T>(url: string, init?: RequestInit & { noCache?: boolean }): Promise<T> {
+  const withBuster = init?.noCache ? `${url}${url.includes('?') ? '&' : '?'}_=${Date.now()}` : url;
+
+  const resp = await fetch(withBuster, {
+    ...init,
+    cache: init?.noCache ? 'no-store' : init?.cache,
     headers: {
-      'Cache-Control': 'no-store, no-cache, must-revalidate',
-      Pragma: 'no-cache',
+      method: 'GET',
+      ...(init?.headers || {}),
+      ...(init?.noCache
+        ? {
+            'Cache-Control': 'no-store, no-cache, must-revalidate',
+            Pragma: 'no-cache',
+          }
+        : {}),
     },
   });
-
-  if (!response.ok) {
-    throw new Error('Error en la llamada a la API');
-  }
-
-  return response.json(); // El tipo de respuesta será inferido como T
+  if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+  return resp.json() as Promise<T>;
 }

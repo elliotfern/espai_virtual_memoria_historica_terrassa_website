@@ -54,7 +54,7 @@ export async function taulaQuadreGeneral() {
 // Hace la consulta y actualiza ambas columnas (Completats y Total)
 async function fetchAndUpdatePair(url: string, idBase: string): Promise<void> {
   try {
-    const response = await fetchData<ApiTotalsResponse>(url);
+    const response = await fetchData<ApiTotalsResponse>(url, { noCache: true });
 
     if (response && response.data && response.data.length > 0) {
       const row = response.data[0];
