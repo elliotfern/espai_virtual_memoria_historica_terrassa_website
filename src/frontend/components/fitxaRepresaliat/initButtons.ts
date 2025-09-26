@@ -3,6 +3,7 @@ import { loadTranslations } from '../../services/i18n/loadTranslations';
 import { initTabs } from './initTabs';
 import { initCategoriaButtons } from './initCategoriasButtons';
 import { renderBotonsAdminSimple } from './informacioFitxaAdministracio';
+import { renderAvisContacte } from './avisContacte';
 
 export async function initButtons(idPersona: number): Promise<void> {
   const fitxa = cache.getFitxa();
@@ -23,4 +24,6 @@ export async function initButtons(idPersona: number): Promise<void> {
     visibilitat: fitxa.visibilitat,
     containerId: 'botonsAdmin',
   });
+
+  renderAvisContacte();
 }

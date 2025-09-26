@@ -53,33 +53,38 @@ export async function taulaQuadreGeneral() {
 
 // Hace la consulta y actualiza ambas columnas (Completats y Total)
 async function fetchAndUpdatePair(url: string, idBase: string): Promise<void> {
+  const epoch = Date.now(); // marca de esta petición
   try {
     const response = await fetchData<ApiTotalsResponse>(url, { noCache: true });
+    const row = response?.data?.[0];
+    if (!row) return;
 
-    if (response && response.data && response.data.length > 0) {
-      const row = response.data[0];
-      const total = Number(row.total ?? 0);
-      const completades = Number(row.total_completades ?? 0);
+    const total = Number(row.total ?? 0);
+    const completades = Number(row.total_completades ?? 0);
 
-      updateTotalsDOM(idBase, total, completades);
-    } else {
-      console.error(`[${url}] Respuesta vacía o estructura incorrecta.`);
-    }
+    updateTotalsDOM(idBase, total, completades, epoch);
   } catch (error) {
     console.error(`[${url}] Error al realizar la consulta:`, error);
   }
 }
 
-function updateTotalsDOM(idBase: string, total: number, completades: number): void {
-  // Columna “Total” (usa el id original)
+function updateTotalsDOM(idBase: string, total: number, completades: number, epoch: number): void {
+  // Total
   const totalEl = document.getElementById(idBase);
   if (totalEl) {
-    totalEl.textContent = formatNumberSpanish(total);
+    const prev = Number(totalEl.getAttribute('data-epoch') ?? 0);
+    if (epoch >= prev) {
+      totalEl.textContent = formatNumberSpanish(total);
+      totalEl.setAttribute('data-epoch', String(epoch));
+    }
   }
-
-  // Columna “Completats” (mismo id con sufijo _completades)
-  const completadesEl = document.getElementById(`${idBase}_completades`);
-  if (completadesEl) {
-    completadesEl.textContent = formatNumberSpanish(completades);
+  // Completats
+  const compEl = document.getElementById(`${idBase}_completades`);
+  if (compEl) {
+    const prev = Number(compEl.getAttribute('data-epoch') ?? 0);
+    if (epoch >= prev) {
+      compEl.textContent = formatNumberSpanish(completades);
+      compEl.setAttribute('data-epoch', String(epoch));
+    }
   }
 }

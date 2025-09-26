@@ -40,6 +40,8 @@ $id = $routeParams[0];
 
         <div class="tab" id="botons2"></div>
         <div id="fitxa-categoria" class="fitxa-persona" style="margin-top:50px;margin-bottom:50px;display:none"> </div>
+
+        <div id="avisContacte" class="row" style="margin-bottom:25px"></div>
     </div>
 </div>
 
