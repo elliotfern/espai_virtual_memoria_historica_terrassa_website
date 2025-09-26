@@ -31,10 +31,11 @@ export async function taulaQuadreGeneral() {
 
     { url: '/api/represaliats/get/totalRepresaliats', idBase: 'totalRepresaliats' },
     { url: '/api/represaliats/get/totalAfusellats', idBase: 'totalAfusellats' },
-    //{ url: '/api/represaliats/get/totalProcessats', idBase: 'totalProcessats' },
+    { url: '/api/represaliats/get/totalProcessats', idBase: 'totalProcessats' },
     { url: '/api/represaliats/get/totalProcessatsConsellGuerra', idBase: 'totalProcessatsConsellGuerra' },
     { url: '/api/represaliats/get/totalPresoModel', idBase: 'totalPresoModel' },
     { url: '/api/represaliats/get/totalGUTerrassa', idBase: 'totalGUTerrassa' },
+    { url: '/api/represaliats/get/totalDMTerrassa', idBase: 'totalDMTerrassa' },
     { url: '/api/represaliats/get/totalResponsabilitats', idBase: 'totalResponsabilitats' },
     { url: '/api/represaliats/get/totalTPO', idBase: 'totalTPO' },
     { url: '/api/represaliats/get/totalComiteRelacions', idBase: 'totalComiteRelacions' },

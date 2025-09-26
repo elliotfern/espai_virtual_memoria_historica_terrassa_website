@@ -2,7 +2,8 @@ export async function fetchData<T>(url: string): Promise<T> {
   const response = await fetch(url, {
     method: 'GET',
     headers: {
-      // Aquí pueden ir los headers si los necesitas
+      'Cache-Control': 'no-store, no-cache, must-revalidate',
+      Pragma: 'no-cache',
     },
   });
 

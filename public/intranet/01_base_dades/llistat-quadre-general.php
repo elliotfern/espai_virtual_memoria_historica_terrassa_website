@@ -53,9 +53,16 @@
 
                     <tr>
                         <td></td>
-                        <td>d) Detinguts Guàrdia Urbana de Terrassa / dipòsit de Sant Llàtzer</td>
+                        <td>d) Detinguts Guàrdia Urbana de Terrassa</td>
                         <td><strong><span id="totalGUTerrassa_completades"></span></strong></td>
                         <td><strong><span id="totalGUTerrassa"></span></strong></td>
+                    </tr>
+
+                    <tr>
+                        <td></td>
+                        <td>d.2) Detinguts Dipòsit de Sant Llàtzer</td>
+                        <td><strong><span id="totalDMTerrassa_completades"></span></strong></td>
+                        <td><strong><span id="totalDMTerrassa"></span></strong></td>
                     </tr>
 
                     <tr>

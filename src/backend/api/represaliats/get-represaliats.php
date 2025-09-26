@@ -811,17 +811,12 @@ ORDER BY t.cognom1, t.cognom2, t.nom;";
     $db = new Database();
 
     $query = "SELECT 
-        SUM(t.completat = 2) AS total_completades,
+        SUM(a.completat = 2) AS total_completades,
         COUNT(*)             AS total
-        FROM (
-        SELECT 
-            a.completat,
-            REPLACE(REPLACE(REPLACE(COALESCE(a.categoria,''), '{',''), '}',''), ' ', '') AS cat_clean
         FROM db_dades_personals AS a
-        ) t
-        WHERE
-        t.cat_clean REGEXP '(^|,)6(,|$)'
-        AND NOT (t.cat_clean REGEXP '(^|,)1,2,3,4,5,7,8,9,10,11,12,13,14,15,16,17,18,19,20(,|$)')";
+     
+       WHERE REPLACE(REPLACE(REPLACE(COALESCE(a.categoria,''), '{',''), '}',''), ' ', '')
+         REGEXP '(^|,)(6)(,|$)'";
 
     try {
         $result = $db->getData($query);
@@ -958,20 +953,386 @@ ORDER BY t.cognom1, t.cognom2, t.nom;";
         );
     }
 
-    /*
+    // GET : Comptador: grup 1 - total Preso Model
+    // URL: https://memoriaterrassa.cat/api/represaliats/get/totalPresoModel
+} else if ($slug === 'totalPresoModel') {
+    $db = new Database();
 
-        totalPresoModel
+    $query = "SELECT 
+        SUM(a.completat = 2) AS total_completades,
+        COUNT(*)             AS total
+        FROM db_dades_personals AS a
+     
+       WHERE REPLACE(REPLACE(REPLACE(COALESCE(a.categoria,''), '{',''), '}',''), ' ', '')
+         REGEXP '(^|,)(12)(,|$)'";
 
-    totalGUTerrassa
-    totalResponsabilitats
-    totalTPO
-    totalComiteRelacions
-    totalComiteSolidaritat
-    totalCampsTreball
-    totalBatallonsPresos
-    totalRepresaliatsPendents
+    try {
+        $result = $db->getData($query);
 
-    */
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
+    // GET : Comptador: grup 1 - total Preso Terrassa
+    // URL: https://memoriaterrassa.cat/api/represaliats/get/totalGUTerrassa
+} else if ($slug === 'totalGUTerrassa') {
+    $db = new Database();
+
+    $query = "SELECT 
+        SUM(a.completat = 2) AS total_completades,
+        COUNT(*)             AS total
+        FROM db_dades_personals AS a
+     
+       WHERE REPLACE(REPLACE(REPLACE(COALESCE(a.categoria,''), '{',''), '}',''), ' ', '')
+         REGEXP '(^|,)(13)(,|$)'";
+
+    try {
+        $result = $db->getData($query);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
+    // GET : Comptador: grup 1 - total Preso diposit
+    // URL: https://memoriaterrassa.cat/api/represaliats/get/totalDMTerrassa
+} else if ($slug === 'totalDMTerrassa') {
+    $db = new Database();
+
+    $query = "SELECT 
+        SUM(a.completat = 2) AS total_completades,
+        COUNT(*)             AS total
+        FROM db_dades_personals AS a
+     
+       WHERE REPLACE(REPLACE(REPLACE(COALESCE(a.categoria,''), '{',''), '}',''), ' ', '')
+         REGEXP '(^|,)(16)(,|$)'";
+
+    try {
+        $result = $db->getData($query);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
+    // GET : Comptador: grup 1 - total responsabilitats politiques
+    // URL: https://memoriaterrassa.cat/api/represaliats/get/totalResponsabilitats
+} else if ($slug === 'totalResponsabilitats') {
+    $db = new Database();
+
+    $query = "SELECT 
+        SUM(a.completat = 2) AS total_completades,
+        COUNT(*)             AS total
+        FROM db_dades_personals AS a
+     
+       WHERE REPLACE(REPLACE(REPLACE(COALESCE(a.categoria,''), '{',''), '}',''), ' ', '')
+         REGEXP '(^|,)(15)(,|$)'";
+
+    try {
+        $result = $db->getData($query);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
+    // GET : Comptador: grup 1 - total TPO
+    // URL: https://memoriaterrassa.cat/api/represaliats/get/totalTPO
+} else if ($slug === 'totalTPO') {
+    $db = new Database();
+
+    $query = "SELECT 
+        SUM(a.completat = 2) AS total_completades,
+        COUNT(*)             AS total
+        FROM db_dades_personals AS a
+     
+       WHERE REPLACE(REPLACE(REPLACE(COALESCE(a.categoria,''), '{',''), '}',''), ' ', '')
+         REGEXP '(^|,)(17)(,|$)'";
+
+    try {
+        $result = $db->getData($query);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
+    // GET : Comptador: grup 1 - total totalComiteRelacions
+    // URL: https://memoriaterrassa.cat/api/represaliats/get/totalComiteRelacions
+} else if ($slug === 'totalComiteRelacions') {
+    $db = new Database();
+
+    $query = "SELECT 
+        SUM(a.completat = 2) AS total_completades,
+        COUNT(*)             AS total
+        FROM db_dades_personals AS a
+     
+       WHERE REPLACE(REPLACE(REPLACE(COALESCE(a.categoria,''), '{',''), '}',''), ' ', '')
+         REGEXP '(^|,)(18)(,|$)'";
+
+    try {
+        $result = $db->getData($query);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
+
+    // GET : Comptador: grup 1 - total totalComiteSolidaritat
+    // URL: https://memoriaterrassa.cat/api/represaliats/get/totalComiteSolidaritat
+} else if ($slug === 'totalComiteSolidaritat') {
+    $db = new Database();
+
+    $query = "SELECT 
+        SUM(a.completat = 2) AS total_completades,
+        COUNT(*)             AS total
+        FROM db_dades_personals AS a
+     
+       WHERE REPLACE(REPLACE(REPLACE(COALESCE(a.categoria,''), '{',''), '}',''), ' ', '')
+         REGEXP '(^|,)(14)(,|$)'";
+
+    try {
+        $result = $db->getData($query);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
+    // GET : Comptador: grup 1 - total totalCampsTreball
+    // URL: https://memoriaterrassa.cat/api/represaliats/get/totalCampsTreball
+} else if ($slug === 'totalCampsTreball') {
+    $db = new Database();
+
+    $query = "SELECT 
+        SUM(a.completat = 2) AS total_completades,
+        COUNT(*)             AS total
+        FROM db_dades_personals AS a
+     
+       WHERE REPLACE(REPLACE(REPLACE(COALESCE(a.categoria,''), '{',''), '}',''), ' ', '')
+         REGEXP '(^|,)(19)(,|$)'";
+
+    try {
+        $result = $db->getData($query);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
+    // GET : Comptador: grup 1 - total totalBatallonsPresos
+    // URL: https://memoriaterrassa.cat/api/represaliats/get/totalBatallonsPresos
+} else if ($slug === 'totalBatallonsPresos') {
+    $db = new Database();
+
+    $query = "SELECT 
+        SUM(a.completat = 2) AS total_completades,
+        COUNT(*)             AS total
+        FROM db_dades_personals AS a
+     
+       WHERE REPLACE(REPLACE(REPLACE(COALESCE(a.categoria,''), '{',''), '}',''), ' ', '')
+         REGEXP '(^|,)(20)(,|$)'";
+
+    try {
+        $result = $db->getData($query);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
+    // GET : Comptador: grup 1 - total totalRepresaliatsPendents
+    // URL: https://memoriaterrassa.cat/api/represaliats/get/totalRepresaliatsPendents
+} else if ($slug === 'totalRepresaliatsPendents') {
+    $db = new Database();
+
+    $query = "SELECT 
+        SUM(a.completat = 2) AS total_completades,
+        COUNT(*)             AS total
+        FROM db_dades_personals AS a
+     
+       WHERE REPLACE(REPLACE(REPLACE(COALESCE(a.categoria,''), '{',''), '}',''), ' ', '')
+         REGEXP '(^|,)(11)(,|$)'";
+
+    try {
+        $result = $db->getData($query);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
 
     // GET : grup 1 - LListat Detinguts presó model
     // URL: https://memoriaterrassa.cat/api/represaliats/get/detingutsPresoModel
