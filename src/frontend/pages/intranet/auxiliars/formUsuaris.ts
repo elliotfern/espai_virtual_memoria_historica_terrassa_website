@@ -47,7 +47,7 @@ export async function formUsuaris(isUpdate: boolean, id?: number) {
     if (!response || !response.data) return;
     data = response.data;
 
-    divTitol.innerHTML = `<h2>Modificació Usuari: ${data.espai_cat}</h2>`;
+    divTitol.innerHTML = `<h2>Modificació Usuari: ${data.nom}</h2>`;
 
     renderFormInputs(data);
 
