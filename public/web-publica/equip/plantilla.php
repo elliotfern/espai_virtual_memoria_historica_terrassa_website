@@ -23,7 +23,7 @@ $translate2 = $translations['cerca-avan'] ?? [];
 
         <!-- Imagen a la derecha -->
         <div class="col-md-4 text-center">
-            <img id="avatar" src="<?php echo IMG_DOMAIN; ?>/assets_usuaris/elliot_fernandez_gran.jpg" class="img-fluid" alt="Usuari">
+            <img id="urlImatge" src="" class="img-fluid" alt="Usuari">
 
         </div>
     </div>

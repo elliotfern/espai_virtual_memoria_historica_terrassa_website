@@ -306,13 +306,14 @@ if ($slug === "isAdmin") {
     // URL: https://memoriaterrassa.cat/api/auth/get/usuariWebId?slug=${id}?lang=${lang}
 } else if ($slug === "usuariWebId") {
 
-    $slug = $_GET['id'] ?? null;
+    $slug = $_GET['slug'] ?? null;
     $lang = $_GET['lang'] ?? null;
     $db = new Database();
 
-    $query = "SELECT u.nom, u.slug, u.avatar, i.bio_curta_$lang AS bio_curta, i.bio_$lang AS bio
+    $query = "SELECT u.nom, u.slug, u.avatar, i.bio_curta_$lang AS bio_curta, i.bio_$lang AS bio, img.nomArxiu AS urlImatge
                 FROM auth_users AS u
                 LEFT JOIN auth_users_i18n AS i ON u.id = i.id_user
+                LEFT JOIN aux_imatges AS img ON u.avatar = img.id
                 WHERE u.slug = :slug";
 
     try {
