@@ -9,7 +9,7 @@ $translate2 = $translations['cerca-avan'] ?? [];
 
     <div class="container px-4">
         <span id="nom" class="negreta gran italic-text cap"></span>
-
+        <p><span id="bio_curta" class="italic-text cap" style="font-size: 30px!important;"></span></p>
     </div>
 </div>
 

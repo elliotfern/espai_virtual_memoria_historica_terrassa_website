@@ -50,4 +50,36 @@ document.addEventListener('DOMContentLoaded', () => {
       equip(lang, slug);
     }
   }
+
+  if (pageType[0] === 'en') {
+    const lang = 'en';
+    const slug = pageType[2];
+    if (pageType[1] === 'equip') {
+      equip(lang, slug);
+    }
+  }
+
+  if (pageType[0] === 'it') {
+    const lang = 'it';
+    const slug = pageType[2];
+    if (pageType[1] === 'equip') {
+      equip(lang, slug);
+    }
+  }
+
+  if (pageType[0] === 'fr') {
+    const lang = 'fr';
+    const slug = pageType[2];
+    if (pageType[1] === 'equip') {
+      equip(lang, slug);
+    }
+  }
+
+  if (pageType[0] === 'pt') {
+    const lang = 'pt';
+    const slug = pageType[2];
+    if (pageType[1] === 'equip') {
+      equip(lang, slug);
+    }
+  }
 });

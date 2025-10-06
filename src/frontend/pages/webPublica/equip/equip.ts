@@ -77,6 +77,32 @@ function renderByIds(record: Record<string, unknown>): void {
   });
 }
 
+function render404(): void {
+  // Oculta el contenido normal si existe un contenedor
+  const content = document.getElementById('equipContainer');
+  if (content) content.hidden = true;
+
+  let box = document.getElementById('error404') as HTMLDivElement | null;
+  if (!box) {
+    box = document.createElement('div');
+    box.id = 'error404';
+    box.className = 'container my-5';
+    box.innerHTML = `
+      <div class="alert alert-danger" role="alert">
+        <h1 class="h3 mb-3">404 · Fitxa no trobada</h1>
+        <p>La persona sol·licitada no existeix o s'ha mogut.</p>
+        <p class="mb-0">
+          <a href="/equip" class="btn btn-primary">Tornar a l’equip</a>
+        </p>
+      </div>
+    `;
+    (document.getElementById('equipRoot') ?? document.body).appendChild(box);
+  } else {
+    box.hidden = false;
+  }
+  document.title = '404 · No trobat · memoriaterrassa.cat';
+}
+
 /**
  * Carga y pinta los datos del usuario en elementos cuyo id coincide con cada campo.
  * - `bio` se inserta como HTML (ya sanitizado en backend).
@@ -93,6 +119,12 @@ function renderByIds(record: Record<string, unknown>): void {
 export async function equip(lang: string, slug: string) {
   const res = await fetchDataGet<ApiResponse<UsuariWeb>>(API_URLS.GET.USUARI_WEB_ID(slug, lang), true);
   if (!res?.data) return;
+
+  // Casos donde la API responde pero no hay datos válidos
+  if (!res || res.status !== 'success' || !res.data) {
+    render404();
+    return;
+  }
 
   const data = res.data;
 
