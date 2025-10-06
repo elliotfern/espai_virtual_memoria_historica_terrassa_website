@@ -77,7 +77,7 @@ if ($slug === "login") {
     $nom = $row['nom'];
     $avatar = $row['nomArxiu'];
 
-    if (password_verify($password, $hash) && in_array($userType, [1, 2, 3, 4])) {
+    if (password_verify($password, $hash) && in_array($userType, [1, 2, 3, 4, 6])) {
         session_start();
         $idUser = $id;
 

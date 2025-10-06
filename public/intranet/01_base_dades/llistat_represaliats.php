@@ -1,7 +1,7 @@
 <?php require_once APP_ROOT . '/public/intranet/includes/header.php'; ?>
 
 <div class="container" style="margin-bottom:55px">
-    <?php if ($isAdmin || $isAutor): ?>
+    <?php if ($isAdmin || $isAutor ||  $isUserRepresaliats): ?>
         <h2>Llistat de represaliats (1939-1979):</h2>
         <ul>
             <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['base_dades']; ?>/represaliats/llistat-processats">Llistat de detinguts / processats</a></li>

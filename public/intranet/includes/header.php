@@ -5,7 +5,9 @@
 
             <?php if ($isAdmin || $isAutor): ?>
                 <a href="<?php echo APP_WEB . APP_INTRANET . $urlIntranet['base_dades']; ?>/general" class="btn btn-success menuBtn w-100 w-md-auto" role="button" aria-disabled="false">Tots</a>
+            <?php endif; ?>
 
+            <?php if ($isAdmin || $isAutor || $isUserRepresaliats): ?>
                 <a href="<?php echo APP_WEB . APP_INTRANET . $urlIntranet['base_dades']; ?>/represaliats" class="btn btn-success menuBtn w-100 w-md-auto" role="button" aria-disabled="false">Represaliats 1939-79</a>
             <?php endif; ?>
 
@@ -24,7 +26,9 @@
 <div class="container text-center" style="margin-top:10px;margin-bottom:20px">
     <div class="row">
         <div class="col-12 col-md-12 d-flex flex-column flex-md-row justify-content-md-between gap-3">
-            <a href="<?php echo APP_WEB . APP_INTRANET . $urlIntranet['base_dades']; ?>/nova-fitxa" class="btn btn-secondary menuBtn w-100 w-md-auto" role="button" aria-disabled="false">Creació nova fitxa</a>
+            <?php if ($isAdmin || $isAutor): ?>
+                <a href="<?php echo APP_WEB . APP_INTRANET . $urlIntranet['base_dades']; ?>/nova-fitxa" class="btn btn-secondary menuBtn w-100 w-md-auto" role="button" aria-disabled="false">Creació nova fitxa</a>
+            <?php endif; ?>
 
             <?php if ($isAdmin || $isAutor || $isLogged) : ?>
                 <a href="<?php echo APP_WEB . APP_INTRANET . $urlIntranet['auxiliars']; ?>" class="btn btn-secondary menuBtn w-100 w-md-auto" role="button" aria-disabled="false">Taules auxiliars</a>

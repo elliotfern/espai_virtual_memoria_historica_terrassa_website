@@ -33,7 +33,7 @@ function verificarSesion()
         $userType = $decoded->user_type ?? null;
 
         // Verificar si user_type es 1 (admin) o 2 (usuario regular) o 3/4 (usuari col·laborador) o 5 (usuari logged)
-        if (!in_array($userType, [1, 2, 3, 4, 5])) {
+        if (!in_array($userType, [1, 2, 3, 4, 5, 6])) {
             header('Location: /acces'); // Redirige si el user_type no es válido (no es admin ni usuario regular)
             exit();
         }
@@ -61,7 +61,7 @@ function validarTokenJWT()
         $userType = $decoded->user_type ?? null;
 
         // Asegurarse de que el userType es válido
-        if (in_array($userType, [1, 2, 3, 4, 5])) {
+        if (in_array($userType, [1, 2, 3, 4, 5, 6])) {
             header('Location: /gestio');
             exit;
         }

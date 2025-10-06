@@ -24,7 +24,7 @@ function isUserLogged(): bool
         $decoded = JWT::decode($token, new Key($jwtSecret, 'HS256'));
 
         // Comprobamos si el usuario es admin (user_type = 1)
-        if (isset($decoded->user_type) && in_array($decoded->user_type, [1, 2, 3, 4])) {
+        if (isset($decoded->user_type) && in_array($decoded->user_type, [1, 2, 3, 4, 6])) {
             return true;
         }
     } catch (Exception $e) {

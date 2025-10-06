@@ -43,6 +43,7 @@
                 <a href="<?php echo APP_WEB; ?>/credits">Crèdits</a> |
                 <a href="<?php echo APP_WEB; ?>/avis-legal">Avís legal</a> |
                 <a href="<?php echo APP_WEB; ?>/politica-privacitat">Política de privacitat</a>
+                <a href="<?php echo APP_WEB; ?>/politica-cookies">Política de cookies</a>
             </div>
         </div>
     </div>

@@ -43,8 +43,9 @@ export async function taulaDadesUsuaris() {
     headersMap: {
       nom: 'Usuari',
       email: 'Email',
-      biografia_cat: 'Biografia',
+      bio_curta_ca: 'Biografia',
       tipus: 'Tipus',
+      idBio: 'Accions',
       id: 'Accions',
     },
     columnRenderers: {
@@ -52,6 +53,11 @@ export async function taulaDadesUsuaris() {
       email: (val) => `${val}`,
       biografia_cat: (val) => `${val}`,
       tipus: (val) => `${val}`,
+      idBio: (val, row) => {
+        const id = row.id as string;
+        return `<a href="https://${window.location.host}/gestio/auxiliars/modifica-bio-usuari/${id}">
+                        <button class="btn btn-secondary btn-sm">Modifica biografia</button></a>`;
+      },
       id: (val, row) => {
         const id = row.id as string;
         return `<a href="https://${window.location.host}/gestio/auxiliars/modifica-usuari/${id}">

@@ -132,10 +132,10 @@ if ($slug === "isAdmin") {
             // Verifica y decodifica el token
             $decoded = JWT::decode($token, new Key($jwtSecret, 'HS256'));
 
-            // Verifica si el usuario tiene permisos de administrador
+            // Verifica si el usuario tiene permiso
             if (
                 isset($decoded->user_type) &&
-                in_array($decoded->user_type, [3, 4]) // Grupos 3 y 4
+                in_array($decoded->user_type, [3, 4, 6]) // Grupos 3 y 4
             ) {
                 echo json_encode(['isLogged' => true]);
                 exit;
@@ -198,9 +198,10 @@ if ($slug === "isAdmin") {
 } else if ($slug === "llistatUsuaris") {
 
     $db = new Database();
-    $query = "SELECT u.nom, u.email, u.biografia_cat, t.tipus, u.id
+    $query = "SELECT u.nom, u.email, i.bio_curta_ca, t.tipus, u.id, i.id AS idBio
                 FROM auth_users AS u
                 LEFT JOIN auth_users_tipus AS t ON u.user_type = t.id
+                LEFT JOIN auth_users_i18n AS i ON u.id = i.id_user
                 ORDER BY u.id ASC";
 
     try {

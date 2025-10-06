@@ -73,6 +73,7 @@ $base_routes = [
     '/credits' => 'public/web-publica/legal/credits.php',
     '/avis-legal' => 'public/web-publica/legal/avis-legal.php',
     '/politica-privacitat' => 'public/web-publica/legal/politica-privacitat.php',
+    '/politica-cookies' => 'public/web-publica/legal/politica-cookies.php',
 
 ];
 
@@ -241,6 +242,13 @@ $routes = [
 
     '/politica-privacitat' => [
         'view' => 'public/web-publica/legal/politica-privacitat.php',
+        'needs_session' => false,
+        'header_footer' => false,
+        'header_menu_footer' => true
+    ],
+
+    '/politica-cookies' => [
+        'view' => 'public/web-publica/legal/politica-cookies.php',
         'needs_session' => false,
         'header_footer' => false,
         'header_menu_footer' => true

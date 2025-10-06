@@ -43,7 +43,7 @@ $id = $routeParams[0];
 
         <hr style="margin-top:30px">
 
-        <div id="avisContacte"></div>
+        <div id="avisContacte" style="margin-top:85px"></div>
     </div>
 </div>
 
