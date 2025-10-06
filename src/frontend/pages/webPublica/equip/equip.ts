@@ -92,10 +92,10 @@ function render404(apiMessage?: unknown): void {
   box.innerHTML = `
     <div class="container my-5">
       <div class="alert alert-danger" role="alert">
-        <h1 class="h3 mb-3">404 · Fitxa no trobada</h1>
+        <h1 class="h3 mb-3">404 · Pàgina no trobada</h1>
         <p>${msg}</p>
         <p class="mb-0">
-          <a href="/equip" class="btn btn-primary">Tornar a l’equip</a>
+          <a href="/" class="btn btn-primary">Tornar a la pàgina principal</a>
         </p>
       </div>
     </div>

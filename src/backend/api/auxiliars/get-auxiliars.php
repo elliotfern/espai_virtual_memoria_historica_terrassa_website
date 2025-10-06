@@ -1637,8 +1637,8 @@ if ($slug === "municipis") {
         // Datos fijos
         $result = [
             ['id' => 1, 'nom' => 'Equip web'],
-            ['id' => 2, 'nom' => 'Equip recerca'],
-            ['id' => 3, 'nom' => 'Equip col·laboradors'],
+            ['id' => 2, 'nom' => 'Equip recerca històrica'],
+            ['id' => 3, 'nom' => 'Equip col·laboradors/es introducció dades'],
             ['id' => 4, 'nom' => 'Sense assignar'],
         ];
 

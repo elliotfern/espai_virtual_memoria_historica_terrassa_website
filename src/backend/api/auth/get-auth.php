@@ -303,7 +303,7 @@ if ($slug === "isAdmin") {
 
 
     // GET: consulta informacio sobre un usuari - WEB
-    // URL: https://memoriaterrassa.cat/api/auth/get/usuariWebId?slug=${id}?lang=${lang}
+    // URL: https://memoriaterrassa.cat/api/auth/get/usuariWebId?slug=${id}&lang=${lang}
 } else if ($slug === "usuariWebId") {
 
     $slug = $_GET['slug'] ?? null;
@@ -319,6 +319,44 @@ if ($slug === "isAdmin") {
     try {
         $params = [':slug' => $slug];
         $result = $db->getData($query, $params, true);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;  // o exit; según cómo funcione Response::error
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
+    // GET: llistat usuaris WEB
+    // URL: https://memoriaterrassa.cat/api/auth/get/usuarisLlistaWeb?lang=${lang}
+} else if ($slug === "usuarisLlistaWeb") {
+
+    $lang = $_GET['lang'] ?? null;
+    $db = new Database();
+
+    $query = "SELECT u.nom, u.slug, u.avatar, i.bio_curta_$lang AS bio_curta, img.nomArxiu AS urlImatge, u.grup
+                FROM auth_users AS u
+                LEFT JOIN auth_users_i18n AS i ON u.id = i.id_user
+                LEFT JOIN aux_imatges AS img ON u.avatar = img.id
+                WHERE u.grup IN (1,2,3)";
+
+    try {
+        $result = $db->getData($query);
 
         if (empty($result)) {
             Response::error(

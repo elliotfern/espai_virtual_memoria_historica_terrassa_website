@@ -212,6 +212,9 @@ $translate = $translations['benvinguda'] ?? [];
         <div class="container my-5">
             <span class="titol italic-text gran lora">Membres recerca històrica:</span>
 
+            <div id="equipLlistaRoot"></div>
+
+
             <div class="row mt-4 gy-4 gx-4">
                 <!-- Primera fila -->
                 <div class="col-md-6 d-flex align-items-center px-3">
