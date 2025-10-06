@@ -153,7 +153,6 @@ if ($slug === "municipi") {
 
     $nom               = !empty($data['nom']) ? data_input($data['nom']) : ($hasError = true);
     $email        = !empty($data['email']) ? data_input($data['email']) : ($hasError = true);
-    $biografia_cat         = !empty($data['biografia_cat']) ? data_input($data['biografia_cat']) : ($hasError = false);
     $user_type          = !empty($data['user_type']) ? data_input($data['user_type']) : ($hasError = true);
     $avatar            = !empty($data['avatar']) ? data_input($data['avatar']) : ($hasError = false);
     $id                  = !empty($data['id']) ? data_input($data['id']) : ($hasError = true);
@@ -169,11 +168,10 @@ if ($slug === "municipi") {
     /** @var PDO $conn */
 
     // Construcción dinámica del query dependiendo de si se actualiza la contraseña o no
-    $query = "UPDATE auth_users SET nom = :nom, email = :email, biografia_cat = :biografia_cat, user_type = :user_type, avatar = :avatar";
+    $query = "UPDATE auth_users SET nom = :nom, email = :email, user_type = :user_type, avatar = :avatar";
     $params = [
         ':nom' => $nom,
         ':email' => $email,
-        ':biografia_cat' => $biografia_cat,
         ':user_type' => $user_type,
         ':avatar' => $avatar,
     ];
@@ -195,6 +193,225 @@ if ($slug === "municipi") {
         echo json_encode(['status' => 'success', 'message' => 'Usuari actualitzat correctament']);
     } catch (PDOException $e) {
         echo json_encode(['status' => 'error', 'message' => 'Error en l\'actualització de les dades.']);
+    }
+} else if ($slug === "usuari-biografia") {
+
+    // —— Body JSON ——
+    $raw = file_get_contents('php://input');
+    $data = json_decode($raw, true);
+    if (!is_array($data)) {
+        Response::error(MissatgesAPI::error('jsonInvalid'), ['Body JSON invàlid'], 400);
+    }
+
+    $errors = [];
+
+    // —— Helpers ——
+    // Devuelve texto “plano” para validar si hay contenido real (quita etiquetas, &nbsp;, espacios…)
+    function plainTextFromHtml(?string $html): string
+    {
+        if ($html === null) return '';
+        $s = html_entity_decode((string)$html, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        $s = strip_tags($s);
+        // elimina NBSP y comprime espacios
+        $s = preg_replace('/\x{A0}/u', ' ', $s);
+        $s = preg_replace('/\s+/u', ' ', $s);
+        return trim($s);
+    }
+
+    // ⚠️ Debes tener implementada esta función igual que en el POST
+    // - Permitir solo etiquetas/atributos de Trix que consideres seguros
+    // - Normalizar estilos, eliminar scripts/eventos, etc.
+    if (!function_exists('sanitizeTrixHtml')) {
+        function sanitizeTrixHtml(string $html): string
+        {
+            // Placeholder mínimo por si acaso (reemplaza por tu implementación real)
+            return $html;
+        }
+    }
+
+    /** ---------- Identificador del registro ---------- **/
+    $id_user = $data['id_user'] ?? null;  // recomendado (una fila por usuario)
+    $id_pk   = $data['id'] ?? null;       // alternativo (PK auto-inc)
+
+    if (($id_user === null || $id_user === '') && ($id_pk === null || $id_pk === '')) {
+        $errors[] = ValidacioErrors::requerit('id_user o id');
+    } else {
+        if ($id_user !== null && $id_user !== '' && !is_numeric($id_user)) {
+            $errors[] = ValidacioErrors::invalid('id_user');
+        }
+        if ($id_pk !== null && $id_pk !== '' && !is_numeric($id_pk)) {
+            $errors[] = ValidacioErrors::invalid('id');
+        }
+    }
+
+    // Si viene id_user, valida rango como en tu POST (0..10)
+    if ($id_user !== null && $id_user !== '') {
+        $id_user = (int)$id_user;
+        if ($id_user < 0 || $id_user > 10) {
+            $errors[] = ValidacioErrors::invalid('id_user');
+        }
+    }
+
+    /** ---------- Campos actualizables ---------- **/
+    // Para PUT parcial: si la clave NO viene, usamos NULL (para COALESCE conservar el valor actual)
+    $hasAnyUpdatable = false;
+    $getOpt = function (array $src, string $key) use (&$hasAnyUpdatable) {
+        if (array_key_exists($key, $src)) {
+            $hasAnyUpdatable = true;
+            return $src[$key];
+        }
+        return null; // no enviado → null ⇒ COALESCE conserva
+    };
+
+    // ——— bio_curta_* (≤255)
+    $len255 = function ($v, string $label) use (&$errors) {
+        if ($v === null) return null; // no enviado
+        $s = trim((string)$v);
+        if (mb_strlen($s, 'UTF-8') > 255) {
+            $errors[] = ValidacioErrors::massaLlarg($label, 255);
+        }
+        return $s; // puede ser '' para “vaciar”
+    };
+    $bio_curta_ca = $len255($getOpt($data, 'bio_curta_ca'), 'bio_curta_ca');
+    $bio_curta_es = $len255($getOpt($data, 'bio_curta_es'), 'bio_curta_es');
+    $bio_curta_en = $len255($getOpt($data, 'bio_curta_en'), 'bio_curta_en');
+    $bio_curta_it = $len255($getOpt($data, 'bio_curta_it'), 'bio_curta_it');
+    $bio_curta_fr = $len255($getOpt($data, 'bio_curta_fr'), 'bio_curta_fr');
+    $bio_curta_pt = $len255($getOpt($data, 'bio_curta_pt'), 'bio_curta_pt');
+
+    // ——— bio_* (Trix/HTML)
+    // Si viene el campo:
+    //   - Sanitizamos para guardar
+    //   - Permitimos '' para “vaciar” contenido
+    // Si NO viene, lo dejamos en NULL para que COALESCE conserve
+    $normTrix = function ($v) {
+        if ($v === null) return null;                // no enviado
+        $raw = (string)$v;
+        $plain = plainTextFromHtml($raw);
+        if ($plain === '') {
+            return '';                                // enviado “vacío” → vaciar
+        }
+        return sanitizeTrixHtml($raw);               // enviado con contenido → sanitizado
+    };
+
+    $bio_ca = $normTrix($getOpt($data, 'bio_ca'));
+    $bio_es = $normTrix($getOpt($data, 'bio_es'));
+    $bio_en = $normTrix($getOpt($data, 'bio_en'));
+    $bio_fr = $normTrix($getOpt($data, 'bio_fr'));
+    $bio_it = $normTrix($getOpt($data, 'bio_it'));
+    $bio_pt = $normTrix($getOpt($data, 'bio_pt'));
+
+    // —— Regla de negocio: si ENVIAS biografías largas, al menos CA o ES con “texto real” ——
+    // (Si no envías ninguna de las dos, no aplicamos esta validación porque no estás cambiándolas)
+    $sentCa = array_key_exists('bio_ca', $data);
+    $sentEs = array_key_exists('bio_es', $data);
+    if ($sentCa || $sentEs) {
+        $plainCa = $sentCa ? plainTextFromHtml((string)($data['bio_ca'] ?? '')) : '';
+        $plainEs = $sentEs ? plainTextFromHtml((string)($data['bio_es'] ?? '')) : '';
+        if ($plainCa === '' && $plainEs === '') {
+            $errors[] = "Cal escriure almenys una biografia (català o castellà).";
+        }
+    }
+
+    // Si no se envía ningún campo actualizable → error
+    if (!$hasAnyUpdatable) {
+        $errors[] = ValidacioErrors::requerit('almenys un camp per actualitzar');
+    }
+
+    // Errores de validación
+    if (!empty($errors)) {
+        Response::error(MissatgesAPI::error('validacio'), $errors, 400);
+    }
+
+    /** ---------- UPDATE ---------- **/
+    try {
+        /** @var PDO $conn */
+        global $conn;
+        if (!isset($conn) || !($conn instanceof PDO)) {
+            $conn = DatabaseConnection::getConnection();
+        }
+
+        $sql = "UPDATE auth_users_i18n SET
+                bio_curta_ca = COALESCE(:bio_curta_ca, bio_curta_ca),
+                bio_curta_es = COALESCE(:bio_curta_es, bio_curta_es),
+                bio_curta_en = COALESCE(:bio_curta_en, bio_curta_en),
+                bio_curta_it = COALESCE(:bio_curta_it, bio_curta_it),
+                bio_curta_fr = COALESCE(:bio_curta_fr, bio_curta_fr),
+                bio_curta_pt = COALESCE(:bio_curta_pt, bio_curta_pt),
+                bio_ca       = COALESCE(:bio_ca,       bio_ca),
+                bio_es       = COALESCE(:bio_es,       bio_es),
+                bio_en       = COALESCE(:bio_en,       bio_en),
+                bio_fr       = COALESCE(:bio_fr,       bio_fr),
+                bio_it       = COALESCE(:bio_it,       bio_it),
+                bio_pt       = COALESCE(:bio_pt,       bio_pt)
+            WHERE " . (
+            ($id_user !== null && $id_user !== '') ? "id_user = :id_user" : "id = :id_pk"
+        );
+
+        $stmt = $conn->prepare($sql);
+
+        // Bind de los “curta” (NULL → conservar; ''/texto → actualizar)
+        $bindStrNull = function (PDOStatement $st, string $param, $val): void {
+            $st->bindValue($param, $val, $val === null ? PDO::PARAM_NULL : PDO::PARAM_STR);
+        };
+        $bindStrNull($stmt, ':bio_curta_ca', $bio_curta_ca);
+        $bindStrNull($stmt, ':bio_curta_es', $bio_curta_es);
+        $bindStrNull($stmt, ':bio_curta_en', $bio_curta_en);
+        $bindStrNull($stmt, ':bio_curta_it', $bio_curta_it);
+        $bindStrNull($stmt, ':bio_curta_fr', $bio_curta_fr);
+        $bindStrNull($stmt, ':bio_curta_pt', $bio_curta_pt);
+
+        // Bind de las Trix/HTML ya sanitizadas
+        $bindStrNull($stmt, ':bio_ca', $bio_ca);
+        $bindStrNull($stmt, ':bio_es', $bio_es);
+        $bindStrNull($stmt, ':bio_en', $bio_en);
+        $bindStrNull($stmt, ':bio_fr', $bio_fr);
+        $bindStrNull($stmt, ':bio_it', $bio_it);
+        $bindStrNull($stmt, ':bio_pt', $bio_pt);
+
+        if ($id_user !== null && $id_user !== '') {
+            $stmt->bindValue(':id_user', (int)$id_user, PDO::PARAM_INT);
+        } else {
+            $stmt->bindValue(':id_pk', (int)$id_pk, PDO::PARAM_INT);
+        }
+
+        $stmt->execute();
+        $rows = $stmt->rowCount();
+
+        // Audit
+        $userId = $GLOBALS['userId'] ?? null;
+        if (class_exists('Audit')) {
+            $detalls = "Actualització biografia d'usuari (i18n)";
+            $tipusOperacio = "UPDATE";
+            $tableName = defined('Tables::DB_AUTH_USERS_I18N') ? Tables::DB_AUTH_USERS_I18N : 'auth_users_i18n';
+            $auditId = $id_pk ?? $id_user;
+
+            Audit::registrarCanvi(
+                $conn,
+                (int)($userId ?? 0),
+                $tipusOperacio,
+                $detalls,
+                $tableName,
+                (int)$auditId
+            );
+        }
+
+        if ($rows === 0) {
+            // No cambios (mismos valores) o no existe
+            Response::success(MissatgesAPI::success('noCanvis'), ['updated' => 0], 200);
+            exit;
+        }
+
+        Response::success(
+            MissatgesAPI::success('update'),
+            [
+                'updated' => $rows,
+                'where'   => ($id_user !== null && $id_user !== '') ? ['id_user' => (int)$id_user] : ['id' => (int)$id_pk]
+            ],
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(MissatgesAPI::error('errorBD'), [$e->getMessage()], 500);
     }
 
     // 4) PUT Partit politic

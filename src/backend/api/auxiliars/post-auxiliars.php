@@ -1311,7 +1311,6 @@ if ($slug === "municipi") {
 
     $nom = isset($data['nom']) && trim($data['nom']) !== '' ? data_input($data['nom']) : null;
     $email = isset($data['email']) && trim($data['email']) !== '' ? data_input($data['email']) : null;
-    $biografia_cat = isset($data['biografia_cat']) ? data_input($data['biografia_cat']) : null;
     $user_type = isset($data['user_type']) && trim($data['user_type']) !== '' ? (int) $data['user_type'] : null;
     $password = isset($data['password']) && trim($data['password']) !== '' ? data_input($data['password']) : null;
     $avatar = isset($data['avatar']) ? (int) $data['avatar'] : null;
@@ -1328,14 +1327,14 @@ if ($slug === "municipi") {
 
     global $conn;
     /** @var PDO $conn */
-    $query = "INSERT INTO auth_users (nom, email, biografia_cat, user_type, password, avatar)
-          VALUES (:nom, :email, :biografia_cat, :user_type, :password, :avatar)";
+    $query = "INSERT INTO auth_users (nom, email, user_type, password, avatar)
+          VALUES (:nom, :email, :user_type, :password, :avatar)";
 
     try {
         $stmt = $conn->prepare($query);
         $stmt->bindParam(':nom', $nom, PDO::PARAM_STR);
         $stmt->bindParam(':email', $email, PDO::PARAM_STR);
-        $stmt->bindParam(':biografia_cat', $biografia_cat, PDO::PARAM_STR);
+
         $stmt->bindParam(':user_type', $user_type, PDO::PARAM_INT);
         $stmt->bindParam(':password', $hashedPassword, PDO::PARAM_STR);
         $stmt->bindParam(':avatar', $avatar, PDO::PARAM_INT);
@@ -1349,6 +1348,162 @@ if ($slug === "municipi") {
         // Si no hay resultados, devolver un mensaje de error
         header("Content-Type: application/json");
         echo json_encode(['status' => 'error', 'message' => 'Error en la transmissió de les dades.']);
+    }
+
+    // 8) POST BIOGRAFIA USUARIS
+    // ruta POST => "/api/auxiliars/post/usuari-biografia"
+} else if ($slug === "usuari-biografia") {
+
+    $raw = file_get_contents('php://input');
+    $data = json_decode($raw, true);
+    if (!is_array($data)) {
+        Response::error(MissatgesAPI::error('jsonInvalid'), ['Body JSON invàlid'], 400);
+    }
+
+    $errors = [];
+
+    // —— Helpers ——
+    // Devuelve texto “plano” para validar si hay contenido real (quita etiquetas, &nbsp;, espacios…)
+    function plainTextFromHtml(?string $html): string
+    {
+        if ($html === null) return '';
+        $s = html_entity_decode((string)$html, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        $s = strip_tags($s);
+        // elimina NBSP y comprime espacios
+        $s = preg_replace('/\x{A0}/u', ' ', $s);
+        $s = preg_replace('/\s+/u', ' ', $s);
+        return trim($s);
+    }
+
+    /** ---------- Validación ---------- **/
+    $id_user = $data['id_user'] ?? null;
+    if ($id_user === null || $id_user === '' || !is_numeric($id_user)) {
+        $errors[] = ValidacioErrors::requerit('id_user');
+    } else {
+        // tinyint(2) => 0..99 (ajusta si tu rango real es distinto)
+        $id_user = (int)$id_user;
+        if ($id_user < 0 || $id_user > 10) {
+            $errors[] = ValidacioErrors::invalid('id_user');
+        }
+    }
+
+    // helper para validar y recortar 255
+    $sanitize255 = function ($v, string $label) use (&$errors) {
+        $s = trim((string)($v ?? ''));
+        if (mb_strlen($s, 'UTF-8') > 255) {
+            $errors[] = ValidacioErrors::massaLlarg($label, 255);
+        }
+        return $s;
+    };
+
+    // NOT NULL sin default ⇒ garantizamos string no nulo ('' si falta)
+    $bio_curta_ca = $sanitize255($data['bio_curta_ca'] ?? '', 'bio_curta_ca');
+    $bio_curta_es = $sanitize255($data['bio_curta_es'] ?? '', 'bio_curta_es');
+    $bio_curta_en = $sanitize255($data['bio_curta_en'] ?? '', 'bio_curta_en');
+    $bio_curta_it = $sanitize255($data['bio_curta_it'] ?? '', 'bio_curta_it');
+    $bio_curta_fr = $sanitize255($data['bio_curta_fr'] ?? '', 'bio_curta_fr');
+    $bio_curta_pt = $sanitize255($data['bio_curta_pt'] ?? '', 'bio_curta_pt');
+
+    // campos TEXT (NOT NULL) ⇒ también forzamos string no nulo
+    $bio_ca = (string)($data['bio_ca'] ?? '');
+    $bio_es = (string)($data['bio_es'] ?? '');
+    $bio_en = (string)($data['bio_en'] ?? '');
+    $bio_fr = (string)($data['bio_fr'] ?? '');
+    $bio_it = (string)($data['bio_it'] ?? '');
+    $bio_pt = (string)($data['bio_pt'] ?? '');
+
+    // —— Validación: al menos una biografía con texto real (CA o ES) ——
+    $hasCa = plainTextFromHtml($bio_ca) !== '';
+    $hasEs = plainTextFromHtml($bio_es) !== '';
+    $hasEn = plainTextFromHtml($bio_en) !== '';
+    $hasFr = plainTextFromHtml($bio_fr) !== '';
+    $hasIt = plainTextFromHtml($bio_it) !== '';
+    $hasPt = plainTextFromHtml($bio_pt) !== '';
+    if (!$hasCa && !$hasEs) {
+        $errors[] = "Cal escriure almenys una biografia (català o castellà).";
+    }
+
+    // Errores de validación
+    if (!empty($errors)) {
+        Response::error(MissatgesAPI::error('validacio'), $errors, 400);
+    }
+
+
+    // —— Sanitizar para guardar (solo si pasó validación) ——
+    $biografiaCa = $hasCa ? sanitizeTrixHtml($bio_ca) : null;
+    $biografiaEs = $hasEs ? sanitizeTrixHtml($bio_es) : null;
+    $biografiaEn = $hasEn ? sanitizeTrixHtml($bio_en) : null;
+    $biografiaFr = $hasFr ? sanitizeTrixHtml($bio_fr) : null;
+    $biografiaIt = $hasIt ? sanitizeTrixHtml($bio_it) : null;
+    $biografiaPt = $hasPt ? sanitizeTrixHtml($bio_pt) : null;
+
+    /** ---------- Inserción ---------- **/
+    try {
+        /** @var PDO $conn */
+        global $conn;
+        if (!isset($conn) || !($conn instanceof PDO)) {
+            $conn = DatabaseConnection::getConnection();
+        }
+
+        $sql = "INSERT INTO auth_users_i18n (
+                id_user,
+                bio_curta_ca, bio_curta_es, bio_curta_en, bio_curta_it, bio_curta_fr, bio_curta_pt,
+                bio_ca, bio_es, bio_en, bio_fr, bio_it, bio_pt
+            ) VALUES (
+                :id_user,
+                :bio_curta_ca, :bio_curta_es, :bio_curta_en, :bio_curta_it, :bio_curta_fr, :bio_curta_pt,
+                :bio_ca, :bio_es, :bio_en, :bio_fr, :bio_it, :bio_pt
+            )";
+
+        $stmt = $conn->prepare($sql);
+        $stmt->bindValue(':id_user',      $id_user,      PDO::PARAM_INT);
+
+        $stmt->bindValue(':bio_curta_ca', $bio_curta_ca, PDO::PARAM_STR);
+        $stmt->bindValue(':bio_curta_es', $bio_curta_es, PDO::PARAM_STR);
+        $stmt->bindValue(':bio_curta_en', $bio_curta_en, PDO::PARAM_STR);
+        $stmt->bindValue(':bio_curta_it', $bio_curta_it, PDO::PARAM_STR);
+        $stmt->bindValue(':bio_curta_fr', $bio_curta_fr, PDO::PARAM_STR);
+        $stmt->bindValue(':bio_curta_pt', $bio_curta_pt, PDO::PARAM_STR);
+
+        $stmt->bindValue(':bio_ca', $biografiaCa, PDO::PARAM_STR);
+        $stmt->bindValue(':bio_es', $biografiaEs, PDO::PARAM_STR);
+        $stmt->bindValue(':bio_en', $biografiaEn, PDO::PARAM_STR);
+        $stmt->bindValue(':bio_fr', $biografiaFr, PDO::PARAM_STR);
+        $stmt->bindValue(':bio_it', $biografiaIt, PDO::PARAM_STR);
+        $stmt->bindValue(':bio_pt', $biografiaPt, PDO::PARAM_STR);
+
+        $stmt->execute();
+
+        $id = (int)$conn->lastInsertId();
+
+        // Audit
+        if (class_exists('Audit')) {
+            $detalls = "Creació biografia d'usuari (i18n)";
+            $tipusOperacio = "INSERT";
+            $tableName = Tables::DB_AUTH_USERS_I18N;
+
+            Audit::registrarCanvi(
+                $conn,
+                (int)($userId ?? 0),
+                $tipusOperacio,
+                $detalls,
+                $tableName,
+                $id
+            );
+        }
+
+        Response::success(
+            MissatgesAPI::success('create'),
+            ['id' => $id, 'id_user' => $id_user],
+            201
+        );
+    } catch (PDOException $e) {
+        // Si más adelante pones UNIQUE(id_user) y hay duplicado, atrapará aquí
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
     }
 
     // 8) POST CATEGORIA REPRESSIO

@@ -199,6 +199,14 @@ $routes = [
         'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-usuari.php'
     ]),
 
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/modifica-bio-usuari/{slug}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-usuari-biografia.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/nou-bio-usuari/{slug}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-usuari-biografia.php'
+    ]),
+
     APP_INTRANET . $urlIntranet['auxiliars'] . '/modifica-avatar-usuari/{slug}' => array_merge($defaultProtectedConfig, [
         'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-usuari-avatar.php'
     ]),

@@ -271,9 +271,47 @@ if ($slug === "isAdmin") {
     $id = $_GET['id'] ?? null;
     $db = new Database();
 
-    $query = "SELECT u.nom, u.email, u.biografia_cat, u.user_type, u.id, u.avatar
+    $query = "SELECT u.nom, u.email, u.user_type, u.id, u.avatar
                 FROM auth_users AS u
                 WHERE u.id = :id";
+
+    try {
+        $params = [':id' => $id];
+        $result = $db->getData($query, $params, true);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;  // o exit; según cómo funcione Response::error
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
+    // GET: consulta informacio sobre un usuari - biografia idiomes
+    // URL: https://memoriaterrassa.cat/api/auth/get/usuariBiografia?id=${id}
+} else if ($slug === "usuariBiografia") {
+
+    $id = $_GET['id'] ?? null;
+    $db = new Database();
+
+    $query = "SELECT id, id_user, bio_curta_ca, bio_curta_es, bio_curta_en,	bio_curta_it, bio_curta_fr, bio_curta_pt, bio_ca, bio_es, bio_en, bio_fr, bio_it, bio_pt, nom
+                FROM auth_users_i18n AS i
+                LEFT JOIN auth_users AS u ON i.id_user = u.id
+                WHERE i.id_user = :id";
 
     try {
         $params = [':id' => $id];

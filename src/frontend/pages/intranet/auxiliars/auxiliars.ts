@@ -44,6 +44,7 @@ import { formCampPreso } from './formCampPreso';
 import { taulaCampsDetencio } from './taulaCampsDetencio';
 import { taulaCampsConcentracio } from './taulaCampsConcentracio';
 import { formCampConcentracio } from './formCampConcentracio';
+import { formUsuarisBiografies } from './formUsuarisBiografies';
 
 export async function auxiliars() {
   const url = window.location.href;
@@ -55,6 +56,10 @@ export async function auxiliars() {
     formUsuaris(false);
   } else if (pageType[2] === 'modifica-usuari') {
     formUsuaris(true, Number(pageType[3]));
+  } else if (pageType[2] === 'modifica-bio-usuari') {
+    formUsuarisBiografies(true, Number(pageType[3]));
+  } else if (pageType[2] === 'nova-bio-usuari') {
+    formUsuarisBiografies(false);
   } else if (pageType[2] === 'llistat-municipis') {
     taulaMunicipis();
   } else if (pageType[2] === 'llistat-partits-politics') {

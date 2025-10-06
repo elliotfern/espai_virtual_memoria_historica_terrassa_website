@@ -52,11 +52,6 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
                             </div>
                         </div>
 
-                        <div class="col-md-12">
-                            <label for="biografia_cat" class="form-label negreta">Descripcio (català):</label>
-                            <textarea id="biografia_cat" name="biografia_cat" class="form-control" rows="4"></textarea>
-                        </div>
-
                         <div class="row espai-superior" style="padding-top:25px">
                             <div class="col">
                                 <a class="btn btn-secondary" role="button" aria-disabled="true" onclick="goBack()">Tornar enrere</a>
