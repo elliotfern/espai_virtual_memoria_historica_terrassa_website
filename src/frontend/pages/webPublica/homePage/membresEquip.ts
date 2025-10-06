@@ -25,6 +25,22 @@ const GROUP_TITLES: Record<number, string> = {
 };
 const GROUP_ORDER: number[] = [2, 1, 3];
 
+type Lang = 'ca' | 'es' | 'en' | 'fr' | 'it' | 'pt';
+
+function normLang(lang: string): Lang {
+  const l = (lang || 'ca').toLowerCase();
+  return (['ca', 'es', 'en', 'fr', 'it', 'pt'] as const).includes(l as Lang) ? (l as Lang) : 'ca';
+}
+
+const CTA_LABEL: Record<Lang, string> = {
+  ca: 'Veure biografia',
+  es: 'Ver biografía',
+  en: 'View biography',
+  fr: 'Voir la biographie',
+  it: 'Vedi biografia',
+  pt: 'Ver biografia',
+};
+
 function buildUserImgSrc(urlImatge?: string): string {
   if (!urlImatge) return `${MEDIA_BASE}avatar-defecte.jpg`;
   const raw = urlImatge.trim();
@@ -34,8 +50,10 @@ function buildUserImgSrc(urlImatge?: string): string {
 }
 
 function buildProfileHref(slug: string, lang: string): string {
+  const L = normLang(lang);
   const base = '/equip/' + encodeURIComponent(slug);
-  return lang ? `/${encodeURIComponent(lang)}${base}` : base;
+  // No añadir /ca
+  return L === 'ca' ? base : `/${L}${base}`;
 }
 
 function chunk<T>(arr: T[], size: number): T[][] {
@@ -45,6 +63,7 @@ function chunk<T>(arr: T[], size: number): T[][] {
 }
 
 function createCard(item: UsuariItem, lang: string, withLeftBorder: boolean): HTMLElement {
+  const L = normLang(lang);
   const col = document.createElement('div');
   col.className = `col-md-6 d-flex align-items-center px-3${withLeftBorder ? ' border-start' : ''}`;
 
@@ -68,7 +87,7 @@ function createCard(item: UsuariItem, lang: string, withLeftBorder: boolean): HT
   a.href = buildProfileHref(item.slug, lang);
   a.className = 'btn btn-primary btn-custom-2 w-auto align-self-start';
   a.style.marginTop = '15px';
-  a.textContent = 'Veure biografia';
+  a.textContent = CTA_LABEL[L];
   left.appendChild(a);
 
   const right = document.createElement('div');

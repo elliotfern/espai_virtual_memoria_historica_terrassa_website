@@ -11,6 +11,7 @@ import { baseDadesWebPublica } from './pages/webPublica/baseDades/baseDades';
 import { fitxaRepresaliat } from './components/fitxaRepresaliat';
 import { equip } from './pages/webPublica/equip/equip';
 import { homePage } from './pages/webPublica/homePage/homePage';
+import { credits } from './pages/webPublica/credits/credits';
 
 nameUser();
 
@@ -35,6 +36,9 @@ document.addEventListener('DOMContentLoaded', () => {
   } else if (pageType[0] === 'inici') {
     const lang = 'ca';
     homePage(lang);
+  } else if (pageType[0] === 'credits') {
+    const lang = 'ca';
+    credits(lang);
   } else if (pageType[0] === 'fonts-documentals') {
     TaulaDadesFonts();
   } else if (pageType[0] === 'equip') {
@@ -48,6 +52,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const slug = pageType[2];
     if (pageType[1] === 'equip') {
       equip(lang, slug);
+    } else if (pageType[1] === 'inici') {
+      homePage(lang);
+    } else if (pageType[1] === 'credits') {
+      credits(lang);
     }
   }
 
@@ -56,6 +64,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const slug = pageType[2];
     if (pageType[1] === 'equip') {
       equip(lang, slug);
+    } else if (pageType[1] === 'inici') {
+      homePage(lang);
+    } else if (pageType[1] === 'credits') {
+      credits(lang);
     }
   }
 
@@ -64,6 +76,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const slug = pageType[2];
     if (pageType[1] === 'equip') {
       equip(lang, slug);
+    } else if (pageType[1] === 'inici') {
+      homePage(lang);
+    } else if (pageType[1] === 'credits') {
+      credits(lang);
     }
   }
 
@@ -72,6 +88,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const slug = pageType[2];
     if (pageType[1] === 'equip') {
       equip(lang, slug);
+    } else if (pageType[1] === 'inici') {
+      homePage(lang);
+    } else if (pageType[1] === 'credits') {
+      credits(lang);
     }
   }
 
@@ -80,6 +100,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const slug = pageType[2];
     if (pageType[1] === 'equip') {
       equip(lang, slug);
+    } else if (pageType[1] === 'inici') {
+      homePage(lang);
+    } else if (pageType[1] === 'credits') {
+      credits(lang);
     }
   }
 });
