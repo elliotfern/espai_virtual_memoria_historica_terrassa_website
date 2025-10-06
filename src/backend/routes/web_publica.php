@@ -61,10 +61,7 @@ $base_routes = [
     '/contacte' => 'public/web-publica/contacte.php',
 
     // 6. Equip investigadors
-    '/equip/manel-marquez' => 'public/web-publica/equip/manel-marquez.php',
-    '/equip/juan-antonio-olivares' => 'public/web-publica/equip/juan-antonio.php',
-    '/equip/elliot-fernandez' => 'public/web-publica/equip/elliot-fernandez.php',
-    '/equip/josep-lluis-lacueva' => 'public/web-publica/equip/jose-luis.php',
+    '/equip/{slug}' => 'public/web-publica/equip/plantilla.php',
 
     // 7. Cronologia
     '/cronologia' => 'public/web-publica/cronologia.php',
@@ -189,29 +186,8 @@ $routes = [
     ],
 
     // 6. Equip investigadors
-    '/equip/manel-marquez'  =>  [
-        'view' => 'public/web-publica/equip/manel-marquez.php',
-        'needs_session' => false,
-        'header_footer' => false,
-        'header_menu_footer' => true
-    ],
-
-    '/equip/juan-antonio-olivares'  =>  [
-        'view' => 'public/web-publica/equip/juan-antonio.php',
-        'needs_session' => false,
-        'header_footer' => false,
-        'header_menu_footer' => true
-    ],
-
-    '/equip/elliot-fernandez'  =>  [
-        'view' => 'public/web-publica/equip/elliot-fernandez.php',
-        'needs_session' => false,
-        'header_footer' => false,
-        'header_menu_footer' => true
-    ],
-
-    '/equip/josep-lluis-lacueva'  =>  [
-        'view' => 'public/web-publica/equip/jose-luis.php',
+    '/equip/{slug}'  =>  [
+        'view' => 'public/web-publica/equip/plantilla.php',
         'needs_session' => false,
         'header_footer' => false,
         'header_menu_footer' => true

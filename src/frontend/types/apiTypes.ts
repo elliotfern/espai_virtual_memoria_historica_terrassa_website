@@ -56,6 +56,7 @@ export type ApiUrls = {
     LLISTAT_REPRESALIATS_INTRANET: string;
     LLISTAT_EXILIATS_INTRANET: string;
     LLISTAT_COSTHUMA_INTRANET: string;
+    USUARI_WEB_ID: (id: string, lang: string) => string;
   };
   POST: {
     MUNICIPI: string;

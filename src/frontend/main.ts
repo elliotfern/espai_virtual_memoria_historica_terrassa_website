@@ -11,6 +11,7 @@ import { loginPage } from './services/auth/login';
 import { initCookieConsent } from './components/bannerCookies/cookie';
 import { baseDadesWebPublica } from './pages/webPublica/baseDades/baseDades';
 import { fitxaRepresaliat } from './components/fitxaRepresaliat';
+import { equip } from './pages/webPublica/equip/equip';
 
 nameUser();
 
@@ -36,5 +37,17 @@ document.addEventListener('DOMContentLoaded', () => {
     initBuscador();
   } else if (pageType[0] === 'fonts-documentals') {
     TaulaDadesFonts();
+  } else if (pageType[0] === 'equip') {
+    const lang = 'ca';
+    const slug = pageType[1];
+    equip(lang, slug);
+  }
+
+  if (pageType[0] === 'es') {
+    const lang = 'es';
+    const slug = pageType[2];
+    if (pageType[1] === 'equip') {
+      equip(lang, slug);
+    }
   }
 });
