@@ -17,6 +17,7 @@ interface Fitxa {
   estat: number;
   user_type: number;
   avatar: number;
+  grup: number;
 }
 
 interface ApiResponse<T> {
@@ -67,6 +68,7 @@ export async function formUsuaris(isUpdate: boolean, id?: number) {
   // Llenar selects con opciones
   await auxiliarSelect(data.user_type ?? 0, 'tipusUsuaris', 'user_type', 'tipus');
   await auxiliarSelect(data.avatar ?? 0, 'avatarsUsuaris', 'avatar', 'nomImatge');
+  await auxiliarSelect(data.grup ?? 0, 'grupsUsuaris', 'grup', 'nom');
 
   btn1.addEventListener('click', function (event) {
     event.preventDefault();

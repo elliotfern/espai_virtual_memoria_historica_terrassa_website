@@ -155,6 +155,8 @@ if ($slug === "municipi") {
     $email        = !empty($data['email']) ? data_input($data['email']) : ($hasError = true);
     $user_type          = !empty($data['user_type']) ? data_input($data['user_type']) : ($hasError = true);
     $avatar            = !empty($data['avatar']) ? data_input($data['avatar']) : ($hasError = false);
+    $slug              = !empty($data['slug']) ? data_input($data['slug']) : ($hasError = false);
+    $grup              = !empty($data['grup']) ? data_input($data['grup']) : ($hasError = false);
     $id                  = !empty($data['id']) ? data_input($data['id']) : ($hasError = true);
 
     // Si hay algún error de validación
@@ -168,12 +170,14 @@ if ($slug === "municipi") {
     /** @var PDO $conn */
 
     // Construcción dinámica del query dependiendo de si se actualiza la contraseña o no
-    $query = "UPDATE auth_users SET nom = :nom, email = :email, user_type = :user_type, avatar = :avatar";
+    $query = "UPDATE auth_users SET nom = :nom, email = :email, user_type = :user_type, avatar = :avatar, slug = :slug, grup = :grup";
     $params = [
         ':nom' => $nom,
         ':email' => $email,
         ':user_type' => $user_type,
         ':avatar' => $avatar,
+        ':slug' => $slug,
+        ':grup' => $grup
     ];
 
     // Si el password viene lleno, lo incluimos

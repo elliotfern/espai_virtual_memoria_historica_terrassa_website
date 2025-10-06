@@ -1314,6 +1314,8 @@ if ($slug === "municipi") {
     $user_type = isset($data['user_type']) && trim($data['user_type']) !== '' ? (int) $data['user_type'] : null;
     $password = isset($data['password']) && trim($data['password']) !== '' ? data_input($data['password']) : null;
     $avatar = isset($data['avatar']) ? (int) $data['avatar'] : null;
+    $grup = isset($data['grup']) ? (int) $data['grup'] : null;
+    $slug = isset($data['slug']) ? (int) $data['slug'] : null;
 
     // Verificar campos obligatorios
     if ($nom === null || $email === null || $user_type === null || $password === null) {
@@ -1327,14 +1329,15 @@ if ($slug === "municipi") {
 
     global $conn;
     /** @var PDO $conn */
-    $query = "INSERT INTO auth_users (nom, email, user_type, password, avatar)
-          VALUES (:nom, :email, :user_type, :password, :avatar)";
+    $query = "INSERT INTO auth_users (nom, email, user_type, password, avatar, slug, grup)
+          VALUES (:nom, :email, :user_type, :password, :avatar, :slug, :grup)";
 
     try {
         $stmt = $conn->prepare($query);
         $stmt->bindParam(':nom', $nom, PDO::PARAM_STR);
         $stmt->bindParam(':email', $email, PDO::PARAM_STR);
-
+        $stmt->bindParam(':slug', $slug, PDO::PARAM_STR);
+        $stmt->bindParam(':grup', $grup, PDO::PARAM_STR);
         $stmt->bindParam(':user_type', $user_type, PDO::PARAM_INT);
         $stmt->bindParam(':password', $hashedPassword, PDO::PARAM_STR);
         $stmt->bindParam(':avatar', $avatar, PDO::PARAM_INT);

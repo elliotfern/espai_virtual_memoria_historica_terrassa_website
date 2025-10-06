@@ -37,8 +37,19 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
                         </div>
 
                         <div class="col-md-4">
+                            <label for="slug" class="form-label negreta">Slug:</label>
+                            <input type="text" class="form-control" id="slug" name="slug" value="">
+                        </div>
+
+                        <div class="col-md-4">
                             <label for="user_type" class="form-label negreta">Tipus d'usuari:</label>
                             <select class="form-select" id="user_type" name="user_type" value="">
+                            </select>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="grup" class="form-label negreta">Grup al que pertany l'usuari:</label>
+                            <select class="form-select" id="grup" name="grup" value="">
                             </select>
                         </div>
 

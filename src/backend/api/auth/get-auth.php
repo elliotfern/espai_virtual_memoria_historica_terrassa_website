@@ -271,7 +271,7 @@ if ($slug === "isAdmin") {
     $id = $_GET['id'] ?? null;
     $db = new Database();
 
-    $query = "SELECT u.nom, u.email, u.user_type, u.id, u.avatar
+    $query = "SELECT u.nom, u.email, u.slug, u.grup, u.user_type, u.id, u.avatar
                 FROM auth_users AS u
                 WHERE u.id = :id";
 
@@ -308,7 +308,7 @@ if ($slug === "isAdmin") {
     $id = $_GET['id'] ?? null;
     $db = new Database();
 
-    $query = "SELECT id, id_user, bio_curta_ca, bio_curta_es, bio_curta_en,	bio_curta_it, bio_curta_fr, bio_curta_pt, bio_ca, bio_es, bio_en, bio_fr, bio_it, bio_pt, nom
+    $query = "SELECT i.id, i.id_user, i.bio_curta_ca, bio_curta_es, bio_curta_en,	bio_curta_it, bio_curta_fr, bio_curta_pt, bio_ca, bio_es, bio_en, bio_fr, bio_it, bio_pt, nom
                 FROM auth_users_i18n AS i
                 LEFT JOIN auth_users AS u ON i.id_user = u.id
                 WHERE i.id_user = :id";

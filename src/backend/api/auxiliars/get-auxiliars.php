@@ -1628,6 +1628,33 @@ if ($slug === "municipis") {
             500
         );
     }
+
+    // GET : Grups usuaris
+    // URL: /api/auxiliars/get/grupsUsuaris
+} elseif ($slug === "grupsUsuaris") {
+
+    try {
+        // Datos fijos
+        $result = [
+            ['id' => 1, 'nom' => 'Equip web'],
+            ['id' => 2, 'nom' => 'Equip recerca'],
+            ['id' => 3, 'nom' => 'Equip col·laboradors'],
+            ['id' => 4, 'nom' => 'Sense assignar'],
+        ];
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (Throwable $e) {
+        // Por coherencia con tu patrón
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
 } else {
     // Si el parámetro 'type' no coincide con ninguno de los casos anteriores, mostramos un error
     echo json_encode(["error" => "Tipo no válido"]);
