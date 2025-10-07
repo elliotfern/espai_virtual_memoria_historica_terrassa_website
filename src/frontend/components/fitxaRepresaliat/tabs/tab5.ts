@@ -16,23 +16,66 @@ export function renderTab5(fitxa: Fitxa, label: string, lang: string): void {
     } else if (fitxa.biografiaEs) {
       if (!fitxa.biografiaCa && fitxa.biografiaEs) {
         bioHtml = `
-    <div class="alert alert-warning">
-      ${t(LABELS_TAB5, 'bioWarnCaMissingEsAvailable', lang)}
-    </div>
-    <span class='blau1 normal'>${fitxa.biografiaEs}</span>
-  `;
+          <div class="alert alert-warning">
+            ${t(LABELS_TAB5, 'bioWarnCaMissingEsAvailable', lang)}
+          </div>
+          <span class='blau1 normal'>${fitxa.biografiaEs}</span>
+        `;
       } else if (!fitxa.biografiaCa && !fitxa.biografiaEs) {
         bioHtml = t(LABELS_TAB5, 'bioUnavailable', lang);
       }
-    } else {
-      bioHtml = `<span class='blau1 normal'>${fitxa.biografiaCa}</span>`;
     }
+  } else if (lang === 'es') {
+    if (!fitxa.biografiaEs) {
+      bioHtml = `
+          <div class="alert alert-warning">
+            ${t(LABELS_TAB5, 'bioUnavailable', lang)}
+          </div>`;
+    } else {
+      bioHtml = `<span class='blau1 normal'>${fitxa.biografiaEs}</span>`;
+    }
+  } else if (lang === 'en') {
+    if (!fitxa.biografiaEn) {
+      bioHtml = `
+          <div class="alert alert-warning">
+            ${t(LABELS_TAB5, 'bioUnavailable', lang)}
+          </div>`;
+    } else {
+      bioHtml = `<span class='blau1 normal'>${fitxa.biografiaEn}</span>`;
+    }
+  } else if (lang === 'fr') {
+    if (!fitxa.biografiaFr) {
+      bioHtml = `
+          <div class="alert alert-warning">
+            ${t(LABELS_TAB5, 'bioUnavailable', lang)}
+          </div>`;
+    } else {
+      bioHtml = `<span class='blau1 normal'>${fitxa.biografiaFr}</span>`;
+    }
+  } else if (lang === 'it') {
+    if (!fitxa.biografiaIt) {
+      bioHtml = `
+          <div class="alert alert-warning">
+            ${t(LABELS_TAB5, 'bioUnavailable', lang)}
+          </div>`;
+    } else {
+      bioHtml = `<span class='blau1 normal'>${fitxa.biografiaIt}</span>`;
+    }
+  } else if (lang === 'pt') {
+    if (!fitxa.biografiaPt) {
+      bioHtml = `
+          <div class="alert alert-warning">
+            ${t(LABELS_TAB5, 'bioUnavailable', lang)}
+          </div>`;
+    } else {
+      bioHtml = `<span class='blau1 normal'>${fitxa.biografiaPt}</span>`;
+    }
+  }
 
-    divInfo.innerHTML = `
+  divInfo.innerHTML = `
     <h3 class="titolSeccio">${label}</h3>
     <div style="margin-top:30px;margin-bottom:30px">
         ${bioHtml}
     </div>
       `;
-  }
 }

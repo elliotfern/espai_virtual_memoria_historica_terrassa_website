@@ -69,6 +69,10 @@ export interface Fitxa {
   img: string;
   biografiaCa: string;
   biografiaEs: string;
+  biografiaEn: string;
+  biografiaFr: string;
+  biografiaIt: string;
+  biografiaPt: string;
   categoria: string;
   ciutat_naixement_id: number;
   ciutat_defuncio_id: number;
