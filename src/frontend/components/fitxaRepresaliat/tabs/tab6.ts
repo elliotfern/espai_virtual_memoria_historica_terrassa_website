@@ -1,9 +1,11 @@
 // src/pages/fitxaRepresaliat/tabs/tab2.ts
+import { t } from '../../../services/i18n/i18n';
+import { LABELS_LISTS } from '../../../services/i18n/labels-tab6';
 import type { Fitxa } from '../../../types/types';
 import { taulaArxius } from '../../modificaFitxaRepresaliat/taulaArxius';
 import { taulaBibliografia } from '../../modificaFitxaRepresaliat/taulaBibliografia';
 
-export function renderTab6(fitxa: Fitxa): void {
+export function renderTab6(fitxa: Fitxa, lang: string): void {
   const divInfo = document.getElementById('fitxa');
 
   if (!divInfo) return;
@@ -37,8 +39,8 @@ export function renderTab6(fitxa: Fitxa): void {
     // Configurar y añadir contenido a los nuevos elementos
     if (quadreFonts1) {
       quadreFonts1.style.display = 'block';
-      const h4 = document.createElement('h4');
-      h4.textContent = 'Llistat de bibliografia';
+      const h4 = document.createElement('h4') as HTMLHeadingElement;
+      h4.textContent = t(LABELS_LISTS, 'bibliographyList', lang);
       h4.classList.add('titolSeccio');
       quadreFonts1.prepend(h4);
 
@@ -49,8 +51,8 @@ export function renderTab6(fitxa: Fitxa): void {
 
     if (quadreFonts2) {
       quadreFonts2.style.display = 'block';
-      const h4 = document.createElement('h4');
-      h4.textContent = "Llistat d'arxius";
+      const h4 = document.createElement('h4') as HTMLHeadingElement;
+      h4.textContent = t(LABELS_LISTS, 'archivesList', lang);
       h4.classList.add('titolSeccio');
       quadreFonts2.prepend(h4);
 

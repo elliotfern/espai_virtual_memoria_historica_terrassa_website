@@ -1,5 +1,7 @@
 // src/pages/fitxaRepresaliat/tabs/tab2.ts
 import { valorTextDesconegut } from '../../../services/formatDates/valorTextDesconegut';
+import { t } from '../../../services/i18n/i18n';
+import { LABELS_TAB4 } from '../../../services/i18n/labels-tab4';
 import type { Fitxa } from '../../../types/types';
 import { partitsPolitics } from '../partitsPolitics';
 import { sindicats } from '../sindicats';
@@ -38,7 +40,7 @@ function filterUnknownLabels(list: string[]): string[] {
   });
 }
 
-export async function renderTab4(fitxa: Fitxa, label: string): Promise<void> {
+export async function renderTab4(fitxa: Fitxa, label: string, lang: string): Promise<void> {
   const divInfo = document.getElementById('fitxa');
   if (!divInfo) return;
 
@@ -54,15 +56,17 @@ export async function renderTab4(fitxa: Fitxa, label: string): Promise<void> {
   const sindicat = sindicatsLimpios.length ? sindicatsLimpios.join(', ') : 'Desconegut';
 
   divInfo.innerHTML = `
-    <h3 class="titolSeccio">${label}</h3>
-    <div style="margin-top:30px;margin-bottom:30px">
-      <h5 class="titolSeccio2">Activitat política i sindical abans de l'esclat de la guerra:</h5>
-      <p><span class='marro2'>Afiliació política:</span> <span class='blau1'>${partitPolitic}</span></p>
-      <p><span class='marro2'>Afiliació sindical:</span> <span class='blau1'>${sindicat}</span></p>
-    </div>
-    <div style="margin-top:30px;margin-bottom:30px">
-      <h5 class="titolSeccio2">Activitat política i sindical durant la guerra civil i la dictadura:</h5>
-      <p><span class='blau1'>${valorTextDesconegut(fitxa.activitat_durant_guerra, 1)}</span></p>
-    </div>
-  `;
+  <h3 class="titolSeccio">${label}</h3>
+
+  <div style="margin-top:30px;margin-bottom:30px">
+    <h5 class="titolSeccio2">${t(LABELS_TAB4, 'preWarHeading', lang)}</h5>
+    <p><span class='marro2'>${t(LABELS_TAB4, 'politicalAffiliation', lang)}:</span> <span class='blau1'>${partitPolitic}</span></p>
+    <p><span class='marro2'>${t(LABELS_TAB4, 'unionAffiliation', lang)}:</span> <span class='blau1'>${sindicat}</span></p>
+  </div>
+
+  <div style="margin-top:30px;margin-bottom:30px">
+    <h5 class="titolSeccio2">${t(LABELS_TAB4, 'warDictatorshipHeading', lang)}</h5>
+    <p><span class='blau1'>${valorTextDesconegut(fitxa.activitat_durant_guerra, 1)}</span></p>
+  </div>
+`;
 }

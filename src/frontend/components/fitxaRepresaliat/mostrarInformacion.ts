@@ -175,25 +175,25 @@ export function mostrarInformacion(tabId: string, id: number, label: string, lan
       renderTab1(fitxa, label, lang);
       break;
     case 'tab2':
-      renderTab2(fitxa, fitxaFam, label);
+      renderTab2(fitxa, fitxaFam, label, lang);
       break;
     case 'tab3':
-      renderTab3(fitxa, label);
+      renderTab3(fitxa, label, lang);
       break;
     case 'tab4':
-      renderTab4(fitxa, label);
+      renderTab4(fitxa, label, lang);
       break;
     case 'tab5':
-      renderTab5(fitxa, label);
+      renderTab5(fitxa, label, lang);
       break;
     case 'tab6':
-      renderTab6(fitxa);
+      renderTab6(fitxa, lang);
       break;
     case 'tab9':
-      renderTab9(fitxa, label);
+      renderTab9(fitxa, label, lang);
       break;
     case 'tab7':
-      renderTab7(fitxa, label);
+      renderTab7(fitxa, label, lang);
       break;
     default:
       document.getElementById('fitxa')!.innerHTML = `<p>El contingut de la pestanya ${label} encara no està disponible.</p>`;

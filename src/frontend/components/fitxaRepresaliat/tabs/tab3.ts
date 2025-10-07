@@ -1,8 +1,10 @@
 // src/pages/fitxaRepresaliat/tabs/tab2.ts
 import { valorTextDesconegut } from '../../../services/formatDates/valorTextDesconegut';
+import { t } from '../../../services/i18n/i18n';
+import { LABELS_TAB3 } from '../../../services/i18n/labels-tab3';
 import type { Fitxa } from '../../../types/types';
 
-export function renderTab3(fitxa: Fitxa, label: string): void {
+export function renderTab3(fitxa: Fitxa, label: string, lang: string): void {
   const divInfo = document.getElementById('fitxa');
 
   if (!divInfo) return;
@@ -16,12 +18,12 @@ export function renderTab3(fitxa: Fitxa, label: string): void {
   const ofici = valorTextDesconegut(fitxa.ofici_cat ?? '', 2);
 
   divInfo.innerHTML = `
-    <h3 class="titolSeccio">${label}</h3>
-        <p><span class='marro2'>Estudis:</span> <span class='blau1'>${estudis}</span></p>
-        <p><span class='marro2'>Ofici:</span> <span class='blau1'>${ofici}</span></p>
-        <p><span class='marro2'>Empresa:</span> <span class='blau1'>${empresa}</span></p>
-        <p><span class='marro2'>Càrrec:</span> <span class='blau1'>${carrecText}</span></p>
-        <p><span class='marro2'>Sector econòmic:</span> <span class='blau1'>${sectorText}</span></p>
-        <p><span class='marro2'>Sub-sector econòmic:</span> <span class='blau1'>${subsectorText}</span></p>
-      `;
+  <h3 class="titolSeccio">${label}</h3>
+  <p><span class='marro2'>${t(LABELS_TAB3, 'studies', lang)}:</span> <span class='blau1'>${estudis}</span></p>
+  <p><span class='marro2'>${t(LABELS_TAB3, 'occupation', lang)}:</span> <span class='blau1'>${ofici}</span></p>
+  <p><span class='marro2'>${t(LABELS_TAB3, 'company', lang)}:</span> <span class='blau1'>${empresa}</span></p>
+  <p><span class='marro2'>${t(LABELS_TAB3, 'position', lang)}:</span> <span class='blau1'>${carrecText}</span></p>
+  <p><span class='marro2'>${t(LABELS_TAB3, 'economicSector', lang)}:</span> <span class='blau1'>${sectorText}</span></p>
+  <p><span class='marro2'>${t(LABELS_TAB3, 'economicSubsector', lang)}:</span> <span class='blau1'>${subsectorText}</span></p>
+`;
 }

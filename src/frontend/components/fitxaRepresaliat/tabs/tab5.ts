@@ -1,30 +1,38 @@
 // src/pages/fitxaRepresaliat/tabs/tab2.ts
+import { t } from '../../../services/i18n/i18n';
+import { LABELS_TAB5 } from '../../../services/i18n/labels-tab5';
 import type { Fitxa } from '../../../types/types';
 
-export function renderTab5(fitxa: Fitxa, label: string): void {
+export function renderTab5(fitxa: Fitxa, label: string, lang: string): void {
   const divInfo = document.getElementById('fitxa');
 
   if (!divInfo) return;
 
-  let bioHtml: string;
+  let bioHtml = '';
 
-  if (fitxa.biografiaCa) {
-    bioHtml = `<span class='blau1 normal'>${fitxa.biografiaCa}</span>`;
-  } else if (fitxa.biografiaEs) {
-    bioHtml = `
-      <div class="alert alert-warning">
-        La biografia en català no està disponible, però hi ha disponible la versió en castellà.
-      </div>
-      <span class='blau1 normal'>${fitxa.biografiaEs}</span>
-    `;
-  } else {
-    bioHtml = 'La biografia no està disponible.';
-  }
+  if (lang === 'ca') {
+    if (fitxa.biografiaCa) {
+      bioHtml = `<span class='blau1 normal'>${fitxa.biografiaCa}</span>`;
+    } else if (fitxa.biografiaEs) {
+      if (!fitxa.biografiaCa && fitxa.biografiaEs) {
+        bioHtml = `
+    <div class="alert alert-warning">
+      ${t(LABELS_TAB5, 'bioWarnCaMissingEsAvailable', lang)}
+    </div>
+    <span class='blau1 normal'>${fitxa.biografiaEs}</span>
+  `;
+      } else if (!fitxa.biografiaCa && !fitxa.biografiaEs) {
+        bioHtml = t(LABELS_TAB5, 'bioUnavailable', lang);
+      }
+    } else {
+      bioHtml = `<span class='blau1 normal'>${fitxa.biografiaCa}</span>`;
+    }
 
-  divInfo.innerHTML = `
+    divInfo.innerHTML = `
     <h3 class="titolSeccio">${label}</h3>
     <div style="margin-top:30px;margin-bottom:30px">
         ${bioHtml}
     </div>
       `;
+  }
 }

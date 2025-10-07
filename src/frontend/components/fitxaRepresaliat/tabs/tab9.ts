@@ -3,6 +3,8 @@ import type { Fitxa } from '../../../types/types';
 // Leaflet (mapa base)
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
+import { LABELS_MAP } from '../../../services/i18n/labels-tab9';
+import { t } from '../../../services/i18n/i18n';
 
 function crearIconoPersona() {
   // Icono SVG inline para no depender de assets
@@ -22,22 +24,22 @@ function crearIconoPersona() {
   });
 }
 
-export function renderTab9(fitxa: Fitxa, label: string): void {
+export function renderTab9(fitxa: Fitxa, label: string, lang: string): void {
   const divInfo = document.getElementById('fitxa');
   if (!divInfo) return;
 
   // Construcción del HTML (todo dinámico)
   const mapId = 'map-tab9';
   divInfo.innerHTML = `
-    <h3 class="titolSeccio">${label}</h3>
+  <h3 class="titolSeccio">${label}</h3>
 
-    <div style="margin-top:20px;margin-bottom:5px">
-        <p><span class='blau1'>En aquest mapa apareix l'adreça coneguda de residència del represaliat abans de l'esclat de la Guerra Civil (en el cas dels exiliats, deportats o morts civils/militars) o durant la dictadura franquista.</p>
-    </div>
+  <div style="margin-top:20px;margin-bottom:5px">
+    <p><span class='blau1'>${t(LABELS_MAP, 'mapIntro', lang)}</span></p>
+  </div>
 
-    <div id="${mapId}" style="width:100%;height:60vh;border-radius:10px;overflow:hidden;margin-top:30px"></div>
-    <div id="${mapId}-msg" style="margin-top:8px;font-size:.9rem;color:#555;"></div>
-  `;
+  <div id="${mapId}" style="width:100%;height:60vh;border-radius:10px;overflow:hidden;margin-top:30px"></div>
+  <div id="${mapId}-msg" style="margin-top:8px;font-size:.9rem;color:#555;"></div>
+`;
 
   const msg = document.getElementById(`${mapId}-msg`);
 
