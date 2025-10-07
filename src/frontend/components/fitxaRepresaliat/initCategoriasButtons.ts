@@ -3,10 +3,10 @@ import { traduirCategoriesRepressioArray } from '../taulaDades/traduirCategories
 import { mostrarCategoria } from './mostrarCategoria';
 import { categoriesRepressio } from '../taulaDades/categoriesRepressio';
 
-export async function initCategoriaButtons(categoriasNumericasString: string, idPersona: number): Promise<void> {
+export async function initCategoriaButtons(categoriasNumericasString: string, idPersona: number, lang: string): Promise<void> {
   try {
     // Obtener categorías (array de objetos {id, name}) para el idioma catalán
-    const colectiusRepressio = await categoriesRepressio('ca');
+    const colectiusRepressio = await categoriesRepressio(lang);
     const nombresCategorias = traduirCategoriesRepressioArray(categoriasNumericasString, colectiusRepressio);
     const contenedorCategorias = document.getElementById('botons2');
 

@@ -4,6 +4,7 @@ import { initTabs } from './initTabs';
 import { initCategoriaButtons } from './initCategoriasButtons';
 import { renderBotonsAdminSimple } from './informacioFitxaAdministracio';
 import { renderAvisContacte } from './avisContacte';
+import { renderTipusRepressioTexts } from './renderTipusRepressio';
 
 export async function initButtons(idPersona: number, lang: string): Promise<void> {
   const fitxa = cache.getFitxa();
@@ -15,7 +16,7 @@ export async function initButtons(idPersona: number, lang: string): Promise<void
   const translations = await loadTranslations(lang);
 
   initTabs(translations, idPersona, lang);
-  initCategoriaButtons(fitxa.categoria || '', idPersona);
+  initCategoriaButtons(fitxa.categoria || '', idPersona, lang);
   // cuando tengas los datos:
   renderBotonsAdminSimple({
     id: fitxa.id,
@@ -25,4 +26,5 @@ export async function initButtons(idPersona: number, lang: string): Promise<void
   });
 
   renderAvisContacte();
+  renderTipusRepressioTexts(lang);
 }

@@ -32,10 +32,10 @@ $id = $routeParams[0];
 
         <hr style="margin-top:30px">
 
-        <h6 class="titolSeccio" style="margin-top:25px"><strong>Tipus de repressió:</strong></h6>
+        <div id="titolTipusRepressio">
+        </div>
 
-        <div class="fitxa-persona marro2 raleway" style="margin-top:20px;margin-bottom:20px">
-            <p>Clica sobre els botons per ampliar la informació sobre el tipus de repressió que va patir:</p>
+        <div id="tipusRepressioText" class="fitxa-persona marro2 raleway" style="margin-top:20px;margin-bottom:20px">
         </div>
 
         <div class="tab" id="botons2"></div>

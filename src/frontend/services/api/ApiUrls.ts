@@ -117,7 +117,7 @@ const TIPUS = {
 
 export const API_URLS: ApiUrls = {
   GET: {
-    CATEGORIES_REPRESSIO: (lang: string) => `${BASE_URL}/api/auxiliars/get/categoriesRepressio?lang=${lang}`,
+    CATEGORIES_REPRESSIO: (lang: string) => `${BASE_URL}/${API}/${RESOURCES.AUXILIARS}/${TIPUS.GET}/categoriesRepressio?lang=${lang}`,
     MUNICIPI_ID: (id: number) => `${BASE_URL}/${API}/${RESOURCES.AUXILIARS}/${TIPUS.GET}/${ENDPOINTS.MUNICIPI}?id=${id}`,
     ESPAI_ID: (id: number) => `${BASE_URL}/${API}/${RESOURCES.AUXILIARS}/${TIPUS.GET}/${ENDPOINTS.ESPAI}?id=${id}`,
     SUB_SECTOR_ID: (id: number) => `${BASE_URL}/${API}/${RESOURCES.AUXILIARS}/${TIPUS.GET}/${ENDPOINTS.SUB_SECTOR_ECONOMIC}?id=${id}`,

@@ -35,6 +35,7 @@ export async function loadTranslations(lang: string): Promise<Record<string, str
         tab6: 'Documentary sources',
         tab7: 'Other data',
         tab8: 'Multimedia',
+        tab9: 'Geolocation',
       };
     case 'fr': // Français
       return {
@@ -46,6 +47,7 @@ export async function loadTranslations(lang: string): Promise<Record<string, str
         tab6: 'Sources documentaires',
         tab7: 'Autres données',
         tab8: 'Multimédia',
+        tab9: 'Géolocalisation',
       };
     case 'it': // Italiano
       return {
@@ -57,6 +59,7 @@ export async function loadTranslations(lang: string): Promise<Record<string, str
         tab6: 'Fonti documentarie',
         tab7: 'Altri dati',
         tab8: 'Multimedia',
+        tab9: 'Geolocalizzazione',
       };
     case 'pt': // Português
       return {
@@ -68,6 +71,7 @@ export async function loadTranslations(lang: string): Promise<Record<string, str
         tab6: 'Fontes documentais',
         tab7: 'Outros dados',
         tab8: 'Multimédia',
+        tab9: 'Geolocalização',
       };
     default: // Fallback → catalán
       return await loadTranslations('ca');
