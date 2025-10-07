@@ -1,3 +1,4 @@
+import { DOMAIN_API } from '../../config/constants';
 import { ApiUrls } from '../../types/apiTypes';
 
 // Accede al dominio desde la variable de entorno
@@ -91,6 +92,7 @@ export const ENDPOINTS = {
   LLISTAT_EXILIATS_INTRANET: 'llistatExiliatsIntranet',
   LLISTAT_COSTHUMA_INTRANET: 'llistatCostHumaIntranet',
   USUARI_WEB_ID: 'usuariWebId',
+  FITXA_REPRESALIAT_WEB: 'fitxaRepresaliat',
 } as const;
 
 // Mapa de recursos disponibles
@@ -171,6 +173,7 @@ export const API_URLS: ApiUrls = {
     LLISTAT_EXILIATS_INTRANET: `${BASE_URL}/${API}/${RESOURCES.DADES_PERSONALS}/${TIPUS.GET}/${ENDPOINTS.LLISTAT_EXILIATS_INTRANET}`,
     LLISTAT_COSTHUMA_INTRANET: `${BASE_URL}/${API}/${RESOURCES.DADES_PERSONALS}/${TIPUS.GET}/${ENDPOINTS.LLISTAT_COSTHUMA_INTRANET}`,
     USUARI_WEB_ID: (id: string, lang: string) => `${BASE_URL}/${API}/${RESOURCES.AUTH}/${TIPUS.GET}/${ENDPOINTS.USUARI_WEB_ID}?slug=${id}&lang=${lang}`,
+    FITXA_REPRESALIAT_WEB: (slug: string, lang: string) => `${DOMAIN_API}/${RESOURCES.DADES_PERSONALS}/${TIPUS.GET}/${ENDPOINTS.FITXA_REPRESALIAT_WEB}?slug=${slug}&lang=${lang}`,
   },
 
   POST: {

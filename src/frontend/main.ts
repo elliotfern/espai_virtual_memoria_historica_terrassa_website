@@ -31,7 +31,8 @@ document.addEventListener('DOMContentLoaded', () => {
   } else if (pageType[0] === 'fitxa') {
     // const id = pageType[1];
     const slug = pageType[1];
-    fitxaRepresaliat(slug);
+    const lang = 'ca';
+    fitxaRepresaliat(slug, lang);
     // initButtons(id); // Pasar el id
   } else if (pageType[0] === 'inici') {
     const lang = 'ca';

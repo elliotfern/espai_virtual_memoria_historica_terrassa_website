@@ -1599,7 +1599,7 @@ if ($slug === "municipis") {
 } elseif ($slug === "campsConcentracio") {
 
     $db = new Database();
-    $query = "SELECT p.id, CONCAT(p.nom, ' - ', m.ciutat) AS nom_camp
+    $query = "SELECT p.id, CONCAT(p.nom_ca, ' - ', m.ciutat) AS nom_camp
               FROM aux_camps_concentracio AS p
               LEFT JOIN aux_dades_municipis as m ON p.municipi = m.id
               ORDER BY nom ASC";

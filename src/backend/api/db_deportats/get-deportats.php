@@ -86,13 +86,13 @@ if ($slug === "llistatComplet") {
                 e3.estat_ca AS estat_preso2,
 
                 pce1.tipus_preso_ca AS tipusCamp1,
-                c1.nom AS nomCamp1,
+                c1.nom_ca AS nomCamp1,
                 mc1.ciutat AS ciutatCamp1,
                 d.deportacio_data_entrada,
                 d.deportacio_num_matricula,
 
                 pce2.tipus_preso_ca AS tipusCamp2,
-                c2.nom AS nomCamp2,
+                c2.nom_ca AS nomCamp2,
                 mc2.ciutat AS ciutatCamp2,
                 d.deportacio_data_entrada_subcamp,
                 d.deportacio_nom_matricula_subcamp,
@@ -263,7 +263,7 @@ if ($slug === "llistatComplet") {
 } else if ($slug === "llistatCamps") {
     $db = new Database();
 
-    $query = "SELECT d.id, d.nom, m.ciutat, t.tipus_preso_ca
+    $query = "SELECT d.id, d.nom_ca, m.ciutat, t.tipus_preso_ca
             FROM aux_camps_concentracio AS d
             LEFT JOIN aux_dades_municipis AS m ON d.municipi = m.id
             LEFT JOIN aux_tipus_presons AS t ON d.tipus = t.id

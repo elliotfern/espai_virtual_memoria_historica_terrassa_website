@@ -3556,7 +3556,7 @@ if ($slug === "municipi") {
 
     // Si no hay errores, crear las variables PHP y preparar la consulta PDO
     $tipus     = !empty($data['tipus']) ? $data['tipus'] : null;
-    $nom       = $data['nom'];
+    $nom       = $data['nom_ca'];
     $municipi  = !empty($data['municipi']) ? $data['municipi'] : null;
 
     // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
@@ -3567,11 +3567,11 @@ if ($slug === "municipi") {
 
         $sql = "INSERT INTO aux_camps_concentracio (
             tipus,
-            nom,
+            nom_ca,
             municipi
         ) VALUES (
             :tipus,
-            :nom,
+            :nom_ca,
             :municipi
         )";
 
@@ -3580,7 +3580,7 @@ if ($slug === "municipi") {
 
         // Enlazar los parámetros con los valores de las variables PHP
         $stmt->bindParam(':tipus', $tipus, PDO::PARAM_INT);
-        $stmt->bindParam(':nom', $nom, PDO::PARAM_STR);
+        $stmt->bindParam(':nom_ca', $nom, PDO::PARAM_STR);
         $stmt->bindParam(':municipi', $municipi, PDO::PARAM_INT);
 
         // Ejecutar la consulta

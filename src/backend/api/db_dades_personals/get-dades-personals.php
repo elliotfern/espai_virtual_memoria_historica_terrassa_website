@@ -379,7 +379,6 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
             dp.autor2 AS autor_id2,
             dp.autor3 AS autor_id3,
             dp.colab1 AS colab1_id,
-            u.biografia_cat,
             dp.data_creacio,
             dp.data_actualitzacio,
             dp.observacions,
@@ -452,9 +451,11 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
 
 
     // 4) Pagina informacio fitxa Represaliat - WEB PUBLICA
-    // ruta GET => "https://memoriaterrassa.cat/api/dades_personals/get/?type=fitxa&id=35"
-} elseif (isset($_GET['type']) && $_GET['type'] == 'fitxaRepresaliat' && isset($_GET['slug'])) {
+    // ruta GET => "https://memoriaterrassa.cat/api/dades_personals/get/fitxaRepresaliat?slug=antonio-arias&lang=cat"
+} elseif ($slug === 'fitxaRepresaliat') {
     $slug = $_GET['slug'];
+    $lang = $_GET['lang'];
+
     $db = new Database();
     $query = "SELECT 
             dp.id,
@@ -522,7 +523,6 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
             dp.autor2 AS autor_id2,
             dp.autor3 AS autor_id3,
             dp.colab1 AS colab1_id,
-            u.biografia_cat,
             dp.data_creacio,
             dp.data_actualitzacio,
             dp.observacions,

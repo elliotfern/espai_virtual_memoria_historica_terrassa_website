@@ -7,6 +7,7 @@ import { DOMAIN_API } from '../../config/constants';
 import { getIsAdmin } from '../../services/auth/getIsAdmin';
 import { getIsAutor } from '../../services/auth/getIsAutor';
 import { getIsLogged } from '../../services/auth/getIsLogged';
+import { API_URLS } from '../../services/api/ApiUrls';
 
 function showNotFound(msg: string): void {
   // Oculta posibles contenedores de la ficha (ajusta IDs/clases reales)
@@ -24,11 +25,9 @@ function showNotFound(msg: string): void {
   }
 }
 
-export async function fitxaRepresaliat(slug: string): Promise<void> {
+export async function fitxaRepresaliat(slug: string, lang: string): Promise<void> {
   try {
-    // 1) Detalle por slug → usamos getApiFirst<Fitxa>
-    const fitxaUrl = `${DOMAIN_API}/api/dades_personals/get/?type=fitxaRepresaliat&slug=${encodeURIComponent(slug)}`;
-    const fitxa = await getApiFirst<Fitxa>(fitxaUrl);
+    const fitxa = await getApiFirst<Fitxa>(API_URLS.GET.FITXA_REPRESALIAT_WEB(slug, lang));
 
     if (!fitxa) {
       showNotFound("Ho sentim, però l'adreça web introduïda no es correspon amb cap fitxa de represaliat.");

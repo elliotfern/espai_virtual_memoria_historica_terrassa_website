@@ -251,7 +251,7 @@ if ($slug === "municipi") {
     // Si viene id_user, valida rango como en tu POST (0..10)
     if ($id_user !== null && $id_user !== '') {
         $id_user = (int)$id_user;
-        if ($id_user < 0 || $id_user > 10) {
+        if ($id_user < 0 || $id_user > 15) {
             $errors[] = ValidacioErrors::invalid('id_user');
         }
     }
