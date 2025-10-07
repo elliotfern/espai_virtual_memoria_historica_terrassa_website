@@ -11,7 +11,7 @@ import { renderTab7 } from './tabs/tab7';
 import { renderTab9 } from './tabs/tab9';
 // aquí iremos importando más tabs: tab2, tab3, etc.
 
-export function mostrarInformacion(tabId: string, id: number, label: string): void {
+export function mostrarInformacion(tabId: string, id: number, label: string, lang: string): void {
   const fitxa = cache.getFitxa();
   const fitxaFam = cache.getFitxaFam();
 
@@ -172,7 +172,7 @@ export function mostrarInformacion(tabId: string, id: number, label: string): vo
 
   switch (tabId) {
     case 'tab1':
-      renderTab1(fitxa, label);
+      renderTab1(fitxa, label, lang);
       break;
     case 'tab2':
       renderTab2(fitxa, fitxaFam, label);

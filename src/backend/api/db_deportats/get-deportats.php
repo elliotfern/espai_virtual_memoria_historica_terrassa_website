@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
 if ($slug === "llistatComplet") {
 
     $query = "SELECT a.id, dp.cognom1, dp.cognom2, dp.nom, a.copia_exp, dp.data_naixement, dp.edat, dp.data_defuncio,
-            e1.ciutat, e1.comarca, e1.provincia, e1.comunitat, e1.pais, e2.ciutat AS ciutat2, e2.comarca AS comarca2, e2.provincia AS provincia2, e2.comunitat AS comunitat2, e2.pais AS pais2, dp.categoria
+            e1.ciutat_ca AS ciutat, e1.comarca, e1.provincia, e1.comunitat, e1.pais, e2.ciutat_ca AS ciutat2, e2.comarca AS comarca2, e2.provincia AS provincia2, e2.comunitat AS comunitat2, e2.pais AS pais2, dp.categoria
             FROM db_afusellats AS a
             LEFT JOIN db_dades_personals AS dp ON a.idPersona = dp.id
             LEFT JOIN aux_dades_municipis AS e1 ON dp.municipi_naixement = e1.id
@@ -87,13 +87,13 @@ if ($slug === "llistatComplet") {
 
                 pce1.tipus_preso_ca AS tipusCamp1,
                 c1.nom_ca AS nomCamp1,
-                mc1.ciutat AS ciutatCamp1,
+                mc1.ciutat_ca AS ciutatCamp1,
                 d.deportacio_data_entrada,
                 d.deportacio_num_matricula,
 
                 pce2.tipus_preso_ca AS tipusCamp2,
                 c2.nom_ca AS nomCamp2,
-                mc2.ciutat AS ciutatCamp2,
+                mc2.ciutat_ca AS ciutatCamp2,
                 d.deportacio_data_entrada_subcamp,
                 d.deportacio_nom_matricula_subcamp,
                 d.deportacio_observacions
@@ -228,7 +228,7 @@ if ($slug === "llistatComplet") {
 } else if ($slug === "llistatCampsPresons") {
     $db = new Database();
 
-    $query = "SELECT d.id, d.nom, m.ciutat, t.tipus_preso_ca
+    $query = "SELECT d.id, d.nom, m.ciutat_ca AS ciutat, t.tipus_preso_ca
             FROM aux_deportacio_preso AS d
             LEFT JOIN aux_dades_municipis AS m ON d.municipi = m.id
             LEFT JOIN aux_tipus_presons AS t ON d.tipus = t.id
@@ -263,7 +263,7 @@ if ($slug === "llistatComplet") {
 } else if ($slug === "llistatCamps") {
     $db = new Database();
 
-    $query = "SELECT d.id, d.nom_ca, m.ciutat, t.tipus_preso_ca
+    $query = "SELECT d.id, d.nom_ca, m.ciutat_ca AS ciutat, t.tipus_preso_ca
             FROM aux_camps_concentracio AS d
             LEFT JOIN aux_dades_municipis AS m ON d.municipi = m.id
             LEFT JOIN aux_tipus_presons AS t ON d.tipus = t.id

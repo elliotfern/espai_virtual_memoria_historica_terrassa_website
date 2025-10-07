@@ -25,8 +25,8 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
                 </div>
 
                 <div class="col-md-4 mb-4">
-                    <label for="nom" class="form-label negreta">Nom del camp de concentració:</label>
-                    <input type="text" class="form-control" id="nom" name="nom" value="">
+                    <label for="nom_ca" class="form-label negreta">Nom del camp de concentració:</label>
+                    <input type="text" class="form-control" id="nom_ca" name="nom_ca" value="">
                 </div>
 
                 <div class="col-md-4 mb-4">

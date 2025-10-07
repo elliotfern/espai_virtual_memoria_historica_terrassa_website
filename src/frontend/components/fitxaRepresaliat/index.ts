@@ -71,7 +71,7 @@ export async function fitxaRepresaliat(slug: string, lang: string): Promise<void
     }
 
     // 3) Iniciar UI
-    await initButtons(fitxa.id);
+    await initButtons(fitxa.id, lang);
   } catch (error) {
     console.error('fitxaRepresaliat - error:', error);
     showNotFound("Ho sentim, però l'adreça web introduïda no es correspon amb cap fitxa de represaliat.");

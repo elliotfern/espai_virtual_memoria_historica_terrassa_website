@@ -5,17 +5,16 @@ import { initCategoriaButtons } from './initCategoriasButtons';
 import { renderBotonsAdminSimple } from './informacioFitxaAdministracio';
 import { renderAvisContacte } from './avisContacte';
 
-export async function initButtons(idPersona: number): Promise<void> {
+export async function initButtons(idPersona: number, lang: string): Promise<void> {
   const fitxa = cache.getFitxa();
   if (!fitxa) {
     console.error('initButtons: no fitxa in cache');
     return;
   }
 
-  const currentLang = document.documentElement.lang || 'ca';
-  const translations = await loadTranslations(currentLang);
+  const translations = await loadTranslations(lang);
 
-  initTabs(translations, idPersona);
+  initTabs(translations, idPersona, lang);
   initCategoriaButtons(fitxa.categoria || '', idPersona);
   // cuando tengas los datos:
   renderBotonsAdminSimple({

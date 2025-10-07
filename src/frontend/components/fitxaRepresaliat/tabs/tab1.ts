@@ -5,7 +5,7 @@ import { joinValors } from '../../../services/formatDates/joinValors';
 import { valorTextDesconegut } from '../../../services/formatDates/valorTextDesconegut';
 import type { Fitxa } from '../../../types/types';
 
-export function renderTab1(fitxa: Fitxa, label: string): void {
+export function renderTab1(fitxa: Fitxa, label: string, lang: string): void {
   const divInfo = document.getElementById('fitxa');
 
   // variables tab1
@@ -51,8 +51,6 @@ export function renderTab1(fitxa: Fitxa, label: string): void {
   const causaDefuncio = fitxa.causa_defuncio_ca === '' || fitxa.causa_defuncio_ca === null || fitxa.causa_defuncio_ca === undefined ? 'Desconeguda' : fitxa.causa_defuncio_ca;
   const causa_defuncio_detalls = fitxa.defuncio_detalls_ca === '' || fitxa.defuncio_detalls_ca === null || fitxa.defuncio_detalls_ca === undefined ? 'Desconegut' : fitxa.defuncio_detalls_ca;
 
-  const sexeText = parseInt(fitxa.sexe, 10) === 1 ? 'Home' : parseInt(fitxa.sexe, 10) === 2 ? 'Dona' : 'desconegut';
-
   const fechaNacimiento = fitxa.data_naixement;
   const fechaDefuncion = fitxa.data_defuncio;
 
@@ -66,20 +64,132 @@ export function renderTab1(fitxa: Fitxa, label: string): void {
 
   if (!divInfo) return;
 
+  type Lang = 'ca' | 'es' | 'en' | 'fr' | 'it' | 'pt';
+
+  const LABELS: Record<Lang, Record<string, string>> = {
+    ca: {
+      sex: 'Sexe',
+      dob: 'Data de naixement',
+      dod: 'Data de defunció',
+      age: 'Edat',
+      birthTown: 'Municipi de naixement',
+      residenceAddress: 'Adreça de residència',
+      deathTown: 'Municipi de defunció',
+      deathPlaceType: 'Tipologia espai de defunció',
+      deathPlaceNotes: 'Observacions espai de defunció',
+      deathCause: 'Causa de la defunció',
+      deathCauseDetails: 'Detalls causa de la defunció',
+    },
+    es: {
+      sex: 'Sexo',
+      dob: 'Fecha de nacimiento',
+      dod: 'Fecha de defunción',
+      age: 'Edad',
+      birthTown: 'Municipio de nacimiento',
+      residenceAddress: 'Dirección de residencia',
+      deathTown: 'Municipio de defunción',
+      deathPlaceType: 'Tipología del espacio de defunción',
+      deathPlaceNotes: 'Observaciones del espacio de defunción',
+      deathCause: 'Causa de la defunción',
+      deathCauseDetails: 'Detalles de la causa de la defunción',
+    },
+    en: {
+      sex: 'Sex',
+      dob: 'Date of birth',
+      dod: 'Date of death',
+      age: 'Age',
+      birthTown: 'Birth municipality',
+      residenceAddress: 'Residential address',
+      deathTown: 'Municipality of death',
+      deathPlaceType: 'Type of place of death',
+      deathPlaceNotes: 'Notes on place of death',
+      deathCause: 'Cause of death',
+      deathCauseDetails: 'Details on cause of death',
+    },
+    fr: {
+      sex: 'Sexe',
+      dob: 'Date de naissance',
+      dod: 'Date de décès',
+      age: 'Âge',
+      birthTown: 'Commune de naissance',
+      residenceAddress: 'Adresse de résidence',
+      deathTown: 'Commune de décès',
+      deathPlaceType: 'Typologie du lieu du décès',
+      deathPlaceNotes: 'Observations sur le lieu du décès',
+      deathCause: 'Cause du décès',
+      deathCauseDetails: 'Détails sur la cause du décès',
+    },
+    it: {
+      sex: 'Sesso',
+      dob: 'Data di nascita',
+      dod: 'Data di morte',
+      age: 'Età',
+      birthTown: 'Comune di nascita',
+      residenceAddress: 'Indirizzo di residenza',
+      deathTown: 'Comune di morte',
+      deathPlaceType: 'Tipologia del luogo del decesso',
+      deathPlaceNotes: 'Osservazioni sul luogo del decesso',
+      deathCause: 'Causa del decesso',
+      deathCauseDetails: 'Dettagli sulla causa del decesso',
+    },
+    pt: {
+      sex: 'Sexo',
+      dob: 'Data de nascimento',
+      dod: 'Data de óbito',
+      age: 'Idade',
+      birthTown: 'Município de nascimento',
+      residenceAddress: 'Morada de residência',
+      deathTown: 'Município do óbito',
+      deathPlaceType: 'Tipologia do local do óbito',
+      deathPlaceNotes: 'Observações sobre o local do óbito',
+      deathCause: 'Causa do óbito',
+      deathCauseDetails: 'Detalhes da causa do óbito',
+    },
+  };
+
+  function t(key: keyof (typeof LABELS)['ca'], lang: string): string {
+    const l = (['ca', 'es', 'en', 'fr', 'it', 'pt'] as Lang[]).includes(lang as Lang) ? (lang as Lang) : 'ca';
+    return LABELS[l][key];
+  }
+
+  const SEX_LABELS: Record<Lang, { '1': string; '2': string; unknown: string }> = {
+    ca: { '1': 'Home', '2': 'Dona', unknown: 'desconegut' },
+    es: { '1': 'Hombre', '2': 'Mujer', unknown: 'desconocido' },
+    en: { '1': 'Male', '2': 'Female', unknown: 'unknown' },
+    fr: { '1': 'Homme', '2': 'Femme', unknown: 'inconnu' },
+    it: { '1': 'Uomo', '2': 'Donna', unknown: 'sconosciuto' },
+    pt: { '1': 'Homem', '2': 'Mulher', unknown: 'desconhecido' },
+  };
+
+  function isLang(x: string): x is Lang {
+    return ['ca', 'es', 'en', 'fr', 'it', 'pt'].includes(x);
+  }
+
+  function getSexeText(sexe: unknown, lang: string): string {
+    const l: Lang = isLang(lang) ? lang : 'ca';
+    const v = Number(sexe);
+    if (v === 1) return SEX_LABELS[l]['1'];
+    if (v === 2) return SEX_LABELS[l]['2'];
+    return SEX_LABELS[l].unknown;
+  }
+
+  // Uso:
+  const sexeText = getSexeText(fitxa.sexe, lang);
+
   divInfo.innerHTML = `
-    <h3 class="titolSeccio">${label}</h3>
-        <p><span class='marro2'>Sexe:</span> <span class='blau1'>${sexeText}</span></p>
-        <p><span class='marro2'>Data de naixement:</span> <span class='blau1'>${dataNaixement}</span></p>
-        <p><span class='marro2'>Data de defunció:</span> <span class='blau1'>${dataDefuncio}</span></p>
-        <p><span class='marro2'>Edat:</span> <span class='blau1'>${edatAlMorir}</span></p>
+        <h3 class="titolSeccio">${label}</h3>
+    <p><span class='marro2'>${t('sex', lang)}:</span> <span class='blau1'>${sexeText}</span></p>
+    <p><span class='marro2'>${t('dob', lang)}:</span> <span class='blau1'>${dataNaixement}</span></p>
+    <p><span class='marro2'>${t('dod', lang)}:</span> <span class='blau1'>${dataDefuncio}</span></p>
+    <p><span class='marro2'>${t('age', lang)}:</span> <span class='blau1'>${edatAlMorir}</span></p>
 
-        <p><span class='marro2'>Municipi de naixement:</span> <span class='blau1'>${ciutatNaixement} <span class='normal'>${naixement}</span></span></p>
+    <p><span class='marro2'>${t('birthTown', lang)}:</span> <span class='blau1'>${ciutatNaixement} <span class='normal'>${naixement}</span></span></p>
 
-        <p><span class='marro2'>Adreça de residència:</span> <span class='blau1'>${adrecaText} <span class='normal'>${residencia}</span></span></p>
-        <p><span class='marro2'>Municipi de defunció:</span> <span class='blau1'>${ciutatDefuncio} <span class='normal'>${defuncio}</span></span></p>
-        <p><span class='marro2'>Tipologia espai de defunció:</span> <span class='blau1'>${tipologiaEspaiDefuncio}</span></p>
-        <p><span class='marro2'>Observacions espai de defunció:</span> <span class='blau1'>${observacionsTipologiaEspacioDefuncio}</span></p>
-        <p><span class='marro2'>Causa de la defunció:</span> <span class='blau1'>${causaDefuncio}</span></p>
-        <p><span class='marro2'>Detalls causa de la defunció:</span> <span class='blau1'>${causa_defuncio_detalls}</span></p>
-      `;
+    <p><span class='marro2'>${t('residenceAddress', lang)}:</span> <span class='blau1'>${adrecaText} <span class='normal'>${residencia}</span></span></p>
+    <p><span class='marro2'>${t('deathTown', lang)}:</span> <span class='blau1'>${ciutatDefuncio} <span class='normal'>${defuncio}</span></span></p>
+    <p><span class='marro2'>${t('deathPlaceType', lang)}:</span> <span class='blau1'>${tipologiaEspaiDefuncio}</span></p>
+    <p><span class='marro2'>${t('deathPlaceNotes', lang)}:</span> <span class='blau1'>${observacionsTipologiaEspacioDefuncio}</span></p>
+    <p><span class='marro2'>${t('deathCause', lang)}:</span> <span class='blau1'>${causaDefuncio}</span></p>
+    <p><span class='marro2'>${t('deathCauseDetails', lang)}:</span> <span class='blau1'>${causa_defuncio_detalls}</span></p>
+  `;
 }

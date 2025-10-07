@@ -1,7 +1,7 @@
 import { scrollToTabContentOnce } from '../../utils/observer';
 import { mostrarInformacion } from './mostrarInformacion';
 
-export function initTabs(translations: Record<string, string>, idPersona: number): void {
+export function initTabs(translations: Record<string, string>, idPersona: number, lang: string): void {
   const tabs = [
     { id: 'tab1', label: translations.tab1 },
     { id: 'tab2', label: translations.tab2 },
@@ -52,7 +52,7 @@ export function initTabs(translations: Record<string, string>, idPersona: number
       btn.classList.add('active');
 
       // Mostrar la información correspondiente
-      mostrarInformacion(tab.id, idPersona, tab.label);
+      mostrarInformacion(tab.id, idPersona, tab.label, lang);
 
       // desplazar en móvil hacia el contenido
       scrollToTabContentOnce();
@@ -62,5 +62,5 @@ export function initTabs(translations: Record<string, string>, idPersona: number
   });
 
   // Mostrar contenido de la primera pestaña por defecto
-  mostrarInformacion('tab1', idPersona, translations.tab1);
+  mostrarInformacion('tab1', idPersona, translations.tab1, lang);
 }
