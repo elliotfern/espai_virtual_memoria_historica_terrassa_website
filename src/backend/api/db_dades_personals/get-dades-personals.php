@@ -679,9 +679,11 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
     }
 
     // 3) Pagina informacio fitxa Represaliat > Dades familiars
-    // ruta GET => "https://memoriaterrassa.cat/api/represaliats/get/?type=fitxaDadesFamiliars&id=35"
-} elseif (isset($_GET['type']) && $_GET['type'] == 'fitxaDadesFamiliars' && isset($_GET['id'])) {
+    // ruta GET => "https://memoriaterrassa.cat/api/dades_personals/get/fitxaDadesFamiliars?id=35&lang=cat"
+} elseif ($slug === 'fitxaDadesFamiliars') {
+
     $id = $_GET['id'];
+    $lang = $_GET['lang'];
     $db = new Database();
 
     $query = "SELECT f.id as idFamiliar, f.nom AS nomFamiliar, f.cognom1 AS cognomFamiliar1, f.cognom2 AS cognomFamiliar2, idParent, r.relacio_parentiu, f.anyNaixement AS anyNaixementFamiliar

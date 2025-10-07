@@ -3,7 +3,6 @@ import { cache } from './cache';
 import { initButtons } from './initButtons';
 import type { Fitxa, FitxaFamiliars } from '../../types/types';
 import { getApiArray, getApiFirst } from '../../services/api/http';
-import { DOMAIN_API } from '../../config/constants';
 import { getIsAdmin } from '../../services/auth/getIsAdmin';
 import { getIsAutor } from '../../services/auth/getIsAutor';
 import { getIsLogged } from '../../services/auth/getIsLogged';
@@ -64,8 +63,7 @@ export async function fitxaRepresaliat(slug: string, lang: string): Promise<void
 
     // 2) Familiares por id → usamos getApiArray<FitxaFamiliars>
     try {
-      const familiarsUrl = `${DOMAIN_API}/api/dades_personals/get/?type=fitxaDadesFamiliars&id=${fitxa.id}`;
-      const familiars = await getApiArray<FitxaFamiliars>(familiarsUrl);
+      const familiars = await getApiArray<FitxaFamiliars>(API_URLS.GET.FITXA_REPRESALIAT_DADES_FAMILIARS_WEB(fitxa.id, lang));
       cache.setFitxaFam(familiars);
     } catch (err) {
       console.warn('Error al obtenir familiars:', err);
@@ -79,6 +77,3 @@ export async function fitxaRepresaliat(slug: string, lang: string): Promise<void
     showNotFound("Ho sentim, però l'adreça web introduïda no es correspon amb cap fitxa de represaliat.");
   }
 }
-
-// a.completat = 2
-// visibilitat = 2
