@@ -21,10 +21,10 @@ export function renderTab2(fitxa: Fitxa, fitxaFam: FitxaFamiliars[] | null, labe
   if (fitxaFam) {
     divInfo.innerHTML += `<div class="familiar"><p><span class='marro2'>${t(LABELS_TAB2, 'familyList', lang)}:</span></p>`;
     fitxaFam.forEach((familiar) => {
-      const nomFamiliar = valorTextDesconegut(familiar.nomFamiliar ?? '', 3);
-      const cognom1Familiar = valorTextDesconegut(familiar.cognomFamiliar1 ?? '', 3);
-      const cognomFamiliar2 = valorTextDesconegut(familiar.cognomFamiliar2 ?? '', 3);
-      const naixementFamiliar = valorTextDesconegut(familiar.anyNaixementFamiliar ?? '', 3);
+      const nomFamiliar = valorTextDesconegut(familiar.nomFamiliar ?? '', 3, lang);
+      const cognom1Familiar = valorTextDesconegut(familiar.cognomFamiliar1 ?? '', 3, lang);
+      const cognomFamiliar2 = valorTextDesconegut(familiar.cognomFamiliar2 ?? '', 3, lang);
+      const naixementFamiliar = valorTextDesconegut(familiar.anyNaixementFamiliar ?? '', 3, lang);
       const familiarDades = joinValors([nomFamiliar, cognom1Familiar, cognomFamiliar2], ' ', false);
 
       divInfo.innerHTML += `

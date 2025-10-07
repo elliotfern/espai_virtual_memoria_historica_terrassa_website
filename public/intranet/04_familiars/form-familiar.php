@@ -40,8 +40,8 @@
                     <input type="text" class="form-control" id="anyNaixement" name="anyNaixement" value="">
                 </div>
 
-                <div class="col-md-4 mb-4"> <label for="relacio_parentiu" class="form-label negreta">Relació de parentiu:</label>
-                    <select class="form-select" name="relacio_parentiu" id="relacio_parentiu" value="">
+                <div class="col-md-4 mb-4"> <label for="relacio_parentiu_ca" class="form-label negreta">Relació de parentiu:</label>
+                    <select class="form-select" name="relacio_parentiu_ca" id="relacio_parentiu_ca" value="">
                     </select>
                     <div class="avis-form">
                         * Camp obligatori

@@ -42,7 +42,7 @@ if ($slug === "fitxaFamiliars") {
             f.id, CONCAT_WS(' ', f.nom, f.cognom1, f.cognom2) AS nom_complet,
             f.anyNaixement,
             f.idParent,
-            r.relacio_parentiu
+            r.relacio_parentiu_ca AS relacio_parentiu
             FROM aux_familiars AS f
             LEFT JOIN aux_familiars_relacio AS r ON f.relacio_parentiu = r.id
             WHERE f.idParent = :idParent";

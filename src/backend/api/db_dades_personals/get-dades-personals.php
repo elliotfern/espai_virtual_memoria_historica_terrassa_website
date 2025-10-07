@@ -686,7 +686,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
     $lang = $_GET['lang'];
     $db = new Database();
 
-    $query = "SELECT f.id as idFamiliar, f.nom AS nomFamiliar, f.cognom1 AS cognomFamiliar1, f.cognom2 AS cognomFamiliar2, idParent, r.relacio_parentiu, f.anyNaixement AS anyNaixementFamiliar
+    $query = "SELECT f.id as idFamiliar, f.nom AS nomFamiliar, f.cognom1 AS cognomFamiliar1, f.cognom2 AS cognomFamiliar2, idParent, r.relacio_parentiu_$lang AS relacio_parentiu, f.anyNaixement AS anyNaixementFamiliar
         FROM aux_familiars AS f
         LEFT JOIN aux_familiars_relacio as r ON f.relacio_parentiu = r.id
         WHERE f.idParent = :id";

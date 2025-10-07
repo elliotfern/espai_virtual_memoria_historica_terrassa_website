@@ -876,9 +876,9 @@ if ($slug === "municipis") {
     // GET : Relacions parentiu
     // URL: /api/auxiliars/get/relacions_parentiu
 } elseif ($slug === "relacions_parentiu") {
-    $query = "SELECT r.id, r.relacio_parentiu
+    $query = "SELECT r.id, r.relacio_parentiu_ca AS relacio_parentiu
               FROM aux_familiars_relacio AS r
-              ORDER BY r.relacio_parentiu ASC";
+              ORDER BY r.relacio_parentiu_ca ASC";
 
     $result = getData2($query);
     echo json_encode($result);
