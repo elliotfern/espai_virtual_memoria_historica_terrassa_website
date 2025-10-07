@@ -13,46 +13,46 @@ export function renderTab1(fitxa: Fitxa, label: string, lang: string): void {
 
   // variables tab1
   const dataFormatada = formatDatesForm(fitxa.data_naixement);
-  const dataNaixement = valorTextDesconegut(dataFormatada, 4);
+  const dataNaixement = valorTextDesconegut(dataFormatada, 4, lang);
 
   const dataFormatada2 = formatDatesForm(fitxa.data_defuncio);
-  const dataDefuncio = valorTextDesconegut(dataFormatada2, 4);
+  const dataDefuncio = valorTextDesconegut(dataFormatada2, 4, lang);
 
-  const ciutatNaixement = valorTextDesconegut(fitxa.ciutat_naixement, 2);
-  const comarcaNaixement = valorTextDesconegut(fitxa.comarca_naixement, 3);
-  const provinciaNaixement = valorTextDesconegut(fitxa.provincia_naixement, 3);
-  const comunitatNaixement = valorTextDesconegut(fitxa.comunitat_naixement, 3);
-  const paisNaixement = valorTextDesconegut(fitxa.pais_naixement, 3);
+  const ciutatNaixement = valorTextDesconegut(fitxa.ciutat_naixement, 2, lang);
+  const comarcaNaixement = valorTextDesconegut(fitxa.comarca_naixement, 3, lang);
+  const provinciaNaixement = valorTextDesconegut(fitxa.provincia_naixement, 3, lang);
+  const comunitatNaixement = valorTextDesconegut(fitxa.comunitat_naixement, 3, lang);
+  const paisNaixement = valorTextDesconegut(fitxa.pais_naixement, 3, lang);
 
   const naixement = joinValors([comarcaNaixement, provinciaNaixement, comunitatNaixement, paisNaixement], ', ', true);
 
-  const adreca = valorTextDesconegut(fitxa.adreca, 3);
-  const tipusViaResidencia = valorTextDesconegut(fitxa.tipus_ca, 3);
+  const adreca = valorTextDesconegut(fitxa.adreca, 3, lang);
+  const tipusViaResidencia = valorTextDesconegut(fitxa.tipus_ca, 3, lang);
   const via = joinValors([tipusViaResidencia, adreca, Number.isFinite(fitxa.adreca_num) ? String(fitxa.adreca_num) : ''], ' ', false);
 
-  const ciutatResidencia = valorTextDesconegut(fitxa.ciutat_residencia, 2);
+  const ciutatResidencia = valorTextDesconegut(fitxa.ciutat_residencia, 2, lang);
 
   const adrecaText = joinValors([via, ciutatResidencia], ', ', false);
 
-  const comarcaResidencia = valorTextDesconegut(fitxa.comarca_residencia, 3);
-  const provinciaResidencia = valorTextDesconegut(fitxa.provincia_residencia, 3);
-  const comunitatResidencia = valorTextDesconegut(fitxa.comunitat_residencia, 3);
-  const paisResidencia = valorTextDesconegut(fitxa.pais_residencia, 3);
+  const comarcaResidencia = valorTextDesconegut(fitxa.comarca_residencia, 3, lang);
+  const provinciaResidencia = valorTextDesconegut(fitxa.provincia_residencia, 3, lang);
+  const comunitatResidencia = valorTextDesconegut(fitxa.comunitat_residencia, 3, lang);
+  const paisResidencia = valorTextDesconegut(fitxa.pais_residencia, 3, lang);
 
   const residencia = joinValors([comarcaResidencia, provinciaResidencia, comunitatResidencia, paisResidencia], ', ', true);
 
-  const ciutatDefuncio = valorTextDesconegut(fitxa.ciutat_defuncio, 2);
-  const comarcaDefuncio = valorTextDesconegut(fitxa.comarca_defuncio, 3);
-  const provinciaDefuncio = valorTextDesconegut(fitxa.provincia_defuncio, 3);
-  const comunitatDefuncio = valorTextDesconegut(fitxa.comunitat_defuncio, 3);
-  const paisDefuncio = valorTextDesconegut(fitxa.pais_defuncio, 3);
+  const ciutatDefuncio = valorTextDesconegut(fitxa.ciutat_defuncio, 2, lang);
+  const comarcaDefuncio = valorTextDesconegut(fitxa.comarca_defuncio, 3, lang);
+  const provinciaDefuncio = valorTextDesconegut(fitxa.provincia_defuncio, 3, lang);
+  const comunitatDefuncio = valorTextDesconegut(fitxa.comunitat_defuncio, 3, lang);
+  const paisDefuncio = valorTextDesconegut(fitxa.pais_defuncio, 3, lang);
 
   const defuncio = joinValors([comarcaDefuncio, provinciaDefuncio, comunitatDefuncio, paisDefuncio], ', ', true);
 
-  const tipologiaEspaiDefuncio = fitxa.tipologia_espai_ca === '' || fitxa.tipologia_espai_ca === null || fitxa.tipologia_espai_ca === undefined ? 'Desconeguda' : fitxa.tipologia_espai_ca;
-  const observacionsTipologiaEspacioDefuncio = fitxa.observacions_espai === '' || fitxa.observacions_espai === null || fitxa.observacions_espai === undefined ? 'Desconeguda' : fitxa.observacions_espai;
-  const causaDefuncio = fitxa.causa_defuncio_ca === '' || fitxa.causa_defuncio_ca === null || fitxa.causa_defuncio_ca === undefined ? 'Desconeguda' : fitxa.causa_defuncio_ca;
-  const causa_defuncio_detalls = fitxa.defuncio_detalls_ca === '' || fitxa.defuncio_detalls_ca === null || fitxa.defuncio_detalls_ca === undefined ? 'Desconegut' : fitxa.defuncio_detalls_ca;
+  const tipologiaEspaiDefuncio = valorTextDesconegut(fitxa.tipologia_espai_ca, 4, lang);
+  const observacionsTipologiaEspacioDefuncio = valorTextDesconegut(fitxa.observacions_espai, 4, lang);
+  const causaDefuncio = valorTextDesconegut(fitxa.causa_defuncio_ca, 4, lang);
+  const causa_defuncio_detalls = valorTextDesconegut(fitxa.defuncio_detalls_ca, 2, lang);
 
   const fechaNacimiento = fitxa.data_naixement;
   const fechaDefuncion = fitxa.data_defuncio;
