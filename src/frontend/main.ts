@@ -33,7 +33,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const slug = pageType[1];
     const lang = 'ca';
     fitxaRepresaliat(slug, lang);
-    // initButtons(id); // Pasar el id
   } else if (pageType[0] === 'inici') {
     const lang = 'ca';
     homePage(lang);
@@ -57,6 +56,10 @@ document.addEventListener('DOMContentLoaded', () => {
       homePage(lang);
     } else if (pageType[1] === 'credits') {
       credits(lang);
+    } else if (pageType[1] === 'fitxa') {
+      const slug = pageType[2];
+      const lang = 'es';
+      fitxaRepresaliat(slug, lang);
     }
   }
 
@@ -69,6 +72,10 @@ document.addEventListener('DOMContentLoaded', () => {
       homePage(lang);
     } else if (pageType[1] === 'credits') {
       credits(lang);
+    } else if (pageType[1] === 'fitxa') {
+      const slug = pageType[2];
+      const lang = 'en';
+      fitxaRepresaliat(slug, lang);
     }
   }
 
@@ -81,6 +88,10 @@ document.addEventListener('DOMContentLoaded', () => {
       homePage(lang);
     } else if (pageType[1] === 'credits') {
       credits(lang);
+    } else if (pageType[1] === 'fitxa') {
+      const slug = pageType[2];
+      const lang = 'it';
+      fitxaRepresaliat(slug, lang);
     }
   }
 
@@ -93,6 +104,10 @@ document.addEventListener('DOMContentLoaded', () => {
       homePage(lang);
     } else if (pageType[1] === 'credits') {
       credits(lang);
+    } else if (pageType[1] === 'fitxa') {
+      const slug = pageType[2];
+      const lang = 'fr';
+      fitxaRepresaliat(slug, lang);
     }
   }
 
@@ -105,6 +120,10 @@ document.addEventListener('DOMContentLoaded', () => {
       homePage(lang);
     } else if (pageType[1] === 'credits') {
       credits(lang);
+    } else if (pageType[1] === 'fitxa') {
+      const slug = pageType[2];
+      const lang = 'pt';
+      fitxaRepresaliat(slug, lang);
     }
   }
 });
