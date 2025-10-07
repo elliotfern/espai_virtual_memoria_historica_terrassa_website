@@ -3,9 +3,11 @@ import { calcularEdadAlMorir } from '../../../config';
 import { formatDatesForm } from '../../../services/formatDates/dates';
 import { joinValors } from '../../../services/formatDates/joinValors';
 import { valorTextDesconegut } from '../../../services/formatDates/valorTextDesconegut';
-import { t } from '../../../services/i18n/i18n';
+import { DEFAULT_LANG, isLang, t } from '../../../services/i18n/i18n';
+import { LABELS_AGE } from '../../../services/i18n/label-ages';
 import { LABELS } from '../../../services/i18n/labels-tab1';
 import { getSexeText } from '../../../services/i18n/sex-labels';
+import { LABELS_VTD } from '../../../services/i18n/valor-desconegut';
 import type { Fitxa } from '../../../types/types';
 
 export function renderTab1(fitxa: Fitxa, label: string, lang: string): void {
@@ -52,21 +54,33 @@ export function renderTab1(fitxa: Fitxa, label: string, lang: string): void {
   const tipologiaEspaiDefuncio = valorTextDesconegut(fitxa.tipologia_espai_ca, 4, lang);
   const observacionsTipologiaEspacioDefuncio = valorTextDesconegut(fitxa.observacions_espai, 4, lang);
   const causaDefuncio = valorTextDesconegut(fitxa.causa_defuncio_ca, 4, lang);
-  const causa_defuncio_detalls = valorTextDesconegut(fitxa.defuncio_detalls_ca, 2, lang);
+  const causa_defuncio_detalls = valorTextDesconegut(fitxa.defuncio_detalls_ca, 5, lang);
 
   const fechaNacimiento = fitxa.data_naixement;
   const fechaDefuncion = fitxa.data_defuncio;
 
-  let edatAlMorir = 'Desconeguda';
-  if (fechaNacimiento && fechaDefuncion) {
-    const edat = calcularEdadAlMorir(fechaNacimiento, fechaDefuncion);
-    if (edat !== null) {
-      edatAlMorir = `${edat} anys`;
+  function yearsUnit(n: number, lang: string): string {
+    const key = n === 1 ? 'year_one' : 'year_other';
+    return t(LABELS_AGE, key, lang);
+  }
+
+  function getEdatAlMorir(fechaNacimiento: string | null | undefined, fechaDefuncion: string | null | undefined, lang: string): string {
+    const l = isLang(lang) ? lang : DEFAULT_LANG;
+
+    // Por defecto: “Desconeguda” (o equivalente en cada idioma)
+    let edatAlMorir = t(LABELS_VTD, 'unknownF', l);
+
+    if (fechaNacimiento && fechaDefuncion) {
+      const edat = calcularEdadAlMorir(fechaNacimiento, fechaDefuncion); // ya la tienes
+      if (edat !== null) {
+        edatAlMorir = `${edat} ${yearsUnit(edat, l)}`;
+      }
     }
+    return edatAlMorir;
   }
 
   if (!divInfo) return;
-
+  const edatAlMorir = getEdatAlMorir(fechaNacimiento, fechaDefuncion, lang);
   const sexeText = getSexeText(fitxa.sexe, lang);
 
   divInfo.innerHTML = `
