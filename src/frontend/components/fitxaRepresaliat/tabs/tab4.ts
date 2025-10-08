@@ -2,6 +2,7 @@
 import { valorTextDesconegut } from '../../../services/formatDates/valorTextDesconegut';
 import { t } from '../../../services/i18n/i18n';
 import { LABELS_TAB4 } from '../../../services/i18n/labels-tab4';
+import { LABELS_VTD } from '../../../services/i18n/valor-desconegut';
 import type { Fitxa } from '../../../types/types';
 import { partitsPolitics } from '../partitsPolitics';
 import { sindicats } from '../sindicats';
@@ -52,8 +53,9 @@ export async function renderTab4(fitxa: Fitxa, label: string, lang: string): Pro
   const partitsLimpios = filterUnknownLabels(nombresPartidos);
   const sindicatsLimpios = filterUnknownLabels(nombresSindicats);
 
-  const partitPolitic = partitsLimpios.length ? partitsLimpios.join(', ') : 'Desconegut';
-  const sindicat = sindicatsLimpios.length ? sindicatsLimpios.join(', ') : 'Desconegut';
+  const partitPolitic = partitsLimpios.length ? partitsLimpios.join(', ') : t(LABELS_VTD, 'unknownM', lang);
+
+  const sindicat = sindicatsLimpios.length ? sindicatsLimpios.join(', ') : t(LABELS_VTD, 'unknownM', lang);
 
   divInfo.innerHTML = `
   <h3 class="titolSeccio">${label}</h3>
@@ -66,7 +68,7 @@ export async function renderTab4(fitxa: Fitxa, label: string, lang: string): Pro
 
   <div style="margin-top:30px;margin-bottom:30px">
     <h5 class="titolSeccio2">${t(LABELS_TAB4, 'warDictatorshipHeading', lang)}</h5>
-    <p><span class='blau1'>${valorTextDesconegut(fitxa.activitat_durant_guerra, 1)}</span></p>
+    <p><span class='blau1'>${valorTextDesconegut(fitxa.activitat_durant_guerra, 1, lang)}</span></p>
   </div>
 `;
 }

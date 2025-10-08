@@ -19,7 +19,7 @@ $urlParts = explode('/', $url2);
 $pag = $urlParts[3] ?? '';
 
 $id_old = "";
-$carrec_cat_old = "";
+$carrec_ca_old = "";
 $carrec_es_old = "";
 $carrec_en_old = "";
 $carrec_fr_old = "";
@@ -33,7 +33,7 @@ if ($pag === "modifica-carrec-empresa") {
     $id = $routeParams[0];
 
     // Verificar si la ID existe en la base de datos
-    $query = "SELECT id, carrec_cat, carrec_es, carrec_en, carrec_fr, carrec_pt, carrec_it	
+    $query = "SELECT id, carrec_ca, carrec_es, carrec_en, carrec_fr, carrec_pt, carrec_it	
     FROM aux_ofici_carrec
     WHERE id = :id";
     $stmt = $conn->prepare($query);
@@ -44,7 +44,7 @@ if ($pag === "modifica-carrec-empresa") {
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             // Acceder a las variables de la consulta
             $id_old = $row['id'] ?? "";
-            $carrec_cat_old = $row['carrec_cat'] ?? "";
+            $carrec_ca_old = $row['carrec_ca'] ?? "";
             $carrec_es_old = $row['carrec_es'] ?? "";
             $carrec_en_old = $row['carrec_en'] ?? "";
             $carrec_fr_old = $row['carrec_fr'] ?? "";
@@ -63,29 +63,30 @@ if ($pag === "modifica-carrec-empresa") {
                 <?php if ($btnModificar === 1) {
                     echo '<h2>Crear nou càrrec d\'empresa</h2>';
                 } else {
-                    echo '<h2>Modifica càrrec d\'empresa: ' . $carrec_cat_old . '</h2>';
+                    echo '<h2>Modifica càrrec d\'empresa: ' . $carrec_ca_old . '</h2>';
                 }
 
-                ?>
-                <div class="alert alert-success" role="alert" id="okMessage" style="display:none">
-                    <div id="okText"></div>
-                </div>
+                echo '<p>Només els usuaris administradors poden crear nous registres</p>';
+                if (isUserAdmin()) : ?>
 
-                <div class="alert alert-danger" role="alert" id="errMessage" style="display:none">
-                    <div id="errText"></div>
-                </div>
-
-                <input type="hidden" name="id" id="id" value="<?php echo $id_old; ?>">
-
-                <div class="col-md-4 mb-4">
-                    <label for="carrec_cat" class="form-label negreta">Càrrec empresa (català):</label>
-                    <input type="text" class="form-control" id="carrec_cat" name="carrec_cat" value="<?php echo $carrec_cat_old; ?>">
-                    <div class="avis-form">
-                        * Camp obligatori
+                    <div class="alert alert-success" role="alert" id="okMessage" style="display:none">
+                        <div id="okText"></div>
                     </div>
-                </div>
 
-                <?php if (isUserAdmin()) : ?>
+                    <div class="alert alert-danger" role="alert" id="errMessage" style="display:none">
+                        <div id="errText"></div>
+                    </div>
+
+                    <input type="hidden" name="id" id="id" value="<?php echo $id_old; ?>">
+
+                    <div class="col-md-4 mb-4">
+                        <label for="carrec_cat" class="form-label negreta">Càrrec empresa (català):</label>
+                        <input type="text" class="form-control" id="carrec_ca" name="carrec_ca" value="<?php echo $carrec_ca_old; ?>">
+                        <div class="avis-form">
+                            * Camp obligatori
+                        </div>
+                    </div>
+
                     <hr>
 
                     <div class="col-md-4 mb-4">

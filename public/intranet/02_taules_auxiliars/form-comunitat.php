@@ -19,15 +19,19 @@ $urlParts = explode('/', $url2);
 $categoriaId = $urlParts[3] ?? '';
 
 $id_old = "";
-$comunitat_old = "";
+$comunitat_es_old = "";
 $comunitat_ca_old = "";
+$comunitat_en_old = "";
+$comunitat_fr_old = "";
+$comunitat_it_old = "";
+$comunitat_pt_old = "";
 $modificaBtn = "";
 
 if ($categoriaId === "modifica-comunitat") {
     $modificaBtn = 1;
     $id_old = $routeParams[0];
 
-    $query = "SELECT c.id, c.comunitat, c.comunitat_ca
+    $query = "SELECT c.id, c.comunitat_es, c.comunitat_ca, c.comunitat_en, c.comunitat_fr, c.comunitat_it, c.comunitat_pt
     FROM aux_dades_municipis_comunitat AS c
     WHERE c.id = :id";
     $stmt = $conn->prepare($query);
@@ -36,9 +40,13 @@ if ($categoriaId === "modifica-comunitat") {
 
     if ($stmt->rowCount() > 0) {
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $comunitat_old = $row['comunitat'] ?? "";
             $id_old = $row['id'] ?? "";
-            $comunitat_ca = $row['comunitat_ca'] ?? "";
+            $comunitat_es_old = $row['comunitat_es'] ?? "";
+            $comunitat_ca_old = $row['comunitat_ca'] ?? "";
+            $comunitat_en_old = $row['comunitat_en'] ?? "";
+            $comunitat_fr_old = $row['comunitat_fr'] ?? "";
+            $comunitat_it_old = $row['comunitat_it'] ?? "";
+            $comunitat_pt_old = $row['comunitat_pt'] ?? "";
         }
     }
 } else {
@@ -51,7 +59,7 @@ if ($categoriaId === "modifica-comunitat") {
         <div class="container">
             <?php if ($modificaBtn === 1) { ?>
                 <h2>Modificació dades Comunitat autònoma / regió / Estat federal</h2>
-                <h4 id="fitxa">Comunitat: <?php echo $comunitat_old; ?></h4>
+                <h4 id="fitxa">Comunitat: <?php echo $comunitat_ca_old; ?></h4>
             <?php } else { ?>
                 <h2>Inserció dades nova Comunitat Autònoma/Regió/Estat federal</h2>
             <?php } ?>
@@ -79,20 +87,45 @@ if ($categoriaId === "modifica-comunitat") {
                 <input type="hidden" id="id" name="id" value="<?php echo $id_old; ?>">
 
                 <div class="col-md-4 mb-4">
-                    <label for="comunitat" class="form-label negreta">Nom comunitat autònoma/regió (forma oficial):</label>
-                    <input type="text" class="form-control" id="comunitat" name="comunitat" value="<?php echo $comunitat_old; ?>">
+                    <label for="comunitat_ca" class="form-label negreta">Nom comunitat autònoma/regió (nom en català):</label>
+                    <input type="text" class="form-control" id="comunitat_ca" name="comunitat_ca" value="<?php echo $comunitat_ca_old; ?>">
+                    <div class="avis-form">
+                        * Obligatori. Omplir amb la forma catalana del nom de la comunitat / regió.
+                    </div>
+                </div>
+
+                <div class="col-md-4 mb-4">
+                    <label for="comunitat_es" class="form-label negreta">Nom comunitat autònoma/regió (nom en castellà):</label>
+                    <input type="text" class="form-control" id="comunitat_es" name="comunitat_es" value="<?php echo $comunitat_es_old; ?>">
                     <div class="avis-form">
                         * Camp obligatori
                     </div>
                 </div>
 
-                <div class="col-md-4 mb-4">
-                    <label for="comunitat" class="form-label negreta">Nom comunitat autònoma/regió (nom en català):</label>
-                    <input type="text" class="form-control" id="comunitat_ca" name="comunitat_ca" value="<?php echo $comunitat_ca_old; ?>">
-                    <div class="avis-form">
-                        * Omplir en cas que disposem del nom de la comunitat en català
+                <?php if (isUserAdmin()) : ?>
+
+                    <div class="col-md-4 mb-4">
+                        <label for="comunitat_en" class="form-label negreta">Nom comunitat autònoma/regió (nom en anglès):</label>
+                        <input type="text" class="form-control" id="comunitat_en" name="comunitat_en" value="<?php echo $comunitat_en_old; ?>">
                     </div>
-                </div>
+
+                    <div class="col-md-4 mb-4">
+                        <label for="comunitat_fr" class="form-label negreta">Nom comunitat autònoma/regió (nom en francès):</label>
+                        <input type="text" class="form-control" id="comunitat_fr" name="comunitat_fr" value="<?php echo $comunitat_fr_old; ?>">
+                    </div>
+
+                    <div class="col-md-4 mb-4">
+                        <label for="comunitat_it" class="form-label negreta">Nom comunitat autònoma/regió (nom en italià):</label>
+                        <input type="text" class="form-control" id="comunitat_it" name="comunitat_it" value="<?php echo $comunitat_it_old; ?>">
+                    </div>
+
+
+                    <div class="col-md-4 mb-4">
+                        <label for="comunitat_pt" class="form-label negreta">Nom comunitat autònoma/regió (nom en portuguès):</label>
+                        <input type="text" class="form-control" id="comunitat_pt" name="comunitat_pt" value="<?php echo $comunitat_pt_old; ?>">
+                    </div>
+
+                <?php endif; ?>
 
                 <div class="row espai-superior" style="border-top: 1px solid black;padding-top:25px">
                     <div class="col">

@@ -52,7 +52,7 @@ export function renderTab1(fitxa: Fitxa, label: string, lang: string): void {
   const defuncio = joinValors([comarcaDefuncio, provinciaDefuncio, comunitatDefuncio, paisDefuncio], ', ', true);
 
   const tipologiaEspaiDefuncio = valorTextDesconegut(fitxa.tipologia_espai_ca, 4, lang);
-  const observacionsTipologiaEspacioDefuncio = valorTextDesconegut(fitxa.observacions_espai, 4, lang);
+  const observacionsTipologiaEspacioDefuncio = valorTextDesconegut(fitxa.observacions_espai, 5, lang);
   const causaDefuncio = valorTextDesconegut(fitxa.causa_defuncio_ca, 4, lang);
   const causa_defuncio_detalls = valorTextDesconegut(fitxa.defuncio_detalls_ca, 5, lang);
 

@@ -161,7 +161,7 @@ if ($slug === "municipi") {
     $errors = [];
 
     // Validación de los datos recibidos
-    if (empty($data['ofici_cat'])) {
+    if (empty($data['ofici_ca'])) {
         $errors[] =  ValidacioErrors::requerit('ofici');
     }
 
@@ -175,7 +175,7 @@ if ($slug === "municipi") {
     }
 
     // Si no hay errores, crear las variables PHP y preparar la consulta PDO
-    $ofici_cat = $data['ofici_cat'];
+    $ofici_ca = $data['ofici_ca'];
     $ofici_es = !empty($data['ofici_es']) ? $data['ofici_es'] : NULL;
     $ofici_en = !empty($data['ofici_en']) ? $data['ofici_en'] : NULL;
     $ofici_fr = !empty($data['ofici_fr']) ? $data['ofici_fr'] : NULL;
@@ -190,14 +190,14 @@ if ($slug === "municipi") {
 
         // Crear la consulta SQL
         $sql = "INSERT INTO aux_oficis (
-            ofici_cat,
+            ofici_ca,
             ofici_es,
             ofici_en,
             ofici_fr,
             ofici_it,
             ofici_pt
         ) VALUES (
-            :ofici_cat,
+            :ofici_ca,
             :ofici_es,
             :ofici_en,
             :ofici_fr,
@@ -209,7 +209,7 @@ if ($slug === "municipi") {
         $stmt = $conn->prepare($sql);
 
         // Enlazar los parámetros con los valores de las variables PHP
-        $stmt->bindParam(':ofici_cat', $ofici_cat, PDO::PARAM_STR);
+        $stmt->bindParam(':ofici_ca', $ofici_ca, PDO::PARAM_STR);
         $stmt->bindParam(':ofici_es', $ofici_es, PDO::PARAM_STR);
         $stmt->bindParam(':ofici_en', $ofici_en, PDO::PARAM_STR);
         $stmt->bindParam(':ofici_fr',  $ofici_fr,  PDO::PARAM_STR);
@@ -222,7 +222,7 @@ if ($slug === "municipi") {
         // Recuperar el ID del registro creado
         $id = $conn->lastInsertId();
         $tipusOperacio = "INSERT";
-        $detalls =  "Creació nou ofici: " . $ofici_cat;
+        $detalls =  "Creació nou ofici: " . $ofici_ca;
 
         // Si la inserció té èxit, cal registrar la inserció en la base de control de canvis
 
@@ -999,8 +999,8 @@ if ($slug === "municipi") {
     $errors = [];
 
     // Validación de los datos recibidos
-    if (empty($data['comunitat'])) {
-        $errors[] =  ValidacioErrors::requerit('comunitat');
+    if (empty($data['comunitat_ca'])) {
+        $errors[] =  ValidacioErrors::requerit('comunitat_ca');
     }
 
     // Si hay errores, devolver una respuesta con los errores
@@ -1015,9 +1015,9 @@ if ($slug === "municipi") {
     // Verificar si la comunitat ya existe en la base de datos
     global $conn;
     /** @var PDO $conn */
-    $sql = "SELECT COUNT(*) FROM aux_dades_municipis_comunitat WHERE comunitat = :comunitat";
+    $sql = "SELECT COUNT(*) FROM aux_dades_municipis_comunitat WHERE comunitat_ca = :comunitat_ca";
     $stmt = $conn->prepare($sql);
-    $stmt->bindParam(':comunitat', $data['comunitat'], PDO::PARAM_STR);
+    $stmt->bindParam(':comunitat_ca', $data['comunitat_ca'], PDO::PARAM_STR);
     $stmt->execute();
     $comunitatExists = $stmt->fetchColumn();
 
@@ -1031,8 +1031,12 @@ if ($slug === "municipi") {
     }
 
     // Si no hay errores, crear las variables PHP y preparar la consulta PDO
-    $comunitat = $data['comunitat'];
-    $comunitat_ca = !empty($data['comunitat_ca']) ? $data['comunitat_ca'] : NULL;
+    $comunitat_ca = $data['comunitat_ca'];
+    $comunitat_es = !empty($data['comunitat_es']) ? $data['comunitat_es'] : NULL;
+    $comunitat_en = !empty($data['comunitat_en']) ? $data['comunitat_en'] : null;
+    $comunitat_fr = !empty($data['comunitat_fr']) ? $data['comunitat_fr'] : null;
+    $comunitat_it = !empty($data['comunitat_it']) ? $data['comunitat_it'] : null;
+    $comunitat_pt = !empty($data['comunitat_pt']) ? $data['comunitat_pt'] : null;
 
     // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
     try {
@@ -1042,17 +1046,26 @@ if ($slug === "municipi") {
 
         // Crear la consulta SQL
         $sql = "INSERT INTO aux_dades_municipis_comunitat (
-            comunitat, comunitat_ca
+            comunitat_es, comunitat_ca, comunitat_en, comunitat_fr, comunitat_it, comunitat_pt
         ) VALUES (
-            :comunitat, :comunitat_ca
+            :comunitat_es, :comunitat_ca, :comunitat_en, :comunitat_fr, :comunitat_it, :comunitat_pt
         )";
 
         // Preparar la consulta
         $stmt = $conn->prepare($sql);
 
-        // Enlazar los parámetros con los valores de las variables PHP
-        $stmt->bindParam(':comunitat', $comunitat, PDO::PARAM_STR);
-        $stmt->bindParam(':comunitat_ca', $comunitat_ca, PDO::PARAM_STR);
+        // Helper para enlazar nulos correctamente
+        $bindNullable = function (PDOStatement $stmt, string $param, $value): void {
+            $stmt->bindValue($param, $value, $value === null ? PDO::PARAM_NULL : PDO::PARAM_STR);
+        };
+
+        // 3) Bind para todos los idiomas
+        $bindNullable($stmt, ':comunitat_ca', $comunitat_ca);
+        $bindNullable($stmt, ':comunitat_es', $comunitat_es);
+        $bindNullable($stmt, ':comunitat_en', $comunitat_en);
+        $bindNullable($stmt, ':comunitat_fr', $comunitat_fr);
+        $bindNullable($stmt, ':comunitat_it', $comunitat_it);
+        $bindNullable($stmt, ':comunitat_pt', $comunitat_pt);
 
         // Ejecutar la consulta
         $stmt->execute();
@@ -2162,7 +2175,7 @@ if ($slug === "municipi") {
     $errors = [];
 
     // Validación de los datos recibidos
-    if (empty($data['estudi_cat'])) {
+    if (empty($data['estudi_ca'])) {
         $errors[] =  ValidacioErrors::requerit('nivell estudis català');
     }
 
@@ -2176,7 +2189,7 @@ if ($slug === "municipi") {
     }
 
     // Si no hay errores, crear las variables PHP y preparar la consulta PDO
-    $estudi_cat = $data['estudi_cat'];
+    $estudi_ca = $data['estudi_ca'];
     $estudi_es  = !empty($data['estudi_es'])  ? $data['estudi_es']  : NULL;
     $estudi_en  = !empty($data['estudi_en'])  ? $data['estudi_en']  : NULL;
     $estudi_it  = !empty($data['estudi_it'])  ? $data['estudi_it']  : NULL;
@@ -2191,14 +2204,14 @@ if ($slug === "municipi") {
 
         // Crear la consulta SQL
         $sql = "INSERT INTO aux_estudis (
-                estudi_cat,
+                estudi_ca,
                 estudi_es,
                 estudi_en,
                 estudi_it,
                 estudi_fr,
                 estudi_pt
             ) VALUES (
-                :estudi_cat,
+                :estudi_ca,
                 :estudi_es,
                 :estudi_en,
                 :estudi_it,
@@ -2210,7 +2223,7 @@ if ($slug === "municipi") {
         $stmt = $conn->prepare($sql);
 
         // Enlazar los parámetros con los valores de las variables PHP
-        $stmt->bindParam(':estudi_cat', $estudi_cat, PDO::PARAM_STR);
+        $stmt->bindParam(':estudi_ca', $estudi_ca, PDO::PARAM_STR);
         $stmt->bindParam(':estudi_es',  $estudi_es,  PDO::PARAM_STR);
         $stmt->bindParam(':estudi_en',  $estudi_en,  PDO::PARAM_STR);
         $stmt->bindParam(':estudi_it',  $estudi_it,  PDO::PARAM_STR);
@@ -2225,7 +2238,7 @@ if ($slug === "municipi") {
 
         // Recuperar el ID del registro creado
         $tipusOperacio = "INSERT";
-        $detalls =  "Creació de nou nivell d'estudis: " . $estudi_cat;
+        $detalls =  "Creació de nou nivell d'estudis: " . $estudi_ca;
 
         // Si la inserció té èxit, cal registrar la inserció en la base de control de canvis
 

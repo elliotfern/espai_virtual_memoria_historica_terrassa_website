@@ -30,3 +30,7 @@ export function t<TKeys extends string>(dict: I18nDict<TKeys>, key: TKeys, lang:
 export function makeDict<TKeys extends string>(d: I18nDict<TKeys>) {
   return d;
 }
+
+export function fmt(s: string, params: Record<string, string | number>) {
+  return s.replace(/\{(\w+)\}/g, (_, k) => String(params[k] ?? ''));
+}

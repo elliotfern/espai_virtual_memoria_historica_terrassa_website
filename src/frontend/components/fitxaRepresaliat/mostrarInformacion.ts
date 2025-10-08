@@ -1,5 +1,7 @@
 // src/pages/fitxaRepresaliat/mostrarInformacion.ts
 import { DOMAIN_API, DOMAIN_IMG } from '../../config/constants';
+import { fmt, t } from '../../services/i18n/i18n';
+import { LABELS_ACTIONS } from '../../services/i18n/label-action';
 import { cache } from './cache';
 import { renderTab1 } from './tabs/tab1';
 import { renderTab2 } from './tabs/tab2';
@@ -69,9 +71,9 @@ export function mostrarInformacion(tabId: string, id: number, label: string, lan
   }
 
   // ==== Botones de exportación (individual) ====
-  const EXPORT_CSV_URL = DOMAIN_API + '/api/export/persones_csv';
-  const EXPORT_XLSX_URL = DOMAIN_API + '/api/export/persones_xlsx';
-  const EXPORT_PDF_URL = DOMAIN_API + '/api/export/persones_pdf';
+  const EXPORT_CSV_URL = DOMAIN_API + '/export/persones_csv';
+  const EXPORT_XLSX_URL = DOMAIN_API + '/export/persones_xlsx';
+  const EXPORT_PDF_URL = DOMAIN_API + '/export/persones_pdf';
 
   // evita duplicados si se re-renderiza
   const oldInline = divAdditionalInfo.querySelector('.export-inline');
@@ -114,14 +116,14 @@ export function mostrarInformacion(tabId: string, id: number, label: string, lan
   const btnCsv = document.createElement('button');
   btnCsv.type = 'button';
   btnCsv.className = 'btn btn-primary btn-custom-2';
-  btnCsv.textContent = 'Descarregar dades en CSV';
+  btnCsv.textContent = t(LABELS_ACTIONS, 'downloadCsv', lang);
   btnCsv.addEventListener('click', () => postExport(EXPORT_CSV_URL));
 
   // botón Excel
   const btnXlsx = document.createElement('button');
   btnXlsx.type = 'button';
   btnXlsx.className = 'btn btn-primary btn-custom-2';
-  btnXlsx.textContent = 'Descarregar dades en Excel';
+  btnXlsx.textContent = t(LABELS_ACTIONS, 'downloadXlsx', lang);
   btnXlsx.addEventListener('click', () => postExport(EXPORT_XLSX_URL));
 
   // deshabilita si no hay identificador disponible
@@ -139,7 +141,7 @@ export function mostrarInformacion(tabId: string, id: number, label: string, lan
   const btnPdf = document.createElement('button');
   btnPdf.type = 'button';
   btnPdf.className = 'btn btn-primary btn-custom-2';
-  btnPdf.textContent = 'Descarregar fitxa en PDF';
+  btnPdf.textContent = t(LABELS_ACTIONS, 'downloadPdf', lang);
   btnPdf.addEventListener('click', () => {
     if (personaId === undefined && !personaSlug) return;
 
@@ -169,6 +171,7 @@ export function mostrarInformacion(tabId: string, id: number, label: string, lan
   exportWrap.appendChild(btnPdf);
 
   // fi botons exportacio dades
+  const msg = fmt(t(LABELS_ACTIONS, 'tabNotAvailable', lang), { tab: label });
 
   switch (tabId) {
     case 'tab1':
@@ -196,7 +199,7 @@ export function mostrarInformacion(tabId: string, id: number, label: string, lan
       renderTab7(fitxa, label, lang);
       break;
     default:
-      document.getElementById('fitxa')!.innerHTML = `<p>El contingut de la pestanya ${label} encara no està disponible.</p>`;
+      document.getElementById('fitxa')!.innerHTML = `<p>${msg}</p>`;
       break;
   }
 }

@@ -10,7 +10,7 @@ if (!$conn) {
 require_once APP_ROOT . '/public/intranet/includes/header.php';
 
 $id_old = "";
-$ofici_cat_old = "";
+$ofici_ca_old = "";
 $ofici_en_old = "";
 $ofici_es_old = "";
 $ofici_fr_old = "";
@@ -32,7 +32,7 @@ if ($pag === "modifica-ofici") {
     $btnModificar = 2;
     $id = $routeParams[0];
 
-    $query = "SELECT id, ofici_cat, ofici_es, ofici_en, ofici_fr, ofici_it,ofici_pt
+    $query = "SELECT id, ofici_ca, ofici_es, ofici_en, ofici_fr, ofici_it,ofici_pt
     FROM aux_oficis
     WHERE id = :id";
     $stmt = $conn->prepare($query);
@@ -42,7 +42,7 @@ if ($pag === "modifica-ofici") {
     if ($stmt->rowCount() > 0) {
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             // Acceder a las variables de la consulta
-            $ofici_cat_old = $row['ofici_cat'] ?? "";
+            $ofici_ca_old = $row['ofici_ca'] ?? "";
             $ofici_es_old = $row['ofici_es'] ?? "";
             $ofici_en_old = $row['ofici_en'] ?? "";
             $ofici_fr_old = $row['ofici_fr'] ?? "";
@@ -61,7 +61,7 @@ if ($pag === "modifica-ofici") {
                 <?php if ($btnModificar === 1) {
                     echo '<h2>Creació nou Ofici</h2>';
                 } else {
-                    echo '<h2>Modifica ofici: ' . $ofici_cat_old . '</h2>';
+                    echo '<h2>Modifica ofici: ' . $ofici_ca_old . '</h2>';
                 }
                 ?>
 
@@ -76,8 +76,8 @@ if ($pag === "modifica-ofici") {
                 <input type="hidden" name="id" id="id" value="<?php echo $id_old; ?>">
 
                 <div class="col-md-4 mb-4">
-                    <label for="ofici_cat" class="form-label negreta">Nom ofici (català):</label>
-                    <input type="text" class="form-control" id="ofici_cat" name="ofici_cat" value="<?php echo $ofici_cat_old; ?>">
+                    <label for="ofici_ca" class="form-label negreta">Nom ofici (català):</label>
+                    <input type="text" class="form-control" id="ofici_ca" name="ofici_ca" value="<?php echo $ofici_ca_old; ?>">
                     <div class="avis-form">
                         * Camp obligatori
                     </div>

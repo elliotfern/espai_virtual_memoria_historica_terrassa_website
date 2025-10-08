@@ -32,12 +32,12 @@ if ($slug === "municipis") {
                 CONCAT(
                     COALESCE(m.ciutat_ca, m.ciutat),
                     IF(
-                    (co.comunitat IS NOT NULL AND co.comunitat != '') 
+                    (co.comunitat_ca IS NOT NULL AND co.comunitat_es != '') 
                     OR (e.estat_ca IS NOT NULL AND e.estat_ca != ''), 
                     CONCAT(
                         ' (',
                         CONCAT_WS(', ',
-                        NULLIF(COALESCE(co.comunitat_ca, co.comunitat), ''),
+                        NULLIF(COALESCE(co.comunitat_ca, co.comunitat_es), ''),
                         NULLIF(e.estat_ca, '')
                         ),
                         ')'
@@ -46,9 +46,9 @@ if ($slug === "municipis") {
                     )
                 ) AS ciutat,
                 COALESCE(c.comarca_ca, c.comarca) AS comarca,
-                COALESCE(p.provincia_ca, p.provincia) AS provincia,
-                COALESCE(co.comunitat_ca, co.comunitat) AS comunitat,
-                COALESCE(e.estat_ca, e.estat) AS estat
+                COALESCE(p.provincia_ca, p.provincia_es) AS provincia,
+                COALESCE(co.comunitat_ca, co.comunitat_es) AS comunitat,
+                COALESCE(e.estat_ca, e.estat_es) AS estat
             FROM aux_dades_municipis AS m
             LEFT JOIN aux_dades_municipis_comarca AS c ON m.comarca = c.id
             LEFT JOIN aux_dades_municipis_provincia AS p ON m.provincia = p.id
@@ -56,8 +56,7 @@ if ($slug === "municipis") {
             LEFT JOIN aux_dades_municipis_estat AS e ON m.estat = e.id
             ORDER BY
             CONVERT(TRIM(COALESCE(NULLIF(m.ciutat_ca,''), m.ciutat)) USING utf8mb4)
-            COLLATE utf8mb4_unicode_ci ASC
-            ";
+            COLLATE utf8mb4_unicode_ci ASC";
 
     try {
         $result = $db->getData($query);
@@ -239,14 +238,14 @@ if ($slug === "municipis") {
             p.id,
             CONCAT_WS(
                 '',
-                COALESCE(p.provincia_ca, p.provincia),
+                COALESCE(p.provincia_ca, p.provincia_es),
                 CONCAT(' (', NULLIF(MAX(e.estat_ca), ''), ')')
             ) AS provincia
             FROM aux_dades_municipis_provincia AS p
             LEFT JOIN aux_dades_municipis AS co ON p.id = co.provincia
             LEFT JOIN aux_dades_municipis_estat AS e ON co.estat = e.id
             GROUP BY p.id
-            ORDER BY COALESCE(p.provincia_ca, p.provincia) ASC;";
+            ORDER BY COALESCE(p.provincia_ca, p.provincia_es) ASC;";
 
     $result = getData2($query);
     echo json_encode($result);
@@ -260,12 +259,12 @@ if ($slug === "municipis") {
                  CONCAT(
                     COALESCE(c.comarca_ca, c.comarca),
                     IF(
-                    MAX(COALESCE(co.comunitat_ca, co.comunitat)) IS NOT NULL 
+                    MAX(COALESCE(co.comunitat_ca, co.comunitat_es)) IS NOT NULL 
                     OR MAX(e.estat_ca) IS NOT NULL,
                     CONCAT(
                         ' (',
                         CONCAT_WS(', ',
-                        NULLIF(MAX(COALESCE(co.comunitat_ca, co.comunitat)), ''),
+                        NULLIF(MAX(COALESCE(co.comunitat_ca, co.comunitat_es)), ''),
                         NULLIF(MAX(e.estat_ca), '')
                         ),
                         ')'
@@ -287,18 +286,20 @@ if ($slug === "municipis") {
     // URL: https://memoriaterrassa.cat/api/auxiliars/get/comunitats
 } else if ($slug === "comunitats") {
 
-    $query = "SELECT c.id,
-            CONCAT(
-                COALESCE(c.comunitat_ca, c.comunitat),
-                ' (',
-                e.estat_ca,
-                ')'
-            ) AS comunitat
+    $query = "SELECT
+        c.id,
+        CONCAT_WS(
+            ' ',
+            COALESCE(c.comunitat_ca, c.comunitat_es),
+            CASE WHEN MAX(e.estat_ca) IS NULL THEN NULL
+                ELSE CONCAT('(', MAX(e.estat_ca), ')')
+            END
+        ) AS comunitat
         FROM aux_dades_municipis_comunitat AS c
-        LEFT JOIN aux_dades_municipis AS co ON c.id = co.comunitat
-        LEFT JOIN aux_dades_municipis_estat AS e ON co.estat = e.id
-        GROUP BY c.id
-        ORDER BY c.comunitat_ca ASC";
+        LEFT JOIN aux_dades_municipis AS co ON co.comunitat = c.id
+        LEFT JOIN aux_dades_municipis_estat AS e ON e.id = co.estat
+        GROUP BY c.id, c.comunitat_ca, c.comunitat_es
+        ORDER BY c.comunitat_ca ASC;";
 
     $result = getData2($query);
     echo json_encode($result);
@@ -307,9 +308,9 @@ if ($slug === "municipis") {
     // URL: https://memoriaterrassa.cat/api/auxiliars/get/estats
 } else if ($slug === "estats") {
 
-    $query = "SELECT e.id, COALESCE(e.estat_ca, e.estat) AS estat
+    $query = "SELECT e.id, COALESCE(e.estat_ca, e.estat_es) AS estat
         FROM aux_dades_municipis_estat AS e
-        ORDER BY e.estat ASC";
+        ORDER BY e.estat_ca ASC";
 
     $result = getData2($query);
     echo json_encode($result);
@@ -320,9 +321,9 @@ if ($slug === "municipis") {
 
     $db = new Database();
 
-    $query = "SELECT e.id, e.estudi_cat
+    $query = "SELECT e.id, e.estudi_ca AS estudi_cat
         FROM aux_estudis AS e
-        ORDER BY e.estudi_cat ASC";
+        ORDER BY e.estudi_ca ASC";
 
     try {
 
@@ -356,9 +357,9 @@ if ($slug === "municipis") {
 
     $db = new Database();
 
-    $query = "SELECT o.id, o.ofici_cat
+    $query = "SELECT o.id, o.ofici_ca AS ofici_cat
               FROM aux_oficis AS o
-              ORDER BY o.ofici_cat ASC";
+              ORDER BY o.ofici_ca ASC";
 
     try {
 
@@ -400,9 +401,9 @@ if ($slug === "municipis") {
     // GET : Llistat sectors
     // URL: /api/auxiliars/get/sectors_economics
 } elseif ($slug === "sectors_economics") {
-    $query = "SELECT se.id, se.sector_cat
+    $query = "SELECT se.id, se.sector_ca AS sector_cat
               FROM aux_sector_economic AS se
-              ORDER BY se.sector_cat ASC";
+              ORDER BY se.sector_ca ASC";
 
     $result = getData2($query);
     echo json_encode($result);
@@ -410,10 +411,10 @@ if ($slug === "municipis") {
     // GET : Llistat sub-sectors economics
     // URL: /api/auxiliars/get/sub_sectors_economics
 } elseif ($slug === "sub_sectors_economics") {
-    $query = "SELECT sse.id, sse.sub_sector_cat, s.sector_cat
+    $query = "SELECT sse.id, sse.sub_sector_ca AS sub_sector_cat, s.sector_ca AS sector_cat
               FROM aux_sub_sector_economic AS sse
               INNER JOIN aux_sector_economic AS s ON sse.idSector = s.id
-              ORDER BY sse.sub_sector_cat ASC";
+              ORDER BY sse.sub_sector_ca ASC";
 
     $result = getData2($query);
     echo json_encode($result);
@@ -458,9 +459,9 @@ if ($slug === "municipis") {
     // GET : Llistat càrrecs empresa
     // URL: /api/auxiliars/get/carrecs_empresa
 } elseif ($slug === "carrecs_empresa") {
-    $query = "SELECT ce.id, ce.carrec_cat
+    $query = "SELECT ce.id, ce.carrec_ca AS carrec_cat
               FROM aux_ofici_carrec AS ce
-              ORDER BY ce.carrec_cat ASC";
+              ORDER BY ce.carrec_ca ASC";
 
     $result = getData2($query);
     echo json_encode($result);
@@ -471,9 +472,9 @@ if ($slug === "municipis") {
 
     $db = new Database();
 
-    $query = "SELECT ec.id, ec.estat_cat
+    $query = "SELECT ec.id, ec.estat_ca AS estat_cat
               FROM aux_estat_civil AS ec
-              ORDER BY ec.estat_cat ASC";
+              ORDER BY ec.estat_ca ASC";
 
     try {
         // Pasamos los valores como array en el mismo orden de los placeholders

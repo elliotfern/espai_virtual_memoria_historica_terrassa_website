@@ -310,6 +310,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
     // ruta GET => "https://memoriaterrassa.cat/api/represaliats/get/?type=fitxa&id=35"
 } elseif (isset($_GET['type']) && $_GET['type'] == 'fitxa' && isset($_GET['id'])) {
     $id = $_GET['id'];
+    $lang = 'ca';
 
     global $conn;
     /** @var PDO $conn */
@@ -326,13 +327,13 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
             m1.id AS ciutat_naixement_id,
             m1.ciutat AS ciutat_naixement,
             m1a.comarca AS comarca_naixement,
-            m1b.provincia AS provincia_naixement,
+            m1b.provincia_ca AS provincia_naixement,
             m1c.comunitat_ca AS comunitat_naixement,
             m1d.estat_ca AS pais_naixement,
 
             m2.ciutat AS ciutat_residencia,
             m2a.comarca AS comarca_residencia,
-            m2b.provincia AS provincia_residencia,
+            m2b.provincia_ca AS provincia_residencia,
             m2c.comunitat_ca AS comunitat_residencia,
             m2d.estat_ca AS pais_residencia,
 
@@ -340,21 +341,21 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
             m3.ciutat AS ciutat_defuncio,
             m3.id AS ciutat_defuncio_id,
             m3a.comarca AS comarca_defuncio,
-            m3b.provincia AS provincia_defuncio,
+            m3b.provincia_ca AS provincia_defuncio,
             m3c.comunitat_ca AS comunitat_defuncio,
             m3d.estat_ca AS pais_defuncio,
             
             dp.adreca, 
-            tespai.tipologia_espai_ca,
+            tespai.tipologia_espai_$lang AS tipologia_espai_ca,
             tespai.id AS tipologia_lloc_defuncio_id,
             tespai.observacions AS observacions_espai,
             causaD.causa_defuncio_ca,
             causaD.id AS causa_defuncio_id,
-            ec.estat_cat AS estat_civil, 
+            ec.estat_$lang AS estat_civil, 
             ec.id AS estat_civil_id,  
-            es.estudi_cat, 
+            es.estudi_$lang AS estudi_cat, 
             es.id AS estudis_id, 
-            o.ofici_cat, 
+            o.ofici_$lang AS ofici_cat, 
             o.id AS ofici_id, 
             em.empresa_ca AS empresa,
             dp.empresa AS empresa_id,
@@ -365,11 +366,11 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
             fs.id AS sindicat_id,
             dp.filiacio_sindical,
             dp.activitat_durant_guerra,
-            se.sector_cat,
+            se.sector_ca AS sector_cat,
             se.id AS sector_id,
-            sse.sub_sector_cat,
+            sse.sub_sector_$lang AS sub_sector_cat,
             sse.id AS sub_sector_id,
-            oc.carrec_cat,
+            oc.carrec_$lang  AS carrec_cat,
             oc.id AS carrecs_empresa_id,
             u.nom AS autorNom,
             u2.nom AS autor2Nom,
@@ -456,6 +457,12 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
     $slug = $_GET['slug'];
     $lang = $_GET['lang'];
 
+
+    // Whitelist para sufijos de columnas traducidas
+    $valid = ['ca', 'es', 'en', 'it', 'pt', 'fr'];
+    $sfx = in_array($lang, $valid, true) ? $lang : 'ca'; // decide qué prefieres como fallback
+
+
     $db = new Database();
     $query = "SELECT 
             dp.id,
@@ -466,39 +473,50 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
             dp.sexe,
             dp.data_naixement,
             dp.data_defuncio,
-            
             m1.id AS ciutat_naixement_id,
-            COALESCE(m1.ciutat_ca, m1.ciutat) AS ciutat_naixement,
+            CASE
+                WHEN :lang = 'ca' THEN COALESCE(m1.ciutat_ca, m1.ciutat)
+                WHEN :lang IN ('es','en','eng','it','pt', 'fr') THEN m1.ciutat
+                ELSE m1.ciutat
+            END AS ciutat_naixement,
             COALESCE(m1a.comarca_ca, m1a.comarca) AS comarca_naixement,
-            COALESCE(m1b.provincia_ca, m1b.provincia) AS provincia_naixement,
-            COALESCE(m1c.comunitat_ca, m1c.comunitat) AS comunitat_naixement,
-            COALESCE(m1d.estat_ca, m1d.estat) AS pais_naixement,
+            m1b.provincia_$sfx AS provincia_naixement,
+            m1c.comunitat_$sfx AS comunitat_naixement,
+            m1d.estat_$sfx AS pais_naixement,
 
             m2.id AS ciutat_residencia_id,
-            COALESCE(m2.ciutat_ca, m2.ciutat) AS ciutat_residencia,
+            CASE
+                WHEN :lang = 'ca' THEN COALESCE(m2.ciutat_ca, m2.ciutat)
+                WHEN :lang IN ('es','en','eng','it','pt', 'fr') THEN m2.ciutat
+                ELSE m2.ciutat
+            END AS ciutat_residencia,
             COALESCE(m2a.comarca_ca, m2a.comarca) AS comarca_residencia,
-            COALESCE(m2b.provincia_ca, m2b.provincia) AS provincia_residencia,
-            COALESCE(m2c.comunitat_ca, m2c.comunitat) AS comunitat_residencia,
-            COALESCE(m2d.estat_ca, m2d.estat) AS pais_residencia,
+            m2b.provincia_$sfx AS provincia_residencia,
+            m2c.comunitat_$sfx AS comunitat_residencia,
+            m2d.estat_$sfx AS pais_residencia,
 
             m3.id AS ciutat_defuncio_id,
-            COALESCE(m3.ciutat_ca, m3.ciutat) AS ciutat_defuncio,
+            CASE
+                WHEN :lang = 'ca' THEN COALESCE(m3.ciutat_ca, m3.ciutat)
+                WHEN :lang IN ('es','en','eng','it','pt', 'fr') THEN m3.ciutat
+                ELSE m3.ciutat
+            END AS ciutat_defuncio,
             COALESCE(m3a.comarca_ca, m3a.comarca) AS comarca_defuncio,
-            COALESCE(m3b.provincia_ca, m3b.provincia) AS provincia_defuncio,
-            COALESCE(m3c.comunitat_ca, m3c.comunitat) AS comunitat_defuncio,
-            COALESCE(m3d.estat_ca, m3d.estat) AS pais_defuncio,
+            m3b.provincia_$sfx AS provincia_defuncio,
+            m3c.comunitat_$sfx AS comunitat_defuncio,
+            m3d.estat_$sfx  AS pais_defuncio,
             
             dp.adreca, 
-            tespai.tipologia_espai_ca,
+            tespai.tipologia_espai_$sfx AS tipologia_espai_ca,
             tespai.id AS tipologia_lloc_defuncio_id,
             tespai.observacions AS observacions_espai,
-            causaD.causa_defuncio_ca,
+            causaD.causa_defuncio_$sfx AS causa_defuncio_ca,
             causaD.id AS causa_defuncio_id,
-            ec.estat_cat AS estat_civil, 
+            ec.estat_$sfx AS estat_civil, 
             ec.id AS estat_civil_id,  
-            es.estudi_cat, 
+            es.estudi_$sfx AS estudi_cat, 
             es.id AS estudis_id, 
-            o.ofici_cat, 
+            o.ofici_$sfx AS ofici_cat, 
             o.id AS ofici_id, 
             em.empresa_ca AS empresa,
             dp.empresa AS empresa_id,
@@ -509,11 +527,11 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
             fs.id AS sindicat_id,
             dp.filiacio_sindical,
             dp.activitat_durant_guerra,
-            se.sector_cat,
+            se.sector_$sfx AS sector_cat,
             se.id AS sector_id,
-            sse.sub_sector_cat,
+            sse.sub_sector_$sfx AS sub_sector_cat,
             sse.id AS sub_sector_id,
-            oc.carrec_cat,
+            oc.carrec_$sfx AS carrec_cat,
             oc.id AS carrecs_empresa_id,
             u.nom AS autorNom,
             u2.nom AS autor2Nom,
@@ -540,7 +558,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
             dp.adreca_antic,
             dp.adreca_num,
             dp.causa_defuncio_detalls,
-            causaDD.defuncio_detalls_ca
+            causaDD.defuncio_detalls_$sfx AS defuncio_detalls_ca
             FROM db_dades_personals AS dp
             LEFT JOIN aux_dades_municipis AS m1 ON dp.municipi_naixement = m1.id
             LEFT JOIN aux_dades_municipis_comarca AS m1a ON m1.comarca = m1a.id
@@ -582,7 +600,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
             WHERE dp.slug = :slug";
 
     try {
-        $params = [':slug' => $slug];
+        $params = [':slug' => $slug, ':lang' => $lang];
         $result = $db->getData($query, $params, false);
 
         if (empty($result)) {

@@ -29,22 +29,25 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
                     </ul>
                 </div>
 
-                <div class="col-md-4 mb-4">
-                    <label for="ciutat" class="form-label negreta">Nom municipi (forma oficial):</label>
+                <div class="col-md-6 mb-4">
+                    <label for="ciutat" class="form-label negreta">Nom oficial del municipi (a Catalunya, nom sempre en català):</label>
                     <input type="text" class="form-control" id="ciutat" name="ciutat" value="">
                     <div class="avis-form">
                         * Camp obligatori
                     </div>
                 </div>
 
-                <div class="col-md-4 mb-4">
-                    <label for="ciutat" class="form-label negreta">Nom municipi (nom en català):</label>
-                    <input type="text" class="form-control" id="ciutat_ca" name="ciutat_ca" value="">
-                    <div class="avis-form">
-                        * Omplir en cas que disposem del nom del municipi en català
-                    </div>
-                </div>
+                <?php if (isUserAdmin()) : ?>
 
+                    <div class="col-md-6 mb-4">
+                        <label for="ciutat" class="form-label negreta">Nom municipi (nom en català):</label>
+                        <input type="text" class="form-control" id="ciutat_ca" name="ciutat_ca" value="">
+                        <div class="avis-form">
+                            * Omplir en cas que disposem del nom del municipi en català
+                        </div>
+                    </div>
+
+                <?php endif; ?>
                 <hr>
 
                 <div class="col-md-4 mb-4">

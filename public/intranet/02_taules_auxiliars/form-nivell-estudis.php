@@ -19,7 +19,7 @@ $urlParts = explode('/', $url2);
 $pag = $urlParts[3] ?? '';
 
 $id_old = "";
-$estudi_cat_old = "";
+$estudi_ca_old = "";
 $estudi_es_old = "";
 $estudi_en_old = "";
 $estudi_fr_old = "";
@@ -33,7 +33,7 @@ if ($pag === "modifica-nivell-estudis") {
     $id = $routeParams[0];
 
     // Verificar si la ID existe en la base de datos
-    $query = "SELECT id, estudi_cat, estudi_es, estudi_en, estudi_it, estudi_fr, estudi_pt
+    $query = "SELECT id, estudi_ca, estudi_es, estudi_en, estudi_it, estudi_fr, estudi_pt
     FROM aux_estudis
     WHERE id = :id";
     $stmt = $conn->prepare($query);
@@ -44,7 +44,7 @@ if ($pag === "modifica-nivell-estudis") {
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             // Acceder a las variables de la consulta
             $id_old = $row['id'] ?? "";
-            $estudi_cat_old = $row['estudi_cat'] ?? "";
+            $estudi_ca_old = $row['estudi_ca'] ?? "";
             $estudi_es_old = $row['estudi_es'] ?? "";
             $estudi_en_old = $row['estudi_en'] ?? "";
             $estudi_it_old = $row['estudi_it'] ?? "";
@@ -78,7 +78,7 @@ if ($pag === "modifica-nivell-estudis") {
 
                 <div class="col-md-4 mb-4">
                     <label for="estudi_cat" class="form-label negreta">Nivell d'estudis (català):</label>
-                    <input type="text" class="form-control" id="estudi_cat" name="estudi_cat" value="<?php echo $estudi_cat_old; ?>">
+                    <input type="text" class="form-control" id="estudi_ca" name="estudi_ca" value="<?php echo $estudi_ca_old; ?>">
                     <div class="avis-form">
                         * Camp obligatori
                     </div>

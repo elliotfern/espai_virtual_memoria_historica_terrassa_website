@@ -998,7 +998,7 @@ if ($slug === "municipi") {
     $errors = [];
 
     // Validación de los datos recibidos
-    if (empty($data['ofici_cat'])) {
+    if (empty($data['ofici_ca'])) {
         $errors[] =  ValidacioErrors::requerit('ofici');
     }
 
@@ -1012,7 +1012,7 @@ if ($slug === "municipi") {
     }
 
     // Si no hay errores, crear las variables PHP y preparar la consulta PDO
-    $ofici_cat = $data['ofici_cat'];
+    $ofici_ca = $data['ofici_ca'];
     $ofici_es = !empty($data['ofici_es']) ? $data['ofici_es'] : NULL;
     $ofici_en = !empty($data['ofici_en']) ? $data['ofici_en'] : NULL;
     $ofici_fr  = !empty($data['ofici_fr'])  ? $data['ofici_fr']  : NULL;
@@ -1028,7 +1028,7 @@ if ($slug === "municipi") {
 
         // Crear la consulta SQL
         $sql = "UPDATE aux_oficis SET 
-            ofici_cat = :ofici_cat,
+            ofici_ca = :ofici_ca,
             ofici_es = :ofici_es,
             ofici_en = :ofici_en
             ofici_fr =:ofici_fr,
@@ -1040,7 +1040,7 @@ if ($slug === "municipi") {
         $stmt = $conn->prepare($sql);
 
         // Enlazar los parámetros con los valores de las variables PHP
-        $stmt->bindParam(':ofici_cat', $ofici_cat, PDO::PARAM_STR);
+        $stmt->bindParam(':ofici_ca', $ofici_ca, PDO::PARAM_STR);
         $stmt->bindParam(':ofici_es', $ofici_es, PDO::PARAM_STR);
         $stmt->bindParam(':ofici_en', $ofici_en, PDO::PARAM_STR);
         $stmt->bindParam(':ofici_fr',  $ofici_fr,  PDO::PARAM_STR);
@@ -1053,7 +1053,7 @@ if ($slug === "municipi") {
 
         // Recuperar el ID del registro creado
         $tipusOperacio = "UPDATR";
-        $detalls =  "Modificació ofici: " . $ofici_cat;
+        $detalls =  "Modificació ofici: " . $ofici_ca;
 
         // Si la inserció té èxit, cal registrar la inserció en la base de control de canvis
 
@@ -1968,7 +1968,7 @@ if ($slug === "municipi") {
     $errors = [];
 
     // Validación de los datos recibidos
-    if (empty($data['estudi_cat'])) {
+    if (empty($data['estudi_ca'])) {
         $errors[] =  ValidacioErrors::requerit('nivell estudis català');
     }
 
@@ -1982,7 +1982,7 @@ if ($slug === "municipi") {
     }
 
     // Si no hay errores, crear las variables PHP y preparar la consulta PDO
-    $estudi_cat = $data['estudi_cat'];
+    $estudi_ca = $data['estudi_ca'];
     $estudi_es  = !empty($data['estudi_es'])  ? $data['estudi_es']  : NULL;
     $estudi_en  = !empty($data['estudi_en'])  ? $data['estudi_en']  : NULL;
     $estudi_it  = !empty($data['estudi_it'])  ? $data['estudi_it']  : NULL;
@@ -1998,7 +1998,7 @@ if ($slug === "municipi") {
 
         // Crear la consulta SQL
         $sql = "UPDATE aux_estudis SET
-            estudi_cat = :estudi_cat,
+            estudi_ca = :estudi_ca,
             estudi_es  = :estudi_es,
             estudi_en  = :estudi_en,
             estudi_it  = :estudi_it,
@@ -2010,7 +2010,7 @@ if ($slug === "municipi") {
         $stmt = $conn->prepare($sql);
 
         // Enlazar los parámetros con los valores de las variables PHP
-        $stmt->bindParam(':estudi_cat', $estudi_cat, PDO::PARAM_STR);
+        $stmt->bindParam(':estudi_ca', $estudi_ca, PDO::PARAM_STR);
         $stmt->bindParam(':estudi_es',  $estudi_es,  PDO::PARAM_STR);
         $stmt->bindParam(':estudi_en',  $estudi_en,  PDO::PARAM_STR);
         $stmt->bindParam(':estudi_it',  $estudi_it,  PDO::PARAM_STR);
@@ -2023,7 +2023,7 @@ if ($slug === "municipi") {
 
         // Recuperar el ID del registro creado
         $tipusOperacio = "UPDATE";
-        $detalls =  "Modificació nivell d'estudis: " . $estudi_cat;
+        $detalls =  "Modificació nivell d'estudis: " . $estudi_ca;
 
         // Si la inserció té èxit, cal registrar la inserció en la base de control de canvis
 

@@ -20,7 +20,7 @@ $pag = $urlParts[3] ?? '';
 
 $causa_defuncio_ca_old = "";
 $id_old = "";
-$sector_cat_old = "";
+$sector_ca_old = "";
 $sector_es_old = "";
 $sector_en_old = "";
 $sector_fr_old = "";
@@ -32,7 +32,7 @@ $btnModificar = 1;
 if ($pag === "modifica-sector-economic") {
     $id_old = $routeParams[0];
     // Verificar si la ID existe en la base de datos
-    $query = "SELECT id, sector_cat, sector_es, sector_en, sector_fr, sector_it, sector_pt
+    $query = "SELECT id, sector_ca, sector_es, sector_en, sector_fr, sector_it, sector_pt
     FROM aux_sector_economic
     WHERE id = :id";
     $stmt = $conn->prepare($query);
@@ -44,7 +44,7 @@ if ($pag === "modifica-sector-economic") {
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             // Acceder a las variables de la consulta
             $id_old = $row['id'] ?? "";
-            $sector_cat_old = $row['sector_cat'] ?? "";
+            $sector_ca_old = $row['sector_ca'] ?? "";
             $sector_es_old = $row['sector_es'] ?? "";
             $sector_en_old = $row['sector_en'] ?? "";
             $sector_fr_old = $row['sector_fr'] ?? "";
@@ -65,7 +65,7 @@ if ($pag === "modifica-sector-economic") {
                 <?php if ($btnModificar === 1) {
                     echo '<h2>Crear nou sector econòmic</h2>';
                 } else {
-                    echo '<h2>Modifica sector econòmic: ' . $sector_cat_old . '</h2>';
+                    echo '<h2>Modifica sector econòmic: ' . $sector_ca_old . '</h2>';
                 }
                 ?>
 
@@ -80,8 +80,8 @@ if ($pag === "modifica-sector-economic") {
                 <input type="hidden" name="id" id="id" value="<?php echo $id_old; ?>">
 
                 <div class="col-md-4 mb-4">
-                    <label for="sector_cat" class="form-label negreta">Sector econòmic (català):</label>
-                    <input type="text" class="form-control" id="sector_cat" name="sector_cat" value="<?php echo $sector_cat_old; ?>">
+                    <label for="sector_ca" class="form-label negreta">Sector econòmic (català):</label>
+                    <input type="text" class="form-control" id="sector_ca" name="sector_ca" value="<?php echo $sector_ca_old; ?>">
                     <div class="avis-form">
                         * Camp obligatori
                     </div>
