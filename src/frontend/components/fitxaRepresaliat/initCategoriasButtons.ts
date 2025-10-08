@@ -50,7 +50,7 @@ export async function initCategoriaButtons(categoriasNumericasString: string, id
         Array.from(allButtons).forEach((b) => b.classList.remove('active'));
         btn.classList.add('active');
 
-        await mostrarCategoria(currentCategoria, idPersona);
+        await mostrarCategoria(currentCategoria, idPersona, lang);
 
         divInfo.style.display = 'block';
       };

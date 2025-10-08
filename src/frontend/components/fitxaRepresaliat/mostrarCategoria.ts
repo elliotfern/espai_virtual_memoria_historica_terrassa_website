@@ -5,7 +5,7 @@ import { fitxaTipusRepressio } from './tab_tipus_repressio';
 
 const categoriaCache: { [key: string]: FitxaJudicial | FitxaJudicial[] } = {};
 
-export async function mostrarCategoria(categoriaNumerica: string, idPersona: number): Promise<void> {
+export async function mostrarCategoria(categoriaNumerica: string, idPersona: number, lang: string): Promise<void> {
   const divInfo = document.getElementById('fitxa-categoria');
   if (!divInfo) return;
 
@@ -38,7 +38,7 @@ export async function mostrarCategoria(categoriaNumerica: string, idPersona: num
       divInfo.innerHTML = '';
       categoriaCache[categoriaNumerica] = fitxes;
 
-      fitxaTipusRepressio(categoriaNumerica, fitxes);
+      fitxaTipusRepressio(categoriaNumerica, fitxes, lang);
     } catch (error) {
       console.error('Error al obtenir la informació de la categoria:', error);
       divInfo.innerHTML = '<p class="text-danger">⚠️ Error al carregar les dades. Torna-ho a intentar més tard.</p>';
@@ -46,7 +46,7 @@ export async function mostrarCategoria(categoriaNumerica: string, idPersona: num
   } else {
     const fitxa2 = categoriaCache[categoriaNumerica];
     if (fitxa2) {
-      fitxaTipusRepressio(categoriaNumerica, fitxa2);
+      fitxaTipusRepressio(categoriaNumerica, fitxa2, lang);
     }
   }
 }

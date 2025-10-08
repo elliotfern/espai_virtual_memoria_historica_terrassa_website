@@ -3,9 +3,11 @@ import { FitxaJudicial } from '../../types/types';
 import { formatDatesForm } from '../../services/formatDates/dates';
 import { valorTextDesconegut } from '../../services/formatDates/valorTextDesconegut';
 import { joinValors } from '../../services/formatDates/joinValors';
+import { tab1Afusellat } from './tabs-repressio/tab1-afusellat';
+import { AfusellatData } from '../../types/AfusellatData';
 
 // Mostrar la información dependiendo de la categoría
-export const fitxaTipusRepressio = async (categoriaNumerica: string, fitxa2: FitxaJudicial | FitxaJudicial[]): Promise<void> => {
+export const fitxaTipusRepressio = async (categoriaNumerica: string, fitxa2: FitxaJudicial | FitxaJudicial[], lang: string): Promise<void> => {
   const divInfo = document.getElementById('fitxa-categoria');
   if (!divInfo) return;
 
@@ -14,7 +16,7 @@ export const fitxaTipusRepressio = async (categoriaNumerica: string, fitxa2: Fit
   divInfo.innerHTML = `<div class="spinner">Carregant dada...</div>`; // Pon aquí tu HTML spinner
 
   // 2. Esperar por los datos (simulado o real)
-  const colectiusArray = await categoriesRepressio('ca');
+  const colectiusArray = await categoriesRepressio(lang);
 
   // 3. Cuando estén los datos, construir el contenido
   const colectiusRepressio = colectiusArray.reduce((acc, categoria) => {
@@ -23,6 +25,7 @@ export const fitxaTipusRepressio = async (categoriaNumerica: string, fitxa2: Fit
   }, {} as { [key: string]: string });
 
   const dades = Array.isArray(fitxa2) ? fitxa2 : [fitxa2];
+  const catNum = Number(categoriaNumerica); // calcúlalo una vez
 
   // 4. Reemplaza el contenido del div con la info final (quitando spinner)
   let htmlContent = `
@@ -30,15 +33,9 @@ export const fitxaTipusRepressio = async (categoriaNumerica: string, fitxa2: Fit
   `;
 
   for (const dada of dades) {
-    if (parseInt(categoriaNumerica) === 1) {
-      htmlContent += `
-    <div class="negreta raleway">
-        <p><span class='marro2'>Data d'execució:</span> <span class='blau1'>${formatDatesForm(dada.data_execucio)}</span></p>
-        <p><span class='marro2'>Lloc d'execució:</span> <span class='blau1'>${dada.lloc_execucio}</span> ${dada.ciutat_execucio && dada.ciutat_execucio.trim() !== '' ? `<span class="normal blau1">(${dada.ciutat_execucio})</span>` : ''}</p>
-        <p><span class='marro2'>Lloc d'enterrament:</span> <span class='blau1'>${dada.lloc_enterrament} </span> ${dada.ciutat_enterrament && dada.ciutat_enterrament.trim() !== '' ? `<span class="normal blau1">(${dada.ciutat_enterrament})</span>` : ''}</p>
-        ${dada.observacions && dada.observacions.trim() !== '' ? `  <p><span class='marro2'>Observacions:</span> <span class='blau1'> ${dada.observacions}.</span></p>` : ''}
-    </div>`;
-    } else if (parseInt(categoriaNumerica) === 2) {
+    if (catNum === 1) {
+      htmlContent = tab1Afusellat(dada as AfusellatData, htmlContent);
+    } else if (catNum === 2) {
       const situacioDeportat = dada.situacio && dada.situacio.trim() !== '' ? dada.situacio : 'Desconegut';
       const situacioId = dada.situacioId;
       let alliberamentMort = '';
