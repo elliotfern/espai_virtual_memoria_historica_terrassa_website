@@ -9,6 +9,8 @@ import { tab2Deportat } from './tabs-repressio/tab2-deportat';
 import { DeportatData } from '../../types/DeportatData';
 import { tab3MortCombat } from './tabs-repressio/tab3-mortCombat';
 import { MortEnCombatData } from '../../types/mortEnCombatData';
+import { tab4MortCivil } from './tabs-repressio/tab4-mortCivil';
+import { MortCivilData } from '../../types/MortCivilData';
 
 // Mostrar la información dependiendo de la categoría
 export const fitxaTipusRepressio = async (categoriaNumerica: string, fitxa2: FitxaJudicial | FitxaJudicial[], lang: string): Promise<void> => {
@@ -44,96 +46,7 @@ export const fitxaTipusRepressio = async (categoriaNumerica: string, fitxa2: Fit
     } else if (catNum === 3) {
       htmlContent = tab3MortCombat(dada as MortEnCombatData, htmlContent, lang);
     } else if (catNum === 4 || catNum === 5) {
-      const cirscumstancies_mortId = dada.cirscumstancies_mortId;
-
-      let data_bombardeig = '';
-      let municipi_bombardeig = '';
-      let lloc_bombardeig = '';
-      let data_detencio = '';
-      let lloc_detencio = '';
-      let qui_detencio = '';
-      let qui_ordena_afusellat = '';
-      let qui_executa_afusellat = '';
-      let titolMunicipiCadaver = '';
-      let contingutHtmlBombargeig = '';
-      let contingutHtmlAssassinat = '';
-      let contingutHtmlAfusellat = '';
-
-      if (cirscumstancies_mortId === 5) {
-        // Causa de la mort: Bombardeig
-        data_bombardeig = dada.data_bombardeig && dada.data_bombardeig.trim() !== '' ? dada.data_bombardeig : 'Desconegut';
-        municipi_bombardeig = dada.municipi_bombardeig && dada.municipi_bombardeig.trim() !== '' ? dada.municipi_bombardeig : 'Desconegut';
-        lloc_bombardeig = dada.lloc_bombardeig && dada.lloc_bombardeig.trim() !== '' ? dada.lloc_bombardeig : 'Desconegut';
-        const responsablesMap: Record<string, string> = {
-          '1': 'Aviació feixista italiana',
-          '2': 'Aviació nazista alemanya',
-          '3': 'Aviació franquista',
-        };
-
-        titolMunicipiCadaver = 'Municipi del bombargeig';
-        const responsable_bombardeig = dada.responsable_bombardeig != null ? responsablesMap[dada.responsable_bombardeig] || 'Desconegut' : 'Desconegut';
-
-        contingutHtmlBombargeig = `
-        <div class="negreta raleway">
-          <div style="margin-top:25px">
-            <h5><span class="negreta blau1">Causa de la mort: Bombardeig</span></h5>
-              <p><span class='marro2'>Data del bombardeig: </span> <span class='blau1'>${data_bombardeig}</span></p>
-              <p><span class='marro2'>Municipi del bombardeig:</span> <span class='blau1'>${municipi_bombardeig}</span></p>
-              <p><span class='marro2'>Tipus d'espai del bombardeig:</span> <span class='blau1'>${lloc_bombardeig}</span></p>
-              <p><span class='marro2'>Responsable del bombardeig:</span> <span class='blau1'>${responsable_bombardeig}</span></p>
-            </div>
-        </div> `;
-      } else if (cirscumstancies_mortId === 8) {
-        // Causa de la mort: Extra-judicial (assassinat)
-        data_detencio = dada.data_detencio && dada.data_detencio.trim() !== '' ? dada.data_detencio : 'Desconegut';
-        lloc_detencio = dada.lloc_detencio && dada.lloc_detencio.trim() !== '' ? dada.lloc_detencio : 'Desconegut';
-        qui_detencio = dada.qui_detencio && dada.qui_detencio.trim() !== '' ? dada.qui_detencio : 'Desconegut';
-        titolMunicipiCadaver = 'Municipi assassinat extra-judicial';
-
-        contingutHtmlAssassinat = `
-        <div class="negreta raleway">
-          <div style="margin-top:25px">
-            <h5><span class="negreta blau1">Causa de la mort: extra-judicial (assassinat)</span></h5>
-              <p><span class='marro2'>Data de la detenció: </span> <span class='blau1'>${data_detencio}</span></p>
-              <p><span class='marro2'>Lloc de la detenció:</span> <span class='blau1'>${lloc_detencio}</span></p>
-              <p><span class='marro2'>Qui el deté?:</span> <span class='blau1'>${qui_detencio}</span></p>
-            </div>
-        </div> `;
-      } else if (cirscumstancies_mortId === 9) {
-        //Causa de la mort: Afusellat
-        qui_ordena_afusellat = dada.qui_ordena_afusellat && dada.qui_ordena_afusellat.trim() !== '' ? dada.qui_ordena_afusellat : 'Desconegut';
-        qui_executa_afusellat = dada.qui_executa_afusellat && dada.qui_executa_afusellat.trim() !== '' ? dada.qui_executa_afusellat : 'Desconegut';
-        titolMunicipiCadaver = 'Municipi afusellament';
-
-        contingutHtmlAfusellat = `
-        <div class="negreta raleway">
-          <div style="margin-top:25px">
-            <h5><span class="negreta blau1">Causa de la mort: afusellat</span></h5>
-              <p><span class='marro2'>Qui ordena l'afusellament: </span> <span class='blau1'>${qui_ordena_afusellat}</span></p>
-              <p><span class='marro2'>Qui l'executa:</span> <span class='blau1'>${qui_executa_afusellat}</span></p>
-            </div>
-        </div> `;
-      } else {
-        titolMunicipiCadaver = 'Municipi trobada del cadàver';
-      }
-
-      const cirscumstancies_mort = dada.cirscumstancies_mort && dada.cirscumstancies_mort.trim() !== '' ? dada.cirscumstancies_mort : 'Desconegut';
-      const data_trobada_cadaver = dada.data_trobada_cadaver && dada.data_trobada_cadaver.trim() !== '' ? formatDatesForm(dada.data_trobada_cadaver) : 'Desconegut';
-      const lloc_trobada_cadaver = dada.lloc_trobada_cadaver && dada.lloc_trobada_cadaver.trim() !== '' ? dada.lloc_trobada_cadaver : 'Desconegut';
-
-      htmlContent += `
-    <div class="negreta raleway">
-      <div style="margin-top:25px">
-        <h5><span class="negreta blau1">1) Dades bàsiques:</span></h5>
-          <p><span class='marro2'>Circumstàncies de la mort: </span> <span class='blau1'>${cirscumstancies_mort}</span></p>
-          <p><span class='marro2'>Data trobada del càdaver:</span> <span class='blau1'>${data_trobada_cadaver}</span></p>
-          <p><span class='marro2'>${titolMunicipiCadaver}:</span> <span class='blau1'>${lloc_trobada_cadaver}</span></p>
-        </div>
-    </div> `;
-
-      htmlContent += contingutHtmlBombargeig;
-      htmlContent += contingutHtmlAssassinat;
-      htmlContent += contingutHtmlAfusellat;
+      htmlContent = tab4MortCivil(dada as MortCivilData, htmlContent, lang);
     } else if (parseInt(categoriaNumerica) === 6) {
       const dataDetencio = dada.data_detencio && dada.data_detencio.trim() !== '' ? formatDatesForm(dada.data_detencio) : 'Desconeguda';
       const llocDetencio = valorTextDesconegut(dada.lloc_detencio, 1);
