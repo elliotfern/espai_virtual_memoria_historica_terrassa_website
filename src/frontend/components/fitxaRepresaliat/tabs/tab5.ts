@@ -1,6 +1,6 @@
 // src/pages/fitxaRepresaliat/tabs/tab2.ts
 import { t } from '../../../services/i18n/i18n';
-import { LABELS_TAB5 } from '../../../services/i18n/labels-tab5';
+import { LABELS_TAB5 } from '../../../services/i18n/fitxaRepresaliat/labels-tab5';
 import type { Fitxa } from '../../../types/types';
 
 export function renderTab5(fitxa: Fitxa, label: string, lang: string): void {

@@ -1,5 +1,5 @@
 // labels-tab5.ts
-import { makeDict } from './i18n';
+import { makeDict } from '../i18n';
 
 type Tab5Keys = 'bioWarnCaMissingEsAvailable' | 'bioUnavailable';
 

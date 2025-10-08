@@ -1,5 +1,5 @@
 // labels-lists.ts
-import { makeDict } from './i18n';
+import { makeDict } from '../i18n';
 
 type ListKeys = 'bibliographyList' | 'archivesList';
 

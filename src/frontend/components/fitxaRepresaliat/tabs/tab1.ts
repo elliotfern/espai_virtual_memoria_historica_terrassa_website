@@ -5,7 +5,7 @@ import { joinValors } from '../../../services/formatDates/joinValors';
 import { valorTextDesconegut } from '../../../services/formatDates/valorTextDesconegut';
 import { DEFAULT_LANG, isLang, t } from '../../../services/i18n/i18n';
 import { LABELS_AGE } from '../../../services/i18n/label-ages';
-import { LABELS } from '../../../services/i18n/labels-tab1';
+import { LABELS } from '../../../services/i18n/fitxaRepresaliat/labels-tab1';
 import { getSexeText } from '../../../services/i18n/sex-labels';
 import { LABELS_VTD } from '../../../services/i18n/valor-desconegut';
 import type { Fitxa } from '../../../types/types';

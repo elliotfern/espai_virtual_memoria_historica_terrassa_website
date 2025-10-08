@@ -1,5 +1,5 @@
 // labels.ts
-import { makeDict } from './i18n';
+import { makeDict } from '../i18n';
 
 type LabelKeys = 'sex' | 'dob' | 'dod' | 'age' | 'birthTown' | 'residenceAddress' | 'deathTown' | 'deathPlaceType' | 'deathPlaceNotes' | 'deathCause' | 'deathCauseDetails';
 

@@ -1,5 +1,5 @@
 // labels-tab4.ts
-import { makeDict } from './i18n';
+import { makeDict } from '../i18n';
 
 type Tab4Keys =
   | 'preWarHeading' // h5

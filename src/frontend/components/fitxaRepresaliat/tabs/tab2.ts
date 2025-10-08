@@ -2,7 +2,7 @@
 import { joinValors } from '../../../services/formatDates/joinValors';
 import { valorTextDesconegut } from '../../../services/formatDates/valorTextDesconegut';
 import { t } from '../../../services/i18n/i18n';
-import { LABELS_TAB2 } from '../../../services/i18n/labels-tab2';
+import { LABELS_TAB2 } from '../../../services/i18n/fitxaRepresaliat/labels-tab2';
 import type { Fitxa, FitxaFamiliars } from '../../../types/types';
 
 export function renderTab2(fitxa: Fitxa, fitxaFam: FitxaFamiliars[] | null, label: string, lang: string): void {

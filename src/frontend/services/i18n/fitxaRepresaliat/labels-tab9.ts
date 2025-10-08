@@ -1,5 +1,5 @@
 // labels-map.ts
-import { makeDict } from './i18n';
+import { makeDict } from '../i18n';
 
 type MapKeys = 'mapIntro';
 

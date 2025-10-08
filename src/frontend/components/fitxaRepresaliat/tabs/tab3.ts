@@ -1,7 +1,7 @@
 // src/pages/fitxaRepresaliat/tabs/tab2.ts
 import { valorTextDesconegut } from '../../../services/formatDates/valorTextDesconegut';
 import { t } from '../../../services/i18n/i18n';
-import { LABELS_TAB3 } from '../../../services/i18n/labels-tab3';
+import { LABELS_TAB3 } from '../../../services/i18n/fitxaRepresaliat/labels-tab3';
 import type { Fitxa } from '../../../types/types';
 
 export function renderTab3(fitxa: Fitxa, label: string, lang: string): void {

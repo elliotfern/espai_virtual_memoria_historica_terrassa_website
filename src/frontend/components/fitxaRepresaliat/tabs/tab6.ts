@@ -1,6 +1,6 @@
 // src/pages/fitxaRepresaliat/tabs/tab2.ts
 import { t } from '../../../services/i18n/i18n';
-import { LABELS_LISTS } from '../../../services/i18n/labels-tab6';
+import { LABELS_LISTS } from '../../../services/i18n/fitxaRepresaliat/labels-tab6';
 import type { Fitxa } from '../../../types/types';
 import { taulaArxius } from '../../modificaFitxaRepresaliat/taulaArxius';
 import { taulaBibliografia } from '../../modificaFitxaRepresaliat/taulaBibliografia';

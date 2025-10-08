@@ -1,5 +1,5 @@
 // labels-tab-info.ts
-import { makeDict } from './i18n';
+import { makeDict } from '../i18n';
 
 type TabInfoKeys = 'observations' | 'createdBy' | 'dataReview' | 'dataEntry' | 'creationDate' | 'lastUpdate';
 

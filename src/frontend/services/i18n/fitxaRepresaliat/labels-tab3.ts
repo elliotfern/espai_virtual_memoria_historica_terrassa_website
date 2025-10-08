@@ -1,5 +1,5 @@
 // labels-tab3.ts
-import { makeDict } from './i18n';
+import { makeDict } from '../i18n';
 
 type Tab3Keys = 'studies' | 'occupation' | 'company' | 'position' | 'economicSector' | 'economicSubsector';
 

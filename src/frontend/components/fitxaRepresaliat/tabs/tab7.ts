@@ -1,7 +1,7 @@
 // src/pages/fitxaRepresaliat/tabs/tab7.ts
 import type { Fitxa } from '../../../types/types';
 import { formatDates } from '../../../services/formatDates/dates';
-import { LABELS_TAB7 } from '../../../services/i18n/labels-tab7';
+import { LABELS_TAB7 } from '../../../services/i18n/fitxaRepresaliat/labels-tab7';
 import { t } from '../../../services/i18n/i18n';
 
 export function renderTab7(fitxa: Fitxa, label: string, lang: string): void {

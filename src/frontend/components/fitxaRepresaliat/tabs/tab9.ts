@@ -3,7 +3,7 @@ import type { Fitxa } from '../../../types/types';
 // Leaflet (mapa base)
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-import { LABELS_MAP } from '../../../services/i18n/labels-tab9';
+import { LABELS_MAP } from '../../../services/i18n/fitxaRepresaliat/labels-tab9';
 import { t } from '../../../services/i18n/i18n';
 
 function crearIconoPersona() {

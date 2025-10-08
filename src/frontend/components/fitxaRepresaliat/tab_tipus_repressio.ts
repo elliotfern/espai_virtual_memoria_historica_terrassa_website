@@ -5,6 +5,10 @@ import { valorTextDesconegut } from '../../services/formatDates/valorTextDescone
 import { joinValors } from '../../services/formatDates/joinValors';
 import { tab1Afusellat } from './tabs-repressio/tab1-afusellat';
 import { AfusellatData } from '../../types/AfusellatData';
+import { tab2Deportat } from './tabs-repressio/tab2-deportat';
+import { DeportatData } from '../../types/DeportatData';
+import { tab3MortCombat } from './tabs-repressio/tab3-mortCombat';
+import { MortEnCombatData } from '../../types/mortEnCombatData';
 
 // Mostrar la información dependiendo de la categoría
 export const fitxaTipusRepressio = async (categoriaNumerica: string, fitxa2: FitxaJudicial | FitxaJudicial[], lang: string): Promise<void> => {
@@ -34,194 +38,12 @@ export const fitxaTipusRepressio = async (categoriaNumerica: string, fitxa2: Fit
 
   for (const dada of dades) {
     if (catNum === 1) {
-      htmlContent = tab1Afusellat(dada as AfusellatData, htmlContent);
+      htmlContent = tab1Afusellat(dada as AfusellatData, htmlContent, lang);
     } else if (catNum === 2) {
-      const situacioDeportat = dada.situacio && dada.situacio.trim() !== '' ? dada.situacio : 'Desconegut';
-      const situacioId = dada.situacioId;
-      let alliberamentMort = '';
-      let municipiMort = '';
-
-      if (situacioId === 1) {
-        alliberamentMort = 'Data de defunció';
-        municipiMort = 'Municipi de defunció';
-      } else if (situacioId === 2) {
-        alliberamentMort = "Data d'alliberament del camp";
-        municipiMort = "Municipi d'alliberament";
-      } else {
-        alliberamentMort = "Data d'evasió";
-        municipiMort = "Municipi d'evasió";
-      }
-
-      const dataAlliberament = dada.data_alliberament && dada.data_alliberament.trim() !== '' ? formatDatesForm(dada.data_alliberament) : 'Desconeguda';
-      const municipiAlliberament = dada.ciutat_mort_alliberament && dada.ciutat_mort_alliberament.trim() !== '' ? dada.ciutat_mort_alliberament : 'Desconegut';
-
-      const tipusPreso = dada.tipusPresoFranca && dada.tipusPresoFranca.trim() !== '' ? dada.tipusPresoFranca : 'Desconeguda';
-      const nomPreso = dada.situacioFrancaNom && dada.situacioFrancaNom.trim() !== '' ? dada.situacioFrancaNom : 'Desconeguda';
-      const dataSortidaPresoFranca = dada.situacioFranca_sortida && dada.situacioFranca_sortida.trim() !== '' ? formatDatesForm(dada.situacioFranca_sortida) : 'Desconeguda';
-      const municipiPreso = dada.ciutat_situacioFranca_preso && dada.ciutat_situacioFranca_preso.trim() !== '' ? dada.ciutat_situacioFranca_preso : 'Desconegut';
-      const numMatriculaPreso = dada.situacioFranca_num_matricula && dada.situacioFranca_num_matricula.trim() !== '' ? dada.situacioFranca_num_matricula : 'Desconegut';
-      const situacioFrancaObservacions = dada.situacioFrancaObservacions && dada.situacioFrancaObservacions.trim() !== '' ? dada.situacioFrancaObservacions : 'Sense dades';
-
-      const estat_mort_allibertament = dada.estat_mort_allibertament;
-
-      const tipusPreso1 = dada.tipusPreso1 && dada.tipusPreso1.trim() !== '' ? dada.tipusPreso1 : 'Sense dades';
-      const nomPreso1 = dada.nomPreso1 && dada.nomPreso1.trim() !== '' ? dada.nomPreso1 : 'Sense dades';
-      const ciutatPreso1 = dada.ciutatPreso1 && dada.ciutatPreso1.trim() !== '' ? dada.ciutatPreso1 : 'Sense dades';
-      const presoClasificacioData1 = dada.presoClasificacioData1 && dada.presoClasificacioData1.trim() !== '' ? formatDatesForm(dada.presoClasificacioData1) : 'Sense dades';
-
-      const presoClasificacioDataEntrada1 = dada.presoClasificacioDataEntrada1 && dada.presoClasificacioDataEntrada1.trim() !== '' ? formatDatesForm(dada.presoClasificacioDataEntrada1) : 'Sense dades';
-      const presoClasificacioMatr1 = dada.presoClasificacioMatr1 && dada.presoClasificacioMatr1.trim() !== '' ? dada.presoClasificacioMatr1 : 'Sense dades';
-
-      const presoClasificacioDataEntrada2 = dada.presoClasificacioDataEntrada2 && dada.presoClasificacioDataEntrada2.trim() !== '' ? formatDatesForm(dada.presoClasificacioDataEntrada2) : 'Sense dades';
-      const presoClasificacioMatr2 = dada.presoClasificacioMatr2 && dada.presoClasificacioMatr2.trim() !== '' ? dada.presoClasificacioMatr2 : 'Sense dades';
-
-      const tipusPreso2 = dada.tipusPreso2 && dada.tipusPreso2.trim() !== '' ? dada.tipusPreso2 : 'Sense dades';
-      const nomPreso2 = dada.nomPreso2 && dada.nomPreso2.trim() !== '' ? dada.nomPreso2 : 'Sense dades';
-      const ciutatPreso2 = dada.ciutatPreso2 && dada.ciutatPreso2.trim() !== '' ? dada.ciutatPreso2 : 'Sense dades';
-      const presoClasificacioData2 = dada.presoClasificacioData2 && dada.presoClasificacioData2.trim() !== '' ? formatDatesForm(dada.presoClasificacioData2) : 'Sense dades';
-
-      const deportacio_observacions = dada.deportacio_observacions && dada.deportacio_observacions.trim() !== '' ? dada.deportacio_observacions : 'Sense dades';
-
-      const tipusCamp1 = dada.tipusCamp1 && dada.tipusCamp1.trim() !== '' ? dada.tipusCamp1 : 'Sense dades';
-      const ciutatCamp1 = dada.ciutatCamp1 && dada.ciutatCamp1.trim() !== '' ? dada.ciutatCamp1 : 'Sense dades';
-
-      const nomCamp1 = dada.nomCamp1 && dada.nomCamp1.trim() !== '' ? dada.nomCamp1 : 'Desconegut';
-      const deportacio_data_entrada = dada.deportacio_data_entrada && dada.deportacio_data_entrada.trim() !== '' ? formatDatesForm(dada.deportacio_data_entrada) : 'Desconeguda';
-      const numeroMatriculaCamp = dada.deportacio_num_matricula && dada.deportacio_num_matricula.trim() !== '' ? dada.deportacio_num_matricula : 'Desconegut';
-
-      const tipusCamp2 = dada.tipusCamp2 && dada.tipusCamp2.trim() !== '' ? dada.tipusCamp2 : 'Sense dades';
-      const ciutatCamp2 = dada.ciutatCamp2 && dada.ciutatCamp2.trim() !== '' ? dada.ciutatCamp2 : 'Sense dades';
-      const nomSubCamp = dada.nomCamp2 && dada.nomCamp2.trim() !== '' ? dada.nomCamp2 : 'Desconegut';
-      const dataEntradaSubCamp = dada.deportacio_data_entrada_subcamp && dada.deportacio_data_entrada_subcamp.trim() !== '' ? formatDatesForm(dada.deportacio_data_entrada_subcamp) : 'Desconegut';
-      const numeroMatriculaSubCamp = dada.deportacio_nom_matricula_subcamp && dada.deportacio_nom_matricula_subcamp.trim() !== '' ? dada.deportacio_nom_matricula_subcamp : 'Desconegut';
-
-      const estat_preso1 = dada.estat_preso1 && dada.estat_preso1.trim() !== '' ? dada.estat_preso1 : '';
-      const estat_preso2 = dada.estat_preso2 && dada.estat_preso2.trim() !== '' ? dada.estat_preso2 : '';
-
-      htmlContent += `
-    <div class="negreta raleway">
-      <div style="margin-top:25px">
-        <h5><span class="negreta blau1">1) Dades bàsiques sobre la deportació:</span></h5> 
-          <p><span class='marro2'>Situació del deportat: </span> <span class='blau1'>${situacioDeportat}</span></p>
-          <p><span class='marro2'>${alliberamentMort}:</span> <span class='blau1'>${dataAlliberament}</span></p>
-          <p><span class='marro2'>${municipiMort}:</span> <span class='blau1'>${municipiAlliberament} (${estat_mort_allibertament})</span></p>
-        </div>
-
-        <div style="margin-top:25px">
-        <h5><span class="negreta blau1">2) Dades sobre la situació a França, prèvia a la deportació:</span></h5>
-          <p><span class='marro2'>Tipus de Presó/camp de detenció: </span> <span class='blau1'>${tipusPreso}</span></p>
-          <p><span class='marro2'>Nom de la presó/camp: </span> <span class='blau1'>${nomPreso}</span></p>
-          <p><span class='marro2'>Municipi de la presó/camp: </span> <span class='blau1'>${municipiPreso}</span></p>
-          <p><span class='marro2'>Data de la sortida de la presó/camp: </span> <span class='blau1'>${dataSortidaPresoFranca}</span></p>
-          <p><span class='marro2'>Número de matrícula presó:</span> <span class='blau1'>${numMatriculaPreso}</span></p>
-          <p><span class='marro2'>Descripció situació a França: </span> <span class='blau1'> ${situacioFrancaObservacions}</span></p>
-        </div>
-
-      <div style="margin-top:25px">
-        <h5><span class="negreta blau1">3) Camp de classificació/detenció previ a la deportació al camp de concentració:</span></h5>
-            <br>
-            <h6><span class="blau1 negreta">Primera presó/camp de classificació</span></h6>
-                <p><span class='marro2'>Tipus de Presó/camp de detenció: </span> <span class='blau1'>${tipusPreso1}</span></p>
-                <p><span class='marro2'>Nom de la Presó/camp de detenció: </span> <span class='blau1'>${nomPreso1}   </span></p>
-                <p><span class='marro2'>Municipi de la Presó/camp de detenció: </span> <span class='blau1'>${ciutatPreso1} (${estat_preso1})</span></p>
-                <p><span class='marro2'>Data d'entrada de la presó: </span> <span class='blau1'>${presoClasificacioDataEntrada1} </span></p>
-                <p><span class='marro2'>Data de la sortida de la presó: </span> <span class='blau1'>${presoClasificacioData1}  </span></p>
-                 <p><span class='marro2'>Número de matrícula: </span> <span class='blau1'>${presoClasificacioMatr1} </span></p>
-            <br>
-            <h6><span class="blau1 negreta">Segona presó/camp de classificació</span></h6>
-                <p><span class='marro2'>Tipus de Presó/camp de detenció: </span> <span class='blau1'>${tipusPreso2} </span></p>
-                <p><span class='marro2'>Nom de la Presó/camp de detenció: </span> <span class='blau1'>${nomPreso2} </span></p>
-                <p><span class='marro2'>Municipi de la Presó/camp de detenció: </span> <span class='blau1'>${ciutatPreso2} (${estat_preso2})</span></p>
-                 <p><span class='marro2'>Data d'entrada de la presó: </span> <span class='blau1'>${presoClasificacioDataEntrada2} </span></p>
-                <p><span class='marro2'>Data de la sortida de la presó: </span> <span class='blau1'>${presoClasificacioData2} </span></p>
-                <p><span class='marro2'>Número de matrícula: </span> <span class='blau1'>${presoClasificacioMatr2} </span></p>
-        </div>
-
-      <div style="margin-top:25px">
-        <h5><span class="negreta blau1">4) Dades sobre la deportació al camp de concentració/extermini:</span></h5>
-        <br>
-         <h6><span class="blau1 negreta">Dades sobre el camp de concentració:</span></h6>
-              <p><span class='marro2'>Nom del camp de deportació: </span> <span class='blau1'>${nomCamp1}</span></p>
-              <p><span class='marro2'>Tipus de camp: </span> <span class='blau1'>${tipusCamp1}</span></p>
-              <p><span class='marro2'>Municipi del camp: </span> <span class='blau1'>${ciutatCamp1}</span></p>
-              <p><span class='marro2'>Data d'entrada al camp: </span> <span class='blau1'>${deportacio_data_entrada}</span></p>
-              <p><span class='marro2'>Número de matrícula:</span> <span class='blau1'>${numeroMatriculaCamp}</span></p>
-
-              <br>
-          <h6><span class="blau1 negreta">Dades sobre el subcamp:</span></h6>
-              <p><span class='marro2'>Nom del subcamp :</span> <span class='blau1'>${nomSubCamp}</span></p>
-              <p><span class='marro2'>Tipus de subcamp: </span> <span class='blau1'>${tipusCamp2}</span></p>
-              <p><span class='marro2'>Municipi del subcamp: </span> <span class='blau1'>${ciutatCamp2}</span></p>
-              <p><span class='marro2'>Data d'entrada al subcamp:</span> <span class='blau1'>${dataEntradaSubCamp}</span></p>
-              <p><span class='marro2'>Número de matrícula del subcamp:</span> <span class='blau1'>${numeroMatriculaSubCamp}</span></p>
-
-              <br>
-          <h6><span class="blau1 negreta">Altres informacions:</span></h6>
-              <p><span class='marro2'>Observacions:</span> <span class='blau1'>${deportacio_observacions}</span></p>
-        </div>
-    </div>
-        `;
-    } else if (parseInt(categoriaNumerica) === 3) {
-      const condicio = dada.condicio && dada.condicio.trim() !== '' ? dada.condicio : 'Desconegut';
-      const bandol = dada.bandol && dada.bandol.trim() !== '' ? dada.bandol : 'Desconegut';
-      const any_lleva = dada.any_lleva && dada.any_lleva.trim() !== '' ? dada.any_lleva : 'Desconegut';
-
-      const unitat_inicial = dada.unitat_inicial && dada.unitat_inicial.trim() !== '' ? dada.unitat_inicial : 'Desconegut';
-      const cos = dada.cos && dada.cos.trim() !== '' ? dada.cos : 'Desconegut';
-      const unitat_final = dada.unitat_final && dada.unitat_final.trim() !== '' ? dada.unitat_final : 'Desconegut';
-      const graduacio_final = dada.graduacio_final && dada.graduacio_final.trim() !== '' ? dada.graduacio_final : 'Desconegut';
-      const periple_militar = dada.periple_militar && dada.periple_militar.trim() !== '' ? dada.periple_militar : 'Sense dades';
-
-      const circumstancia_mort = dada.circumstancia_mort && dada.circumstancia_mort.trim() !== '' ? dada.circumstancia_mort : 'Desconeguda';
-      const desaparegut_data = dada.desaparegut_data && dada.desaparegut_data.trim() !== '' ? formatDatesForm(dada.desaparegut_data) : '-';
-      const desaparegut_lloc = dada.desaparegut_lloc && dada.desaparegut_lloc.trim() !== '' ? dada.desaparegut_lloc : '-';
-      const desaparegut_data_aparicio = dada.desaparegut_data_aparicio && dada.desaparegut_data_aparicio.trim() !== '' ? formatDatesForm(dada.desaparegut_data_aparicio) : '-';
-      const desaparegut_lloc_aparicio = dada.desaparegut_lloc_aparicio && dada.desaparegut_lloc_aparicio.trim() !== '' ? dada.desaparegut_lloc_aparicio : '-';
-
-      const fragment =
-        dada.reaparegut === 1
-          ? `
-          <div style="margin-top:25px">
-            <h5><span class="negreta blau1">4) Dades conegudes sobre l'aparició posterior del desaparegut:</span></h5>
-                <p><span class='marro2'>Data d'aparació del desaparegut:</span> <span class='blau1'>${desaparegut_data_aparicio}</span></p>
-                <p><span class='marro2'>Lloc d'aparació del desaparegut:</span> <span class='blau1'>${desaparegut_lloc_aparicio}</span></p>
-                <p><span class='marro2'>Observacions:</span> <span class='blau1'>${dada.aparegut_observacions}</span></p>
-          </div>
-      `
-          : '';
-
-      htmlContent += `
-    <div class="negreta raleway">
-      <div style="margin-top:25px">
-        <h5><span class="negreta blau1">1) Dades bàsiques:</span></h5>
-          <p><span class='marro2'>Condició: </span> <span class='blau1'>${condicio}</span></p>
-          <p><span class='marro2'>Bàndol durant la guerra:</span> <span class='blau1'>${bandol}</span></p>
-          <p><span class='marro2'>Any lleva:</span> <span class='blau1'>${any_lleva}</span></p>
-        </div>
-
-      <div style="margin-top:25px">
-        <h5><span class="negreta blau1">2) Dades militars:</span></h5>
-          <p><span class='marro2'>Unitat inicial:</span> <span class='blau1'>${unitat_inicial}</span></p>
-          <p><span class='marro2'>Cos militar:</span> <span class='blau1'>${cos}</span></p>
-          <p><span class='marro2'>Unitat final:</span> <span class='blau1'>${unitat_final}</span></p>
-          <p><span class='marro2'>Graduació final:</span> <span class='blau1'>${graduacio_final}</span></p>
-          <p><span class='marro2'>Periple militar i altres observacions:</span> <span class='blau1'>${periple_militar}</span></p>
-        </div>
-
-      <div style="margin-top:25px">
-        <h5><span class="negreta blau1">3) Circumstàncies de la mort o desaparació:</span></h5>
-          <p><span class='marro2'>Causa de defunció/desaparació:</span> <span class='blau1'>${circumstancia_mort}</span></p>
-          <h6><span class="negreta blau1">Si el combatent és donat per desaparegut:</span></h6>
-          <p><span class='marro2'>Data de la desaparació:</span> <span class='blau1'>${desaparegut_data}</span></p>
-          <p><span class='marro2'>Lloc de desaparació:</span> <span class='blau1'>${desaparegut_lloc}</span></p>
-        </div>
-
-          ${fragment}
-
-    </div>
-
-        `;
-    } else if (parseInt(categoriaNumerica) === 4 || parseInt(categoriaNumerica) === 5) {
+      htmlContent = tab2Deportat(dada as DeportatData, htmlContent, lang);
+    } else if (catNum === 3) {
+      htmlContent = tab3MortCombat(dada as MortEnCombatData, htmlContent, lang);
+    } else if (catNum === 4 || catNum === 5) {
       const cirscumstancies_mortId = dada.cirscumstancies_mortId;
 
       let data_bombardeig = '';

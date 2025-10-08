@@ -1,7 +1,7 @@
 // src/pages/fitxaRepresaliat/tabs/tab2.ts
 import { valorTextDesconegut } from '../../../services/formatDates/valorTextDesconegut';
 import { t } from '../../../services/i18n/i18n';
-import { LABELS_TAB4 } from '../../../services/i18n/labels-tab4';
+import { LABELS_TAB4 } from '../../../services/i18n/fitxaRepresaliat/labels-tab4';
 import { LABELS_VTD } from '../../../services/i18n/valor-desconegut';
 import type { Fitxa } from '../../../types/types';
 import { partitsPolitics } from '../partitsPolitics';
