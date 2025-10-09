@@ -1,8 +1,5 @@
 import { categoriesRepressio } from '../taulaDades/categoriesRepressio';
 import { FitxaJudicial } from '../../types/types';
-import { formatDatesForm } from '../../services/formatDates/dates';
-import { valorTextDesconegut } from '../../services/formatDates/valorTextDesconegut';
-import { joinValors } from '../../services/formatDates/joinValors';
 import { tab1Afusellat } from './tabs-repressio/tab1-afusellat';
 import { AfusellatData } from '../../types/AfusellatData';
 import { tab2Deportat } from './tabs-repressio/tab2-deportat';
@@ -20,6 +17,17 @@ import { Exiliat } from '../../types/Exiliat';
 import { tab11Pendent } from './tabs-repressio/tab11-pendents';
 import { tab12PresoModel } from './tabs-repressio/tab12-presoModel';
 import { PresoModel } from '../../types/PresoModel';
+import { DetingutGUData } from '../../types/DetingutGuardiaUrbana';
+import { tab13DetingutGU } from './tabs-repressio/tab13-detingutGuardiaUrbana';
+import { tab14DetingutComiteSolidaritat } from './tabs-repressio/tab14-detingutComiteSolidaritat';
+import { DetingutComiteData } from '../../types/DetingutComiteSolidaritat';
+import { tab15ResponsabilitatsPolitiques } from './tabs-repressio/tab15-lleiResponsabilitatsPolitiques';
+import { LRPData } from '../../types/LleiResponsabilitatsPolitiques';
+import { tab16TribunalOrdenPublico } from './tabs-repressio/tab17-tribunalOrdenPublico';
+import { ProcessatTOPData } from '../../types/TribunalOrdenPublico';
+import { tab18ComiteRelacionsSolidaritat } from './tabs-repressio/tab18-comiteRelacionsSolidaritat';
+import { tab19CampsTreball } from './tabs-repressio/tab19-campsTreball';
+import { tab20BatalloPresos } from './tabs-repressio/tab20-batalloPresos';
 
 // Mostrar la información dependiendo de la categoría
 export const fitxaTipusRepressio = async (categoriaNumerica: string, fitxa2: FitxaJudicial | FitxaJudicial[], lang: string): Promise<void> => {
@@ -70,113 +78,20 @@ export const fitxaTipusRepressio = async (categoriaNumerica: string, fitxa2: Fit
       htmlContent = tab11Pendent(htmlContent, lang);
     } else if (catNum === 12) {
       htmlContent = tab12PresoModel([dada as unknown as PresoModel], htmlContent, lang);
-    } else if (parseInt(categoriaNumerica) === 13 || parseInt(categoriaNumerica) === 16) {
-      // detinguts guardia urbana
-
-      htmlContent = '';
-
-      for (const [index, dada] of dades.entries()) {
-        const dataEntradaFormat = formatDatesForm(dada.data_empresonament);
-        const data_empresonament = valorTextDesconegut(dataEntradaFormat, 4);
-        const dataSortidaFormat = formatDatesForm(dada.data_sortida);
-        const data_sortida = valorTextDesconegut(dataSortidaFormat, 4);
-        const motiu_empresonament = valorTextDesconegut(dada.motiu_empresonament, 1);
-        const qui_ordena_detencio = valorTextDesconegut(dada.qui_ordena_detencio, 1);
-        const nom_institucio = valorTextDesconegut(dada.nom_institucio, 1);
-        const grup = valorTextDesconegut(dada.grup, 1);
-        const topText = dada.top === 1 ? 'Sí' : dada.top === 2 ? 'No' : dada.top === 3 ? 'Sense dades' : 'Desconegut';
-        const observacions = valorTextDesconegut(dada.observacions, 1);
-
-        htmlContent += `
-       <div class="negreta raleway" style="margin-bottom:10px; padding-bottom:30px">
-          <h4 class="blau1">Detingut Guàrdia Urbana / Empresonat al Dipòsit municipal Sant Llàtzer, registre núm. ${index + 1}</h4>
-            <div class="negreta raleway">
-              <div style="margin-top:25px">
-                <p><span class='marro2'>Data de detenció: </span> <span class='blau1'>${data_empresonament}</span></p>
-                <p><span class='marro2'>Data de sortida:</span> <span class='blau1'>${data_sortida}</span></p>
-                <p><span class='marro2'>Motiu de la detenció:</span> <span class='blau1'>${motiu_empresonament}</span></p>
-                <p><span class='marro2'>Responsable d'ordenar la detenció:</span> <span class='blau1'>${qui_ordena_detencio} - ${nom_institucio}</span></p>
-                <p><span class='marro2'>TIpus d'institució que ordena la detenció:</span> <span class='blau1'>${grup}</span></p>
-                <p><span class='marro2'>Detenció ordenada pel Tribunal de Orden Público?:</span> <span class='blau1'>${topText}</span></p>
-                <p><span class='marro2'>Observacions: </span> <span class='blau1'>${observacions}</span></p>
-              </div>
-            </div>     
-        </div>
-      `;
-      }
-    } else if (parseInt(categoriaNumerica) === 14) {
-      // Detingut Comitè Solidaritat (1971-1977)
-      htmlContent = '';
-
-      for (const [index, dada] of dades.entries()) {
-        const anyDetencio = valorTextDesconegut(dada.any_detencio, 4);
-        const motiu_empresonament = valorTextDesconegut(dada.motiu, 1);
-        const advocat = valorTextDesconegut(dada.advocat, 1);
-        const observacions = valorTextDesconegut(dada.observacions, 1);
-
-        htmlContent += `
-       <div class="negreta raleway" style="margin-bottom:10px; padding-bottom:30px">
-          <h4 class="blau1">Detingut Comitè de Solidaritat (1971-1977), registre núm. ${index + 1}</h4>
-            <div class="negreta raleway">
-              <div style="margin-top:25px">
-                <p><span class='marro2'>Any de la detenció: </span> <span class='blau1'>${anyDetencio}</span></p>
-                <p><span class='marro2'>Motiu de la detenció:</span> <span class='blau1'>${motiu_empresonament}</span></p>
-                <p><span class='marro2'>Advocat:</span> <span class='blau1'>${advocat}</span></p>
-                <p><span class='marro2'>Observacions: </span> <span class='blau1'>${observacions}</span></p>
-              </div>
-            </div>     
-        </div>
-      `;
-      }
-    } else if (parseInt(categoriaNumerica) === 15) {
-      // Llei Responsabilitats Polítiques
-      const nomPreso = valorTextDesconegut(dada.lloc_empresonament, 6);
-      const ciutatPreso = valorTextDesconegut(dada.preso_ciutat, 3);
-      const empresonament = joinValors([nomPreso, ciutatPreso], ' - ', false);
-      const paisExili = valorTextDesconegut(dada.lloc_exili, 7);
-      const condemna = valorTextDesconegut(dada.condemna, 1);
-      const observacions = valorTextDesconegut(dada.observacions, 1);
-
-      htmlContent += `
-     <div class="negreta raleway">
-      <div style="margin-top:25px">
-        <p><span class='marro2'>Lloc d'empresonament: </span> <span class='blau1'>${empresonament}</span></p>
-        <p><span class='marro2'>País exili:</span> <span class='blau1'>${paisExili}</span></p>
-        <p><span class='marro2'>Condemna Expedient de Responsabilitats Politiques:</span> <span class='blau1'>${condemna}</span></p>
-        <p><span class='marro2'>Observacions: </span> <span class='blau1'>${observacions}</span></p>
-      </div>
-      </div>     
-        `;
-    } else if (parseInt(categoriaNumerica) === 17) {
-      // Processat Tribunal Orden Público
-
-      const num_causa = valorTextDesconegut(dada.num_causa, 6);
-      const dataSentencia = formatDatesForm(dada.data_sentencia);
-      const data_sentencia = valorTextDesconegut(dataSentencia, 1);
-      const ciutatPreso = valorTextDesconegut(dada.preso_ciutat, 1);
-      const nomPreso = valorTextDesconegut(dada.preso, 1);
-      const empresonament = joinValors([nomPreso, ciutatPreso], ' - ', false);
-      const sentencia = valorTextDesconegut(dada.sentencia, 1);
-
-      htmlContent += `
-     <div class="negreta raleway">
-      <div style="margin-top:25px">
-        <p><span class='marro2'>Número de la causa: </span> <span class='blau1'>${num_causa}</span></p>
-        <p><span class='marro2'>Data sentència:</span> <span class='blau1'>${data_sentencia}</span></p>
-        <p><span class='marro2'>Sentència:</span> <span class='blau1'>${sentencia}</span></p>
-        <p><span class='marro2'>Lloc d'empresonament: </span> <span class='blau1'>${empresonament}</span></p>
-      </div>
-      </div>     
-        `;
-    } else if (parseInt(categoriaNumerica) === 18) {
-      // Detingut Comitè Relacions de Solidaritat (1939-1941).
-      htmlContent += `
-     <div class="negreta raleway">
-      <div style="margin-top:25px">
-        <p>Represaliat per haver donat suport als exiliats a través del Comitè de Relacions de Solidaritat.</p>
-      </div>
-      </div>     
-        `;
+    } else if (catNum === 13 || catNum === 16) {
+      htmlContent = tab13DetingutGU([dada as unknown as DetingutGUData], htmlContent, lang);
+    } else if (catNum === 14) {
+      htmlContent = tab14DetingutComiteSolidaritat([dada as unknown as DetingutComiteData], htmlContent, lang);
+    } else if (catNum === 15) {
+      htmlContent = tab15ResponsabilitatsPolitiques(dada as LRPData, htmlContent, lang);
+    } else if (catNum === 17) {
+      htmlContent = tab16TribunalOrdenPublico(dada as ProcessatTOPData, htmlContent, lang);
+    } else if (catNum === 18) {
+      htmlContent = tab18ComiteRelacionsSolidaritat(htmlContent, lang);
+    } else if (catNum === 19) {
+      htmlContent = tab19CampsTreball(htmlContent, lang);
+    } else if (catNum === 20) {
+      htmlContent = tab20BatalloPresos(htmlContent, lang);
     } else {
       htmlContent += `
      <div class="negreta raleway">
