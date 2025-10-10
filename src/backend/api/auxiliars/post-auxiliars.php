@@ -898,7 +898,7 @@ if ($slug === "municipi") {
     $errors = [];
 
     // Validación de los datos recibidos
-    if (empty($data['provincia'])) {
+    if (empty($data['provincia_ca'])) {
         $errors[] = 'El camp provincia és obligatori.';
     }
 
@@ -914,9 +914,9 @@ if ($slug === "municipi") {
     // Verificar si la provincia ya existe en la base de datos
     global $conn;
     /** @var PDO $conn */
-    $sql = "SELECT COUNT(*) FROM aux_dades_municipis_provincia WHERE provincia = :provincia";
+    $sql = "SELECT COUNT(*) FROM aux_dades_municipis_provincia WHERE provincia_ca = :provincia_ca";
     $stmt = $conn->prepare($sql);
-    $stmt->bindParam(':provincia', $data['provincia'], PDO::PARAM_STR);
+    $stmt->bindParam(':provincia_ca', $data['provincia_ca'], PDO::PARAM_STR);
     $stmt->execute();
     $provinciaExists = $stmt->fetchColumn();
 
@@ -931,7 +931,7 @@ if ($slug === "municipi") {
 
     // Si no hay errores, crear las variables PHP y preparar la consulta PDO
     $provincia_ca = !empty($data['provincia_ca']) ? $data['provincia_ca'] : NULL;
-    $provincia = $data['provincia'];
+    $provincia_es = $data['provincia_es'];
 
     // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
     try {
@@ -941,16 +941,16 @@ if ($slug === "municipi") {
 
         // Crear la consulta SQL
         $sql = "INSERT INTO aux_dades_municipis_provincia (
-            provincia, provincia_ca
+            provincia_es, provincia_ca
         ) VALUES (
-            :provincia, :provincia_ca
+            :provincia_es, :provincia_ca
         )";
 
         // Preparar la consulta
         $stmt = $conn->prepare($sql);
 
         // Enlazar los parámetros con los valores de las variables PHP
-        $stmt->bindParam(':provincia', $provincia, PDO::PARAM_STR);
+        $stmt->bindParam(':provincia_es', $provincia_es, PDO::PARAM_STR);
         $stmt->bindParam(':provincia_ca', $provincia_ca, PDO::PARAM_STR);
 
         // Ejecutar la consulta
@@ -961,7 +961,7 @@ if ($slug === "municipi") {
 
         // Recuperar el ID del registro creado
         $tipusOperacio = "INSERT";
-        $detalls =  "Creació nova provincia: " . $provincia;
+        $detalls =  "Creació nova provincia: " . $provincia_ca;
 
         // Si la inserció té èxit, cal registrar la inserció en la base de control de canvis
 

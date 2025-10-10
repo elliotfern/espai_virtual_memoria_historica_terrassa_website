@@ -94,15 +94,14 @@ if ($categoriaId === "modifica-comunitat") {
                     </div>
                 </div>
 
-                <div class="col-md-4 mb-4">
-                    <label for="comunitat_es" class="form-label negreta">Nom comunitat autònoma/regió (nom en castellà):</label>
-                    <input type="text" class="form-control" id="comunitat_es" name="comunitat_es" value="<?php echo $comunitat_es_old; ?>">
-                    <div class="avis-form">
-                        * Camp obligatori
-                    </div>
-                </div>
-
+                <hr>
                 <?php if (isUserAdmin()) : ?>
+
+                    <div class="col-md-4 mb-4">
+                        <label for="comunitat_es" class="form-label negreta">Nom comunitat autònoma/regió (nom en castellà):</label>
+                        <input type="text" class="form-control" id="comunitat_es" name="comunitat_es" value="<?php echo $comunitat_es_old; ?>">
+
+                    </div>
 
                     <div class="col-md-4 mb-4">
                         <label for="comunitat_en" class="form-label negreta">Nom comunitat autònoma/regió (nom en anglès):</label>

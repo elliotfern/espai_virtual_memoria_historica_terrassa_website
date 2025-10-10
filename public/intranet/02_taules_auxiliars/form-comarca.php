@@ -80,21 +80,23 @@ if ($categoriaId === "modifica-comarca") {
                 </div>
 
                 <div class="col-md-4 mb-4">
-                    <label for="comarca" class="form-label negreta">Nom comarca (forma oficial):</label>
+                    <label for="comarca" class="form-label negreta">Nom oficial de la comarca (a Catalunya, nom sempre en català):</label>
                     <input type="text" class="form-control" id="comarca" name="comarca" value="<?php echo $comarca_old; ?>">
                     <div class="avis-form">
                         * Camp obligatori
                     </div>
                 </div>
 
-                <div class="col-md-4 mb-4">
-                    <label for="comarca" class="form-label negreta">Nom comarca (nom en català):</label>
-                    <input type="text" class="form-control" id="comarca_ca" name="comarca_ca" value="<?php echo $comarca_ca_old; ?>">
-                    <div class="avis-form">
-                        * Omplir en cas que disposem del nom de la comarca en català
-                    </div>
-                </div>
+                <?php if (isUserAdmin()) : ?>
 
+                    <div class="col-md-4 mb-4">
+                        <label for="comarca" class="form-label negreta">Nom comarca (nom en català):</label>
+                        <input type="text" class="form-control" id="comarca_ca" name="comarca_ca" value="<?php echo $comarca_ca_old; ?>">
+                        <div class="avis-form">
+                            * Omplir en cas que disposem del nom de la comarca en català
+                        </div>
+                    </div>
+                <?php endif; ?>
                 <div class="row espai-superior" style="border-top: 1px solid black;padding-top:25px">
                     <div class="col">
                     </div>

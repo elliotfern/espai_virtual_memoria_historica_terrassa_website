@@ -19,14 +19,14 @@ $urlParts = explode('/', $url2);
 $categoriaId = $urlParts[3] ?? '';
 
 $id_old = "";
-$provincia_old = "";
+$provincia_es_old = "";
 $provincia_ca_old = "";
 
 if ($categoriaId === "modifica-provincia") {
     $id_old = $routeParams[0];
     $modificaBtn = 1;
 
-    $query = "SELECT p.id, p.provincia, provincia_ca
+    $query = "SELECT p.id, p.provincia_es, provincia_ca
     FROM aux_dades_municipis_provincia AS p
     WHERE p.id = :id";
     $stmt = $conn->prepare($query);
@@ -35,7 +35,7 @@ if ($categoriaId === "modifica-provincia") {
 
     if ($stmt->rowCount() > 0) {
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $provincia_old = $row['provincia'] ?? "";
+            $provincia_es_old = $row['provincia_es'] ?? "";
             $provincia_ca_old = $row['provincia_ca'] ?? "";
             $id_old = $row['id'] ?? "";
         }
@@ -50,7 +50,7 @@ if ($categoriaId === "modifica-provincia") {
         <div class="container">
             <?php if ($modificaBtn === 1) { ?>
                 <h2>Modificació dades Província</h2>
-                <h4 id="fitxa">Província: <?php echo $provincia_old; ?></h4>
+                <h4 id="fitxa">Província: <?php echo $provincia_ca_old; ?></h4>
             <?php } else { ?>
                 <h2>Inserció dades nova Província/Departament</h2>
             <?php } ?>
@@ -80,20 +80,23 @@ if ($categoriaId === "modifica-provincia") {
                 <input type="hidden" id="id" name="id" value="<?php echo $id_old; ?>">
 
                 <div class="col-md-4 mb-4">
-                    <label for="provincia" class="form-label negreta">Nom Província (forma oficial):</label>
-                    <input type="text" class="form-control" id="provincia" name="provincia" value="<?php echo $provincia_old; ?>">
+                    <label for="provincia" class="form-label negreta">Nom Província (en català):</label>
+                    <input type="text" class="form-control" id="provincia_ca" name="provincia_ca" value="<?php echo $provincia_ca_old; ?>">
                     <div class="avis-form">
                         * Camp obligatori
                     </div>
                 </div>
 
-                <div class="col-md-4 mb-4">
-                    <label for="provincia" class="form-label negreta">Nom Província (nom en català):</label>
-                    <input type="text" class="form-control" id="provincia_ca" name="provincia_ca" value="<?php echo $provincia_ca_old; ?>">
-                    <div class="avis-form">
-                        * Omplir en cas que disposem del nom de la província en català
+                <?php if (isUserAdmin()) : ?>
+
+                    <div class="col-md-4 mb-4">
+                        <label for="provincia" class="form-label negreta">Nom Província (nom en castellà):</label>
+                        <input type="text" class="form-control" id="provincia_es" name="provincia_es" value="<?php echo $provincia_es_old; ?>">
+                        <div class="avis-form">
+                            * Omplir en cas que disposem del nom de la província en català
+                        </div>
                     </div>
-                </div>
+                <?php endif; ?>
 
                 <div class="row espai-superior" style="border-top: 1px solid black;padding-top:25px">
                     <div class="col">

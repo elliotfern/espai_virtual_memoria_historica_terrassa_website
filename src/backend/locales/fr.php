@@ -25,7 +25,8 @@ return [
         'espai-virtual' => 'Espace virtuel',
         'contacta' => 'Contact',
         'cronologia' => 'Chronologie',
-        'links' => 'Liens'
+        'links' => 'Liens',
+        'geolocalitzacio' => 'Géolocalisation'
     ],
 
     'cerca-avan' => [
