@@ -88,14 +88,41 @@ if ($slug === "municipi") {
         );
     }
 
-    // Verificar si el municipi ya existe en la base de datos
+    // Verificar si el municipi ya existe en la base de datos (ciutat o ciutat_ca)
     global $conn;
     /** @var PDO $conn */
-    $sql = "SELECT COUNT(*) FROM aux_dades_municipis WHERE ciutat = :ciutat";
+
+    // Normalizamos entradas (trim)
+    $in_ciutat    = isset($data['ciutat']) ? trim((string)$data['ciutat']) : '';
+    $in_ciutat_ca = isset($data['ciutat_ca']) ? trim((string)$data['ciutat_ca']) : null;
+
+    $sql = "
+  SELECT COUNT(*) 
+  FROM aux_dades_municipis
+  WHERE 
+    -- el valor de 'ciutat' ya existe en qualsevol de les dues columnes
+    LOWER(ciutat)    = LOWER(:ciutat)
+    OR LOWER(ciutat_ca) = LOWER(:ciutat)
+    -- si ens envien 'ciutat_ca', també comprovem que no existeixi
+    OR (
+      :ciutat_ca IS NOT NULL AND (
+        LOWER(ciutat)    = LOWER(:ciutat_ca)
+        OR LOWER(ciutat_ca) = LOWER(:ciutat_ca)
+      )
+    )
+";
+
     $stmt = $conn->prepare($sql);
-    $stmt->bindParam(':ciutat', $data['ciutat'], PDO::PARAM_STR);
+    $stmt->bindValue(':ciutat', $in_ciutat, PDO::PARAM_STR);
+    // Para :ciutat_ca usa NULL real cuando no venga
+    if ($in_ciutat_ca === null || $in_ciutat_ca === '') {
+        $stmt->bindValue(':ciutat_ca', null, PDO::PARAM_NULL);
+    } else {
+        $stmt->bindValue(':ciutat_ca', $in_ciutat_ca, PDO::PARAM_STR);
+    }
+
     $stmt->execute();
-    $municipiExists = $stmt->fetchColumn();
+    $municipiExists = (int)$stmt->fetchColumn();
 
     if ($municipiExists > 0) {
         Response::error(
@@ -105,6 +132,7 @@ if ($slug === "municipi") {
         );
         exit;
     }
+
 
     // Si no hay errores, crear las variables PHP y preparar la consulta PDO
     $ciutat = $data['ciutat'];

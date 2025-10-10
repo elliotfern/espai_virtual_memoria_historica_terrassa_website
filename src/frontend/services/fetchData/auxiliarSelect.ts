@@ -48,6 +48,10 @@ export async function auxiliarSelect(idAux: number | null | undefined, api: stri
       removeItemButton: true, // recupera la “x” para limpiar
       itemSelectText: '',
       noResultsText: 'Sense resultats',
+      searchResultLimit: 100, // pon el número que quieras (p.ej. 100)
+      renderChoiceLimit: -1, // sin límite de render (deja -1)
+      // position: 'auto',         // opcional, por si quieres ajustar la posición
+      // searchFloor: 1,           // opcional: mínimo de caracteres para buscar
       ...config,
     });
 

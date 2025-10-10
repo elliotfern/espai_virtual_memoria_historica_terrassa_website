@@ -28,35 +28,40 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
 if ($slug === "municipis") {
     $db = new Database();
 
-    $query = "SELECT m.id,
-                CONCAT(
-                    COALESCE(m.ciutat_ca, m.ciutat),
-                    IF(
-                    (co.comunitat_ca IS NOT NULL AND co.comunitat_es != '') 
-                    OR (e.estat_ca IS NOT NULL AND e.estat_ca != ''), 
-                    CONCAT(
-                        ' (',
-                        CONCAT_WS(', ',
-                        NULLIF(COALESCE(co.comunitat_ca, co.comunitat_es), ''),
-                        NULLIF(e.estat_ca, '')
-                        ),
-                        ')'
+    $query = "SELECT
+        m.id,
+        CONCAT(
+            COALESCE(NULLIF(m.ciutat_ca, ''), NULLIF(m.ciutat, '')),
+            CASE
+            WHEN COALESCE(
+                    NULLIF(co.comunitat_ca, ''), NULLIF(co.comunitat_es, ''),
+                    NULLIF(e.estat_ca, ''),      NULLIF(e.estat_es, '')
+                ) IS NOT NULL
+            THEN CONCAT(
+                    ' (',
+                    CONCAT_WS(', ',
+                    COALESCE(NULLIF(co.comunitat_ca, ''), NULLIF(co.comunitat_es, '')),
+                    COALESCE(NULLIF(e.estat_ca, ''), NULLIF(e.estat_es, ''))
                     ),
-                    ''
-                    )
-                ) AS ciutat,
-                COALESCE(c.comarca_ca, c.comarca) AS comarca,
-                COALESCE(p.provincia_ca, p.provincia_es) AS provincia,
-                COALESCE(co.comunitat_ca, co.comunitat_es) AS comunitat,
-                COALESCE(e.estat_ca, e.estat_es) AS estat
-            FROM aux_dades_municipis AS m
-            LEFT JOIN aux_dades_municipis_comarca AS c ON m.comarca = c.id
-            LEFT JOIN aux_dades_municipis_provincia AS p ON m.provincia = p.id
-            LEFT JOIN aux_dades_municipis_comunitat AS co ON m.comunitat = co.id
-            LEFT JOIN aux_dades_municipis_estat AS e ON m.estat = e.id
-            ORDER BY
-            CONVERT(TRIM(COALESCE(NULLIF(m.ciutat_ca,''), m.ciutat)) USING utf8mb4)
-            COLLATE utf8mb4_unicode_ci ASC";
+                    ')'
+                )
+            ELSE ''
+            END
+        ) AS ciutat,
+
+        COALESCE(NULLIF(c.comarca_ca, ''),    NULLIF(c.comarca, ''))        AS comarca,
+        COALESCE(NULLIF(p.provincia_ca, ''),  NULLIF(p.provincia_es, ''))   AS provincia,
+        COALESCE(NULLIF(co.comunitat_ca, ''), NULLIF(co.comunitat_es, ''))  AS comunitat,
+        COALESCE(NULLIF(e.estat_ca, ''),      NULLIF(e.estat_es, ''))       AS estat
+
+        FROM aux_dades_municipis AS m
+        LEFT JOIN aux_dades_municipis_comarca   AS c  ON m.comarca   = c.id
+        LEFT JOIN aux_dades_municipis_provincia AS p  ON m.provincia = p.id
+        LEFT JOIN aux_dades_municipis_comunitat AS co ON m.comunitat = co.id
+        LEFT JOIN aux_dades_municipis_estat     AS e  ON m.estat     = e.id
+
+        ORDER BY
+        ciutat ASC";
 
     try {
         $result = $db->getData($query);
