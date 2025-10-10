@@ -349,7 +349,7 @@ if ($slug === "isAdmin") {
     $lang = $_GET['lang'] ?? null;
     $db = new Database();
 
-    $query = "SELECT u.nom, u.slug, u.avatar, i.bio_curta_$lang AS bio_curta, img.nomArxiu AS urlImatge, u.grup
+    $query = "SELECT u.nom, u.slug, u.avatar, i.bio_curta_$lang AS bio_curta, img.nomArxiu AS urlImatge, u.grup, u.ordre
                 FROM auth_users AS u
                 LEFT JOIN auth_users_i18n AS i ON u.id = i.id_user
                 LEFT JOIN aux_imatges AS img ON u.avatar = img.id

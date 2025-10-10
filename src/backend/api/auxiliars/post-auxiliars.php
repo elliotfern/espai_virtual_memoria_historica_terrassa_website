@@ -43,6 +43,18 @@ if (!$userId) {
 // 1) POST municipi
 // ruta POST => "/api/auxiliars/post/municipi"
 if ($slug === "municipi") {
+
+    // Helper: detectar palabra prohibida (case-insensitive)
+    $hasForbidden = function (?string $val, array $words): bool {
+        if (!is_string($val) || $val === '') return false;
+        $norm = trim($val);
+        foreach ($words as $w) {
+            if ($w === '') continue;
+            if (stripos($norm, $w) !== false) return true; // insensible a mayúsculas
+        }
+        return false;
+    };
+
     $inputData = file_get_contents('php://input');
     $data = json_decode($inputData, true);
 
@@ -56,6 +68,15 @@ if ($slug === "municipi") {
 
     if (empty($data['estat'])) {
         $errors[] =  ValidacioErrors::requerit('estat');
+    }
+
+    // ❗ Bloquear nombres que contengan "municipi" (en cualquier forma)
+    $forbidden = ['municipi'];
+    if (!empty($data['ciutat']) && $hasForbidden($data['ciutat'], $forbidden)) {
+        $errors[] = ValidacioErrors::custom($data['ciutat']);
+    }
+    if (!empty($data['ciutat_ca']) && $hasForbidden($data['ciutat_ca'], $forbidden)) {
+        $errors[] = ValidacioErrors::custom('ciutat_ca');
     }
 
     // Si hay errores, devolver una respuesta con los errores

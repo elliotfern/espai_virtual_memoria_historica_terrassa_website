@@ -29,5 +29,10 @@ class ValidacioErrors
         return "El camp <strong>$camp</strong> no pot superar els $max caràcters.";
     }
 
+    public static function custom(string $camp): string
+    {
+        return "No s'accepta la paraula <strong>$camp</strong> com a nom vàlid de municipi.";
+    }
+
     // Pots afegir més funcions segons necessitis
 }

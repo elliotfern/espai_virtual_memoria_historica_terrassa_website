@@ -38,6 +38,7 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
                 </div>
 
                 <?php if (isUserAdmin()) : ?>
+                    <hr>
 
                     <div class="col-md-6 mb-4">
                         <label for="ciutat" class="form-label negreta">Nom municipi (nom en català):</label>
