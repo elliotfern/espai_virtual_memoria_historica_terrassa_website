@@ -737,12 +737,13 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
     }
 
     // 4) Per obtenir nom, cognom1 i cognom2 al cercador homepage Texts complets
-    // ruta GET => "https://memoriaterrassa.cat/api/dades_personals/get/?llistatPersonesCercador"
-} elseif (isset($_GET['llistatPersonesCercador'])) {
+    // ruta GET => "https://memoriaterrassa.cat/api/dades_personals/get/llistatPersonesCercador"
+} elseif ($slug === 'llistatPersonesCercador') {
 
     $db = new Database();
     $query = "SELECT d.id, d.nom, d.cognom1, d.cognom2, d.slug
-        FROM db_dades_personals AS d";
+        FROM db_dades_personals AS d
+        WHERE d.completat = 2 AND d.visibilitat = 2";
 
     try {
 

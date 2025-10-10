@@ -57,7 +57,7 @@ export async function initBuscador(lang: string): Promise<void> {
 
     if (!searchInput || !resultsDiv) return;
 
-    const url = `${DOMAIN_API}/dades_personals/get/?llistatPersonesCercador`;
+    const url = `${DOMAIN_API}/dades_personals/get/llistatPersonesCercador`;
     const persones = await getApiArray<Persona>(url);
 
     searchInput.addEventListener('input', () => {
