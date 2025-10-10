@@ -2,9 +2,7 @@ import { DOMAIN_API, DOMAIN_WEB } from '../../config/constants';
 import { getApiArray } from '../../services/api/http';
 import { normalizeText } from '../../services/formatDates/formatText';
 import { LABELS_SEARCH } from '../../services/i18n/homePage/cercador';
-import { DEFAULT_LANG, isLang, t } from '../../services/i18n/i18n';
-
-type Lang = 'ca' | 'es' | 'en' | 'fr' | 'it' | 'pt';
+import { t } from '../../services/i18n/i18n';
 
 interface Persona {
   nom: string;
@@ -14,18 +12,13 @@ interface Persona {
   slug: string;
 }
 
-function getActiveLang(): Lang {
-  const fromHtml = (document.documentElement.getAttribute('lang') || '').toLowerCase();
-  return isLang(fromHtml) ? fromHtml : DEFAULT_LANG;
-}
-
-function fitxaHref(slug: string, lang: Lang): string {
+function fitxaHref(slug: string, lang: string): string {
   // en catalán no se añade prefijo, en el resto sí
   return lang === 'ca' ? `${DOMAIN_WEB}/fitxa/${slug}` : `${DOMAIN_WEB}/${lang}/fitxa/${slug}`;
 }
 
 // Mostrar resultados
-function mostrarResultats(resultats: Persona[], resultsDiv: HTMLElement, lang: Lang) {
+function mostrarResultats(resultats: Persona[], resultsDiv: HTMLElement, lang: string) {
   if (resultats.length === 0) {
     resultsDiv.innerHTML = `<p>${t(LABELS_SEARCH, 'noResults', lang)}</p>`;
     return;
@@ -44,7 +37,7 @@ function mostrarResultats(resultats: Persona[], resultsDiv: HTMLElement, lang: L
 }
 
 // Lógica de filtrado
-function filtrarPersones(term: string, persones: Persona[], resultsDiv: HTMLElement, lang: Lang) {
+function filtrarPersones(term: string, persones: Persona[], resultsDiv: HTMLElement, lang: string) {
   const normalizedTerm = normalizeText(term);
   const searchWords = normalizedTerm.split(' ').filter(Boolean);
 
@@ -57,9 +50,7 @@ function filtrarPersones(term: string, persones: Persona[], resultsDiv: HTMLElem
   mostrarResultats(resultats.slice(0, 10), resultsDiv, lang);
 }
 
-export async function initBuscador(): Promise<void> {
-  const lang = getActiveLang();
-
+export async function initBuscador(lang: string): Promise<void> {
   const run = async () => {
     const searchInput = document.getElementById('searchInput') as HTMLInputElement | null;
     const resultsDiv = document.getElementById('results') as HTMLElement | null;

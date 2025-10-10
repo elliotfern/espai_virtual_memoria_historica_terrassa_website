@@ -3,7 +3,7 @@ import { llistatMembresEquip } from './membresEquip';
 import { traduccionsHomePagei18n } from './traduccionsHomePage';
 
 export async function homePage(lang: string): Promise<void> {
-  initBuscador();
+  initBuscador(lang);
   llistatMembresEquip(lang);
   traduccionsHomePagei18n(lang);
 }
