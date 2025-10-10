@@ -9,6 +9,7 @@ interface UsuariItem {
   bio_curta: string; // puede traer <br>
   urlImatge?: string;
   grup: number; // 1,2,3
+  ordre: number;
 }
 
 interface ApiResponse<T> {
@@ -145,9 +146,15 @@ function renderGroup(container: HTMLElement, title: string, people: UsuariItem[]
   titleSpan.textContent = title;
   groupBox.appendChild(titleSpan);
 
-  // Orden alfabético por nombre según idioma activo
+  // 🔽 ORDENAR POR "ordre" (asc), con desempate por nombre
   const collator = new Intl.Collator(L, { sensitivity: 'base' });
-  const sorted = [...people].sort((a, b) => collator.compare(a.nom, b.nom));
+  const sorted = [...people].sort((a, b) => {
+    const ao = Number.isFinite(a.ordre) ? a.ordre : Number.POSITIVE_INFINITY;
+    const bo = Number.isFinite(b.ordre) ? b.ordre : Number.POSITIVE_INFINITY;
+    if (ao !== bo) return ao - bo;
+    // desempate legible por nombre
+    return collator.compare(a.nom, b.nom);
+  });
 
   // Filas de 2
   const rows = chunk(sorted, 2);

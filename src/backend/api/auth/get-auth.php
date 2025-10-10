@@ -353,7 +353,8 @@ if ($slug === "isAdmin") {
                 FROM auth_users AS u
                 LEFT JOIN auth_users_i18n AS i ON u.id = i.id_user
                 LEFT JOIN aux_imatges AS img ON u.avatar = img.id
-                WHERE u.grup IN (1,2,3)";
+                WHERE u.grup IN (1,2,3)
+                ORDER BY u.ordre ASC";
 
     try {
         $result = $db->getData($query);
