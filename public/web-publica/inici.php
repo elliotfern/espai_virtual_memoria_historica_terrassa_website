@@ -21,7 +21,7 @@ $translate = $translations['benvinguda'] ?? [];
                 <div class="p-4 border bloc1">
                     <span class="titol" data-i18n="basicSearch_titleA">Cerca bàsica de</span>
                     <br />
-                    <span class="italic-text" data-i18n="basicSearch_titleB">represaliats i represaliades</span>
+                    <span class="titol italic-text" data-i18n="basicSearch_titleB">represaliats i represaliades</span>
 
                     <div class="d-flex flex-column d-grid gap-3" style="margin-top:20px;margin-bottom:20px">
                         <div class="container mt-4">
@@ -53,7 +53,7 @@ $translate = $translations['benvinguda'] ?? [];
                 <div class="p-4 border bloc2">
                     <span class="titol" data-i18n="explore_titleA">Explora les nostres</span>
                     <br />
-                    <span class="italic-text" data-i18n="explore_titleB">bases de dades</span>
+                    <span class="titol italic-text" data-i18n="explore_titleB">bases de dades</span>
 
                     <div class="d-flex flex-column d-grid gap-3" style="margin-top:40px;margin-bottom:20px">
                         <span class="text3" data-i18n="explore_text">
@@ -227,9 +227,7 @@ $translate = $translations['benvinguda'] ?? [];
         <span class="text1 mitja raleway" data-i18n-html="team_text"><span class="negreta">Qui hi ha darrere del projecte?</span> Aquest projecte és possible gràcies a la
             col·laboració d'entitats i professionals dedicats a la recuperació de la memòria històrica</span>
 
-        <div class="container my-5">
-            <span class="titol italic-text gran lora" data-i18n="team_members">Membres recerca històrica:</span>
-            <div id="equipLlistaRoot"></div>
+        <div class="container my-5" id="equipLlistaRoot">
         </div>
     </div>
 </div>

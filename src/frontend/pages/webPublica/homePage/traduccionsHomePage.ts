@@ -1,4 +1,4 @@
-import { HomeKeys, LABELS_HOME } from '../../../services/i18n/homepage';
+import { HomeKeys, LABELS_HOME } from '../../../services/i18n/homePage/homepage';
 import { DEFAULT_LANG, isLang, t } from '../../../services/i18n/i18n';
 
 // Lista tipada de claves

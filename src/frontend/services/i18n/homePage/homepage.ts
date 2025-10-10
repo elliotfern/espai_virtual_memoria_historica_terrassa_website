@@ -1,5 +1,5 @@
 // i18n/home.ts
-import { makeDict } from './i18n';
+import { makeDict } from '../i18n';
 
 export type HomeKeys = 'basicSearch_titleA' | 'basicSearch_titleB' | 'basicSearch_placeholder' | 'basicSearch_help' | 'basicSearch_cta' | 'explore_titleA' | 'explore_titleB' | 'explore_text' | 'db_btn_general' | 'db_btn_cost' | 'db_btn_exili' | 'db_btn_repres' | 'hero_title' | 'hero_subtitle' | 'hero_text' | 'hero_cta' | 'resources_title' | 'resources_subtitle' | 'grid_title_general' | 'grid_title_cost' | 'grid_title_exili' | 'grid_title_repres' | 'interactive_title' | 'interactive_item1' | 'interactive_item2' | 'interactive_item3' | 'interactive_item4' | 'team_title' | 'team_subtitle' | 'team_text' | 'team_members';
 

@@ -1,10 +1,13 @@
+// modules/equip/llistatMembresEquip.ts
 import { fetchDataGet } from '../../../services/fetchData/fetchDataGet';
+import { LABELS_EQUIP } from '../../../services/i18n/homePage/equip';
+import { DEFAULT_LANG, isLang, t } from '../../../services/i18n/i18n';
 
 interface UsuariItem {
   nom: string;
   slug: string;
-  bio_curta: string; // puede traer <br> puntuales
-  urlImatge?: string; // identificador o URL absoluta
+  bio_curta: string; // puede traer <br>
+  urlImatge?: string;
   grup: number; // 1,2,3
 }
 
@@ -14,32 +17,42 @@ interface ApiResponse<T> {
   data: T | null;
 }
 
+type Lang = 'ca' | 'es' | 'en' | 'fr' | 'it' | 'pt';
+
 const API_LIST = (lang: string) => `https://memoriaterrassa.cat/api/auth/get/usuarisLlistaWeb?lang=${encodeURIComponent(lang)}`;
 
 const MEDIA_BASE = 'https://media.memoriaterrassa.cat/assets_usuaris/';
 const WEB_ASSETS = 'https://media.memoriaterrassa.cat/assets_web/';
-const GROUP_TITLES: Record<number, string> = {
-  2: 'Membres recerca històrica:',
-  1: 'Equip pàgina web:',
-  3: 'Col·laboradores introducció i processament de dades:',
-};
+
+// Orden de grupos: 2 → 1 → 3
 const GROUP_ORDER: number[] = [2, 1, 3];
 
-type Lang = 'ca' | 'es' | 'en' | 'fr' | 'it' | 'pt';
-
 function normLang(lang: string): Lang {
-  const l = (lang || 'ca').toLowerCase();
-  return (['ca', 'es', 'en', 'fr', 'it', 'pt'] as const).includes(l as Lang) ? (l as Lang) : 'ca';
+  const l = isLang(lang) ? lang : DEFAULT_LANG;
+  return l;
 }
 
-const CTA_LABEL: Record<Lang, string> = {
-  ca: 'Veure biografia',
-  es: 'Ver biografía',
-  en: 'View biography',
-  fr: 'Voir la biographie',
-  it: 'Vedi biografia',
-  pt: 'Ver biografia',
-};
+function groupTitle(grup: number, lang: string): string {
+  const L = normLang(lang);
+  if (grup === 2) return t(LABELS_EQUIP, 'groupTitleResearch', L);
+  if (grup === 1) return t(LABELS_EQUIP, 'groupTitleWeb', L);
+  return t(LABELS_EQUIP, 'groupTitleData', L); // 3 u otros
+}
+
+function ctaLabel(lang: string): string {
+  const L = normLang(lang);
+  return t(LABELS_EQUIP, 'ctaViewBio', L);
+}
+
+function altPhoto(lang: string): string {
+  const L = normLang(lang);
+  return t(LABELS_EQUIP, 'altPhoto', L);
+}
+
+function altDecoration(lang: string): string {
+  const L = normLang(lang);
+  return t(LABELS_EQUIP, 'altDecoration', L);
+}
 
 function buildUserImgSrc(urlImatge?: string): string {
   if (!urlImatge) return `${MEDIA_BASE}avatar-defecte.jpg`;
@@ -52,7 +65,6 @@ function buildUserImgSrc(urlImatge?: string): string {
 function buildProfileHref(slug: string, lang: string): string {
   const L = normLang(lang);
   const base = '/equip/' + encodeURIComponent(slug);
-  // No añadir /ca
   return L === 'ca' ? base : `/${L}${base}`;
 }
 
@@ -70,10 +82,10 @@ function createCard(item: UsuariItem, lang: string, withLeftBorder: boolean): HT
   const left = document.createElement('div');
   left.className = 'col-md-6 d-flex flex-column g-3';
 
-  // Título (nombre) — si quieres forzar salto antes del último apellido:
+  // Título (nombre) — salto antes del último apellido
   const h3 = document.createElement('h3');
   h3.className = 'fw-bold lora gran blau1';
-  h3.innerHTML = item.nom.replace(/\s+([^\s]+)$/, '<br>$1'); // “Nombre(s) <br> Apellido”
+  h3.innerHTML = item.nom.replace(/\s+([^\s]+)$/, '<br>$1');
   left.appendChild(h3);
 
   // Bio curta (puede traer <br>)
@@ -84,10 +96,10 @@ function createCard(item: UsuariItem, lang: string, withLeftBorder: boolean): HT
 
   // Botón
   const a = document.createElement('a');
-  a.href = buildProfileHref(item.slug, lang);
+  a.href = buildProfileHref(item.slug, L);
   a.className = 'btn btn-primary btn-custom-2 w-auto align-self-start';
   a.style.marginTop = '15px';
-  a.textContent = CTA_LABEL[L];
+  a.textContent = ctaLabel(L);
   left.appendChild(a);
 
   const right = document.createElement('div');
@@ -99,7 +111,7 @@ function createCard(item: UsuariItem, lang: string, withLeftBorder: boolean): HT
   const img = document.createElement('img');
   img.src = buildUserImgSrc(item.urlImatge);
   img.className = 'rounded-circle img-petita';
-  img.alt = 'Foto';
+  img.alt = altPhoto(L);
   img.loading = 'lazy';
   img.decoding = 'async';
   imCol.appendChild(img);
@@ -110,7 +122,7 @@ function createCard(item: UsuariItem, lang: string, withLeftBorder: boolean): HT
   const deco = document.createElement('img');
   deco.src = WEB_ASSETS + 'vector.png';
   deco.className = 'img-s';
-  deco.alt = 'Decoració';
+  deco.alt = altDecoration(L);
   decoCol.appendChild(deco);
 
   right.appendChild(imCol);
@@ -124,7 +136,7 @@ function createCard(item: UsuariItem, lang: string, withLeftBorder: boolean): HT
 function renderGroup(container: HTMLElement, title: string, people: UsuariItem[], lang: string): void {
   if (people.length === 0) return;
 
-  // Wrapper por grupo
+  const L = normLang(lang);
   const groupBox = document.createElement('div');
   groupBox.className = 'container my-5';
 
@@ -133,15 +145,18 @@ function renderGroup(container: HTMLElement, title: string, people: UsuariItem[]
   titleSpan.textContent = title;
   groupBox.appendChild(titleSpan);
 
-  // Filas de 2 (col-md-6 cada una)
-  const rows = chunk(people, 2);
+  // Orden alfabético por nombre según idioma activo
+  const collator = new Intl.Collator(L, { sensitivity: 'base' });
+  const sorted = [...people].sort((a, b) => collator.compare(a.nom, b.nom));
+
+  // Filas de 2
+  const rows = chunk(sorted, 2);
   rows.forEach((rowItems, rowIndex) => {
     const row = document.createElement('div');
     row.className = 'row mt-4 gy-4 gx-4' + (rowIndex > 0 ? ' border-top' : '');
     rowItems.forEach((item, colIndex) => {
-      row.appendChild(createCard(item, lang, colIndex === 1)); // borde en la 2ª columna
+      row.appendChild(createCard(item, L, colIndex === 1));
     });
-    // Si queda 1 sola en la última fila, no pasa nada (ocupa su mitad).
     groupBox.appendChild(row);
   });
 
@@ -152,13 +167,15 @@ export async function llistatMembresEquip(lang: string): Promise<void> {
   const root = document.getElementById('equipLlistaRoot');
   if (!root) return;
 
+  const L = normLang(lang);
+
   try {
-    const res = await fetchDataGet<ApiResponse<UsuariItem[]>>(API_LIST(lang), true);
+    const res = await fetchDataGet<ApiResponse<UsuariItem[]>>(API_LIST(L), true);
 
     if (!res || res.status !== 'success' || !Array.isArray(res.data)) {
       root.innerHTML = `
         <div class="container my-5">
-          <div class="alert alert-danger">No s'ha pogut carregar l'equip.</div>
+          <div class="alert alert-danger">${t(LABELS_EQUIP, 'errorLoad', L)}</div>
         </div>`;
       return;
     }
@@ -177,15 +194,12 @@ export async function llistatMembresEquip(lang: string): Promise<void> {
     root.innerHTML = '';
     for (const g of GROUP_ORDER) {
       const people = byGroup.get(g) ?? [];
-      // Si quieres orden alfabético por nombre dentro del grupo:
-      people.sort((a, b) => a.nom.localeCompare(b.nom, 'ca', { sensitivity: 'base' }));
-      renderGroup(root, GROUP_TITLES[g], people, lang);
+      renderGroup(root, groupTitle(g, L), people, L);
     }
-  } catch (err: unknown) {
+  } catch {
     root.innerHTML = `
       <div class="container my-5">
-        <div class="alert alert-danger">Error de connexió amb la API.</div>
+        <div class="alert alert-danger">${t(LABELS_EQUIP, 'errorConn', L)}</div>
       </div>`;
-    console.log(err);
   }
 }

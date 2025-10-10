@@ -1,6 +1,10 @@
 import { DOMAIN_API, DOMAIN_WEB } from '../../config/constants';
 import { getApiArray } from '../../services/api/http';
 import { normalizeText } from '../../services/formatDates/formatText';
+import { LABELS_SEARCH } from '../../services/i18n/homePage/cercador';
+import { DEFAULT_LANG, isLang, t } from '../../services/i18n/i18n';
+
+type Lang = 'ca' | 'es' | 'en' | 'fr' | 'it' | 'pt';
 
 interface Persona {
   nom: string;
@@ -10,56 +14,82 @@ interface Persona {
   slug: string;
 }
 
-// Mostrar resultados
+function getActiveLang(): Lang {
+  const fromHtml = (document.documentElement.getAttribute('lang') || '').toLowerCase();
+  return isLang(fromHtml) ? fromHtml : DEFAULT_LANG;
+}
 
-function mostrarResultats(resultats: Persona[], resultsDiv: HTMLElement) {
-  const webApi = DOMAIN_WEB;
+function fitxaHref(slug: string, lang: Lang): string {
+  // en catalán no se añade prefijo, en el resto sí
+  return lang === 'ca' ? `${DOMAIN_WEB}/fitxa/${slug}` : `${DOMAIN_WEB}/${lang}/fitxa/${slug}`;
+}
+
+// Mostrar resultados
+function mostrarResultats(resultats: Persona[], resultsDiv: HTMLElement, lang: Lang) {
   if (resultats.length === 0) {
-    resultsDiv.innerHTML = "<p>No s'ha trobat cap coincidència.</p>";
+    resultsDiv.innerHTML = `<p>${t(LABELS_SEARCH, 'noResults', lang)}</p>`;
     return;
   }
 
-  resultsDiv.innerHTML = resultats
+  const html = resultats
     .map(
-      (p) =>
-        `<a href="${webApi}/fitxa/${p.slug}" class="card p-2 mb-2 text-decoration-none text-dark">
+      (p) => `
+        <a href="${fitxaHref(p.slug, lang)}" class="card p-2 mb-2 text-decoration-none text-dark">
           <strong>${p.nom}</strong> ${p.cognom1} ${p.cognom2}
         </a>`
     )
     .join('');
+
+  resultsDiv.innerHTML = html;
 }
 
 // Lógica de filtrado
-function filtrarPersones(term: string, persones: Persona[], resultsDiv: HTMLElement) {
+function filtrarPersones(term: string, persones: Persona[], resultsDiv: HTMLElement, lang: Lang) {
   const normalizedTerm = normalizeText(term);
-  const searchWords = normalizedTerm.split(' ');
+  const searchWords = normalizedTerm.split(' ').filter(Boolean);
 
   const resultats = persones.filter((p) => {
     const fullName = normalizeText(`${p.nom} ${p.cognom1} ${p.cognom2}`);
-
-    // Comprobamos que todas las palabras estén incluidas
     return searchWords.every((word) => fullName.includes(word));
   });
 
   // Limita a 10 resultados
-  mostrarResultats(resultats.slice(0, 10), resultsDiv);
+  mostrarResultats(resultats.slice(0, 10), resultsDiv, lang);
 }
 
-export async function initBuscador() {
-  const searchInput = document.getElementById('searchInput') as HTMLInputElement;
-  const resultsDiv = document.getElementById('results') as HTMLElement;
+export async function initBuscador(): Promise<void> {
+  const lang = getActiveLang();
 
-  const url = `${DOMAIN_API}/api/dades_personals/get/?llistatPersonesCercador`;
-  const persones = await getApiArray<Persona>(url);
+  const run = async () => {
+    const searchInput = document.getElementById('searchInput') as HTMLInputElement | null;
+    const resultsDiv = document.getElementById('results') as HTMLElement | null;
 
-  searchInput.addEventListener('input', () => {
-    const term = searchInput.value.trim();
+    if (!searchInput || !resultsDiv) return;
 
-    if (term.length < 5) {
-      resultsDiv.innerHTML = '<p><span class="avis">Escriu almenys 5 caràcters per començar la cerca.</span></p>';
-      return;
-    }
+    const url = `${DOMAIN_API}/dades_personals/get/?llistatPersonesCercador`;
+    const persones = await getApiArray<Persona>(url);
 
-    filtrarPersones(term, persones, resultsDiv);
-  });
+    searchInput.addEventListener('input', () => {
+      const term = searchInput.value.trim();
+
+      if (term.length < 5) {
+        resultsDiv.innerHTML = `<p><span class="avis">${t(LABELS_SEARCH, 'minChars', lang)}</span></p>`;
+        return;
+      }
+
+      filtrarPersones(term, persones, resultsDiv, lang);
+    });
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener(
+      'DOMContentLoaded',
+      () => {
+        void run();
+      },
+      { once: true }
+    );
+  } else {
+    void run();
+  }
 }
