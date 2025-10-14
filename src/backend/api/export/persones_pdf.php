@@ -6,7 +6,9 @@ use App\Config\DatabaseConnection;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 
-require_once __DIR__ . '/_export_common.php'; // namespace MT\Export
+$lang = $routeParams[0] ?? null;
+
+require_once __DIR__ . '/_export_common.php'; // namespace MT\Export 
 
 // ——— Headers descarga
 header('Content-Type: application/pdf');
@@ -15,55 +17,55 @@ header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
 
 $pdo = DatabaseConnection::getConnection();
 if (!$pdo) {
-    http_response_code(500);
-    echo 'DB error';
-    exit;
+  http_response_code(500);
+  echo 'DB error';
+  exit;
 }
 
 // Helpers locales
 function e(?string $s): string
 {
-    return htmlspecialchars((string)$s, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+  return htmlspecialchars((string)$s, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 }
 function fmtDate(?string $d): string
 {
-    if (!$d) return '';
-    $d = trim($d);
-    if ($d === '' || $d === '0000-00-00') return '';
-    // intenta DD/MM/YYYY si viene YYYY-MM-DD
-    if (preg_match('/^\d{4}-\d{2}-\d{2}$/', $d)) {
-        $dt = DateTime::createFromFormat('Y-m-d', $d);
-        return $dt ? $dt->format('d/m/Y') : $d;
-    }
-    return $d;
+  if (!$d) return '';
+  $d = trim($d);
+  if ($d === '' || $d === '0000-00-00') return '';
+  // intenta DD/MM/YYYY si viene YYYY-MM-DD
+  if (preg_match('/^\d{4}-\d{2}-\d{2}$/', $d)) {
+    $dt = DateTime::createFromFormat('Y-m-d', $d);
+    return $dt ? $dt->format('d/m/Y') : $d;
+  }
+  return $d;
 }
 
 /** Resuelve URL absoluta de imagen (requiere isRemoteEnabled en Dompdf) */
 function buildImgUrl(PDO $pdo, ?int $id, ?string $slug): string
 {
-    // Ajusta a tu host/base:
-    $scheme = (!empty($_SERVER['REQUEST_SCHEME']) ? $_SERVER['REQUEST_SCHEME'] : 'https');
-    $host   = IMG_DOMAIN;
-    $base   = $host . '/assets_represaliats/img/';
+  // Ajusta a tu host/base:
+  $scheme = (!empty($_SERVER['REQUEST_SCHEME']) ? $_SERVER['REQUEST_SCHEME'] : 'https');
+  $host   = IMG_DOMAIN;
+  $base   = $host . '/assets_represaliats/img/';
 
-    // Intentar obtener el campo p.img si existe (id numérico del recurso)
-    if ($id) {
-        $q = $pdo->prepare("
+  // Intentar obtener el campo p.img si existe (id numérico del recurso)
+  if ($id) {
+    $q = $pdo->prepare("
         SELECT i.nomArxiu
         FROM db_dades_personals AS d
         LEFT JOIN aux_imatges AS i ON d.img = i.id
         WHERE d.id = :id
         LIMIT 1");
 
-        $q->bindValue(':id', $id, PDO::PARAM_INT);
-        if ($q->execute()) {
-            $nomArxiu = $q->fetchColumn();
-            if ($nomArxiu) return $base . e((string)$nomArxiu) . '.jpg';
-        }
+    $q->bindValue(':id', $id, PDO::PARAM_INT);
+    if ($q->execute()) {
+      $nomArxiu = $q->fetchColumn();
+      if ($nomArxiu) return $base . e((string)$nomArxiu) . '.jpg';
     }
+  }
 
-    // Fallback a defecto
-    return $base . 'foto_defecte.jpg';
+  // Fallback a defecto
+  return $base . 'foto_defecte.jpg';
 }
 
 /**
@@ -76,30 +78,30 @@ function buildImgUrl(PDO $pdo, ?int $id, ?string $slug): string
  */
 function htmlToPlain(string $html): string
 {
-    // quitar script/style
-    $s = preg_replace('~<(script|style)[^>]*>.*?</\1>~is', '', $html) ?? $html;
+  // quitar script/style
+  $s = preg_replace('~<(script|style)[^>]*>.*?</\1>~is', '', $html) ?? $html;
 
-    // <li> como viñeta
-    $s = preg_replace('~<\s*li[^>]*>~i', "- ", $s) ?? $s;
+  // <li> como viñeta
+  $s = preg_replace('~<\s*li[^>]*>~i', "- ", $s) ?? $s;
 
-    // <br> → \n
-    $s = preg_replace('~<\s*br\s*/?>~i', "\n", $s) ?? $s;
+  // <br> → \n
+  $s = preg_replace('~<\s*br\s*/?>~i', "\n", $s) ?? $s;
 
-    // cierres de bloque → \n
-    $s = preg_replace('~</\s*(p|div|section|article|li|tr|h[1-6])\s*>~i', "\n", $s) ?? $s;
+  // cierres de bloque → \n
+  $s = preg_replace('~</\s*(p|div|section|article|li|tr|h[1-6])\s*>~i', "\n", $s) ?? $s;
 
-    // quitar el resto de etiquetas
-    $s = strip_tags($s);
+  // quitar el resto de etiquetas
+  $s = strip_tags($s);
 
-    // entidades HTML → UTF-8
-    $s = html_entity_decode($s, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+  // entidades HTML → UTF-8
+  $s = html_entity_decode($s, ENT_QUOTES | ENT_HTML5, 'UTF-8');
 
-    // normalizar espacios y saltos
-    $s = preg_replace("/\r\n|\r|\n/u", "\n", $s) ?? $s;
-    $s = preg_replace("/[ \t]+/u", ' ', $s) ?? $s;
-    $s = preg_replace("/\n{3,}/u", "\n\n", $s) ?? $s;
+  // normalizar espacios y saltos
+  $s = preg_replace("/\r\n|\r|\n/u", "\n", $s) ?? $s;
+  $s = preg_replace("/[ \t]+/u", ' ', $s) ?? $s;
+  $s = preg_replace("/\n{3,}/u", "\n\n", $s) ?? $s;
 
-    return trim($s);
+  return trim($s);
 }
 
 // ——— Lee identificadores (ids[]/id | slugs[]/slug)
@@ -119,16 +121,16 @@ if (!$slugs && $slug !== '') $slugs = [$slug];
 $stmt = $pdo->prepare($sql . " LIMIT 1");
 
 foreach ($params as $k => $v) {
-    $stmt->bindValue($k, $v, is_int($v) ? PDO::PARAM_INT : PDO::PARAM_STR);
+  $stmt->bindValue($k, $v, is_int($v) ? PDO::PARAM_INT : PDO::PARAM_STR);
 }
 
 $stmt->execute();
 $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$row) {
-    http_response_code(404);
-    echo "Persona no trobada.";
-    exit;
+  http_response_code(404);
+  echo "Persona no trobada.";
+  exit;
 }
 
 // Traducciones (sexe, categoria…)
@@ -158,19 +160,19 @@ $comunitat_defuncio         = e((string)($row['comunitat_defuncio'] ?? ''));
 $pais_defuncio              = e((string)($row['pais_defuncio'] ?? ''));
 
 $naixement_line = implode(' · ', array_filter([
-    $ciutat_naixement,
-    $comarca_naixement,
-    $provincia_naixement,
-    $comunitat_naixement,
-    $pais_naixement
+  $ciutat_naixement,
+  $comarca_naixement,
+  $provincia_naixement,
+  $comunitat_naixement,
+  $pais_naixement
 ], fn($v) => $v !== ''));
 
 $defuncio_line  = implode(' · ', array_filter([
-    $ciutat_defuncio,
-    $comarca_defuncio,
-    $provincia_defuncio,
-    $comunitat_defuncio,
-    $pais_defuncio
+  $ciutat_defuncio,
+  $comarca_defuncio,
+  $provincia_defuncio,
+  $comunitat_defuncio,
+  $pais_defuncio
 ], fn($v) => $v !== ''));
 
 $data_naixement_fmt = e(fmtDate($row['data_naixement'] ?? null));
@@ -204,8 +206,8 @@ $bio_ca_html  = $bio_ca_plain !== '' ? nl2br(e($bio_ca_plain)) : '<span class="m
 $bio_es_html  = $bio_es_plain !== '' ? nl2br(e($bio_es_plain)) : '';
 
 $bio_es_block = $bio_es_html !== ''
-    ? '<div class="kv" style="margin-top:3mm">' . $bio_es_html . '</div>'
-    : '';
+  ? '<div class="kv" style="margin-top:3mm">' . $bio_es_html . '</div>'
+  : '';
 
 
 // HTML + CSS (simple, limpio para A4)

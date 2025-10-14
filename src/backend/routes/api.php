@@ -234,11 +234,11 @@ $routes = [
     '/api/aux_imatges/clear-image' => ['view' => 'src/backend/api/aux_imatges/delete-imatge-id.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
 
     // API EXPORT
-    '/api/export/persones_csv' => ['view' => 'src/backend/api/export/persones_csv.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+    '/api/export/persones_csv/{lang}' => ['view' => 'src/backend/api/export/persones_csv.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
 
-    '/api/export/persones_xlsx' => ['view' => 'src/backend/api/export/persones_xlsx.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+    '/api/export/persones_xlsx/{lang}' => ['view' => 'src/backend/api/export/persones_xlsx.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
 
-    '/api/export/persones_pdf' => ['view' => 'src/backend/api/export/persones_pdf.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+    '/api/export/persones_pdf/{lang}' => ['view' => 'src/backend/api/export/persones_pdf.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
 
     // SITEMAP
     '/api/sitemaps/ca' => ['view' => 'src/backend/api/sitemaps/sitemap-ca.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],

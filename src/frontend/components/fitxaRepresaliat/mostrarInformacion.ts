@@ -71,9 +71,9 @@ export function mostrarInformacion(tabId: string, id: number, label: string, lan
   }
 
   // ==== Botones de exportación (individual) ====
-  const EXPORT_CSV_URL = DOMAIN_API + '/export/persones_csv';
-  const EXPORT_XLSX_URL = DOMAIN_API + '/export/persones_xlsx';
-  const EXPORT_PDF_URL = DOMAIN_API + '/export/persones_pdf';
+  const EXPORT_CSV_URL = DOMAIN_API + '/export/persones_csv/' + lang;
+  const EXPORT_XLSX_URL = DOMAIN_API + '/export/persones_xlsx/' + lang;
+  const EXPORT_PDF_URL = DOMAIN_API + '/export/persones_pdf/' + lang;
 
   // evita duplicados si se re-renderiza
   const oldInline = divAdditionalInfo.querySelector('.export-inline');

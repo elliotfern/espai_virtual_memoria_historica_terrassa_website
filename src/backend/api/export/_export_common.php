@@ -226,21 +226,21 @@ SELECT
   p.data_naixement,
   p.data_defuncio,
 
-  m1.ciutat                    AS ciutat_naixement,
+  COALESCE(m1.ciutat_ca, m1.ciutat) ciutat_naixement,
   m1a.comarca                  AS comarca_naixement,
-  m1b.provincia                AS provincia_naixement,
+  m1b.provincia_ca                AS provincia_naixement,
   m1c.comunitat_ca             AS comunitat_naixement,
   m1d.estat_ca                 AS pais_naixement,
 
-  m2.ciutat                    AS ciutat_residencia,
+  COALESCE(m2.ciutat_ca, m2.ciutat) AS ciutat_residencia,
   m2a.comarca                  AS comarca_residencia,
-  m2b.provincia                AS provincia_residencia,
+  m2b.provincia_ca                 AS provincia_residencia,
   m2c.comunitat_ca             AS comunitat_residencia,
   m2d.estat_ca                 AS pais_residencia,
 
-  m3.ciutat                    AS ciutat_defuncio,
+  COALESCE(m3.ciutat_ca, m3.ciutat)   AS ciutat_defuncio,
   m3a.comarca                  AS comarca_defuncio,
-  m3b.provincia                AS provincia_defuncio,
+  m3b.provincia_ca                 AS provincia_defuncio,
   m3c.comunitat_ca             AS comunitat_defuncio,
   m3d.estat_ca                 AS pais_defuncio,
 
@@ -248,9 +248,9 @@ SELECT
   tespai.tipologia_espai_ca    AS tipologia_espai_ca,
   tespai.observacions          AS observacions_espai,
   causaD.causa_defuncio_ca     AS causa_defuncio_ca,
-  ec.estat_cat                 AS estat_civil,
-  es.estudi_cat,
-  o.ofici_cat,
+  ec.estat_ca                 AS estat_civil,
+  es.estudi_ca,
+  o.ofici_ca,
   em.empresa_ca                AS empresa,
 
   (SELECT GROUP_CONCAT(fp.partit_politic ORDER BY fp.partit_politic SEPARATOR ' | ')
@@ -264,9 +264,9 @@ SELECT
   ) AS filiacio_sindical_noms,
 
   p.activitat_durant_guerra,
-  se.sector_cat,
-  sse.sub_sector_cat,
-  oc.carrec_cat,
+  se.sector_ca,
+  sse.sub_sector_ca,
+  oc.carrec_ca,
   p.data_creacio,
   p.data_actualitzacio,
   p.observacions,
