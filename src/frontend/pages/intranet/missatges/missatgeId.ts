@@ -23,12 +23,47 @@ function escapeHtml(str: string | null | undefined): string {
   return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
 }
 
-// Formatear "YYYY-MM-DD HH:mm:ss" -> "dd/mm/aaaa"
-function formatDataEs(dataEnviament: string): string {
-  if (!dataEnviament) return '';
-  const [datePart] = dataEnviament.split(' '); // "2025-11-20"
-  const [year, month, day] = datePart.split('-');
-  return `${day}/${month}/${year}`; // 20/11/2025
+// --- HELPERS FECHA/HORA ---
+
+// Parsea "YYYY-MM-DD HH:mm:ss" como fecha UTC
+function parseApiDateUtc(value: string): Date | null {
+  if (!value) return null;
+  const [datePart, timePart] = value.split(' '); // "2025-11-02" "11:31:41"
+  if (!datePart || !timePart) return null;
+
+  const [yearStr, monthStr, dayStr] = datePart.split('-');
+  const [hourStr, minuteStr, secondStr] = timePart.split(':');
+
+  const year = Number(yearStr);
+  const month = Number(monthStr); // 1–12
+  const day = Number(dayStr);
+  const hour = Number(hourStr);
+  const minute = Number(minuteStr);
+  const second = Number(secondStr);
+
+  if (Number.isNaN(year) || Number.isNaN(month) || Number.isNaN(day) || Number.isNaN(hour) || Number.isNaN(minute) || Number.isNaN(second)) {
+    return null;
+  }
+
+  // Creamos fecha en UTC
+  return new Date(Date.UTC(year, month - 1, day, hour, minute, second));
+}
+
+// Formatea la fecha a "dd/mm/aaaa HH:MM:SS" en zona horaria España
+function formatDataHoraEs(dataEnviament: string): string {
+  const d = parseApiDateUtc(dataEnviament);
+  if (!d) return '';
+
+  return d.toLocaleString('es-ES', {
+    timeZone: 'Europe/Madrid',
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false,
+  }); // ej: "02/11/2025 12:31:41"
 }
 
 // Pintar la card dins del div#missatgeId
@@ -47,7 +82,7 @@ function renderMissatge(response: ApiResponse): void {
 
   const { id, nomCognoms, email, telefon, missatge, form_ip, form_user_agent, dataEnviament } = response.data;
 
-  const dataFormatejada = formatDataEs(dataEnviament);
+  const dataHoraFormatejada = formatDataHoraEs(dataEnviament);
 
   const cardHtml = `
     <div class="card shadow-sm mb-3">
@@ -55,7 +90,7 @@ function renderMissatge(response: ApiResponse): void {
         <div>
           <h5 class="mb-0">${escapeHtml(nomCognoms)}</h5>
           <small class="text-muted">
-            ID #${id} · ${escapeHtml(dataFormatejada)}
+            ID #${id} · ${escapeHtml(dataHoraFormatejada)}
           </small>
         </div>
         <span class="badge bg-success text-uppercase">Missatge</span>
@@ -75,7 +110,7 @@ function renderMissatge(response: ApiResponse): void {
 
           <dt class="col-sm-3">Data enviament</dt>
           <dd class="col-sm-9 mb-1">
-            ${escapeHtml(dataFormatejada)}
+            ${escapeHtml(dataHoraFormatejada)}
           </dd>
         </dl>
 
