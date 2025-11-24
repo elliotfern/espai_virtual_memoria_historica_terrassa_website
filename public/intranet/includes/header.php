@@ -39,6 +39,11 @@
 
                 <a href="<?php echo APP_WEB . APP_INTRANET; ?>/registre-canvis" class="btn btn-secondary menuBtn w-100 w-md-auto" role="button" aria-disabled="false">Registre canvis</a>
             <?php endif; ?>
+
+            <?php if ($isAdmin || $isAutor || $isLogged) : ?>
+                <a href="<?php echo APP_WEB . APP_INTRANET . $urlIntranet['missatges']; ?>" class="btn btn-secondary menuBtn w-100 w-md-auto" role="button" aria-disabled="false">Missatges rebuts</a>
+            <?php endif; ?>
+
         </div>
     </div>
 </div>

@@ -12,6 +12,59 @@ if (!$conn) {
     throw new Exception("No es pot establir connexió amb la base de dades.");
 }
 
+/**
+ * Limpia un mensaje proveniente de un <textarea> para almacenarlo de forma segura.
+ * Política: NO se permite HTML, solo texto plano.
+ *
+ * @param string|null $raw        Entrada del usuario (puede ser null)
+ * @param int         $maxLength  Máx. caracteres permitidos tras limpiar
+ * @param int         $maxLines   Máx. líneas permitidas tras limpiar
+ * @return string     Mensaje saneado, en UTF-8
+ */
+function sanitizeHtml(?string $raw, int $maxLength = 5000, int $maxLines = 400): string
+{
+    $s = (string)($raw ?? '');
+
+    // 1) Asegurar/normalizar UTF-8
+    if (!mb_check_encoding($s, 'UTF-8')) {
+        // Intento de conversión (auto-detección de entrada)
+        $s = @mb_convert_encoding($s, 'UTF-8', 'auto');
+        if ($s === false) {
+            $s = ''; // En caso extremo, vaciamos para no almacenar basura binaria
+        }
+    }
+    // Eliminar BOM si lo hubiera
+    $s = preg_replace('/^\xEF\xBB\xBF/u', '', $s);
+
+    // 2) Eliminar bytes nulos y caracteres de control (excepto tab y salto de línea)
+    $s = str_replace("\0", '', $s);
+    $s = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/u', '', $s);
+
+    // 3) Normalizar saltos de línea a "\n"
+    $s = str_replace(["\r\n", "\r"], "\n", $s);
+
+    // 4) Quitar cualquier HTML/etiquetas
+    $s = strip_tags($s);
+
+    // 5) Trims de líneas y colapso de líneas en blanco repetidas
+    $lines = array_map(static fn($l) => trim($l, " \t"), explode("\n", $s));
+    // Quitar espacios redundantes y colapsar 3+ saltos en solo 2
+    $s = preg_replace("/\n{3,}/", "\n\n", trim(implode("\n", $lines)));
+
+    // 6) Limitar número de líneas
+    $arr = explode("\n", $s);
+    if (count($arr) > $maxLines) {
+        $arr = array_slice($arr, 0, $maxLines);
+    }
+    $s = implode("\n", $arr);
+
+    // 7) Limitar longitud total
+    if (mb_strlen($s, 'UTF-8') > $maxLength) {
+        $s = mb_substr($s, 0, $maxLength, 'UTF-8');
+    }
+
+    return $s;
+}
 
 // Configuración de cabeceras para aceptar JSON y responder JSON
 header("Content-Type: application/json");

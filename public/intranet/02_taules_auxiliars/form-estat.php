@@ -19,7 +19,7 @@ $urlParts = explode('/', $url2);
 $categoriaId = $urlParts[3] ?? '';
 
 $id_old = "";
-$estat_old = "";
+$estat_es_old = "";
 $estat_ca_old = "";
 $modificaBtn = "";
 
@@ -27,7 +27,7 @@ if ($categoriaId === "modifica-estat") {
     $modificaBtn = 1;
     $id_old = $routeParams[0];
 
-    $query = "SELECT c.id, c.estat, c.estat_ca
+    $query = "SELECT c.id, c.estat_es, c.estat_ca
     FROM aux_dades_municipis_estat AS c
     WHERE c.id = :id";
     $stmt = $conn->prepare($query);
@@ -36,7 +36,7 @@ if ($categoriaId === "modifica-estat") {
 
     if ($stmt->rowCount() > 0) {
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $estat_old = $row['estat'] ?? "";
+            $estat_es_old = $row['estat_es'] ?? "";
             $id_old = $row['id'] ?? "";
             $estat_ca_old = $row['estat_ca'] ?? "";
         }
@@ -81,21 +81,20 @@ if ($categoriaId === "modifica-estat") {
                 </div>
 
                 <div class="col-md-4 mb-4">
-                    <label for="estat" class="form-label negreta">Nom Estat (forma oficial):</label>
-                    <input type="text" class="form-control" id="estat" name="estat" value="<?php echo $estat_old; ?>">
-                    <div class="avis-form">
-                        * Camp obligatori
-                    </div>
-                </div>
-
-                <div class="col-md-4 mb-4">
                     <label for="estat_ca" class="form-label negreta">Nom Estat (nom en català):</label>
                     <input type="text" class="form-control" id="estat_ca" name="estat_ca" value="<?php echo $estat_ca_old; ?>">
                     <div class="avis-form">
-                        * Omplir en cas que disposem del nom de l'estat en català
+                        * Obligatori
                     </div>
                 </div>
 
+                <?php if (isUserAdmin()) : ?>
+                    <div class="col-md-4 mb-4">
+                        <label for="estat_es" class="form-label negreta">Nom Estat (forma oficial):</label>
+                        <input type="text" class="form-control" id="estat_es" name="estat_es" value="<?php echo $estat_es_old; ?>">
+                    </div>
+
+                <?php endif; ?>
                 <div class="row espai-superior" style="border-top: 1px solid black;padding-top:25px">
                     <div class="col">
                         <a class="btn btn-secondary" role="button" aria-disabled="true" onclick="goBack()">Tornar enrere</a>

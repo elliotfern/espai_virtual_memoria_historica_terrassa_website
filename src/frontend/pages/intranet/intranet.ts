@@ -6,6 +6,7 @@ import { baseDadesIntranet } from './base-dades/baseDades';
 import { fontsDocumentals } from './fonts-documentals/fontsDocumentals';
 import { formBiografies } from './biografies/formBiografies';
 import { formFamiliars } from './familiars/formFamiliars';
+import { taulaMissatgesRebuts } from './missatges/taulaMissatgesRebuts';
 
 export function intranet() {
   const url = window.location.href;
@@ -42,6 +43,10 @@ export function intranet() {
       formFamiliars(false, idPersona);
     } else if (pageType[2] === 'modifica-familiar') {
       formFamiliars(true, idPersona, id);
+    }
+  } else if (pageType[1] === 'missatges') {
+    if (pageType[2] === 'llistat-missatges') {
+      taulaMissatgesRebuts();
     }
   }
 }

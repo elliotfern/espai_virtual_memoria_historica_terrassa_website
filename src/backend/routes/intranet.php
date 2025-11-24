@@ -688,6 +688,15 @@ $routes = [
         'view' => BACKEND_URL . $urlIntranetDir['imatgeRepresaliat'] . '/form-imatge-represaliat.php'
     ]),
 
+    //  Missatges rebuts formulari de contacte
+    APP_INTRANET . $urlIntranet['missatges'] => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['missatges'] . '/index.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['missatges'] . '/llistat-missatges' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['missatges'] . '/llistat-missatges.php'
+    ]),
+
 
 ];
 

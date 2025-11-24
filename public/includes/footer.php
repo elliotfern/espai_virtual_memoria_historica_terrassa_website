@@ -9,7 +9,7 @@
             </div>
 
             <div class="col-12" style="margin-top:25px">
-                Amb el suport de:
+                Amb el suport institucional de:
             </div>
             <div class="row gx-3 gy-3">
                 <div class="col-12 col-md-4 col-lg-3">
@@ -27,6 +27,25 @@
                 <div class="col-12 col-md-4 col-lg-3">
                     <a href="https://xac.gencat.cat/ca/llista_arxius_comarcals/valles_occ/" target="_blank"><img src="<?php echo IMG_DOMAIN; ?>/assets_web/logo-ahct.jpg" alt="Logo" class="logosFooter"></a>
                 </div>
+            </div>
+
+            <div class="col-12" style="margin-top:25px">
+                Entitats sindicals, polítiques, socials i empreses col·laboradores:
+            </div>
+            <div class="row gx-3 gy-3">
+                <div class="col-12 col-md-4 col-lg-3">
+                    <a href="https://cgtcatalunya.cat/" target="_blank"> <img src="<?php echo IMG_DOMAIN; ?>/assets_web/cgt-terrassa.png" alt="CGT Terrassa" class="logosFooter2"></a>
+                </div>
+
+                <div class="col-12 col-md-4 col-lg-3">
+                    <a href="https://www.ccoo.cat/vocc-catc/" target="_blank"> <img src="<?php echo IMG_DOMAIN; ?>/assets_web/ccoo_valles.jpg" alt="CCOO Comissions Obreres Catalunya" class="logosFooter"></a>
+                </div>
+
+
+                <div class="col-12 col-md-4 col-lg-3">
+                    <a href="https://amical-mauthausen.org/ca/" target="_blank"> <img src="<?php echo IMG_DOMAIN; ?>/assets_web/amical_mauthausen.jpg" alt="Amical Mauthausen" class="logosFooter"></a>
+                </div>
+
             </div>
 
         </div>

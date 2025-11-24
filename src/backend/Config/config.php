@@ -46,6 +46,7 @@ $urlIntranetDir = [
     'familiars' => '/04_familiars',
     'biografies' => '/05_biografies',
     'imatgeRepresaliat' => '/06_imatges_represaliats',
+    'missatges' => '/07_missatges',
 ];
 
 $urlIntranet = [
@@ -57,6 +58,7 @@ $urlIntranet = [
     'familiars' => '/familiars',
     'biografies' => '/biografies',
     'imatgeRepresaliat' => '/imatge-represaliat',
+    'missatges' => '/missatges',
 ];
 
 

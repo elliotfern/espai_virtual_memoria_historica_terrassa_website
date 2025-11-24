@@ -70,22 +70,25 @@ if ($slug === "municipi") {
         $errors[] =  ValidacioErrors::requerit('estat');
     }
 
-    // ❗ Bloquear nombres que contengan "municipi" (en cualquier forma)
-    $forbidden = ['municipi'];
-    if (!empty($data['ciutat']) && $hasForbidden($data['ciutat'], $forbidden)) {
-        $errors[] = ValidacioErrors::custom($data['ciutat']);
-    }
-    if (!empty($data['ciutat_ca']) && $hasForbidden($data['ciutat_ca'], $forbidden)) {
-        $errors[] = ValidacioErrors::custom('ciutat_ca');
-    }
+    if ($userId != 1) {
 
-    // Si hay errores, devolver una respuesta con los errores
-    if (!empty($errors)) {
-        Response::error(
-            MissatgesAPI::error('validacio'),
-            $errors,
-            400
-        );
+        // ❗ Bloquear nombres que contengan "municipi" (en cualquier forma)
+        $forbidden = ['municipi'];
+        if (!empty($data['ciutat']) && $hasForbidden($data['ciutat'], $forbidden)) {
+            $errors[] = ValidacioErrors::custom($data['ciutat']);
+        }
+        if (!empty($data['ciutat_ca']) && $hasForbidden($data['ciutat_ca'], $forbidden)) {
+            $errors[] = ValidacioErrors::custom('ciutat_ca');
+        }
+
+        // Si hay errores, devolver una respuesta con los errores
+        if (!empty($errors)) {
+            Response::error(
+                MissatgesAPI::error('validacio'),
+                $errors,
+                400
+            );
+        }
     }
 
     // Verificar si el municipi ya existe en la base de datos (ciutat o ciutat_ca)
@@ -97,20 +100,20 @@ if ($slug === "municipi") {
     $in_ciutat_ca = isset($data['ciutat_ca']) ? trim((string)$data['ciutat_ca']) : null;
 
     $sql = "
-  SELECT COUNT(*) 
-  FROM aux_dades_municipis
-  WHERE 
-    -- el valor de 'ciutat' ya existe en qualsevol de les dues columnes
-    LOWER(ciutat)    = LOWER(:ciutat)
-    OR LOWER(ciutat_ca) = LOWER(:ciutat)
-    -- si ens envien 'ciutat_ca', també comprovem que no existeixi
-    OR (
-      :ciutat_ca IS NOT NULL AND (
-        LOWER(ciutat)    = LOWER(:ciutat_ca)
-        OR LOWER(ciutat_ca) = LOWER(:ciutat_ca)
-      )
-    )
-";
+                SELECT COUNT(*) 
+                FROM aux_dades_municipis
+                WHERE 
+                    -- el valor de 'ciutat' ya existe en qualsevol de les dues columnes
+                    LOWER(ciutat)    = LOWER(:ciutat)
+                    OR LOWER(ciutat_ca) = LOWER(:ciutat)
+                    -- si ens envien 'ciutat_ca', també comprovem que no existeixi
+                    OR (
+                    :ciutat_ca IS NOT NULL AND (
+                        LOWER(ciutat)    = LOWER(:ciutat_ca)
+                        OR LOWER(ciutat_ca) = LOWER(:ciutat_ca)
+                    )
+                    )
+                ";
 
     $stmt = $conn->prepare($sql);
     $stmt->bindValue(':ciutat', $in_ciutat, PDO::PARAM_STR);
@@ -132,6 +135,8 @@ if ($slug === "municipi") {
         );
         exit;
     }
+
+
 
 
     // Si no hay errores, crear las variables PHP y preparar la consulta PDO
@@ -1162,7 +1167,7 @@ if ($slug === "municipi") {
     $errors = [];
 
     // Validación de los datos recibidos
-    if (empty($data['estat'])) {
+    if (empty($data['estat_ca'])) {
         $errors[] =  ValidacioErrors::requerit('estat');
     }
 
@@ -1178,9 +1183,9 @@ if ($slug === "municipi") {
     // Verificar si l'estat ja existeix a la base de dades
     global $conn;
     /** @var PDO $conn */
-    $sql = "SELECT COUNT(*) FROM aux_dades_municipis_estat WHERE estat = :estat";
+    $sql = "SELECT COUNT(*) FROM aux_dades_municipis_estat WHERE estat_ca = :estat_ca";
     $stmt = $conn->prepare($sql);
-    $stmt->bindParam(':estat', $data['estat'], PDO::PARAM_STR);
+    $stmt->bindParam(':estat_ca', $data['estat_ca'], PDO::PARAM_STR);
     $stmt->execute();
     $estatExists = $stmt->fetchColumn();
 
@@ -1194,7 +1199,7 @@ if ($slug === "municipi") {
     }
 
     // Si no hay errores, crear las variables PHP y preparar la consulta PDO
-    $estat = $data['estat'];
+    $estat_es = $data['estat_es'];
     $estat_ca = !empty($data['estat_ca']) ? $data['estat_ca'] : NULL;
 
     // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
@@ -1205,16 +1210,16 @@ if ($slug === "municipi") {
 
         // Crear la consulta SQL
         $sql = "INSERT INTO aux_dades_municipis_estat (
-            estat, estat_ca
+            estat_es, estat_ca
         ) VALUES (
-            :estat, :estat_ca
+            :estat_es, :estat_ca
         )";
 
         // Preparar la consulta
         $stmt = $conn->prepare($sql);
 
         // Enlazar los parámetros con los valores de las variables PHP
-        $stmt->bindParam(':estat', $estat, PDO::PARAM_STR);
+        $stmt->bindParam(':estat_es', $estat_es, PDO::PARAM_STR);
         $stmt->bindParam(':estat_ca', $estat_ca, PDO::PARAM_STR);
 
         // Ejecutar la consulta
@@ -1225,7 +1230,7 @@ if ($slug === "municipi") {
 
         // Recuperar el ID del registro creado
         $tipusOperacio = "INSERT";
-        $detalls =  "Creació nou estat: " . $estat;
+        $detalls =  "Creació nou estat: " . $estat_ca;
 
         // Si la inserció té èxit, cal registrar la inserció en la base de control de canvis
 
