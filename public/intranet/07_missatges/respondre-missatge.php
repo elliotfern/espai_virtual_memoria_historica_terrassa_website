@@ -1,4 +1,4 @@
-sss<?php require_once APP_ROOT . '/public/intranet/includes/header.php'; ?>
+<?php require_once APP_ROOT . '/public/intranet/includes/header.php'; ?>
 
 <div class="container">
     <div class="container" style="padding:25px;margin-top:25px;margin-bottom:50px;">

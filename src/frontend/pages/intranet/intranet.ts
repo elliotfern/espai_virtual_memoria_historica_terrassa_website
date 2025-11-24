@@ -8,7 +8,7 @@ import { formBiografies } from './biografies/formBiografies';
 import { formFamiliars } from './familiars/formFamiliars';
 import { taulaMissatgesRebuts } from './missatges/taulaMissatgesRebuts';
 import { carregarMissatge } from './missatges/missatgeId';
-import { renderRespostaForm } from './respondreMissatge';
+import { renderRespostaForm } from './missatges/respondreMissatge';
 
 export function intranet() {
   const url = window.location.href;

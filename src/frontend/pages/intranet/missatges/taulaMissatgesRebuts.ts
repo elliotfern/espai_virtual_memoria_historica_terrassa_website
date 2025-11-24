@@ -9,6 +9,7 @@ interface EspaiRow {
   telefon: string;
   dataEnviament: string;
   estat: string;
+  nom: string;
 }
 
 type Column<T> = {
@@ -26,7 +27,41 @@ export async function taulaMissatgesRebuts() {
     { header: 'Email', field: 'email' },
     { header: 'Telèfon', field: 'telefon' },
     { header: 'Data enviament', field: 'dataEnviament' },
+    { header: 'Usuari que respon', field: 'nom' },
   ];
+
+  columns.push({
+    header: 'Estat missatge',
+    field: 'estat', // mejor que 'id', ya que usamos estat
+    render: (_: unknown, row: EspaiRow) => {
+      // Por si la API devuelve "1", "2", "3" como string:
+      const estat = typeof row.estat === 'string' ? parseInt(row.estat, 10) : row.estat;
+
+      let label = '';
+      let btnClass = '';
+
+      switch (estat) {
+        case 1:
+          label = 'Pendent resposta';
+          btnClass = 'btn-warning';
+          break;
+        case 2:
+          label = 'Resposta enviada';
+          btnClass = 'btn-success';
+          break;
+        case 3:
+          label = 'Sense resposta';
+          btnClass = 'btn-secondary';
+          break;
+        default:
+          label = 'Desconegut';
+          btnClass = 'btn-outline-secondary';
+          break;
+      }
+
+      return `<button type="button" class="btn btn-sm ${btnClass}" disabled>${label}</button>`;
+    },
+  });
 
   columns.push({
     header: 'Veure missatge',

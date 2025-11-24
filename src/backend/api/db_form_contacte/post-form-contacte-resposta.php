@@ -229,41 +229,76 @@ try {
             <meta charset="UTF-8">
             <style>
                 body {
+                    margin: 0;
+                    padding: 0;
                     font-family: Arial, sans-serif;
-                    background-color: #f4f4f4;
-                    color: #333;
-                    padding: 20px;
+                    background-color: #f6f4eb;
+                    color: #333333;
+                }
+                .wrapper {
+                    width: 100%;
+                    padding: 20px 0;
+                    background-color: #f6f4eb;
                 }
                 .container {
                     max-width: 600px;
-                    margin: auto;
+                    margin: 0 auto;
                     background: #ffffff;
                     border-radius: 8px;
                     box-shadow: 0 0 10px rgba(0,0,0,0.05);
-                    padding: 30px;
+                    padding: 24px 24px 30px 24px;
+                }
+                .header {
+                    text-align: center;
+                    margin-bottom: 20px;
+                }
+                .logo {
+                    max-width: 220px;
+                    height: auto;
+                    display: block;
+                    margin: 0 auto;
                 }
                 .footer {
                     margin-top: 30px;
                     font-size: 12px;
-                    color: #999;
+                    color: #999999;
+                    text-align: center;
+                }
+                .divider {
+                    border: 0;
+                    border-top: 1px solid #e0e0e0;
+                    margin: 20px 0;
                 }
             </style>
             </head>
             <body>
-            <div class="container">
-                <p>Hola ' . htmlspecialchars($nomCognoms, ENT_QUOTES, 'UTF-8') . ',</p>
-                <p>Et responem al missatge que vas enviar al web de Memòria Terrassa:</p>
+            <div class="wrapper">
+                <div class="container">
+                    <div class="header">
+                        <img 
+                            src="https://media.memoriaterrassa.cat/assets_web/logo_web.png" 
+                            alt="Memòria Terrassa" 
+                            class="logo"
+                        />
+                    </div>
 
-                <hr>
-                <p>' . $respostaHtml . '</p>
-                <hr>
+                    <p>Hola ' . htmlspecialchars($nomCognoms, ENT_QUOTES, 'UTF-8') . ',</p>
+                    <p>Et responem al missatge que vas enviar al web de Memòria Terrassa:</p>
 
-                <div class="footer">
-                    Aquest correu s\'ha enviat automàticament des del web memoriaterrassa.cat.
+                    <hr class="divider" />
+
+                    <p>' . $respostaHtml . '</p>
+
+                    <hr class="divider" />
+
+                    <div class="footer">
+                        Aquest correu s\'ha enviat automàticament des del web memoriaterrassa.cat.
+                    </div>
                 </div>
             </div>
             </body>
             </html>';
+
 
         $mail->AltBody = $respostaText;
 

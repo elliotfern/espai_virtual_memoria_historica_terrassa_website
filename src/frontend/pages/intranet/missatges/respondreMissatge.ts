@@ -19,7 +19,7 @@ export function renderRespostaForm(missatgeId: number): void {
               id="respostaSubject"
               name="subject"
               class="form-control"
-              value="Resposta al teu missatge a Memòria Terrassa"
+              value="Resposta al teu missatge a l'Espai Virtual de la Memòria Històrica de Terrassa"
               maxlength="255"
               required
             />

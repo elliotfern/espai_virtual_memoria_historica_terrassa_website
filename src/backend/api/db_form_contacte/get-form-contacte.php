@@ -75,8 +75,10 @@ if ($slug === "missatgesRebuts") {
     $id = $_GET['id'];
 
     $query = "SELECT 
-	        id, nomCognoms, email, telefon, missatge, form_ip, form_user_agent, dataEnviament
-            FROM db_form_contacte
+	        c.id, c.nomCognoms, c.email, c.telefon, c.missatge, c.form_ip, c.form_user_agent, c.dataEnviament, u.nom
+            FROM db_form_contacte AS c
+            LEFT JOIN db_form_contacte_respostes AS r ON r.missatge_id = c.id
+            LEFT JOIN auth_users AS u ON r.usuari_id = u.id
             WHERE id = :id";
 
     try {
