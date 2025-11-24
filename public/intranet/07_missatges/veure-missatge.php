@@ -3,7 +3,7 @@
 <div class="container">
     <div class="container" style="padding:25px;margin-top:25px;margin-bottom:50px;">
 
-        <h3 style="margin-bottom:25px">Centre de missatges: Missatge</h3>
+        <h3 style="margin-bottom:25px">Centre de missatges: Missatge rebut</h3>
 
         <div id="missatgeId">
         </div>

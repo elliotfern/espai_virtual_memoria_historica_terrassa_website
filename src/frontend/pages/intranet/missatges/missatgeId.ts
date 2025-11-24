@@ -23,6 +23,14 @@ function escapeHtml(str: string | null | undefined): string {
   return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
 }
 
+// Formatear "YYYY-MM-DD HH:mm:ss" -> "dd/mm/aaaa"
+function formatDataEs(dataEnviament: string): string {
+  if (!dataEnviament) return '';
+  const [datePart] = dataEnviament.split(' '); // "2025-11-20"
+  const [year, month, day] = datePart.split('-');
+  return `${day}/${month}/${year}`; // 20/11/2025
+}
+
 // Pintar la card dins del div#missatgeId
 function renderMissatge(response: ApiResponse): void {
   const container = document.getElementById('missatgeId');
@@ -39,13 +47,15 @@ function renderMissatge(response: ApiResponse): void {
 
   const { id, nomCognoms, email, telefon, missatge, form_ip, form_user_agent, dataEnviament } = response.data;
 
+  const dataFormatejada = formatDataEs(dataEnviament);
+
   const cardHtml = `
     <div class="card shadow-sm mb-3">
       <div class="card-header d-flex justify-content-between align-items-center">
         <div>
           <h5 class="mb-0">${escapeHtml(nomCognoms)}</h5>
           <small class="text-muted">
-            ID #${id} · ${escapeHtml(dataEnviament)}
+            ID #${id} · ${escapeHtml(dataFormatejada)}
           </small>
         </div>
         <span class="badge bg-success text-uppercase">Missatge</span>
@@ -65,14 +75,21 @@ function renderMissatge(response: ApiResponse): void {
 
           <dt class="col-sm-3">Data enviament</dt>
           <dd class="col-sm-9 mb-1">
-            ${escapeHtml(dataEnviament)}
+            ${escapeHtml(dataFormatejada)}
           </dd>
         </dl>
 
         <h6 class="fw-semibold">Missatge</h6>
-        <div class="border rounded p-3 bg-light" style="white-space: pre-line;">
+        <div class="border rounded p-3 bg-light mb-3" style="white-space: pre-line;">
           ${escapeHtml(missatge)}
         </div>
+
+        <a 
+          href="https://memoriaterrassa.cat/gestio/missatges/respondre-missatge/${id}" 
+          class="btn btn-primary"
+        >
+          Respondre missatge
+        </a>
       </div>
 
       <div class="card-footer text-muted small d-flex flex-wrap gap-3">
