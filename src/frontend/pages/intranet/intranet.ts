@@ -7,6 +7,7 @@ import { fontsDocumentals } from './fonts-documentals/fontsDocumentals';
 import { formBiografies } from './biografies/formBiografies';
 import { formFamiliars } from './familiars/formFamiliars';
 import { taulaMissatgesRebuts } from './missatges/taulaMissatgesRebuts';
+import { carregarMissatge } from './missatges/missatgeId';
 
 export function intranet() {
   const url = window.location.href;
@@ -47,6 +48,9 @@ export function intranet() {
   } else if (pageType[1] === 'missatges') {
     if (pageType[2] === 'llistat-missatges') {
       taulaMissatgesRebuts();
+    } else if (pageType[2] === 'veure-missatge') {
+      const id = Number.parseInt(pageType?.[3] ?? '', 10);
+      carregarMissatge(id);
     }
   }
 }

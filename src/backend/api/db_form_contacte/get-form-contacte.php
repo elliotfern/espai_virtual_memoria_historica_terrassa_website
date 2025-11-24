@@ -68,16 +68,16 @@ if ($slug === "missatgesRebuts") {
     }
 
     // GET : Fitxa repressialiat > relació de familiars (Intranet)
-    // URL: https://memoriaterrassa.cat/api/familiars/get/familiarsFitxa?id=${id}
-} else if ($slug === "familiarsFitxa") {
+    // URL: https://memoriaterrassa.cat/api/form_contacte/get/missatgeId?id=${id}
+} else if ($slug === "missatgeId") {
 
     $db = new Database();
     $id = $_GET['id'];
 
-    $query = "SELECT f.id, f.nom, f.cognom1, f.cognom2, f.anyNaixement, f.relacio_parentiu, f.idParent, d.nom AS nom_represaliat, d.cognom1 AS     cognom1_represaliat, d.cognom2 AS cognom2_represaliat, d.slug
-    FROM aux_familiars AS f
-    LEFT JOIN db_dades_personals AS d ON f.idParent = d.id
-    WHERE f.id = :id";
+    $query = "SELECT 
+	        id, nomCognoms, email, telefon, missatge, form_ip, form_user_agent, dataEnviament
+            FROM db_form_contacte
+            WHERE id = :id";
 
     try {
         $params = [':id' => $id];
