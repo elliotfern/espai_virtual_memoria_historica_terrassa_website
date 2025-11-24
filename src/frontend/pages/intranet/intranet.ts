@@ -8,6 +8,7 @@ import { formBiografies } from './biografies/formBiografies';
 import { formFamiliars } from './familiars/formFamiliars';
 import { taulaMissatgesRebuts } from './missatges/taulaMissatgesRebuts';
 import { carregarMissatge } from './missatges/missatgeId';
+import { renderRespostaForm } from './respondreMissatge';
 
 export function intranet() {
   const url = window.location.href;
@@ -51,6 +52,9 @@ export function intranet() {
     } else if (pageType[2] === 'veure-missatge') {
       const id = Number.parseInt(pageType?.[3] ?? '', 10);
       carregarMissatge(id);
+    } else if (pageType[2] === 'respondre-missatge') {
+      const id = Number.parseInt(pageType?.[3] ?? '', 10);
+      renderRespostaForm(id);
     }
   }
 }

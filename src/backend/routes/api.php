@@ -253,6 +253,8 @@ $routes = [
     '/api/form_contacte/get/{slug}' => ['view' => 'src/backend/api/db_form_contacte/get-form-contacte.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
 
     '/api/form_contacte/post' => ['view' => 'src/backend/api/db_form_contacte/post-form-contacte.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+
+    '/api/form_contacte/resposta/post' => ['view' => 'src/backend/api/db_form_contacte/post-form-contacte-resposta.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
 ];
 
 return $routes;

@@ -5,7 +5,7 @@ sss<?php require_once APP_ROOT . '/public/intranet/includes/header.php'; ?>
 
         <h3 style="margin-bottom:25px">Centre de missatges: respondre missatge</h3>
 
-        <div id="missatgeId">
+        <div id="missatgeRespostaId">
         </div>
     </div>
 </div>
