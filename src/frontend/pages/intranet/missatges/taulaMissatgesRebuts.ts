@@ -31,13 +31,13 @@ export async function taulaMissatgesRebuts() {
   columns.push({
     header: 'Veure missatge',
     field: 'id',
-    render: (_: unknown, row: EspaiRow) => `<a id="${row.id}" title="Modifica" href="https://${window.location.hostname}/gestio/auxiliars/modifica-estat/${row.id}"><button type="button" class="btn btn-warning btn-sm">Modifica</button></a>`,
+    render: (_: unknown, row: EspaiRow) => `<a id="${row.id}" title="Veure missatges" href="https://${window.location.hostname}/gestio/missatges/veure-missatge/${row.id}"><button type="button" class="btn btn-success btn-sm">Missatge</button></a>`,
   });
 
   columns.push({
     header: 'Respondre missatge',
     field: 'id',
-    render: (_: unknown, row: EspaiRow) => `<a id="${row.id}" title="Modifica" href="https://${window.location.hostname}/gestio/auxiliars/modifica-estat/${row.id}"><button type="button" class="btn btn-warning btn-sm">Modifica</button></a>`,
+    render: (_: unknown, row: EspaiRow) => `<a id="${row.id}" title="Respondre" href="https://${window.location.hostname}/gestio/missatges/respondre-missatge/${row.id}"><button type="button" class="btn btn-warning btn-sm">Respondre</button></a>`,
   });
 
   if (isAdmin) {

@@ -36,12 +36,11 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
 if ($slug === "missatgesRebuts") {
 
     $db = new Database();
-    $id = $_GET['id'];
 
     $query = "SELECT 
 	        id, nomCognoms, email, telefon, missatge, form_ip, form_user_agent, dataEnviament
             FROM db_form_contacte
-            ORDER BY id ASC";
+            ORDER BY id DESC";
 
     try {
         $result = $db->getData($query);

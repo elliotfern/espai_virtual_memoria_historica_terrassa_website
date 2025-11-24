@@ -697,6 +697,13 @@ $routes = [
         'view' => BACKEND_URL . $urlIntranetDir['missatges'] . '/llistat-missatges.php'
     ]),
 
+    APP_INTRANET . $urlIntranet['missatges'] . '/veure-missatge/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['missatges'] . '/veure-missatge.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['missatges'] . '/respondre-missatge/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['missatges'] . '/respondre-missatge.php'
+    ]),
 
 ];
 
