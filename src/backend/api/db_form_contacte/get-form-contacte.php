@@ -38,8 +38,11 @@ if ($slug === "missatgesRebuts") {
     $db = new Database();
 
     $query = "SELECT 
-	        id, nomCognoms, email, telefon, missatge, form_ip, form_user_agent, dataEnviament
-            FROM db_form_contacte
+	          c.id, c.nomCognoms, c.email, c.telefon, c.missatge, c.form_ip, c.form_user_agent, c.dataEnviament, u.nom, c.estat
+            FROM db_form_contacte AS c
+            LEFT JOIN db_form_contacte_respostes AS r ON r.missatge_id = c.id
+            LEFT JOIN auth_users AS u ON r.usuari_id = u.id
+            GROUP BY c.id
             ORDER BY id DESC";
 
     try {
@@ -74,12 +77,47 @@ if ($slug === "missatgesRebuts") {
     $db = new Database();
     $id = $_GET['id'];
 
-    $query = "SELECT 
-	        c.id, c.nomCognoms, c.email, c.telefon, c.missatge, c.form_ip, c.form_user_agent, c.dataEnviament, u.nom
+    $query = "SELECT c.id, c.nomCognoms, c.email, c.telefon, c.missatge, c.form_ip, c.form_user_agent, c.dataEnviament, c.estat
             FROM db_form_contacte AS c
-            LEFT JOIN db_form_contacte_respostes AS r ON r.missatge_id = c.id
+            WHERE c.id = :id";
+
+    try {
+        $params = [':id' => $id];
+        $result = $db->getData($query, $params, true);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
+    // GET : Respostes emails missatges rebuts
+    // URL: https://memoriaterrassa.cat/api/form_contacte/get/RespostaId?id=${id}
+} else if ($slug === "RespostaId") {
+
+    $db = new Database();
+    $id = $_GET['id'];
+
+    $query = "SELECT r.id, r.missatge_id, r.usuari_id, r.resposta_subject, r.resposta_text, r.email_destinatari, r.data_resposta, r.created_at, r.updated_at, u.nom
+            FROM db_form_contacte_respostes AS r
             LEFT JOIN auth_users AS u ON r.usuari_id = u.id
-            WHERE id = :id";
+            WHERE c.id = :id";
 
     try {
         $params = [':id' => $id];

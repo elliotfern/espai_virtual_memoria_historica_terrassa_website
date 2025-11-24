@@ -89,7 +89,7 @@ export async function taulaMissatgesRebuts() {
             break;
         }
 
-        return `<button type="button" class="btn btn-sm ${btnClass}" disabled>${label}</button>`;
+        return `<button type="button" class="btn btn-sm ${btnClass}">${label}</button>`;
       },
     },
 

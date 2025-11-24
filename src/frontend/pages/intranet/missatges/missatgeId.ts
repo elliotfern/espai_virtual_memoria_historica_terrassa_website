@@ -1,4 +1,4 @@
-// Tipos de la resposta de la API
+// Tipos de la resposta de la API (missatge original)
 interface MissatgeData {
   id: number;
   nomCognoms: string;
@@ -15,6 +15,28 @@ interface ApiResponse {
   message: string;
   errors: unknown[];
   data: MissatgeData;
+}
+
+// --- TIPOS PARA LA RESPOSTA DEL EMAIL ---
+
+interface RespostaData {
+  id: number;
+  missatge_id: number;
+  usuari_id: number;
+  resposta_subject: string;
+  resposta_text: string;
+  email_destinatari: string;
+  data_resposta: string; // "YYYY-MM-DD HH:mm:ss"
+  created_at: string;
+  updated_at: string;
+  nom: string; // nom de l'usuari que ha respost
+}
+
+interface RespostaApiResponse {
+  status: 'success' | 'error';
+  message: string;
+  errors: unknown[];
+  data: RespostaData | null;
 }
 
 // Escapar HTML per seguretat
@@ -134,14 +156,66 @@ function renderMissatge(response: ApiResponse): void {
         </span>
       </div>
     </div>
+
+    <!-- Contenidor on mostrarem la resposta (si existeix) -->
+    <div id="missatgeRespostaEmail"></div>
   `;
 
   container.innerHTML = cardHtml;
 }
 
-// --- FETCH A LA API ---
+// --- RENDER DE LA RESPOSTA ---
+
+function renderResposta(respostaResp: RespostaApiResponse): void {
+  const container = document.getElementById('missatgeRespostaEmail');
+  if (!container) return;
+
+  // Si la API retorna error o no hi ha data, mostrem un missatge neutre
+  if (respostaResp.status !== 'success' || !respostaResp.data) {
+    container.innerHTML = `
+      <div class="card border-0">
+        <div class="card-body text-muted">
+          Encara no s'ha enviat cap resposta per aquest missatge.
+        </div>
+      </div>
+    `;
+    return;
+  }
+
+  const r = respostaResp.data;
+  const dataResposta = formatDataHoraEs(r.data_resposta);
+
+  container.innerHTML = `
+    <div class="card border-info mt-3">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <div>
+          <h6 class="mb-0">Resposta enviada</h6>
+          <small class="text-muted">
+            Per ${escapeHtml(r.nom)} · ${escapeHtml(dataResposta)}
+          </small>
+        </div>
+        <span class="badge bg-info text-dark text-uppercase">Resposta</span>
+      </div>
+      <div class="card-body">
+        <p class="mb-1">
+          <strong>Assumpte:</strong> ${escapeHtml(r.resposta_subject)}
+        </p>
+        <p class="mb-2">
+          <strong>Destinatari:</strong> 
+          <a href="mailto:${escapeHtml(r.email_destinatari)}">${escapeHtml(r.email_destinatari)}</a>
+        </p>
+        <div class="border rounded p-3 bg-light" style="white-space: pre-line;">
+          ${escapeHtml(r.resposta_text)}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// --- FETCH A LES API ---
 
 const API_URL = 'https://memoriaterrassa.cat/api/form_contacte/get/missatgeId';
+const RESPOSTA_API_URL = 'https://memoriaterrassa.cat/api/form_contacte/get/RespostaId';
 
 export async function carregarMissatge(id: number): Promise<void> {
   const container = document.getElementById('missatgeId');
@@ -167,6 +241,9 @@ export async function carregarMissatge(id: number): Promise<void> {
 
     const data: ApiResponse = await response.json();
     renderMissatge(data);
+
+    // Després de pintar el missatge, carreguem la resposta (si existeix)
+    await carregarResposta(id);
   } catch (error) {
     console.error('Error carregant el missatge:', error);
     if (container) {
@@ -176,5 +253,51 @@ export async function carregarMissatge(id: number): Promise<void> {
         </div>
       `;
     }
+  }
+}
+
+async function carregarResposta(id: number): Promise<void> {
+  const container = document.getElementById('missatgeRespostaEmail');
+  if (!container) return;
+
+  container.innerHTML = `
+    <div class="text-center py-3 text-muted">
+      Carregant resposta...
+    </div>
+  `;
+
+  try {
+    const response = await fetch(`${RESPOSTA_API_URL}?id=${encodeURIComponent(id.toString())}`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+      },
+      credentials: 'include', // per si cal cookie de sessió
+    });
+
+    // Si la API decideix retornar 404 quan no hi ha resposta:
+    if (response.status === 404) {
+      renderResposta({
+        status: 'error',
+        message: 'No hi ha resposta',
+        errors: [],
+        data: null,
+      });
+      return;
+    }
+
+    if (!response.ok) {
+      throw new Error(`Error HTTP: ${response.status}`);
+    }
+
+    const data: RespostaApiResponse = await response.json();
+    renderResposta(data);
+  } catch (error) {
+    console.error('Error carregant la resposta:', error);
+    container.innerHTML = `
+      <div class="alert alert-danger">
+        S'ha produït un error en carregar la resposta.
+      </div>
+    `;
   }
 }
