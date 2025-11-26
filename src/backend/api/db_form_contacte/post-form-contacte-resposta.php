@@ -197,6 +197,8 @@ try {
         ':email_destinatari' => $emailDestinatari,
     ]);
 
+
+
     $respostaId = (int)$conn->lastInsertId();
 
     // 3) Enviar el correu via SMTP de Brevo + PHPMailer
@@ -214,6 +216,7 @@ try {
         $mail->Encoding   = 'base64';
 
         $mail->setFrom($brevoFrom, $brevoFromName);
+        $mail->addReplyTo('email@memoriaterrassa.cat', 'Espai Virtual de la Memòria Història de Terrassa');
         $mail->addAddress($emailDestinatari, $nomCognoms);
 
         $mail->Subject = $subject;
@@ -303,6 +306,11 @@ try {
         $mail->AltBody = $respostaText;
 
         $mail->send();
+
+        // 4) Actualitzar l'estat del missatge original a 2 (Resposta enviada)
+        $updateSql = "UPDATE db_form_contacte SET estat = 2 WHERE id = :id";
+        $updateStmt = $conn->prepare($updateSql);
+        $updateStmt->execute([':id' => $missatgeId]);
 
         echo json_encode([
             'status'      => 'success',

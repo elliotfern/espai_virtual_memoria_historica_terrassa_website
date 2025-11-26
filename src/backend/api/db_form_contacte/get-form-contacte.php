@@ -117,7 +117,7 @@ if ($slug === "missatgesRebuts") {
     $query = "SELECT r.id, r.missatge_id, r.usuari_id, r.resposta_subject, r.resposta_text, r.email_destinatari, r.data_resposta, r.created_at, r.updated_at, u.nom
             FROM db_form_contacte_respostes AS r
             LEFT JOIN auth_users AS u ON r.usuari_id = u.id
-            WHERE c.id = :id";
+            WHERE r.missatge_id = :id";
 
     try {
         $params = [':id' => $id];
