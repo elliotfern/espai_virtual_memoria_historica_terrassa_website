@@ -39,7 +39,7 @@ function postDownload(url: string, selection: Selection) {
 function buildExportUrl(fmt: 'csv' | 'xlsx'): string {
   const host = `https://${window.location.hostname}`;
   // Usa tus rutas reales (PHP ejecutable)
-  return fmt === 'csv' ? `${host}/api/export/persones_csv` : `${host}/api/export/persones_xlsx`;
+  return fmt === 'csv' ? `${host}/api/export/persones_csv/ca` : `${host}/api/export/persones_xlsx/ca`;
 }
 
 /** API pública: dispara la descarga (POST) */

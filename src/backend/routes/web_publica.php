@@ -66,6 +66,9 @@ $base_routes = [
     // 7. Cronologia
     '/cronologia' => 'public/web-publica/cronologia.php',
 
+    // 8. Links
+    '/links' => 'public/web-publica/links.php',
+
     // Altres pagines
     '/credits' => 'public/web-publica/legal/credits.php',
     '/avis-legal' => 'public/web-publica/legal/avis-legal.php',
@@ -196,6 +199,14 @@ $routes = [
     // Cronologia
     '/cronologia'  =>  [
         'view' => 'public/web-publica/cronologia.php',
+        'needs_session' => false,
+        'header_footer' => false,
+        'header_menu_footer' => true
+    ],
+
+    // 8. Links
+    '/links'  =>  [
+        'view' => 'public/web-publica/links.php',
         'needs_session' => false,
         'header_footer' => false,
         'header_menu_footer' => true
