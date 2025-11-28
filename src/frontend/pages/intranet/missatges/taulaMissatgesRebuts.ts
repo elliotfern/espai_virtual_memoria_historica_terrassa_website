@@ -10,6 +10,7 @@ interface EspaiRow {
   dataEnviament: string;
   estat: string;
   nom: string;
+  nom_represaliat: string;
 }
 
 type Column<T> = {
@@ -43,6 +44,8 @@ export async function taulaMissatgesRebuts() {
     },
 
     { header: 'Data enviament', field: 'dataEnviament' },
+
+    { header: 'Represaliat', field: 'nom_represaliat' },
 
     {
       header: 'Usuari que respon',

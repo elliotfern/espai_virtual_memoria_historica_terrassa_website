@@ -138,6 +138,18 @@ if ($result['total'] >= $limite) {
 $errors = [];
 
 // Validación de los datos recibidos
+if (empty($data['aceptacio'])) {
+    $errors[] = "Has d'acceptar la política de privacitat.";
+} else {
+    $aceptacio = strip_tags(trim($data['aceptacio']));
+}
+
+if (empty($data['nom_represaliat'])) {
+    $errors[] = "Has d'introduir el nom i cognoms de la persona represaliada.";
+} else {
+    $nom_represaliat = strip_tags(trim($data['nom_represaliat']));
+}
+
 if (empty($data['nomCognoms'])) {
     $errors[] = "El camp 'Nom i Cognoms' és obligatori.";
 } else {
@@ -182,6 +194,7 @@ if (!empty($errors)) {
 $form_ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
 $form_user_agent = $_SERVER['HTTP_USER_AGENT'] ?? 'unknown';
 $dataEnviament = date('Y-m-d H:i:s');
+$estat = 1;
 
 // 	id 	nomCognoms 	email 	telefon 	missatge 	form_ip 	form_user_agent 	dataEnviament 	
 // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
@@ -198,7 +211,10 @@ try {
                 missatge,
                 form_ip,
                 form_user_agent,
-                dataEnviament
+                dataEnviament,
+                nom_represaliat,
+                estat
+
             ) VALUES (
                 :nomCognoms,
                 :email,
@@ -206,7 +222,9 @@ try {
                 :missatge,
                 :form_ip,
                 :form_user_agent,
-                :dataEnviament
+                :dataEnviament,
+                :nom_represaliat,
+                :estat
             )";
 
     // Preparar la consulta
@@ -220,6 +238,9 @@ try {
     $stmt->bindParam(':form_ip', $form_ip, PDO::PARAM_STR);
     $stmt->bindParam(':form_user_agent', $form_user_agent, PDO::PARAM_STR);
     $stmt->bindParam(':dataEnviament', $dataEnviament, PDO::PARAM_STR);
+    $stmt->bindParam(':estat', $estat, PDO::PARAM_INT);
+    $stmt->bindParam(':nom_represaliat', $nom_represaliat, PDO::PARAM_STR);
+
 
     // Ejecutar la consulta
     $stmt->execute();
@@ -287,6 +308,9 @@ try {
                     <h2>Nou formulari de contacte</h2>
                     <p>Hola,</p>
                     <p>Hem rebut un nou formulari de contacte</p>
+                    <p>Enviat per: ' . htmlspecialchars($nomCognoms) . '</p>
+                    <p>Missatge: ' . htmlspecialchars($missatge) . '</p>
+                    <br><br>
                     <p>Fes clic al següent botó per veure el missatge:</p>
                     <a class="button" href="' . htmlspecialchars($resetLink) . '">Intranet web</a>
 

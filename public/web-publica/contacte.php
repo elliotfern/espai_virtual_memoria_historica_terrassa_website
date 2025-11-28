@@ -37,7 +37,7 @@ $translate2 = $translations['cerca-avan'] ?? [];
             <input type="hidden" name="form_timestamp" id="form_timestamp" value="">
 
             <div class="mb-3">
-                <label for="nomCognoms" class="form-label negreta">Nom i Cognoms</label>
+                <label for="nomCognoms" class="form-label negreta">Nom i Cognoms:</label>
                 <input type="text" class="form-control" id="nomCognoms" name="nomCognoms" required>
                 <div class="avis-form">
                     * Camp obligatori
@@ -45,7 +45,7 @@ $translate2 = $translations['cerca-avan'] ?? [];
             </div>
 
             <div class="mb-3">
-                <label for="email" class="form-label negreta">Correu electrònic</label>
+                <label for="email" class="form-label negreta">Correu electrònic:</label>
                 <input type="email" class="form-control" id="email" name="email" required>
                 <div class="avis-form">
                     * Camp obligatori
@@ -53,13 +53,21 @@ $translate2 = $translations['cerca-avan'] ?? [];
             </div>
 
             <div class="mb-3">
-                <label for="telefon" class="form-label negreta">Telèfon</label>
+                <label for="telefon" class="form-label negreta">Telèfon:</label>
                 <input type="text" class="form-control" id="telefon" name="telefon">
             </div>
 
             <div class="mb-3">
-                <label for="missatge" class="form-label negreta">Missatge</label>
-                <textarea class="form-control" id="missatge" name="missatge" rows="8" required></textarea>
+                <label for="nom_represaliat" class="form-label negreta">Nom i cognoms de la persona represaliada:</label>
+                <input type="text" class="form-control" id="nom_represaliat" name="nom_represaliat">
+                <div class="avis-form">
+                    * Camp obligatori
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="missatge" class="form-label negreta">Missatge:</label>
+                <textarea class="form-control" id="missatge" name="missatge" rows="10" required></textarea>
                 <div class="avis-form">
                     * Camp obligatori
                 </div>
@@ -68,9 +76,30 @@ $translate2 = $translations['cerca-avan'] ?? [];
             <input type="hidden" name="form_ip" value="">
             <input type="hidden" name="form_user_agent" value="">
 
-            <button type="submit" class="btn btn-primary" onclick="enviarFormularioPost(event)">Envia</button>
+            <div class="mb-3" class="legal-info" style="margin-bottom:15px">
+
+                <label for="aceptacio">
+                    <input type="checkbox" id="aceptacio" name="aceptacio" required>
+                    <span class="small">Accepto la <a href="https://memoriaterrassa.cat/politica-privacitat" target="_blank">política de privacitat</a> i dono el meu permís al tractament de les meves dades personals.</span>
+                </label>
+            </div>
+
+            <button type="submit" class="btn btn-primary" onclick="enviarFormularioPost(event)">Envia el missatge</button>
         </form>
 
+        <div class="legal-info small" style="margin-bottom:15px; margin-top:55px">
+
+            <p class="small mt-2"><strong>Responsable del tractament de les dades:</strong></p>
+            <p class="small">Entitat: Centre d'Estudis Històrics de Terrassa (CEHT)</p>
+            <p class="small">NIF: G58426875</p>
+            <p class="small">Direcció postal: C/ Baldrich, 268 — 08223 Terrassa (Barcelona).</p>
+            <p class="small">Email de contacte: email@memoriaterrassa.cat</a></p>
+
+            <p class="small mt-2">
+                <strong>Informació legal:</strong><br>
+                Us informem que les dades de caràcter personal que ens proporcioneu seran tractades per l'entitat "Centre d'Estudis Històrics de Terrassa" com a responsable del tractament. Les recollim amb la finalitat de gestionar el vostre missatge i que pugueu obtenir una resposta correcte. El fet que no introduïu les dades de caràcter personal que apareixen en el formulari com a obligatòries podrà tenir com a conseqüència que no es pugui atendre la vostra sol·licitud. No es preveuen cessions a tercers ni transferències a tercers països. Podreu exercir els vostres drets d'accés, rectificació i limitació i suprimir les dades a email@memoriaterrassa.cat, com també el dret de presentar una reclamació davant una autoritat de control. Podeu consultar la informació addicional i detallada sobre protecció de dades a la nostra <a href="https://memoriaterrassa.cat/politica-privacitat" target="_blank">política de privadesa</a>.
+            </p>
+        </div>
     </div>
 </div>
 
@@ -125,6 +154,12 @@ $translate2 = $translations['cerca-avan'] ?? [];
                 } else {
                     errTextDiv.textContent = data.message || "S'ha produït un error a la base de dades.";
                 }
+
+                // Desplazar al mensaje de error
+                errMessageDiv.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center"
+                });
             }
 
             return; // Salir de la función después de mostrar el error
@@ -141,6 +176,12 @@ $translate2 = $translations['cerca-avan'] ?? [];
                 okTextDiv.textContent = data.message || "Formulari enviat correctament.";
                 errMessageDiv.style.display = "none";
             }
+
+            // Desplazar al mensaje de éxito
+            okMessageDiv.scrollIntoView({
+                behavior: "smooth",
+                block: "center"
+            });
 
             form.reset(); // Opcional: limpiar el formulario
         }
