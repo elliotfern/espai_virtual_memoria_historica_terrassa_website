@@ -255,6 +255,10 @@ $routes = [
     '/api/form_contacte/post' => ['view' => 'src/backend/api/db_form_contacte/post-form-contacte.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
 
     '/api/form_contacte/resposta/post' => ['view' => 'src/backend/api/db_form_contacte/post-form-contacte-resposta.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+
+    // CRON MISSATGES IMAP
+    '/api/form_contacte/cron/imap' => ['view' => 'src/backend/api/db_form_contacte/cron-imap.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+
 ];
 
 return $routes;

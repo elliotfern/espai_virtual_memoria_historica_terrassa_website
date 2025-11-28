@@ -245,6 +245,23 @@ try {
     // Ejecutar la consulta
     $stmt->execute();
 
+    $idMissatge = $pdo->lastInsertId();
+
+    // Token tipo MT-000123 (rellenando con ceros a la izquierda)
+    $token = 'MT-' . str_pad($idMissatge, 6, '0', STR_PAD_LEFT);
+
+    // Guardamos el token en la fila recién creada
+    $stmtToken = $pdo->prepare("
+    UPDATE db_form_contacte 
+    SET token_assumpte = :token 
+    WHERE id = :id
+    ");
+    $stmtToken->execute([
+        ':token' => $token,
+        ':id'    => $idMissatge,
+    ]);
+
+
     // 5. Preparar y enviar email
     $resetLink = "https://memoriaterrassa.cat/gestio";
 

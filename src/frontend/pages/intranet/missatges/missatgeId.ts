@@ -1,4 +1,4 @@
-// Tipos de la resposta de la API (missatge original)
+// Tipus de la resposta de la API (missatge original)
 interface MissatgeData {
   id: number;
   nomCognoms: string;
@@ -10,15 +10,7 @@ interface MissatgeData {
   dataEnviament: string; // "YYYY-MM-DD HH:mm:ss"
 }
 
-interface ApiResponse {
-  status: 'success' | 'error';
-  message: string;
-  errors: unknown[];
-  data: MissatgeData;
-}
-
-// --- TIPOS PARA LA RESPOSTA DEL EMAIL ---
-
+// Resposta enviada des de la intranet (gestor)
 interface RespostaData {
   id: number;
   missatge_id: number;
@@ -29,14 +21,47 @@ interface RespostaData {
   data_resposta: string; // "YYYY-MM-DD HH:mm:ss"
   created_at: string;
   updated_at: string;
-  nom: string; // nom de l'usuari que ha respost
+  nom: string; // nom de l'usuari gestor que ha respost
 }
 
-interface RespostaApiResponse {
+// Resposta que arriba per email (usuari)
+interface RespostaEmailData {
+  id: number;
+  missatge_id: number;
+  email_remitent: string;
+  email_rebut: string;
+  subject: string;
+  body: string;
+  rebut_a: string; // "YYYY-MM-DD HH:mm:ss"
+  created_at: string;
+}
+
+// Conversa completa que retorna la API
+interface ConversacioData {
+  missatge: MissatgeData;
+  respostes_gestor: RespostaData[];
+  respostes_email: RespostaEmailData[];
+}
+
+interface ConversacioApiResponse {
   status: 'success' | 'error';
   message: string;
   errors: unknown[];
-  data: RespostaData | null;
+  data: ConversacioData | null;
+}
+
+// Tipus unificat per al fil cronològic
+type TipusMissatgeFil = 'missatge_original' | 'resposta_gestor' | 'resposta_email_usuari';
+
+interface ItemFil {
+  id: string; // ej: "form_5", "gestor_12", "email_7"
+  tipus: TipusMissatgeFil;
+  autorNom: string;
+  autorEmail: string;
+  dataIso: string; // data original de la API
+  dataFormatejada: string; // "dd/mm/aaaa HH:MM:SS"
+  subject?: string;
+  text: string;
 }
 
 // Escapar HTML per seguretat
@@ -47,17 +72,17 @@ function escapeHtml(str: string | null | undefined): string {
 
 // --- HELPERS FECHA/HORA ---
 
-// Parsea "YYYY-MM-DD HH:mm:ss" como fecha UTC
+// Parsea "YYYY-MM-DD HH:mm:ss" com a data UTC
 function parseApiDateUtc(value: string): Date | null {
   if (!value) return null;
-  const [datePart, timePart] = value.split(' '); // "2025-11-02" "11:31:41"
+  const [datePart, timePart] = value.split(' ');
   if (!datePart || !timePart) return null;
 
   const [yearStr, monthStr, dayStr] = datePart.split('-');
   const [hourStr, minuteStr, secondStr] = timePart.split(':');
 
   const year = Number(yearStr);
-  const month = Number(monthStr); // 1–12
+  const month = Number(monthStr);
   const day = Number(dayStr);
   const hour = Number(hourStr);
   const minute = Number(minuteStr);
@@ -67,11 +92,10 @@ function parseApiDateUtc(value: string): Date | null {
     return null;
   }
 
-  // Creamos fecha en UTC
   return new Date(Date.UTC(year, month - 1, day, hour, minute, second));
 }
 
-// Formatea la fecha a "dd/mm/aaaa HH:MM:SS" en zona horaria España
+// Formata la data a "dd/mm/aaaa HH:MM:SS" en zona horària Espanya
 function formatDataHoraEs(dataEnviament: string): string {
   const d = parseApiDateUtc(dataEnviament);
   if (!d) return '';
@@ -85,34 +109,97 @@ function formatDataHoraEs(dataEnviament: string): string {
     minute: '2-digit',
     second: '2-digit',
     hour12: false,
-  }); // ej: "02/11/2025 12:31:41"
+  });
 }
 
-// Pintar la card dins del div#missatgeId
-function renderMissatge(response: ApiResponse): void {
+// --- CONSTRUCCIÓ DEL FIL DE CONVERSA ---
+
+function construirFilConversacio(data: ConversacioData): ItemFil[] {
+  const items: ItemFil[] = [];
+
+  // 1) Missatge original
+  const m = data.missatge;
+  items.push({
+    id: `form_${m.id}`,
+    tipus: 'missatge_original',
+    autorNom: m.nomCognoms,
+    autorEmail: m.email,
+    dataIso: m.dataEnviament,
+    dataFormatejada: formatDataHoraEs(m.dataEnviament),
+    subject: 'Missatge de contacte',
+    text: m.missatge,
+  });
+
+  // 2) Respostes del gestor (intranet)
+  for (const r of data.respostes_gestor) {
+    items.push({
+      id: `gestor_${r.id}`,
+      tipus: 'resposta_gestor',
+      autorNom: r.nom,
+      // Si més endavant tens el correu del gestor, aquí el pots canviar.
+      autorEmail: r.email_destinatari,
+      dataIso: r.data_resposta,
+      dataFormatejada: formatDataHoraEs(r.data_resposta),
+      subject: r.resposta_subject,
+      text: r.resposta_text,
+    });
+  }
+
+  // 3) Respostes via email (usuari)
+  for (const e of data.respostes_email) {
+    items.push({
+      id: `email_${e.id}`,
+      tipus: 'resposta_email_usuari',
+      autorNom: e.email_remitent,
+      autorEmail: e.email_remitent,
+      dataIso: e.rebut_a,
+      dataFormatejada: formatDataHoraEs(e.rebut_a),
+      subject: e.subject,
+      text: e.body,
+    });
+  }
+
+  // 4) Ordenar cronològicament
+  items.sort((a, b) => {
+    const da = parseApiDateUtc(a.dataIso)?.getTime() ?? 0;
+    const db = parseApiDateUtc(b.dataIso)?.getTime() ?? 0;
+    return da - db;
+  });
+
+  return items;
+}
+
+// --- RENDER DE LA CONVERSA COMPLETA ---
+
+const CONVERSACIO_API_URL = 'https://memoriaterrassa.cat/api/form_contacte/get/conversacio';
+
+function renderConversacio(resp: ConversacioApiResponse): void {
   const container = document.getElementById('missatgeId');
   if (!container) return;
 
-  if (response.status !== 'success' || !response.data) {
+  if (resp.status !== 'success' || !resp.data) {
     container.innerHTML = `
       <div class="alert alert-danger mb-0">
-        No s'ha pogut carregar el missatge.
+        No s'ha pogut carregar la conversa d'aquest missatge.
       </div>
     `;
     return;
   }
 
-  const { id, nomCognoms, email, telefon, missatge, form_ip, form_user_agent, dataEnviament } = response.data;
+  const data = resp.data;
+  const fil = construirFilConversacio(data);
 
-  const dataHoraFormatejada = formatDataHoraEs(dataEnviament);
+  // Card del missatge original
+  const m = data.missatge;
+  const dataHoraFormatejada = formatDataHoraEs(m.dataEnviament);
 
-  const cardHtml = `
+  let html = `
     <div class="card shadow-sm mb-3">
       <div class="card-header d-flex justify-content-between align-items-center">
         <div>
-          <h5 class="mb-0">${escapeHtml(nomCognoms)}</h5>
+          <h5 class="mb-0">${escapeHtml(m.nomCognoms)}</h5>
           <small class="text-muted">
-            ID #${id} · ${escapeHtml(dataHoraFormatejada)}
+            ID #${m.id} · ${escapeHtml(dataHoraFormatejada)}
           </small>
         </div>
         <span class="badge bg-success text-uppercase">Missatge</span>
@@ -122,12 +209,12 @@ function renderMissatge(response: ApiResponse): void {
         <dl class="row mb-3">
           <dt class="col-sm-3">Email</dt>
           <dd class="col-sm-9 mb-1">
-            <a href="mailto:${escapeHtml(email)}">${escapeHtml(email)}</a>
+            <a href="mailto:${escapeHtml(m.email)}">${escapeHtml(m.email)}</a>
           </dd>
 
           <dt class="col-sm-3">Telèfon</dt>
           <dd class="col-sm-9 mb-1">
-            ${telefon ? escapeHtml(telefon) : '<span class="text-muted">No informat</span>'}
+            ${m.telefon ? escapeHtml(m.telefon) : '<span class="text-muted">No informat</span>'}
           </dd>
 
           <dt class="col-sm-3">Data enviament</dt>
@@ -138,11 +225,11 @@ function renderMissatge(response: ApiResponse): void {
 
         <h6 class="fw-semibold">Missatge</h6>
         <div class="border rounded p-3 bg-light mb-3" style="white-space: pre-line;">
-          ${escapeHtml(missatge)}
+          ${escapeHtml(m.missatge)}
         </div>
 
         <a 
-          href="https://memoriaterrassa.cat/gestio/missatges/respondre-missatge/${id}" 
+          href="https://memoriaterrassa.cat/gestio/missatges/respondre-missatge/${m.id}" 
           class="btn btn-primary"
         >
           Respondre missatge
@@ -150,124 +237,88 @@ function renderMissatge(response: ApiResponse): void {
       </div>
 
       <div class="card-footer text-muted small d-flex flex-wrap gap-3">
-        <span><strong>IP:</strong> ${escapeHtml(form_ip)}</span>
+        <span><strong>IP:</strong> ${escapeHtml(m.form_ip)}</span>
         <span class="text-truncate">
-          <strong>User agent:</strong> ${escapeHtml(form_user_agent)}
+          <strong>User agent:</strong> ${escapeHtml(m.form_user_agent)}
         </span>
       </div>
     </div>
-
-    <!-- Contenidor on mostrarem la resposta (si existeix) -->
-    <div id="missatgeRespostaEmail"></div>
   `;
 
-  container.innerHTML = cardHtml;
-}
-
-// --- RENDER DE LA RESPOSTA ---
-
-function renderResposta(respostaResp: RespostaApiResponse): void {
-  const container = document.getElementById('missatgeRespostaEmail');
-  if (!container) return;
-
-  // Si la API retorna error o no hi ha data, mostrem un missatge neutre
-  if (respostaResp.status !== 'success' || !respostaResp.data) {
-    container.innerHTML = `
-      <div class="card border-0">
-        <div class="card-body text-muted">
-          Encara no s'ha enviat cap resposta per aquest missatge.
-        </div>
-      </div>
-    `;
-    return;
-  }
-
-  const r = respostaResp.data;
-  const dataResposta = formatDataHoraEs(r.data_resposta);
-
-  container.innerHTML = `
-    <div class="card border-info mt-3">
-      <div class="card-header d-flex justify-content-between align-items-center">
-        <div>
-          <h6 class="mb-0">Resposta enviada</h6>
-          <small class="text-muted">
-            Per ${escapeHtml(r.nom)} · ${escapeHtml(dataResposta)}
-          </small>
-        </div>
-        <span class="badge bg-info text-dark text-uppercase">Resposta</span>
+  // Bloc de conversa sota del missatge original
+  html += `
+    <div class="card mt-3">
+      <div class="card-header">
+        <h6 class="mb-0">Conversa completa</h6>
       </div>
       <div class="card-body">
-        <p class="mb-1">
-          <strong>Assumpte:</strong> ${escapeHtml(r.resposta_subject)}
-        </p>
-        <p class="mb-2">
-          <strong>Destinatari:</strong> 
-          <a href="mailto:${escapeHtml(r.email_destinatari)}">${escapeHtml(r.email_destinatari)}</a>
-        </p>
-        <div class="border rounded p-3 bg-light" style="white-space: pre-line;">
-          ${escapeHtml(r.resposta_text)}
+  `;
+
+  if (fil.length <= 1) {
+    html += `
+      <p class="text-muted mb-0">
+        Encara no s'ha intercanviat cap resposta per aquest missatge.
+      </p>
+    `;
+  } else {
+    html += `<div class="list-group list-group-flush">`;
+
+    for (const item of fil) {
+      // El missatge original ja s'ha pintat a la card principal
+      if (item.tipus === 'missatge_original') continue;
+
+      const badge = item.tipus === 'resposta_gestor' ? '<span class="badge bg-info text-dark ms-2">Resposta gestor</span>' : '<span class="badge bg-secondary ms-2">Resposta usuari (email)</span>';
+
+      html += `
+        <div class="list-group-item">
+          <div class="d-flex justify-content-between align-items-center mb-1">
+            <div>
+              <strong>${escapeHtml(item.autorNom || item.autorEmail)}</strong>
+              ${badge}
+            </div>
+            <small class="text-muted">${escapeHtml(item.dataFormatejada)}</small>
+          </div>
+          ${
+            item.subject
+              ? `
+            <p class="mb-1">
+              <strong>Assumpte:</strong> ${escapeHtml(item.subject)}
+            </p>
+          `
+              : ''
+          }
+          <div class="border rounded p-2 bg-light" style="white-space: pre-line;">
+            ${escapeHtml(item.text)}
+          </div>
         </div>
+      `;
+    }
+
+    html += `</div>`;
+  }
+
+  html += `
       </div>
     </div>
   `;
+
+  container.innerHTML = html;
 }
 
-// --- FETCH A LES API ---
+// --- FETCH A LA API DE CONVERSA ---
 
-const API_URL = 'https://memoriaterrassa.cat/api/form_contacte/get/missatgeId';
-const RESPOSTA_API_URL = 'https://memoriaterrassa.cat/api/form_contacte/get/RespostaId';
-
-export async function carregarMissatge(id: number): Promise<void> {
+export async function carregarConversacioMissatge(id: number): Promise<void> {
   const container = document.getElementById('missatgeId');
   if (container) {
     container.innerHTML = `
       <div class="text-center py-4 text-muted">
-        Carregant missatge...
+        Carregant conversa...
       </div>
     `;
   }
 
   try {
-    const response = await fetch(`${API_URL}?id=${encodeURIComponent(id.toString())}`, {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error(`Error HTTP: ${response.status}`);
-    }
-
-    const data: ApiResponse = await response.json();
-    renderMissatge(data);
-
-    // Després de pintar el missatge, carreguem la resposta (si existeix)
-    await carregarResposta(id);
-  } catch (error) {
-    console.error('Error carregant el missatge:', error);
-    if (container) {
-      container.innerHTML = `
-        <div class="alert alert-danger">
-          S'ha produït un error en carregar el missatge.
-        </div>
-      `;
-    }
-  }
-}
-
-async function carregarResposta(id: number): Promise<void> {
-  const container = document.getElementById('missatgeRespostaEmail');
-  if (!container) return;
-
-  container.innerHTML = `
-    <div class="text-center py-3 text-muted">
-      Carregant resposta...
-    </div>
-  `;
-
-  try {
-    const response = await fetch(`${RESPOSTA_API_URL}?id=${encodeURIComponent(id.toString())}`, {
+    const response = await fetch(`${CONVERSACIO_API_URL}?id=${encodeURIComponent(id.toString())}`, {
       method: 'GET',
       headers: {
         Accept: 'application/json',
@@ -275,29 +326,20 @@ async function carregarResposta(id: number): Promise<void> {
       credentials: 'include', // per si cal cookie de sessió
     });
 
-    // Si la API decideix retornar 404 quan no hi ha resposta:
-    if (response.status === 404) {
-      renderResposta({
-        status: 'error',
-        message: 'No hi ha resposta',
-        errors: [],
-        data: null,
-      });
-      return;
-    }
-
     if (!response.ok) {
       throw new Error(`Error HTTP: ${response.status}`);
     }
 
-    const data: RespostaApiResponse = await response.json();
-    renderResposta(data);
+    const data: ConversacioApiResponse = await response.json();
+    renderConversacio(data);
   } catch (error) {
-    console.error('Error carregant la resposta:', error);
-    container.innerHTML = `
-      <div class="alert alert-danger">
-        S'ha produït un error en carregar la resposta.
-      </div>
-    `;
+    console.error('Error carregant la conversa:', error);
+    if (container) {
+      container.innerHTML = `
+        <div class="alert alert-danger">
+          S'ha produït un error en carregar la conversa del missatge.
+        </div>
+      `;
+    }
   }
 }

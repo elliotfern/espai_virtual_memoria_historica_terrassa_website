@@ -93,13 +93,12 @@ if (empty($data['missatge_id']) || !ctype_digit((string)$data['missatge_id'])) {
     $missatgeId = (int)$data['missatge_id'];
 }
 
-// subject
+// subject (assumpte base, encara sense token)
 if (empty($data['subject'])) {
-    // Puedes poner un subject por defecto si no lo envían
-    $subject = "Resposta al teu missatge a Memòria Terrassa";
+    $subjectBase = "Resposta al teu missatge a Memòria Terrassa";
 } else {
-    $subject = trim((string)$data['subject']);
-    if (mb_strlen($subject, 'UTF-8') > 255) {
+    $subjectBase = trim((string)$data['subject']);
+    if (mb_strlen($subjectBase, 'UTF-8') > 255) {
         $errors[] = "L'assumpte és massa llarg (màx. 255 caràcters).";
     }
 }
@@ -142,7 +141,7 @@ try {
     /** @var PDO $conn */
 
     // 1) Recuperar el missatge original (email + nomCognoms)
-    $sql = "SELECT nomCognoms, email 
+    $sql = "SELECT nomCognoms, email, token_assumpte
             FROM db_form_contacte
             WHERE id = :id";
     $stmt = $conn->prepare($sql);
@@ -160,6 +159,7 @@ try {
 
     $nomCognoms       = (string)$original['nomCognoms'];
     $emailDestinatari = (string)$original['email'];
+    $tokenAssumpte    = $original['token_assumpte'] ?? null;
 
     if (!filter_var($emailDestinatari, FILTER_VALIDATE_EMAIL)) {
         http_response_code(400);
@@ -169,6 +169,31 @@ try {
         ]);
         exit;
     }
+
+    // Si por lo que sea no tuviera token (casos antics), el generem sobre la marxa
+    if (empty($tokenAssumpte)) {
+        $tokenAssumpte = 'MT-' . str_pad((string)$missatgeId, 6, '0', STR_PAD_LEFT);
+
+        // Opcional però recomanable: actualitzar la taula perquè no torni a estar buit
+        $sqlUpdateToken = "UPDATE db_form_contacte 
+                       SET token_assumpte = :token 
+                       WHERE id = :id";
+        $stmtUpdateToken = $conn->prepare($sqlUpdateToken);
+        $stmtUpdateToken->execute([
+            ':token' => $tokenAssumpte,
+            ':id'    => $missatgeId,
+        ]);
+    }
+
+    // Construim l'assumpte final amb el token
+    // Format: [MT-000123] Assumpte base
+    $subject = '[' . $tokenAssumpte . '] ' . $subjectBase;
+
+    // Ens assegurem que no superi 255 caràcters
+    if (mb_strlen($subject, 'UTF-8') > 255) {
+        $subject = mb_substr($subject, 0, 255, 'UTF-8');
+    }
+
 
     // 2) Insertar la resposta a la taula db_form_contacte_respostes
     $sql = "INSERT INTO db_form_contacte_respostes (
@@ -192,7 +217,7 @@ try {
     $stmt->execute([
         ':missatge_id'      => $missatgeId,
         ':usuari_id'        => $usuariId,
-        ':resposta_subject' => $subject,
+        ':resposta_subject'  => $subject,       // ✅ ahora es el subject con [TOKEN]
         ':resposta_text'    => $respostaText,
         ':email_destinatari' => $emailDestinatari,
     ]);
@@ -219,7 +244,7 @@ try {
         $mail->addReplyTo('email@memoriaterrassa.cat', 'Espai Virtual de la Memòria Història de Terrassa');
         $mail->addAddress($emailDestinatari, $nomCognoms);
 
-        $mail->Subject = $subject;
+        $mail->Subject = $subject; // ✅ subject con [MT-000123]
         $mail->isHTML(true);
 
         // HTML: convertimos saltos de línea a <br>

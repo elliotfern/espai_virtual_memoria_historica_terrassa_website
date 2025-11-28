@@ -17,8 +17,15 @@
             <div class="invalid-feedback" id="usernameFeedback"></div>
 
             <label for="password" class="negreta">Contrasenya</label>
-            <input type="password" name="password" id="password" class="form-control">
+            <div class="input-group">
+              <input type="password" name="password" id="password" class="form-control">
+              <button class="btn btn-outline-secondary" type="button" id="togglePassword"
+                aria-label="Mostrar o amagar la contrasenya">
+                👁
+              </button>
+            </div>
             <div class="invalid-feedback" id="passwordFeedback"></div>
+
 
             <button name="login" id="btnLogin" class="btn btn-primary">Entra</button>
           </div>
@@ -30,3 +37,42 @@
     </div>
   </div>
 </div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const passwordInput = document.getElementById("password");
+    const toggleBtn = document.getElementById("togglePassword");
+
+    let hideTimeout = null;
+
+    if (toggleBtn && passwordInput) {
+      toggleBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+
+        // Si actualmente está oculta, la mostramos temporalmente
+        if (passwordInput.type === "password") {
+          passwordInput.type = "text";
+          toggleBtn.textContent = "🙈"; // cambia el icono
+
+          // Limpiar cualquier timeout anterior
+          if (hideTimeout) {
+            clearTimeout(hideTimeout);
+          }
+
+          // Volver a ocultar la contraseña después de 4 segundos
+          hideTimeout = setTimeout(() => {
+            passwordInput.type = "password";
+            toggleBtn.textContent = "👁";
+          }, 4000);
+        } else {
+          // Si ya está visible y vuelve a clicar, la ocultamos inmediatamente
+          if (hideTimeout) {
+            clearTimeout(hideTimeout);
+          }
+          passwordInput.type = "password";
+          toggleBtn.textContent = "👁";
+        }
+      });
+    }
+  });
+</script>

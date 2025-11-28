@@ -7,7 +7,7 @@ import { fontsDocumentals } from './fonts-documentals/fontsDocumentals';
 import { formBiografies } from './biografies/formBiografies';
 import { formFamiliars } from './familiars/formFamiliars';
 import { taulaMissatgesRebuts } from './missatges/taulaMissatgesRebuts';
-import { carregarMissatge } from './missatges/missatgeId';
+import { carregarConversacioMissatge } from './missatges/missatgeId';
 import { renderRespostaForm } from './missatges/respondreMissatge';
 
 export function intranet() {
@@ -51,7 +51,7 @@ export function intranet() {
       taulaMissatgesRebuts();
     } else if (pageType[2] === 'veure-missatge') {
       const id = Number.parseInt(pageType?.[3] ?? '', 10);
-      carregarMissatge(id);
+      carregarConversacioMissatge(id);
     } else if (pageType[2] === 'respondre-missatge') {
       const id = Number.parseInt(pageType?.[3] ?? '', 10);
       renderRespostaForm(id);

@@ -38,7 +38,7 @@ if ($slug === "missatgesRebuts") {
     $db = new Database();
 
     $query = "SELECT 
-	          c.id, c.nomCognoms, c.email, c.telefon, c.missatge, c.form_ip, c.form_user_agent, c.dataEnviament, u.nom, c.estat
+	          c.id, c.nomCognoms, c.email, c.telefon, c.missatge, c.form_ip, c.form_user_agent, c.dataEnviament, u.nom, c.estat, c.nom_represaliat
             FROM db_form_contacte AS c
             LEFT JOIN db_form_contacte_respostes AS r ON r.missatge_id = c.id
             LEFT JOIN auth_users AS u ON r.usuari_id = u.id
@@ -77,7 +77,7 @@ if ($slug === "missatgesRebuts") {
     $db = new Database();
     $id = $_GET['id'];
 
-    $query = "SELECT c.id, c.nomCognoms, c.email, c.telefon, c.missatge, c.form_ip, c.form_user_agent, c.dataEnviament, c.estat
+    $query = "SELECT c.id, c.nomCognoms, c.email, c.telefon, c.missatge, c.form_ip, c.form_user_agent, c.dataEnviament, c.estat, c.nom_represaliat
             FROM db_form_contacte AS c
             WHERE c.id = :id";
 
@@ -135,6 +135,121 @@ if ($slug === "missatgesRebuts") {
         Response::success(
             MissatgesAPI::success('get'),
             $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
+    // GET : Respostes emails missatges rebuts
+    // URL: https://memoriaterrassa.cat/api/form_contacte/get/conversacio?id=${id}
+} else if ($slug === "conversacio") {
+
+
+    $db = new Database();
+
+    // Validació bàsica de l'ID
+    if (!isset($_GET['id']) || !ctype_digit((string)$_GET['id'])) {
+        Response::error(
+            MissatgesAPI::error('parametres'),
+            ['ID de missatge no vàlid'],
+            400
+        );
+        return;
+    }
+
+    $id = (int)$_GET['id'];
+
+    try {
+        // 1) Missatge original
+        $queryMissatge = "
+            SELECT 
+                c.id,
+                c.nomCognoms,
+                c.email,
+                c.telefon,
+                c.missatge,
+                c.form_ip,
+                c.form_user_agent,
+                c.dataEnviament,
+                c.estat,
+                c.nom_represaliat
+            FROM db_form_contacte AS c
+            WHERE c.id = :id
+        ";
+
+        // true => UNA sola fila (ajusta si en el teu getData funciona al revés)
+        $missatge = $db->getData($queryMissatge, [':id' => $id], true);
+
+        if (empty($missatge)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        // 2) Respostes del gestor (intranet)
+        $queryRespostesGestor = "
+            SELECT 
+                r.id,
+                r.missatge_id,
+                r.usuari_id,
+                r.resposta_subject,
+                r.resposta_text,
+                r.email_destinatari,
+                r.data_resposta,
+                r.created_at,
+                r.updated_at,
+                u.nom
+            FROM db_form_contacte_respostes AS r
+            LEFT JOIN auth_users AS u ON r.usuari_id = u.id
+            WHERE r.missatge_id = :id
+            ORDER BY r.data_resposta ASC
+        ";
+
+        // false => MÚLTIPLES files (ajusta si cal)
+        $respostesGestor = $db->getData($queryRespostesGestor, [':id' => $id], false);
+        if (empty($respostesGestor)) {
+            $respostesGestor = [];
+        }
+
+        // 3) Respostes via email (usuari)
+        $queryRespostesEmail = "
+            SELECT 
+                e.id,
+                e.missatge_id,
+                e.email_remitent,
+                e.email_rebut,
+                e.subject,
+                e.body,
+                e.rebut_a,
+                e.created_at
+            FROM db_form_contacte_respostes_email AS e
+            WHERE e.missatge_id = :id
+            ORDER BY e.rebut_a ASC
+        ";
+
+        $respostesEmail = $db->getData($queryRespostesEmail, [':id' => $id], false);
+        if (empty($respostesEmail)) {
+            $respostesEmail = [];
+        }
+
+        // 4) Construir l'objecte data que espera el frontend
+        $data = [
+            'missatge'         => $missatge,
+            'respostes_gestor' => $respostesGestor,
+            'respostes_email'  => $respostesEmail,
+        ];
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $data,
             200
         );
     } catch (PDOException $e) {
