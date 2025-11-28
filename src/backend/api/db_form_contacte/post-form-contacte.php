@@ -245,13 +245,13 @@ try {
     // Ejecutar la consulta
     $stmt->execute();
 
-    $idMissatge = $pdo->lastInsertId();
+    $idMissatge = $conn->lastInsertId();
 
     // Token tipo MT-000123 (rellenando con ceros a la izquierda)
     $token = 'MT-' . str_pad($idMissatge, 6, '0', STR_PAD_LEFT);
 
     // Guardamos el token en la fila recién creada
-    $stmtToken = $pdo->prepare("
+    $stmtToken = $conn->prepare("
     UPDATE db_form_contacte 
     SET token_assumpte = :token 
     WHERE id = :id

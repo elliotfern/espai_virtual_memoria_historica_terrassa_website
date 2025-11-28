@@ -269,6 +269,21 @@ function renderConversacio(resp: ConversacioApiResponse): void {
 
       const badge = item.tipus === 'resposta_gestor' ? '<span class="badge bg-info text-dark ms-2">Resposta gestor</span>' : '<span class="badge bg-secondary ms-2">Resposta usuari (email)</span>';
 
+      // Botó "Respondre" només per missatges de l'usuari (via email)
+      const respondButtonHtml =
+        item.tipus === 'resposta_email_usuari'
+          ? `
+            <div class="mt-2 text-end">
+              <a 
+                href="https://memoriaterrassa.cat/gestio/missatges/respondre-missatge/${m.id}" 
+                class="btn btn-sm btn-outline-primary"
+              >
+                Respondre
+              </a>
+            </div>
+          `
+          : '';
+
       html += `
         <div class="list-group-item">
           <div class="d-flex justify-content-between align-items-center mb-1">
@@ -290,6 +305,7 @@ function renderConversacio(resp: ConversacioApiResponse): void {
           <div class="border rounded p-2 bg-light" style="white-space: pre-line;">
             ${escapeHtml(item.text)}
           </div>
+          ${respondButtonHtml}
         </div>
       `;
     }
