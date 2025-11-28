@@ -232,7 +232,7 @@ function renderConversacio(resp: ConversacioApiResponse): void {
   const dataHoraFormatejada = formatDataHoraEs(m.dataEnviament);
 
   // Badge d'estat
-  const estatBadge = m.estat === 4 ? '<span class="badge bg-dark text-uppercase ms-2">Tancada</span>' : '<span class="badge bg-success text-uppercase ms-2">Oberta</span>';
+  const estatBadge = m.estat === 4 ? '<span class="badge bg-dark text-uppercase ms-2">Conversació tancada</span>' : '<span class="badge bg-success text-uppercase ms-2">Conversació oberta</span>';
 
   // Card del missatge original
   let html = `
@@ -268,7 +268,7 @@ function renderConversacio(resp: ConversacioApiResponse): void {
           </dd>
         </dl>
 
-        <h6 class="fw-semibold">Missatge</h6>
+        <h6 class="fw-semibold">Missatge formulari web</h6>
         <div class="border rounded p-3 bg-light mb-3" style="white-space: pre-line;">
           ${escapeHtml(m.missatge)}
         </div>

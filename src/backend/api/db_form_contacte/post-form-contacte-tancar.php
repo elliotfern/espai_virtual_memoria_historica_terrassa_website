@@ -7,6 +7,9 @@ use App\Config\DatabaseConnection;
 
 $conn = DatabaseConnection::getConnection();
 
+// ✅ Crear instància de la teva classe Database (AQUÍ ESTAVA EL PROBLEMA)
+$db = new Database();
+
 if (!$conn) {
     throw new Exception("No es pot establir connexió amb la base de dades.");
 }
