@@ -8,6 +8,7 @@ interface MissatgeData {
   form_ip: string;
   form_user_agent: string;
   dataEnviament: string; // "YYYY-MM-DD HH:mm:ss"
+  estat: number; // per saber si està tancada (4) o no
 }
 
 // Resposta enviada des de la intranet (gestor)
@@ -172,6 +173,44 @@ function construirFilConversacio(data: ConversacioData): ItemFil[] {
 // --- RENDER DE LA CONVERSA COMPLETA ---
 
 const CONVERSACIO_API_URL = 'https://memoriaterrassa.cat/api/form_contacte/get/conversacio';
+const TANCAR_CONVERSACIO_API_URL = 'https://memoriaterrassa.cat/api/form_contacte/post-tancar';
+
+export async function carregarConversacioMissatge(id: number): Promise<void> {
+  const container = document.getElementById('missatgeId');
+  if (container) {
+    container.innerHTML = `
+      <div class="text-center py-4 text-muted">
+        Carregant conversa...
+      </div>
+    `;
+  }
+
+  try {
+    const response = await fetch(`${CONVERSACIO_API_URL}?id=${encodeURIComponent(id.toString())}`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+      },
+      credentials: 'include', // per si cal cookie de sessió
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error HTTP: ${response.status}`);
+    }
+
+    const data: ConversacioApiResponse = await response.json();
+    renderConversacio(data);
+  } catch (error) {
+    console.error('Error carregant la conversa:', error);
+    if (container) {
+      container.innerHTML = `
+        <div class="alert alert-danger">
+          S'ha produït un error en carregar la conversa del missatge.
+        </div>
+      `;
+    }
+  }
+}
 
 function renderConversacio(resp: ConversacioApiResponse): void {
   const container = document.getElementById('missatgeId');
@@ -189,10 +228,13 @@ function renderConversacio(resp: ConversacioApiResponse): void {
   const data = resp.data;
   const fil = construirFilConversacio(data);
 
-  // Card del missatge original
   const m = data.missatge;
   const dataHoraFormatejada = formatDataHoraEs(m.dataEnviament);
 
+  // Badge d'estat
+  const estatBadge = m.estat === 4 ? '<span class="badge bg-dark text-uppercase ms-2">Tancada</span>' : '<span class="badge bg-success text-uppercase ms-2">Oberta</span>';
+
+  // Card del missatge original
   let html = `
     <div class="card shadow-sm mb-3">
       <div class="card-header d-flex justify-content-between align-items-center">
@@ -202,7 +244,10 @@ function renderConversacio(resp: ConversacioApiResponse): void {
             ID #${m.id} · ${escapeHtml(dataHoraFormatejada)}
           </small>
         </div>
-        <span class="badge bg-success text-uppercase">Missatge</span>
+        <div>
+          <span class="badge bg-primary text-uppercase">Missatge</span>
+          ${estatBadge}
+        </div>
       </div>
 
       <div class="card-body">
@@ -248,8 +293,21 @@ function renderConversacio(resp: ConversacioApiResponse): void {
   // Bloc de conversa sota del missatge original
   html += `
     <div class="card mt-3">
-      <div class="card-header">
+      <div class="card-header d-flex justify-content-between align-items-center">
         <h6 class="mb-0">Conversa completa</h6>
+        ${
+          m.estat !== 4
+            ? `
+          <button 
+            type="button" 
+            class="btn btn-sm btn-dark" 
+            id="btnTancarConversacio"
+          >
+            Tancar conversació
+          </button>
+        `
+            : ''
+        }
       </div>
       <div class="card-body">
   `;
@@ -319,43 +377,47 @@ function renderConversacio(resp: ConversacioApiResponse): void {
   `;
 
   container.innerHTML = html;
-}
 
-// --- FETCH A LA API DE CONVERSA ---
+  // ⭐ Listener per al botó "Tancar conversació" (ara DINS de renderConversacio)
+  const btnTancar = document.getElementById('btnTancarConversacio') as HTMLButtonElement | null;
 
-export async function carregarConversacioMissatge(id: number): Promise<void> {
-  const container = document.getElementById('missatgeId');
-  if (container) {
-    container.innerHTML = `
-      <div class="text-center py-4 text-muted">
-        Carregant conversa...
-      </div>
-    `;
-  }
+  if (btnTancar) {
+    btnTancar.addEventListener('click', async () => {
+      const confirmat = window.confirm('Segur que vols tancar aquesta conversació? Ja no quedarà pendent de resposta.');
+      if (!confirmat) return;
 
-  try {
-    const response = await fetch(`${CONVERSACIO_API_URL}?id=${encodeURIComponent(id.toString())}`, {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-      },
-      credentials: 'include', // per si cal cookie de sessió
+      btnTancar.disabled = true;
+      btnTancar.textContent = 'Tancant...';
+
+      try {
+        const response = await fetch(TANCAR_CONVERSACIO_API_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+          },
+          credentials: 'include',
+          body: JSON.stringify({ id: m.id }), // m està en scope aquí
+        });
+
+        const data = await response.json().catch(() => null);
+
+        if (!response.ok || !data || data.status !== 'success') {
+          const msg = data && data.message ? data.message : "S'ha produït un error en tancar la conversació.";
+          alert(msg);
+          btnTancar.disabled = false;
+          btnTancar.textContent = 'Tancar conversació';
+          return;
+        }
+
+        // Recarreguem la conversa per actualitzar estat i treure el botó
+        await carregarConversacioMissatge(m.id);
+      } catch (err) {
+        console.error('Error tancant la conversació:', err);
+        alert("S'ha produït un error de connexió en tancar la conversació.");
+        btnTancar.disabled = false;
+        btnTancar.textContent = 'Tancar conversació';
+      }
     });
-
-    if (!response.ok) {
-      throw new Error(`Error HTTP: ${response.status}`);
-    }
-
-    const data: ConversacioApiResponse = await response.json();
-    renderConversacio(data);
-  } catch (error) {
-    console.error('Error carregant la conversa:', error);
-    if (container) {
-      container.innerHTML = `
-        <div class="alert alert-danger">
-          S'ha produït un error en carregar la conversa del missatge.
-        </div>
-      `;
-    }
   }
 }

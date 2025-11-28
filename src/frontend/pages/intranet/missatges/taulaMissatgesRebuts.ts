@@ -86,6 +86,10 @@ export async function taulaMissatgesRebuts() {
             label = 'Sense resposta';
             btnClass = 'btn-secondary';
             break;
+          case 4:
+            label = 'Conversa tancada';
+            btnClass = 'btn-dark';
+            break;
           default:
             label = 'Desconegut';
             btnClass = 'btn-outline-secondary';
