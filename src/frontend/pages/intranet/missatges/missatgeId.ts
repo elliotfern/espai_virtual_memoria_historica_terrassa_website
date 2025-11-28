@@ -245,7 +245,7 @@ function renderConversacio(resp: ConversacioApiResponse): void {
           </small>
         </div>
         <div>
-          <span class="badge bg-primary text-uppercase">Missatge formulari web<</span>
+          <span class="badge bg-primary text-uppercase">Missatge formulari web</span>
           ${estatBadge}
         </div>
       </div>
