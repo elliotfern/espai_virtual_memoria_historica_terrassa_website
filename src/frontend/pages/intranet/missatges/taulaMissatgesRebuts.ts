@@ -103,13 +103,7 @@ export async function taulaMissatgesRebuts() {
     {
       header: 'Veure missatge',
       field: 'id',
-      render: (_: unknown, row: EspaiRow) => `<a id="${row.id}" title="Veure missatges" href="https://${window.location.hostname}/gestio/missatges/veure-missatge/${row.id}"><button type="button" class="btn btn-success btn-sm">Missatge</button></a>`,
-    },
-
-    {
-      header: 'Respondre missatge',
-      field: 'id',
-      render: (_: unknown, row: EspaiRow) => `<a id="${row.id}" title="Respondre" href="https://${window.location.hostname}/gestio/missatges/respondre-missatge/${row.id}"><button type="button" class="btn btn-warning btn-sm">Respondre</button></a>`,
+      render: (_: unknown, row: EspaiRow) => `<a id="${row.id}" title="Veure missatges" href="https://${window.location.hostname}/gestio/missatges/veure-missatge/${row.id}"><button type="button" class="btn btn-success btn-sm">Veure missatge</button></a>`,
     },
   ];
 

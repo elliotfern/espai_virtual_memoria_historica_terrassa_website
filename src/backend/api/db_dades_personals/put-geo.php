@@ -78,8 +78,8 @@ $sql = "SELECT
   a.adreca         AS via_nom,        -- nombre vía
   a.adreca_num     AS via_num,        -- número portal
   m.ciutat         AS ciutat,
-  p.provincia      AS provincia,
-  s.estat          AS estat,
+  p.provincia_ca      AS provincia,
+  s.estat_ca          AS estat,
   mc.comunitat_ca  AS comunitat_ca
 FROM db_dades_personals a
 LEFT JOIN aux_dades_municipis            m  ON m.id  = a.municipi_residencia
