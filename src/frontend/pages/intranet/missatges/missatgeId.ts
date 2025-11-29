@@ -9,6 +9,7 @@ interface MissatgeData {
   form_user_agent: string;
   dataEnviament: string; // "YYYY-MM-DD HH:mm:ss"
   estat: number; // per saber si està tancada (4) o no
+  nom_represaliat: string;
 }
 
 // Resposta enviada des de la intranet (gestor)
@@ -265,6 +266,10 @@ function renderConversacio(resp: ConversacioApiResponse): void {
           <dt class="col-sm-3">Data enviament</dt>
           <dd class="col-sm-9 mb-1">
             ${escapeHtml(dataHoraFormatejada)}
+          </dd>
+
+          <dt class="col-sm-3">Persona represaliada</dt>
+          <dd class="col-sm-9 mb-1">${escapeHtml(m.nom_represaliat)}
           </dd>
         </dl>
 
