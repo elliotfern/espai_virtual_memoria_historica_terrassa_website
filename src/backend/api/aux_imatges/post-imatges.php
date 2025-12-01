@@ -86,6 +86,7 @@ try {
     $mime  = $finfo->file($file['tmp_name']);
     $allowed = [
         'image/jpeg' => 'jpg',
+        'application/pdf' => 'pdf',
     ];
     if (!isset($allowed[$mime])) {
         throw new RuntimeException('Format no permès. Usa JPG');
@@ -110,18 +111,24 @@ try {
         }
     }
 
+    $tipus = isset($_POST['tipus']) ? (int)$_POST['tipus'] : 1;
+    if (!in_array($tipus, [1, 2, 3], true)) {
+        $tipus = 1;
+    }
+
     // Transacción para evitar orfes
     $conn->beginTransaction();
 
     // INSERT (tipus forçat a 1, dateCreated = NOW())
     $stmt = $conn->prepare("
     INSERT INTO aux_imatges (nomArxiu, nomImatge, tipus, dateCreated, dateModified, idPersona)
-    VALUES (:nomArxiu, :nomImatge, 1, NOW(), NULL, :idPersona)
+    VALUES (:nomArxiu, :nomImatge, :tipus, NOW(), NULL, :idPersona)
   ");
     $stmt->execute([
         ':nomArxiu'  => $nomArxiu,
         ':nomImatge' => $nomImatge,
         ':idPersona' => $idPersona ?: null,
+        ':tipus' => $tipus ?: null,
     ]);
     $id = (int)$conn->lastInsertId();
     if ($id <= 0) {
