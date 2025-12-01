@@ -17,31 +17,62 @@ export function formTipusRepressio() {
   const url = window.location.href;
   const pageType = getPageType(url);
 
-  if (pageType[3] === '4') {
-    costHumaCivils(Number(pageType[4]));
-  } else if (pageType[3] === '3' || pageType[3] === '22') {
-    costHumaCombat(Number(pageType[4]));
-  } else if (pageType[3] === '10') {
-    exili(Number(pageType[4]));
-  } else if (pageType[3] === '2') {
-    deportat(Number(pageType[4]));
-  } else if (pageType[3] === '1') {
-    afusellat(Number(pageType[4]));
-  } else if (pageType[3] === '6') {
-    processat(Number(pageType[4]));
-  } else if (pageType[3] === '12') {
-    empresonatsPresoModel(Number(pageType[4]));
-  } else if (pageType[3] === '7') {
-    depurats(Number(pageType[4]));
-  } else if (pageType[3] === '13' || pageType[3] === '16') {
-    detingutsGuardiaUrbana(Number(pageType[4]));
-  } else if (pageType[3] === '15') {
-    responsabilitatsPolitiques(Number(pageType[4]));
-  } else if (pageType[3] === '17') {
-    top(Number(pageType[4]));
-  } else if (pageType[3] === '14') {
-    comiteSolidaritat(Number(pageType[4]));
-  } else if (pageType[3] === '18') {
-    comiteRelacionsSolidaritat(Number(pageType[4]));
+  const tipus = Number(pageType[3]); // <- número
+  const id = Number(pageType[4]); // <- número
+
+  switch (tipus) {
+    case 4:
+      costHumaCivils(id);
+      break;
+
+    case 3:
+    case 22:
+      costHumaCombat(id);
+      break;
+
+    case 10:
+      exili(id);
+      break;
+
+    case 2:
+      deportat(id);
+      break;
+
+    case 1:
+      afusellat(id);
+      break;
+
+    case 6:
+      processat(id);
+      break;
+
+    case 12:
+      empresonatsPresoModel(id);
+      break;
+
+    case 7:
+      depurats(id);
+      break;
+
+    case 13:
+    case 16:
+      detingutsGuardiaUrbana(id);
+      break;
+
+    case 15:
+      responsabilitatsPolitiques(id);
+      break;
+
+    case 17:
+      top(id);
+      break;
+
+    case 14:
+      comiteSolidaritat(id);
+      break;
+
+    case 18:
+      comiteRelacionsSolidaritat(id);
+      break;
   }
 }
