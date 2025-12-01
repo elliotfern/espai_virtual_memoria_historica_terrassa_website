@@ -589,7 +589,7 @@ if ($pagina === "modifica-fitxa") {
           <div id="quadreFontsArxius"></div>
         </div>
       </div>
-    </div> <!-- Fi tab6 -->
+    </div> <!-- Fi tab7 -->
 
     <div id="tab8" class="tabcontent">
       <div class="row g-3">
@@ -723,6 +723,17 @@ if ($pagina === "modifica-fitxa") {
 
       </div>
     </div> <!-- Fi tab10 -->
+
+    <!-- Tab11 Multimedia -->
+    <div id="tab11" class="tabcontent">
+      <div class="row g-3">
+        <h3>Elements multimèdia</h3>
+
+        <div id="contenidorGaleria"></div>
+        <input type="hidden" id="imatgesGaleriaHidden">
+
+      </div>
+    </div> <!-- Fi tab11 -->
 
     <div class="row espai-superior" style="border-top: 1px solid black;padding-top:25px">
       <div class="col">

@@ -547,6 +547,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
             dp.completat, 
             dp.visibilitat,
             img.nomArxiu AS img,
+            img.nomImatge,
             dp.img AS imatgePerfil,
             bio.biografiaCa,
             bio.biografiaEs,

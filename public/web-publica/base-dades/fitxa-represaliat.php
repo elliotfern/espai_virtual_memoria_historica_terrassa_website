@@ -20,6 +20,7 @@ $id = $routeParams[0];
                 <div class="col-12 col-md-4">
                     <div class="p-3 border bg-light">
                         <img src="" alt="Foto" class="logoPetit" id="imatgeRepresaliat">
+                        <div id="imatgeRepresaliatAlt" class="small"> </div>
                     </div>
                 </div>
 

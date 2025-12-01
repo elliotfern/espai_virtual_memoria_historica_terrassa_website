@@ -3,6 +3,7 @@ import { enviarDadesFormFitxaRepressaliat } from '../../services/fetchData/updat
 import { Fitxa } from '../../types/types';
 import { tab1 } from './tab1';
 import { tab10 } from './tab10';
+import { tab11Adjunts } from './tab11';
 import { tab2 } from './tab2';
 import { tab3 } from './tab3';
 import { tab4 } from './tab4';
@@ -56,6 +57,9 @@ export async function fitxaRepressaliat(idRepressaliat?: number): Promise<void> 
 
     // tab10 - Imatge fitxa represaliat
     tab10('imatgePerfil', fitxa);
+
+    // tab11 - galeria multimedia
+    tab11Adjunts('contenidorGaleria', fitxa);
 
     // Escolta event
     const form = document.getElementById('formFitxaRepressaliat') as HTMLFormElement | null;
