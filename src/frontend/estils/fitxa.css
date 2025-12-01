@@ -3,9 +3,11 @@
   inset: 0;
   background: rgba(0, 0, 0, 0.8);
   display: flex;
-  align-items: center;
+  align-items: flex-start; /* arriba, no centrado vertical */
   justify-content: center;
   z-index: 1050;
+  overflow-y: auto; /* 👈 permite scroll vertical */
+  padding: 2rem 1rem; /* margen superior e inferior */
 }
 
 .lightbox-overlay.d-none {
@@ -15,12 +17,14 @@
 .lightbox-content {
   position: relative;
   max-width: 90%;
-  max-height: 90%;
+  margin: 0 auto 2rem auto; /* centrado y un poco de espacio abajo */
 }
 
 .lightbox-content img {
+  display: block;
   max-width: 100%;
-  max-height: 100%;
+  height: auto; /* 👈 dejamos que la altura crezca */
+  max-height: none; /* 👈 sin límite: se verá entera con scroll */
   object-fit: contain;
   border-radius: 6px;
   box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.5);

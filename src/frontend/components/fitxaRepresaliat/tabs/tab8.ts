@@ -141,7 +141,7 @@ function renderImageCard(adj: Adjunt, texts: ReturnType<typeof getMultimediaText
         </a>
         <div class="card-body p-2 d-flex flex-column">
           <div class="d-flex justify-content-between align-items-center mb-1">
-            <p class="card-text small mb-0 text-truncate" title="${escapeHtml(adj.filename)}">
+            <p class="card-text small mb-1" title="${escapeHtml(adj.filename)}">
               ${escapeHtml(adj.filename)}
             </p>
             <span class="badge bg-secondary ms-2">${badge}</span>
@@ -163,7 +163,7 @@ function renderDocCard(adj: Adjunt, texts: ReturnType<typeof getMultimediaTexts>
       <div class="card h-100 border-0 shadow-sm d-flex flex-column justify-content-between">
         <div class="card-body d-flex flex-column justify-content-center text-center">
           <div class="mb-2" style="font-size:2rem;">📄</div>
-          <p class="card-text small mb-1 text-truncate" title="${escapeHtml(adj.filename)}">
+          <p class="card-text small mb-1" title="${escapeHtml(adj.filename)}">
             ${escapeHtml(adj.filename)}
           </p>
           <span class="badge bg-secondary mb-2">${badge}</span>
@@ -206,14 +206,12 @@ function wireLightbox(root: HTMLElement): void {
     img.src = url;
     img.alt = alt;
     overlay.classList.remove('d-none');
-    document.body.classList.add('overflow-hidden');
   };
 
   const close = () => {
     if (!img) return;
     img.src = '';
     overlay.classList.add('d-none');
-    document.body.classList.remove('overflow-hidden');
   };
 
   // Delegación sobre las tarjetas
