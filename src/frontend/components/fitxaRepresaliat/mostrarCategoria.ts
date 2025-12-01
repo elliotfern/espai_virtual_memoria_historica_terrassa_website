@@ -86,8 +86,9 @@ function getApiUrlForCategoria(categoriaNumerica: string, idPersona: number, bas
       return `${baseUrl}/api/top/get/fitxaId?id=${idPersona}`;
     case 18:
       return `${baseUrl}/api/comite_relacions_solidaritat/get/fitxaId?id=${idPersona}`;
-    default:
     case 22:
       return `${baseUrl}/api/cost_huma_front/get/fitxaId?id=${idPersona}`;
+    default:
+      return null;
   }
 }
