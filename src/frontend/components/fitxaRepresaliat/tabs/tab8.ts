@@ -1,7 +1,9 @@
 // src/pages/fitxaRepresaliat/tabs/tab9.ts
 import type { Fitxa } from '../../../types/types';
+import { LABELS_TAB8 } from '../../../services/i18n/fitxaRepresaliat/labels-tab8';
+import { t } from '../../../services/i18n/i18n';
 
-// Ajusta si ya tienes Adjunt tipat en Fitxa
+// Ajusta si ya tens Adjunt tipat en Fitxa
 type Adjunt = {
   id: number;
   url: string;
@@ -21,13 +23,11 @@ export function renderTab8(fitxa: Fitxa, label: string, lang: string): void {
   const images = adjunts.filter((a) => isImageAdj(a));
   const docs = adjunts.filter((a) => !isImageAdj(a));
 
-  // No hay nada
+  // No hi ha res
   if (!images.length && !docs.length) {
     divInfo.innerHTML = `
-      <section class="mt-3">
-        <h3 class="h5 mb-3 titolSeccio">${label}</h3>
-        <p class="text-muted mb-0">${texts.emptyAll}</p>
-      </section>
+      <h3 class="titolSeccio">${label}</h3>
+      <p class="text-muted mb-0">${texts.emptyAll}</p>
     `;
     return;
   }
@@ -35,7 +35,7 @@ export function renderTab8(fitxa: Fitxa, label: string, lang: string): void {
   const imagesHtml = images.length
     ? `
       <section class="mb-4">
-        <h4 class="h6 mb-3 titolSeccio">${texts.imagesTitle}</h4>  
+        <h4 class="h6 mb-3 titolSeccio">${texts.imagesTitle}</h4>
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
           ${images.map((a) => renderImageCard(a, texts)).join('')}
         </div>
@@ -46,7 +46,7 @@ export function renderTab8(fitxa: Fitxa, label: string, lang: string): void {
   const docsHtml = docs.length
     ? `
       <section class="mb-4">
-        <h4 class="h6 mb-3">${texts.docsTitle}</h4>
+        <h4 class="h6 mb-3 titolSeccio">${texts.docsTitle}</h4>
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
           ${docs.map((a) => renderDocCard(a, texts)).join('')}
         </div>
@@ -55,52 +55,27 @@ export function renderTab8(fitxa: Fitxa, label: string, lang: string): void {
     : '';
 
   divInfo.innerHTML = `
-    <section class="mt-3">
-      <h3 class="h5 mb-3">${label}</h3>
-      ${imagesHtml}
-      ${docsHtml}
-    </section>
+    <h3 class="titolSeccio">${label}</h3>
+    ${imagesHtml}
+    ${docsHtml}
     ${renderLightboxHtml()}
   `;
 
   wireLightbox(divInfo);
 }
 
-/* ---------- i18n simple ---------- */
+/* ---------- i18n via LABELS_TAB8 + t(...) ---------- */
 
 function getMultimediaTexts(lang: string) {
-  switch (lang) {
-    case 'es':
-      return {
-        emptyAll: 'Todavía no hay elementos multimedia disponibles.',
-        imagesTitle: 'Galería de imágenes',
-        docsTitle: 'Documentos',
-        openImage: 'Descargar imagen',
-        openPdf: 'Abrir documento PDF',
-        badgeJpg: 'JPG',
-        badgePdf: 'PDF',
-      };
-    case 'en':
-      return {
-        emptyAll: 'No multimedia items are available yet.',
-        imagesTitle: 'Images Gallery',
-        docsTitle: 'Documents',
-        openImage: 'Download image',
-        openPdf: 'Open PDF document',
-        badgeJpg: 'JPG',
-        badgePdf: 'PDF',
-      };
-    default: // ca
-      return {
-        emptyAll: 'Encara no hi ha elements multimèdia disponibles.',
-        imagesTitle: "Galeria d'imatges",
-        docsTitle: 'Documents',
-        openImage: 'Descarregar imatge',
-        openPdf: 'Obrir document PDF',
-        badgeJpg: 'JPG',
-        badgePdf: 'PDF',
-      };
-  }
+  return {
+    emptyAll: t(LABELS_TAB8, 'emptyAll', lang),
+    imagesTitle: t(LABELS_TAB8, 'imagesTitle', lang),
+    docsTitle: t(LABELS_TAB8, 'docsTitle', lang),
+    openImage: t(LABELS_TAB8, 'openImage', lang),
+    openPdf: t(LABELS_TAB8, 'openPdf', lang),
+    badgeJpg: t(LABELS_TAB8, 'badgeJpg', lang),
+    badgePdf: t(LABELS_TAB8, 'badgePdf', lang),
+  };
 }
 
 /* ---------- Helpers de tipo ---------- */
@@ -108,9 +83,7 @@ function getMultimediaTexts(lang: string) {
 function isImageAdj(adj: Adjunt): boolean {
   const mime = (adj.mime || '').toLowerCase();
   const filename = (adj.filename || '').toLowerCase();
-  return (
-    mime.startsWith('image/') || filename.endsWith('.jpg') || filename.endsWith('.jpeg') || filename.endsWith('.png') // por si algún día
-  );
+  return mime.startsWith('image/') || filename.endsWith('.jpg') || filename.endsWith('.jpeg') || filename.endsWith('.png');
 }
 
 function getExtensionLabel(adj: Adjunt): string {
@@ -122,7 +95,7 @@ function getExtensionLabel(adj: Adjunt): string {
   return 'FILE';
 }
 
-/* ---------- Render de tarjetas ---------- */
+/* ---------- Render de targetes ---------- */
 
 function renderImageCard(adj: Adjunt, texts: ReturnType<typeof getMultimediaTexts>): string {
   const badge = getExtensionLabel(adj) === 'PDF' ? texts.badgePdf : texts.badgeJpg;
@@ -214,7 +187,6 @@ function wireLightbox(root: HTMLElement): void {
     overlay.classList.add('d-none');
   };
 
-  // Delegación sobre las tarjetas
   root.addEventListener('click', (ev) => {
     const target = ev.target as HTMLElement;
     const link = target.closest<HTMLAnchorElement>('.js-lightbox-trigger');
@@ -226,17 +198,14 @@ function wireLightbox(root: HTMLElement): void {
     open(url, alt);
   });
 
-  // Cerrar por botón
   closeBtn?.addEventListener('click', () => close());
 
-  // Cerrar clicando fuera de la imagen
   overlay.addEventListener('click', (ev) => {
     if (ev.target === overlay) {
       close();
     }
   });
 
-  // Cerrar con ESC
   document.addEventListener('keydown', (ev) => {
     if (ev.key === 'Escape' && !overlay.classList.contains('d-none')) {
       close();

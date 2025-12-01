@@ -1,0 +1,58 @@
+// src/services/i18n/fitxaRepresaliat/labels-tab8.ts
+
+export const LABELS_TAB8 = {
+  ca: {
+    emptyAll: 'Encara no hi ha elements multimèdia disponibles.',
+    imagesTitle: "Galeria d'imatges",
+    docsTitle: 'Documents',
+    openImage: 'Descarregar imatge',
+    openPdf: 'Obrir document PDF',
+    badgeJpg: 'JPG',
+    badgePdf: 'PDF',
+  },
+  es: {
+    emptyAll: 'Todavía no hay elementos multimedia disponibles.',
+    imagesTitle: 'Galería de imágenes',
+    docsTitle: 'Documentos',
+    openImage: 'Descargar imagen',
+    openPdf: 'Abrir documento PDF',
+    badgeJpg: 'JPG',
+    badgePdf: 'PDF',
+  },
+  en: {
+    emptyAll: 'No multimedia items are available yet.',
+    imagesTitle: 'Images gallery',
+    docsTitle: 'Documents',
+    openImage: 'Download image',
+    openPdf: 'Open PDF document',
+    badgeJpg: 'JPG',
+    badgePdf: 'PDF',
+  },
+  fr: {
+    emptyAll: "Il n'y a pas encore d'éléments multimédia disponibles.",
+    imagesTitle: 'Galerie d’images',
+    docsTitle: 'Documents',
+    openImage: 'Télécharger l’image',
+    openPdf: 'Ouvrir le document PDF',
+    badgeJpg: 'JPG',
+    badgePdf: 'PDF',
+  },
+  it: {
+    emptyAll: 'Non ci sono ancora elementi multimediali disponibili.',
+    imagesTitle: 'Galleria di immagini',
+    docsTitle: 'Documenti',
+    openImage: "Scarica l'immagine",
+    openPdf: 'Apri documento PDF',
+    badgeJpg: 'JPG',
+    badgePdf: 'PDF',
+  },
+  pt: {
+    emptyAll: 'Ainda não há elementos multimédia disponíveis.',
+    imagesTitle: 'Galeria de imagens',
+    docsTitle: 'Documentos',
+    openImage: 'Descarregar imagem',
+    openPdf: 'Abrir documento PDF',
+    badgeJpg: 'JPG',
+    badgePdf: 'PDF',
+  },
+} as const;
