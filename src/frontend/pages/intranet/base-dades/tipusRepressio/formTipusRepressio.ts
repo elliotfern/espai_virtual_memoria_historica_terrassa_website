@@ -19,7 +19,7 @@ export function formTipusRepressio() {
 
   if (pageType[3] === '4') {
     costHumaCivils(Number(pageType[4]));
-  } else if (pageType[3] === '3') {
+  } else if (pageType[3] === '3' || pageType[3] === '22') {
     costHumaCombat(Number(pageType[4]));
   } else if (pageType[3] === '10') {
     exili(Number(pageType[4]));
