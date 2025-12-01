@@ -1,7 +1,7 @@
 <div class="container" style="margin-bottom:50px;border: 1px solid gray;border-radius: 10px;padding:25px;background-color:#eaeaea">
 
     <div class="container">
-        <h2>Tipus de repressió: Morts en combat (Cost humà de la Guerra civil)</h2>
+        <h2>Tipus de repressió: Mort / desaparegut en combat (Cost humà de la Guerra civil)</h2>
         <div id="fitxaNomCognoms"></div>
 
         <div class="alert alert-success" role="alert" id="okMessage" style="display:none">

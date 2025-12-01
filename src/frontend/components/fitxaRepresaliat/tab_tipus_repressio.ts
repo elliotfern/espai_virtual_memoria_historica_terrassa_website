@@ -60,7 +60,7 @@ export const fitxaTipusRepressio = async (categoriaNumerica: string, fitxa2: Fit
       htmlContent = tab1Afusellat(dada as AfusellatData, htmlContent, lang);
     } else if (catNum === 2) {
       htmlContent = tab2Deportat(dada as DeportatData, htmlContent, lang);
-    } else if (catNum === 3) {
+    } else if (catNum === 3 || catNum === 22) {
       htmlContent = tab3MortCombat(dada as MortEnCombatData, htmlContent, lang);
     } else if (catNum === 4 || catNum === 5) {
       htmlContent = tab4MortCivil(dada as MortCivilData, htmlContent, lang);

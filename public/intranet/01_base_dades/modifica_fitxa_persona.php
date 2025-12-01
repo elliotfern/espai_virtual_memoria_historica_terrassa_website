@@ -73,8 +73,64 @@ if ($pagina === "modifica-fitxa") {
               * Has d'escollir almenys 1 categoria.
             </div>
 
+            <div class="col-md-12" style="margin-bottom:20px;margin-top:20px">
+              <h6><strong>Cost humà de la guerra civil:</strong></h6>
+
+              <div id="categoria" class="d-flex flex-wrap">
+                <div class="form-check me-3">
+                  <input class="form-check-input" type="checkbox" id="categoria3" name="categoria" value="categoria3">
+                  <label class="form-check-label" for="categoria3">
+                    Mort en combat
+                  </label>
+                </div>
+
+                <div class="form-check me-3">
+                  <input class="form-check-input" type="checkbox" id="categoria22" name="categoria" value="categoria22">
+                  <label class="form-check-label" for="categoria22">
+                    Desaparegut en combat
+                  </label>
+                </div>
+
+
+                <div class="form-check me-3">
+                  <input class="form-check-input" type="checkbox" id="categoria4" name="categoria" value="categoria4">
+                  <label class="form-check-label" for="categoria4">
+                    Mort civil
+                  </label>
+                </div>
+
+                <div class="form-check me-3">
+                  <input class="form-check-input" type="checkbox" id="categoria5" name="categoria" value="categoria5">
+                  <label class="form-check-label" for="categoria5">
+                    Represàlia republicana
+                  </label>
+                </div>
+              </div>
+            </div> <!-- Fi bloc cost huma -->
+
             <div class="col-md-12" style="margin-top:20px;margin-bottom:20px">
-              <h6><strong>Represaliats 1939/1979:</strong></h6>
+              <h6><strong>Exiliats i deportats:</strong></h6>
+
+              <div id="categoria" class="d-flex flex-wrap">
+                <div class="form-check me-3">
+                  <input class="form-check-input" type="checkbox" id="categoria10" name="categoria" value="categoria10">
+                  <label class="form-check-label" for="categoria10">
+                    Exiliat
+                  </label>
+                </div>
+
+                <div class="form-check me-3">
+                  <input class="form-check-input" type="checkbox" id="categoria2" name="categoria" value="categoria2">
+                  <label class="form-check-label" for="categoria2">
+                    Deportat
+                  </label>
+                </div>
+
+              </div>
+            </div> <!-- Fi bloc exili -->
+
+            <div class="col-md-12" style="margin-top:20px;margin-bottom:20px">
+              <h6><strong>Represaliats Dictadura franquista (1939-1979):</strong></h6>
               <div id="categoria" class="d-flex flex-wrap">
 
                 <div class="form-check me-3">
@@ -171,54 +227,6 @@ if ($pagina === "modifica-fitxa") {
 
               </div>
             </div> <!-- Fi bloc repressio 1939-79 -->
-
-            <div class="col-md-12" style="margin-bottom:20px">
-              <h6><strong>Exili:</strong></h6>
-
-              <div id="categoria" class="d-flex flex-wrap">
-                <div class="form-check me-3">
-                  <input class="form-check-input" type="checkbox" id="categoria10" name="categoria" value="categoria10">
-                  <label class="form-check-label" for="categoria10">
-                    Exiliat
-                  </label>
-                </div>
-
-                <div class="form-check me-3">
-                  <input class="form-check-input" type="checkbox" id="categoria2" name="categoria" value="categoria2">
-                  <label class="form-check-label" for="categoria2">
-                    Deportat
-                  </label>
-                </div>
-
-              </div>
-            </div> <!-- Fi bloc exili -->
-
-            <div class="col-md-12" style="margin-top:20px">
-              <h6><strong>Cost humà de la guerra:</strong></h6>
-
-              <div id="categoria" class="d-flex flex-wrap">
-                <div class="form-check me-3">
-                  <input class="form-check-input" type="checkbox" id="categoria3" name="categoria" value="categoria3">
-                  <label class="form-check-label" for="categoria3">
-                    Mort o desaparegut en combat
-                  </label>
-                </div>
-
-                <div class="form-check me-3">
-                  <input class="form-check-input" type="checkbox" id="categoria4" name="categoria" value="categoria4">
-                  <label class="form-check-label" for="categoria4">
-                    Mort civil
-                  </label>
-                </div>
-
-                <div class="form-check me-3">
-                  <input class="form-check-input" type="checkbox" id="categoria5" name="categoria" value="categoria5">
-                  <label class="form-check-label" for="categoria5">
-                    Represàlia republicana
-                  </label>
-                </div>
-              </div>
-            </div> <!-- Fi bloc cost huma -->
 
             <div class="col-md-12" style="margin-bottom:20px;margin-top:20px">
               <h6><strong>Dones:</strong></h6>

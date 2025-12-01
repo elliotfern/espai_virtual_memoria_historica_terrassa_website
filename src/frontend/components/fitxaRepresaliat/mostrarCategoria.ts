@@ -75,6 +75,7 @@ function getApiUrlForCategoria(categoriaNumerica: string, idPersona: number, bas
     case 12:
       return `${baseUrl}/api/preso_model/get/fitxaId?id=${idPersona}`;
     case 13:
+      return null;
     case 16:
       return `${baseUrl}/api/detinguts_guardia_urbana/get/fitxaId?id=${idPersona}`;
     case 14:
@@ -86,6 +87,7 @@ function getApiUrlForCategoria(categoriaNumerica: string, idPersona: number, bas
     case 18:
       return `${baseUrl}/api/comite_relacions_solidaritat/get/fitxaId?id=${idPersona}`;
     default:
-      return null;
+    case 22:
+      return `${baseUrl}/api/cost_huma_front/get/fitxaId?id=${idPersona}`;
   }
 }

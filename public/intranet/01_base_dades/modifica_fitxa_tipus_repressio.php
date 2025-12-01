@@ -4,7 +4,7 @@ $idPersona = $routeParams[1]; // Segundo, por ejemplo, 2
 $categoriaId = (int) $categoriaId;
 
 // Verificar si es un número entero válido
-if (!is_int($categoriaId) || $categoriaId >= 19) {
+if (!is_int($categoriaId) || $categoriaId >= 23) {
     // Si no es un número entero o es menor o igual a cero, detener la ejecución
     header("Location: /404");
     exit();
@@ -64,5 +64,8 @@ switch ($categoriaId) {
         break;
     case 18:
         require_once APP_ROOT . '/public/intranet/01_base_dades/tipus_repressio/1_represaliats/llistat-detinguts_comite_relacions_solidaritat.php';
+        break;
+    case 22:
+        require_once APP_ROOT . '/public/intranet/01_base_dades/tipus_repressio/3_cost_huma/morts_combat.php';
         break;
 }
