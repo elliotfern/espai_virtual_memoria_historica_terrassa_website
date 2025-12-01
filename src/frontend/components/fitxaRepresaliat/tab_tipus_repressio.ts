@@ -36,7 +36,7 @@ export const fitxaTipusRepressio = async (categoriaNumerica: string, fitxa2: Fit
 
   // 1. Mostrar el div y el spinner
   divInfo.style.display = 'block';
-  divInfo.innerHTML = `<div class="spinner">Carregant dada...</div>`; // Pon aquí tu HTML spinner
+  divInfo.innerHTML = `<div class="spinner">Carregant dades...</div>`; // Pon aquí tu HTML spinner
 
   // 2. Esperar por los datos (simulado o real)
   const colectiusArray = await categoriesRepressio(lang);

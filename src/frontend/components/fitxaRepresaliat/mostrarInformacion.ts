@@ -25,13 +25,15 @@ export function mostrarInformacion(tabId: string, id: number, label: string, lan
   // imatge represaliat
   // Seleccionamos la imagen con el ID 'imatgeRepresaliat'
   const imagen = document.getElementById('imatgeRepresaliat') as HTMLImageElement;
+  const imatgeRepresaliatAlt = document.getElementById('imatgeRepresaliatAlt') as HTMLDivElement | null;
 
   const divAdditionalInfo = document.getElementById('info');
   if (!divAdditionalInfo) return;
 
   // Comprobamos si la variable fitxa.img tiene un valor válido
-  if (fitxa.img && fitxa.img !== '' && fitxa.img !== null && imagen) {
+  if (imatgeRepresaliatAlt && fitxa.img && fitxa.img !== '' && fitxa.img !== null && imagen) {
     imagen.src = DOMAIN_IMG + `/assets_represaliats/img/${fitxa.img}.jpg`; // Si es válida, usamos la imagen de la variable
+    imatgeRepresaliatAlt.textContent = fitxa.nomImatge;
   } else {
     imagen.src = DOMAIN_IMG + `/assets_represaliats/img/foto_defecte.jpg`; // Si no, mostramos la imagen por defecto
   }
