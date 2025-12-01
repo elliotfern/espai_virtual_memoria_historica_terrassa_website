@@ -10,6 +10,7 @@ import { renderTab4 } from './tabs/tab4';
 import { renderTab5 } from './tabs/tab5';
 import { renderTab6 } from './tabs/tab6';
 import { renderTab7 } from './tabs/tab7';
+import { renderTab8 } from './tabs/tab8';
 import { renderTab9 } from './tabs/tab9';
 // aquí iremos importando más tabs: tab2, tab3, etc.
 
@@ -193,6 +194,9 @@ export function mostrarInformacion(tabId: string, id: number, label: string, lan
       break;
     case 'tab6':
       renderTab6(fitxa, lang);
+      break;
+    case 'tab8':
+      renderTab8(fitxa, label, lang);
       break;
     case 'tab9':
       renderTab9(fitxa, label, lang);
