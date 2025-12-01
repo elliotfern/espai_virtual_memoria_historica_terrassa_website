@@ -25,7 +25,7 @@ export function renderTab8(fitxa: Fitxa, label: string, lang: string): void {
   if (!images.length && !docs.length) {
     divInfo.innerHTML = `
       <section class="mt-3">
-        <h3 class="h5 mb-3">${label}</h3>
+        <h3 class="h5 mb-3 titolSeccio">${label}</h3>
         <p class="text-muted mb-0">${texts.emptyAll}</p>
       </section>
     `;
@@ -35,7 +35,7 @@ export function renderTab8(fitxa: Fitxa, label: string, lang: string): void {
   const imagesHtml = images.length
     ? `
       <section class="mb-4">
-        <h3 class="h6 mb-3 titolSeccio">${texts.imagesTitle}</h3>  
+        <h4 class="h6 mb-3 titolSeccio">${texts.imagesTitle}</h4>  
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
           ${images.map((a) => renderImageCard(a, texts)).join('')}
         </div>
