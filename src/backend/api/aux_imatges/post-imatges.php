@@ -89,7 +89,7 @@ try {
         'application/pdf' => 'pdf',
     ];
     if (!isset($allowed[$mime])) {
-        throw new RuntimeException('Format no permès. Usa JPG');
+        throw new RuntimeException('Format no permès. Usa JPG p PDF');
     }
     $ext = $allowed[$mime];
 
@@ -111,24 +111,22 @@ try {
         }
     }
 
-    $tipus = isset($_POST['tipus']) ? (int)$_POST['tipus'] : 1;
-    if (!in_array($tipus, [1, 2, 3], true)) {
-        $tipus = 1;
-    }
+    $tipus = isset($_POST['tipus']);
 
     // Transacción para evitar orfes
     $conn->beginTransaction();
 
     // INSERT (tipus forçat a 1, dateCreated = NOW())
     $stmt = $conn->prepare("
-    INSERT INTO aux_imatges (nomArxiu, nomImatge, tipus, dateCreated, dateModified, idPersona)
-    VALUES (:nomArxiu, :nomImatge, :tipus, NOW(), NULL, :idPersona)
+    INSERT INTO aux_imatges (nomArxiu, nomImatge, tipus, mime, dateCreated, dateModified, idPersona)
+    VALUES (:nomArxiu, :nomImatge, :tipus, :mime, NOW(), NULL, :idPersona)
   ");
     $stmt->execute([
         ':nomArxiu'  => $nomArxiu,
         ':nomImatge' => $nomImatge,
         ':idPersona' => $idPersona ?: null,
         ':tipus' => $tipus ?: null,
+        ':mime'      => $mime,
     ]);
     $id = (int)$conn->lastInsertId();
     if ($id <= 0) {
@@ -156,6 +154,7 @@ try {
             'id'       => $id,
             'url'      => $url,
             'filename' => $filename,
+            'mime'     => $mime,      // 👈 Asegúrate de tener ESTO
             // opcionalmente puedes devolver nomArxiu/nomImatge si quieres verlo en el front:
             // 'nomArxiu'  => $nomArxiu,
             // 'nomImatge' => $nomImatge,

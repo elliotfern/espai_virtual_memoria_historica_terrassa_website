@@ -13,7 +13,7 @@ type UploadResponse = {
     id: number;
     url: string;
     filename: string;
-    mime: string;
+    mime?: string;
     tipus: number;
   };
 };
@@ -48,7 +48,9 @@ export function tab11Adjunts(containerId: string, fitxa?: Fitxa | null): void {
 
   const titleName = getNomComplet(fitxa);
 
-  container.innerHTML = tab11({ titleName });
+  const adjunts = (fitxa?.adjunts ?? []).filter((a) => a && typeof a.id === 'number');
+
+  container.innerHTML = tab11({ titleName, adjunts });
 
   // preview
   wirePreviewAdjunt();
@@ -57,9 +59,19 @@ export function tab11Adjunts(containerId: string, fitxa?: Fitxa | null): void {
   wireUploadAdjunt(fitxa?.id ?? null);
 }
 
+type AdjuntLite = {
+  id: number;
+  url: string;
+  filename: string;
+  mime?: string;
+  tipus?: number;
+};
+
 /** Card bàsica per a adjunts (JPG/PDF) */
-function tab11(args: { titleName: string }): string {
-  const { titleName } = args;
+function tab11(args: { titleName: string; adjunts: AdjuntLite[] }): string {
+  const { titleName, adjunts } = args;
+
+  const hasAny = adjunts.length > 0;
 
   return `
     <div class="card shadow-sm border-0">
@@ -70,13 +82,17 @@ function tab11(args: { titleName: string }): string {
 
         <!-- Aquí mostrarem la galeria (imatges + PDFs) -->
         <div id="galeriaWrapper">
-          <p class="text-muted mb-3">
-            Encara no hi ha fitxers a la galeria.
-          </p>
+          ${
+            hasAny
+              ? renderGalleryHtml(adjunts)
+              : `<p class="text-muted mb-3">
+                   Encara no hi ha fitxers a la galeria.
+                 </p>`
+          }
         </div>
 
         <!-- Input hidden on guardarem els IDs dels fitxers (separats per comes) -->
-        <input type="hidden" id="adjuntsHidden" value="">
+        <input type="hidden" id="adjuntsHidden" value="${hasAny ? adjunts.map((a) => a.id).join(',') : ''}">
 
         <!-- Caixa de pujada d'un sol fitxer (JPG o PDF) -->
         <div id="adjuntUploadBox" class="container"
@@ -113,14 +129,14 @@ function tab11(args: { titleName: string }): string {
               </div>
             </div>
 
-            <!-- Botó d'afegir (més endavant farà la pujada) -->
+            <!-- Botó d'afegir -->
             <div class="col-md-3 d-flex align-items-end">
               <button class="btn btn-success w-100" id="btnAfegirAdjunt" type="button">
                 Afegir fitxer
               </button>
             </div>
 
-            <!-- Vista prèvia (només per imatges; ho farem al pas 2) -->
+            <!-- Vista prèvia -->
             <div class="col-12">
               <img id="previewAdjunt" class="img-thumbnail d-none mt-2" alt="Vista prèvia"
                    style="max-height:220px;object-fit:cover">
@@ -134,6 +150,47 @@ function tab11(args: { titleName: string }): string {
           </small>
         </div>
       </div>
+    </div>
+  `;
+}
+
+function renderGalleryHtml(adjunts: AdjuntLite[]): string {
+  const items = adjunts
+    .map((a) => {
+      const mime = (a.mime || '').toLowerCase();
+      const filename = (a.filename || '').toLowerCase();
+
+      const isImage = mime.startsWith('image/') || filename.endsWith('.jpg') || filename.endsWith('.jpeg');
+
+      const mediaHtml = isImage
+        ? `<img src="${a.url}" class="img-fluid rounded"
+                 style="object-fit:cover;max-height:180px;" alt="${a.filename}">`
+        : `<a href="${a.url}" target="_blank" rel="noopener"
+               class="btn btn-outline-danger w-100 mt-4 mb-4">
+             📄 Obrir PDF
+           </a>`;
+
+      return `
+        <div class="col" data-id="${a.id}">
+          <div class="card h-100 border-0">
+            ${mediaHtml}
+            <div class="d-flex justify-content-between align-items-center mt-2">
+              <small class="text-muted text-truncate" title="${a.filename}">
+                ${a.filename}
+              </small>
+              <button class="btn btn-sm btn-outline-danger" data-delete="${a.id}">
+                Eliminar
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    })
+    .join('');
+
+  return `
+    <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3">
+      ${items}
     </div>
   `;
 }
@@ -226,7 +283,7 @@ function wireUploadAdjunt(idPersona: number | null): void {
       const fd = new FormData();
       fd.append('nomImatge', name);
       fd.append('nomArxiu', file);
-      fd.append('tipus', '2'); // 2 = galeria
+      fd.append('tipus', '3'); // 1 = imagen / 2 - avatar usuari / 3 - galeria multimedia
       if (idPersona) fd.append('idPersona', String(idPersona));
 
       const res = await fetch(API_UPLOAD, { method: 'POST', body: fd });
@@ -268,7 +325,10 @@ function addAdjuntToGallery(data: UploadResponse['data']): void {
   const wrapper = document.getElementById('galeriaWrapper') as HTMLDivElement | null;
   if (!wrapper) return;
 
-  const isImage = data.mime === JPG_MIME;
+  const mime = (data.mime || '').toLowerCase();
+  const filename = (data.filename || '').toLowerCase();
+
+  const isImage = mime.startsWith('image/') || filename.endsWith('.jpg') || filename.endsWith('.jpeg');
 
   const card = document.createElement('div');
   card.className = 'col';
@@ -280,14 +340,15 @@ function addAdjuntToGallery(data: UploadResponse['data']): void {
       ${isImage ? `<img src="${data.url}" class="img-fluid rounded" style="object-fit:cover;max-height:180px;">` : `<a href="${data.url}" target="_blank" class="btn btn-outline-danger w-100">📄 Obrir PDF</a>`}
 
       <div class="d-flex justify-content-between align-items-center mt-2">
-        <small class="text-muted text-truncate">${data.filename}</small>
+        <small class="text-muted text-truncate" title="${data.filename}">
+          ${data.filename}
+        </small>
         <button class="btn btn-sm btn-outline-danger" data-delete="${data.id}">Eliminar</button>
       </div>
 
     </div>
   `;
 
-  // primera vez → crear grid
   let grid = wrapper.querySelector('.row') as HTMLDivElement | null;
   if (!grid) {
     grid = document.createElement('div');

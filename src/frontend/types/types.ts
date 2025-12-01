@@ -14,6 +14,14 @@ export interface FitxaFamiliars {
   anyNaixementFamiliar: string;
 }
 
+export type Adjunt = {
+  id: number;
+  url: string;
+  filename: string;
+  mime?: string;
+  tipus?: number;
+};
+
 export interface Fitxa {
   id: number;
   nom: string;
@@ -107,6 +115,7 @@ export interface Fitxa {
   causa_defuncio_detalls: number;
   imatgePerfil?: number; // indicador de que hay imagen
   nomImatge: string;
+  adjunts?: Adjunt[]; // 👈 nuevo campo
 }
 
 export interface FitxaJudicial {

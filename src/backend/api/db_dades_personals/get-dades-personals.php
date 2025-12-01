@@ -35,6 +35,56 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
     exit();
 }
 
+// Imatges
+/**
+ * Retorna els adjunts (JPG/PDF) associats a una persona per a la galeria (tipus=2).
+ *
+ * @param PDO $conn
+ * @param int $idPersona
+ * @return array<int,array<string,mixed>>
+ */
+function loadAdjuntsForPersona(PDO $conn, int $idPersona): array
+{
+    $stmt = $conn->prepare("
+        SELECT id, nomArxiu, nomImatge, mime
+        FROM aux_imatges
+        WHERE idPersona = :idPersona
+          AND tipus = 1
+        ORDER BY dateCreated ASC, id ASC
+    ");
+    $stmt->execute([':idPersona' => $idPersona]);
+    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $baseUrl = 'https://media.memoriaterrassa.cat/assets_represaliats/img/';
+
+    $out = [];
+    foreach ($rows as $row) {
+        $id        = (int)$row['id'];
+        $nomArxiu  = (string)$row['nomArxiu'];
+        $nomImatge = trim((string)$row['nomImatge']);
+        $mime      = (string)($row['mime'] ?? '');
+
+        // Inferim extensió a partir del mime
+        $ext = '';
+        if (str_starts_with($mime, 'image/')) {
+            $ext = '.jpg';
+        } elseif ($mime === 'application/pdf') {
+            $ext = '.pdf';
+        }
+
+        $url = $baseUrl . $nomArxiu . $ext;
+
+        $out[] = [
+            'id'       => $id,
+            'url'      => $url,
+            'filename' => $nomImatge !== '' ? $nomImatge : ($nomArxiu . $ext),
+            'mime'     => $mime,
+        ];
+    }
+
+    return $out;
+}
+
 
 // 1) Llistat complet represaliats (web pública) completades 2 / visibilitat 2
 // ruta GET => "https://memoriaterrassa.cat/api/dades_personals/get/?type=llistatComplertWeb"
@@ -434,21 +484,78 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
             LEFT JOIN db_biografies AS bio ON dp.id = bio.idRepresaliat
             LEFT JOIN aux_empreses AS em ON dp.empresa = em.id
             LEFT JOIN aux_tipus_via AS v ON dp.tipus_via = v.id
-            WHERE dp.id = $id";
+            WHERE dp.id = :id";
 
 
     $stmt = $conn->prepare($query);
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
     $stmt->execute();
 
+    header("Content-Type: application/json; charset=utf-8");
+
     if ($stmt->rowCount() === 0) {
-        header("Content-Type: application/json");
-        echo json_encode(null);  // Devuelve un objeto JSON nulo si no hay resultados
-    } else {
-        // Solo obtenemos la primera fila ya que parece ser una búsqueda por ID
-        $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        header("Content-Type: application/json");
-        echo json_encode($row);  // Codifica la fila como un objeto JSON
+        echo json_encode(null);
+        exit;
     }
+
+    // Array de filas (aunque normalmente será solo 1)
+    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $baseUrl = 'https://media.memoriaterrassa.cat/assets_represaliats/img/';
+
+    foreach ($rows as &$row) {
+        if (!isset($row['id'])) {
+            $row['adjunts'] = [];
+            continue;
+        }
+
+        $idPersona = (int)$row['id'];
+
+        // 🔹 Adjuntos de galería: tipus = 3
+        $qAdj = "
+        SELECT id, nomArxiu, nomImatge, mime, tipus
+        FROM aux_imatges
+        WHERE idPersona = :idPersona
+          AND tipus = 3
+        ORDER BY dateCreated ASC, id ASC
+    ";
+        $stmtAdj = $conn->prepare($qAdj);
+        $stmtAdj->execute([':idPersona' => $idPersona]);
+        $rowsAdj = $stmtAdj->fetchAll(PDO::FETCH_ASSOC);
+
+        $adjunts = [];
+
+        if (!empty($rowsAdj)) {
+            foreach ($rowsAdj as $rowAdj) {
+                $nomArxiu  = (string)$rowAdj['nomArxiu'];
+                $nomImatge = trim((string)$rowAdj['nomImatge']);
+                $mime      = (string)($rowAdj['mime'] ?? '');
+
+                // Inferir extensión según MIME
+                $ext = '';
+                if (strpos($mime, 'image/') === 0) {
+                    $ext = '.jpg';
+                } elseif ($mime === 'application/pdf') {
+                    $ext = '.pdf';
+                }
+
+                $url = $baseUrl . $nomArxiu . $ext;
+
+                $adjunts[] = [
+                    'id'       => (int)$rowAdj['id'],
+                    'url'      => $url,
+                    'filename' => $nomImatge !== '' ? $nomImatge : ($nomArxiu . $ext),
+                    'mime'     => $mime,
+                    'tipus'    => (int)$rowAdj['tipus'],
+                ];
+            }
+        }
+
+        $row['adjunts'] = $adjunts;
+    }
+    unset($row);
+
+    echo json_encode($rows);
 
 
     // 4) Pagina informacio fitxa Represaliat - WEB PUBLICA
@@ -613,6 +720,65 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
             return;
         }
 
+
+        // 🔹 A PARTIR DE AQUÍ: cargar adjuntos (imatges/pdf) de aux_imatges
+        // En tu JSON, data es un array de filas.
+        // Ej: [ [ 'id' => 1173, ... ] ]
+        // Recorremos cada fila y le añadimos 'adjunts'
+        $baseUrl = 'https://media.memoriaterrassa.cat/assets_represaliats/img/';
+
+        foreach ($result as &$row) {
+            if (!isset($row['id'])) {
+                // Si por lo que sea no hay id, no podemos buscar adjunts
+                $row['adjunts'] = [];
+                continue;
+            }
+
+            $idPersona = (int)$row['id'];
+
+            $qAdj = "
+            SELECT id, nomArxiu, nomImatge, mime, tipus
+            FROM aux_imatges
+            WHERE idPersona = :idPersona
+              AND tipus = 3
+            ORDER BY dateCreated ASC, id ASC
+        ";
+
+            $rowsAdj = $db->getData($qAdj, [':idPersona' => $idPersona]); // devuelve array de filas
+
+            $adjunts = [];
+
+            if (!empty($rowsAdj) && is_array($rowsAdj)) {
+                foreach ($rowsAdj as $rowAdj) {
+                    $nomArxiu  = (string)$rowAdj['nomArxiu'];
+                    $nomImatge = trim((string)$rowAdj['nomImatge']);
+                    $mime      = (string)($rowAdj['mime'] ?? '');
+
+                    // Deducimos extensión según MIME
+                    $ext = '';
+                    if (strpos($mime, 'image/') === 0) {
+                        $ext = '.jpg';
+                    } elseif ($mime === 'application/pdf') {
+                        $ext = '.pdf';
+                    }
+
+                    $url = $baseUrl . $nomArxiu . $ext;
+
+                    $adjunts[] = [
+                        'id'       => (int)$rowAdj['id'],
+                        'url'      => $url,
+                        'filename' => $nomImatge !== '' ? $nomImatge : ($nomArxiu . $ext),
+                        'mime'     => $mime,
+                        'tipus'    => (int)$rowAdj['tipus'],
+                    ];
+                }
+            }
+
+            // Añadimos el array de adjuntos a la fila principal
+            $row['adjunts'] = $adjunts;
+        }
+        unset($row); // buena práctica al usar &
+
         Response::success(
             MissatgesAPI::success('get'),
             $result,
@@ -625,6 +791,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
             500
         );
     }
+
 
     // 4) Nom i cognoms del represaliat
     // ruta GET => "https://memoriaterrassa.cat/api/represaliats/get/?type=nomCognoms&id=35"
