@@ -73,9 +73,9 @@ function getMultimediaTexts(lang: string) {
     case 'es':
       return {
         emptyAll: 'Todavía no hay elementos multimedia disponibles.',
-        imagesTitle: 'Imágenes',
+        imagesTitle: 'Galería de imágenes',
         docsTitle: 'Documentos',
-        openImage: 'Ver imagen',
+        openImage: 'Descargar imagen',
         openPdf: 'Abrir documento PDF',
         badgeJpg: 'JPG',
         badgePdf: 'PDF',
@@ -83,9 +83,9 @@ function getMultimediaTexts(lang: string) {
     case 'en':
       return {
         emptyAll: 'No multimedia items are available yet.',
-        imagesTitle: 'Images',
+        imagesTitle: 'Images Gallery',
         docsTitle: 'Documents',
-        openImage: 'View image',
+        openImage: 'Download image',
         openPdf: 'Open PDF document',
         badgeJpg: 'JPG',
         badgePdf: 'PDF',
@@ -93,9 +93,9 @@ function getMultimediaTexts(lang: string) {
     default: // ca
       return {
         emptyAll: 'Encara no hi ha elements multimèdia disponibles.',
-        imagesTitle: 'Imatges',
+        imagesTitle: "Galeria d'imatges",
         docsTitle: 'Documents',
-        openImage: 'Veure imatge',
+        openImage: 'Descarregar imatge',
         openPdf: 'Obrir document PDF',
         badgeJpg: 'JPG',
         badgePdf: 'PDF',
