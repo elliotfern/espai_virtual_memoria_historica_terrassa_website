@@ -111,7 +111,7 @@ try {
         }
     }
 
-    $tipus = isset($_POST['tipus']);
+    $tipus = $_POST['tipus'];
 
     // Transacción para evitar orfes
     $conn->beginTransaction();

@@ -36,3 +36,28 @@
   right: -12px;
   border-radius: 999px;
 }
+
+/* Card multimedia: que todas tengan la misma lógica de altura */
+.ef-media-card {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Contenedor de la miniatura: altura fija y centrado del contenido */
+.ef-media-thumb {
+  height: 220px; /* 👈 ajusta a gusto (200–260px) */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f8f9fa; /* gris muy suave para el marco */
+  overflow: hidden;
+}
+
+/* Imagen dentro del contenedor: que quepa entera, sin cortes raros */
+.ef-media-thumb img {
+  max-height: 100%;
+  max-width: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain; /* 👈 no recorta, la adapta dentro del espacio */
+}

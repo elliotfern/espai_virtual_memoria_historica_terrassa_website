@@ -96,24 +96,24 @@ function getExtensionLabel(adj: Adjunt): string {
 }
 
 /* ---------- Render de targetes ---------- */
-
 function renderImageCard(adj: Adjunt, texts: ReturnType<typeof getMultimediaTexts>): string {
   const badge = getExtensionLabel(adj) === 'PDF' ? texts.badgePdf : texts.badgeJpg;
 
   return `
     <div class="col">
-      <div class="card h-100 border-0 shadow-sm">
+      <div class="card h-100 border-0 shadow-sm ef-media-card">
         <a href="${adj.url}"
            class="text-decoration-none js-lightbox-trigger"
            data-lightbox-url="${adj.url}"
            data-lightbox-alt="${escapeHtml(adj.filename)}">
-          <img src="${adj.url}"
-               class="card-img-top img-fluid"
-               alt="${escapeHtml(adj.filename)}"
-               style="object-fit:cover;max-height:220px;">
+          <div class="ef-media-thumb">
+            <img src="${adj.url}"
+                 class="img-fluid"
+                 alt="${escapeHtml(adj.filename)}">
+          </div>
         </a>
         <div class="card-body p-2 d-flex flex-column">
-          <div class="d-flex justify-content-between align-items-center mb-1">
+          <div class="d-flex justify-content-between align-items-start mb-1">
             <p class="card-text small mb-1" title="${escapeHtml(adj.filename)}">
               ${escapeHtml(adj.filename)}
             </p>
@@ -133,7 +133,7 @@ function renderDocCard(adj: Adjunt, texts: ReturnType<typeof getMultimediaTexts>
 
   return `
     <div class="col">
-      <div class="card h-100 border-0 shadow-sm d-flex flex-column justify-content-between">
+      <div class="card h-100 border-0 shadow-sm d-flex flex-column justify-content-between ef-media-card">
         <div class="card-body d-flex flex-column justify-content-center text-center">
           <div class="mb-2" style="font-size:2rem;">📄</div>
           <p class="card-text small mb-1" title="${escapeHtml(adj.filename)}">

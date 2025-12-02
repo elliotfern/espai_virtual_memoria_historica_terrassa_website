@@ -87,7 +87,7 @@ if ($pagina === "modifica-fitxa") {
                 <div class="form-check me-3">
                   <input class="form-check-input" type="checkbox" id="categoria22" name="categoria" value="categoria22">
                   <label class="form-check-label" for="categoria22">
-                    Desaparegut en combat
+                    Desaparegut o ferit en combat
                   </label>
                 </div>
 
