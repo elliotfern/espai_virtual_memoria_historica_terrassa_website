@@ -127,7 +127,7 @@ export async function taulaPaginaTots(): Promise<void> {
       field: 'id',
       render: (_value, row) =>
         `<a id="${row.id}" title="Modifica" target="_blank" href="https://${window.location.hostname}/gestio/base-dades/modifica-fitxa/${row.id}">
-           <button type="button" class="btn btn-secondary btn-sm">Dades personals</button>
+           <button type="button" class="btn btn-secondary btn-sm">Modifica dades fitxa</button>
          </a>`,
     });
   }
