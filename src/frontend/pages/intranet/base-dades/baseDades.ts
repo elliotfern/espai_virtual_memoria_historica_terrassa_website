@@ -23,6 +23,7 @@ import { taulaPaginaTots } from './taulaPaginaTots';
 import { taulaPaginaRepresaliats } from './taulaPaginaRepresaliats';
 import { taulaPaginaExiliats } from './taulaPaginaExiliats';
 import { taulaPaginaCostHuma } from './taulaPaginaCostHuma';
+import { formDetingutConsellGuerra } from './tipusRepressio/processat';
 
 export function baseDadesIntranet() {
   const url = window.location.href;
@@ -141,6 +142,10 @@ export function baseDadesIntranet() {
   }
   if (section === 'empresonaments-preso-model') {
     formPresoModel(Number(pageType[4]), Number(pageType[5]));
+    return;
+  }
+  if (section === 'detinguts-consell-guerra') {
+    formDetingutConsellGuerra(Number(pageType[4]), Number(pageType[5]));
     return;
   }
   if (section === 'empresonaments-comite-solidaritat') {

@@ -2,6 +2,12 @@ import { fetchDataGet } from '../../../../services/fetchData/fetchDataGet';
 import { auxiliarSelect } from '../../../../services/fetchData/auxiliarSelect';
 import { renderFormInputs } from '../../../../services/fetchData/renderInputsForm';
 import { transmissioDadesDB } from '../../../../services/fetchData/transmissioDades';
+import { getIsAdmin } from '../../../../services/auth/getIsAdmin';
+import { getIsAutor } from '../../../../services/auth/getIsAutor';
+import { formatDatesForm } from '../../../../services/formatDates/dates';
+import { DOMAIN_API, DOMAIN_WEB } from '../../../../config/constants';
+import { renderTaulaCercadorFiltres } from '../../../../services/renderTaula/renderTaulaCercadorFiltres';
+import { initDeleteHandlers, registerDeleteCallback } from '../../../../services/fetchData/handleDelete';
 
 interface Fitxa {
   [key: string]: unknown;
@@ -20,7 +26,88 @@ interface Fitxa {
   lloc_detencio: number;
 }
 
-export async function processat(idRepresaliat: number) {
+interface EspaiRow {
+  id: number;
+  data_empresonament: string;
+  data_llibertat: string;
+  motiu_empresonament: string;
+  codi: string;
+  arxiu: string;
+  data_detencio: string;
+  tipus_procediment: string;
+  num_causa: string;
+}
+
+type Column<T> = {
+  header: string;
+  field: keyof T;
+  render?: (value: T[keyof T], row: T) => string;
+};
+
+export async function llistatDetingutConsellGuerra(idRepresaliat: number) {
+  const isAdmin = await getIsAdmin();
+  const isAutor = await getIsAutor();
+  const reloadKey = 'reload-taula-taulaLlistatConsellGuerra';
+  const container = document.getElementById('fitxaNomCognoms');
+
+  const data2 = await fetchDataGet<Fitxa>(`/api/dades_personals/get/?type=nomCognoms&id=${idRepresaliat}`);
+
+  if (data2) {
+    if (!container) return;
+
+    const nomComplet = `${data2.nom} ${data2.cognom1} ${data2.cognom2}`;
+    const url = `${DOMAIN_WEB}/fitxa/${data2.slug}`;
+
+    container.innerHTML = `<h4>Fitxa: <a href="${url}" target="_blank">${nomComplet}</a></h4>`;
+  }
+
+  const columns: Column<EspaiRow>[] = [
+    { header: 'Data detenció', field: 'data_detencio', render: (_: unknown, row: EspaiRow) => `${formatDatesForm(row.data_detencio)}` },
+    { header: 'Tipus procediment judicial', field: 'tipus_procediment', render: (_: unknown, row: EspaiRow) => `${row.tipus_procediment}` },
+    { header: 'Núm. de causa', field: 'num_causa', render: (_: unknown, row: EspaiRow) => `${row.num_causa}` },
+  ];
+
+  if (isAdmin || isAutor) {
+    columns.push({
+      header: 'Accions',
+      field: 'id',
+      render: (_: unknown, row: EspaiRow) => `<a id="${row.id}" title="Modifica" href="${DOMAIN_WEB}/gestio/base-dades/detinguts-consell-guerra/modifica-detingut-consell-guerra/${idRepresaliat}/${row.id}"><button type="button" class="btn btn-warning btn-sm">Modifica</button></a>`,
+    });
+  }
+
+  if (isAdmin) {
+    columns.push({
+      header: '',
+      field: 'id',
+      render: (_: unknown, row: EspaiRow) => `
+          <button 
+            type="button"
+            class="btn btn-danger btn-sm delete-button"
+            data-id="${row.id}" 
+            data-url="${DOMAIN_API}/presoModel/delete/${row.id}"
+            data-reload-callback="${reloadKey}"
+          >
+            Elimina
+          </button>`,
+    });
+  }
+
+  renderTaulaCercadorFiltres<EspaiRow>({
+    url: `${DOMAIN_API}/processats/get/fitxaId?id=${idRepresaliat}`,
+    containerId: 'taulaLlistatConsellGuerra',
+    columns,
+    filterKeys: ['num_causa'],
+    //filterByField: 'provincia',
+  });
+
+  // Registra el callback con una clave única
+  registerDeleteCallback(reloadKey, () => llistatDetingutConsellGuerra(idRepresaliat));
+
+  // Inicia el listener una sola vez
+  initDeleteHandlers();
+}
+
+export async function formDetingutConsellGuerra(idRepresaliat: number, id?: number) {
   let data: Partial<Fitxa> = {
     tipus_procediment: 0,
     tipus_judici: 0,
@@ -33,8 +120,13 @@ export async function processat(idRepresaliat: number) {
     lloc_detencio: 0,
   };
 
-  const response = await fetchDataGet<Fitxa>(`/api/processats/get/fitxaRepressio?id=${idRepresaliat}`);
+  let response: Fitxa | null = null;
+
   const data2 = await fetchDataGet<Fitxa>(`/api/dades_personals/get/?type=nomCognoms&id=${idRepresaliat}`);
+
+  if (id) {
+    response = await fetchDataGet<Fitxa>(`/api/processats/get/fitxaRepressio?id=${id}`);
+  }
 
   const btnForm = document.getElementById('btnProcessat') as HTMLButtonElement;
   const btn1 = document.getElementById('refreshButton1');

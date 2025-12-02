@@ -28,7 +28,7 @@ switch ($categoriaId) {
     case 5:
         break;
     case 6:
-        require_once APP_ROOT . '/public/intranet/01_base_dades/tipus_repressio/1_represaliats/processats.php';
+        require_once APP_ROOT . '/public/intranet/01_base_dades/tipus_repressio/1_represaliats/llistat-detinguts-consells-guerra.php';
         break;
     case 7:
         require_once APP_ROOT . '/public/intranet/01_base_dades/tipus_repressio/1_represaliats/depurats.php';

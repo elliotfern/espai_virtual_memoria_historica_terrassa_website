@@ -123,6 +123,15 @@ $routes = [
         'view' => BACKEND_URL . $urlIntranetDir['base_dades'] . '/tipus_repressio/1_represaliats/detinguts_preso_model.php'
     ]),
 
+    // detinguts / consell de guerra
+    APP_INTRANET . '/base-dades/detinguts-consell-guerra/modifica-detingut-consell-guerra/{idPersona}/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['base_dades'] . '/tipus_repressio/1_represaliats/detinguts_consell-guerra.php'
+    ]),
+
+    APP_INTRANET . '/base-dades/detinguts-consell-guerra/nou-detingut-consell-guerra/{idPersona}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['base_dades'] . '/tipus_repressio/1_represaliats/detinguts_consell-guerra.php'
+    ]),
+
     // detinguts COMITE SOLIDARITAT
     APP_INTRANET . '/base-dades/empresonaments-comite-solidaritat/modifica-empresonament/{idPersona}/{id}' => array_merge($defaultProtectedConfig, [
         'view' => BACKEND_URL . $urlIntranetDir['base_dades'] . '/tipus_repressio/1_represaliats/detinguts_comite_solidaritat.php'
