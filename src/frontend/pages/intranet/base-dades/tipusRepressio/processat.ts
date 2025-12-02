@@ -126,7 +126,7 @@ export async function formDetingutConsellGuerra(idRepresaliat: number, id?: numb
   const data2 = await fetchDataGet<Fitxa>(`/api/dades_personals/get/?type=nomCognoms&id=${idRepresaliat}`);
 
   if (id) {
-    response = await fetchDataGet<Fitxa>(`/api/processats/get/fitxaRepressio?id=${id}`);
+    response = await fetchDataGet<Fitxa>(`/api/processats/get/fitxaIntranetId?id=${id}`);
   }
 
   const btnForm = document.getElementById('btnProcessat') as HTMLButtonElement;
