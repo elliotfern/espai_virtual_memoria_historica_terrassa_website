@@ -37,6 +37,8 @@ interface EspaiRow {
   tipus_procediment: string;
   num_causa: string;
   tipus_judici: string;
+  any_inicial: string;
+  any_final: string;
 }
 
 type Column<T> = {
@@ -77,6 +79,23 @@ export async function llistatDetingutConsellGuerra(idRepresaliat: number) {
 
     { header: 'Tipus procediment judicial', field: 'tipus_procediment', render: (_: unknown, row: EspaiRow) => `${row.tipus_procediment} - ${row.tipus_judici}` },
     { header: 'Núm. de causa', field: 'num_causa', render: (_: unknown, row: EspaiRow) => `${row.num_causa}` },
+    {
+      header: 'Anys',
+      field: 'num_causa',
+      render: (_: unknown, row: EspaiRow) => {
+        const valor = row.any_inicial?.trim();
+        const valor2 = row.any_final?.trim();
+
+        if (!valor && !valor2) return '-';
+
+        if (valor && valor2) {
+          return `${valor} - ${valor2}`;
+        }
+
+        // Si solo hay uno de los dos
+        return valor ?? valor2 ?? '-';
+      },
+    },
   ];
 
   if (isAdmin || isAutor) {

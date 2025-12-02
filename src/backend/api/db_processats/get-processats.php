@@ -139,7 +139,7 @@ if ($slug === 'fitxaRepressio') {
 
     try {
         $params = [':idPersona' => $id];
-        $result = $db->getData($query, $params, true);
+        $result = $db->getData($query, $params);
 
         if (empty($result)) {
             Response::error(
@@ -174,43 +174,34 @@ if ($slug === 'fitxaRepressio') {
     p.id,
     p.idPersona,
     p.data_detencio,
-    m2.ciutat AS lloc_detencio,
+    p.lloc_detencio,
     p.copia_exp,
-    pj.procediment_ca AS tipus_procediment,
-    tp.tipusJudici_ca AS tipus_judici,
+    p.tipus_procediment,
+    p.tipus_judici,
     p.num_causa,
     p.data_inici_proces,
     p.jutge_instructor,
     p.secretari_instructor,
-    j.jutjat_ca AS jutjat,
+    p.jutjat,
+    p.anyDetingut,
     p.any_inicial,
     p.any_final,
     p.consell_guerra_data,
-    m.ciutat AS lloc_consell_guerra,
+    p.lloc_consell_guerra,
     p.president_tribunal,
     p.defensor,
     p.fiscal,
     p.ponent,
     p.tribunal_vocals,
-    a1.acusacio_ca AS acusacio,
-    a2.acusacio_ca AS acusacio_2,
+    p.acusacio,
+    p.acusacio_2,
     p.testimoni_acusacio,
     p.sentencia_data,
-    pe.pena_ca AS pena,
-    se.sentencia_ca AS sentencia,
+    p.sentencia,
+    p.pena,
     p.commutacio,
-    p.observacions,
-    p.anyDetingut
+    p.observacions
     FROM db_processats AS p
-    LEFT JOIN aux_procediment_judicial AS pj ON p.tipus_procediment = pj.id
-    LEFT JOIN aux_tipus_judici AS tp ON p.tipus_judici = tp.id
-    LEFT JOIN aux_jutjats AS j ON p.jutjat = j.id
-    LEFT JOIN aux_dades_municipis AS m ON p.lloc_consell_guerra = m.id
-    LEFT JOIN aux_acusacions AS a1 ON p.acusacio = a1.id
-    LEFT JOIN aux_acusacions AS a2 ON p.acusacio_2 = a2.id
-    LEFT JOIN aux_sentencies AS se ON p.sentencia = se.id
-    LEFT JOIN aux_penes AS pe ON p.pena = pe.id
-    LEFT JOIN aux_dades_municipis AS m2 ON p.lloc_detencio = m2.id
     WHERE p.id = :id";
 
     try {

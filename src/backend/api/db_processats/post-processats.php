@@ -49,19 +49,6 @@ if (!$data['idPersona']) {
 
 $idPersona = $data['idPersona'];
 
-// Comprobación directa en la misma sección del PUT
-global $conn;
-/** @var PDO $conn */
-$stmtCheck = $conn->prepare("SELECT COUNT(*) FROM db_processats WHERE idPersona = :idPersona");
-$stmtCheck->execute(['idPersona' => $idPersona]);
-$errorDuplicat = $stmtCheck->fetchColumn() > 0;
-
-if ($errorDuplicat) {
-    http_response_code(409); // Conflict
-    echo json_encode(['status' => 'error', 'message' => 'Ja existeix un registre d\'aquest represaliat a la base de dades']);
-    exit;
-}
-
 // Inicializar un array para los errores
 $errors = [];
 

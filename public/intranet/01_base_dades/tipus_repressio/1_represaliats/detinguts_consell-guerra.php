@@ -40,10 +40,14 @@
                     <label for="tipus_procediment" class="form-label negreta">Tipus de procediment:</label>
                     <select class="form-select" aria-label="Default select example" name="tipus_procediment" id="tipus_procediment">
                     </select>
+                    <div class="avis-form">
+                        * Camp obligatori.
+                    </div>
                     <div class="mt-2">
                         <a href="https://memoriaterrassa.cat/gestio/auxiliars/nou-tipus-procediment-judicial" target="_blank" class="btn btn-secondary btn-sm" id="afegir1">Afegir procediment</a>
                         <button id="refreshButton1" class="btn btn-primary btn-sm">Actualitzar llistat</button>
                     </div>
+
                 </div>
 
                 <div class="col-md-4 mb-4">
