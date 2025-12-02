@@ -88,7 +88,7 @@ export async function empresonatsPresoModel(idRepresaliat: number) {
             type="button"
             class="btn btn-danger btn-sm delete-button"
             data-id="${row.id}" 
-            data-url="${DOMAIN_API}/api/presoModel/delete/${row.id}"
+            data-url="${DOMAIN_API}/presoModel/delete/${row.id}"
             data-reload-callback="${reloadKey}"
           >
             Elimina
@@ -97,7 +97,7 @@ export async function empresonatsPresoModel(idRepresaliat: number) {
   }
 
   renderTaulaCercadorFiltres<EspaiRow>({
-    url: `${DOMAIN_API}/api/preso_model/get/empresonatId?id=${idRepresaliat}`,
+    url: `${DOMAIN_API}/preso_model/get/empresonatId?id=${idRepresaliat}`,
     containerId: 'taulaLlistatDetencionsPresoModel',
     columns,
     filterKeys: ['arxiu'],
