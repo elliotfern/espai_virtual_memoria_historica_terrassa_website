@@ -77,10 +77,37 @@ export async function llistatDetingutConsellGuerra(idRepresaliat: number) {
       },
     },
 
-    { header: 'Tipus procediment judicial', field: 'tipus_procediment', render: (_: unknown, row: EspaiRow) => `${row.tipus_procediment} - ${row.tipus_judici}` },
-    { header: 'Núm. de causa', field: 'num_causa', render: (_: unknown, row: EspaiRow) => `${row.num_causa}` },
     {
-      header: 'Anys',
+      header: 'Tipus procediment judicial',
+      field: 'tipus_procediment',
+      render: (_: unknown, row: EspaiRow) => {
+        const valor = row.tipus_procediment?.trim();
+        const valor2 = row.tipus_judici?.trim();
+        if (!valor && !valor2) return '-';
+
+        if (valor && valor2) {
+          return `${valor} - ${valor2}`;
+        }
+
+        // Si solo hay uno de los dos
+        return valor ?? valor2 ?? '-';
+      },
+    },
+
+    {
+      header: 'Núm. de causa',
+      field: 'num_causa',
+      render: (_: unknown, row: EspaiRow) => {
+        const valor = row.num_causa?.trim();
+
+        if (!valor) return '-';
+
+        return valor;
+      },
+    },
+
+    {
+      header: 'Anys causa',
       field: 'num_causa',
       render: (_: unknown, row: EspaiRow) => {
         const valor = row.any_inicial?.trim();
