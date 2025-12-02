@@ -36,6 +36,7 @@ interface EspaiRow {
   data_detencio: string;
   tipus_procediment: string;
   num_causa: string;
+  tipus_judici: string;
 }
 
 type Column<T> = {
@@ -63,7 +64,7 @@ export async function llistatDetingutConsellGuerra(idRepresaliat: number) {
 
   const columns: Column<EspaiRow>[] = [
     { header: 'Data detenció', field: 'data_detencio', render: (_: unknown, row: EspaiRow) => `${formatDatesForm(row.data_detencio)}` },
-    { header: 'Tipus procediment judicial', field: 'tipus_procediment', render: (_: unknown, row: EspaiRow) => `${row.tipus_procediment}` },
+    { header: 'Tipus procediment judicial', field: 'tipus_procediment', render: (_: unknown, row: EspaiRow) => `${row.tipus_procediment} - ${row.tipus_judici}` },
     { header: 'Núm. de causa', field: 'num_causa', render: (_: unknown, row: EspaiRow) => `${row.num_causa}` },
   ];
 
