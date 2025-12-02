@@ -4,7 +4,7 @@ import { costHumaCombat } from './costHumaCombat';
 import { exili } from './exili';
 import { deportat } from './deportat';
 import { afusellat } from './afusellat';
-import { processat } from './processat';
+import { llistatDetingutConsellGuerra } from './processat';
 import { empresonatsPresoModel } from './presoModel';
 import { depurats } from './depurats';
 import { detingutsGuardiaUrbana } from './detingutsGuardiaUrbana';
@@ -43,7 +43,7 @@ export function formTipusRepressio() {
       break;
 
     case 6:
-      processat(id);
+      llistatDetingutConsellGuerra(id);
       break;
 
     case 12:
