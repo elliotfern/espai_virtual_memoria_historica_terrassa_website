@@ -66,6 +66,17 @@
                 </div>
 
                 <div class="col-md-4 mb-4">
+                    <label for="num_registre" class="form-label negreta">Número de registre Arxiu AMTTB:</label>
+                    <input type="text" class="form-control" id="num_registre" name="num_registre" value="">
+                </div>
+
+                <div class="col-md-4 mb-4">
+                    <label for="copia_exp" class="form-label negreta">Còpia digilitzada del sumari?:</label>
+                    <select id="copia_exp" class="form-select" name="copia_exp">
+                    </select>
+                </div>
+
+                <div class="col-md-4 mb-4">
                     <label for="anyDetingut" class="form-label negreta">Anys en ser detingut o investigat:</label>
                     <input type="text" class="form-control" id="anyDetingut" name="anyDetingut" value="">
                 </div>

@@ -19,7 +19,7 @@ interface EspaiRow {
   num_registre: string;
   ciutat: string;
   num_causa: string;
-  copia_exp: string;
+  copia_exp: number;
   nom_usuari: string;
 }
 
@@ -74,10 +74,7 @@ export async function taulaProcessats() {
     {
       header: 'Digitalitzat',
       field: 'id',
-      render: (_: unknown, row: EspaiRow) => {
-        const copia_exp = row.copia_exp;
-        return copia_exp && copia_exp.trim() !== '' ? copia_exp : 'Sense dades';
-      },
+      render: (_: unknown, row: EspaiRow) => (row.copia_exp === 1 ? 'SI' : 'NO'),
     },
 
     {

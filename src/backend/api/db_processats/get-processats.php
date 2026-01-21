@@ -179,6 +179,7 @@ if ($slug === 'fitxaRepressio') {
     p.tipus_procediment,
     p.tipus_judici,
     p.num_causa,
+    p.num_registre,
     p.data_inici_proces,
     p.jutge_instructor,
     p.secretari_instructor,

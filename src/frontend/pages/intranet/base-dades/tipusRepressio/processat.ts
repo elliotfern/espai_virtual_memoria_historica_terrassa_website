@@ -24,6 +24,7 @@ interface Fitxa {
   sentencia: number;
   pena: number;
   lloc_detencio: number;
+  copia_exp: number;
 }
 
 interface EspaiRow {
@@ -176,6 +177,7 @@ export async function formDetingutConsellGuerra(idRepresaliat: number, id?: numb
     sentencia: 0,
     pena: 0,
     lloc_detencio: 0,
+    copia_exp: 0,
   };
 
   let response: Fitxa | null = null;
@@ -282,6 +284,7 @@ export async function formDetingutConsellGuerra(idRepresaliat: number, id?: numb
   await auxiliarSelect(data?.acusacio_2, 'acusacions', 'acusacio_2', 'acusacio_ca');
   await auxiliarSelect(data?.sentencia, 'sentencies', 'sentencia', 'sentencia_ca');
   await auxiliarSelect(data?.pena, 'penes', 'pena', 'pena_ca');
+  await auxiliarSelect(data?.copia_exp, 'digitalitzat', 'copia_exp', 'nom');
 
   if (!response) {
     if (processatForm) {

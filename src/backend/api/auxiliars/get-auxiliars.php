@@ -1661,6 +1661,31 @@ if ($slug === "municipis") {
             500
         );
     }
+
+    // GET : Digitalitzat sumari consell de guerra
+    // URL: /api/auxiliars/get/digitalitzat
+} elseif ($slug === "digitalitzat") {
+
+    try {
+        // Datos fijos
+        $result = [
+            ['id' => 1, 'nom' => 'Si'],
+            ['id' => 2, 'nom' => 'No'],
+        ];
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (Throwable $e) {
+        // Por coherencia con tu patrón
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
 } else {
     // Si el parámetro 'type' no coincide con ninguno de los casos anteriores, mostramos un error
     echo json_encode(["error" => "Tipo no válido"]);
