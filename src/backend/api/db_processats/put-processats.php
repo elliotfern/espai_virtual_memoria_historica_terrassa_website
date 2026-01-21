@@ -135,6 +135,8 @@ $commutacio = !empty($data['commutacio']) ? $data['commutacio'] : NULL;
 $observacions = !empty($data['observacions']) ? $data['observacions'] : NULL;
 $anyDetingut = !empty($data['anyDetingut']) ? $data['anyDetingut'] : NULL;
 $lloc_detencio = !empty($data['lloc_detencio']) ? $data['lloc_detencio'] : NULL;
+$num_registre = !empty($data['num_registre']) ? $data['num_registre'] : NULL;
+$copia_exp = !empty($data['copia_exp']) ? $data['copia_exp'] : NULL;
 
 // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
 try {
@@ -173,7 +175,9 @@ try {
             observacions = :observacions,
             anyDetingut = :anyDetingut,
             lloc_detencio = :lloc_detencio,
-            data_detencio = :data_detencio
+            data_detencio = :data_detencio,
+            num_registre = :num_registre, 
+            copia_exp = :copia_exp
         WHERE id = :id;";
 
     // Preparar la consulta
@@ -210,6 +214,8 @@ try {
     $stmt->bindParam(':commutacio', $commutacio, PDO::PARAM_STR);
     $stmt->bindParam(':observacions', $observacions, PDO::PARAM_STR);
     $stmt->bindParam(':anyDetingut', $anyDetingut, PDO::PARAM_STR);
+    $stmt->bindParam(':num_registre', $anyDetingut, PDO::PARAM_STR);
+    $stmt->bindParam(':copia_exp', $anyDetingut, PDO::PARAM_INT);
 
     // Ejecutar la consulta
     $stmt->execute();

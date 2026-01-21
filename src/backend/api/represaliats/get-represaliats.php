@@ -285,7 +285,7 @@ ORDER BY t.cognom1, t.cognom2, t.nom;";
                 FROM db_dades_personals AS a
                 LEFT JOIN db_processats AS e ON a.id = e.idPersona
                 LEFT JOIN aux_dades_municipis AS m ON a.municipi_naixement = m.id
-                LEFT JOIN auth_usuaris ON u ON a.autor = u.id
+                LEFT JOIN auth_users AS u ON a.autor = u.id
                 WHERE FIND_IN_SET('6', REPLACE(REPLACE(a.categoria, '{', ''), '}', '')) > 0
                 ORDER BY a.cognom1 ASC;";
 
