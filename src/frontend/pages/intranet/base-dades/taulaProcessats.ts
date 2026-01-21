@@ -57,7 +57,7 @@ export async function taulaProcessats() {
       field: 'id',
       render: (_: unknown, row: EspaiRow) => {
         const numCausa = row.num_causa;
-        return numCausa;
+        return numCausa && numCausa.trim() !== '' ? numCausa : 'Sense dades';
       },
     },
 
@@ -66,11 +66,18 @@ export async function taulaProcessats() {
       field: 'id',
       render: (_: unknown, row: EspaiRow) => {
         const nomRegistre = row.num_registre;
-        return nomRegistre;
+        return nomRegistre && nomRegistre.trim() !== '' ? nomRegistre : 'Sense dades';
       },
     },
 
-    { header: 'Digitalitzat', field: 'copia_exp' },
+    {
+      header: 'Digitalitzat',
+      field: 'id',
+      render: (_: unknown, row: EspaiRow) => {
+        const copia_exp = row.copia_exp;
+        return copia_exp && copia_exp.trim() !== '' ? copia_exp : 'Sense dades';
+      },
+    },
 
     { header: 'Fitxa web', field: 'es_processat' },
   ];
