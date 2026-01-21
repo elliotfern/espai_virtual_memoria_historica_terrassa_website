@@ -280,10 +280,11 @@ ORDER BY t.cognom1, t.cognom2, t.nom;";
 } else if ($slug === 'processats') {
     $db = new Database();
 
-    $query = "SELECT a.id, CONCAT(a.cognom1, ' ', a.cognom2, ', ', a.nom) AS nom_complet, a.data_naixement, a.data_defuncio, a.slug, a.categoria,
+    $query = "SELECT a.id, CONCAT(a.cognom1, ' ', a.cognom2, ', ', a.nom) AS nom_complet, a.data_naixement, e.copia_exp, e.num_causa, e.num_registre, a.slug, a.categoria, m.ciutat
                 CASE WHEN e.id IS NOT NULL THEN 'Fitxa creada' ELSE 'No' END AS es_processat
                 FROM db_dades_personals AS a
                 LEFT JOIN db_processats AS e ON a.id = e.idPersona
+                LEFT JOIN aux_dades_municipis AS m ON a.municipi_naixement = m.id
                 WHERE FIND_IN_SET('6', REPLACE(REPLACE(a.categoria, '{', ''), '}', '')) > 0
                 ORDER BY a.cognom1 ASC;";
 

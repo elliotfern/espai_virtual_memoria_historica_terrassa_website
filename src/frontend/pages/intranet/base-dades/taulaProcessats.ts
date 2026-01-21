@@ -16,6 +16,10 @@ interface EspaiRow {
   categoria: string;
   es_processat: string;
   slug: string;
+  num_registre: string;
+  ciutat: string;
+  num_causa: string;
+  copia_exp: string;
 }
 
 type Column<T> = {
@@ -32,14 +36,16 @@ export async function taulaProcessats() {
 
   const columns: Column<EspaiRow>[] = [
     { header: 'ID', field: 'id' },
+
     { header: 'Nom i cognoms', field: 'id', render: (_: unknown, row: EspaiRow) => `<a id="${row.id}" title="Fitxa" href="https://${window.location.hostname}/fitxa/${row.slug}" target="_blank">${row.nom_complet}</a>` },
     {
-      header: 'Data naixement',
+      header: 'Naixement',
       field: 'id',
       render: (_: unknown, row: EspaiRow) => {
         const date = row.data_naixement;
         if (date && date !== '0000-00-00') {
-          return formatDatesForm(date) ?? '';
+          const info = `${formatDatesForm(date)} - ${row.ciutat}`;
+          return info;
         } else {
           return '';
         }
@@ -47,25 +53,33 @@ export async function taulaProcessats() {
     },
 
     {
-      header: 'Data defunció',
+      header: 'Núm. Causa',
       field: 'id',
       render: (_: unknown, row: EspaiRow) => {
-        const date2 = row.data_defuncio;
-        if (date2 && date2 !== '0000-00-00') {
-          return formatDatesForm(date2) ?? '';
-        } else {
-          return '';
-        }
+        const numCausa = row.num_causa;
+        return numCausa;
       },
     },
-    { header: 'Fitxa processat creada', field: 'es_processat' },
+
+    {
+      header: 'Núm. Registre',
+      field: 'id',
+      render: (_: unknown, row: EspaiRow) => {
+        const nomRegistre = row.num_registre;
+        return nomRegistre;
+      },
+    },
+
+    { header: 'Digitalitzat', field: 'copia_exp' },
+
+    { header: 'Fitxa web', field: 'es_processat' },
   ];
 
   if (isAdmin || isAutor || isLogged) {
     columns.push({
       header: 'Accions',
       field: 'id',
-      render: (_: unknown, row: EspaiRow) => `<a id="${row.id}" title="Modifica" target="_blank" href="https://${window.location.hostname}/gestio/base-dades/modifica-fitxa/${row.id}"><button type="button" class="btn btn-success btn-sm">Modifica dades fitxa</button></a>`,
+      render: (_: unknown, row: EspaiRow) => `<a id="${row.id}" title="Modifica" target="_blank" href="https://${window.location.hostname}/gestio/base-dades/modifica-fitxa/${row.id}"><button type="button" class="btn btn-success btn-sm">Modifica Fitxa</button></a>`,
     });
   }
 
@@ -73,7 +87,7 @@ export async function taulaProcessats() {
     columns.push({
       header: 'Accions',
       field: 'id',
-      render: (_: unknown, row: EspaiRow) => `<a id="${row.id}" title="Modifica" target="_blank" href="https://${window.location.hostname}/gestio/base-dades/modifica-repressio/6/${row.id}"><button type="button" class="btn btn-warning btn-sm">Modifica repressio</button></a>`,
+      render: (_: unknown, row: EspaiRow) => `<a id="${row.id}" title="Modifica" target="_blank" href="https://${window.location.hostname}/gestio/base-dades/modifica-repressio/6/${row.id}"><button type="button" class="btn btn-warning btn-sm">Modifica Dades Consell Guerra</button></a>`,
     });
   }
 
