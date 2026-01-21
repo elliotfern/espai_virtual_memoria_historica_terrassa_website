@@ -136,7 +136,6 @@ $observacions = !empty($data['observacions']) ? $data['observacions'] : NULL;
 $anyDetingut = !empty($data['anyDetingut']) ? $data['anyDetingut'] : NULL;
 $lloc_detencio = !empty($data['lloc_detencio']) ? $data['lloc_detencio'] : NULL;
 $num_registre = !empty($data['num_registre']) ? $data['num_registre'] : NULL;
-$copia_exp = !empty($data['copia_exp']) ? $data['copia_exp'] : NULL;
 
 // Conectar a la base de datos con PDO (asegúrate de modificar los detalles de la conexión)
 try {
@@ -176,8 +175,7 @@ try {
             anyDetingut = :anyDetingut,
             lloc_detencio = :lloc_detencio,
             data_detencio = :data_detencio,
-            num_registre = :num_registre, 
-            copia_exp = :copia_exp
+            num_registre = :num_registre
         WHERE id = :id;";
 
     // Preparar la consulta
@@ -188,7 +186,7 @@ try {
     $stmt->bindParam(':idPersona', $idPersona, PDO::PARAM_INT);
     $stmt->bindParam(':data_detencio', $data_detencioFormat, PDO::PARAM_STR);
     $stmt->bindParam(':lloc_detencio', $lloc_detencio, PDO::PARAM_STR);
-    $stmt->bindParam(':copia_exp', $copia_exp, PDO::PARAM_STR);
+    $stmt->bindParam(':copia_exp', $copia_exp, PDO::PARAM_INT);
     $stmt->bindParam(':tipus_procediment', $tipus_procediment, PDO::PARAM_INT);
     $stmt->bindParam(':tipus_judici', $tipus_judici, PDO::PARAM_INT);
     $stmt->bindParam(':num_causa', $num_causa, PDO::PARAM_STR);
@@ -214,8 +212,7 @@ try {
     $stmt->bindParam(':commutacio', $commutacio, PDO::PARAM_STR);
     $stmt->bindParam(':observacions', $observacions, PDO::PARAM_STR);
     $stmt->bindParam(':anyDetingut', $anyDetingut, PDO::PARAM_STR);
-    $stmt->bindParam(':num_registre', $anyDetingut, PDO::PARAM_STR);
-    $stmt->bindParam(':copia_exp', $anyDetingut, PDO::PARAM_INT);
+    $stmt->bindParam(':num_registre', $num_registre, PDO::PARAM_STR);
 
     // Ejecutar la consulta
     $stmt->execute();

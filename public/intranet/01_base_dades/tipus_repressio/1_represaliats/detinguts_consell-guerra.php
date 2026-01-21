@@ -72,7 +72,7 @@
 
                 <div class="col-md-4 mb-4">
                     <label for="copia_exp" class="form-label negreta">Còpia digilitzada del sumari?:</label>
-                    <select id="copia_exp" class="form-select" name="copia_exp">
+                    <select id="copia_exp" class="form-select" name="copia_exp" required>
                     </select>
                 </div>
 
