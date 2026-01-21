@@ -34,9 +34,10 @@ switch ($categoriaId) {
         require_once APP_ROOT . '/public/intranet/01_base_dades/tipus_repressio/1_represaliats/depurats.php';
         break;
     case 8:
+        // dona
         break;
     case 9:
-        // dona
+        require_once APP_ROOT . '/public/intranet/01_base_dades/tipus_repressio/1_represaliats/llistat-detinguts-consells-guerra.php';
         break;
     case 10:
         require_once APP_ROOT . '/public/intranet/01_base_dades/tipus_repressio/2_exiliats/exiliats.php';

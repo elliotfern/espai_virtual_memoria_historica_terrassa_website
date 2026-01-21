@@ -6,7 +6,7 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
     <div class="container">
         <div class="row">
             <h2>Gestió base de dades. Grup: Represaliats 1939-1979</h2>
-            <h4>Llistat de processats/empresonats/empresonats</h4>
+            <h4>Llistat Consells de Guerra</h4>
 
             <div id="taulaLlistatProcessats"></div>
 

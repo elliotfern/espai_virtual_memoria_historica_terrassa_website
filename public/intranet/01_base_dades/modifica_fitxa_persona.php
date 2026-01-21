@@ -28,7 +28,7 @@ if ($pagina === "modifica-fitxa") {
 
     <?php if (!$isAdmin): ?>
 
-      <p>omés poden crear noves fitxes els usuaris administradors.</p>
+      <p>Només poden crear noves fitxes els usuaris administradors.</p>
 
     <?php endif; ?>
 
@@ -143,7 +143,14 @@ if ($pagina === "modifica-fitxa") {
                 <div class="form-check me-3">
                   <input class="form-check-input" type="checkbox" id="categoria6" name="categoria" value="categoria6">
                   <label class="form-check-label" for="categoria6">
-                    Processat/Empresonat
+                    Consell de Guerra
+                  </label>
+                </div>
+
+                <div class="form-check me-3">
+                  <input class="form-check-input" type="checkbox" id="categoria9" name="categoria" value="categoria9">
+                  <label class="form-check-label" for="categoria9">
+                    Detingut
                   </label>
                 </div>
 

@@ -2,7 +2,7 @@
 
     <form id="processatForm">
         <div class="container">
-            <h2>Tipus de repressió: Detingut/Processat</h2>
+            <h2>Tipus de repressió: Consell de guerra</h2>
             <h4 id="fitxaNomCognoms">Fitxa:</a></h4>
             <div class="row g-4">
                 <div class="alert alert-success" role="alert" id="okMessage" style="display:none">
