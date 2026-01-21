@@ -20,6 +20,7 @@ interface EspaiRow {
   ciutat: string;
   num_causa: string;
   copia_exp: string;
+  nom_usuari: string;
 }
 
 type Column<T> = {
@@ -79,6 +80,15 @@ export async function taulaProcessats() {
       },
     },
 
+    {
+      header: 'Investigador',
+      field: 'id',
+      render: (_: unknown, row: EspaiRow) => {
+        const nom_usuari = row.nom_usuari;
+        return nom_usuari && nom_usuari.trim() !== '' ? nom_usuari : '-';
+      },
+    },
+
     { header: 'Fitxa web', field: 'es_processat' },
   ];
 
@@ -92,7 +102,7 @@ export async function taulaProcessats() {
 
   if (isAdmin || isAutor || isLogged) {
     columns.push({
-      header: 'Accions',
+      header: '',
       field: 'id',
       render: (_: unknown, row: EspaiRow) => `<a id="${row.id}" title="Modifica" target="_blank" href="https://${window.location.hostname}/gestio/base-dades/modifica-repressio/6/${row.id}"><button type="button" class="btn btn-warning btn-sm">Modifica Dades Consell Guerra</button></a>`,
     });
