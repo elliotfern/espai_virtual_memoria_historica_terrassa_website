@@ -159,11 +159,6 @@
 
                 <h4>4) Detalls del procediment judicial: Consell de Guerra</h4>
                 <div class="col-md-4 mb-4">
-                    <label for="copia_exp" class="form-label negreta">Còpia expedient:</label>
-                    <input type="text" class="form-control" id="copia_exp" name="copia_exp" value="">
-                </div>
-
-                <div class="col-md-4 mb-4">
                     <label for="data_inici_proces" class="form-label negreta">Data inici del procés judicial:</label>
                     <input type="text" class="form-control" id="data_inici_proces" name="data_inici_proces" value="">
                     <div class="avis-form">
