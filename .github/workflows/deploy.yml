@@ -1,4 +1,4 @@
-name: Deploy Memoria Historica web
+name: Deploy Memoria Historica (full sync + build + composer)
 
 on:
   push:
@@ -18,10 +18,10 @@ jobs:
           node-version: '18'
           cache: 'npm'
 
-      - name: Install dependencies
+      - name: Install dependencies (npm)
         run: npm ci
 
-      - name: Build
+      - name: Build (npm)
         run: npm run build
 
       - name: Start SSH agent
@@ -34,19 +34,37 @@ jobs:
           mkdir -p ~/.ssh
           ssh-keyscan -H 87.98.230.129 >> ~/.ssh/known_hosts
 
-      - name: Upload bundle.js atomically
+      - name: Sync project to shared hosting (rsync)
         run: |
-          # Aseguramos que bundle.js existe
-          test -f dist/bundle.js || { echo "dist/bundle.js no existe"; exit 1; }
+          set -euo pipefail
 
-          # Crear dir remoto si no existe
-          ssh -o StrictHostKeyChecking=no epgylzqu@87.98.230.129 "mkdir -p /home/epgylzqu/memoriaterrassa.cat/dist"
+          REMOTE="epgylzqu@87.98.230.129"
+          REMOTE_DIR="/home/epgylzqu/memoriaterrassa.cat/"
 
-          # Subir a temporal
-          scp dist/bundle.js epgylzqu@87.98.230.129:/home/epgylzqu/memoriaterrassa.cat/dist/bundle.js.tmp
+          rsync -az --delete \
+            --chmod=Du=rwx,Dgo=rx,Fu=rw,Fgo=r \
+            --exclude ".git/" \
+            --exclude ".github/" \
+            --exclude "node_modules/" \
+            --exclude ".env" \
+            --exclude ".env.*" \
+            --exclude "var/" \
+            --exclude "*.log" \
+            -e "ssh" \
+            ./ "$REMOTE:$REMOTE_DIR"
 
-          # Renombrar atómicamente y fijar permisos
-          ssh -o StrictHostKeyChecking=no epgylzqu@87.98.230.129 "\
-            mv -f /home/epgylzqu/memoriaterrassa.cat/dist/bundle.js.tmp /home/epgylzqu/memoriaterrassa.cat/dist/bundle.js && \
-            chmod 644 /home/epgylzqu/memoriaterrassa.cat/dist/bundle.js \
-          "
+      - name: Composer install on server
+        run: |
+          set -euo pipefail
+
+          ssh epgylzqu@87.98.230.129 "bash -lc '
+            set -euo pipefail
+            cd /home/epgylzqu/memoriaterrassa.cat
+
+            if [ -f composer.json ]; then
+              command -v composer >/dev/null 2>&1 || { echo \"ERROR: composer no está instalado\"; exit 3; }
+              composer install --no-dev --prefer-dist --optimize-autoloader
+            else
+              echo \"No composer.json: salto composer\"
+            fi
+          '"
