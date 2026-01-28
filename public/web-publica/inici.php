@@ -13,62 +13,6 @@ $language = $matches[1] ?? '';
 $translate = $translations['benvinguda'] ?? [];
 ?>
 
-<!-- IN MEMORIAN JUAN ANTONIO OLIVARES -->
-<div class="container d-flex flex-column justify-content-center align-items-center text-center" style="padding-top:10px;padding-bottom:20px;">
-    <span class="titol gran lora negreta mb-3">
-        Juan Antonio Olivares Abad in memoriam
-    </span>
-
-    <span class="text1 mitja raleway mb-3">
-        (25 de novembre de 2025)
-    </span>
-
-    <img src="https://media.memoriaterrassa.cat/assets_usuaris/juan_antonio_olivares.jpg"
-        alt="Foto"
-        class="img-fluid"
-        loading="lazy"
-        decoding="async">
-</div>
-
-<div class="container text1 mitja raleway mb-3" style="padding-top:10px;padding-bottom:60px;">
-    <p>
-        La Història de Terrassa s'ha construït gràcies a la tasca de magnífics historiadors i historiadores, uns dedicats a aquest ofici durant tota la seva vida professional i d'altres després d'una llarga vida professional i de compromís polític, sindical, social i cultural al servei de les persones, aquest és el cas de l'amic i historiador Juan Antonio Olivares Abad, nascut a Terrassa l’any 1951, del barri de Sant Pere de Terrassa i veí de Viladecavalls.
-    </p>
-
-    <p>
-        Juan Antonio Olivares ha dedicat milers d'hores als altres, a la col·lectivitat humana, de la qual formava part i ho ha fet per voluntat de servei a la majoria de les persones els treballadors/es. Persones de carn i os, que fa avui vuitanta anys s'han jugat la seva vida en defensa de la democràcia republicana i de la justícia social i que van perdre patrimoni, llibertat i vida. Persones que no vàrem dubtar a continuar el combat contra la dictadura franquista, com havien fet els seus, en defensa de la democràcia i els dels drets dels treballadors des de les files de les esquerres compromeses.
-    </p>
-
-    <p>
-        Juan Antonio va ser una persona compromesa va ser treballador bancari, delegat sindical de CCOO (1983-2007), membre de la Comissió de Control Caixa Terrassa (2000-2006) i regidor de l'Ajuntament de Viladecavalls (1999-2007) per diferents organitzacions i coalicions d’esquerres. Un home al servei dels altres.
-    </p>
-
-    <p>
-        A Juan Antonio el movia un impuls ètic i uns valors profundament democràtics i civilitzadors, per això es va dedicar a la recuperació de la memòria històrica. La seva història personal i familiar el va impulsar a recuperar la dignitat dels derrotats i derrotades, ja que aquests són els nostres i són la majoria social: els i les treballadores. Ho va fer al servei de tots i totes en multitud de treballs molts dels quals han estat base sòlida per a poder crear la web de l'Espai Virtual de la Memòria Històrica de Terrassa, en el que tant d’esforç va posar.
-    </p>
-
-    <p>
-        Però mai va oblidar la terra d’origen de la família i va escriure el llibre: "Abans. Durant. Després. Repressió Franquista a Alhama de Granada" (2016) una obra magna, d'un historiador rigorós i compromès amb els valors democràtics i de defensa dels drets humans. Un treball veraç, justament per aquests valors que professem, i realitzat a base de treball voluntari, cosa que no demostra que fos de l'acadèmia i sense ajuda institucional –o molt limitada– el treball de qualitat dels historiadors locals és possible.
-    </p>
-
-    <p>
-        Juan tampoc s’oblidà dels deportats o exiliats, un bon exemple és el llibre "Terrassa exiliada" (2021) una extensa aproximació a l'exili terrassenc. Gràcies a aquest treball han sortit a la llum moltes persones anònimes cosa que ens permetran avançar en el coneixement de la repressió franquista i nazi-feixista que van patir els exiliats de la vella Ègara.
-    </p>
-
-    <p>
-        Avui, l'amic i historiador terrassenc, Juan Antonio Olivares Abad ens ha deixat, però amb la seva vida d'home, historiador i lluitador antifranquista exemplar, ens ha recordat amb força i dignitat que els noms dels homes i dones comunes, el que tots i totes som, no es podran esborrar de la història.
-    </p>
-
-    <p>
-        <strong>Espai Virtual de la Memòria Històrica de Terrassa.</strong><br>
-        <strong>Junta del Centre d'Estudis Històrics de Terrassa.</strong>
-    </p>
-
-    <p>
-        <em>Terrassa, 25 de novembre de 2025.</em>
-    </p>
-</div>
-
 <!-- Secció amb container-fluid -->
 <div class="container-fluid bg-image2">
     <div class="container px-4">
