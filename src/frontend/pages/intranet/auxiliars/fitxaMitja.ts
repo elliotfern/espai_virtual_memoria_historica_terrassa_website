@@ -206,7 +206,7 @@ function renderMitjaDetall(target: HTMLElement, detall: MitjaDetall): void {
             type="button"
             class="btn btn-sm btn-outline-primary"
             data-action="edit-mitja"
-            data-id="${base.slug}">
+            data-slug="${base.slug}">
             Editar mitjà
           </button>
 
@@ -214,7 +214,7 @@ function renderMitjaDetall(target: HTMLElement, detall: MitjaDetall): void {
             type="button"
             class="btn btn-sm btn-outline-secondary"
             data-action="edit-i18n"
-            data-id="${base.slug}">
+            data-slug="${base.slug}">
             Editar traduccions
           </button>
         </div>

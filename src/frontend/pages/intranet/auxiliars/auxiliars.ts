@@ -47,6 +47,7 @@ import { formCampConcentracio } from './formCampConcentracio';
 import { formUsuarisBiografies } from './formUsuarisBiografies';
 import { taulaMitjansComunicacio } from './taulaMitjansComunicacio';
 import { initFitxaDetallsMitja } from './fitxaMitja';
+import { formMitjaPremsa } from './formMitja';
 
 export async function auxiliars() {
   const url = window.location.href;
@@ -515,5 +516,10 @@ export async function auxiliars() {
   } else if (pageType[2] === 'fitxa-mitja-comunicacio') {
     const slug = pageType[3];
     initFitxaDetallsMitja(slug);
+  } else if (pageType[2] === 'modifica-mitja-comunicacio') {
+    const slug = pageType[3];
+    formMitjaPremsa(true, slug);
+  } else if (pageType[2] === 'nou-mitja-comunicacio') {
+    formMitjaPremsa(false);
   }
 }
