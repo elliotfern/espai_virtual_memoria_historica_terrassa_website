@@ -19,6 +19,35 @@ interface MitjaFormData {
   descripcio_ca: string;
 }
 
+interface ApiRowPremsaMitja {
+  id: number;
+  slug: string;
+  tipus: string;
+  web_url: string | null;
+  created_at?: string | null;
+  updated_at?: string | null;
+  lang: string | null;
+  nom: string | null;
+  descripcio: string | null;
+}
+
+function mapRowsToMitjaFormData(rows: ApiRowPremsaMitja[]): MitjaFormData {
+  const first = rows[0];
+  if (!first) throw new Error("No s'ha trobat el mitjà.");
+
+  // buscar la fila CA si existe
+  const ca = rows.find((r) => r.lang === 'ca') ?? null;
+
+  return {
+    id: first.id,
+    slug: first.slug,
+    tipus: first.tipus,
+    web_url: first.web_url ?? null,
+    nom_ca: ca?.nom ?? '',
+    descripcio_ca: ca?.descripcio ?? '',
+  };
+}
+
 export async function formMitjaPremsa(isUpdate: boolean, slugMitja?: string): Promise<void> {
   const divTitol = document.getElementById('titolForm') as HTMLDivElement | null;
   const btnSubmit = document.getElementById('btnMitja') as HTMLButtonElement | null;
@@ -39,10 +68,10 @@ export async function formMitjaPremsa(isUpdate: boolean, slugMitja?: string): Pr
   if (isUpdate) {
     if (!slugMitja || slugMitja.trim().length === 0) return;
 
-    const response = await fetchDataGet<ApiResponse<MitjaFormData>>(API_URLS.GET.FITXA_MITJA(slugMitja), true);
+    const response = await fetchDataGet<ApiResponse<ApiRowPremsaMitja[]>>(API_URLS.GET.FITXA_MITJA(slugMitja), true);
     if (!response || response.status !== 'success' || !response.data) return;
 
-    data = response.data;
+    data = mapRowsToMitjaFormData(response.data);
 
     // ✅ Pintar siempre, aunque nom_ca esté vacío
     const titol = (data.nom_ca ?? '').trim().length > 0 ? (data.nom_ca as string) : (data.slug ?? slugMitja);
