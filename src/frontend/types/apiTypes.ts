@@ -60,6 +60,7 @@ export type ApiUrls = {
     FITXA_REPRESALIAT_WEB: (slug: string, lang: string) => string;
     FITXA_REPRESALIAT_DADES_FAMILIARS_WEB: (id: number, lang: string) => string;
     LLISTAT_MITJANS: string;
+    FITXA_MITJA: (slug: string) => string;
   };
   POST: {
     MUNICIPI: string;
@@ -94,6 +95,7 @@ export type ApiUrls = {
     PRESO_DETENCIO: string;
     CAMP_CONCENTRACIO: string;
     BIOGRAFIES: string;
+    PREMSA_MITJA: string;
   };
   PUT: {
     MUNICIPI: string;
@@ -128,6 +130,7 @@ export type ApiUrls = {
     PRESO_DETENCIO: string;
     CAMP_CONCENTRACIO: string;
     BIOGRAFIES: string;
+    PREMSA_MITJA: string;
   };
   DELETE: {
     MUNICIPI: string;

@@ -173,14 +173,16 @@ function mapRowsToDetall(rows: ApiRowPremsaMitja[]): MitjaDetall {
 function renderMitjaDetall(target: HTMLElement, detall: MitjaDetall): void {
   const { base, i18n } = detall;
 
-  const webUrlHtml = base.webUrl ? `<a href="${escapeHtml(base.webUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(base.webUrl)}</a>` : `<span class="muted">—</span>`;
+  const webUrlHtml = base.webUrl ? `<a href="${escapeHtml(base.webUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(base.webUrl)}</a>` : `<span class="text-muted">—</span>`;
 
   const rowsI18n = LANGS.map((lang) => {
-    const nom = i18n[lang].nom ? escapeHtml(i18n[lang].nom as string) : `<span class="muted">—</span>`;
-    const des = i18n[lang].descripcio ? escapeHtml(i18n[lang].descripcio as string) : `<span class="muted">—</span>`;
+    const nom = i18n[lang].nom ? escapeHtml(i18n[lang].nom as string) : `<span class="text-muted">—</span>`;
+
+    const des = i18n[lang].descripcio ? escapeHtml(i18n[lang].descripcio as string) : `<span class="text-muted">—</span>`;
+
     return `
       <tr>
-        <td><code>${lang}</code></td>
+        <td class="fw-semibold"><code>${lang}</code></td>
         <td>${nom}</td>
         <td>${des}</td>
       </tr>
@@ -188,41 +190,49 @@ function renderMitjaDetall(target: HTMLElement, detall: MitjaDetall): void {
   }).join('');
 
   target.innerHTML = `
-    <div class="fitxa">
-      <div class="fitxa__header">
-        <div class="fitxa__title">
-          <h2>${escapeHtml(i18n.ca.nom ?? base.slug)}</h2>
-          <div class="fitxa__subtitle">
+    <div class="card shadow-sm">
+      <div class="card-header d-flex justify-content-between align-items-start gap-3">
+        <div>
+          <h4 class="mb-1">${escapeHtml(i18n.ca.nom ?? base.slug)}</h4>
+          <div class="text-muted small">
             <span><strong>Tipus:</strong> ${escapeHtml(base.tipus)}</span>
-            <span class="sep">·</span>
+            <span class="mx-2">·</span>
             <span><strong>Slug:</strong> <code>${escapeHtml(base.slug)}</code></span>
           </div>
         </div>
 
-        <div class="fitxa__actions">
-          <button type="button" class="btn" data-action="edit-mitja" data-id="${base.id}">
+        <div class="d-flex gap-2 flex-shrink-0">
+          <button
+            type="button"
+            class="btn btn-sm btn-outline-primary"
+            data-action="edit-mitja"
+            data-id="${base.slug}">
             Editar mitjà
           </button>
-          <button type="button" class="btn" data-action="edit-i18n" data-id="${base.id}">
+
+          <button
+            type="button"
+            class="btn btn-sm btn-outline-secondary"
+            data-action="edit-i18n"
+            data-id="${base.slug}">
             Editar traduccions
           </button>
         </div>
       </div>
 
-      <div class="fitxa__body">
-        <div class="kv">
-          <div class="kv__row">
-            <div class="kv__k">Web</div>
-            <div class="kv__v">${webUrlHtml}</div>
-          </div>
-        </div>
+      <div class="card-body">
+        <dl class="row mb-4">
+          <dt class="col-sm-3 text-muted">Web</dt>
+          <dd class="col-sm-9 mb-0">${webUrlHtml}</dd>
+        </dl>
 
-        <h3>Traduccions</h3>
-        <div class="table-wrap">
-          <table class="table">
-            <thead>
+        <h5 class="mb-3">Traduccions</h5>
+
+        <div class="table-responsive">
+          <table class="table table-sm table-striped align-middle">
+            <thead class="table-light">
               <tr>
-                <th>Lang</th>
+                <th style="width: 80px;">Lang</th>
                 <th>Nom</th>
                 <th>Descripció</th>
               </tr>
@@ -236,24 +246,19 @@ function renderMitjaDetall(target: HTMLElement, detall: MitjaDetall): void {
     </div>
   `;
 
-  // Bind eventos (delegación simple)
+  // Eventos
   const actions = target.querySelectorAll<HTMLButtonElement>('button[data-action]');
   actions.forEach((btn) => {
     btn.addEventListener('click', () => {
       const action = btn.dataset.action ?? '';
-      const idStr = btn.dataset.id ?? '';
-      const id = Number(idStr);
-
-      if (!Number.isFinite(id)) return;
+      const slug = btn.dataset.slug ?? '';
 
       if (action === 'edit-mitja') {
-        // Ejemplo: redirigir a tu página de edición
-        window.location.href = `/gestio/auxiliars/modifica-mitja-comunicacio/${encodeURIComponent(String(id))}`;
+        window.location.href = `/gestio/auxiliars/modifica-mitja-comunicacio/${encodeURIComponent(String(slug))}`;
       }
 
       if (action === 'edit-i18n') {
-        // Ejemplo: redirigir a edición de traducciones
-        window.location.href = `/gestio/auxiliars/modifica-mitja-comunicacio-i18n/${encodeURIComponent(String(id))}`;
+        window.location.href = `/gestio/auxiliars/modifica-mitja-comunicacio-i18n/${encodeURIComponent(String(slug))}`;
       }
     });
   });

@@ -622,6 +622,14 @@ $routes = [
         'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/fitxa-mitja.php'
     ]),
 
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/modifica-mitja-comunicacio/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-mitja-comunicacio.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/nou-mitja-comunicacio' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-mitja-comunicacio.php'
+    ]),
+
 
     // Gestió familiars
     APP_INTRANET . $urlIntranet['familiars'] . '/modifica-familiar/{id}/{id}' => array_merge($defaultProtectedConfig, [
