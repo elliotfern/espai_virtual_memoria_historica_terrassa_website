@@ -618,7 +618,7 @@ $routes = [
         'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/llistat-mitjans.php'
     ]),
 
-    APP_INTRANET . $urlIntranet['auxiliars'] . '/fitxa-mitja' => array_merge($defaultProtectedConfig, [
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/fitxa-mitja-comunicacio/{slug}' => array_merge($defaultProtectedConfig, [
         'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/fitxa-mitja.php'
     ]),
 
