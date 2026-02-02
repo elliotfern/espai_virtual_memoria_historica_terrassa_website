@@ -59,6 +59,7 @@ export type ApiUrls = {
     USUARI_WEB_ID: (id: string, lang: string) => string;
     FITXA_REPRESALIAT_WEB: (slug: string, lang: string) => string;
     FITXA_REPRESALIAT_DADES_FAMILIARS_WEB: (id: number, lang: string) => string;
+    LLISTAT_MITJANS: string;
   };
   POST: {
     MUNICIPI: string;

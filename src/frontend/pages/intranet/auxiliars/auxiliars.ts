@@ -45,6 +45,7 @@ import { taulaCampsDetencio } from './taulaCampsDetencio';
 import { taulaCampsConcentracio } from './taulaCampsConcentracio';
 import { formCampConcentracio } from './formCampConcentracio';
 import { formUsuarisBiografies } from './formUsuarisBiografies';
+import { taulaMitjansComunicacio } from './taulaMitjansComunicacio';
 
 export async function auxiliars() {
   const url = window.location.href;
@@ -508,5 +509,7 @@ export async function auxiliars() {
     formCampConcentracio(true, Number(pageType[3]));
   } else if (pageType[2] === 'nou-camp-concentracio') {
     formCampConcentracio(false);
+  } else if (pageType[2] === 'llistat-mitjans') {
+    taulaMitjansComunicacio();
   }
 }

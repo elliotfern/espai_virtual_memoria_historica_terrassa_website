@@ -133,6 +133,12 @@
                 <li>control_registre_canvis</li>
             </ul>
 
+
+            <h4>10. Mitjans de comunicació</h4>
+            <ul>
+                <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['auxiliars']; ?>/llistat-mitjans">Taula llistat de mitjans</a></li>
+            </ul>
+
         <?php endif; ?>
     </div>
 </div>

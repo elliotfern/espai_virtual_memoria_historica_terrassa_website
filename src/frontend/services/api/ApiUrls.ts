@@ -94,6 +94,7 @@ export const ENDPOINTS = {
   USUARI_WEB_ID: 'usuariWebId',
   FITXA_REPRESALIAT_WEB: 'fitxaRepresaliat',
   FITXA_REPRESALIAT_DADES_FAMILIARS_WEB: 'fitxaDadesFamiliars',
+  LLISTAT_MITJANS: 'premsaMitjans',
 } as const;
 
 // Mapa de recursos disponibles
@@ -176,6 +177,7 @@ export const API_URLS: ApiUrls = {
     USUARI_WEB_ID: (id: string, lang: string) => `${BASE_URL}/${API}/${RESOURCES.AUTH}/${TIPUS.GET}/${ENDPOINTS.USUARI_WEB_ID}?slug=${id}&lang=${lang}`,
     FITXA_REPRESALIAT_WEB: (slug: string, lang: string) => `${DOMAIN_API}/${RESOURCES.DADES_PERSONALS}/${TIPUS.GET}/${ENDPOINTS.FITXA_REPRESALIAT_WEB}?slug=${slug}&lang=${lang}`,
     FITXA_REPRESALIAT_DADES_FAMILIARS_WEB: (id: number, lang: string) => `${DOMAIN_API}/${RESOURCES.DADES_PERSONALS}/${TIPUS.GET}/${ENDPOINTS.FITXA_REPRESALIAT_DADES_FAMILIARS_WEB}?id=${id}&lang=${lang}`,
+    LLISTAT_MITJANS: `${BASE_URL}/${API}/${RESOURCES.AUXILIARS}/${TIPUS.GET}/${ENDPOINTS.LLISTAT_MITJANS}`,
   },
 
   POST: {

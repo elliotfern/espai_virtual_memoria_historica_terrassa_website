@@ -612,6 +612,11 @@ $routes = [
         'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-camp-concentracio.php'
     ]),
 
+    // Mitjans de comunicacio
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/llistat-mitjans' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/llistat-mitjans.php'
+    ]),
+
 
     // Gestió familiars
     APP_INTRANET . $urlIntranet['familiars'] . '/modifica-familiar/{id}/{id}' => array_merge($defaultProtectedConfig, [

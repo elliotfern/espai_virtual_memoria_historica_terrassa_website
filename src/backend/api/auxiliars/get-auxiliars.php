@@ -1686,6 +1686,49 @@ if ($slug === "municipis") {
             500
         );
     }
+    // GET : Premsa - Mitjans (llistat en català)
+    // URL: /api/auxiliars/get/premsaMitjans
+} elseif ($slug === "premsaMitjans") {
+
+    $db = new Database();
+
+    $query = "SELECT 
+                m.id,
+                m.slug,
+                m.tipus,
+                m.web_url,
+                i.nom,
+                i.descripcio
+              FROM aux_premsa_mitjans AS m
+              LEFT JOIN aux_premsa_mitjans_i18n AS i
+                ON i.mitja_id = m.id AND i.lang = 'ca'
+              ORDER BY i.nom ASC";
+
+    try {
+
+        $result = $db->getData($query);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
 } else {
     // Si el parámetro 'type' no coincide con ninguno de los casos anteriores, mostramos un error
     echo json_encode(["error" => "Tipo no válido"]);
