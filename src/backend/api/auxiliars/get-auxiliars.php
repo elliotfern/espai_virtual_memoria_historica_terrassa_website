@@ -1788,6 +1788,50 @@ if ($slug === "municipis") {
             500
         );
     }
+
+    // GET : Premsa - Aparicions (llistat, amb i18n)
+    // URL: /api/auxiliars/get/premsaAparicions
+} elseif ($slug === "premsaAparicions") {
+
+    $db = new Database();
+
+    $query = "SELECT
+                a.id,
+                a.data_aparicio,
+                a.tipus_aparicio,
+                a.mitja_id,
+                a.url_noticia,
+                a.image_id,
+                a.destacat,
+                a.estat,
+                a.created_at,
+                a.updated_at,
+                i.lang,
+                i.titol,
+                i.resum,
+                i.notes,
+                i.pdf_url
+              FROM db_premsa_aparicions AS a
+              LEFT JOIN db_premsa_aparicions_i18n AS i
+                ON i.aparicio_id = a.id
+              ORDER BY a.data_aparicio DESC, a.id DESC";
+
+    try {
+
+        $result = $db->getData($query);
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
 } else {
     // Si el parámetro 'type' no coincide con ninguno de los casos anteriores, mostramos un error
     echo json_encode(["error" => "Tipo no válido"]);

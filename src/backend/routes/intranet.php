@@ -613,7 +613,7 @@ $routes = [
     ]),
 
     // Mitjans de comunicacio
-    // Llistat mitjams, Fitxa mitjà i edició
+    // Llistat mitjans, Fitxa mitjà i edició
     APP_INTRANET . $urlIntranet['auxiliars'] . '/llistat-mitjans' => array_merge($defaultProtectedConfig, [
         'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/llistat-mitjans.php'
     ]),
@@ -632,6 +632,11 @@ $routes = [
 
     APP_INTRANET . $urlIntranet['auxiliars'] . '/modifica-mitja-comunicacio-i18n/{id}' => array_merge($defaultProtectedConfig, [
         'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-mitja-comunicacio-i18n.php'
+    ]),
+
+    // Llistat aparicions en premsa
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/llistat-aparacions-mitjans' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/llistat-aparacions-mitjans.php'
     ]),
 
     // Gestió familiars

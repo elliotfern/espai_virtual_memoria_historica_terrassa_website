@@ -98,6 +98,7 @@ export const ENDPOINTS = {
   FITXA_MITJA: 'premsaMitja',
   PREMSA_MITJA: 'premsaMitja',
   PREMSA_MITJA_I18N: 'premsaMitjaI18n',
+  LLISTAT_APARICIONS: 'premsaAparicions',
 } as const;
 
 // Mapa de recursos disponibles
@@ -182,6 +183,7 @@ export const API_URLS: ApiUrls = {
     FITXA_REPRESALIAT_DADES_FAMILIARS_WEB: (id: number, lang: string) => `${DOMAIN_API}/${RESOURCES.DADES_PERSONALS}/${TIPUS.GET}/${ENDPOINTS.FITXA_REPRESALIAT_DADES_FAMILIARS_WEB}?id=${id}&lang=${lang}`,
     LLISTAT_MITJANS: `${BASE_URL}/${API}/${RESOURCES.AUXILIARS}/${TIPUS.GET}/${ENDPOINTS.LLISTAT_MITJANS}`,
     FITXA_MITJA: (slug: string) => `${DOMAIN_API}/${RESOURCES.AUXILIARS}/${TIPUS.GET}/${ENDPOINTS.FITXA_MITJA}?slug=${slug}`,
+    LLISTAT_APARICIONS: `${BASE_URL}/${API}/${RESOURCES.AUXILIARS}/${TIPUS.GET}/${ENDPOINTS.LLISTAT_APARICIONS}`,
   },
 
   POST: {

@@ -49,6 +49,7 @@ import { taulaMitjansComunicacio } from './taulaMitjansComunicacio';
 import { initFitxaDetallsMitja } from './fitxaMitja';
 import { formMitjaPremsa } from './formMitja';
 import { formMitjaPremsaI18n } from './formMitjaI18n';
+import { taulaAparicionsPremsa } from './taulaAparicionsMitjans';
 
 export async function auxiliars() {
   const url = window.location.href;
@@ -525,5 +526,7 @@ export async function auxiliars() {
   } else if (pageType[2] === 'modifica-mitja-comunicacio-i18n') {
     const slug = pageType[3];
     formMitjaPremsaI18n(slug);
+  } else if (pageType[2] === 'llistat-aparacions-mitjans') {
+    taulaAparicionsPremsa();
   }
 }

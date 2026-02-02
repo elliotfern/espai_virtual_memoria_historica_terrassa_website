@@ -61,6 +61,7 @@ export type ApiUrls = {
     FITXA_REPRESALIAT_DADES_FAMILIARS_WEB: (id: number, lang: string) => string;
     LLISTAT_MITJANS: string;
     FITXA_MITJA: (slug: string) => string;
+    LLISTAT_APARICIONS: string;
   };
   POST: {
     MUNICIPI: string;
