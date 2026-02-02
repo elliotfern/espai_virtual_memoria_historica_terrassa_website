@@ -1729,6 +1729,65 @@ if ($slug === "municipis") {
             500
         );
     }
+
+    // GET : Premsa - Mitjà (detall per slug, amb i18n)
+    // URL: /api/auxiliars/get/premsaMitja?slug=xxx
+} elseif ($slug === "premsaMitja") {
+
+    if (empty($_GET['slug'])) {
+        Response::error(
+            MissatgesAPI::error('missing_params'),
+            ['slug'],
+            400
+        );
+        return;
+    }
+
+    $slugMitja = $_GET['slug'];
+    $db = new Database();
+
+    $query = "SELECT
+                m.id,
+                m.slug,
+                m.tipus,
+                m.web_url,
+                m.created_at,
+                m.updated_at,
+                i.lang,
+                i.nom,
+                i.descripcio
+              FROM aux_premsa_mitjans AS m
+              LEFT JOIN aux_premsa_mitjans_i18n AS i
+                ON i.mitja_id = m.id
+              WHERE m.slug = :slug";
+
+    try {
+
+        $result = $db->getData($query, [
+            ':slug' => $slugMitja
+        ]);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
 } else {
     // Si el parámetro 'type' no coincide con ninguno de los casos anteriores, mostramos un error
     echo json_encode(["error" => "Tipo no válido"]);

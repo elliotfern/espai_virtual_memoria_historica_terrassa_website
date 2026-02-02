@@ -11,7 +11,7 @@ interface EspaiRow {
   descripcio: string;
   preso: string;
   nom: string;
-  tipus_preso_ca: string;
+  slug: string;
 }
 
 type Column<T> = {
@@ -36,7 +36,7 @@ export async function taulaMitjansComunicacio() {
     columns.push({
       header: 'Detalls',
       field: 'id',
-      render: (_: unknown, row: EspaiRow) => `<a id="${row.id}" title="Detalls" href="https://${window.location.hostname}/gestio/auxiliars/fitxa-mitja-comunicacio/${row.id}"><button type="button" class="btn btn-warning btn-sm">Detalls</button></a>`,
+      render: (_: unknown, row: EspaiRow) => `<a id="${row.id}" title="Detalls" href="https://${window.location.hostname}/gestio/auxiliars/fitxa-mitja-comunicacio/${row.slug}"><button type="button" class="btn btn-warning btn-sm">Detalls</button></a>`,
     });
 
     columns.push({

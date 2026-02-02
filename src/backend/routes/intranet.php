@@ -613,8 +613,13 @@ $routes = [
     ]),
 
     // Mitjans de comunicacio
+    // Llistat mitjams, Fitxa mitjà i edició
     APP_INTRANET . $urlIntranet['auxiliars'] . '/llistat-mitjans' => array_merge($defaultProtectedConfig, [
         'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/llistat-mitjans.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/fitxa-mitja' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/fitxa-mitja.php'
     ]),
 
 

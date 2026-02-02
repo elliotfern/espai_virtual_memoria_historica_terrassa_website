@@ -46,6 +46,7 @@ import { taulaCampsConcentracio } from './taulaCampsConcentracio';
 import { formCampConcentracio } from './formCampConcentracio';
 import { formUsuarisBiografies } from './formUsuarisBiografies';
 import { taulaMitjansComunicacio } from './taulaMitjansComunicacio';
+import { initFitxaDetallsMitja } from './fitxaMitja';
 
 export async function auxiliars() {
   const url = window.location.href;
@@ -511,5 +512,8 @@ export async function auxiliars() {
     formCampConcentracio(false);
   } else if (pageType[2] === 'llistat-mitjans') {
     taulaMitjansComunicacio();
+  } else if (pageType[2] === 'fitxa-mitja-comunicacio') {
+    const slug = pageType[3];
+    initFitxaDetallsMitja(slug);
   }
 }
