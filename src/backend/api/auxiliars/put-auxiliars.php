@@ -3235,6 +3235,149 @@ if ($slug === "municipi") {
         );
     }
 
+    // PUT premsaMitja
+    // ruta PUT => "/api/auxiliars/put/premsaMitja"
+} else if ($slug === "premsaMitja") {
+
+    $inputData = file_get_contents('php://input');
+    $data = json_decode($inputData, true);
+
+    $errors = [];
+
+    if (empty($data['id'])) {
+        $errors[] = ValidacioErrors::requerit('id');
+    }
+    if (empty($data['slug'])) {
+        $errors[] = ValidacioErrors::requerit('slug');
+    }
+    if (empty($data['tipus'])) {
+        $errors[] = ValidacioErrors::requerit('tipus');
+    }
+    if (empty($data['nom_ca'])) {
+        $errors[] = ValidacioErrors::requerit('nom_ca');
+    }
+
+    if (!empty($data['web_url']) && filter_var($data['web_url'], FILTER_VALIDATE_URL) === false) {
+        $errors[] = "Format incorrecte de la URL";
+    }
+
+    if (!empty($errors)) {
+        Response::error(
+            MissatgesAPI::error('validacio'),
+            $errors,
+            400
+        );
+        return;
+    }
+
+    $id = (int)$data['id'];
+    $slugMitja = $data['slug'];
+    $tipus = $data['tipus'];
+    $webUrl = !empty($data['web_url']) ? $data['web_url'] : NULL;
+
+    $nomCa = $data['nom_ca'];
+    $descripcioCa = !empty($data['descripcio_ca']) ? $data['descripcio_ca'] : NULL;
+
+    try {
+        global $conn;
+        /** @var PDO $conn */
+
+        $conn->beginTransaction();
+
+        // comprobar slug duplicado en OTRO registro
+        $sqlCheck = "SELECT COUNT(*) FROM aux_premsa_mitjans WHERE slug = :slug AND id <> :id";
+        $stmtCheck = $conn->prepare($sqlCheck);
+        $stmtCheck->bindParam(':slug', $slugMitja, PDO::PARAM_STR);
+        $stmtCheck->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmtCheck->execute();
+
+        $exists = (int)$stmtCheck->fetchColumn();
+        if ($exists > 0) {
+            $conn->rollBack();
+            Response::error(
+                MissatgesAPI::error('validacio'),
+                ["Slug duplicat"],
+                400
+            );
+            return;
+        }
+
+        // update tabla base
+        $sql = "UPDATE aux_premsa_mitjans
+                SET slug = :slug,
+                    tipus = :tipus,
+                    web_url = :web_url
+                WHERE id = :id";
+
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':slug', $slugMitja, PDO::PARAM_STR);
+        $stmt->bindParam(':tipus', $tipus, PDO::PARAM_STR);
+        $stmt->bindParam(':web_url', $webUrl, PDO::PARAM_STR);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+
+        // upsert i18n CA
+        $lang = "ca";
+
+        $sqlExistsI18n = "SELECT COUNT(*) 
+                          FROM aux_premsa_mitjans_i18n 
+                          WHERE mitja_id = :mitja_id AND lang = :lang";
+        $stmtExistsI18n = $conn->prepare($sqlExistsI18n);
+        $stmtExistsI18n->bindParam(':mitja_id', $id, PDO::PARAM_INT);
+        $stmtExistsI18n->bindParam(':lang', $lang, PDO::PARAM_STR);
+        $stmtExistsI18n->execute();
+
+        $i18nExists = (int)$stmtExistsI18n->fetchColumn();
+
+        if ($i18nExists > 0) {
+            $sqlI18n = "UPDATE aux_premsa_mitjans_i18n
+                        SET nom = :nom,
+                            descripcio = :descripcio
+                        WHERE mitja_id = :mitja_id AND lang = :lang";
+        } else {
+            $sqlI18n = "INSERT INTO aux_premsa_mitjans_i18n (
+                            mitja_id, lang, nom, descripcio
+                        ) VALUES (
+                            :mitja_id, :lang, :nom, :descripcio
+                        )";
+        }
+
+        $stmtI18n = $conn->prepare($sqlI18n);
+        $stmtI18n->bindParam(':mitja_id', $id, PDO::PARAM_INT);
+        $stmtI18n->bindParam(':lang', $lang, PDO::PARAM_STR);
+        $stmtI18n->bindParam(':nom', $nomCa, PDO::PARAM_STR);
+        $stmtI18n->bindParam(':descripcio', $descripcioCa, PDO::PARAM_STR);
+        $stmtI18n->execute();
+
+        $tipusOperacio = "UPDATE";
+        $detalls = "Modificació mitjà: " . $nomCa;
+
+        Audit::registrarCanvi(
+            $conn,
+            $userId,
+            $tipusOperacio,
+            $detalls,
+            Tables::AUX_PREMSA_MITJANS,
+            $id
+        );
+
+        $conn->commit();
+
+        Response::success(
+            MissatgesAPI::success('update'),
+            ['id' => $id],
+            200
+        );
+    } catch (PDOException $e) {
+        if (isset($conn) && $conn->inTransaction()) {
+            $conn->rollBack();
+        }
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
     // Fi endpoints   
 } else {
     Response::error(

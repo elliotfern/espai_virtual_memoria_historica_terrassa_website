@@ -136,9 +136,6 @@ if ($slug === "municipi") {
         exit;
     }
 
-
-
-
     // Si no hay errores, crear las variables PHP y preparar la consulta PDO
     $ciutat = $data['ciutat'];
     $ciutat_ca = !empty($data['ciutat_ca']) ? $data['ciutat_ca'] : NULL;
@@ -3679,6 +3676,141 @@ if ($slug === "municipi") {
         );
     } catch (PDOException $e) {
         // En caso de error en la conexión o ejecución de la consulta
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
+    // POST premsaMitja
+    // ruta POST => "/api/auxiliars/post/premsaMitja"
+} else if ($slug === "premsaMitja") {
+
+    $inputData = file_get_contents('php://input');
+    $data = json_decode($inputData, true);
+
+    $errors = [];
+
+    // Validación requerida
+    if (empty($data['slug'])) {
+        $errors[] = ValidacioErrors::requerit('slug');
+    }
+    if (empty($data['tipus'])) {
+        $errors[] = ValidacioErrors::requerit('tipus');
+    }
+    if (empty($data['nom_ca'])) {
+        $errors[] = ValidacioErrors::requerit('nom_ca');
+    }
+
+    // Validación URL (opcional)
+    if (!empty($data['web_url']) && filter_var($data['web_url'], FILTER_VALIDATE_URL) === false) {
+        $errors[] = "Format incorrecte de la URL";
+    }
+
+    if (!empty($errors)) {
+        Response::error(
+            MissatgesAPI::error('validacio'),
+            $errors,
+            400
+        );
+        return;
+    }
+
+    // Variables
+    $slugMitja = $data['slug'];
+    $tipus = $data['tipus'];
+    $webUrl = !empty($data['web_url']) ? $data['web_url'] : NULL;
+
+    $nomCa = $data['nom_ca'];
+    $descripcioCa = !empty($data['descripcio_ca']) ? $data['descripcio_ca'] : NULL;
+
+    try {
+        global $conn;
+        /** @var PDO $conn */
+
+        $conn->beginTransaction();
+
+        // (Opcional pero recomendado) comprobar slug duplicado
+        $sqlCheck = "SELECT COUNT(*) FROM aux_premsa_mitjans WHERE slug = :slug";
+        $stmtCheck = $conn->prepare($sqlCheck);
+        $stmtCheck->bindParam(':slug', $slugMitja, PDO::PARAM_STR);
+        $stmtCheck->execute();
+
+        $exists = (int)$stmtCheck->fetchColumn();
+        if ($exists > 0) {
+            $conn->rollBack();
+            Response::error(
+                MissatgesAPI::error('validacio'),
+                ["Slug duplicat"],
+                400
+            );
+            return;
+        }
+
+        // Insert tabla base
+        $sql = "INSERT INTO aux_premsa_mitjans (
+                    slug,
+                    tipus,
+                    web_url
+                ) VALUES (
+                    :slug,
+                    :tipus,
+                    :web_url
+                )";
+
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':slug', $slugMitja, PDO::PARAM_STR);
+        $stmt->bindParam(':tipus', $tipus, PDO::PARAM_STR);
+        $stmt->bindParam(':web_url', $webUrl, PDO::PARAM_STR);
+        $stmt->execute();
+
+        $id = (int)$conn->lastInsertId();
+
+        // Insert i18n (CA)
+        $lang = "ca";
+        $sqlI18n = "INSERT INTO aux_premsa_mitjans_i18n (
+                        mitja_id,
+                        lang,
+                        nom,
+                        descripcio
+                    ) VALUES (
+                        :mitja_id,
+                        :lang,
+                        :nom,
+                        :descripcio
+                    )";
+
+        $stmtI18n = $conn->prepare($sqlI18n);
+        $stmtI18n->bindParam(':mitja_id', $id, PDO::PARAM_INT);
+        $stmtI18n->bindParam(':lang', $lang, PDO::PARAM_STR);
+        $stmtI18n->bindParam(':nom', $nomCa, PDO::PARAM_STR);
+        $stmtI18n->bindParam(':descripcio', $descripcioCa, PDO::PARAM_STR);
+        $stmtI18n->execute();
+
+        $tipusOperacio = "INSERT";
+        $detalls = "Creació nou mitjà: " . $nomCa;
+
+        Audit::registrarCanvi(
+            $conn,
+            $userId,
+            $tipusOperacio,
+            $detalls,
+            Tables::AUX_PREMSA_MITJANS,
+            $id
+        );
+
+        $conn->commit();
+
+        Response::success(
+            MissatgesAPI::success('create'),
+            ['id' => $id],
+            200
+        );
+    } catch (PDOException $e) {
+        if (isset($conn) && $conn->inTransaction()) {
+            $conn->rollBack();
+        }
         Response::error(
             MissatgesAPI::error('errorBD'),
             [$e->getMessage()],
