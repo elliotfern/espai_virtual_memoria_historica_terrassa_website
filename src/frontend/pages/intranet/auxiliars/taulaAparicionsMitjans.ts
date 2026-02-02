@@ -14,6 +14,7 @@ interface AparicioRow {
   estat: 'draft' | 'publicat';
   created_at: string;
   updated_at: string | null;
+  nom: string;
 
   // i18n (vienen repetidas por idioma en el listado SQL)
   lang: string | null;
@@ -42,7 +43,7 @@ export async function taulaAparicionsPremsa() {
 
     {
       header: 'Mitjà',
-      field: 'mitja_id',
+      field: 'nom',
     },
 
     {

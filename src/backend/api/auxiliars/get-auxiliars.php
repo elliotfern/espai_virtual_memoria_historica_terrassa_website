@@ -1810,11 +1810,14 @@ if ($slug === "municipis") {
                 i.titol,
                 i.resum,
                 i.notes,
-                i.pdf_url
-              FROM db_premsa_aparicions AS a
-              LEFT JOIN db_premsa_aparicions_i18n AS i
-                ON i.aparicio_id = a.id
-              ORDER BY a.data_aparicio DESC, a.id DESC";
+                i.pdf_url,
+                m.nom
+            FROM db_premsa_aparicions AS a
+            LEFT JOIN db_premsa_aparicions_i18n AS i ON i.aparicio_id = a.id
+            LEFT JOIN aux_premsa_mitjans_i18n AS m ON a.mitja_id = m.mitja_id
+            WHERE m.lang = 'ca'
+            GROUP BY a.id
+            ORDER BY a.data_aparicio DESC, a.id DESC";
 
     try {
 
