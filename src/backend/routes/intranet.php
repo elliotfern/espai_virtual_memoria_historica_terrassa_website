@@ -635,8 +635,8 @@ $routes = [
     ]),
 
     // Llistat aparicions en premsa
-    APP_INTRANET . $urlIntranet['auxiliars'] . '/llistat-aparacions-mitjans' => array_merge($defaultProtectedConfig, [
-        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/llistat-aparacions-mitjans.php'
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/llistat-aparicions-mitjans' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/llistat-aparicions-mitjans.php'
     ]),
 
     // Gestió familiars
