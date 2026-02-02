@@ -64,7 +64,7 @@ export async function taulaMitjansComunicacio() {
   }
 
   renderTaulaCercadorFiltres<EspaiRow>({
-    url: API_URLS.GET.LLISTAT_CAMPS,
+    url: API_URLS.GET.LLISTAT_MITJANS,
     containerId: 'taulaLlistatMitjans',
     columns,
     filterKeys: ['nom'],
