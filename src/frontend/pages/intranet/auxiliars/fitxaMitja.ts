@@ -2,6 +2,13 @@ type Lang = 'ca' | 'es' | 'en' | 'fr' | 'it' | 'pt';
 
 const LANGS: readonly Lang[] = ['ca', 'es', 'en', 'fr', 'it', 'pt'] as const;
 
+interface ApiResponse<T> {
+  status: string;
+  message: string;
+  errors: unknown[];
+  data: T;
+}
+
 interface ApiRowPremsaMitja {
   id: number;
   slug: string;
@@ -90,6 +97,11 @@ function emptyI18n(): MitjaI18n {
 
 /** ---------- Fetch + mapeo ---------- */
 
+function isApiResponse(value: unknown): value is ApiResponse<unknown> {
+  if (!isRecord(value)) return false;
+  return typeof value['status'] === 'string' && typeof value['message'] === 'string' && Array.isArray(value['errors']) && 'data' in value;
+}
+
 /**
  * Ajusta aquí si tu backend envuelve el payload dentro de { data: [...] }.
  * Ahora mismo asumo que devuelve directamente array de filas (como en tus ejemplos).
@@ -104,17 +116,25 @@ async function fetchMitjaRows(slug: string): Promise<ApiRowPremsaMitja[]> {
 
   const json: unknown = await res.json();
 
-  if (!Array.isArray(json)) {
-    throw new Error('Resposta inesperada: no és un array.');
+  // ✅ Ahora: el backend devuelve objeto wrapper
+  if (!isApiResponse(json)) {
+    throw new Error('Resposta inesperada: objecte API invàlid.');
+  }
+
+  const payload = json.data;
+
+  if (!Array.isArray(payload)) {
+    throw new Error('Resposta inesperada: data no és un array.');
   }
 
   const rows: ApiRowPremsaMitja[] = [];
-  for (const item of json) {
+  for (const item of payload) {
     if (!isApiRowPremsaMitja(item)) {
       throw new Error('Resposta inesperada: format de fila incorrecte.');
     }
     rows.push(item);
   }
+
   return rows;
 }
 
