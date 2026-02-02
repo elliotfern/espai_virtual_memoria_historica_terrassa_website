@@ -131,6 +131,7 @@ export type ApiUrls = {
     CAMP_CONCENTRACIO: string;
     BIOGRAFIES: string;
     PREMSA_MITJA: string;
+    PREMSA_MITJA_I18N: string;
   };
   DELETE: {
     MUNICIPI: string;

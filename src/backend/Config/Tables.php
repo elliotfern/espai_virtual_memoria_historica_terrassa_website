@@ -76,6 +76,7 @@ final class Tables
     public const DB_DETINGUTS_COMITE_RELACIONS_SOLIDARITAT = 'db_comite_relacions_solidaritat';
 
     public const AUX_PREMSA_MITJANS = 'aux_premsa_mitjans';
+    public const AUX_PREMSA_MITJANS_I18N = 'aux_premsa_mitjans_i18n';
 
     // USUARIS
     public const DB_AUTH_USERS_I18N = 'auth_users_i18n';

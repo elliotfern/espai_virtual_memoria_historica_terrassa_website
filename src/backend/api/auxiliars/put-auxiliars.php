@@ -3378,6 +3378,142 @@ if ($slug === "municipi") {
             500
         );
     }
+
+    // PUT premsaMitjaI18n
+    // ruta PUT => "/api/auxiliars/put/premsaMitjaI18n"
+} else if ($slug === "premsaMitjaI18n") {
+
+    $inputData = file_get_contents('php://input');
+    $data = json_decode($inputData, true);
+
+    $errors = [];
+
+    // Validación mínima
+    if (empty($data['slug'])) {
+        $errors[] = ValidacioErrors::requerit('slug');
+    }
+
+    // Recomiendo exigir catalán (mínimo)
+    if (empty($data['nom_ca'])) {
+        $errors[] = ValidacioErrors::requerit('nom_ca');
+    }
+
+    if (!empty($errors)) {
+        Response::error(
+            MissatgesAPI::error('validacio'),
+            $errors,
+            400
+        );
+        return;
+    }
+
+    $slugMitja = $data['slug'];
+
+    // Recoger campos (vacíos -> NULL)
+    $nom_ca = !empty($data['nom_ca']) ? $data['nom_ca'] : NULL;
+    $des_ca = !empty($data['descripcio_ca']) ? $data['descripcio_ca'] : NULL;
+
+    $nom_es = !empty($data['nom_es']) ? $data['nom_es'] : NULL;
+    $des_es = !empty($data['descripcio_es']) ? $data['descripcio_es'] : NULL;
+
+    $nom_en = !empty($data['nom_en']) ? $data['nom_en'] : NULL;
+    $des_en = !empty($data['descripcio_en']) ? $data['descripcio_en'] : NULL;
+
+    $nom_fr = !empty($data['nom_fr']) ? $data['nom_fr'] : NULL;
+    $des_fr = !empty($data['descripcio_fr']) ? $data['descripcio_fr'] : NULL;
+
+    $nom_it = !empty($data['nom_it']) ? $data['nom_it'] : NULL;
+    $des_it = !empty($data['descripcio_it']) ? $data['descripcio_it'] : NULL;
+
+    $nom_pt = !empty($data['nom_pt']) ? $data['nom_pt'] : NULL;
+    $des_pt = !empty($data['descripcio_pt']) ? $data['descripcio_pt'] : NULL;
+
+    try {
+        global $conn;
+        /** @var PDO $conn */
+
+        $conn->beginTransaction();
+
+        // 1) Obtener mitja_id por slug
+        $sqlId = "SELECT id FROM aux_premsa_mitjans WHERE slug = :slug LIMIT 1";
+        $stmtId = $conn->prepare($sqlId);
+        $stmtId->bindParam(':slug', $slugMitja, PDO::PARAM_STR);
+        $stmtId->execute();
+
+        $mitjaId = (int)$stmtId->fetchColumn();
+
+        if ($mitjaId <= 0) {
+            $conn->rollBack();
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        // 2) Upsert i18n (requiere PK (mitja_id, lang))
+        $sqlUpsert = "INSERT INTO aux_premsa_mitjans_i18n (
+                        mitja_id, lang, nom, descripcio
+                      ) VALUES (
+                        :mitja_id, :lang, :nom, :descripcio
+                      )
+                      ON DUPLICATE KEY UPDATE
+                        nom = VALUES(nom),
+                        descripcio = VALUES(descripcio)";
+
+        $stmtUpsert = $conn->prepare($sqlUpsert);
+
+        // helper local: ejecutar 1 idioma
+        $saveLang = function (string $lang, ?string $nom, ?string $descripcio) use ($stmtUpsert, $mitjaId) {
+            // Si quieres NO guardar idiomas vacíos, descomenta estas 2 líneas:
+            // if (($nom === NULL || $nom === '') && ($descripcio === NULL || $descripcio === '')) return;
+
+            $stmtUpsert->bindParam(':mitja_id', $mitjaId, PDO::PARAM_INT);
+            $stmtUpsert->bindParam(':lang', $lang, PDO::PARAM_STR);
+            $stmtUpsert->bindParam(':nom', $nom, PDO::PARAM_STR);
+            $stmtUpsert->bindParam(':descripcio', $descripcio, PDO::PARAM_STR);
+            $stmtUpsert->execute();
+        };
+
+        $saveLang("ca", $nom_ca, $des_ca);
+        $saveLang("es", $nom_es, $des_es);
+        $saveLang("en", $nom_en, $des_en);
+        $saveLang("fr", $nom_fr, $des_fr);
+        $saveLang("it", $nom_it, $des_it);
+        $saveLang("pt", $nom_pt, $des_pt);
+
+        // 3) Audit
+        $tipusOperacio = "UPDATE";
+        $detalls = "Modificació traduccions mitjà: " . $slugMitja;
+
+        Audit::registrarCanvi(
+            $conn,
+            $userId,
+            $tipusOperacio,
+            $detalls,
+            Tables::AUX_PREMSA_MITJANS_I18N,
+            $mitjaId
+        );
+
+        $conn->commit();
+
+        Response::success(
+            MissatgesAPI::success('update'),
+            ['id' => $mitjaId, 'slug' => $slugMitja],
+            200
+        );
+    } catch (PDOException $e) {
+        if (isset($conn) && $conn->inTransaction()) {
+            $conn->rollBack();
+        }
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
     // Fi endpoints   
 } else {
     Response::error(

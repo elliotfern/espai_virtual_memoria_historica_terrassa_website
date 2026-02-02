@@ -48,6 +48,7 @@ import { formUsuarisBiografies } from './formUsuarisBiografies';
 import { taulaMitjansComunicacio } from './taulaMitjansComunicacio';
 import { initFitxaDetallsMitja } from './fitxaMitja';
 import { formMitjaPremsa } from './formMitja';
+import { formMitjaPremsaI18n } from './formMitjaI18n';
 
 export async function auxiliars() {
   const url = window.location.href;
@@ -521,5 +522,8 @@ export async function auxiliars() {
     formMitjaPremsa(true, slug);
   } else if (pageType[2] === 'nou-mitja-comunicacio') {
     formMitjaPremsa(false);
+  } else if (pageType[2] === 'modifica-mitja-comunicacio-i18n') {
+    const slug = pageType[3];
+    formMitjaPremsaI18n(slug);
   }
 }

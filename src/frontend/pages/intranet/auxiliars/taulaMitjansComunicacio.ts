@@ -42,7 +42,7 @@ export async function taulaMitjansComunicacio() {
     columns.push({
       header: 'Accions',
       field: 'id',
-      render: (_: unknown, row: EspaiRow) => `<a id="${row.id}" title="Modifica" href="https://${window.location.hostname}/gestio/auxiliars/modifica-mitja-comunicacio/${row.id}"><button type="button" class="btn btn-warning btn-sm">Modifica</button></a>`,
+      render: (_: unknown, row: EspaiRow) => `<a id="${row.id}" title="Modifica" href="https://${window.location.hostname}/gestio/auxiliars/modifica-mitja-comunicacio/${row.slug}"><button type="button" class="btn btn-warning btn-sm">Modifica</button></a>`,
     });
   }
 
