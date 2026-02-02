@@ -526,7 +526,7 @@ export async function auxiliars() {
   } else if (pageType[2] === 'modifica-mitja-comunicacio-i18n') {
     const slug = pageType[3];
     formMitjaPremsaI18n(slug);
-  } else if (pageType[2] === 'llistat-aparacions-mitjans') {
+  } else if (pageType[2] === 'llistat-aparicions-mitjans') {
     taulaAparicionsPremsa();
   }
 }
