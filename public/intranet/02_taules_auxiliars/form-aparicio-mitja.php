@@ -40,19 +40,6 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
                             </select>
                         </div>
 
-                        <div class="col-12">
-                            <label for="titol_ca" class="form-label fw-bold">Títol (català) *</label>
-                            <input
-                                type="text"
-                                class="form-control"
-                                id="titol_ca"
-                                name="titol_ca"
-                                required
-                                maxlength="255"
-                                placeholder="Escriu el títol en català…">
-                            <div class="form-text">Obligatori. Es guardarà a la taula i18n amb lang=ca.</div>
-                        </div>
-
                         <div class="col-md-4">
                             <label for="mitja_id" class="form-label fw-bold">Mitjà *</label>
                             <select class="form-select" id="mitja_id" name="mitja_id" required>
@@ -65,6 +52,19 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
                             <label for="url_noticia" class="form-label fw-bold">URL notícia</label>
                             <input type="url" class="form-control" id="url_noticia" name="url_noticia" placeholder="https://…">
                             <div class="form-text">Opcional. Enllaç a la notícia/publicació.</div>
+                        </div>
+
+                        <div class="col-12">
+                            <label for="titol_ca" class="form-label fw-bold">Títol (català) *</label>
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="titol_ca"
+                                name="titol_ca"
+                                required
+                                maxlength="255"
+                                placeholder="Escriu el títol en català…">
+                            <div class="form-text">Obligatori.</div>
                         </div>
 
                         <div class="col-md-4">
