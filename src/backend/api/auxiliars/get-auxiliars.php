@@ -2006,7 +2006,7 @@ if ($slug === "municipis") {
                 p.cognom2,
                 p.slug
               FROM aux_imatges AS i
-              LEFT JOIN db_persones AS p ON i.idPersona = p.id
+              LEFT JOIN db_dades_personals AS p ON i.idPersona = p.id
               ORDER BY id DESC";
 
     try {
