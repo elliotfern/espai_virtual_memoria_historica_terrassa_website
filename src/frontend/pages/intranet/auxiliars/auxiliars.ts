@@ -51,6 +51,7 @@ import { formMitjaPremsa } from './formMitja';
 import { formMitjaPremsaI18n } from './formMitjaI18n';
 import { taulaAparicionsPremsa } from './taulaAparicionsMitjans';
 import { taulaImatges } from './taulaImatges';
+import { formImatge } from './formImatge';
 
 export async function auxiliars() {
   const url = window.location.href;
@@ -531,5 +532,10 @@ export async function auxiliars() {
     taulaAparicionsPremsa();
   } else if (pageType[2] === 'llistat-imatges') {
     taulaImatges();
+  } else if (pageType[2] === 'nova-imatge') {
+    formImatge(false);
+  } else if (pageType[2] === 'modifica-imatge') {
+    const id = Number(pageType[3]);
+    formImatge(true, id);
   }
 }

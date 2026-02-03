@@ -3985,4 +3985,193 @@ if ($slug === "municipi") {
             500
         );
     }
+
+    // POST imatge (create + upload)
+    // ruta POST => "/api/auxiliars/post/imatge"
+} else if ($slug === "imatge") {
+
+    header('Content-Type: application/json');
+
+    // (si en tu proyecto ya existe)
+    // checkReferer(DOMAIN);
+
+    $userId = getAuthenticatedUserId();
+    if (!$userId) {
+        Response::error('No autenticat', [], 401);
+        return;
+    }
+
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        Response::error('Method not allowed', [], 405);
+        return;
+    }
+
+    /**
+     * Sanea nombre base sin extensión
+     */
+    $sanitizeBaseName = function (string $original): string {
+        $base = pathinfo($original, PATHINFO_FILENAME);
+        $base = trim($base);
+
+        if (function_exists('iconv')) {
+            $trans = @iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $base);
+            if ($trans !== false) $base = $trans;
+        }
+        $base = strtolower($base);
+        $base = preg_replace('/[^a-z0-9\-_]+/', '-', $base) ?? '';
+        $base = preg_replace('/-+/', '-', $base) ?? '';
+        $base = trim($base, '-_ ');
+        if ($base === '') $base = 'imatge';
+        if (strlen($base) > 120) $base = substr($base, 0, 120);
+        return $base;
+    };
+
+    /**
+     * Carpeta destino según tipus
+     */
+    $getTargetDir = function (int $tipus): string {
+        switch ($tipus) {
+            case 1:
+            case 3:
+                return '/home/epgylzqu/media.memoriaterrassa.cat/assets_represaliats/img/';
+            case 2:
+                return '/home/epgylzqu/media.memoriaterrassa.cat/assets_usuaris/';
+            case 4:
+                return '/home/epgylzqu/media.memoriaterrassa.cat/assets_premsa/';
+            default:
+                throw new RuntimeException('Tipus no vàlid.');
+        }
+    };
+
+    /**
+     * Ruta pública base según tipus
+     */
+    $getPublicBase = function (int $tipus): string {
+        switch ($tipus) {
+            case 1:
+            case 3:
+                return 'https://media.memoriaterrassa.cat/assets_represaliats/img/';
+            case 2:
+                return 'https://media.memoriaterrassa.cat/assets_usuaris/';
+            case 4:
+                return 'https://media.memoriaterrassa.cat/assets_premsa/';
+            default:
+                throw new RuntimeException('Tipus no vàlid.');
+        }
+    };
+
+    try {
+        global $conn;
+        /** @var PDO $conn */
+
+        // Campos
+        $nomImatge = trim($_POST['nomImatge'] ?? '');
+        $tipus     = isset($_POST['tipus']) ? (int)$_POST['tipus'] : 0;
+        $idPersona = isset($_POST['idPersona']) && $_POST['idPersona'] !== '' ? (int)$_POST['idPersona'] : null;
+
+        // En tu form el input se llama "file"
+        $file = $_FILES['file'] ?? null;
+
+        if ($nomImatge === '') {
+            throw new RuntimeException('Falta el camp nomImatge.');
+        }
+        if ($tipus < 1 || $tipus > 4) {
+            throw new RuntimeException('Tipus no vàlid.');
+        }
+        if (!$file || !isset($file['error']) || $file['error'] !== UPLOAD_ERR_OK) {
+            throw new RuntimeException('Fitxer invàlid o no enviat.');
+        }
+
+        // Tamaño (ajusta si quieres)
+        $maxBytes = 10 * 1024 * 1024; // 10MB
+        if (!isset($file['size']) || (int)$file['size'] <= 0 || (int)$file['size'] > $maxBytes) {
+            throw new RuntimeException('La mida supera el límit de 10MB.');
+        }
+
+        // MIME real
+        $finfo = new finfo(FILEINFO_MIME_TYPE);
+        $mime  = $finfo->file($file['tmp_name']);
+
+        $allowed = [
+            'image/jpeg'      => 'jpg',
+            'image/png'       => 'png',
+            'application/pdf' => 'pdf',
+        ];
+        if (!isset($allowed[$mime])) {
+            throw new RuntimeException('Format no permès. Usa JPG, PNG o PDF.');
+        }
+        $ext = $allowed[$mime];
+
+        // nomArxiu (sin extensión)
+        $originalClientName = (string)($file['name'] ?? 'imatge');
+        $nomArxiu = $sanitizeBaseName($originalClientName);
+
+        // Directorio
+        $targetDir = $getTargetDir($tipus);
+        if (!is_dir($targetDir)) {
+            if (!mkdir($targetDir, 0755, true) && !is_dir($targetDir)) {
+                throw new RuntimeException('No s\'ha pogut crear el directori de destinació.');
+            }
+        }
+
+        $conn->beginTransaction();
+
+        // (Opcional) evitar duplicado exacto nomArxiu+tipus+mime
+        // Si quieres, se puede añadir un sufijo incremental aquí.
+
+        // INSERT
+        $sql = "INSERT INTO aux_imatges
+                    (idPersona, nomArxiu, nomImatge, tipus, mime, dateCreated, dateModified)
+                VALUES
+                    (:idPersona, :nomArxiu, :nomImatge, :tipus, :mime, CURDATE(), NULL)";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute([
+            ':idPersona' => $idPersona ?: null,
+            ':nomArxiu'  => $nomArxiu,
+            ':nomImatge' => $nomImatge,
+            ':tipus'     => $tipus,
+            ':mime'      => $mime,
+        ]);
+
+        $id = (int)$conn->lastInsertId();
+        if ($id <= 0) {
+            throw new RuntimeException('No s\'ha pogut crear el registre a la base de dades.');
+        }
+
+        // Guardar archivo físico como nomArxiu.ext (tu modelo)
+        $filename  = $nomArxiu . '.' . $ext;
+        $targetAbs = rtrim($targetDir, '/') . '/' . $filename;
+
+        if (!move_uploaded_file($file['tmp_name'], $targetAbs)) {
+            throw new RuntimeException('No s\'ha pogut desar el fitxer al servidor.');
+        }
+        @chmod($targetAbs, 0644);
+
+        // Auditoría (si lo usas en estos endpoints)
+        // Audit::registrarCanvi($conn, $userId, "INSERT", "Creació imatge: {$nomImatge}", Tables::AUX_IMATGES, $id);
+
+        $conn->commit();
+
+        $publicUrl = $getPublicBase($tipus) . $filename;
+
+        Response::success(
+            MissatgesAPI::success('create'),
+            [
+                'id' => $id,
+                'url' => $publicUrl,
+                'filename' => $filename,
+                'mime' => $mime,
+            ],
+            200
+        );
+    } catch (Throwable $e) {
+        if (isset($conn) && $conn->inTransaction()) {
+            $conn->rollBack();
+        }
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
 }

@@ -3699,6 +3699,208 @@ if ($slug === "municipi") {
         );
     }
 
+    // PUT imatge (update + opcional replace upload)
+    // ruta PUT => "/api/auxiliars/put/imatge"
+} else if ($slug === "imatge") {
+
+    header('Content-Type: application/json');
+
+    // checkReferer(DOMAIN);
+
+    $userId = getAuthenticatedUserId();
+    if (!$userId) {
+        Response::error('No autenticat', [], 401);
+        return;
+    }
+
+    // Aceptamos PUT (ideal) o POST (fallback) porque multipart PUT a veces no llena $_FILES
+    if (!in_array($_SERVER['REQUEST_METHOD'], ['PUT', 'POST'], true)) {
+        Response::error('Method not allowed', [], 405);
+        return;
+    }
+
+    $getTargetDir = function (int $tipus): string {
+        switch ($tipus) {
+            case 1:
+            case 3:
+                return '/home/epgylzqu/media.memoriaterrassa.cat/assets_represaliats/img/';
+            case 2:
+                return '/home/epgylzqu/media.memoriaterrassa.cat/assets_usuaris/';
+            case 4:
+                return '/home/epgylzqu/media.memoriaterrassa.cat/assets_premsa/';
+            default:
+                throw new RuntimeException('Tipus no vàlid.');
+        }
+    };
+
+    $getPublicBase = function (int $tipus): string {
+        switch ($tipus) {
+            case 1:
+            case 3:
+                return 'https://media.memoriaterrassa.cat/assets_represaliats/img/';
+            case 2:
+                return 'https://media.memoriaterrassa.cat/assets_usuaris/';
+            case 4:
+                return 'https://media.memoriaterrassa.cat/assets_premsa/';
+            default:
+                throw new RuntimeException('Tipus no vàlid.');
+        }
+    };
+
+    $mimeToExt = function (?string $mime): string {
+        return match ($mime) {
+            'image/jpeg' => 'jpg',
+            'image/png' => 'png',
+            'application/pdf' => 'pdf',
+            default => '',
+        };
+    };
+
+    try {
+        global $conn;
+        /** @var PDO $conn */
+
+        $id = isset($_POST['id']) ? (int)$_POST['id'] : 0;
+        $nomImatge = trim($_POST['nomImatge'] ?? '');
+        $tipus = isset($_POST['tipus']) ? (int)$_POST['tipus'] : 0;
+        $idPersona = isset($_POST['idPersona']) && $_POST['idPersona'] !== '' ? (int)$_POST['idPersona'] : null;
+
+        if ($id <= 0) throw new RuntimeException('Falta id.');
+        if ($nomImatge === '') throw new RuntimeException('Falta nomImatge.');
+        if ($tipus < 1 || $tipus > 4) throw new RuntimeException('Tipus no vàlid.');
+
+        // file opcional
+        $file = $_FILES['file'] ?? null;
+        $hasNewFile = ($file && isset($file['error']) && $file['error'] === UPLOAD_ERR_OK);
+
+        $conn->beginTransaction();
+
+        // Cargar actual
+        $sqlCur = "SELECT id, idPersona, nomArxiu, nomImatge, tipus, mime
+                   FROM aux_imatges
+                   WHERE id = :id
+                   LIMIT 1";
+        $stmtCur = $conn->prepare($sqlCur);
+        $stmtCur->execute([':id' => $id]);
+        $cur = $stmtCur->fetch(PDO::FETCH_ASSOC);
+
+        if (!$cur) {
+            $conn->rollBack();
+            Response::error(MissatgesAPI::error('not_found'), [], 404);
+            return;
+        }
+
+        $curNomArxiu = (string)$cur['nomArxiu'];
+        $curTipus    = (int)$cur['tipus'];
+        $curMime     = $cur['mime'] ? (string)$cur['mime'] : null;
+
+        $newMime = $curMime;
+
+        // Si hay nuevo archivo: validar y reemplazar
+        if ($hasNewFile) {
+            $maxBytes = 10 * 1024 * 1024;
+            if (!isset($file['size']) || (int)$file['size'] <= 0 || (int)$file['size'] > $maxBytes) {
+                throw new RuntimeException('La mida supera el límit de 10MB.');
+            }
+
+            $finfo = new finfo(FILEINFO_MIME_TYPE);
+            $mime  = $finfo->file($file['tmp_name']);
+
+            $allowed = [
+                'image/jpeg'      => 'jpg',
+                'image/png'       => 'png',
+                'application/pdf' => 'pdf',
+            ];
+            if (!isset($allowed[$mime])) {
+                throw new RuntimeException('Format no permès. Usa JPG, PNG o PDF.');
+            }
+            $newMime = $mime;
+        }
+
+        // Update BD
+        $sqlUp = "UPDATE aux_imatges
+                  SET
+                    idPersona = :idPersona,
+                    nomImatge = :nomImatge,
+                    tipus = :tipus,
+                    mime = :mime,
+                    dateModified = CURDATE()
+                  WHERE id = :id";
+        $stmtUp = $conn->prepare($sqlUp);
+        $stmtUp->execute([
+            ':idPersona' => $idPersona ?: null,
+            ':nomImatge' => $nomImatge,
+            ':tipus' => $tipus,
+            ':mime' => $newMime,
+            ':id' => $id,
+        ]);
+
+        // Operaciones de fichero (mover/cambiar)
+        $oldExt = $mimeToExt($curMime);
+        $newExt = $mimeToExt($newMime);
+
+        $oldDir = $getTargetDir($curTipus);
+        $newDir = $getTargetDir($tipus);
+
+        if (!is_dir($newDir)) {
+            if (!mkdir($newDir, 0755, true) && !is_dir($newDir)) {
+                throw new RuntimeException('No s\'ha pogut crear el directori de destinació.');
+            }
+        }
+
+        $oldPath = rtrim($oldDir, '/') . '/' . $curNomArxiu . ($oldExt !== '' ? '.' . $oldExt : '');
+        $newPath = rtrim($newDir, '/') . '/' . $curNomArxiu . ($newExt !== '' ? '.' . $newExt : '');
+
+        // 1) Si NO hay nuevo archivo pero cambia tipus: mover
+        if (!$hasNewFile && $curTipus !== $tipus) {
+            if (is_file($oldPath)) {
+                if (!@rename($oldPath, $newPath)) {
+                    throw new RuntimeException('No s\'ha pogut moure el fitxer al nou directori.');
+                }
+                @chmod($newPath, 0644);
+            }
+        }
+
+        // 2) Si HAY nuevo archivo: guardarlo en el directorio del tipo nuevo (o actual)
+        if ($hasNewFile) {
+            // Si cambia extensión, intenta borrar el viejo
+            if ($oldExt !== '' && is_file($oldPath) && ($oldPath !== $newPath)) {
+                @unlink($oldPath);
+            }
+            // Si no cambia dir/ext, igualmente reemplazamos
+            if (!move_uploaded_file($file['tmp_name'], $newPath)) {
+                throw new RuntimeException('No s\'ha pogut desar el fitxer al servidor.');
+            }
+            @chmod($newPath, 0644);
+        }
+
+        // Auditoría (si la usas)
+        // Audit::registrarCanvi($conn, $userId, "UPDATE", "Modificació imatge #{$id}: {$nomImatge}", Tables::AUX_IMATGES, $id);
+
+        $conn->commit();
+
+        $publicUrl = $getPublicBase($tipus) . $curNomArxiu . ($newExt !== '' ? '.' . $newExt : '');
+
+        Response::success(
+            MissatgesAPI::success('update'),
+            [
+                'id' => $id,
+                'url' => $publicUrl,
+                'mime' => $newMime,
+            ],
+            200
+        );
+    } catch (Throwable $e) {
+        if (isset($conn) && $conn->inTransaction()) {
+            $conn->rollBack();
+        }
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
 
     // Fi endpoints   
 } else {

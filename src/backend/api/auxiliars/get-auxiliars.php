@@ -2025,6 +2025,118 @@ if ($slug === "municipis") {
             500
         );
     }
+
+    // GET : Aux - Imatge (detall per id)
+    // URL: /api/auxiliars/get/imatge?id=123
+} elseif ($slug === "imatge") {
+
+    if (empty($_GET['id'])) {
+        Response::error(
+            MissatgesAPI::error('missing_params'),
+            ['id'],
+            400
+        );
+        return;
+    }
+
+    $idImatge = (int) $_GET['id'];
+
+    if ($idImatge <= 0) {
+        Response::error(
+            MissatgesAPI::error('missing_params'),
+            ['id'],
+            400
+        );
+        return;
+    }
+
+    $db = new Database();
+
+    $query = "SELECT
+                i.id,
+                i.idPersona,
+                i.nomArxiu,
+                i.nomImatge,
+                i.tipus,
+                i.mime,
+                i.dateCreated,
+                i.dateModified
+              FROM aux_imatges AS i
+              WHERE i.id = :id";
+
+    try {
+
+        $result = $db->getData($query, [
+            ':id' => $idImatge
+        ]);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
+    // GET : Aux - llistat persones
+    // URL: /api/auxiliars/get/persones
+} elseif ($slug === "persones") {
+
+    $db = new Database();
+
+    $query = "SELECT
+                p.id,
+                TRIM(
+                CONCAT(
+                    COALESCE(p.nom, ''),
+                    ' ',
+                    COALESCE(p.cognom1, ''),
+                    ' ',
+                    COALESCE(p.cognom2, '')
+                )
+                ) AS nom_complet
+              FROM db_dades_personals AS d
+              ORDER BY cognom1";
+
+    try {
+
+        $result = $db->getData($query);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
 } else {
     // Si el parámetro 'type' no coincide con ninguno de los casos anteriores, mostramos un error
     echo json_encode(["error" => "Tipo no válido"]);
