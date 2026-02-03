@@ -1699,10 +1699,11 @@ if ($slug === "municipis") {
                 m.web_url,
                 i.nom,
                 i.descripcio
-              FROM aux_premsa_mitjans AS m
-              LEFT JOIN aux_premsa_mitjans_i18n AS i
+            FROM aux_premsa_mitjans AS m
+            LEFT JOIN aux_premsa_mitjans_i18n AS i
                 ON i.mitja_id = m.id AND i.lang = 'ca'
-              ORDER BY i.nom ASC";
+            GROUP BY m.id
+            ORDER BY i.nom ASC";
 
     try {
 

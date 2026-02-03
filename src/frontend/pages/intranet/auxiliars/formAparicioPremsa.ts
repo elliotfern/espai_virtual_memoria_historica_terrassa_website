@@ -18,11 +18,11 @@ interface FitxaAparicio {
   estat: 'draft' | 'publicat';
 }
 
-interface ApiResponse<T> {
+type ApiResponseArr<T> = {
   status: string;
   message: string;
-  data: T;
-}
+  data: T[];
+};
 
 /**
  * Form create/update per db_premsa_aparicions (sense i18n)
@@ -46,10 +46,11 @@ export async function formAparicioPremsa(isUpdate: boolean, id?: number) {
 
   // UPDATE: carrega fitxa i omple inputs
   if (id && isUpdate) {
-    const response = await fetchDataGet<ApiResponse<FitxaAparicio>>(API_URLS.GET.APARICIO_ID(id), true);
-    if (!response || !response.data) return;
+    const response = await fetchDataGet<ApiResponseArr<FitxaAparicio>>(API_URLS.GET.APARICIO_ID(id), true);
+    if (!response || !Array.isArray(response.data) || !response.data[0]) return;
 
-    data = response.data;
+    data = response.data[0];
+    renderFormInputs(data as Record<string, unknown>);
 
     divTitol.innerHTML = `
       <h4 class="mb-0">Modifica aparició #${data.id}</h4>
