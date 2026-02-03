@@ -125,10 +125,10 @@ export async function formImatge(isUpdate?: boolean, id?: number) {
 
   // Cargar datos si update
   if (modeUpdate && realId) {
-    const response = await fetchDataGet<ApiResponse<FitxaImatge>>(API_URLS.GET.IMATGE_ID(realId), true);
-    if (!response || !response.data) return;
+    const response = await fetchDataGet<ApiResponse<FitxaImatge[]>>(API_URLS.GET.IMATGE_ID(id), true);
+    if (!response || !response.data || !response.data.length) return;
 
-    data = response.data;
+    data = response.data[0]; // 👈 IMPORTANTÍSIMO
 
     divTitol.innerHTML = `<h3>Modificar imatge #${data.id}</h3>`;
     btnImatge.textContent = 'Guardar canvis';
@@ -181,8 +181,12 @@ export async function formImatge(isUpdate?: boolean, id?: number) {
     });
   }
 
-  // Select Personas (si tienes auxiliar 'persones' o similar)
-  await auxiliarSelect(data.idPersona ?? 0, 'persones', 'idPersona', 'nom_complet');
+  if (data.idPersona) {
+    await auxiliarSelect(data.idPersona, 'persones', 'persona', 'idPersona');
+  } else {
+    // cargar opciones sin preselección (0 te rompe)
+    await auxiliarSelect(0, 'persones', 'idPersona', 'nom_complet');
+  }
 
   // Preview file
   fileInput.addEventListener('change', () => {
