@@ -1,3 +1,5 @@
+import { formatDatesForm } from '../../../services/formatDates/dates';
+
 // fitxaImatge.ts
 interface ApiResponse<T> {
   status: string;
@@ -203,10 +205,10 @@ function renderImatgeDetall(target: HTMLElement, img: ImatgeDetall): void {
               <dd class="col-sm-8"><code>${escapeHtml(img.mime)}</code></dd>
 
               <dt class="col-sm-4">Creat</dt>
-              <dd class="col-sm-8">${img.dateCreated ? escapeHtml(img.dateCreated) : '—'}</dd>
+              <dd class="col-sm-8">${img.dateCreated ? escapeHtml(formatDatesForm(img.dateCreated)) : '—'}</dd>
 
               <dt class="col-sm-4">Modificat</dt>
-              <dd class="col-sm-8">${img.dateModified ? escapeHtml(img.dateModified) : '—'}</dd>
+              <dd class="col-sm-8">${img.dateModified ? escapeHtml(formatDatesForm(img.dateModified)) : '—'}</dd>
 
               <dt class="col-sm-4">URL</dt>
               <dd class="col-sm-8">${urlHtml}</dd>
