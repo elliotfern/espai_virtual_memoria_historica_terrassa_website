@@ -50,7 +50,7 @@ import { initFitxaDetallsMitja } from './fitxaMitja';
 import { formMitjaPremsa } from './formMitja';
 import { formMitjaPremsaI18n } from './formMitjaI18n';
 import { taulaAparicionsPremsa } from './taulaAparicionsMitjans';
-import { taulaImatges } from './llistatImatges';
+import { taulaImatges } from './taulaImatges';
 
 export async function auxiliars() {
   const url = window.location.href;
