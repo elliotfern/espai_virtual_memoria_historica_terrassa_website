@@ -85,12 +85,12 @@ export async function formAparicioPremsa(isUpdate: boolean, id?: number) {
    */
 
   // Mitjans (select #mitja_id)
-  await auxiliarSelect(data.mitja_id ?? 0, 'premsaMitjans', 'mitja_id', 'nom');
+  await auxiliarSelect(data.mitja_id ?? '', 'premsaMitjans', 'mitja_id', 'nom');
 
   // Tipus aparicio (select #tipus_aparicio)
   await auxiliarSelect(data.tipus_aparicio ?? '', 'premsaTipusAparicio', 'tipus_aparicio', 'nom');
 
-  await auxiliarSelect(data.image_id ?? 0, 'premsaImatges', 'image_id', 'nomImatge');
+  await auxiliarSelect(data.image_id ?? '', 'premsaImatges', 'image_id', 'nomImatge');
 
   /**
    * Normalización checkbox destacat (si tu transmissioDadesDB no lo hace)
