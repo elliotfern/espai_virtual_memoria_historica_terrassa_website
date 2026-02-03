@@ -660,6 +660,10 @@ $routes = [
         'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-imatge.php'
     ]),
 
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/fitxa-imatge/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/fitxa-imatge.php'
+    ]),
+
     // Gestió familiars
     APP_INTRANET . $urlIntranet['familiars'] . '/modifica-familiar/{id}/{id}' => array_merge($defaultProtectedConfig, [
         'view' => BACKEND_URL . $urlIntranetDir['familiars'] . '/form-familiar.php'
