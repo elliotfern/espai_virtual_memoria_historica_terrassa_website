@@ -16,9 +16,12 @@ type RenderTableOptions<T> = {
   initialPage?: number;
   initialSearch?: string;
   initialFilterValue?: T[keyof T] | null;
+
+  // ✅ NUEVO: para mostrar labels en los botones del filtro
+  filterButtonLabel?: (value: T[keyof T]) => string;
 };
 
-export async function renderTaulaCercadorFiltres<T>({ url, columns, containerId, rowsPerPage = 15, filterKeys = [], filterByField, showSearch = true, showPagination = true, initialPage = 1, initialSearch = '', initialFilterValue = null }: RenderTableOptions<T>): Promise<{ page: number; search: string; filter: T[keyof T] | null }> {
+export async function renderTaulaCercadorFiltres<T>({ url, columns, containerId, rowsPerPage = 15, filterKeys = [], filterByField, showSearch = true, showPagination = true, initialPage = 1, initialSearch = '', initialFilterValue = null, filterButtonLabel }: RenderTableOptions<T>): Promise<{ page: number; search: string; filter: T[keyof T] | null }> {
   const container = document.getElementById(containerId);
   if (!container) {
     console.error(`Contenedor #${containerId} no encontrado`);
@@ -89,7 +92,10 @@ export async function renderTaulaCercadorFiltres<T>({ url, columns, containerId,
     if (!filterByField) return;
 
     const uniqueValues = Array.from(new Set(data.map((row) => row[filterByField]))).filter(Boolean) as T[keyof T][];
-    uniqueValues.sort((a, b) => String(a).localeCompare(String(b), 'ca', { sensitivity: 'base' }));
+
+    const getLabel = (v: T[keyof T]) => (filterButtonLabel ? filterButtonLabel(v) : String(v));
+
+    uniqueValues.sort((a, b) => getLabel(a).localeCompare(getLabel(b), 'ca', { sensitivity: 'base' }));
 
     buttonContainer.innerHTML = '';
 
@@ -105,10 +111,10 @@ export async function renderTaulaCercadorFiltres<T>({ url, columns, containerId,
 
     uniqueValues.forEach((value) => {
       const button = document.createElement('button');
-      button.textContent = String(value);
+      button.textContent = getLabel(value); // ✅ aquí el cambio
       button.className = 'filter-btn';
       button.onclick = () => {
-        activeButtonFilter = value;
+        activeButtonFilter = value; // ✅ se sigue filtrando por el valor REAL
         updateActiveButton(button);
         applyFilters();
       };

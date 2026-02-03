@@ -1993,15 +1993,20 @@ if ($slug === "municipis") {
     $db = new Database();
 
     $query = "SELECT
-                id,
-                idPersona,
-                nomArxiu,
-                nomImatge,
-                tipus,
-                mime,
-                dateCreated,
-                dateModified
-              FROM aux_imatges
+                i.id,
+                i.idPersona,
+                i.nomArxiu,
+                i.nomImatge,
+                i.tipus,
+                i.mime,
+                i.dateCreated,
+                i.dateModified,
+                p.nom,
+                p.cognom1,
+                p.cognom2,
+                p.slug
+              FROM aux_imatges AS i
+              LEFT JOIN db_persones AS p ON i.idPersona = p.id
               ORDER BY id DESC";
 
     try {
