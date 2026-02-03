@@ -2192,7 +2192,7 @@ if ($slug === "municipis") {
             ON i.aparicio_id = a.id
            AND i.lang = l.lang
 
-        LEFT JOIN db_premsa_mitjans_i18n AS m
+        LEFT JOIN aux_premsa_mitjans_i18n AS m
             ON m.mitja_id = a.mitja_id
            AND m.lang = 'ca'
 
