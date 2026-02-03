@@ -3901,6 +3901,161 @@ if ($slug === "municipi") {
         );
     }
 
+    // PUT premsaAparicioI18n
+    // ruta PUT => "/api/auxiliars/put/premsaAparicioI18n"
+} else if ($slug === "premsaAparicioI18n") {
+
+    $inputData = file_get_contents('php://input');
+    $data = json_decode($inputData, true);
+
+    $errors = [];
+
+    if (empty($data['id'])) {
+        $errors[] = ValidacioErrors::requerit('id');
+    }
+
+    // Required i18n CA
+    if (empty($data['titol_ca'])) {
+        $errors[] = ValidacioErrors::requerit('titol_ca');
+    }
+
+    // Validació URLs PDF (opcionals)
+    $langs = ['ca', 'es', 'en', 'fr', 'it', 'pt'];
+    foreach ($langs as $l) {
+        $k = "pdf_url_" . $l;
+        if (!empty($data[$k]) && filter_var($data[$k], FILTER_VALIDATE_URL) === false) {
+            $errors[] = "Format incorrecte de la URL ($k)";
+        }
+    }
+
+    if (!empty($errors)) {
+        Response::error(
+            MissatgesAPI::error('validacio'),
+            $errors,
+            400
+        );
+        return;
+    }
+
+    $id = (int)$data['id'];
+
+    try {
+        global $conn;
+        /** @var PDO $conn */
+
+        $conn->beginTransaction();
+
+        // Comprobar que existe la aparició base
+        $sqlCheck = "SELECT COUNT(*) FROM db_premsa_aparicions WHERE id = :id";
+        $stmtCheck = $conn->prepare($sqlCheck);
+        $stmtCheck->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmtCheck->execute();
+
+        $exists = (int)$stmtCheck->fetchColumn();
+        if ($exists === 0) {
+            $conn->rollBack();
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        // UPSERT i18n per idioma (en bloc)
+        $sqlI18n = "INSERT INTO db_premsa_aparicions_i18n (
+                        aparicio_id,
+                        lang,
+                        titol,
+                        resum,
+                        notes,
+                        pdf_url
+                    ) VALUES (
+                        :aparicio_id,
+                        :lang,
+                        :titol,
+                        :resum,
+                        :notes,
+                        :pdf_url
+                    )
+                    ON DUPLICATE KEY UPDATE
+                        titol = VALUES(titol),
+                        resum = VALUES(resum),
+                        notes = VALUES(notes),
+                        pdf_url = VALUES(pdf_url)";
+
+        $stmtI18n = $conn->prepare($sqlI18n);
+
+        foreach ($langs as $lang) {
+
+            $titolKey = "titol_" . $lang;
+
+            // En este endpoint i18n (en bloc):
+            // - SIEMPRE tocamos el idioma si existe la key.
+            // - Como el form siempre envía todas las keys, esto permite "vaciar" (-> NULL).
+            if (!array_key_exists($titolKey, $data)) {
+                continue;
+            }
+
+            $titol = ($data[$titolKey] !== null && $data[$titolKey] !== '') ? $data[$titolKey] : NULL;
+
+            // Si quieres que un idioma con titol vacío NO se guarde, descomenta:
+            // if ($titol === NULL) { continue; }
+
+            $resumKey = "resum_" . $lang;
+            $notesKey = "notes_" . $lang;
+            $pdfKey   = "pdf_url_" . $lang;
+
+            $resum  = array_key_exists($resumKey, $data) ? ($data[$resumKey] !== '' ? $data[$resumKey] : NULL) : NULL;
+            $notes  = array_key_exists($notesKey, $data) ? ($data[$notesKey] !== '' ? $data[$notesKey] : NULL) : NULL;
+            $pdfUrl = array_key_exists($pdfKey, $data) ? ($data[$pdfKey] !== '' ? $data[$pdfKey] : NULL) : NULL;
+
+            // Si TODO está vacío, no insertamos fila (evita filas basura)
+            if ($titol === NULL && $resum === NULL && $notes === NULL && $pdfUrl === NULL) {
+                // si ya existía fila y quieres borrarla, aquí podrías DELETE, pero de momento no.
+                continue;
+            }
+
+            $stmtI18n->bindParam(':aparicio_id', $id, PDO::PARAM_INT);
+            $stmtI18n->bindParam(':lang', $lang, PDO::PARAM_STR);
+            $stmtI18n->bindParam(':titol', $titol, PDO::PARAM_STR);
+            $stmtI18n->bindParam(':resum', $resum, PDO::PARAM_STR);
+            $stmtI18n->bindParam(':notes', $notes, PDO::PARAM_STR);
+            $stmtI18n->bindParam(':pdf_url', $pdfUrl, PDO::PARAM_STR);
+            $stmtI18n->execute();
+        }
+
+        // Audit
+        $tipusOperacio = "UPDATE";
+        $detalls = "Modificació traduccions aparició #{$id}: " . $data['titol_ca'];
+
+        Audit::registrarCanvi(
+            $conn,
+            $userId,
+            $tipusOperacio,
+            $detalls,
+            Tables::DB_PREMSA_APARICIONS_I18N, // ajusta la constant si se llama distinto
+            $id
+        );
+
+        $conn->commit();
+
+        Response::success(
+            MissatgesAPI::success('update'),
+            ['id' => $id],
+            200
+        );
+    } catch (PDOException $e) {
+        if (isset($conn) && $conn->inTransaction()) {
+            $conn->rollBack();
+        }
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
 
     // Fi endpoints   
 } else {

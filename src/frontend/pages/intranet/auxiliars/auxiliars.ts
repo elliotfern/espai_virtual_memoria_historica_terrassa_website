@@ -55,6 +55,7 @@ import { formImatge } from './formImatge';
 import { initFitxaDetallsImatge } from './fitxaImatge';
 import { formAparicioPremsa } from './formAparicioPremsa';
 import { initFitxaDetallsAparicioMitja } from './fitxaAparicioPremsa';
+import { formAparicioPremsaI18n } from './formAparicioPremsaI18n';
 
 export async function auxiliars() {
   const url = window.location.href;
@@ -551,5 +552,8 @@ export async function auxiliars() {
   } else if (pageType[2] === 'fitxa-aparicio-premsa') {
     const id = Number(pageType[3]);
     initFitxaDetallsAparicioMitja(id);
+  } else if (pageType[2] === 'modifica-aparicio-premsa-i18n') {
+    const id = Number(pageType[3]);
+    formAparicioPremsaI18n(id);
   }
 }

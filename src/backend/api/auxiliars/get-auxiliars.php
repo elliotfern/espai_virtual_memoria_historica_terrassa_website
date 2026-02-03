@@ -1887,7 +1887,7 @@ if ($slug === "municipis") {
               LEFT JOIN db_premsa_aparicions_i18n AS i ON i.aparicio_id = a.id
               LEFT JOIN db_premsa_aparicions_i18n i_ca ON i_ca.aparicio_id = a.id AND i_ca.lang = 'ca'
               LEFT JOIN aux_imatges AS im on a.image_id = im.id
-              LEFT JOIN aux_premsa_mitjans_i18n AS pm ON a.mitja_id = pm.id AND pm.lang = 'ca'
+              LEFT JOIN aux_premsa_mitjans_i18n AS pm ON a.mitja_id = pm.mitja_id AND pm.lang = 'ca'
               WHERE a.id = :id";
 
     try {
@@ -2101,7 +2101,7 @@ if ($slug === "municipis") {
 
     // GET : Aux - llistat persones
     // URL: /api/auxiliars/get/persones
-} elseif ($slug === "persones") {
+} else if ($slug === "persones") {
 
     $db = new Database();
 
@@ -2122,6 +2122,89 @@ if ($slug === "municipis") {
     try {
 
         $result = $db->getData($query);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+    // GET : Aux - aparició premsa (traduccions i18n)
+    // URL: /api/auxiliars/get/premsaAparicioI18n?id=123
+} else if ($slug === "premsaAparicioI18n") {
+
+    $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+
+    if ($id <= 0) {
+        Response::error(
+            MissatgesAPI::error('validacio'),
+            [$e->getMessage()],
+            400
+        );
+        return;
+    }
+
+    $db = new Database();
+
+    $query = "SELECT
+            a.id                 AS aparicio_id,
+            l.lang               AS lang,
+            i.titol              AS titol,
+            i.resum              AS resum,
+            i.notes              AS notes,
+            i.pdf_url            AS pdf_url,
+
+            -- info base (para la ficha del form)
+            a.data_aparicio      AS data_aparicio,
+            a.tipus_aparicio     AS tipus_aparicio,
+            a.mitja_id           AS mitja_id,
+            a.url_noticia        AS url_noticia,
+            m.nom                AS nomMitja
+
+        FROM db_premsa_aparicions AS a
+
+        -- tabla virtual de idiomas
+        JOIN (
+            SELECT 'ca' AS lang
+            UNION ALL SELECT 'es'
+            UNION ALL SELECT 'en'
+            UNION ALL SELECT 'fr'
+            UNION ALL SELECT 'it'
+            UNION ALL SELECT 'pt'
+        ) AS l
+
+        LEFT JOIN db_premsa_aparicions_i18n AS i
+            ON i.aparicio_id = a.id
+           AND i.lang = l.lang
+
+        LEFT JOIN db_premsa_mitjans_i18n AS m
+            ON m.mitja_id = a.mitja_id
+           AND m.lang = 'ca'
+
+        WHERE a.id = :id
+
+        ORDER BY FIELD(l.lang, 'ca','es','en','fr','it','pt')
+    ";
+
+    try {
+
+        $params = [':id' => $id];
+        $result = $db->getData($query, $params);
 
         if (empty($result)) {
             Response::error(

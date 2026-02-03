@@ -651,6 +651,10 @@ $routes = [
         'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/fitxa-aparicio-mitja.php'
     ]),
 
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/modifica-aparicio-premsa-i18n/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-aparicio-mitja-i18n.php'
+    ]),
+
     // Auxiliars: GESTIÓ IMATGES
     APP_INTRANET . $urlIntranet['auxiliars'] . '/llistat-imatges' => array_merge($defaultProtectedConfig, [
         'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/llistat-imatges.php'

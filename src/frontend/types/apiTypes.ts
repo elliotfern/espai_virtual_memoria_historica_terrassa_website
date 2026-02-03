@@ -65,6 +65,7 @@ export type ApiUrls = {
     APARICIO_ID: (id: number) => string;
     LLISTAT_IMATGES: string;
     IMATGE_ID: (id: number) => string;
+    APARICIO_PREMSA_I18N_ID: (id: number) => string;
   };
   POST: {
     MUNICIPI: string;
@@ -140,6 +141,7 @@ export type ApiUrls = {
     PREMSA_MITJA_I18N: string;
     APARICIO: string;
     IMATGE: string;
+    APARICIO_PREMSA_I18N: string;
   };
   DELETE: {
     MUNICIPI: string;
