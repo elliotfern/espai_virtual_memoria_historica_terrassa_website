@@ -9,7 +9,7 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
             <h4>Llistat d'aparicions als mitjans de comunicació</h4>
             <?php if (isUserAdmin()) : ?>
 
-                <p><button onclick="window.location.href='<?php echo APP_INTRANET . $url['auxiliars']; ?>/nova-aparacio-premsa'" class="btn btn-success">Nova aparició a mitjà</button></p>
+                <p><button onclick="window.location.href='<?php echo APP_INTRANET . $url['auxiliars']; ?>/nova-aparicio-premsa'" class="btn btn-success">Nova aparició a mitjà</button></p>
 
                 <div id="taulaLlistatAparacions"></div>
 

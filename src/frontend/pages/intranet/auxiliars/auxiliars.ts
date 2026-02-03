@@ -53,6 +53,7 @@ import { taulaAparicionsPremsa } from './taulaAparicionsMitjans';
 import { taulaImatges } from './taulaImatges';
 import { formImatge } from './formImatge';
 import { initFitxaDetallsImatge } from './fitxaImatge';
+import { formAparicioPremsa } from './formAparicioPremsa';
 
 export async function auxiliars() {
   const url = window.location.href;
@@ -531,6 +532,11 @@ export async function auxiliars() {
     formMitjaPremsaI18n(slug);
   } else if (pageType[2] === 'llistat-aparicions-mitjans') {
     taulaAparicionsPremsa();
+  } else if (pageType[2] === 'nova-aparicio-premsa') {
+    formAparicioPremsa(false);
+  } else if (pageType[2] === 'modificacio-aparicio-premsa') {
+    const id = Number(pageType[3]);
+    formAparicioPremsa(true, id);
   } else if (pageType[2] === 'llistat-imatges') {
     taulaImatges();
   } else if (pageType[2] === 'nova-imatge') {
