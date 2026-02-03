@@ -639,12 +639,16 @@ $routes = [
         'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/llistat-aparicions-mitjans.php'
     ]),
 
-    APP_INTRANET . $urlIntranet['auxiliars'] . '/nova-aparicio-mitja' => array_merge($defaultProtectedConfig, [
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/nova-aparicio-premsa' => array_merge($defaultProtectedConfig, [
         'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-aparicio-mitja.php'
     ]),
 
-    APP_INTRANET . $urlIntranet['auxiliars'] . '/modifica-aparicio-mitja/{id}' => array_merge($defaultProtectedConfig, [
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/modifica-aparicio-premsa/{id}' => array_merge($defaultProtectedConfig, [
         'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-aparicio-mitja.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/fitxa-aparicio-premsa/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/fitxa-aparicio-mitja.php'
     ]),
 
     // Auxiliars: GESTIÓ IMATGES
