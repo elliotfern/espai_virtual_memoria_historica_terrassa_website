@@ -2109,8 +2109,8 @@ if ($slug === "municipis") {
                     COALESCE(p.cognom2, '')
                 )
                 ) AS nom_complet
-              FROM db_dades_personals AS d
-              ORDER BY cognom1";
+              FROM db_dades_personals AS p
+              ORDER BY p.cognom1";
 
     try {
 
