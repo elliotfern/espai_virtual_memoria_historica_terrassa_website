@@ -35,8 +35,8 @@ export async function formAparicioPremsa(isUpdate: boolean, id?: number) {
   const aparicioForm = document.getElementById('aparicioForm') as HTMLFormElement;
 
   let data: Partial<FitxaAparicio> = {
-    mitja_id: 0,
-    destacat: 0,
+    mitja_id: undefined,
+    destacat: undefined,
     estat: 'publicat',
     url_noticia: null,
     image_id: null,
