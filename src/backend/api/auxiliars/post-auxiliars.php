@@ -3817,4 +3817,172 @@ if ($slug === "municipi") {
             500
         );
     }
+
+    // POST premsaAparicio
+    // ruta POST => "/api/auxiliars/post/premsaAparicio"
+} else if ($slug === "premsaAparicio") {
+
+    $inputData = file_get_contents('php://input');
+    $data = json_decode($inputData, true);
+
+    $errors = [];
+
+    // Required base
+    if (empty($data['data_aparicio'])) {
+        $errors[] = ValidacioErrors::requerit('data_aparicio');
+    }
+    if (empty($data['tipus_aparicio'])) {
+        $errors[] = ValidacioErrors::requerit('tipus_aparicio');
+    }
+    if (empty($data['mitja_id'])) {
+        $errors[] = ValidacioErrors::requerit('mitja_id');
+    }
+
+    // Required i18n CA
+    if (empty($data['titol_ca'])) {
+        $errors[] = ValidacioErrors::requerit('titol_ca');
+    }
+
+    // Validació URLs (opcionals)
+    if (!empty($data['url_noticia']) && filter_var($data['url_noticia'], FILTER_VALIDATE_URL) === false) {
+        $errors[] = "Format incorrecte de la URL (url_noticia)";
+    }
+    if (!empty($data['pdf_url_ca']) && filter_var($data['pdf_url_ca'], FILTER_VALIDATE_URL) === false) {
+        $errors[] = "Format incorrecte de la URL (pdf_url_ca)";
+    }
+    // (opcional) validar pdf_url_xx si vienen
+    $langs = ['ca', 'es', 'en', 'fr', 'it', 'pt'];
+    foreach ($langs as $l) {
+        $k = "pdf_url_" . $l;
+        if (!empty($data[$k]) && filter_var($data[$k], FILTER_VALIDATE_URL) === false) {
+            $errors[] = "Format incorrecte de la URL ($k)";
+        }
+    }
+
+    if (!empty($errors)) {
+        Response::error(
+            MissatgesAPI::error('validacio'),
+            $errors,
+            400
+        );
+        return;
+    }
+
+    // Variables base
+    $dataAparicio  = $data['data_aparicio']; // YYYY-MM-DD
+    $tipusAparicio = $data['tipus_aparicio'];
+    $mitjaId       = (int)$data['mitja_id'];
+
+    $urlNoticia = !empty($data['url_noticia']) ? $data['url_noticia'] : NULL;
+    $imageId    = !empty($data['image_id']) ? (int)$data['image_id'] : NULL;
+
+    $destacat = !empty($data['destacat']) ? 1 : 0;
+    $estat = !empty($data['estat']) ? $data['estat'] : 'publicat';
+
+    try {
+        global $conn;
+        /** @var PDO $conn */
+
+        $conn->beginTransaction();
+
+        // Insert tabla base
+        $sql = "INSERT INTO db_premsa_aparicions (
+                    data_aparicio,
+                    tipus_aparicio,
+                    mitja_id,
+                    url_noticia,
+                    image_id,
+                    destacat,
+                    estat
+                ) VALUES (
+                    :data_aparicio,
+                    :tipus_aparicio,
+                    :mitja_id,
+                    :url_noticia,
+                    :image_id,
+                    :destacat,
+                    :estat
+                )";
+
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':data_aparicio', $dataAparicio, PDO::PARAM_STR);
+        $stmt->bindParam(':tipus_aparicio', $tipusAparicio, PDO::PARAM_STR);
+        $stmt->bindParam(':mitja_id', $mitjaId, PDO::PARAM_INT);
+        $stmt->bindParam(':url_noticia', $urlNoticia, PDO::PARAM_STR);
+        $stmt->bindParam(':image_id', $imageId, PDO::PARAM_INT);
+        $stmt->bindParam(':destacat', $destacat, PDO::PARAM_INT);
+        $stmt->bindParam(':estat', $estat, PDO::PARAM_STR);
+        $stmt->execute();
+
+        $id = (int)$conn->lastInsertId();
+
+        // Insert i18n (tots els idiomes que vinguin)
+        $sqlI18n = "INSERT INTO db_premsa_aparicions_i18n (
+                        aparicio_id,
+                        lang,
+                        titol,
+                        resum,
+                        notes,
+                        pdf_url
+                    ) VALUES (
+                        :aparicio_id,
+                        :lang,
+                        :titol,
+                        :resum,
+                        :notes,
+                        :pdf_url
+                    )";
+
+        $stmtI18n = $conn->prepare($sqlI18n);
+
+        foreach ($langs as $lang) {
+            $titolKey = "titol_" . $lang;
+            // Guardem la fila si existeix titol (i per CA és obligatori)
+            if (empty($data[$titolKey])) {
+                continue;
+            }
+
+            $titol = $data[$titolKey];
+            $resum = !empty($data["resum_" . $lang]) ? $data["resum_" . $lang] : NULL;
+            $notes = !empty($data["notes_" . $lang]) ? $data["notes_" . $lang] : NULL;
+            $pdfUrl = !empty($data["pdf_url_" . $lang]) ? $data["pdf_url_" . $lang] : NULL;
+
+            $stmtI18n->bindParam(':aparicio_id', $id, PDO::PARAM_INT);
+            $stmtI18n->bindParam(':lang', $lang, PDO::PARAM_STR);
+            $stmtI18n->bindParam(':titol', $titol, PDO::PARAM_STR);
+            $stmtI18n->bindParam(':resum', $resum, PDO::PARAM_STR);
+            $stmtI18n->bindParam(':notes', $notes, PDO::PARAM_STR);
+            $stmtI18n->bindParam(':pdf_url', $pdfUrl, PDO::PARAM_STR);
+            $stmtI18n->execute();
+        }
+
+        $tipusOperacio = "INSERT";
+        $detalls = "Creació nova aparició: " . $data['titol_ca'];
+
+        Audit::registrarCanvi(
+            $conn,
+            $userId,
+            $tipusOperacio,
+            $detalls,
+            Tables::DB_PREMSA_APARICIONS, // ajusta la constant si en tens una altra
+            $id
+        );
+
+        $conn->commit();
+
+        Response::success(
+            MissatgesAPI::success('create'),
+            ['id' => $id],
+            200
+        );
+    } catch (PDOException $e) {
+        if (isset($conn) && $conn->inTransaction()) {
+            $conn->rollBack();
+        }
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
 }

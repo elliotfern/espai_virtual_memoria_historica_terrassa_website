@@ -2,6 +2,7 @@ import { renderTaulaCercadorFiltres } from '../../../services/renderTaula/render
 import { initDeleteHandlers, registerDeleteCallback } from '../../../services/fetchData/handleDelete';
 import { getIsAdmin } from '../../../services/auth/getIsAdmin';
 import { API_URLS } from '../../../services/api/ApiUrls';
+import { formatDatesForm } from '../../../services/formatDates/dates';
 
 interface AparicioRow {
   id: number;
@@ -35,7 +36,11 @@ export async function taulaAparicionsPremsa() {
   const reloadKey = 'reload-taula-taulaLlistatAparacions';
 
   const columns: Column<AparicioRow>[] = [
-    { header: 'Data', field: 'data_aparicio' },
+    {
+      header: 'Data',
+      field: 'data_aparicio',
+      render: (_: unknown, row: AparicioRow) => formatDatesForm(row.data_aparicio),
+    },
 
     { header: 'Tipus', field: 'tipus_aparicio' },
 

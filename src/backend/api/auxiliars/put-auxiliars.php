@@ -3514,6 +3514,192 @@ if ($slug === "municipi") {
         );
     }
 
+    // PUT premsaAparicio
+    // ruta PUT => "/api/auxiliars/put/premsaAparicio"
+} else if ($slug === "premsaAparicio") {
+
+    $inputData = file_get_contents('php://input');
+    $data = json_decode($inputData, true);
+
+    $errors = [];
+
+    if (empty($data['id'])) {
+        $errors[] = ValidacioErrors::requerit('id');
+    }
+
+    // Required base
+    if (empty($data['data_aparicio'])) {
+        $errors[] = ValidacioErrors::requerit('data_aparicio');
+    }
+    if (empty($data['tipus_aparicio'])) {
+        $errors[] = ValidacioErrors::requerit('tipus_aparicio');
+    }
+    if (empty($data['mitja_id'])) {
+        $errors[] = ValidacioErrors::requerit('mitja_id');
+    }
+
+    // Required i18n CA
+    if (empty($data['titol_ca'])) {
+        $errors[] = ValidacioErrors::requerit('titol_ca');
+    }
+
+    // Validació URLs (opcionals)
+    if (!empty($data['url_noticia']) && filter_var($data['url_noticia'], FILTER_VALIDATE_URL) === false) {
+        $errors[] = "Format incorrecte de la URL (url_noticia)";
+    }
+
+    $langs = ['ca', 'es', 'en', 'fr', 'it', 'pt'];
+    foreach ($langs as $l) {
+        $k = "pdf_url_" . $l;
+        if (!empty($data[$k]) && filter_var($data[$k], FILTER_VALIDATE_URL) === false) {
+            $errors[] = "Format incorrecte de la URL ($k)";
+        }
+    }
+
+    if (!empty($errors)) {
+        Response::error(
+            MissatgesAPI::error('validacio'),
+            $errors,
+            400
+        );
+        return;
+    }
+
+    $id = (int)$data['id'];
+
+    // Variables base
+    $dataAparicio  = $data['data_aparicio'];
+    $tipusAparicio = $data['tipus_aparicio'];
+    $mitjaId       = (int)$data['mitja_id'];
+
+    $urlNoticia = !empty($data['url_noticia']) ? $data['url_noticia'] : NULL;
+    $imageId    = !empty($data['image_id']) ? (int)$data['image_id'] : NULL;
+    $destacat   = !empty($data['destacat']) ? 1 : 0;
+    $estat      = !empty($data['estat']) ? $data['estat'] : 'publicat';
+
+    try {
+        global $conn;
+        /** @var PDO $conn */
+
+        $conn->beginTransaction();
+
+        // (Opcional pero recomendado) comprobar que existe
+        $sqlCheck = "SELECT COUNT(*) FROM db_premsa_aparicions WHERE id = :id";
+        $stmtCheck = $conn->prepare($sqlCheck);
+        $stmtCheck->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmtCheck->execute();
+
+        $exists = (int)$stmtCheck->fetchColumn();
+        if ($exists === 0) {
+            $conn->rollBack();
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        // Update tabla base
+        $sql = "UPDATE db_premsa_aparicions
+                SET
+                    data_aparicio = :data_aparicio,
+                    tipus_aparicio = :tipus_aparicio,
+                    mitja_id = :mitja_id,
+                    url_noticia = :url_noticia,
+                    image_id = :image_id,
+                    destacat = :destacat,
+                    estat = :estat
+                WHERE id = :id";
+
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':data_aparicio', $dataAparicio, PDO::PARAM_STR);
+        $stmt->bindParam(':tipus_aparicio', $tipusAparicio, PDO::PARAM_STR);
+        $stmt->bindParam(':mitja_id', $mitjaId, PDO::PARAM_INT);
+        $stmt->bindParam(':url_noticia', $urlNoticia, PDO::PARAM_STR);
+        $stmt->bindParam(':image_id', $imageId, PDO::PARAM_INT);
+        $stmt->bindParam(':destacat', $destacat, PDO::PARAM_INT);
+        $stmt->bindParam(':estat', $estat, PDO::PARAM_STR);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+
+        // UPSERT i18n per idioma (si ve titol_xx)
+        $sqlI18n = "INSERT INTO db_premsa_aparicions_i18n (
+                        aparicio_id,
+                        lang,
+                        titol,
+                        resum,
+                        notes,
+                        pdf_url
+                    ) VALUES (
+                        :aparicio_id,
+                        :lang,
+                        :titol,
+                        :resum,
+                        :notes,
+                        :pdf_url
+                    )
+                    ON DUPLICATE KEY UPDATE
+                        titol = VALUES(titol),
+                        resum = VALUES(resum),
+                        notes = VALUES(notes),
+                        pdf_url = VALUES(pdf_url)";
+
+        $stmtI18n = $conn->prepare($sqlI18n);
+
+        foreach ($langs as $lang) {
+            $titolKey = "titol_" . $lang;
+
+            // En update, si no viene titol_xx, no tocamos ese idioma
+            if (!array_key_exists($titolKey, $data) || $data[$titolKey] === null || $data[$titolKey] === '') {
+                continue;
+            }
+
+            $titol = $data[$titolKey];
+            $resum = array_key_exists("resum_" . $lang, $data) ? ($data["resum_" . $lang] ?: NULL) : NULL;
+            $notes = array_key_exists("notes_" . $lang, $data) ? ($data["notes_" . $lang] ?: NULL) : NULL;
+            $pdfUrl = array_key_exists("pdf_url_" . $lang, $data) ? ($data["pdf_url_" . $lang] ?: NULL) : NULL;
+
+            $stmtI18n->bindParam(':aparicio_id', $id, PDO::PARAM_INT);
+            $stmtI18n->bindParam(':lang', $lang, PDO::PARAM_STR);
+            $stmtI18n->bindParam(':titol', $titol, PDO::PARAM_STR);
+            $stmtI18n->bindParam(':resum', $resum, PDO::PARAM_STR);
+            $stmtI18n->bindParam(':notes', $notes, PDO::PARAM_STR);
+            $stmtI18n->bindParam(':pdf_url', $pdfUrl, PDO::PARAM_STR);
+            $stmtI18n->execute();
+        }
+
+        $tipusOperacio = "UPDATE";
+        $detalls = "Modificació aparició #{$id}: " . $data['titol_ca'];
+
+        Audit::registrarCanvi(
+            $conn,
+            $userId,
+            $tipusOperacio,
+            $detalls,
+            Tables::DB_PREMSA_APARICIONS, // ajusta la constant si en tens una altra
+            $id
+        );
+
+        $conn->commit();
+
+        Response::success(
+            MissatgesAPI::success('update'),
+            ['id' => $id],
+            200
+        );
+    } catch (PDOException $e) {
+        if (isset($conn) && $conn->inTransaction()) {
+            $conn->rollBack();
+        }
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
+
     // Fi endpoints   
 } else {
     Response::error(

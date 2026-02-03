@@ -77,6 +77,8 @@ final class Tables
 
     public const AUX_PREMSA_MITJANS = 'aux_premsa_mitjans';
     public const AUX_PREMSA_MITJANS_I18N = 'aux_premsa_mitjans_i18n';
+    public const DB_PREMSA_APARICIONS = 'db_premsa_aparicions';
+    public const DB_PREMSA_APARICIONS_I18N = 'db_premsa_aparicions_i18n';
 
     // USUARIS
     public const DB_AUTH_USERS_I18N = 'auth_users_i18n';

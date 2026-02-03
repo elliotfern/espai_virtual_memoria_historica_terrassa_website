@@ -1835,6 +1835,191 @@ if ($slug === "municipis") {
             500
         );
     }
+
+    // GET : Premsa - Aparició (detall per id, amb i18n)
+    // URL: /api/auxiliars/get/premsaAparicio?id=123
+} else if ($slug === "premsaAparicio") {
+
+    if (empty($_GET['id'])) {
+        Response::error(
+            MissatgesAPI::error('missing_params'),
+            ['id'],
+            400
+        );
+        return;
+    }
+
+    $idAparicio = (int) $_GET['id'];
+
+    if ($idAparicio <= 0) {
+        Response::error(
+            MissatgesAPI::error('missing_params'),
+            ['id'],
+            400
+        );
+        return;
+    }
+
+    $db = new Database();
+
+    $query = "SELECT
+                a.id,
+                a.data_aparicio,
+                a.tipus_aparicio,
+                a.mitja_id,
+                a.url_noticia,
+                a.image_id,
+                a.destacat,
+                a.estat,
+                a.created_at,
+                a.updated_at,
+                i.lang,
+                i.titol,
+                i.resum,
+                i.notes,
+                i.pdf_url
+              FROM db_premsa_aparicions AS a
+              LEFT JOIN db_premsa_aparicions_i18n AS i
+                ON i.aparicio_id = a.id
+              WHERE a.id = :id";
+
+    try {
+
+        $result = $db->getData($query, [
+            ':id' => $idAparicio
+        ]);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
+    // GET : Premsa - TIPUS Aparició
+    // URL: /api/auxiliars/get/premsaTipusAparicio
+} else if ($slug === "premsaTipusAparicio") {
+
+    $result = [
+        [
+            'id' => 'presentacio',
+            'nom' => 'Presentació'
+        ],
+        [
+            'id' => 'roda_premsa',
+            'nom' => 'Roda de premsa'
+        ],
+        [
+            'id' => 'activitat',
+            'nom' => 'Activitat'
+        ],
+        [
+            'id' => 'entrevista',
+            'nom' => 'Entrevista'
+        ],
+        [
+            'id' => 'reportatge',
+            'nom' => 'Reportatge'
+        ],
+        [
+            'id' => 'nota_premsa',
+            'nom' => 'Nota de premsa'
+        ],
+        [
+            'id' => 'publicacio_xarxes',
+            'nom' => 'Publicació xarxes'
+        ],
+        [
+            'id' => 'altres',
+            'nom' => 'Altres'
+        ]
+    ];
+
+    Response::success(
+        MissatgesAPI::success('get'),
+        $result,
+        200
+    );
+
+    // GET : Premsa - Imatges (select, tipus = 4)
+    // URL: /api/auxiliars/get/premsaImatges
+} else if ($slug === "premsaImatges") {
+
+    $db = new Database();
+
+    $query = "SELECT
+                id,
+                nomImatge
+              FROM aux_imatges
+              WHERE tipus = 4
+              ORDER BY nomImatge ASC";
+
+    try {
+
+        $result = $db->getData($query);
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
+    // GET : Aux - Imatges (llistat)
+    // URL: /api/auxiliars/get/imatges
+} else if ($slug === "imatges") {
+
+    $db = new Database();
+
+    $query = "SELECT
+                id,
+                idPersona,
+                nomArxiu,
+                nomImatge,
+                tipus,
+                mime,
+                dateCreated,
+                dateModified
+              FROM aux_imatges
+              ORDER BY id DESC";
+
+    try {
+
+        $result = $db->getData($query);
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
 } else {
     // Si el parámetro 'type' no coincide con ninguno de los casos anteriores, mostramos un error
     echo json_encode(["error" => "Tipo no válido"]);

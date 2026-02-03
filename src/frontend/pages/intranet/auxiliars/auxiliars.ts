@@ -50,6 +50,7 @@ import { initFitxaDetallsMitja } from './fitxaMitja';
 import { formMitjaPremsa } from './formMitja';
 import { formMitjaPremsaI18n } from './formMitjaI18n';
 import { taulaAparicionsPremsa } from './taulaAparicionsMitjans';
+import { taulaImatges } from './llistatImatges';
 
 export async function auxiliars() {
   const url = window.location.href;
@@ -528,5 +529,7 @@ export async function auxiliars() {
     formMitjaPremsaI18n(slug);
   } else if (pageType[2] === 'llistat-aparicions-mitjans') {
     taulaAparicionsPremsa();
+  } else if (pageType[2] === 'llistat-imatges') {
+    taulaImatges();
   }
 }

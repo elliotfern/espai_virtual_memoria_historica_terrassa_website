@@ -639,6 +639,19 @@ $routes = [
         'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/llistat-aparicions-mitjans.php'
     ]),
 
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/nova-aparicio-mitja' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-aparicio-mitja.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/modifica-aparicio-mitja/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-aparicio-mitja.php'
+    ]),
+
+    // Auxiliars: GESTIÓ IMATGES
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/llistat-imatges' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/llistat-imatges.php'
+    ]),
+
     // Gestió familiars
     APP_INTRANET . $urlIntranet['familiars'] . '/modifica-familiar/{id}/{id}' => array_merge($defaultProtectedConfig, [
         'view' => BACKEND_URL . $urlIntranetDir['familiars'] . '/form-familiar.php'

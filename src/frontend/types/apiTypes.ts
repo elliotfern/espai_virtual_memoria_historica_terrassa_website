@@ -62,6 +62,8 @@ export type ApiUrls = {
     LLISTAT_MITJANS: string;
     FITXA_MITJA: (slug: string) => string;
     LLISTAT_APARICIONS: string;
+    APARICIO_ID: (id: number) => string;
+    LLISTAT_IMATGES: string;
   };
   POST: {
     MUNICIPI: string;
@@ -97,6 +99,7 @@ export type ApiUrls = {
     CAMP_CONCENTRACIO: string;
     BIOGRAFIES: string;
     PREMSA_MITJA: string;
+    APARICIO: string;
   };
   PUT: {
     MUNICIPI: string;
@@ -133,6 +136,7 @@ export type ApiUrls = {
     BIOGRAFIES: string;
     PREMSA_MITJA: string;
     PREMSA_MITJA_I18N: string;
+    APARICIO: string;
   };
   DELETE: {
     MUNICIPI: string;
