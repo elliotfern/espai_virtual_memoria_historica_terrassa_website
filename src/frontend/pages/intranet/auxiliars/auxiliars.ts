@@ -534,7 +534,7 @@ export async function auxiliars() {
     taulaAparicionsPremsa();
   } else if (pageType[2] === 'nova-aparicio-premsa') {
     formAparicioPremsa(false);
-  } else if (pageType[2] === 'modificacio-aparicio-premsa') {
+  } else if (pageType[2] === 'modifica-aparicio-premsa') {
     const id = Number(pageType[3]);
     formAparicioPremsa(true, id);
   } else if (pageType[2] === 'llistat-imatges') {
