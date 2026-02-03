@@ -1881,11 +1881,13 @@ if ($slug === "municipis") {
                 i.notes,
                 i.pdf_url,
                 im.nomArxiu,
-                im.mime
+                im.mime,
+                pm.nom AS nomMitja
               FROM db_premsa_aparicions AS a
               LEFT JOIN db_premsa_aparicions_i18n AS i ON i.aparicio_id = a.id
               LEFT JOIN db_premsa_aparicions_i18n i_ca ON i_ca.aparicio_id = a.id AND i_ca.lang = 'ca'
               LEFT JOIN aux_imatges AS im on a.image_id = im.id
+              LEFT JOIN aux_premsa_mitjans_i18n AS pm ON a.mitja_id = pm.id AND pm.lang = 'ca'
               WHERE a.id = :id";
 
     try {

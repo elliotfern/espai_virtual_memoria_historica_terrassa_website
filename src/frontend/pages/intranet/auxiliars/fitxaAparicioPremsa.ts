@@ -15,6 +15,7 @@ interface ApiRowPremsaAparicio {
   data_aparicio: string; // YYYY-MM-DD
   tipus_aparicio: string;
   mitja_id: number;
+  nomMitja?: string | null; // ✅ lo añades en API
   url_noticia: string | null;
   image_id: number | null;
   destacat: number; // 0/1
@@ -23,9 +24,9 @@ interface ApiRowPremsaAparicio {
   created_at?: string | null;
   updated_at?: string | null;
 
-  // ✅ datos de la imagen (LEFT JOIN imatges)
-  image_nomArxiu: string | null;
-  image_mime: string | null;
+  // ✅ imagen (tal cual tu JSON)
+  nomArxiu: string | null;
+  mime: string | null;
 
   // i18n
   lang: string | null;
@@ -40,16 +41,16 @@ interface AparicioBase {
   dataAparicio: string;
   tipusAparicio: string;
   mitjaId: number;
+  nomMitja: string | null;
   urlNoticia: string | null;
-  imageId: number | null;
   destacat: number;
   estat: 'draft' | 'publicat';
   createdAt?: string | null;
   updatedAt?: string | null;
 
-  // ✅ imagen
-  imageNomArxiu: string | null;
-  imageMime: string | null;
+  // imagen
+  nomArxiu: string | null;
+  mime: string | null;
   imageUrl: string | null;
 }
 
@@ -116,16 +117,35 @@ function buildPremsaImageUrl(nomArxiu: string | null, mime: string | null): stri
   return `https://media.memoriaterrassa.cat/assets_premsa/${encodeURIComponent(nomArxiu)}.${ext}`;
 }
 
+function safeUrlLink(url: string | null): string {
+  if (!url) return `<span class="text-muted">—</span>`;
+  const u = escapeHtml(url);
+  return `<a href="${u}" target="_blank" rel="noopener noreferrer">${u}</a>`;
+}
+
+function badgeEstat(estat: 'draft' | 'publicat'): string {
+  return estat === 'publicat' ? `<span class="badge bg-success">Publicat</span>` : `<span class="badge bg-secondary">Esborrany</span>`;
+}
+
+function badgeDestacat(destacat: number): string {
+  return destacat === 1 ? `<span class="badge bg-warning text-dark">Destacat</span>` : `<span class="badge bg-light text-dark">No</span>`;
+}
+
+function langHasContent(e: AparicioI18nEntry): boolean {
+  return !!(e.titol || e.resum || e.notes || e.pdfUrl);
+}
+
 function isApiRowPremsaAparicio(value: unknown): value is ApiRowPremsaAparicio {
   if (!isRecord(value)) return false;
 
-  // base requeridos
   if (typeof value['id'] !== 'number') return false;
   if (typeof value['data_aparicio'] !== 'string') return false;
   if (typeof value['tipus_aparicio'] !== 'string') return false;
   if (typeof value['mitja_id'] !== 'number') return false;
 
-  // nullables base
+  const nomMitja = value['nomMitja'];
+  if (!(typeof nomMitja === 'string' || nomMitja === null || nomMitja === undefined)) return false;
+
   const urlNoticia = value['url_noticia'];
   if (!(typeof urlNoticia === 'string' || urlNoticia === null || urlNoticia === undefined)) return false;
 
@@ -138,21 +158,20 @@ function isApiRowPremsaAparicio(value: unknown): value is ApiRowPremsaAparicio {
   const estat = value['estat'];
   if (!(typeof estat === 'string' || estat === null || estat === undefined)) return false;
 
-  // timestamps
   const created = value['created_at'];
   if (!(typeof created === 'string' || created === null || created === undefined)) return false;
 
   const updated = value['updated_at'];
   if (!(typeof updated === 'string' || updated === null || updated === undefined)) return false;
 
-  // ✅ imagen (LEFT JOIN)
-  const nomArxiu = value['image_nomArxiu'];
+  // imagen (tu JSON)
+  const nomArxiu = value['nomArxiu'];
   if (!(typeof nomArxiu === 'string' || nomArxiu === null || nomArxiu === undefined)) return false;
 
-  const mime = value['image_mime'];
+  const mime = value['mime'];
   if (!(typeof mime === 'string' || mime === null || mime === undefined)) return false;
 
-  // i18n (LEFT JOIN)
+  // i18n
   const lang = value['lang'];
   if (!(typeof lang === 'string' || lang === null || lang === undefined)) return false;
 
@@ -169,24 +188,6 @@ function isApiRowPremsaAparicio(value: unknown): value is ApiRowPremsaAparicio {
   if (!(typeof pdf === 'string' || pdf === null || pdf === undefined)) return false;
 
   return true;
-}
-
-function badgeEstat(estat: 'draft' | 'publicat'): string {
-  return estat === 'publicat' ? `<span class="badge bg-success">Publicat</span>` : `<span class="badge bg-secondary">Esborrany</span>`;
-}
-
-function badgeDestacat(destacat: number): string {
-  return destacat === 1 ? `<span class="badge bg-warning text-dark">Destacat</span>` : `<span class="badge bg-light text-dark">No</span>`;
-}
-
-function safeUrlLink(url: string | null): string {
-  if (!url) return `<span class="text-muted">—</span>`;
-  const u = escapeHtml(url);
-  return `<a href="${u}" target="_blank" rel="noopener noreferrer">${u}</a>`;
-}
-
-function langHasContent(e: AparicioI18nEntry): boolean {
-  return !!(e.titol || e.resum || e.notes || e.pdfUrl);
 }
 
 /** ---------- Fetch + mapeo ---------- */
@@ -213,22 +214,22 @@ function mapRowsToDetall(rows: ApiRowPremsaAparicio[]): AparicioDetall {
   const first = rows[0];
   if (!first) throw new Error("No s'ha trobat l'aparició.");
 
-  const imageUrl = buildPremsaImageUrl(first.image_nomArxiu ?? null, first.image_mime ?? null);
+  const imageUrl = buildPremsaImageUrl(first.nomArxiu ?? null, first.mime ?? null);
 
   const base: AparicioBase = {
     id: first.id,
     dataAparicio: first.data_aparicio,
     tipusAparicio: first.tipus_aparicio,
     mitjaId: first.mitja_id,
+    nomMitja: first.nomMitja ?? null,
     urlNoticia: first.url_noticia ?? null,
-    imageId: first.image_id ?? null,
     destacat: typeof first.destacat === 'number' ? first.destacat : 0,
     estat: (first.estat ?? 'publicat') as 'draft' | 'publicat',
     createdAt: first.created_at ?? null,
     updatedAt: first.updated_at ?? null,
 
-    imageNomArxiu: first.image_nomArxiu ?? null,
-    imageMime: first.image_mime ?? null,
+    nomArxiu: first.nomArxiu ?? null,
+    mime: first.mime ?? null,
     imageUrl,
   };
 
@@ -266,15 +267,16 @@ function renderAparicioDetall(target: HTMLElement, detall: AparicioDetall): void
         >
       </div>
       <div class="small text-muted mt-2">
-        <span><strong>Arxiu:</strong> <code>${escapeHtml(base.imageNomArxiu ?? '')}</code></span>
+        <span><strong>Arxiu:</strong> <code>${escapeHtml(base.nomArxiu ?? '')}</code></span>
         <span class="mx-2">·</span>
-        <span><strong>MIME:</strong> <code>${escapeHtml(base.imageMime ?? '')}</code></span>
+        <span><strong>MIME:</strong> <code>${escapeHtml(base.mime ?? '')}</code></span>
       </div>
     `
     : `<div class="p-4 bg-light border rounded text-muted text-center">Sense imatge</div>`;
 
   const rowsI18n = LANGS.map((lang) => {
     const entry = i18n[lang];
+
     const titol = entry.titol ? escapeHtml(entry.titol) : `<span class="text-muted">—</span>`;
     const resum = entry.resum ? escapeHtml(entry.resum) : `<span class="text-muted">—</span>`;
     const notes = entry.notes ? escapeHtml(entry.notes) : `<span class="text-muted">—</span>`;
@@ -294,17 +296,6 @@ function renderAparicioDetall(target: HTMLElement, detall: AparicioDetall): void
         <td>${resum}</td>
         <td>${notes}</td>
         <td>${pdf}</td>
-        <td class="text-end">
-          <button
-            type="button"
-            class="btn btn-sm btn-outline-secondary"
-            data-action="edit-i18n-lang"
-            data-id="${base.id}"
-            data-lang="${lang}"
-            title="Editar ${lang}">
-            ✎
-          </button>
-        </td>
       </tr>
     `;
   }).join('');
@@ -341,14 +332,13 @@ function renderAparicioDetall(target: HTMLElement, detall: AparicioDetall): void
 
           <div class="col-md-7">
             <dl class="row mb-0">
-              <dt class="col-sm-4 text-muted">Mitjà (ID)</dt>
-              <dd class="col-sm-8 mb-0"><code>${escapeHtml(String(base.mitjaId))}</code></dd>
+              <dt class="col-sm-4 text-muted">Mitjà</dt>
+              <dd class="col-sm-8 mb-0">
+                ${base.nomMitja ? escapeHtml(base.nomMitja) : `<span class="text-muted">—</span>`}
+              </dd>
 
               <dt class="col-sm-4 text-muted">URL notícia</dt>
               <dd class="col-sm-8 mb-0">${safeUrlLink(base.urlNoticia)}</dd>
-
-              <dt class="col-sm-4 text-muted">Imatge (ID)</dt>
-              <dd class="col-sm-8 mb-0">${base.imageId ? `<code>${escapeHtml(String(base.imageId))}</code>` : `<span class="text-muted">—</span>`}</dd>
 
               <dt class="col-sm-4 text-muted">Destacat</dt>
               <dd class="col-sm-8 mb-0">${badgeDestacat(base.destacat)}</dd>
@@ -370,7 +360,6 @@ function renderAparicioDetall(target: HTMLElement, detall: AparicioDetall): void
                 <th style="min-width: 220px;">Resum</th>
                 <th style="min-width: 220px;">Notes</th>
                 <th style="min-width: 220px;">PDF URL</th>
-                <th style="width: 70px;" class="text-end">Editar</th>
               </tr>
             </thead>
             <tbody>
@@ -382,25 +371,20 @@ function renderAparicioDetall(target: HTMLElement, detall: AparicioDetall): void
     </div>
   `;
 
-  // Eventos
-  const actions = target.querySelectorAll<HTMLButtonElement>('button[data-action]');
-  actions.forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const action = btn.dataset.action ?? '';
-      const id = btn.dataset.id ?? '';
-      const lang = btn.dataset.lang ?? '';
-
-      if (action === 'edit-aparicio') {
-        window.location.href = `/gestio/auxiliars/modifica-aparicio-premsa/${encodeURIComponent(id)}`;
-      }
-      if (action === 'edit-i18n-all') {
-        window.location.href = `/gestio/auxiliars/modifica-aparicio-premsa-i18n/${encodeURIComponent(id)}`;
-      }
-      if (action === 'edit-i18n-lang') {
-        window.location.href = `/gestio/auxiliars/modifica-aparicio-premsa-i18n/${encodeURIComponent(id)}?lang=${encodeURIComponent(lang)}`;
-      }
+  // Eventos (solo 2 botones)
+  const btnEditBase = target.querySelector<HTMLButtonElement>('button[data-action="edit-aparicio"]');
+  if (btnEditBase) {
+    btnEditBase.addEventListener('click', () => {
+      window.location.href = `/gestio/auxiliars/modifica-aparicio-premsa/${encodeURIComponent(String(base.id))}`;
     });
-  });
+  }
+
+  const btnEditI18n = target.querySelector<HTMLButtonElement>('button[data-action="edit-i18n-all"]');
+  if (btnEditI18n) {
+    btnEditI18n.addEventListener('click', () => {
+      window.location.href = `/gestio/auxiliars/modifica-aparicio-premsa-i18n/${encodeURIComponent(String(base.id))}`;
+    });
+  }
 }
 
 /** ---------- Init ---------- */
