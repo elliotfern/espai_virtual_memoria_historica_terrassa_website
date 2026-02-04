@@ -12,6 +12,7 @@ import { fitxaRepresaliat } from './components/fitxaRepresaliat';
 import { equip } from './pages/webPublica/equip/equip';
 import { homePage } from './pages/webPublica/homePage/homePage';
 import { credits } from './pages/webPublica/credits/credits';
+import { espaiVirtualWebPublica } from './pages/webPublica/espaiVirtual/espaiVirtual';
 
 nameUser();
 
@@ -45,6 +46,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const lang = 'ca';
     const slug = pageType[1];
     equip(lang, slug);
+  } else if (pageType[0] === 'espai-virtual') {
+    espaiVirtualWebPublica('ca');
   }
 
   if (pageType[0] === 'es') {

@@ -2227,6 +2227,92 @@ if ($slug === "municipis") {
             500
         );
     }
+
+    // GET : Public - llistat aparicions premsa (per la web pública)
+    // URL: /api/auxiliars/get/premsaAparicionsPublic?lang=ca
+} else if ($slug === "premsaAparicionsPublic") {
+
+    $lang = isset($_GET['lang']) ? strtolower(trim($_GET['lang'])) : 'ca';
+
+    $langs = ['ca', 'es', 'en', 'fr', 'it', 'pt'];
+    if (!in_array($lang, $langs, true)) {
+        $lang = 'ca';
+    }
+
+    $db = new Database();
+
+    $query = "SELECT
+            a.id,
+            a.data_aparicio,
+            a.tipus_aparicio,
+            a.url_noticia,
+            a.destacat,
+
+            -- Títol (fallback a CA)
+            COALESCE(i_lang.titol, i_ca.titol) AS titol,
+
+            -- Mitjà (nom) (fallback a CA)
+            COALESCE(m_lang.nom, m_ca.nom) AS nomMitja,
+
+            -- Imatge (si existeix)
+            im.nomArxiu,
+            im.mime
+
+        FROM db_premsa_aparicions AS a
+
+        LEFT JOIN db_premsa_aparicions_i18n AS i_lang
+            ON i_lang.aparicio_id = a.id
+           AND i_lang.lang = :lang
+
+        LEFT JOIN db_premsa_aparicions_i18n AS i_ca
+            ON i_ca.aparicio_id = a.id
+           AND i_ca.lang = 'ca'
+
+        LEFT JOIN db_premsa_mitjans_i18n AS m_lang
+            ON m_lang.mitja_id = a.mitja_id
+           AND m_lang.lang = :lang
+
+        LEFT JOIN db_premsa_mitjans_i18n AS m_ca
+            ON m_ca.mitja_id = a.mitja_id
+           AND m_ca.lang = 'ca'
+
+        LEFT JOIN db_imatges AS im
+            ON im.id = a.image_id
+
+        WHERE a.estat = 'publicat'
+
+        ORDER BY
+            a.destacat DESC,
+            a.data_aparicio DESC,
+            a.id DESC
+    ";
+
+    try {
+
+        $params = [':lang' => $lang];
+        $result = $db->getData($query, $params);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
 } else {
     // Si el parámetro 'type' no coincide con ninguno de los casos anteriores, mostramos un error
     echo json_encode(["error" => "Tipo no válido"]);

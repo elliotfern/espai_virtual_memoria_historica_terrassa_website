@@ -55,7 +55,18 @@ $base_routes = [
     '/fonts-documentals' => 'public/web-publica/fonts.php',
 
     // 4. Espai virtual
-    '/que-es-espai-virtual' => 'public/web-publica/espai-virtual.php',
+    'espai-virtual/que-es-espai-virtual' => 'public/web-publica/espai-virtual.php',
+
+    // 4.1. Antecedents
+    '/espai-virtual/antecedents' => 'public/web-publica/antecedents.php',
+
+    // 4.2. Aparicions premsa
+    '/espai-virtual/premsa' => 'public/web-publica/premsa.php',
+
+    '/espai-virtual/premsa-aparicio/{id}' => 'public/web-publica/premsa-aparicio-detalls.php',
+
+    // 4.2. Materials comunicacio
+    '/espai-virtual/materials-comunicacio' => 'public/web-publica/materials.php',
 
     // 5. Contacte
     '/contacte' => 'public/web-publica/contacte.php',
@@ -165,7 +176,7 @@ $routes = [
 
 
     // 3. Fonts documentals
-    'fonts-documentals'  =>  [
+    '/fonts-documentals'  =>  [
         'view' => 'public/web-publica/fonts.php',
         'needs_session' => false,
         'header_footer' => false,
@@ -173,8 +184,36 @@ $routes = [
     ],
 
     // 4. Espai virtual
-    'que-es-espai-virtual' =>  [
+    '/espai-virtual/que-es-espai-virtual' =>  [
         'view' => 'public/web-publica/espai-virtual.php',
+        'needs_session' => false,
+        'header_footer' => false,
+        'header_menu_footer' => true
+    ],
+
+    '/espai-virtual/antecedents' =>  [
+        'view' => 'public/web-publica/antecedents.php',
+        'needs_session' => false,
+        'header_footer' => false,
+        'header_menu_footer' => true
+    ],
+
+    '/espai-virtual/premsa' =>  [
+        'view' => 'public/web-publica/premsa.php',
+        'needs_session' => false,
+        'header_footer' => false,
+        'header_menu_footer' => true
+    ],
+
+    '/espai-virtual/premsa-aparicio/{id}' =>  [
+        'view' => 'public/web-publica/premsa-aparicio-detalls.php',
+        'needs_session' => false,
+        'header_footer' => false,
+        'header_menu_footer' => true
+    ],
+
+    '/espai-virtual/materials-comunicacio' =>  [
+        'view' => 'public/web-publica/materials.php',
         'needs_session' => false,
         'header_footer' => false,
         'header_menu_footer' => true

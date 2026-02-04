@@ -174,7 +174,19 @@ $langCode2 = getLanguageFromUrl();
                                 <li class="nav-item"><a class="nav-link" href="<?php echo $langCode2 === 'ca' ? '/' : '/' . $langCode2 . '/'; ?>documents-estudis"> <?php echo $translate['estudis']; ?></a></li>
                                 <li class="nav-item"><a class="nav-link" href="<?php echo $langCode2 === 'ca' ? '/' : '/' . $langCode2 . '/'; ?>cronologia"> <?php echo $translate['cronologia']; ?></a></li>
                                 <li class="nav-item"><a class="nav-link" href="<?php echo $langCode2 === 'ca' ? '/' : '/' . $langCode2 . '/'; ?>fonts-documentals"> <?php echo $translate['documents']; ?></a></li>
-                                <li class="nav-item"><a class="nav-link" href="<?php echo $langCode2 === 'ca' ? '/' : '/' . $langCode2 . '/'; ?>que-es-espai-virtual"> <?php echo $translate['espai-virtual']; ?></a></li>
+
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="submenuEspaiVirtual" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <?php echo $translate['espai-virtual']; ?>
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="submenuEspaiVirtual">
+                                        <li><a class="dropdown-item" href="<?php echo $langCode2 === 'ca' ? '/' : '/' . $langCode2 . '/'; ?>espai-virtual/que-es-espai-virtual"> <?php echo $translate['que-es-espai-virtual']; ?></a></li>
+                                        <li><a class="dropdown-item" href="<?php echo $langCode2 === 'ca' ? '/' : '/' . $langCode2 . '/'; ?>espai-virtual/antecedents"> <?php echo $translate['antecedents']; ?></a></li>
+                                        <li><a class="dropdown-item" href="<?php echo $langCode2 === 'ca' ? '/' : '/' . $langCode2 . '/'; ?>espai-virtual/premsa"> <?php echo $translate['premsa']; ?></a></li>
+                                        <li><a class="dropdown-item" href="<?php echo $langCode2 === 'ca' ? '/' : '/' . $langCode2 . '/'; ?>espai-virtual/materials-comunicacio"> <?php echo $translate['materials']; ?></a></li>
+                                    </ul>
+                                </li>
+
                                 <li class="nav-item"><a class="nav-link" href="<?php echo $langCode2 === 'ca' ? '/' : '/' . $langCode2 . '/'; ?>links"> <?php echo $translate['links']; ?></a></li>
                                 <li class="nav-item"><a class="nav-link" href="<?php echo $langCode2 === 'ca' ? '/' : '/' . $langCode2 . '/'; ?>contacte"> <?php echo $translate['contacta']; ?></a></li>
                             </ul>
