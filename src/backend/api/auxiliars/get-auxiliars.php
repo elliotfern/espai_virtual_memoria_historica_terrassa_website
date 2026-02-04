@@ -2201,7 +2201,7 @@ if ($slug === "municipis") {
             ON m.mitja_id = a.mitja_id
            AND m.lang = 'ca'
 
-        LEFT JOIN aux_imatges AS im ON a.imatge_id = im.id
+        LEFT JOIN aux_imatges AS im ON a.image_id = im.id
 
         WHERE a.id = :id
 
