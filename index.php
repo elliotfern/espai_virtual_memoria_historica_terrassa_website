@@ -14,97 +14,84 @@ require_once __DIR__ . '/src/backend/Utils/convertirDates.php';
 require_once __DIR__ . '/src/backend/Utils/sanitizerHtml.php';
 require_once __DIR__ . '/src/backend/routes/routes.php';
 
-// Obtener la ruta solicitada
-$requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-
-// Normalizar la ruta eliminando barras finales
+// ---------------------------------------------------------
+// 1) URI normalizada
+// ---------------------------------------------------------
+$requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ?? '/';
 $requestUri = rtrim($requestUri, '/');
+if ($requestUri === '') $requestUri = '/';
 
-if ($requestUri === '') {
-    $requestUri = '/';
+// ---------------------------------------------------------
+// 2) Detectar idioma SOLO si es el PRIMER segmento completo
+//    (evita que "/espai-virtual" se lea como "/es")
+// ---------------------------------------------------------
+$language2 = 'ca';
+$uriForRouting = $requestUri;
+
+// Idiomas soportados
+$langPattern = '#^/(ca|es|fr|en|pt|it)(/|$)#';
+
+if (preg_match($langPattern, $requestUri, $m)) {
+    $candidate = $m[1];
+
+    // Si usas "ca" sin prefijo normalmente, puedes permitirlo igual sin romper
+    // (pero no lo necesitas). Dejamos ca soportado por si lo pones algún día.
+    $language2 = $candidate ?: 'ca';
+
+    // Quitar el prefijo de idioma para hacer match con $routes
+    // Ej: "/es/espai-virtual/premsa" => "/espai-virtual/premsa"
+    $uriForRouting = preg_replace($langPattern, '/', $requestUri);
+    $uriForRouting = rtrim($uriForRouting, '/');
+    if ($uriForRouting === '') $uriForRouting = '/';
 }
 
-$lang = ltrim($requestUri, '/');
-
-if ($lang === '') {
-    $lang = 'ca';
-}
-
-// Obtener la ruta solicitada
-$requestUri2 = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-
-// Normalizar la ruta eliminando barras finales
-$requestUri2 = rtrim($requestUri2, '/');
-
-// Detectar el idioma desde la URL (primer segmento después del dominio)
-preg_match('#^/(fr|en|es|pt|it)#', $requestUri, $matches);
-
-// Asignar el idioma detectado o usar un valor predeterminado
-$language2 = $matches[1] ?? 'ca';
-
-if ($language2 === '') {
-    $language2 = 'ca';
-}
-
-// Cargar las traducciones correspondientes al idioma
+// Cargar traducciones correspondientes
 $translations = require __DIR__ . "/src/backend/locales/{$language2}.php";
 
-// Inicializar una variable para los parámetros de la ruta
+// ---------------------------------------------------------
+// 3) Resolver rutas usando $uriForRouting (sin /es, /fr...)
+// ---------------------------------------------------------
 $routeParams = [];
-
-// Buscar si la ruta es una ruta dinámica y extraer los parámetros
 $routeFound = false;
+$view = 'public/includes/404.php';
+$noHeaderFooter = false;
+$headerMenu = true;
+$apiSenseHTML = false;
+
 foreach ($routes as $route => $routeInfo) {
-    // Crear un patrón para la ruta dinámica reemplazando los parámetros {param} por expresiones regulares
     $pattern = preg_replace('/\{[a-zA-Z0-9_]+\}/', '([a-zA-Z0-9_-]+)', $route);
 
-    if (preg_match('#^' . $pattern . '$#', $requestUri, $matches)) {
-        // Si encontramos la ruta, extraemos los parámetros
+    if (preg_match('#^' . $pattern . '$#', $uriForRouting, $matches)) {
         $routeFound = true;
-        $routeParams = array_slice($matches, 1);  // El primer elemento es la ruta misma, los parámetros son los siguientes
-
-        // Asignamos la vista asociada a la ruta
+        $routeParams = array_slice($matches, 1);
         $view = $routeInfo['view'];
+
+        // flags
+        $needsSession = $routeInfo['needs_session'] ?? false;
+        if ($needsSession) verificarSesion();
+
+        $userLogged = $routeInfo['userLogged'] ?? false;
+        if ($userLogged) validarTokenJWT();
+
+        $noHeaderFooter = $routeInfo['header_footer'] ?? false;
+        $headerMenu = $routeInfo['header_menu_footer'] ?? false;
+        $apiSenseHTML = $routeInfo['apiSenseHTML'] ?? false;
+
         break;
     }
 }
 
-// Si la ruta no es encontrada, asignamos la página 404
-if (!$routeFound) {
-    $view = 'public/includes/404.php';
-    $noHeaderFooter = false;
-    $headerMenu = true;
-    $apiSenseHTML = false;
-} else {
-    // Verificar si la ruta requiere sesión
-    $needsSession = $routeInfo['needs_session'] ?? false;
-    if ($needsSession) {
-        verificarSesion(); // Llamada a la función de verificación de sesión
-    }
-
-    // Verificar si la ruta ha de tenir redirecció per usuari ja registrat
-    $userLogged = $routeInfo['userLogged'] ?? false;
-    if ($userLogged) {
-        validarTokenJWT(); // Llamada a la función de verificación de sesión
-    }
-
-    // Determinar si la vista necesita encabezado y pie de página
-    $noHeaderFooter = $routeInfo['header_footer'] ?? false;
-
-    // Determinar si la vista el menu del header
-    $headerMenu = $routeInfo['header_menu_footer'] ?? false;
-
-    $apiSenseHTML = $routeInfo['apiSenseHTML'] ?? false;
-}
-
-// **No hacer redirección**, solo no incluir header y footer si estamos en /es
-if (preg_match('#^/(es|fr|en|pt|it)$#', $requestUri)) {
-    // Si estamos en /es, no hacemos nada más
+// ---------------------------------------------------------
+// 4) Render final (manteniendo tu lógica)
+//    OJO: aquí conviene comprobar contra $requestUri (con idioma),
+//    pero con patrón de segmento completo
+// ---------------------------------------------------------
+if (preg_match('#^/(es|fr|en|pt|it)(/|$)#', $requestUri) && preg_match('#^/(es|fr|en|pt|it)$#', $requestUri)) {
+    // Si es exactamente "/es" o "/fr" etc (sin más segmentos)
     include 'public/includes/header.php';
     include 'public/web-publica/index.php';
     include 'public/includes/footer-end.php';
 } else {
-    // Incluir encabezado y pie de página si no se especifica que no lo tenga
     if ($noHeaderFooter) {
         include 'public/includes/header.php';
         include $view;
@@ -116,7 +103,13 @@ if (preg_match('#^/(es|fr|en|pt|it)$#', $requestUri)) {
         include 'public/includes/footer.php';
         include 'public/includes/footer-end.php';
     } elseif ($apiSenseHTML) {
-        // Solo incluir la vista asociada a la ruta
         include $view;
+    } else {
+        // Por seguridad, si alguna ruta no define flags bien
+        include 'public/includes/header.php';
+        include 'public/includes/header-menu.php';
+        include $view;
+        include 'public/includes/footer.php';
+        include 'public/includes/footer-end.php';
     }
 }
