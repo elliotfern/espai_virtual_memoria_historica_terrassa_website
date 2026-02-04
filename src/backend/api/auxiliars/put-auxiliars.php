@@ -16,7 +16,6 @@ if (!$conn) {
 $slug = $routeParams[0];
 // Configuración de cabeceras para aceptar JSON y responder JSON
 header("Content-Type: application/json");
-header("Access-Control-Allow-Methods: PUT");
 
 // Definir el dominio permitido
 $allowedOrigin = DOMAIN;
@@ -25,7 +24,7 @@ $allowedOrigin = DOMAIN;
 checkReferer($allowedOrigin);
 
 // Verificar que el método de la solicitud sea GET
-if ($_SERVER['REQUEST_METHOD'] !== 'PUT') {
+if (!in_array($_SERVER['REQUEST_METHOD'], ['PUT', 'POST'], true)) {
     header('HTTP/1.1 405 Method Not Allowed');
     echo json_encode(['error' => 'Method not allowed']);
     exit();
