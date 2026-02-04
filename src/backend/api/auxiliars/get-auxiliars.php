@@ -2257,30 +2257,34 @@ if ($slug === "municipis") {
 FROM db_premsa_aparicions AS a
 
 LEFT JOIN (
-    SELECT aparicio_id, titol
+    SELECT aparicio_id, MAX(titol) AS titol
     FROM db_premsa_aparicions_i18n
     WHERE lang = :lang
+    GROUP BY aparicio_id
 ) AS i_lang
     ON i_lang.aparicio_id = a.id
 
 LEFT JOIN (
-    SELECT aparicio_id, titol
+    SELECT aparicio_id, MAX(titol) AS titol
     FROM db_premsa_aparicions_i18n
     WHERE lang = 'ca'
+    GROUP BY aparicio_id
 ) AS i_ca
     ON i_ca.aparicio_id = a.id
 
 LEFT JOIN (
-    SELECT mitja_id, nom
+    SELECT mitja_id, MAX(nom) AS nom
     FROM aux_premsa_mitjans_i18n
     WHERE lang = :lang
+    GROUP BY mitja_id
 ) AS m_lang
     ON m_lang.mitja_id = a.mitja_id
 
 LEFT JOIN (
-    SELECT mitja_id, nom
+    SELECT mitja_id, MAX(nom) AS nom
     FROM aux_premsa_mitjans_i18n
     WHERE lang = 'ca'
+    GROUP BY mitja_id
 ) AS m_ca
     ON m_ca.mitja_id = a.mitja_id
 
@@ -2292,8 +2296,7 @@ WHERE a.estat = 'publicat'
 ORDER BY
     a.destacat DESC,
     a.data_aparicio DESC,
-    a.id DESC
-";
+    a.id DESC";
 
     try {
 
