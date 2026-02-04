@@ -1,6 +1,4 @@
 <?php
-require_once APP_ROOT . '/public/web/includes/header.php';
-
 // Traducciones generales si las usas aquí
 $translate = $translations['general'] ?? [];
 ?>
