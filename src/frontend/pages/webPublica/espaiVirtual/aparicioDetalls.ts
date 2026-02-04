@@ -26,6 +26,11 @@ type PremsaAparicioI18nRow = {
   mitja_id: number | null;
   url_noticia: string | null;
   nomMitja: string | null;
+
+  // ✅ imagen (viene de tu JOIN con alias "im")
+  nomArxiu: string | null;
+  mime: string | null;
+  nomImatge: string | null;
 };
 
 type PremsaAparicioDetalls = {
@@ -36,6 +41,11 @@ type PremsaAparicioDetalls = {
     mitjaId: number | null;
     urlNoticia: string | null;
     nomMitja: string | null;
+
+    // ✅ imagen
+    nomArxiu: string | null;
+    mime: string | null;
+    nomImatge: string | null;
   };
   i18nByLang: Record<Lang, { titol: string; resum: string; notes: string; pdfUrl: string }>;
 };
@@ -78,9 +88,29 @@ function safeUrl(u: string | null): string | null {
   if (!u) return null;
   const s = u.trim();
   if (!s) return null;
-  // Acepta http(s) y rutas relativas
   if (s.startsWith('http://') || s.startsWith('https://') || s.startsWith('/')) return s;
   return null;
+}
+
+// ✅ mismos helpers que en el listado
+function mimeToExt(mime: string | null): string {
+  switch (mime) {
+    case 'image/jpeg':
+      return 'jpg';
+    case 'image/png':
+      return 'png';
+    case 'application/pdf':
+      return 'pdf';
+    default:
+      return '';
+  }
+}
+
+function buildImgUrlPremsa(nomArxiu: string | null, mime: string | null): string | null {
+  if (!nomArxiu || !mime) return null;
+  const ext = mimeToExt(mime);
+  if (!ext) return null;
+  return `https://media.memoriaterrassa.cat/assets_premsa/${encodeURIComponent(nomArxiu)}.${ext}`;
 }
 
 function emptyI18n() {
@@ -117,6 +147,11 @@ function buildDetalls(rows: PremsaAparicioI18nRow[]): PremsaAparicioDetalls {
       mitjaId: first.mitja_id ?? null,
       urlNoticia: first.url_noticia ?? null,
       nomMitja: first.nomMitja ?? null,
+
+      // ✅ imagen
+      nomArxiu: first.nomArxiu ?? null,
+      mime: first.mime ?? null,
+      nomImatge: first.nomImatge ?? null,
     },
     i18nByLang,
   };
@@ -152,7 +187,6 @@ async function fetchAparicioDetalls(id: number): Promise<PremsaAparicioDetalls> 
 }
 
 function renderSkeleton(): string {
-  // Contenedor principal (id fijo para tu plantilla)
   return `
     <article class="p-4" style="background-color:#ffffff;border-radius:6px;">
       <div class="d-flex flex-column gap-3">
@@ -202,6 +236,12 @@ function renderSkeleton(): string {
             <div class="raleway" id="apResum"></div>
           </div>
 
+          <!-- ✅ Foto grande después del resum + pie de foto -->
+          <figure id="apImgWrap" class="d-none m-0">
+            <img id="apImg" class="img-fluid w-100" alt="" style="border-radius:6px;">
+            <figcaption id="apImgCaption" class="text-muted raleway mt-2 d-none"></figcaption>
+          </figure>
+
           <div id="apNotesWrap" class="d-none">
             <div class="text-muted raleway mb-1">Notes</div>
             <div class="raleway" id="apNotes"></div>
@@ -215,7 +255,6 @@ function renderSkeleton(): string {
 }
 
 function setBtnHrefForLang(el: HTMLAnchorElement, lang: Lang, hrefCa: string) {
-  // Si tu web usa prefijo /es /en... en público
   const prefix = lang === 'ca' ? '' : `/${lang}`;
   el.href = `${prefix}${hrefCa}`;
 }
@@ -234,6 +273,10 @@ function renderDetalls(detalls: PremsaAparicioDetalls, lang: Lang): void {
 
   const $resumWrap = document.getElementById('apResumWrap');
   const $resum = document.getElementById('apResum');
+
+  const $imgWrap = document.getElementById('apImgWrap');
+  const $img = document.getElementById('apImg') as HTMLImageElement | null;
+  const $imgCaption = document.getElementById('apImgCaption');
 
   const $notesWrap = document.getElementById('apNotesWrap');
   const $notes = document.getElementById('apNotes');
@@ -278,7 +321,7 @@ function renderDetalls(detalls: PremsaAparicioDetalls, lang: Lang): void {
     }
   }
 
-  // Textos (con tu tipografía/clases)
+  // Resum
   if ($resumWrap && $resum) {
     const txt = (t.resum || '').trim();
     if (txt) {
@@ -290,6 +333,36 @@ function renderDetalls(detalls: PremsaAparicioDetalls, lang: Lang): void {
     }
   }
 
+  // ✅ Foto grande + pie de foto
+  if ($imgWrap && $img) {
+    const imgUrl = buildImgUrlPremsa(detalls.base.nomArxiu, detalls.base.mime);
+    if (imgUrl) {
+      $imgWrap.classList.remove('d-none');
+      $img.src = imgUrl;
+      $img.alt = t.titol && t.titol !== '—' ? t.titol : 'Imatge';
+
+      const caption = (detalls.base.nomImatge ?? '').trim();
+      if ($imgCaption) {
+        if (caption) {
+          $imgCaption.classList.remove('d-none');
+          $imgCaption.textContent = caption;
+        } else {
+          $imgCaption.classList.add('d-none');
+          $imgCaption.textContent = '';
+        }
+      }
+    } else {
+      $imgWrap.classList.add('d-none');
+      $img.removeAttribute('src');
+      $img.alt = '';
+      if ($imgCaption) {
+        $imgCaption.classList.add('d-none');
+        $imgCaption.textContent = '';
+      }
+    }
+  }
+
+  // Notes
   if ($notesWrap && $notes) {
     const txt = (t.notes || '').trim();
     if (txt) {
@@ -304,13 +377,12 @@ function renderDetalls(detalls: PremsaAparicioDetalls, lang: Lang): void {
   if ($status) $status.textContent = '';
 }
 
-export async function initPublicAparicioPremsaDetalls(lang: Lang, id: number): Promise<void> {
+export async function initPublicAparicioPremsaDetalls(id: number, lang?: Lang): Promise<void> {
   const container = document.getElementById('publicAparicioPremsaDetalls') as HTMLDivElement | null;
   if (!container) return;
 
   const currentLang = lang ?? getCurrentLang('ca');
 
-  // Render base
   container.innerHTML = `
     <div class="row g-4">
       <div class="col-12">
@@ -319,7 +391,6 @@ export async function initPublicAparicioPremsaDetalls(lang: Lang, id: number): P
     </div>
   `;
 
-  // Ajusta "tornar" según idioma
   const $btnBack = document.getElementById('apBtnBack') as HTMLAnchorElement | null;
   if ($btnBack) setBtnHrefForLang($btnBack, currentLang, '/espai-virtual/premsa');
 

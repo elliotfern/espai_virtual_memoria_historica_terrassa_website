@@ -2174,7 +2174,12 @@ if ($slug === "municipis") {
             a.tipus_aparicio     AS tipus_aparicio,
             a.mitja_id           AS mitja_id,
             a.url_noticia        AS url_noticia,
-            m.nom                AS nomMitja
+            m.nom                AS nomMitja,
+
+            -- ✅ imagen (igual que en listado)
+            im.nomArxiu           AS nomArxiu,
+            im.mime               AS mime,
+            im.nomImatge          AS nomImatge
 
         FROM db_premsa_aparicions AS a
 
@@ -2195,6 +2200,8 @@ if ($slug === "municipis") {
         LEFT JOIN aux_premsa_mitjans_i18n AS m
             ON m.mitja_id = a.mitja_id
            AND m.lang = 'ca'
+
+        LEFT JOIN aux_imatges AS im ON a.imatge_id = im.id
 
         WHERE a.id = :id
 

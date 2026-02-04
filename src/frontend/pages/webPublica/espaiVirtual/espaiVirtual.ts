@@ -16,6 +16,6 @@ export function espaiVirtualWebPublica(lang: Lang) {
   } else if (pageType[1] === 'premsa-aparicio') {
     console.log('hola detalls');
     const id = Number(pageType[2]);
-    initPublicAparicioPremsaDetalls(lang, id);
+    initPublicAparicioPremsaDetalls(id, lang);
   }
 }
