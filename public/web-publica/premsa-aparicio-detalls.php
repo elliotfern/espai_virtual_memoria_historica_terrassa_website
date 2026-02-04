@@ -19,5 +19,5 @@ $translate = $translations['general'] ?? [];
     <span class="titol italic-text gran lora">Notícies, entrevistes, articles de premsa i altres esdeveniments</span>
 
     <!-- Aquí renderiza TS -->
-    <div id="publicAparicionsPremsa" class="mt-4"></div>
+    <div id="publicAparicioPremsaDetalls" class="mt-4"></div>
 </div>
