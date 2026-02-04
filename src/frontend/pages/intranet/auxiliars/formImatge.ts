@@ -152,7 +152,7 @@ export async function formImatge(isUpdate?: boolean, id?: number) {
       clearMessages();
 
       try {
-        await submitMultipart('PUT', imatgeForm, API_URLS.PUT.IMATGE);
+        await submitMultipart('POST', imatgeForm, API_URLS.PUT.IMATGE);
         showOk('Imatge modificada correctament.');
       } catch (e) {
         showErr(e instanceof Error ? e.message : 'Error');
