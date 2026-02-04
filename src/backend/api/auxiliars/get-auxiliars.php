@@ -2242,50 +2242,58 @@ if ($slug === "municipis") {
     $db = new Database();
 
     $query = "SELECT
-            a.id,
-            a.data_aparicio,
-            a.tipus_aparicio,
-            a.url_noticia,
-            a.destacat,
+    a.id,
+    a.data_aparicio,
+    a.tipus_aparicio,
+    a.url_noticia,
+    a.destacat,
 
-            -- Títol (fallback a CA)
-            COALESCE(i_lang.titol, i_ca.titol) AS titol,
+    COALESCE(i_lang.titol, i_ca.titol) AS titol,
+    COALESCE(m_lang.nom, m_ca.nom)     AS nomMitja,
 
-            -- Mitjà (nom) (fallback a CA)
-            COALESCE(m_lang.nom, m_ca.nom) AS nomMitja,
+    im.nomArxiu,
+    im.mime
 
-            -- Imatge (si existeix)
-            im.nomArxiu,
-            im.mime
+FROM db_premsa_aparicions AS a
 
-        FROM db_premsa_aparicions AS a
+LEFT JOIN (
+    SELECT aparicio_id, titol
+    FROM db_premsa_aparicions_i18n
+    WHERE lang = :lang
+) AS i_lang
+    ON i_lang.aparicio_id = a.id
 
-        LEFT JOIN db_premsa_aparicions_i18n AS i_lang
-            ON i_lang.aparicio_id = a.id
-           AND i_lang.lang = :lang
+LEFT JOIN (
+    SELECT aparicio_id, titol
+    FROM db_premsa_aparicions_i18n
+    WHERE lang = 'ca'
+) AS i_ca
+    ON i_ca.aparicio_id = a.id
 
-        LEFT JOIN db_premsa_aparicions_i18n AS i_ca
-            ON i_ca.aparicio_id = a.id
-           AND i_ca.lang = 'ca'
+LEFT JOIN (
+    SELECT mitja_id, nom
+    FROM aux_premsa_mitjans_i18n
+    WHERE lang = :lang
+) AS m_lang
+    ON m_lang.mitja_id = a.mitja_id
 
-        LEFT JOIN aux_premsa_mitjans_i18n AS m_lang
-            ON m_lang.mitja_id = a.mitja_id
-           AND m_lang.lang = :lang
+LEFT JOIN (
+    SELECT mitja_id, nom
+    FROM aux_premsa_mitjans_i18n
+    WHERE lang = 'ca'
+) AS m_ca
+    ON m_ca.mitja_id = a.mitja_id
 
-        LEFT JOIN aux_premsa_mitjans_i18n AS m_ca
-            ON m_ca.mitja_id = a.mitja_id
-           AND m_ca.lang = 'ca'
+LEFT JOIN aux_imatges AS im
+    ON im.id = a.image_id
 
-        LEFT JOIN aux_imatges AS im
-            ON im.id = a.image_id
+WHERE a.estat = 'publicat'
 
-        WHERE a.estat = 'publicat'
-
-        ORDER BY
-            a.destacat DESC,
-            a.data_aparicio DESC,
-            a.id DESC
-    ";
+ORDER BY
+    a.destacat DESC,
+    a.data_aparicio DESC,
+    a.id DESC
+";
 
     try {
 
