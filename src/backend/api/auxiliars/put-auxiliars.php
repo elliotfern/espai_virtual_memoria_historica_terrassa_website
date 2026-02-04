@@ -3573,6 +3573,7 @@ if ($slug === "municipi") {
     $mitjaId       = (int)$data['mitja_id'];
 
     $urlNoticia = !empty($data['url_noticia']) ? $data['url_noticia'] : NULL;
+    $urlVideo = !empty($data['url_video']) ? $data['url_video'] : NULL;
     $imageId    = !empty($data['image_id']) ? (int)$data['image_id'] : NULL;
     $destacat   = !empty($data['destacat']) ? 1 : 0;
     $estat      = !empty($data['estat']) ? $data['estat'] : 'publicat';
@@ -3607,6 +3608,7 @@ if ($slug === "municipi") {
                     tipus_aparicio = :tipus_aparicio,
                     mitja_id = :mitja_id,
                     url_noticia = :url_noticia,
+                    url_video = :url_video,
                     image_id = :image_id,
                     destacat = :destacat,
                     estat = :estat
@@ -3617,6 +3619,7 @@ if ($slug === "municipi") {
         $stmt->bindParam(':tipus_aparicio', $tipusAparicio, PDO::PARAM_STR);
         $stmt->bindParam(':mitja_id', $mitjaId, PDO::PARAM_INT);
         $stmt->bindParam(':url_noticia', $urlNoticia, PDO::PARAM_STR);
+        $stmt->bindParam(':url_video', $urlVideo, PDO::PARAM_STR);
         $stmt->bindParam(':image_id', $imageId, PDO::PARAM_INT);
         $stmt->bindParam(':destacat', $destacat, PDO::PARAM_INT);
         $stmt->bindParam(':estat', $estat, PDO::PARAM_STR);

@@ -1869,6 +1869,7 @@ if ($slug === "municipis") {
                 a.tipus_aparicio,
                 a.mitja_id,
                 a.url_noticia,
+                a.url_video,
                 a.image_id,
                 a.destacat,
                 a.estat,
@@ -2174,6 +2175,7 @@ if ($slug === "municipis") {
             a.tipus_aparicio     AS tipus_aparicio,
             a.mitja_id           AS mitja_id,
             a.url_noticia        AS url_noticia,
+            a.url_video          AS url_video,
             m.nom                AS nomMitja,
 
             -- ✅ imagen (igual que en listado)

@@ -55,6 +55,12 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
                         </div>
 
                         <div class="col-12">
+                            <label for="url_video" class="form-label fw-bold">URL video</label>
+                            <input type="url" class="form-control" id="url_video" name="url_video" placeholder="https://…">
+                            <div class="form-text">Opcional. Enllaç a video.</div>
+                        </div>
+
+                        <div class="col-12">
                             <label for="titol_ca" class="form-label fw-bold">Títol (català) *</label>
                             <input
                                 type="text"

@@ -31,6 +31,9 @@ type PremsaAparicioI18nRow = {
   nomArxiu: string | null;
   mime: string | null;
   nomImatge: string | null;
+
+  // ✅ vídeo (campo base, sin i18n)
+  url_video: string | null;
 };
 
 type PremsaAparicioDetalls = {
@@ -46,6 +49,9 @@ type PremsaAparicioDetalls = {
     nomArxiu: string | null;
     mime: string | null;
     nomImatge: string | null;
+
+    // ✅ vídeo
+    urlVideo: string | null;
   };
   i18nByLang: Record<Lang, { titol: string; resum: string; notes: string; pdfUrl: string }>;
 };
@@ -113,6 +119,33 @@ function buildImgUrlPremsa(nomArxiu: string | null, mime: string | null): string
   return `https://media.memoriaterrassa.cat/assets_premsa/${encodeURIComponent(nomArxiu)}.${ext}`;
 }
 
+// ✅ DailyMotion embed
+function dailymotionIdFromUrl(url: string): string | null {
+  const u = url.trim();
+  if (!u) return null;
+
+  // Acepta cosas tipo:
+  // - https://www.dailymotion.com/video/x7xyz12
+  // - https://dailymotion.com/video/x7xyz12?playlist=...
+  // - https://dai.ly/x7xyz12
+  // - https://www.dailymotion.com/embed/video/x7xyz12
+  // - https://www.dailymotion.com/video/x7xyz12?some=...
+  const m = u.match(/dailymotion\.com\/video\/([a-zA-Z0-9]+)/) || u.match(/dailymotion\.com\/embed\/video\/([a-zA-Z0-9]+)/) || u.match(/dai\.ly\/([a-zA-Z0-9]+)/);
+
+  return m?.[1] ?? null;
+}
+
+function dailymotionEmbedUrl(url: string | null): string | null {
+  if (!url) return null;
+  const safe = safeUrl(url);
+  if (!safe) return null;
+
+  const id = dailymotionIdFromUrl(safe);
+  if (!id) return null;
+
+  return `https://www.dailymotion.com/embed/video/${encodeURIComponent(id)}`;
+}
+
 function emptyI18n() {
   return { titol: '', resum: '', notes: '', pdfUrl: '' };
 }
@@ -152,6 +185,9 @@ function buildDetalls(rows: PremsaAparicioI18nRow[]): PremsaAparicioDetalls {
       nomArxiu: first.nomArxiu ?? null,
       mime: first.mime ?? null,
       nomImatge: first.nomImatge ?? null,
+
+      // ✅ vídeo
+      urlVideo: first.url_video ?? null,
     },
     i18nByLang,
   };
@@ -242,6 +278,26 @@ function renderSkeleton(): string {
             <figcaption id="apImgCaption" class="text-muted raleway mt-2 d-none"></figcaption>
           </figure>
 
+          <!-- ✅ Vídeo (después de la imagen) -->
+          <div id="apVideoWrap" class="d-none">
+            <div class="ratio ratio-16x9" style="border-radius:6px; overflow:hidden;">
+              <iframe
+                id="apVideoIframe"
+                title="Vídeo"
+                src=""
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen
+                referrerpolicy="strict-origin-when-cross-origin"
+              ></iframe>
+            </div>
+
+            <div class="d-flex flex-wrap gap-2 mt-2">
+              <a id="apVideoLink" class="btn btn-primary btn-custom-2 w-auto d-none" href="#" target="_blank" rel="noopener noreferrer">
+                veure vídeo
+              </a>
+            </div>
+          </div>
+
           <div id="apNotesWrap" class="d-none">
             <div class="text-muted raleway mb-1">Notes</div>
             <div class="raleway" id="apNotes"></div>
@@ -277,6 +333,10 @@ function renderDetalls(detalls: PremsaAparicioDetalls, lang: Lang): void {
   const $imgWrap = document.getElementById('apImgWrap');
   const $img = document.getElementById('apImg') as HTMLImageElement | null;
   const $imgCaption = document.getElementById('apImgCaption');
+
+  const $videoWrap = document.getElementById('apVideoWrap');
+  const $videoIframe = document.getElementById('apVideoIframe') as HTMLIFrameElement | null;
+  const $videoLink = document.getElementById('apVideoLink') as HTMLAnchorElement | null;
 
   const $notesWrap = document.getElementById('apNotesWrap');
   const $notes = document.getElementById('apNotes');
@@ -359,6 +419,41 @@ function renderDetalls(detalls: PremsaAparicioDetalls, lang: Lang): void {
         $imgCaption.classList.add('d-none');
         $imgCaption.textContent = '';
       }
+    }
+  }
+
+  // ✅ Vídeo (DailyMotion) después de la imagen
+  if ($videoWrap && $videoIframe && $videoLink) {
+    const urlVideo = detalls.base.urlVideo ?? null;
+    const safe = safeUrl(urlVideo);
+
+    const embed = dailymotionEmbedUrl(urlVideo);
+
+    if (embed) {
+      // Mostramos player embebido
+      $videoWrap.classList.remove('d-none');
+      $videoIframe.src = embed;
+
+      // Link opcional visible también (por si quieren abrirlo)
+      if (safe) {
+        $videoLink.classList.remove('d-none');
+        $videoLink.href = safe;
+      } else {
+        $videoLink.classList.add('d-none');
+        $videoLink.href = '#';
+      }
+    } else if (safe) {
+      // No se pudo parsear el ID, pero al menos damos botón enlace
+      $videoWrap.classList.remove('d-none');
+      $videoIframe.src = '';
+      $videoLink.classList.remove('d-none');
+      $videoLink.href = safe;
+    } else {
+      // Nada
+      $videoWrap.classList.add('d-none');
+      $videoIframe.src = '';
+      $videoLink.classList.add('d-none');
+      $videoLink.href = '#';
     }
   }
 
