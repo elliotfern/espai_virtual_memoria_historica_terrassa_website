@@ -2268,15 +2268,15 @@ if ($slug === "municipis") {
             ON i_ca.aparicio_id = a.id
            AND i_ca.lang = 'ca'
 
-        LEFT JOIN db_premsa_mitjans_i18n AS m_lang
+        LEFT JOIN aux_premsa_mitjans_i18n AS m_lang
             ON m_lang.mitja_id = a.mitja_id
            AND m_lang.lang = :lang
 
-        LEFT JOIN db_premsa_mitjans_i18n AS m_ca
+        LEFT JOIN aux_premsa_mitjans_i18n AS m_ca
             ON m_ca.mitja_id = a.mitja_id
            AND m_ca.lang = 'ca'
 
-        LEFT JOIN db_imatges AS im
+        LEFT JOIN aux_imatges AS im
             ON im.id = a.image_id
 
         WHERE a.estat = 'publicat'
