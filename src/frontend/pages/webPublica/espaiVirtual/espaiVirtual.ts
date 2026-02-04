@@ -13,7 +13,7 @@ export function espaiVirtualWebPublica(lang: Lang) {
     //
   } else if (pageType[1] === 'premsa') {
     initPublicAparicionsPremsaList(lang);
-  } else if (pageType[1] === 'premsa-aparicio"') {
+  } else if (pageType[1] === 'premsa-aparicio') {
     const id = Number(pageType[2]);
     initPublicAparicioPremsaDetalls(lang, id);
   }
