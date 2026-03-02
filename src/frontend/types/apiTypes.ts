@@ -66,6 +66,8 @@ export type ApiUrls = {
     LLISTAT_IMATGES: string;
     IMATGE_ID: (id: number) => string;
     APARICIO_PREMSA_I18N_ID: (id: number) => string;
+    HORES_LLISTAT_ME: string;
+    HORES_ID: (id: number) => string;
   };
   POST: {
     MUNICIPI: string;
@@ -103,6 +105,7 @@ export type ApiUrls = {
     PREMSA_MITJA: string;
     APARICIO: string;
     IMATGE: string;
+    HORES: string;
   };
   PUT: {
     MUNICIPI: string;
@@ -142,6 +145,7 @@ export type ApiUrls = {
     APARICIO: string;
     IMATGE: string;
     APARICIO_PREMSA_I18N: string;
+    HORES: string;
   };
   DELETE: {
     MUNICIPI: string;

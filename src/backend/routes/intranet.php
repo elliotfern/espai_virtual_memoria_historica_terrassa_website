@@ -773,6 +773,20 @@ $routes = [
         'view' => BACKEND_URL . $urlIntranetDir['missatges'] . '/respondre-missatge.php'
     ]),
 
+    // Registre horari
+    APP_INTRANET . $urlIntranet['registre_horari'] => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['registre_horari'] . '/index.php'
+    ]),
+
+
+    APP_INTRANET . $urlIntranet['registre_horari'] . '/nou-registre' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['registre_horari'] . '/form-registre.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['registre_horari'] . '/modifica-registre/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['registre_horari'] . '/form-registre.php'
+    ]),
+
 ];
 
 return $routes;

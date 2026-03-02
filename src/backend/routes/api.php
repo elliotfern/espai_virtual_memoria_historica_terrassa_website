@@ -261,6 +261,13 @@ $routes = [
     // CRON MISSATGES IMAP
     '/api/form_contacte/cron/imap' => ['view' => 'src/backend/api/db_form_contacte/cron-imap.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
 
+    // REGISTRE CONTROL HORARI
+    '/api/registre_horari/get/{slug}' => ['view' => 'src/backend/api/db_hores_treballades/get-registre.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+
+    '/api/registre_horari/post/{slug}' => ['view' => 'src/backend/api/db_hores_treballades/post-registre.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+
+    '/api/registre_horari/put/{slug}' => ['view' => 'src/backend/api/db_hores_treballades/put-registre.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+
 ];
 
 return $routes;

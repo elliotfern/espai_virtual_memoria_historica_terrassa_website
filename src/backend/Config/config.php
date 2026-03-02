@@ -47,6 +47,7 @@ $urlIntranetDir = [
     'biografies' => '/05_biografies',
     'imatgeRepresaliat' => '/06_imatges_represaliats',
     'missatges' => '/07_missatges',
+    'registre_horari' => '/08_registre_horari',
 ];
 
 $urlIntranet = [
@@ -59,6 +60,7 @@ $urlIntranet = [
     'biografies' => '/biografies',
     'imatgeRepresaliat' => '/imatge-represaliat',
     'missatges' => '/missatges',
+    'registre_horari' => '/registre-horari',
 ];
 
 

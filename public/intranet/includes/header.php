@@ -48,4 +48,17 @@
     </div>
 </div>
 
+<div class="container text-center" style="margin-top:10px;margin-bottom:20px">
+
+    <div class="row">
+        <div class="col-12 col-md-12 d-flex flex-column flex-md-row justify-content-md-between gap-3">
+            <?php if ($isAdmin || $isAutor): ?>
+                <a href="<?php echo APP_WEB . APP_INTRANET . $urlIntranet['registre_horari']; ?>/registre-horari" class="btn btn-dark menuBtn w-100 w-md-auto" role="button" aria-disabled="false">Registre horari</a>
+            <?php endif; ?>
+
+        </div>
+    </div>
+
+</div>
+
 <hr>
