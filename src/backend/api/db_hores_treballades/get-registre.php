@@ -74,7 +74,7 @@ if ($slug === "horesId") {
                 ))";
 
     // Si no admin: forcem que només pugui llegir el seu propi registre
-    $whereOwner = $isAdmin ? "" : " AND h.user_uuid = UUID_TO_BIN(:user_uuid)";
+    $whereOwner = $isAdmin ? "" : " AND h.user_uuid = UNHEX(REPLACE(:user_uuid, '-', ''))";
 
     $query = "
         SELECT
@@ -188,7 +188,7 @@ if ($slug === "horesId") {
             h.updated_at
         FROM db_hores_treballades AS h
         LEFT JOIN aux_tipus_tasca AS t ON t.id = h.tipus_id
-        WHERE h.user_uuid = UUID_TO_BIN(:user_uuid)
+        WHERE h.user_uuid = UNHEX(REPLACE(:user_uuid, '-', ''))
         {$whereMonth}
         ORDER BY h.dia DESC, h.id DESC
     ";
