@@ -32,8 +32,8 @@ if ($_SERVER['REQUEST_METHOD'] !== 'PUT') {
 if ($slug === "hores") {
 
     // Auth
-    $userUuidAuth = getAuthenticatedUserUuid(); // UUID string
-    $userId = getAuthenticatedUserUuid();         // per auditoria
+    $userUuidAuth = getAuthenticatedUserId();
+    $userId = getAuthenticatedUserId();
     if (!$userUuidAuth || !$userId) {
         Response::error(
             MissatgesAPI::error('no_autenticat'),
@@ -108,13 +108,13 @@ if ($slug === "hores") {
             SELECT id, dia
             FROM db_hores_treballades
             WHERE id = :id
-              AND user_uuid = UNHEX(REPLACE(:user_uuid, '-', ''))
+              AND user_id = :user_id
             LIMIT 1
         ";
         $stmtOwn = $conn->prepare($sqlOwn);
         $stmtOwn->execute([
             ':id' => $id,
-            ':user_uuid' => $userUuidAuth,
+            ':user_id' => $userUuidAuth,
         ]);
 
         $row = $stmtOwn->fetch(PDO::FETCH_ASSOC);
@@ -127,18 +127,18 @@ if ($slug === "hores") {
             return;
         }
 
-        // 2) Control UNIQUE (user_uuid, dia) si canvia el dia i ja existeix un altre registre aquell dia
+        // 2) Control UNIQUE (user_id, dia) si canvia el dia i ja existeix un altre registre aquell dia
         $sqlDup = "
             SELECT id
             FROM db_hores_treballades
-            WHERE user_uuid = UNHEX(REPLACE(:user_uuid, '-', ''))
+            WHERE user_id = :user_id
               AND dia = :dia
               AND id <> :id
             LIMIT 1
         ";
         $stmtDup = $conn->prepare($sqlDup);
         $stmtDup->execute([
-            ':user_uuid' => $userUuidAuth,
+            ':user_id' => $userUuidAuth,
             ':dia' => $dia,
             ':id' => $id,
         ]);
@@ -162,7 +162,7 @@ if ($slug === "hores") {
                 tipus_id = :tipus_id,
                 descripcio = :descripcio
             WHERE id = :id
-              AND user_uuid = UNHEX(REPLACE(:user_uuid, '-', ''))
+              AND user_id = :user_id
             LIMIT 1
         ";
 
@@ -172,7 +172,7 @@ if ($slug === "hores") {
         $stmtUp->bindValue(':tipus_id', $tipusId, PDO::PARAM_INT);
         $stmtUp->bindValue(':descripcio', $descr, $descr === null ? PDO::PARAM_NULL : PDO::PARAM_STR);
         $stmtUp->bindValue(':id', $id, PDO::PARAM_INT);
-        $stmtUp->bindValue(':user_uuid', $userUuidAuth, PDO::PARAM_STR);
+        $stmtUp->bindValue(':user_id', $userUuidAuth, PDO::PARAM_INT);
 
         $stmtUp->execute();
 
@@ -196,7 +196,7 @@ if ($slug === "hores") {
         return;
     } catch (PDOException $e) {
 
-        // Duplicate key por UNIQUE(user_uuid,dia)
+        // Duplicate key por UNIQUE(user_id,dia)
         $code = $e->errorInfo[1] ?? null;
         if ((int)$code === 1062) {
             Response::error(

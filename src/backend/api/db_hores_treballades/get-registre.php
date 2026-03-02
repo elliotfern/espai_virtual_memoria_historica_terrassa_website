@@ -63,23 +63,12 @@ if ($slug === "horesId") {
 
     $db = new Database();
 
-    // Helpers SQL per convertir BINARY(16) a UUID string (format estàndard)
-    // (mateix estil que ja estàs fent amb HEX + SUBSTR)
-    $sqlUuid = "LOWER(CONCAT_WS('-',
-                    SUBSTR(HEX(h.user_uuid), 1, 8),
-                    SUBSTR(HEX(h.user_uuid), 9, 4),
-                    SUBSTR(HEX(h.user_uuid), 13, 4),
-                    SUBSTR(HEX(h.user_uuid), 17, 4),
-                    SUBSTR(HEX(h.user_uuid), 21)
-                ))";
-
     // Si no admin: forcem que només pugui llegir el seu propi registre
-    $whereOwner = $isAdmin ? "" : " AND h.user_uuid = UNHEX(REPLACE(:user_uuid, '-', ''))";
+    $whereOwner = $isAdmin ? "" : " AND h.user_id = :user_id";
 
     $query = "
         SELECT
             h.id,
-            {$sqlUuid} AS user_uuid,
             h.dia,
             h.hores,
             h.tipus_id AS tipusId,
@@ -100,7 +89,7 @@ if ($slug === "horesId") {
         ];
 
         if (!$isAdmin) {
-            $params[':user_uuid'] = $userUuidAuth;
+            $params[':user_id'] = $userUuidAuth;
         }
 
         // true => UNA sola fila
@@ -152,7 +141,7 @@ if ($slug === "horesId") {
     $month = isset($_GET['month']) ? trim((string)$_GET['month']) : '';
     $whereMonth = "";
     $params = [
-        ':user_uuid' => $userUuidAuth,
+        ':user_id' => $userUuidAuth,
     ];
 
     if ($month !== '') {
@@ -188,7 +177,7 @@ if ($slug === "horesId") {
             h.updated_at
         FROM db_hores_treballades AS h
         LEFT JOIN aux_tipus_tasca AS t ON t.id = h.tipus_id
-        WHERE h.user_uuid = UNHEX(REPLACE(:user_uuid, '-', ''))
+        WHERE h.user_id = :user_id
         {$whereMonth}
         ORDER BY h.dia DESC, h.id DESC
     ";

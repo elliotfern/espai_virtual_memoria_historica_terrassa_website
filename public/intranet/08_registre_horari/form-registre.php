@@ -19,7 +19,7 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
             <form id="HoresForm">
                 <!-- ID del registre (si edició) -->
                 <input type="hidden" name="id" id="id" value="">
-                <input type="hidden" name="user_uuid" id="user_uuid" value="">
+                <input type="hidden" name="user_id" id="user_id" value="">
 
                 <!-- Dia -->
                 <div class="col-md-12 espai-superior">

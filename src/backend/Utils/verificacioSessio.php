@@ -94,31 +94,3 @@ function getAuthenticatedUserId(): ?int
         return null;
     }
 }
-
-function getAuthenticatedUserUuid(): ?string
-{
-    $jwtSecret = $_ENV['TOKEN'];
-    $cookieName = 'token';
-
-    if (!isset($_COOKIE[$cookieName])) return null;
-
-    try {
-        $decoded = JWT::decode($_COOKIE[$cookieName], new Key($jwtSecret, 'HS256'));
-
-        // Ajusta según tu token: user_uuid / uuid / sub...
-        $uuid = $decoded->user_id;
-
-        if (!is_string($uuid)) return null;
-
-        $uuid = trim($uuid);
-
-        // Validación UUID estándar
-        if (!preg_match('~^[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}$~', $uuid)) {
-            return null;
-        }
-
-        return strtolower($uuid);
-    } catch (Exception $e) {
-        return null;
-    }
-}

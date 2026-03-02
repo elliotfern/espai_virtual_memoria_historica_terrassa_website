@@ -8,7 +8,7 @@ interface FitxaHores {
   [key: string]: unknown;
 
   id: number;
-  user_uuid: string; // normalmente vendrá como UUID string (no binario)
+  user_id: number; // normalmente vendrá como UUID string (no binario)
   dia: string; // YYYY-MM-DD
   hores: number;
   tipusId: number;
@@ -33,7 +33,7 @@ export async function formHores(isUpdate: boolean, id?: number) {
 
   let data: Partial<FitxaHores> = {
     id: 0,
-    user_uuid: '',
+    user_id: 0,
     dia: '',
     hores: 0,
     tipusId: 0,

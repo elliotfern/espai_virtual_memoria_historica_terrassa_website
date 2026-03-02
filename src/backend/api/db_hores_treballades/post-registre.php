@@ -34,8 +34,8 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 if ($slug === "hores") {
 
     // Auth
-    $userUuidAuth = getAuthenticatedUserUuid(); // ✅ UUID string
-    $userId = getAuthenticatedUserUuid();         // ✅ int (auditoria)      // per auditoria (si la tens així)
+    $userUuidAuth = getAuthenticatedUserId();
+    $userId = getAuthenticatedUserId();
     if (!$userUuidAuth || !$userId) {
         Response::error(
             MissatgesAPI::error('no_autenticat'),
@@ -109,13 +109,13 @@ if ($slug === "hores") {
         $sqlCheck = "
             SELECT id
             FROM db_hores_treballades
-            WHERE user_uuid = UNHEX(REPLACE(:user_uuid, '-', ''))
+            WHERE user_id = :user_id
               AND dia = :dia
             LIMIT 1
         ";
         $stmtCheck = $conn->prepare($sqlCheck);
         $stmtCheck->execute([
-            ':user_uuid' => $userUuidAuth,
+            ':user_id' => $userUuidAuth,
             ':dia'       => $dia,
         ]);
         $existingId = $stmtCheck->fetchColumn();
@@ -132,12 +132,12 @@ if ($slug === "hores") {
         // 2) Insert
         $sql = "
             INSERT INTO db_hores_treballades
-                (user_uuid, dia, hores, tipus_id, descripcio, created_at)
+                (user_id, dia, hores, tipus_id, descripcio, created_at)
             VALUES
-                (UNHEX(REPLACE(:user_uuid, '-', '')), :dia, :hores, :tipus_id, :descripcio, NOW())
+                :user_id, :dia, :hores, :tipus_id, :descripcio, NOW())
         ";
         $stmt = $conn->prepare($sql);
-        $stmt->bindValue(':user_uuid', $userUuidAuth, PDO::PARAM_STR);
+        $stmt->bindValue(':user_id', $userUuidAuth, PDO::PARAM_INT);
         $stmt->bindValue(':dia', $dia, PDO::PARAM_STR);
         $stmt->bindValue(':hores', $hores, PDO::PARAM_INT);
         $stmt->bindValue(':tipus_id', $tipusId, PDO::PARAM_INT);
