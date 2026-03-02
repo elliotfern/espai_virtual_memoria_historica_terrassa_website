@@ -34,9 +34,8 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 if ($slug === "hores") {
 
     // Auth
-    $userUuidAuth = getAuthenticatedUserId();
     $userId = getAuthenticatedUserId();
-    if (!$userUuidAuth || !$userId) {
+    if (!$userId) {
         Response::error(
             MissatgesAPI::error('no_autenticat'),
             [],
@@ -115,7 +114,7 @@ if ($slug === "hores") {
         ";
         $stmtCheck = $conn->prepare($sqlCheck);
         $stmtCheck->execute([
-            ':user_id' => $userUuidAuth,
+            ':user_id' => $userId,
             ':dia'       => $dia,
         ]);
         $existingId = $stmtCheck->fetchColumn();
@@ -134,10 +133,10 @@ if ($slug === "hores") {
             INSERT INTO db_hores_treballades
                 (user_id, dia, hores, tipus_id, descripcio, created_at)
             VALUES
-                :user_id, :dia, :hores, :tipus_id, :descripcio, NOW())
+                (:user_id, :dia, :hores, :tipus_id, :descripcio, NOW())
         ";
         $stmt = $conn->prepare($sql);
-        $stmt->bindValue(':user_id', $userUuidAuth, PDO::PARAM_INT);
+        $stmt->bindValue(':user_id', $userId, PDO::PARAM_INT);
         $stmt->bindValue(':dia', $dia, PDO::PARAM_STR);
         $stmt->bindValue(':hores', $hores, PDO::PARAM_INT);
         $stmt->bindValue(':tipus_id', $tipusId, PDO::PARAM_INT);
