@@ -80,6 +80,8 @@ final class Tables
     public const DB_PREMSA_APARICIONS = 'db_premsa_aparicions';
     public const DB_PREMSA_APARICIONS_I18N = 'db_premsa_aparicions_i18n';
 
+    public const DB_HORES_TREBALLADES = 'db_hores_treballades';
+
     // USUARIS
     public const DB_AUTH_USERS_I18N = 'auth_users_i18n';
 }

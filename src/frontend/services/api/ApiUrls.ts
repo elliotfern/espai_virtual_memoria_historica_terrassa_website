@@ -107,7 +107,7 @@ export const ENDPOINTS = {
   APARICIO_PREMSA_I18N_ID: 'premsaAparicioI18n',
   APARICIO_PREMSA_I18N: 'premsaAparicioI18n',
   HORES_LLISTAT_ME: 'llistatMe',
-  HORES_ID: '',
+  HORES_ID: 'horesId',
   HORES: 'hores',
 } as const;
 

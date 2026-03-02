@@ -54,7 +54,7 @@ export async function taulaHoresMe() {
   }
 
   renderTaulaCercadorFiltres<HoresRow>({
-    url: API_URLS.GET.HORES_LLISTAT_ME, // debe apuntar a /api/hores/get/llistatMe
+    url: API_URLS.GET.HORES_LLISTAT_ME,
     containerId: 'taulaHores',
     columns,
     filterKeys: ['dia', 'tipusNom', 'descripcio'],
