@@ -9,6 +9,7 @@ import { formFamiliars } from './familiars/formFamiliars';
 import { taulaMissatgesRebuts } from './missatges/taulaMissatgesRebuts';
 import { carregarConversacioMissatge } from './missatges/missatgeId';
 import { renderRespostaForm } from './missatges/respondreMissatge';
+import { registreHorari } from './registre-horari/registre';
 
 export function intranet() {
   const url = window.location.href;
@@ -56,5 +57,7 @@ export function intranet() {
       const id = Number.parseInt(pageType?.[3] ?? '', 10);
       renderRespostaForm(id);
     }
+  } else if (pageType[1] === 'registre-horari') {
+    registreHorari();
   }
 }
