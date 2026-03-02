@@ -106,7 +106,7 @@ function getAuthenticatedUserUuid(): ?string
         $decoded = JWT::decode($_COOKIE[$cookieName], new Key($jwtSecret, 'HS256'));
 
         // Ajusta según tu token: user_uuid / uuid / sub...
-        $uuid = $decoded->user_uuid ?? $decoded->uuid ?? null;
+        $uuid = $decoded->user_id;
 
         if (!is_string($uuid)) return null;
 
