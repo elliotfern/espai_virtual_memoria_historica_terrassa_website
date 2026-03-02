@@ -34,8 +34,8 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 if ($slug === "hores") {
 
     // Auth
-    $userUuidAuth = getAuthenticatedUserId();
-    $userId = getAuthenticatedUserId();         // per auditoria (si la tens així)
+    $userUuidAuth = getAuthenticatedUserUuid(); // ✅ UUID string
+    $userId = getAuthenticatedUserUuid();         // ✅ int (auditoria)      // per auditoria (si la tens així)
     if (!$userUuidAuth || !$userId) {
         Response::error(
             MissatgesAPI::error('no_autenticat'),

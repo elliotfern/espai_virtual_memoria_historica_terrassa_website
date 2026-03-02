@@ -32,8 +32,8 @@ if ($_SERVER['REQUEST_METHOD'] !== 'PUT') {
 if ($slug === "hores") {
 
     // Auth
-    $userUuidAuth = getAuthenticatedUserId(); // UUID string
-    $userId = getAuthenticatedUserId();         // per auditoria
+    $userUuidAuth = getAuthenticatedUserUuid(); // UUID string
+    $userId = getAuthenticatedUserUuid();         // per auditoria
     if (!$userUuidAuth || !$userId) {
         Response::error(
             MissatgesAPI::error('no_autenticat'),
