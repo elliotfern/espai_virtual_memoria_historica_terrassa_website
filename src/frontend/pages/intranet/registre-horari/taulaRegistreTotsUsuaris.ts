@@ -3,6 +3,7 @@ import { fetchDataGet } from '../../../services/fetchData/fetchDataGet';
 import { renderTaulaCercadorFiltres } from '../../../services/renderTaula/renderTaulaCercadorFiltres';
 import { initDeleteHandlers, registerDeleteCallback } from '../../../services/fetchData/handleDelete';
 import { getIsAdmin } from '../../../services/auth/getIsAdmin';
+import { formatDates } from '../../../services/formatDates/dates';
 
 interface ApiResponse<T> {
   status: string;
@@ -56,7 +57,15 @@ export async function taulaRegistreHorariAdmin() {
   if (!filtrosDiv) return;
 
   const columns: Column<RegistreRow>[] = [
-    { header: 'Dia', field: 'dia' },
+    {
+      header: 'Dia',
+      field: 'dia',
+      render: (_: unknown, row: RegistreRow) => {
+        const label = formatDates(row.dia);
+        return `${label}`;
+      },
+    },
+
     {
       header: 'Usuari',
       field: 'userNom',

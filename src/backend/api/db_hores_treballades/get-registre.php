@@ -322,6 +322,90 @@ if ($slug === "horesId") {
         Response::error(MissatgesAPI::error('errorBD'), [$e->getMessage()], 500);
         return;
     }
+
+    /**
+     * GET: Resum hores per usuari (ADMIN)
+     * URL: /api/hores/get/resumUsuari?user_id=123
+     */
+} else if ($slug === 'resumUsuari') {
+
+    $adminId = getAuthenticatedUserId();
+    if (!$adminId) {
+        Response::error(MissatgesAPI::error('no_autenticat'), [], 401);
+        return;
+    }
+
+    if (!isUserAdmin()) {
+        Response::error(MissatgesAPI::error('no_permisos'), [], 403);
+        return;
+    }
+
+    if (!isset($_GET['user_id']) || !ctype_digit((string)$_GET['user_id'])) {
+        Response::error(MissatgesAPI::error('parametres'), ["user_id invàlid"], 400);
+        return;
+    }
+
+    $userId = (int)$_GET['user_id'];
+    $db = new Database();
+
+    try {
+        // 1) Info usuari
+        $qUser = "SELECT id, nom, email FROM auth_users WHERE id = :id LIMIT 1";
+        $user = $db->getData($qUser, [':id' => $userId], true);
+        if (empty($user)) {
+            Response::error(MissatgesAPI::error('not_found'), [], 404);
+            return;
+        }
+
+        // 2) Months
+        $qMonths = "
+      SELECT
+        YEAR(h.dia) AS y,
+        MONTH(h.dia) AS m,
+        SUM(h.hores) AS hores
+      FROM db_hores_treballades h
+      WHERE h.user_id = :user_id
+      GROUP BY YEAR(h.dia), MONTH(h.dia)
+      ORDER BY y DESC, m DESC
+    ";
+        $months = $db->getData($qMonths, [':user_id' => $userId], false);
+        if (empty($months)) $months = [];
+
+        // 3) Years
+        $qYears = "
+      SELECT
+        YEAR(h.dia) AS y,
+        SUM(h.hores) AS hores
+      FROM db_hores_treballades h
+      WHERE h.user_id = :user_id
+      GROUP BY YEAR(h.dia)
+      ORDER BY y DESC
+    ";
+        $years = $db->getData($qYears, [':user_id' => $userId], false);
+        if (empty($years)) $years = [];
+
+        // 4) Total absolut
+        $qTotal = "
+      SELECT COALESCE(SUM(h.hores), 0) AS hores
+      FROM db_hores_treballades h
+      WHERE h.user_id = :user_id
+    ";
+        $totalRow = $db->getData($qTotal, [':user_id' => $userId], true);
+        $total = (int)($totalRow['hores'] ?? 0);
+
+        $payload = [
+            'user' => $user,
+            'months' => $months,
+            'years' => $years,
+            'total' => $total,
+        ];
+
+        Response::success(MissatgesAPI::success('get'), $payload, 200);
+        return;
+    } catch (PDOException $e) {
+        Response::error(MissatgesAPI::error('errorBD'), [$e->getMessage()], 500);
+        return;
+    }
 } else {
     header('HTTP/1.1 403 Forbidden');
     echo json_encode(['error' => 'Something get wrong']);

@@ -1,6 +1,7 @@
 import { getPageType } from '../../../services/url/splitUrl';
 import { formHores } from './formRegistre';
 import { taulaHoresMe } from './taulaRegistreHoresUsuari';
+import { resumUsuariHores } from './taulaRegistreTotalUsuari';
 import { taulaRegistreHorariAdmin } from './taulaRegistreTotsUsuaris';
 
 export function registreHorari() {
@@ -31,6 +32,17 @@ export function registreHorari() {
       return;
     }
     formHores(true, id);
+    return;
+  }
+
+  if (action === 'usuari') {
+    const id = Number(pageType[3]);
+    if (!Number.isFinite(id) || id <= 0) {
+      // Si quieres: pinta un error en #errMessage
+      console.error('ID invàlid a modifica-registre');
+      return;
+    }
+    resumUsuariHores(id);
     return;
   }
 

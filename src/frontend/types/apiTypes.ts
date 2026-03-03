@@ -70,6 +70,7 @@ export type ApiUrls = {
     HORES_ID: (id: number) => string;
     HORES_LLISTAT_ADMIN: (month?: string) => string;
     HORES_MESES_DISPONIBLES_ADMIN: string;
+    HORES_RESUM_USUARI: (id: number) => string;
   };
   POST: {
     MUNICIPI: string;
