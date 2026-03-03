@@ -282,6 +282,46 @@ if ($slug === "horesId") {
         Response::error(MissatgesAPI::error('errorBD'), [$e->getMessage()], 500);
         return;
     }
+
+    /**
+     * GET : Mesos disponibles (ADMIN)
+     * URL: https://memoriaterrassa.cat/api/hores/get/mesosDisponiblesAdmin
+     */
+} else if ($slug === "mesosDisponiblesAdmin") {
+
+    $userId = getAuthenticatedUserId();
+    if (!$userId) {
+        Response::error(MissatgesAPI::error('no_autenticat'), [], 401);
+        return;
+    }
+
+    if (!isUserAdmin()) {
+        Response::error(MissatgesAPI::error('no_permisos'), [], 403);
+        return;
+    }
+
+    $db = new Database();
+
+    $query = "
+        SELECT DISTINCT DATE_FORMAT(h.dia, '%Y-%m') AS ym
+        FROM db_hores_treballades h
+        ORDER BY ym DESC
+    ";
+
+    try {
+        $rows = $db->getData($query);
+        $months = [];
+
+        foreach ($rows as $r) {
+            if (!empty($r['ym'])) $months[] = $r['ym'];
+        }
+
+        Response::success(MissatgesAPI::success('get'), $months, 200);
+        return;
+    } catch (PDOException $e) {
+        Response::error(MissatgesAPI::error('errorBD'), [$e->getMessage()], 500);
+        return;
+    }
 } else {
     header('HTTP/1.1 403 Forbidden');
     echo json_encode(['error' => 'Something get wrong']);
