@@ -1,6 +1,7 @@
 import { getPageType } from '../../../services/url/splitUrl';
 import { formHores } from './formRegistre';
 import { taulaHoresMe } from './taulaRegistreHoresUsuari';
+import { taulaRegistreHorariAdmin } from './taulaRegistreTotsUsuaris';
 
 export function registreHorari() {
   const url = window.location.href;
@@ -14,6 +15,11 @@ export function registreHorari() {
 
   if (action === 'nou-registre') {
     formHores(false);
+    return;
+  }
+
+  if (action === 'taula-registre') {
+    taulaRegistreHorariAdmin();
     return;
   }
 

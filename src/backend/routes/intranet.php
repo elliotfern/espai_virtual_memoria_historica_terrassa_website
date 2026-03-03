@@ -787,6 +787,10 @@ $routes = [
         'view' => BACKEND_URL . $urlIntranetDir['registre_horari'] . '/form-registre.php'
     ]),
 
+    APP_INTRANET . $urlIntranet['registre_horari'] . '/taula-registre' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['registre_horari'] . '/taula-registre.php'
+    ]),
+
 ];
 
 return $routes;

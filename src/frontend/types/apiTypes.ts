@@ -68,6 +68,7 @@ export type ApiUrls = {
     APARICIO_PREMSA_I18N_ID: (id: number) => string;
     HORES_LLISTAT_ME: string;
     HORES_ID: (id: number) => string;
+    HORES_LLISTAT_ADMIN: (month?: string) => string;
   };
   POST: {
     MUNICIPI: string;

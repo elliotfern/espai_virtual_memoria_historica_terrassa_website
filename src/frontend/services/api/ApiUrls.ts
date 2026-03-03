@@ -109,6 +109,7 @@ export const ENDPOINTS = {
   HORES_LLISTAT_ME: 'llistatMe',
   HORES_ID: 'horesId',
   HORES: 'hores',
+  HORES_LLISTAT_ADMIN: 'llistatAdmin',
 } as const;
 
 // Mapa de recursos disponibles
@@ -201,6 +202,7 @@ export const API_URLS: ApiUrls = {
     APARICIO_PREMSA_I18N_ID: (id: number) => `${BASE_URL}/${API}/${RESOURCES.AUXILIARS}/${TIPUS.GET}/${ENDPOINTS.APARICIO_PREMSA_I18N_ID}?id=${id}`,
     HORES_LLISTAT_ME: `${BASE_URL}/${API}/${RESOURCES.REGISTRE_HORARI}/${TIPUS.GET}/${ENDPOINTS.HORES_LLISTAT_ME}`,
     HORES_ID: (id: number) => `${BASE_URL}/${API}/${RESOURCES.REGISTRE_HORARI}/${TIPUS.GET}/${ENDPOINTS.HORES_ID}?id=${id}`,
+    HORES_LLISTAT_ADMIN: (month?: string) => (month ? `${BASE_URL}/${API}/${RESOURCES.REGISTRE_HORARI}/${TIPUS.GET}/${ENDPOINTS.HORES_LLISTAT_ADMIN}?month=${month}` : `${BASE_URL}/${API}/${RESOURCES.REGISTRE_HORARI}/${TIPUS.GET}/${ENDPOINTS.HORES_LLISTAT_ADMIN}`),
   },
 
   POST: {

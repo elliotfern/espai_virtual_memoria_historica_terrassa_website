@@ -207,6 +207,81 @@ if ($slug === "horesId") {
             500
         );
     }
+
+    /**
+     * GET : Llistat complet registre horari (ADMIN)
+     * URL: https://memoriaterrassa.cat/api/hores/get/llistatAdmin?month=2026-03
+     */
+} else if ($slug === "llistatAdmin") {
+
+    // Auth
+    $userId = getAuthenticatedUserId();
+    if (!$userId) {
+        Response::error(MissatgesAPI::error('no_autenticat'), [], 401);
+        return;
+    }
+
+    // Admin only
+    if (!isUserAdmin()) {
+        Response::error(MissatgesAPI::error('no_permisos'), [], 403);
+        return;
+    }
+
+    $db = new Database();
+
+    // Filtro mes opcional
+    $month = isset($_GET['month']) ? trim((string)$_GET['month']) : '';
+    $whereMonth = '';
+    $params = [];
+
+    if ($month !== '') {
+        if (!preg_match('~^\d{4}\-(0[1-9]|1[0-2])$~', $month)) {
+            Response::error(MissatgesAPI::error('parametres'), ['Paràmetre month invàlid (YYYY-MM)'], 400);
+            return;
+        }
+
+        $start = $month . '-01';
+        $dt = new DateTime($start);
+        $dt->modify('+1 month');
+        $end = $dt->format('Y-m-d');
+
+        $whereMonth = " WHERE h.dia >= :start AND h.dia < :end ";
+        $params[':start'] = $start;
+        $params[':end'] = $end;
+    }
+
+    $query = "
+        SELECT
+            h.id,
+            h.user_id AS userId,
+            u.nom AS userNom,
+            u.email AS userEmail,
+            h.dia,
+            h.hores,
+            h.tipus_id AS tipusId,
+            t.nom AS tipusNom,
+            h.descripcio,
+            h.created_at,
+            h.updated_at
+        FROM db_hores_treballades AS h
+        LEFT JOIN auth_users AS u ON u.id = h.user_id
+        LEFT JOIN aux_tipus_tasca AS t ON t.id = h.tipus_id
+        {$whereMonth}
+        ORDER BY h.dia DESC, h.id DESC
+    ";
+
+    try {
+        $result = $db->getData($query, $params);
+
+        // En listados, mejor devolver [] con 200
+        if (empty($result)) $result = [];
+
+        Response::success(MissatgesAPI::success('get'), $result, 200);
+        return;
+    } catch (PDOException $e) {
+        Response::error(MissatgesAPI::error('errorBD'), [$e->getMessage()], 500);
+        return;
+    }
 } else {
     header('HTTP/1.1 403 Forbidden');
     echo json_encode(['error' => 'Something get wrong']);

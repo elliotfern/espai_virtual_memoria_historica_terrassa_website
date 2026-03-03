@@ -8,6 +8,12 @@
         <p><button class="btn btn-primary" onclick="window.location.href='<?php echo APP_INTRANET . $urlIntranet['registre_horari']; ?>/nou-registre'">
                 Afegir nou registre
             </button></p>
+
+        <?php if ($isAdmin): ?>
+            <p><button class="btn btn-primary" onclick="window.location.href='<?php echo APP_INTRANET . $urlIntranet['registre_horari']; ?>/taula-registre'">
+                    Llistat complert
+                </button></p>
+        <?php endif; ?>
     </div>
 
     <div id="taulaHores"></div>
