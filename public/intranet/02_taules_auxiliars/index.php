@@ -140,6 +140,13 @@
                 <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['auxiliars']; ?>/llistat-aparicions-mitjans">Taula llistat aparicions als mitjans</a></li>
             </ul>
 
+            <h4>11. Estudis</h4>
+            <ul>
+                <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['auxiliars']; ?>/estudis/llistat-periodes">Taula llistat de períodes històrics</a></li>
+                <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['auxiliars']; ?>/estudis/llistat-territoris">Taula llistat territoris</a></li>
+                <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['auxiliars']; ?>/estudis/llistat-tipus-estudis">Taula llistat tipus d'estudis</a></li>
+            </ul>
+
         <?php endif; ?>
     </div>
 </div>

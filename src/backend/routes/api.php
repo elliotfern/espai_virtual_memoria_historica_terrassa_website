@@ -268,6 +268,13 @@ $routes = [
 
     '/api/registre_horari/put/{slug}' => ['view' => 'src/backend/api/db_hores_treballades/put-registre.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
 
+    // ESTUDIS
+    '/api/estudis/get/{slug}' => ['view' => 'src/backend/api/db_estudis/get-estudis.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+
+    '/api/estudis/post/{slug}' => ['view' => 'src/backend/api/db_estudis/post-estudis.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+
+    '/api/estudis/put/{slug}' => ['view' => 'src/backend/api/db_estudis/put-estudis.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+
 ];
 
 return $routes;

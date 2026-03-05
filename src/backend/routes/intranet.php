@@ -672,6 +672,27 @@ $routes = [
         'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/fitxa-imatge.php'
     ]),
 
+    // Auxiliars - Pàgina Estudis
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/estudis/llistat-periodes' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/estudis/llistat-periodes.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/estudis/nou-periode' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/estudis/form-periode.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/estudis/modifica-periode/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/estudis/form-periode.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/estudis/llistat-territoris' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/estudis/llistat-territoris.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/estudis/llistat-tipus-estudis' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/estudis/llistat-tipus.php'
+    ]),
+
     // Gestió familiars
     APP_INTRANET . $urlIntranet['familiars'] . '/modifica-familiar/{id}/{id}' => array_merge($defaultProtectedConfig, [
         'view' => BACKEND_URL . $urlIntranetDir['familiars'] . '/form-familiar.php'

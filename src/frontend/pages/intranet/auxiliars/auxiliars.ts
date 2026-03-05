@@ -56,6 +56,7 @@ import { initFitxaDetallsImatge } from './fitxaImatge';
 import { formAparicioPremsa } from './formAparicioPremsa';
 import { initFitxaDetallsAparicioMitja } from './fitxaAparicioPremsa';
 import { formAparicioPremsaI18n } from './formAparicioPremsaI18n';
+import { estudis } from './estudis/estudis';
 
 export async function auxiliars() {
   const url = window.location.href;
@@ -555,5 +556,7 @@ export async function auxiliars() {
   } else if (pageType[2] === 'modifica-aparicio-premsa-i18n') {
     const id = Number(pageType[3]);
     formAparicioPremsaI18n(id);
+  } else if (pageType[2] === 'estudis') {
+    estudis();
   }
 }
