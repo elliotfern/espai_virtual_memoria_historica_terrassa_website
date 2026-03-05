@@ -42,10 +42,9 @@ if ($slug === 'periodes') {
     $query = "SELECT
             p.id,
             p.sort_order,
-            COALESCE(i_req.nom, i_ca.nom) AS nom
+            i_ca.nom AS nom
         FROM db_estudis_periodes p
-        LEFT JOIN db_estudis_periodes_i18n i_ca
-            ON i_ca.periode_id = p.id AND i_ca.lang_id = 1
+        LEFT JOIN db_estudis_periodes_i18n i_ca ON i_ca.periode_id = p.id AND i_ca.lang_id = 1
         ORDER BY p.sort_order ASC, p.id ASC
     ";
 
