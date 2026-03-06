@@ -689,6 +689,14 @@ $routes = [
         'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/estudis/llistat-territoris.php'
     ]),
 
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/estudis/nou-territori' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/estudis/form-territori.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/estudis/modifica-territori/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/estudis/form-territori.php'
+    ]),
+
     APP_INTRANET . $urlIntranet['auxiliars'] . '/estudis/llistat-tipus-estudis' => array_merge($defaultProtectedConfig, [
         'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/estudis/llistat-tipus.php'
     ]),
