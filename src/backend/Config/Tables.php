@@ -82,6 +82,8 @@ final class Tables
 
     public const DB_HORES_TREBALLADES = 'db_hores_treballades';
 
+    public const DB_ESTUDIS_PERIODES = 'db_estudis_periodes';
+
     // USUARIS
     public const DB_AUTH_USERS_I18N = 'auth_users_i18n';
 }

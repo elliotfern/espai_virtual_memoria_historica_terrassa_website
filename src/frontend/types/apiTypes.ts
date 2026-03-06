@@ -71,6 +71,7 @@ export type ApiUrls = {
     HORES_LLISTAT_ADMIN: (month?: string) => string;
     HORES_MESES_DISPONIBLES_ADMIN: string;
     HORES_RESUM_USUARI: (id: number) => string;
+    ESTUDIS_PERIODE_ID: (id: number) => string;
   };
   POST: {
     MUNICIPI: string;
@@ -109,6 +110,7 @@ export type ApiUrls = {
     APARICIO: string;
     IMATGE: string;
     HORES: string;
+    ESTUDIS_PERIODE: string;
   };
   PUT: {
     MUNICIPI: string;
@@ -149,6 +151,7 @@ export type ApiUrls = {
     IMATGE: string;
     APARICIO_PREMSA_I18N: string;
     HORES: string;
+    ESTUDIS_PERIODE: string;
   };
   DELETE: {
     MUNICIPI: string;

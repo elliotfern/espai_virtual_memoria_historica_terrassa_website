@@ -1,4 +1,5 @@
 import { getPageType } from '../../../../services/url/splitUrl';
+import { formPeriode } from './formPeriode';
 import { taulaPeriodes } from './llistatPeriodes';
 
 export async function estudis() {
@@ -7,8 +8,10 @@ export async function estudis() {
 
   if (pageType[3] === 'llistat-periodes') {
     taulaPeriodes();
-  } else if (pageType[2] === 'modifica-aparicio-premsa-i18n') {
-    //const id = Number(pageType[3]);
-    //formAparicioPremsaI18n(id);
+  } else if (pageType[3] === 'nou-periode') {
+    formPeriode(false);
+  } else if (pageType[3] === 'modifica-periode') {
+    const id = Number(pageType[4]);
+    formPeriode(true, id);
   }
 }
