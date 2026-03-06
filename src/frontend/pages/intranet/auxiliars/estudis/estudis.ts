@@ -1,6 +1,7 @@
 import { getPageType } from '../../../../services/url/splitUrl';
 import { formPeriode } from './formPeriode';
 import { taulaPeriodes } from './llistatPeriodes';
+import { taulaTerritoris } from './llistatTerritoris';
 
 export async function estudis() {
   const url = window.location.href;
@@ -13,5 +14,7 @@ export async function estudis() {
   } else if (pageType[3] === 'modifica-periode') {
     const id = Number(pageType[4]);
     formPeriode(true, id);
+  } else if (pageType[3] === 'llistat-territoris') {
+    taulaTerritoris();
   }
 }

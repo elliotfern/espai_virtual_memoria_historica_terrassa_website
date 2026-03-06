@@ -133,6 +133,57 @@ if ($slug === 'periodes') {
         );
         return;
     }
+
+    /**
+     * GET: Llistat de territoris (Intranet)
+     * URL: /api/estudis/get/territoris?lang=ca
+     * Retorna: [{id, sort_order, nom}]
+     */
+} else if ($slug === 'territoris') {
+
+    // lang opcional, default = ca
+    $lang = isset($_GET['lang']) ? trim((string)$_GET['lang']) : 'ca';
+
+    $langsAllowed = ['ca', 'es', 'en', 'fr', 'it', 'pt'];
+    if (!in_array($lang, $langsAllowed, true)) {
+        $lang = 'ca';
+    }
+
+    $db = new Database();
+
+    $query = "SELECT
+            t.id,
+            t.sort_order,
+            COALESCE(i_req.nom, i_ca.nom) AS nom
+        FROM db_estudis_territoris t
+        LEFT JOIN db_estudis_territoris_i18n i_req
+            ON i_req.territori_id = t.id AND i_req.lang = :lang
+        LEFT JOIN db_estudis_territoris_i18n i_ca
+            ON i_ca.territori_id = t.id AND i_ca.lang = 'ca'
+        ORDER BY t.sort_order ASC, t.id ASC
+    ";
+
+    try {
+        $rows = $db->getData($query, [':lang' => $lang]);
+
+        if (empty($rows)) {
+            $rows = [];
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $rows,
+            200
+        );
+        return;
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+        return;
+    }
 } else {
     header('HTTP/1.1 403 Forbidden');
     echo json_encode(['error' => 'Something get wrong']);
