@@ -396,6 +396,256 @@ if ($slug === 'periodes') {
         );
         return;
     }
+
+
+    /**
+     * GET: Llistat d'estudis (Intranet)
+     * URL: /api/estudis/get/estudis?lang=ca
+     */
+} else if ($slug === 'estudis') {
+
+    // Auth requerida
+    $userId = getAuthenticatedUserId();
+    if (!$userId) {
+        Response::error(
+            MissatgesAPI::error('no_autenticat'),
+            [],
+            401
+        );
+        return;
+    }
+
+    // Idioma opcional, per defecte català
+    $lang = isset($_GET['lang']) ? trim((string)$_GET['lang']) : 'ca';
+    $langsAllowed = ['ca', 'es', 'en', 'fr', 'it', 'pt'];
+
+    if (!in_array($lang, $langsAllowed, true)) {
+        $lang = 'ca';
+    }
+
+    $db = new Database();
+
+    $query = "SELECT
+            e.id,
+            e.slug,
+            e.any_publicacio,
+
+            COALESCE(ei_req.titol, ei_ca.titol) AS titol,
+            COALESCE(pi_req.nom, pi_ca.nom) AS periode,
+            COALESCE(ti_req.nom, ti_ca.nom) AS territori,
+            COALESCE(tyi_req.nom, tyi_ca.nom) AS tipus,
+
+            GROUP_CONCAT(DISTINCT u.nom ORDER BY ea.sort_order ASC, u.nom ASC SEPARATOR ', ') AS autors
+
+        FROM db_estudis e
+
+        LEFT JOIN db_estudis_i18n ei_req
+            ON ei_req.estudi_id = e.id AND ei_req.lang = :lang
+        LEFT JOIN db_estudis_i18n ei_ca
+            ON ei_ca.estudi_id = e.id AND ei_ca.lang = 'ca'
+
+        LEFT JOIN db_estudis_periodes_i18n pi_req
+            ON pi_req.periode_id = e.periode_id AND pi_req.lang = :lang
+        LEFT JOIN db_estudis_periodes_i18n pi_ca
+            ON pi_ca.periode_id = e.periode_id AND pi_ca.lang = 'ca'
+
+        LEFT JOIN db_estudis_territoris_i18n ti_req
+            ON ti_req.territori_id = e.territori_id AND ti_req.lang = :lang
+        LEFT JOIN db_estudis_territoris_i18n ti_ca
+            ON ti_ca.territori_id = e.territori_id AND ti_ca.lang = 'ca'
+
+        LEFT JOIN db_estudis_tipus_i18n tyi_req
+            ON tyi_req.tipus_id = e.tipus_id AND tyi_req.lang = :lang
+        LEFT JOIN db_estudis_tipus_i18n tyi_ca
+            ON tyi_ca.tipus_id = e.tipus_id AND tyi_ca.lang = 'ca'
+
+        LEFT JOIN db_estudis_autors ea
+            ON ea.estudi_id = e.id
+        LEFT JOIN auth_users u
+            ON u.id = ea.autor_id
+
+        GROUP BY
+            e.id,
+            e.slug,
+            e.any_publicacio,
+            ei_req.titol,
+            ei_ca.titol,
+            pi_req.nom,
+            pi_ca.nom,
+            ti_req.nom,
+            ti_ca.nom,
+            tyi_req.nom,
+            tyi_ca.nom
+
+        ORDER BY
+            e.any_publicacio DESC,
+            titol ASC,
+            e.id DESC
+    ";
+
+    try {
+        $rows = $db->getData($query, [':lang' => $lang]);
+
+        if (empty($rows)) {
+            $rows = [];
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $rows,
+            200
+        );
+        return;
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+        return;
+    }
+
+    /**
+     * GET: Fitxa d'un estudi per ID (Intranet)
+     * URL: /api/estudis/get/estudiId?id=3
+     */
+} else if ($slug === 'estudiId') {
+
+    // Validación ID
+    if (!isset($_GET['id']) || !ctype_digit((string)$_GET['id'])) {
+        Response::error(
+            MissatgesAPI::error('parametres'),
+            ['ID no vàlid'],
+            400
+        );
+        return;
+    }
+
+    $id = (int)$_GET['id'];
+    $db = new Database();
+
+    $query = "SELECT
+            e.id,
+            e.slug,
+            e.any_publicacio,
+            e.periode_id,
+            e.territori_id,
+            e.tipus_id,
+
+            MAX(CASE WHEN ei.lang = 'ca' THEN ei.titol END) AS titol_ca,
+            MAX(CASE WHEN ei.lang = 'ca' THEN ei.resum END) AS resum_ca,
+            MAX(CASE WHEN ei.lang = 'ca' THEN ei.url_document END) AS url_document_ca,
+
+            MAX(CASE WHEN ei.lang = 'es' THEN ei.titol END) AS titol_es,
+            MAX(CASE WHEN ei.lang = 'es' THEN ei.resum END) AS resum_es,
+            MAX(CASE WHEN ei.lang = 'es' THEN ei.url_document END) AS url_document_es,
+
+            MAX(CASE WHEN ei.lang = 'en' THEN ei.titol END) AS titol_en,
+            MAX(CASE WHEN ei.lang = 'en' THEN ei.resum END) AS resum_en,
+            MAX(CASE WHEN ei.lang = 'en' THEN ei.url_document END) AS url_document_en,
+
+            MAX(CASE WHEN ei.lang = 'fr' THEN ei.titol END) AS titol_fr,
+            MAX(CASE WHEN ei.lang = 'fr' THEN ei.resum END) AS resum_fr,
+            MAX(CASE WHEN ei.lang = 'fr' THEN ei.url_document END) AS url_document_fr,
+
+            MAX(CASE WHEN ei.lang = 'it' THEN ei.titol END) AS titol_it,
+            MAX(CASE WHEN ei.lang = 'it' THEN ei.resum END) AS resum_it,
+            MAX(CASE WHEN ei.lang = 'it' THEN ei.url_document END) AS url_document_it,
+
+            MAX(CASE WHEN ei.lang = 'pt' THEN ei.titol END) AS titol_pt,
+            MAX(CASE WHEN ei.lang = 'pt' THEN ei.resum END) AS resum_pt,
+            MAX(CASE WHEN ei.lang = 'pt' THEN ei.url_document END) AS url_document_pt
+
+        FROM db_estudis e
+        LEFT JOIN db_estudis_i18n ei
+            ON ei.estudi_id = e.id
+        WHERE e.id = :id
+        GROUP BY
+            e.id,
+            e.slug,
+            e.any_publicacio,
+            e.periode_id,
+            e.territori_id,
+            e.tipus_id
+        LIMIT 1
+    ";
+
+    $queryAutors = "
+        SELECT autor_id
+        FROM db_estudis_autors
+        WHERE estudi_id = :id
+        ORDER BY sort_order ASC, autor_id ASC
+    ";
+
+    try {
+        $result = $db->getData($query, [':id' => $id], true);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        $rowsAutors = $db->getData($queryAutors, [':id' => $id]);
+        $autors = [];
+
+        if (!empty($rowsAutors)) {
+            foreach ($rowsAutors as $row) {
+                $autors[] = (int)$row['autor_id'];
+            }
+        }
+
+        $payload = [
+            'id' => (int)$result['id'],
+            'slug' => $result['slug'] ?? '',
+            'any_publicacio' => isset($result['any_publicacio']) ? (int)$result['any_publicacio'] : null,
+            'periode_id' => isset($result['periode_id']) ? (int)$result['periode_id'] : 0,
+            'territori_id' => isset($result['territori_id']) ? (int)$result['territori_id'] : 0,
+            'tipus_id' => isset($result['tipus_id']) ? (int)$result['tipus_id'] : 0,
+            'autors' => $autors,
+
+            'titol_ca' => $result['titol_ca'] ?? '',
+            'resum_ca' => $result['resum_ca'] ?? '',
+            'url_document_ca' => $result['url_document_ca'] ?? '',
+
+            'titol_es' => $result['titol_es'] ?? '',
+            'resum_es' => $result['resum_es'] ?? '',
+            'url_document_es' => $result['url_document_es'] ?? '',
+
+            'titol_en' => $result['titol_en'] ?? '',
+            'resum_en' => $result['resum_en'] ?? '',
+            'url_document_en' => $result['url_document_en'] ?? '',
+
+            'titol_fr' => $result['titol_fr'] ?? '',
+            'resum_fr' => $result['resum_fr'] ?? '',
+            'url_document_fr' => $result['url_document_fr'] ?? '',
+
+            'titol_it' => $result['titol_it'] ?? '',
+            'resum_it' => $result['resum_it'] ?? '',
+            'url_document_it' => $result['url_document_it'] ?? '',
+
+            'titol_pt' => $result['titol_pt'] ?? '',
+            'resum_pt' => $result['resum_pt'] ?? '',
+            'url_document_pt' => $result['url_document_pt'] ?? '',
+        ];
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $payload,
+            200
+        );
+        return;
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+        return;
+    }
 } else {
     header('HTTP/1.1 403 Forbidden');
     echo json_encode(['error' => 'Something get wrong']);

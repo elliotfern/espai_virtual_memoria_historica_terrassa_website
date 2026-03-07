@@ -710,6 +710,18 @@ $routes = [
         'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/estudis/form-tipus.php'
     ]),
 
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/estudis/llistat-estudis' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/estudis/llistat-estudis.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/estudis/nou-estudi' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/estudis/form-estudi.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/estudis/modifica-estudi/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/estudis/form-estudi.php'
+    ]),
+
     // Gestió familiars
     APP_INTRANET . $urlIntranet['familiars'] . '/modifica-familiar/{id}/{id}' => array_merge($defaultProtectedConfig, [
         'view' => BACKEND_URL . $urlIntranetDir['familiars'] . '/form-familiar.php'

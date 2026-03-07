@@ -2369,6 +2369,155 @@ ORDER BY
             500
         );
     }
+
+
+    /**
+     * GET: Llistat d'autors per al select múltiple d'estudis
+     * URL: /api/auxiliars/get/autors_estudis
+     */
+} else if ($slug === 'autors_estudis') {
+
+    // Auth requerida
+    $userId = getAuthenticatedUserId();
+    if (!$userId) {
+        Response::error(
+            MissatgesAPI::error('no_autenticat'),
+            [],
+            401
+        );
+        return;
+    }
+
+    $db = new Database();
+
+    $query = "
+        SELECT
+            u.id,
+            u.nom
+        FROM auth_users u
+        ORDER BY u.ordre ASC, u.nom ASC
+    ";
+
+    try {
+        $rows = $db->getData($query);
+
+        if (empty($rows)) {
+            $rows = [];
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $rows,
+            200
+        );
+        return;
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+        return;
+    }
+
+    // Estudis periodes
+} else if ($slug === 'estudisPeriodes') {
+
+    $userId = getAuthenticatedUserId();
+    if (!$userId) {
+        Response::error(MissatgesAPI::error('no_autenticat'), [], 401);
+        return;
+    }
+
+    $db = new Database();
+
+    $query = "SELECT
+            p.id,
+            CONCAT(p.sort_order, ' - ', i.nom) AS nom,
+            p.sort_order
+        FROM db_estudis_periodes p
+        INNER JOIN db_estudis_periodes_i18n i
+            ON i.periode_id = p.id
+           AND i.lang = 'ca'
+        ORDER BY p.sort_order ASC, i.nom ASC
+    ";
+
+    try {
+        $rows = $db->getData($query);
+        if (empty($rows)) $rows = [];
+
+        Response::success(MissatgesAPI::success('get'), $rows, 200);
+        return;
+    } catch (PDOException $e) {
+        Response::error(MissatgesAPI::error('errorBD'), [$e->getMessage()], 500);
+        return;
+    }
+
+    // estudis territoris
+} else if ($slug === 'estudisTerritoris') {
+
+    $userId = getAuthenticatedUserId();
+    if (!$userId) {
+        Response::error(MissatgesAPI::error('no_autenticat'), [], 401);
+        return;
+    }
+
+    $db = new Database();
+
+    $query = "SELECT
+            t.id,
+            CONCAT(t.sort_order, ' - ', i.nom) AS nom,
+            t.sort_order
+        FROM db_estudis_territoris t
+        INNER JOIN db_estudis_territoris_i18n i
+            ON i.territori_id = t.id
+           AND i.lang = 'ca'
+        ORDER BY t.sort_order ASC, i.nom ASC
+    ";
+
+    try {
+        $rows = $db->getData($query);
+        if (empty($rows)) $rows = [];
+
+        Response::success(MissatgesAPI::success('get'), $rows, 200);
+        return;
+    } catch (PDOException $e) {
+        Response::error(MissatgesAPI::error('errorBD'), [$e->getMessage()], 500);
+        return;
+    }
+
+    // estudis tipus
+} else if ($slug === 'estudisTipus') {
+
+    $userId = getAuthenticatedUserId();
+    if (!$userId) {
+        Response::error(MissatgesAPI::error('no_autenticat'), [], 401);
+        return;
+    }
+
+    $db = new Database();
+
+    $query = "SELECT
+            t.id,
+            CONCAT(t.sort_order, ' - ', i.nom) AS nom,
+            t.sort_order
+        FROM db_estudis_tipus t
+        INNER JOIN db_estudis_tipus_i18n i
+            ON i.tipus_id = t.id
+           AND i.lang = 'ca'
+        ORDER BY t.sort_order ASC, i.nom ASC
+    ";
+
+    try {
+        $rows = $db->getData($query);
+        if (empty($rows)) $rows = [];
+
+        Response::success(MissatgesAPI::success('get'), $rows, 200);
+        return;
+    } catch (PDOException $e) {
+        Response::error(MissatgesAPI::error('errorBD'), [$e->getMessage()], 500);
+        return;
+    }
 } else {
     // Si el parámetro 'type' no coincide con ninguno de los casos anteriores, mostramos un error
     echo json_encode(["error" => "Tipo no válido"]);
