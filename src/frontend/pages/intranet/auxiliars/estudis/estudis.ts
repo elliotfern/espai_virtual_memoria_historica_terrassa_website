@@ -24,7 +24,7 @@ export async function estudis() {
   } else if (pageType[3] === 'modifica-territori') {
     const id = Number(pageType[4]);
     formTerritori(true, id);
-  } else if (pageType[3] === 'llistat-tipus') {
+  } else if (pageType[3] === 'llistat-tipus-estudis') {
     taulaTipus();
   } else if (pageType[3] === 'nou-tipus') {
     formTipus(false);
