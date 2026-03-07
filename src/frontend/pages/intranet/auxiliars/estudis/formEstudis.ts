@@ -103,8 +103,6 @@ export async function formEstudi(isUpdate: boolean, id?: number): Promise<void> 
     await auxiliarSelect(data.tipus_id ?? 0, 'estudisTipus', 'tipus_id', 'nom');
 
     // TODO: aquí conectar la carga de autores múltiple con vuestra función real
-    // Ejemplo si ya tienes una auxiliar para múltiples:
-    // await auxiliarSelectMultiple(data.autors ?? [], 'estudisAutors', 'autors', 'nom');
     await auxiliarSelectMultipleAutors(data.autors ?? [], 'autors');
 
     btnEstudi.textContent = 'Modificar dades';
@@ -119,6 +117,7 @@ export async function formEstudi(isUpdate: boolean, id?: number): Promise<void> 
     await auxiliarSelect(0, 'estudisPeriodes', 'periode_id', 'nom');
     await auxiliarSelect(0, 'estudisTerritoris', 'territori_id', 'nom');
     await auxiliarSelect(0, 'estudisTipus', 'tipus_id', 'nom');
+    await auxiliarSelectMultipleAutors([], 'autors');
 
     // TODO: aquí conectar la carga de autores múltiple con vuestra función real
     // await auxiliarSelectMultiple([], 'estudisAutors', 'autors', 'nom');
