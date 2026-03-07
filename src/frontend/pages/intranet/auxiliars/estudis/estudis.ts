@@ -1,8 +1,10 @@
 import { getPageType } from '../../../../services/url/splitUrl';
 import { formPeriode } from './formPeriode';
 import { formTerritori } from './formTerritori';
+import { formTipus } from './formTipus';
 import { taulaPeriodes } from './llistatPeriodes';
 import { taulaTerritoris } from './llistatTerritoris';
+import { taulaTipus } from './llistatTipus';
 
 export async function estudis() {
   const url = window.location.href;
@@ -22,5 +24,12 @@ export async function estudis() {
   } else if (pageType[3] === 'modifica-territori') {
     const id = Number(pageType[4]);
     formTerritori(true, id);
+  } else if (pageType[3] === 'llistat-tipus') {
+    taulaTipus();
+  } else if (pageType[3] === 'nou-tipus') {
+    formTipus(false);
+  } else if (pageType[3] === 'modifica-tipus') {
+    const id = Number(pageType[4]);
+    formTipus(true, id);
   }
 }

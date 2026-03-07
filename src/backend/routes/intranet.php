@@ -699,6 +699,15 @@ $routes = [
 
     APP_INTRANET . $urlIntranet['auxiliars'] . '/estudis/llistat-tipus-estudis' => array_merge($defaultProtectedConfig, [
         'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/estudis/llistat-tipus.php'
+
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/estudis/nou-tipus' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/estudis/form-tipus.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/estudis/modifica-tipus/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/estudis/form-tipus.php'
     ]),
 
     // Gestió familiars

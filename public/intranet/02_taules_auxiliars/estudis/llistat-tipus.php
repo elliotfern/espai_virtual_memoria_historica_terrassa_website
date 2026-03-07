@@ -6,12 +6,12 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
     <div class="container">
         <div class="row">
             <h2>Gestió base de dades auxiliars</h2>
-            <h4>Estudis: llistat de territoris</h4>
+            <h4>Estudis: llistat de tipus d'estudi</h4>
             <?php if (isUserAdmin()) : ?>
 
-                <p><button onclick="window.location.href='<?php echo APP_INTRANET . $url['auxiliars']; ?>/estudis/nou-territori'" class="btn btn-success">Nou període territori</button></p>
+                <p><button onclick="window.location.href='<?php echo APP_INTRANET . $url['auxiliars']; ?>/estudis/nou-territori'" class="btn btn-success">Nou tipus</button></p>
 
-                <div id="taulaTerritoris"></div>
+                <div id="taulaTipus"></div>
 
             <?php endif; ?>
         </div>

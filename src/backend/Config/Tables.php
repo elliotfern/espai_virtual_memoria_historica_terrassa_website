@@ -84,6 +84,7 @@ final class Tables
 
     public const DB_ESTUDIS_PERIODES = 'db_estudis_periodes';
     public const DB_ESTUDIS_TERRITORIS = 'db_estudis_territoris';
+    public const DB_ESTUDIS_TIPUS = 'db_estudis_tipus';
 
     // USUARIS
     public const DB_AUTH_USERS_I18N = 'auth_users_i18n';

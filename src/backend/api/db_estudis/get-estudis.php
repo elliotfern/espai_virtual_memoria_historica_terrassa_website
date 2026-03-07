@@ -258,6 +258,144 @@ if ($slug === 'periodes') {
         );
         return;
     }
+
+    /**
+     * GET: Llistat de tipus (Intranet)
+     * URL: /api/estudis/get/tipus?lang=ca
+     * Retorna: [{id, sort_order, nom}]
+     */
+} else if ($slug === 'tipus') {
+
+
+    // lang opcional, default = ca
+    $lang = isset($_GET['lang']) ? trim((string)$_GET['lang']) : 'ca';
+
+    $langsAllowed = ['ca', 'es', 'en', 'fr', 'it', 'pt'];
+    if (!in_array($lang, $langsAllowed, true)) {
+        $lang = 'ca';
+    }
+
+    $db = new Database();
+
+    $query = "SELECT
+            t.id,
+            t.sort_order,
+            COALESCE(i_req.nom, i_ca.nom) AS nom
+        FROM db_estudis_tipus t
+        LEFT JOIN db_estudis_tipus_i18n i_req
+            ON i_req.tipus_id = t.id AND i_req.lang = :lang
+        LEFT JOIN db_estudis_tipus_i18n i_ca
+            ON i_ca.tipus_id = t.id AND i_ca.lang = 'ca'
+        ORDER BY t.sort_order ASC, t.id ASC
+    ";
+
+    try {
+        $rows = $db->getData($query, [':lang' => $lang]);
+
+        if (empty($rows)) {
+            $rows = [];
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $rows,
+            200
+        );
+        return;
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+        return;
+    }
+
+    /**
+     * GET: Fitxa d'un tipus per ID (Intranet)
+     * URL: /api/estudis/get/tipusId?id=3
+     */
+} else if ($slug === 'tipusId') {
+
+    // Auth requerida
+    $userId = getAuthenticatedUserId();
+    if (!$userId) {
+        Response::error(
+            MissatgesAPI::error('no_autenticat'),
+            [],
+            401
+        );
+        return;
+    }
+
+    // Validación ID
+    if (!isset($_GET['id']) || !ctype_digit((string)$_GET['id'])) {
+        Response::error(
+            MissatgesAPI::error('parametres'),
+            ['ID no vàlid'],
+            400
+        );
+        return;
+    }
+
+    $id = (int)$_GET['id'];
+    $db = new Database();
+
+    $query = "
+        SELECT
+            t.id,
+            t.sort_order,
+            MAX(CASE WHEN ti.lang = 'ca' THEN ti.nom END) AS nom_ca,
+            MAX(CASE WHEN ti.lang = 'es' THEN ti.nom END) AS nom_es,
+            MAX(CASE WHEN ti.lang = 'en' THEN ti.nom END) AS nom_en,
+            MAX(CASE WHEN ti.lang = 'fr' THEN ti.nom END) AS nom_fr,
+            MAX(CASE WHEN ti.lang = 'it' THEN ti.nom END) AS nom_it,
+            MAX(CASE WHEN ti.lang = 'pt' THEN ti.nom END) AS nom_pt
+        FROM db_estudis_tipus t
+        LEFT JOIN db_estudis_tipus_i18n ti
+            ON ti.tipus_id = t.id
+        WHERE t.id = :id
+        GROUP BY t.id, t.sort_order
+        LIMIT 1
+    ";
+
+    try {
+        $result = $db->getData($query, [':id' => $id], true);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        $payload = [
+            'id' => (int)$result['id'],
+            'sort_order' => isset($result['sort_order']) ? (int)$result['sort_order'] : 0,
+            'nom_ca' => $result['nom_ca'] ?? '',
+            'nom_es' => $result['nom_es'] ?? '',
+            'nom_en' => $result['nom_en'] ?? '',
+            'nom_fr' => $result['nom_fr'] ?? '',
+            'nom_it' => $result['nom_it'] ?? '',
+            'nom_pt' => $result['nom_pt'] ?? '',
+        ];
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $payload,
+            200
+        );
+        return;
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+        return;
+    }
 } else {
     header('HTTP/1.1 403 Forbidden');
     echo json_encode(['error' => 'Something get wrong']);

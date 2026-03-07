@@ -73,6 +73,7 @@ export type ApiUrls = {
     HORES_RESUM_USUARI: (id: number) => string;
     ESTUDIS_PERIODE_ID: (id: number) => string;
     TERRITORI_ID: (id: number) => string;
+    ESTUDIS_TIPUS_ID: (id: number) => string;
   };
   POST: {
     MUNICIPI: string;
@@ -113,6 +114,7 @@ export type ApiUrls = {
     HORES: string;
     ESTUDIS_PERIODE: string;
     ESTUDIS_TERRITORI: string;
+    ESTUDIS_TIPUS: string;
   };
   PUT: {
     MUNICIPI: string;
@@ -155,6 +157,7 @@ export type ApiUrls = {
     HORES: string;
     ESTUDIS_PERIODE: string;
     ESTUDIS_TERRITORI: string;
+    ESTUDIS_TIPUS: string;
   };
   DELETE: {
     MUNICIPI: string;
