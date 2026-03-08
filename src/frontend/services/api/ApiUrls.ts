@@ -117,7 +117,7 @@ export const ENDPOINTS = {
   TERRITORI_ID: 'territoriId',
   ESTUDIS_TERRITORI: 'territori',
   ESTUDIS_TIPUS_ID: 'tipusId',
-  ESTUDIS_TIPUS: 'estudis',
+  ESTUDIS_TIPUS: 'tipus',
   ESTUDI_ID: 'estudiId',
   ESTUDI: 'estudi',
 } as const;
