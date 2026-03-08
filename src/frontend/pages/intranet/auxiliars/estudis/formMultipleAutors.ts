@@ -1,3 +1,5 @@
+import Choices from 'choices.js';
+import 'choices.js/public/assets/styles/choices.min.css';
 import { fetchDataGet } from '../../../../services/fetchData/fetchDataGet';
 
 interface AutorItem {
@@ -10,6 +12,8 @@ interface ApiResponse<T> {
   message: string;
   data: T;
 }
+
+let autorsChoices: Choices | null = null;
 
 export async function auxiliarSelectMultipleAutors(selectedValues: number[] = [], selectId = 'autors'): Promise<void> {
   const select = document.getElementById(selectId) as HTMLSelectElement | null;
@@ -30,4 +34,19 @@ export async function auxiliarSelectMultipleAutors(selectedValues: number[] = []
       return `<option value="${autor.id}"${selected}>${autor.nom}</option>`;
     })
     .join('');
+
+  if (autorsChoices) {
+    autorsChoices.destroy();
+    autorsChoices = null;
+  }
+
+  autorsChoices = new Choices(select, {
+    removeItemButton: true,
+    searchEnabled: true,
+    shouldSort: false,
+    itemSelectText: '',
+    placeholder: true,
+    placeholderValue: 'Selecciona autor/s',
+    searchPlaceholderValue: 'Cerca autor...',
+  });
 }

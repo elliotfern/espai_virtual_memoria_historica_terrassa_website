@@ -61,7 +61,7 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
 
                 <div class="col-md-12 mb-4">
                     <label for="autors" class="form-label negreta">Autor/s:</label>
-                    <select class="form-select" id="autors" name="autors[]" multiple size="6">
+                    <select class="form-select" id="autors" name="autors[]" multiple>
                     </select>
                     <div class="avis-form">
                         * Selecciona un o més autors
