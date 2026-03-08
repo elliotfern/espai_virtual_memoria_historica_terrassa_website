@@ -45,7 +45,7 @@ function t(lang: Lang, key: string): string {
       searchPlaceholder: 'Títol, resum o autor…',
       year: 'Any',
       yearsAll: 'Tots',
-      author: 'Autor',
+      author: 'Autor/a',
       authorsAll: 'Tots',
       periode: 'Període',
       periodesAll: 'Tots',
@@ -63,6 +63,11 @@ function t(lang: Lang, key: string): string {
       lang_fr: 'francès',
       lang_it: 'italià',
       lang_pt: 'portuguès',
+      authorLabel: 'Autor/a:',
+      yearLabel: 'Any:',
+      periodeLabel: 'Període:',
+      territoriLabel: 'Territori:',
+      tipusLabel: 'Tipus:',
     },
     es: {
       loading: 'Cargando…',
@@ -72,7 +77,7 @@ function t(lang: Lang, key: string): string {
       searchPlaceholder: 'Título, resumen o autor…',
       year: 'Año',
       yearsAll: 'Todos',
-      author: 'Autor',
+      author: 'Autor/a',
       authorsAll: 'Todos',
       periode: 'Periodo',
       periodesAll: 'Todos',
@@ -90,6 +95,11 @@ function t(lang: Lang, key: string): string {
       lang_fr: 'francés',
       lang_it: 'italiano',
       lang_pt: 'portugués',
+      authorLabel: 'Autor/a:',
+      yearLabel: 'Año:',
+      periodeLabel: 'Periodo:',
+      territoriLabel: 'Territorio:',
+      tipusLabel: 'Tipo:',
     },
     en: {
       loading: 'Loading…',
@@ -117,6 +127,11 @@ function t(lang: Lang, key: string): string {
       lang_fr: 'French',
       lang_it: 'Italian',
       lang_pt: 'Portuguese',
+      authorLabel: 'Author:',
+      yearLabel: 'Year:',
+      periodeLabel: 'Period:',
+      territoriLabel: 'Territory:',
+      tipusLabel: 'Type:',
     },
     fr: {
       loading: 'Chargement…',
@@ -144,6 +159,11 @@ function t(lang: Lang, key: string): string {
       lang_fr: 'français',
       lang_it: 'italien',
       lang_pt: 'portugais',
+      authorLabel: 'Autore:',
+      yearLabel: 'Anno:',
+      periodeLabel: 'Periodo:',
+      territoriLabel: 'Territorio:',
+      tipusLabel: 'Tipo:',
     },
     it: {
       loading: 'Caricamento…',
@@ -171,6 +191,11 @@ function t(lang: Lang, key: string): string {
       lang_fr: 'francese',
       lang_it: 'italiano',
       lang_pt: 'portoghese',
+      authorLabel: 'Autore:',
+      yearLabel: 'Anno:',
+      periodeLabel: 'Periodo:',
+      territoriLabel: 'Territorio:',
+      tipusLabel: 'Tipo:',
     },
     pt: {
       loading: 'A carregar…',
@@ -198,6 +223,11 @@ function t(lang: Lang, key: string): string {
       lang_fr: 'francês',
       lang_it: 'italiano',
       lang_pt: 'português',
+      authorLabel: 'Autor:',
+      yearLabel: 'Ano:',
+      periodeLabel: 'Período:',
+      territoriLabel: 'Território:',
+      tipusLabel: 'Tipo:',
     },
   };
 
@@ -303,22 +333,85 @@ function renderCard(item: EstudiPublic, lang: Lang): string {
 
   return `
     <div class="col-12">
-      <article class="p-4" style="background-color:#ffffff;border-radius:6px;">
+     <article class="p-4" style="
+          background-color:#ffffff;
+          border-radius:6px;
+          border-left:6px solid #c2af96;
+          padding-left:18px;
+          ">
+          
         <div class="d-flex flex-column gap-2">
           <span class="titol mitja lora negreta" style="line-height:1.15;display:block;">
             ${titol}
           </span>
 
-          <div class="text-muted raleway">
-            <span class="negreta">${autors}</span>
-            <span class="mx-2">·</span>
-            <span>${anyTxt}</span>
-            <span class="mx-2">·</span>
-            <span>${periode}</span>
-            <span class="mx-2">·</span>
-            <span>${territori}</span>
-            <span class="mx-2">·</span>
-            <span>${tipus}</span>
+          <div class="d-flex flex-wrap gap-2 mt-2">
+
+            <span class="raleway" style="
+              background-color:#c2af96;
+              color:#2f2a24;
+              border:1px solid #b19d84;
+              padding:6px 12px;
+              border-radius:6px;
+              display:inline-flex;
+              align-items:center;
+              font-size:0.92rem;
+            ">
+              <span class="negreta me-1">${escapeHtml(t(lang, 'authorLabel'))}</span>${autors}
+            </span>
+
+            <span class="raleway" style="
+              background-color:#c2af96;
+              color:#2f2a24;
+              border:1px solid #b19d84;
+              padding:6px 12px;
+              border-radius:6px;
+              display:inline-flex;
+              align-items:center;
+              font-size:0.92rem;
+            ">
+              <span class="negreta me-1">${escapeHtml(t(lang, 'yearLabel'))}</span>${anyTxt}
+            </span>
+
+            <span class="raleway" style="
+              background-color:#c2af96;
+              color:#2f2a24;
+              border:1px solid #b19d84;
+              padding:6px 12px;
+              border-radius:6px;
+              display:inline-flex;
+              align-items:center;
+              font-size:0.92rem;
+            ">
+              <span class="negreta me-1">${escapeHtml(t(lang, 'periodeLabel'))}</span>${periode}
+            </span>
+
+            <span class="raleway" style="
+              background-color:#c2af96;
+              color:#2f2a24;
+              border:1px solid #b19d84;
+              padding:6px 12px;
+              border-radius:6px;
+              display:inline-flex;
+              align-items:center;
+              font-size:0.92rem;
+            ">
+              <span class="negreta me-1">${escapeHtml(t(lang, 'territoriLabel'))}</span>${territori}
+            </span>
+
+            <span class="raleway" style="
+              background-color:#c2af96;
+              color:#2f2a24;
+              border:1px solid #b19d84;
+              padding:6px 12px;
+              border-radius:6px;
+              display:inline-flex;
+              align-items:center;
+              font-size:0.92rem;
+            ">
+              <span class="negreta me-1">${escapeHtml(t(lang, 'tipusLabel'))}</span>${tipus}
+            </span>
+
           </div>
 
           ${resumHtml}
