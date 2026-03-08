@@ -64,8 +64,11 @@ document.addEventListener('DOMContentLoaded', () => {
       credits(lang);
     } else if (pageType[1] === 'fitxa') {
       const slug = pageType[2];
-      const lang = 'es';
       fitxaRepresaliat(slug, lang);
+    } else if (pageType[2] === 'espai-virtual') {
+      espaiVirtualWebPublica(lang);
+    } else if (pageType[2] === 'documents-estudis') {
+      initPublicEstudisList(lang);
     }
   }
 
@@ -80,8 +83,11 @@ document.addEventListener('DOMContentLoaded', () => {
       credits(lang);
     } else if (pageType[1] === 'fitxa') {
       const slug = pageType[2];
-      const lang = 'en';
       fitxaRepresaliat(slug, lang);
+    } else if (pageType[2] === 'espai-virtual') {
+      espaiVirtualWebPublica(lang);
+    } else if (pageType[2] === 'documents-estudis') {
+      initPublicEstudisList(lang);
     }
   }
 
@@ -95,9 +101,11 @@ document.addEventListener('DOMContentLoaded', () => {
     } else if (pageType[1] === 'credits') {
       credits(lang);
     } else if (pageType[1] === 'fitxa') {
-      const slug = pageType[2];
-      const lang = 'it';
       fitxaRepresaliat(slug, lang);
+    } else if (pageType[2] === 'espai-virtual') {
+      espaiVirtualWebPublica(lang);
+    } else if (pageType[2] === 'documents-estudis') {
+      initPublicEstudisList(lang);
     }
   }
 
@@ -111,9 +119,11 @@ document.addEventListener('DOMContentLoaded', () => {
     } else if (pageType[1] === 'credits') {
       credits(lang);
     } else if (pageType[1] === 'fitxa') {
-      const slug = pageType[2];
-      const lang = 'fr';
       fitxaRepresaliat(slug, lang);
+    } else if (pageType[2] === 'espai-virtual') {
+      espaiVirtualWebPublica(lang);
+    } else if (pageType[2] === 'documents-estudis') {
+      initPublicEstudisList(lang);
     }
   }
 
@@ -127,9 +137,11 @@ document.addEventListener('DOMContentLoaded', () => {
     } else if (pageType[1] === 'credits') {
       credits(lang);
     } else if (pageType[1] === 'fitxa') {
-      const slug = pageType[2];
-      const lang = 'pt';
       fitxaRepresaliat(slug, lang);
+    } else if (pageType[2] === 'espai-virtual') {
+      espaiVirtualWebPublica(lang);
+    } else if (pageType[2] === 'documents-estudis') {
+      initPublicEstudisList(lang);
     }
   }
 });
