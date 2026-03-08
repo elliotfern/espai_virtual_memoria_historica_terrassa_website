@@ -181,12 +181,14 @@ async function fetchEstudis(lang: Lang): Promise<EstudiPublic[]> {
 function renderFilters(lang: Lang): string {
   return `
     <div class="p-4" style="background-color:#EEEAD9;border-radius:6px;">
-      <div class="row g-3 align-items-end">
-        <div class="col-md-4">
+      <div class="row g-3">
+        <div class="col-12">
           <label for="fText" class="form-label fw-bold raleway">${escapeHtml(t(lang, 'search'))}</label>
           <input type="search" class="form-control" id="fText" placeholder="${escapeHtml(t(lang, 'searchPlaceholder'))}">
         </div>
+      </div>
 
+      <div class="row g-3 align-items-end mt-1">
         <div class="col-md-2">
           <label for="fAny" class="form-label fw-bold raleway">${escapeHtml(t(lang, 'year'))}</label>
           <select class="form-select" id="fAny">
@@ -201,14 +203,14 @@ function renderFilters(lang: Lang): string {
           </select>
         </div>
 
-        <div class="col-md-2">
+        <div class="col-md-3">
           <label for="fPeriode" class="form-label fw-bold raleway">${escapeHtml(t(lang, 'periode'))}</label>
           <select class="form-select" id="fPeriode">
             <option value="">${escapeHtml(t(lang, 'periodesAll'))}</option>
           </select>
         </div>
 
-        <div class="col-md-2">
+        <div class="col-md-3">
           <label for="fTerritori" class="form-label fw-bold raleway">${escapeHtml(t(lang, 'territori'))}</label>
           <select class="form-select" id="fTerritori">
             <option value="">${escapeHtml(t(lang, 'territorisAll'))}</option>
