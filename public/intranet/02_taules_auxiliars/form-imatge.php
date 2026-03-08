@@ -33,6 +33,7 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
                                 <option value="2">Usuari web</option>
                                 <option value="3">Galeria multimèdia</option>
                                 <option value="4">Aparició Premsa</option>
+                                <option value="5">Estudis - documents pdf</option>
                             </select>
                         </div>
 

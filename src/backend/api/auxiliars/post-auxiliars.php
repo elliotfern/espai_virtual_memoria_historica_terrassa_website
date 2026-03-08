@@ -4042,6 +4042,8 @@ if ($slug === "municipi") {
                 return '/home/epgylzqu/media.memoriaterrassa.cat/assets_usuaris/';
             case 4:
                 return '/home/epgylzqu/media.memoriaterrassa.cat/assets_premsa/';
+            case 5:
+                return '/home/epgylzqu/media.memoriaterrassa.cat/assets_estudis/';
             default:
                 throw new RuntimeException('Tipus no vàlid.');
         }
@@ -4059,6 +4061,8 @@ if ($slug === "municipi") {
                 return 'https://media.memoriaterrassa.cat/assets_usuaris/';
             case 4:
                 return 'https://media.memoriaterrassa.cat/assets_premsa/';
+            case 5:
+                return 'https://media.memoriaterrassa.cat/assets_estudis/';
             default:
                 throw new RuntimeException('Tipus no vàlid.');
         }
@@ -4079,7 +4083,7 @@ if ($slug === "municipi") {
         if ($nomImatge === '') {
             throw new RuntimeException('Falta el camp nomImatge.');
         }
-        if ($tipus < 1 || $tipus > 4) {
+        if ($tipus < 1 || $tipus > 5) {
             throw new RuntimeException('Tipus no vàlid.');
         }
         if (!$file || !isset($file['error']) || $file['error'] !== UPLOAD_ERR_OK) {
