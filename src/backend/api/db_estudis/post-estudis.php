@@ -622,10 +622,6 @@ if ($slug === "periode") {
         $errors[] = "El camp 'titol_ca' és obligatori.";
     }
 
-    if ($urlCa === '') {
-        $errors[] = "El camp 'url_document_ca' és obligatori.";
-    }
-
     if (empty($autors)) {
         $errors[] = "Cal seleccionar almenys un autor.";
     }
