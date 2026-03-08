@@ -668,26 +668,18 @@ if ($slug === 'periodes') {
             e.slug,
             e.any_publicacio,
 
-            -- Títol / resum en idioma demanat amb fallback a català
             COALESCE(ei_req.titol, ei_ca.titol, '') AS titol,
             COALESCE(ei_req.resum, ei_ca.resum, '') AS resum,
 
-            -- Catàlegs en idioma demanat amb fallback a català
             COALESCE(pi_req.nom, pi_ca.nom, '') AS periode,
             COALESCE(ti_req.nom, ti_ca.nom, '') AS territori,
             COALESCE(ty_req.nom, ty_ca.nom, '') AS tipus,
 
-            -- Autors concatenats
-            GROUP_CONCAT(DISTINCT u.nom ORDER BY ea.sort_order ASC, u.nom ASC SEPARATOR ', ') AS autors,
+            a.autors,
 
-            -- Documents per idioma
             ei_req.url_document AS url_req,
             ei_ca.url_document AS url_ca,
-            ei_es.url_document AS url_es,
-            ei_en.url_document AS url_en,
-            ei_fr.url_document AS url_fr,
-            ei_it.url_document AS url_it,
-            ei_pt.url_document AS url_pt
+            ei_es.url_document AS url_es
 
         FROM db_estudis e
 
@@ -702,22 +694,6 @@ if ($slug === 'periodes') {
         LEFT JOIN db_estudis_i18n ei_es
             ON ei_es.estudi_id = e.id
            AND ei_es.lang = 'es'
-
-        LEFT JOIN db_estudis_i18n ei_en
-            ON ei_en.estudi_id = e.id
-           AND ei_en.lang = 'en'
-
-        LEFT JOIN db_estudis_i18n ei_fr
-            ON ei_fr.estudi_id = e.id
-           AND ei_fr.lang = 'fr'
-
-        LEFT JOIN db_estudis_i18n ei_it
-            ON ei_it.estudi_id = e.id
-           AND ei_it.lang = 'it'
-
-        LEFT JOIN db_estudis_i18n ei_pt
-            ON ei_pt.estudi_id = e.id
-           AND ei_pt.lang = 'pt'
 
         LEFT JOIN db_estudis_periodes_i18n pi_req
             ON pi_req.periode_id = e.periode_id
@@ -743,37 +719,19 @@ if ($slug === 'periodes') {
             ON ty_ca.tipus_id = e.tipus_id
            AND ty_ca.lang = 'ca'
 
-        LEFT JOIN db_estudis_autors ea
-            ON ea.estudi_id = e.id
-
-        LEFT JOIN db_estudis_autors_noms u
-            ON u.id = ea.autor_id
-
-        GROUP BY
-            e.id,
-            e.slug,
-            e.any_publicacio,
-            ei_req.titol,
-            ei_ca.titol,
-            ei_req.resum,
-            ei_ca.resum,
-            pi_req.nom,
-            pi_ca.nom,
-            ti_req.nom,
-            ti_ca.nom,
-            ty_req.nom,
-            ty_ca.nom,
-            ei_req.url_document,
-            ei_ca.url_document,
-            ei_es.url_document,
-            ei_en.url_document,
-            ei_fr.url_document,
-            ei_it.url_document,
-            ei_pt.url_document
+        LEFT JOIN (
+            SELECT
+                ea.estudi_id,
+                GROUP_CONCAT(an.nom ORDER BY ea.sort_order ASC SEPARATOR ', ') AS autors
+            FROM db_estudis_autors ea
+            INNER JOIN db_estudis_autors_noms an
+                ON an.id = ea.autor_id
+            GROUP BY ea.estudi_id
+        ) a
+            ON a.estudi_id = e.id
 
         ORDER BY
             e.any_publicacio DESC,
-            titol ASC,
             e.id DESC
     ";
 
@@ -788,49 +746,26 @@ if ($slug === 'periodes') {
         $payload = [];
 
         foreach ($rows as $row) {
-            $docs = [
-                'ca' => trim((string)($row['url_ca'] ?? '')),
-                'es' => trim((string)($row['url_es'] ?? '')),
-                'en' => trim((string)($row['url_en'] ?? '')),
-                'fr' => trim((string)($row['url_fr'] ?? '')),
-                'it' => trim((string)($row['url_it'] ?? '')),
-                'pt' => trim((string)($row['url_pt'] ?? '')),
-            ];
-
             $urlReq = trim((string)($row['url_req'] ?? ''));
+            $urlCa = trim((string)($row['url_ca'] ?? ''));
+            $urlEs = trim((string)($row['url_es'] ?? ''));
 
-            $documentUrl = '';
+            $documentUrl = null;
             $documentLang = null;
             $isFallbackDocument = 0;
 
-            // 1) idioma actual
             if ($urlReq !== '') {
                 $documentUrl = $urlReq;
                 $documentLang = $lang;
                 $isFallbackDocument = 0;
-            }
-            // 2) català
-            else if (!empty($docs['ca'])) {
-                $documentUrl = $docs['ca'];
+            } elseif ($urlCa !== '') {
+                $documentUrl = $urlCa;
                 $documentLang = 'ca';
                 $isFallbackDocument = 1;
-            }
-            // 3) castellà
-            else if (!empty($docs['es'])) {
-                $documentUrl = $docs['es'];
+            } elseif ($urlEs !== '') {
+                $documentUrl = $urlEs;
                 $documentLang = 'es';
                 $isFallbackDocument = 1;
-            }
-            // 4) qualsevol altre disponible
-            else {
-                foreach (['en', 'fr', 'it', 'pt'] as $fallbackLang) {
-                    if (!empty($docs[$fallbackLang])) {
-                        $documentUrl = $docs[$fallbackLang];
-                        $documentLang = $fallbackLang;
-                        $isFallbackDocument = 1;
-                        break;
-                    }
-                }
             }
 
             $payload[] = [
@@ -843,7 +778,7 @@ if ($slug === 'periodes') {
                 'territori' => $row['territori'] ?? '',
                 'tipus' => $row['tipus'] ?? '',
                 'autors' => $row['autors'] ?? '',
-                'url_document' => $documentUrl !== '' ? $documentUrl : null,
+                'url_document' => $documentUrl,
                 'document_lang' => $documentLang,
                 'is_fallback_document' => $isFallbackDocument,
             ];
