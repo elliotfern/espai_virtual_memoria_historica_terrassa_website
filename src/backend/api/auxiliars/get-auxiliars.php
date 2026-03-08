@@ -2390,12 +2390,11 @@ ORDER BY
 
     $db = new Database();
 
-    $query = "
-        SELECT
+    $query = "SELECT
             u.id,
             u.nom
-        FROM auth_users u
-        ORDER BY u.ordre ASC, u.nom ASC
+        FROM db_estudis_autors_noms u
+        ORDER BY u.nom ASC
     ";
 
     try {

@@ -722,7 +722,7 @@ if ($slug === "periode") {
             return;
         }
 
-        $stmtAutor = $conn->prepare("SELECT id FROM auth_users WHERE id = :id LIMIT 1");
+        $stmtAutor = $conn->prepare("SELECT id FROM db_estudis_autors_noms WHERE id = :id LIMIT 1");
         foreach ($autorsNet as $autorId) {
             $stmtAutor->execute([':id' => $autorId]);
             if (!$stmtAutor->fetchColumn()) {

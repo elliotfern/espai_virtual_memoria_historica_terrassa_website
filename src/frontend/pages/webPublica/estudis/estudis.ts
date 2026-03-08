@@ -15,7 +15,8 @@ interface EstudiPublic {
   titol: string | null;
   resum: string | null;
   url_document: string | null;
-  fallback_ca: number | null;
+  document_lang: Lang | null;
+  is_fallback_document: number | null;
   periode: string | null;
   territori: string | null;
   tipus: string | null;
@@ -53,9 +54,15 @@ function t(lang: Lang, key: string): string {
       tipus: 'Tipus',
       tipusAll: 'Tots',
       openDocument: 'obrir document',
-      fallbackCa: 'Disponible només en versió en llengua catalana',
+      availableOnlyIn: 'Disponible només en',
       noSummary: 'Sense resum',
       results: 'resultat(s)',
+      lang_ca: 'català',
+      lang_es: 'castellà',
+      lang_en: 'anglès',
+      lang_fr: 'francès',
+      lang_it: 'italià',
+      lang_pt: 'portuguès',
     },
     es: {
       loading: 'Cargando…',
@@ -74,9 +81,15 @@ function t(lang: Lang, key: string): string {
       tipus: 'Tipo',
       tipusAll: 'Todos',
       openDocument: 'abrir documento',
-      fallbackCa: 'Disponible sólo en versión en lengua catalana',
+      availableOnlyIn: 'Disponible sólo en',
       noSummary: 'Sin resumen',
       results: 'resultado(s)',
+      lang_ca: 'catalán',
+      lang_es: 'castellano',
+      lang_en: 'inglés',
+      lang_fr: 'francés',
+      lang_it: 'italiano',
+      lang_pt: 'portugués',
     },
     en: {
       loading: 'Loading…',
@@ -95,9 +108,15 @@ function t(lang: Lang, key: string): string {
       tipus: 'Type',
       tipusAll: 'All',
       openDocument: 'open document',
-      fallbackCa: 'Available only in Catalan language version',
+      availableOnlyIn: 'Available only in',
       noSummary: 'No summary',
       results: 'result(s)',
+      lang_ca: 'Catalan',
+      lang_es: 'Spanish',
+      lang_en: 'English',
+      lang_fr: 'French',
+      lang_it: 'Italian',
+      lang_pt: 'Portuguese',
     },
     fr: {
       loading: 'Chargement…',
@@ -116,9 +135,15 @@ function t(lang: Lang, key: string): string {
       tipus: 'Type',
       tipusAll: 'Tous',
       openDocument: 'ouvrir le document',
-      fallbackCa: 'Disponible uniquement en version en langue catalane',
+      availableOnlyIn: 'Disponible uniquement en',
       noSummary: 'Sans résumé',
       results: 'résultat(s)',
+      lang_ca: 'catalan',
+      lang_es: 'espagnol',
+      lang_en: 'anglais',
+      lang_fr: 'français',
+      lang_it: 'italien',
+      lang_pt: 'portugais',
     },
     it: {
       loading: 'Caricamento…',
@@ -137,9 +162,15 @@ function t(lang: Lang, key: string): string {
       tipus: 'Tipo',
       tipusAll: 'Tutti',
       openDocument: 'apri documento',
-      fallbackCa: 'Disponibile solo in versione in lingua catalana',
+      availableOnlyIn: 'Disponibile solo in',
       noSummary: 'Senza riassunto',
       results: 'risultato/i',
+      lang_ca: 'catalano',
+      lang_es: 'spagnolo',
+      lang_en: 'inglese',
+      lang_fr: 'francese',
+      lang_it: 'italiano',
+      lang_pt: 'portoghese',
     },
     pt: {
       loading: 'A carregar…',
@@ -158,13 +189,30 @@ function t(lang: Lang, key: string): string {
       tipus: 'Tipo',
       tipusAll: 'Todos',
       openDocument: 'abrir documento',
-      fallbackCa: 'Disponível apenas em versão em língua catalã',
+      availableOnlyIn: 'Disponível apenas em',
       noSummary: 'Sem resumo',
       results: 'resultado(s)',
+      lang_ca: 'catalão',
+      lang_es: 'espanhol',
+      lang_en: 'inglês',
+      lang_fr: 'francês',
+      lang_it: 'italiano',
+      lang_pt: 'português',
     },
   };
 
   return dict[lang][key] ?? key;
+}
+
+function languageName(uiLang: Lang, docLang: Lang | null): string {
+  if (!docLang) return '';
+  return t(uiLang, `lang_${docLang}`);
+}
+
+function fallbackMessage(uiLang: Lang, docLang: Lang | null): string {
+  const name = languageName(uiLang, docLang);
+  if (!name) return '';
+  return `${t(uiLang, 'availableOnlyIn')} ${name}`;
 }
 
 async function fetchEstudis(lang: Lang): Promise<EstudiPublic[]> {
@@ -237,7 +285,8 @@ function renderCard(item: EstudiPublic, lang: Lang): string {
   const tipus = item.tipus ? escapeHtml(item.tipus) : '—';
   const resum = item.resum ? escapeHtml(item.resum).replaceAll('\n', '<br>') : '';
   const docUrl = safeUrl(item.url_document);
-  const fallbackMsg = (item.fallback_ca ?? 0) === 1 ? `<div class="text-muted raleway mt-2">${escapeHtml(t(lang, 'fallbackCa'))}</div>` : '';
+
+  const fallbackMsg = (item.is_fallback_document ?? 0) === 1 ? `<div class="text-muted raleway mt-2">${escapeHtml(fallbackMessage(lang, item.document_lang))}</div>` : '';
 
   const resumHtml = resum ? `<div class="raleway mt-3">${resum}</div>` : `<div class="text-muted raleway mt-3">${escapeHtml(t(lang, 'noSummary'))}</div>`;
 
@@ -387,7 +436,6 @@ export async function initPublicEstudisList(lang: Lang): Promise<void> {
     });
 
     status.textContent = `${filtered.length} ${t(lang, 'results')}`;
-
     list.innerHTML = filtered.map((item) => renderCard(item, lang)).join('');
   };
 

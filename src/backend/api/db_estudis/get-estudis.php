@@ -461,7 +461,7 @@ if ($slug === 'periodes') {
 
         LEFT JOIN db_estudis_autors ea
             ON ea.estudi_id = e.id
-        LEFT JOIN auth_users u
+        LEFT JOIN db_estudis_autors_noms u
             ON u.id = ea.autor_id
 
         GROUP BY
@@ -647,6 +647,7 @@ if ($slug === 'periodes') {
         return;
     }
 
+
     /**
      * GET: Llistat públic d'estudis
      * URL: /api/estudis/get/estudisPublic?lang=ca
@@ -671,25 +672,22 @@ if ($slug === 'periodes') {
             COALESCE(ei_req.titol, ei_ca.titol, '') AS titol,
             COALESCE(ei_req.resum, ei_ca.resum, '') AS resum,
 
-            -- URL document: idioma demanat; si no existeix, català
-            COALESCE(NULLIF(ei_req.url_document, ''), NULLIF(ei_ca.url_document, ''), '') AS url_document,
-
-            -- Flag de fallback a català per al document
-            CASE
-                WHEN :lang = 'ca' THEN 0
-                WHEN (ei_req.url_document IS NULL OR ei_req.url_document = '')
-                     AND (ei_ca.url_document IS NOT NULL AND ei_ca.url_document <> '')
-                THEN 1
-                ELSE 0
-            END AS fallback_ca,
-
-            -- Noms de catàlegs en idioma demanat amb fallback a català
+            -- Catàlegs en idioma demanat amb fallback a català
             COALESCE(pi_req.nom, pi_ca.nom, '') AS periode,
             COALESCE(ti_req.nom, ti_ca.nom, '') AS territori,
             COALESCE(ty_req.nom, ty_ca.nom, '') AS tipus,
 
             -- Autors concatenats
-            GROUP_CONCAT(DISTINCT u.nom ORDER BY ea.sort_order ASC, u.nom ASC SEPARATOR ', ') AS autors
+            GROUP_CONCAT(DISTINCT u.nom ORDER BY ea.sort_order ASC, u.nom ASC SEPARATOR ', ') AS autors,
+
+            -- Documents per idioma
+            ei_req.url_document AS url_req,
+            ei_ca.url_document AS url_ca,
+            ei_es.url_document AS url_es,
+            ei_en.url_document AS url_en,
+            ei_fr.url_document AS url_fr,
+            ei_it.url_document AS url_it,
+            ei_pt.url_document AS url_pt
 
         FROM db_estudis e
 
@@ -700,6 +698,26 @@ if ($slug === 'periodes') {
         LEFT JOIN db_estudis_i18n ei_ca
             ON ei_ca.estudi_id = e.id
            AND ei_ca.lang = 'ca'
+
+        LEFT JOIN db_estudis_i18n ei_es
+            ON ei_es.estudi_id = e.id
+           AND ei_es.lang = 'es'
+
+        LEFT JOIN db_estudis_i18n ei_en
+            ON ei_en.estudi_id = e.id
+           AND ei_en.lang = 'en'
+
+        LEFT JOIN db_estudis_i18n ei_fr
+            ON ei_fr.estudi_id = e.id
+           AND ei_fr.lang = 'fr'
+
+        LEFT JOIN db_estudis_i18n ei_it
+            ON ei_it.estudi_id = e.id
+           AND ei_it.lang = 'it'
+
+        LEFT JOIN db_estudis_i18n ei_pt
+            ON ei_pt.estudi_id = e.id
+           AND ei_pt.lang = 'pt'
 
         LEFT JOIN db_estudis_periodes_i18n pi_req
             ON pi_req.periode_id = e.periode_id
@@ -728,7 +746,7 @@ if ($slug === 'periodes') {
         LEFT JOIN db_estudis_autors ea
             ON ea.estudi_id = e.id
 
-        LEFT JOIN auth_users u
+        LEFT JOIN db_estudis_autors_noms u
             ON u.id = ea.autor_id
 
         GROUP BY
@@ -739,14 +757,19 @@ if ($slug === 'periodes') {
             ei_ca.titol,
             ei_req.resum,
             ei_ca.resum,
-            ei_req.url_document,
-            ei_ca.url_document,
             pi_req.nom,
             pi_ca.nom,
             ti_req.nom,
             ti_ca.nom,
             ty_req.nom,
-            ty_ca.nom
+            ty_ca.nom,
+            ei_req.url_document,
+            ei_ca.url_document,
+            ei_es.url_document,
+            ei_en.url_document,
+            ei_fr.url_document,
+            ei_it.url_document,
+            ei_pt.url_document
 
         ORDER BY
             e.any_publicacio DESC,
@@ -758,12 +781,77 @@ if ($slug === 'periodes') {
         $rows = $db->getData($query, [':lang' => $lang]);
 
         if (empty($rows)) {
-            $rows = [];
+            Response::success(MissatgesAPI::success('get'), [], 200);
+            return;
+        }
+
+        $payload = [];
+
+        foreach ($rows as $row) {
+            $docs = [
+                'ca' => trim((string)($row['url_ca'] ?? '')),
+                'es' => trim((string)($row['url_es'] ?? '')),
+                'en' => trim((string)($row['url_en'] ?? '')),
+                'fr' => trim((string)($row['url_fr'] ?? '')),
+                'it' => trim((string)($row['url_it'] ?? '')),
+                'pt' => trim((string)($row['url_pt'] ?? '')),
+            ];
+
+            $urlReq = trim((string)($row['url_req'] ?? ''));
+
+            $documentUrl = '';
+            $documentLang = null;
+            $isFallbackDocument = 0;
+
+            // 1) idioma actual
+            if ($urlReq !== '') {
+                $documentUrl = $urlReq;
+                $documentLang = $lang;
+                $isFallbackDocument = 0;
+            }
+            // 2) català
+            else if (!empty($docs['ca'])) {
+                $documentUrl = $docs['ca'];
+                $documentLang = 'ca';
+                $isFallbackDocument = 1;
+            }
+            // 3) castellà
+            else if (!empty($docs['es'])) {
+                $documentUrl = $docs['es'];
+                $documentLang = 'es';
+                $isFallbackDocument = 1;
+            }
+            // 4) qualsevol altre disponible
+            else {
+                foreach (['en', 'fr', 'it', 'pt'] as $fallbackLang) {
+                    if (!empty($docs[$fallbackLang])) {
+                        $documentUrl = $docs[$fallbackLang];
+                        $documentLang = $fallbackLang;
+                        $isFallbackDocument = 1;
+                        break;
+                    }
+                }
+            }
+
+            $payload[] = [
+                'id' => (int)$row['id'],
+                'slug' => $row['slug'] ?? '',
+                'any_publicacio' => isset($row['any_publicacio']) ? (int)$row['any_publicacio'] : null,
+                'titol' => $row['titol'] ?? '',
+                'resum' => $row['resum'] ?? '',
+                'periode' => $row['periode'] ?? '',
+                'territori' => $row['territori'] ?? '',
+                'tipus' => $row['tipus'] ?? '',
+                'autors' => $row['autors'] ?? '',
+                'url_document' => $documentUrl !== '' ? $documentUrl : null,
+                'document_lang' => $documentLang,
+                'is_fallback_document' => $isFallbackDocument,
+            ];
         }
 
         Response::success(
             MissatgesAPI::success('get'),
-            $rows,
+            $payload,
             200
         );
         return;
