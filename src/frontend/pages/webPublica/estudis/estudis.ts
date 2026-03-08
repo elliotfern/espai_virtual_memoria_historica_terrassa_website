@@ -323,7 +323,20 @@ function renderCard(item: EstudiPublic, lang: Lang): string {
   const btnHtml = docUrl
     ? `
       <div class="d-flex flex-wrap gap-2 mt-3">
-        <a class="btn btn-primary btn-custom-2 w-auto" href="${escapeHtml(docUrl)}" target="_blank" rel="noopener noreferrer">
+       <a class="btn w-auto raleway"
+          href="${escapeHtml(docUrl)}"
+          target="_blank"
+          rel="noopener noreferrer"
+          style="
+            background-color:#133b7c;
+            color:#ffffff;
+            border:1px solid #0f2e60;
+            padding:7px 14px;
+            border-radius:6px;
+            font-size:0.92rem;
+            font-weight:600;
+          "
+        >
           ${escapeHtml(t(lang, 'openDocument'))}
         </a>
       </div>
@@ -339,7 +352,7 @@ function renderCard(item: EstudiPublic, lang: Lang): string {
           border-left:6px solid #c2af96;
           padding-left:18px;
           ">
-          
+
         <div class="d-flex flex-column gap-2">
           <span class="titol mitja lora negreta" style="line-height:1.15;display:block;">
             ${titol}
