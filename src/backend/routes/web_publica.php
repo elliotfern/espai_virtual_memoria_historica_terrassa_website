@@ -49,7 +49,9 @@ $base_routes = [
     '/cerca-represaliat' => 'public/web-publica/base-dades/cerca-represaliat.php',
 
     // 2. Estudis
-    '/documents-estudis' => 'public/web-publica/estudis.php',
+    '/documents-estudis' => 'public/web-publica/estudis/estudis.php',
+
+    '/documents-estudis/fitxa/{id}' => 'public/web-publica/estudis/estudi-detalls.php',
 
     // 3. Fonts documentals
     '/fonts-documentals' => 'public/web-publica/fonts.php',
@@ -168,12 +170,18 @@ $routes = [
 
     // 2. Estudis
     '/documents-estudis' =>  [
-        'view' => 'public/web-publica/estudis.php',
+        'view' => 'public/web-publica/estudis/estudis.php',
         'needs_session' => false,
         'header_footer' => false,
         'header_menu_footer' => true
     ],
 
+    '/documents-estudis/fitxa/{id}' =>  [
+        'view' => 'public/web-publica/estudis/estudi-detalls.php',
+        'needs_session' => false,
+        'header_footer' => false,
+        'header_menu_footer' => true
+    ],
 
     // 3. Fonts documentals
     '/fonts-documentals'  =>  [

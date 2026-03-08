@@ -13,6 +13,7 @@ import { equip } from './pages/webPublica/equip/equip';
 import { homePage } from './pages/webPublica/homePage/homePage';
 import { credits } from './pages/webPublica/credits/credits';
 import { espaiVirtualWebPublica } from './pages/webPublica/espaiVirtual/espaiVirtual';
+import { initPublicEstudisList } from './pages/webPublica/estudis/estudis';
 
 nameUser();
 
@@ -48,6 +49,8 @@ document.addEventListener('DOMContentLoaded', () => {
     equip(lang, slug);
   } else if (pageType[0] === 'espai-virtual') {
     espaiVirtualWebPublica('ca');
+  } else if (pageType[0] === 'documents-estudis') {
+    initPublicEstudisList('ca');
   }
 
   if (pageType[0] === 'es') {

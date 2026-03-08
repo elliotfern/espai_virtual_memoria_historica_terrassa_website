@@ -646,6 +646,135 @@ if ($slug === 'periodes') {
         );
         return;
     }
+
+    /**
+     * GET: Llistat públic d'estudis
+     * URL: /api/estudis/get/estudisPublic?lang=ca
+     */
+} else if ($slug === 'estudisPublic') {
+
+    $lang = isset($_GET['lang']) ? trim((string)$_GET['lang']) : 'ca';
+    $langsAllowed = ['ca', 'es', 'en', 'fr', 'it', 'pt'];
+
+    if (!in_array($lang, $langsAllowed, true)) {
+        $lang = 'ca';
+    }
+
+    $db = new Database();
+
+    $query = "SELECT
+            e.id,
+            e.slug,
+            e.any_publicacio,
+
+            -- Títol / resum en idioma demanat amb fallback a català
+            COALESCE(ei_req.titol, ei_ca.titol, '') AS titol,
+            COALESCE(ei_req.resum, ei_ca.resum, '') AS resum,
+
+            -- URL document: idioma demanat; si no existeix, català
+            COALESCE(NULLIF(ei_req.url_document, ''), NULLIF(ei_ca.url_document, ''), '') AS url_document,
+
+            -- Flag de fallback a català per al document
+            CASE
+                WHEN :lang = 'ca' THEN 0
+                WHEN (ei_req.url_document IS NULL OR ei_req.url_document = '')
+                     AND (ei_ca.url_document IS NOT NULL AND ei_ca.url_document <> '')
+                THEN 1
+                ELSE 0
+            END AS fallback_ca,
+
+            -- Noms de catàlegs en idioma demanat amb fallback a català
+            COALESCE(pi_req.nom, pi_ca.nom, '') AS periode,
+            COALESCE(ti_req.nom, ti_ca.nom, '') AS territori,
+            COALESCE(ty_req.nom, ty_ca.nom, '') AS tipus,
+
+            -- Autors concatenats
+            GROUP_CONCAT(DISTINCT u.nom ORDER BY ea.sort_order ASC, u.nom ASC SEPARATOR ', ') AS autors
+
+        FROM db_estudis e
+
+        LEFT JOIN db_estudis_i18n ei_req
+            ON ei_req.estudi_id = e.id
+           AND ei_req.lang = :lang
+
+        LEFT JOIN db_estudis_i18n ei_ca
+            ON ei_ca.estudi_id = e.id
+           AND ei_ca.lang = 'ca'
+
+        LEFT JOIN db_estudis_periodes_i18n pi_req
+            ON pi_req.periode_id = e.periode_id
+           AND pi_req.lang = :lang
+
+        LEFT JOIN db_estudis_periodes_i18n pi_ca
+            ON pi_ca.periode_id = e.periode_id
+           AND pi_ca.lang = 'ca'
+
+        LEFT JOIN db_estudis_territoris_i18n ti_req
+            ON ti_req.territori_id = e.territori_id
+           AND ti_req.lang = :lang
+
+        LEFT JOIN db_estudis_territoris_i18n ti_ca
+            ON ti_ca.territori_id = e.territori_id
+           AND ti_ca.lang = 'ca'
+
+        LEFT JOIN db_estudis_tipus_i18n ty_req
+            ON ty_req.tipus_id = e.tipus_id
+           AND ty_req.lang = :lang
+
+        LEFT JOIN db_estudis_tipus_i18n ty_ca
+            ON ty_ca.tipus_id = e.tipus_id
+           AND ty_ca.lang = 'ca'
+
+        LEFT JOIN db_estudis_autors ea
+            ON ea.estudi_id = e.id
+
+        LEFT JOIN auth_users u
+            ON u.id = ea.autor_id
+
+        GROUP BY
+            e.id,
+            e.slug,
+            e.any_publicacio,
+            ei_req.titol,
+            ei_ca.titol,
+            ei_req.resum,
+            ei_ca.resum,
+            ei_req.url_document,
+            ei_ca.url_document,
+            pi_req.nom,
+            pi_ca.nom,
+            ti_req.nom,
+            ti_ca.nom,
+            ty_req.nom,
+            ty_ca.nom
+
+        ORDER BY
+            e.any_publicacio DESC,
+            titol ASC,
+            e.id DESC
+    ";
+
+    try {
+        $rows = $db->getData($query, [':lang' => $lang]);
+
+        if (empty($rows)) {
+            $rows = [];
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $rows,
+            200
+        );
+        return;
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+        return;
+    }
 } else {
     header('HTTP/1.1 403 Forbidden');
     echo json_encode(['error' => 'Something get wrong']);
