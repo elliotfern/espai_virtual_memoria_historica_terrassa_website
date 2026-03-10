@@ -86,7 +86,11 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
 
                 <div class="col-md-12 mb-4">
                     <label for="contingut_html_ca" class="form-label negreta">Contingut HTML (català):</label>
-                    <textarea class="form-control" id="contingut_html_ca" name="contingut_html_ca" rows="10"></textarea>
+                    <!-- Campo oculto que almacena el valor de Trix -->
+                    <input id="contingut_html_ca" type="hidden" name="contingut_html_ca" value="">
+
+                    <!-- Editor Trix -->
+                    <trix-editor class="form-control" input="contingut_html_ca"></trix-editor>
                     <div class="avis-form">
                         * Camp obligatori
                     </div>
@@ -121,7 +125,11 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
 
                     <div class="col-md-12 mb-4">
                         <label for="contingut_html_es" class="form-label negreta">Contingut HTML (castellà):</label>
-                        <textarea class="form-control" id="contingut_html_es" name="contingut_html_es" rows="8"></textarea>
+                        <!-- Campo oculto que almacena el valor de Trix -->
+                        <input id="contingut_html_es" type="hidden" name="contingut_html_es" value="">
+
+                        <!-- Editor Trix -->
+                        <trix-editor class="form-control" input="contingut_html_es"></trix-editor>
                     </div>
 
                     <div class="col-md-4 mb-4">
@@ -146,7 +154,11 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
 
                     <div class="col-md-12 mb-4">
                         <label for="contingut_html_en" class="form-label negreta">Contingut HTML (anglès):</label>
-                        <textarea class="form-control" id="contingut_html_en" name="contingut_html_en" rows="8"></textarea>
+                        <!-- Campo oculto que almacena el valor de Trix -->
+                        <input id="contingut_html_en" type="hidden" name="contingut_html_en" value="">
+
+                        <!-- Editor Trix -->
+                        <trix-editor class="form-control" input="contingut_html_en"></trix-editor>
                     </div>
 
                     <div class="col-md-4 mb-4">
@@ -171,7 +183,11 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
 
                     <div class="col-md-12 mb-4">
                         <label for="contingut_html_fr" class="form-label negreta">Contingut HTML (francès):</label>
-                        <textarea class="form-control" id="contingut_html_fr" name="contingut_html_fr" rows="8"></textarea>
+                        <!-- Campo oculto que almacena el valor de Trix -->
+                        <input id="contingut_html_fr" type="hidden" name="contingut_html_fr" value="">
+
+                        <!-- Editor Trix -->
+                        <trix-editor class="form-control" input="contingut_html_fr"></trix-editor>
                     </div>
 
                     <div class="col-md-4 mb-4">
@@ -196,7 +212,11 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
 
                     <div class="col-md-12 mb-4">
                         <label for="contingut_html_it" class="form-label negreta">Contingut HTML (italià):</label>
-                        <textarea class="form-control" id="contingut_html_it" name="contingut_html_it" rows="8"></textarea>
+                        <!-- Campo oculto que almacena el valor de Trix -->
+                        <input id="contingut_html_it" type="hidden" name="contingut_html_it" value="">
+
+                        <!-- Editor Trix -->
+                        <trix-editor class="form-control" input="contingut_html_it"></trix-editor>
                     </div>
 
                     <div class="col-md-4 mb-4">
@@ -221,7 +241,11 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
 
                     <div class="col-md-12 mb-4">
                         <label for="contingut_html_pt" class="form-label negreta">Contingut HTML (portuguès):</label>
-                        <textarea class="form-control" id="contingut_html_pt" name="contingut_html_pt" rows="8"></textarea>
+                        <!-- Campo oculto que almacena el valor de Trix -->
+                        <input id="contingut_html_pt" type="hidden" name="contingut_html_pt" value="">
+
+                        <!-- Editor Trix -->
+                        <trix-editor class="form-control" input="contingut_html_pt"></trix-editor>
                     </div>
                 <?php endif; ?>
 
