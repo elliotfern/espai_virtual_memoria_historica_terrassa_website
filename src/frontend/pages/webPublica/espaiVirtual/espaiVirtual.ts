@@ -1,4 +1,5 @@
 import { getPageType } from '../../../services/url/splitUrl';
+import { blocAntecedentsPublic } from './antecedents';
 import { initPublicAparicioPremsaDetalls } from './aparicioDetalls';
 import { initPublicAparicionsPremsaList } from './aparicionsPremsaList';
 
@@ -17,5 +18,7 @@ export function espaiVirtualWebPublica(lang: Lang) {
     console.log('hola detalls');
     const id = Number(pageType[2]);
     initPublicAparicioPremsaDetalls(id, lang);
+  } else if (pageType[1] === 'antecedents') {
+    blocAntecedentsPublic(lang);
   }
 }

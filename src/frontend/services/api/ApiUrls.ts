@@ -122,6 +122,7 @@ export const ENDPOINTS = {
   ESTUDI: 'estudi',
   FORM_ANTECEDENT_ID: 'formAntecedent',
   ANTECEDENT: 'antecedent',
+  PUBLIC_ANTECEDENTS: 'publicAntecedents',
 } as const;
 
 // Mapa de recursos disponibles
@@ -224,6 +225,7 @@ export const API_URLS: ApiUrls = {
     ESTUDIS_TIPUS_ID: (id: number) => `${BASE_URL}/${API}/${RESOURCES.ESTUDIS}/${TIPUS.GET}/${ENDPOINTS.ESTUDIS_TIPUS_ID}?id=${id}`,
     ESTUDI_ID: (id: number) => `${BASE_URL}/${API}/${RESOURCES.ESTUDIS}/${TIPUS.GET}/${ENDPOINTS.ESTUDI_ID}?id=${id}`,
     FORM_ANTECEDENT_ID: (id: number) => `${BASE_URL}/${API}/${RESOURCES.ANTECEDENTS}/${TIPUS.GET}/${ENDPOINTS.FORM_ANTECEDENT_ID}?id=${id}`,
+    PUBLIC_ANTECEDENTS: (lang: string) => `${BASE_URL}/${API}/${RESOURCES.ANTECEDENTS}/${TIPUS.GET}/${ENDPOINTS.PUBLIC_ANTECEDENTS}?lang=${lang}`,
   },
 
   POST: {

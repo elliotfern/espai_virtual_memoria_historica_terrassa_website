@@ -76,6 +76,7 @@ export type ApiUrls = {
     ESTUDIS_TIPUS_ID: (id: number) => string;
     ESTUDI_ID: (id: number) => string;
     FORM_ANTECEDENT_ID: (id: number) => string;
+    PUBLIC_ANTECEDENTS: (lang: string) => string;
   };
   POST: {
     MUNICIPI: string;

@@ -260,6 +260,59 @@ if ($slug === 'antecedents') {
         Response::error(MissatgesAPI::error('errorBD'), [$e->getMessage()], 500);
         return;
     }
+
+    /**
+     * GET: Antecedents per a la web pública
+     * URL: https://memoriaterrassa.cat/api/antecedents/get/publicAntecedents?lang=ca
+     */
+} else if ($slug === 'publicAntecedents') {
+
+    $lang = isset($_GET['lang']) ? trim((string) $_GET['lang']) : 'ca';
+    $allowedLangs = ['ca', 'es', 'en', 'fr', 'it', 'pt'];
+
+    if (!in_array($lang, $allowedLangs, true)) {
+        $lang = 'ca';
+    }
+
+    $db = new Database();
+
+    $query = "SELECT
+            a.id,
+            a.ordre,
+            a.image_id,
+            a.layout_image_left,
+            a.show_in_timeline,
+            i.any_text,
+            i.titol,
+            i.contingut_html,
+            i.link_url,
+            img.nomArxiu AS image_url
+        FROM db_web_antecedents a
+        INNER JOIN db_web_antecedents_i18n i
+            ON i.antecedent_id = a.id
+           AND i.lang = :lang
+        LEFT JOIN aux_imatges img
+            ON img.id = a.image_id
+        ORDER BY a.ordre ASC, a.id ASC
+    ";
+
+    try {
+        $rows = $db->getData($query, ['lang' => $lang]);
+
+        if (empty($rows)) {
+            $rows = [];
+        }
+
+        Response::success(MissatgesAPI::success('get'), $rows, 200);
+        return;
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+        return;
+    }
 } else {
     header('HTTP/1.1 403 Forbidden');
     echo json_encode(['error' => 'Something get wrong']);
