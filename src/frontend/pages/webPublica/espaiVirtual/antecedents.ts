@@ -31,7 +31,7 @@ function escapeHtml(value: string): string {
 function getLabels(lang: Lang) {
   const map = {
     ca: {
-      sectionTitle: 'Antecedents',
+      sectionTitle: 'Un recorregut per història del projecte',
       sectionSubtitle: "Explora els moments clau en la creació i evolució d'aquest<br> espai dedicat a la memòria històrica de Terrassa.",
       showMore: 'veure més',
       showLess: 'veure menys',
