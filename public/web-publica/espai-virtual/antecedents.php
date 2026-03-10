@@ -86,7 +86,6 @@ $translate2 = $translations['cerca-avan'] ?? [];
 
     .timeline-item:hover::before {
         background-color: #B39B7C;
-        transform: scale(1.2) translateX(-50%);
     }
 
     /* Tarjetas: tamaño normal */
@@ -138,6 +137,10 @@ $translate2 = $translations['cerca-avan'] ?? [];
     /* animación suave */
     .timeline-item::before {
         transition: all 0.25s ease;
+    }
+
+    .timeline-item:nth-child(even).active::before {
+        transform: scale(1.25) translateX(50%);
     }
 
     /* ===== Timeline en móvil ===== */
