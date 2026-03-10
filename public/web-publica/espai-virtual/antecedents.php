@@ -15,8 +15,8 @@ $translate2 = $translations['cerca-avan'] ?? [];
 
 <!-- Contenido -->
 <div class="container d-flex flex-column" style="padding-top: 50px;padding-bottom:50px;">
-    <span class="titol gran lora negreta">Un recorregut per la nostra història</span>
-    <span class="titol italic-text gran lora">Notícies, entrevisteExplora els moments clau en la creació i evolució d'aquest<br> espai dedicat a la memòria històrica de Terrassa.</span>
+    <span class="titol gran lora negreta">Un recorregut per història del projecte</span>
+    <span class="titol italic-text gran lora">Explora els moments clau en la creació i evolució d'aquest<br> espai dedicat a la memòria històrica de Terrassa.</span>
 
     <!-- Aquí renderiza TS -->
     <div id="blocAntecedents"></div>
