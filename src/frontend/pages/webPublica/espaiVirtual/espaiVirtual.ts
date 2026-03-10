@@ -12,13 +12,12 @@ export function espaiVirtualWebPublica(lang: Lang) {
 
   if (pageType[1] === 'que-es-espai-virtual') {
     //
-  } else if (pageType[1] === 'premsa') {
+  } else if (pageType[1] === 'premsa' || pageType[2] === 'premsa') {
     initPublicAparicionsPremsaList(lang);
-  } else if (pageType[1] === 'premsa-aparicio') {
-    console.log('hola detalls');
+  } else if (pageType[1] === 'premsa-aparicio' || pageType[2] === 'premsa-aparicio') {
     const id = Number(pageType[2]);
     initPublicAparicioPremsaDetalls(id, lang);
-  } else if (pageType[1] === 'antecedents') {
+  } else if (pageType[1] === 'antecedents' || pageType[2] === 'antecedents') {
     blocAntecedentsPublic(lang);
   }
 }
