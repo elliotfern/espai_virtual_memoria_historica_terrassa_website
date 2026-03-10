@@ -38,35 +38,35 @@ function getLabels(lang: Lang) {
       moreInfo: 'més informació',
     },
     es: {
-      sectionTitle: 'Antecedentes',
+      sectionTitle: 'Un recorrido por la historia del proyecto',
       sectionSubtitle: 'Explora los momentos clave en la creación y evolución de este<br> espacio dedicado a la memoria histórica de Terrassa.',
       showMore: 'ver más',
       showLess: 'ver menos',
       moreInfo: 'más información',
     },
     en: {
-      sectionTitle: 'Background',
+      sectionTitle: 'A journey through the history of the project',
       sectionSubtitle: 'Explore the key moments in the creation and evolution of this<br> space dedicated to the historical memory of Terrassa.',
       showMore: 'see more',
       showLess: 'see less',
       moreInfo: 'more information',
     },
     fr: {
-      sectionTitle: 'Antécédents',
+      sectionTitle: 'Un parcours à travers l’histoire du projet',
       sectionSubtitle: "Explorez les moments clés de la création et de l'évolution de cet<br> espace consacré à la mémoire historique de Terrassa.",
       showMore: 'voir plus',
       showLess: 'voir moins',
       moreInfo: "plus d'informations",
     },
     it: {
-      sectionTitle: 'Antecedenti',
+      sectionTitle: 'Un percorso nella storia del progetto',
       sectionSubtitle: 'Esplora i momenti chiave nella creazione e nell’evoluzione di questo<br> spazio dedicato alla memoria storica di Terrassa.',
       showMore: 'vedi di più',
       showLess: 'vedi di meno',
       moreInfo: 'maggiori informazioni',
     },
     pt: {
-      sectionTitle: 'Antecedentes',
+      sectionTitle: 'Um percurso pela história do projeto',
       sectionSubtitle: 'Explora os momentos-chave na criação e evolução deste<br> espaço dedicado à memória histórica de Terrassa.',
       showMore: 'ver mais',
       showLess: 'ver menos',
@@ -180,16 +180,20 @@ function renderAntecedentsSection(items: AntecedentPublicRow[], lang: Lang): str
   `;
 }
 
-function initAntecedentToggle(container: HTMLElement): void {
+function initAntecedentToggle(container: HTMLElement, lang: Lang): void {
   const buttons = Array.from(container.querySelectorAll('.btn-antecedent-toggle')) as HTMLButtonElement[];
   const detailBlocks = Array.from(container.querySelectorAll('.antecedent-detail')) as HTMLDivElement[];
+  const labels = getLabels(lang);
 
   const hideAllDetails = () => {
     detailBlocks.forEach((detail) => detail.classList.add('d-none'));
 
     buttons.forEach((button) => {
-      const openLabel = button.dataset.labelOpen ?? 'veure més';
+      const openLabel = button.dataset.labelOpen ?? labels.showMore;
       button.textContent = openLabel;
+
+      const item = button.closest('.timeline-item');
+      if (item) item.classList.remove('active');
     });
   };
 
@@ -207,14 +211,15 @@ function initAntecedentToggle(container: HTMLElement): void {
 
       if (isHidden) {
         target.classList.remove('d-none');
-        button.textContent = button.dataset.labelClose ?? 'veure menys';
+        button.textContent = button.dataset.labelClose ?? labels.showLess;
 
-        window.setTimeout(() => {
-          target.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start',
-          });
-        }, 80);
+        const item = button.closest('.timeline-item');
+        if (item) item.classList.add('active');
+
+        target.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        });
       }
     });
   });
@@ -232,5 +237,5 @@ export async function blocAntecedentsPublic(lang: Lang): Promise<void> {
   }
 
   container.innerHTML = renderAntecedentsSection(response.data, lang);
-  initAntecedentToggle(container);
+  initAntecedentToggle(container, lang);
 }

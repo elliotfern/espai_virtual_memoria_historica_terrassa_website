@@ -75,12 +75,18 @@ $translate2 = $translations['cerca-avan'] ?? [];
         border-radius: 50%;
         left: 100%;
         transform: translateX(-50%);
+        transition: all 0.25s ease;
     }
 
     .timeline-item:nth-child(even)::before {
         left: auto;
         right: 100%;
         transform: translateX(50%);
+    }
+
+    .timeline-item:hover::before {
+        background-color: #B39B7C;
+        transform: scale(1.2) translateX(-50%);
     }
 
     /* Tarjetas: tamaño normal */
@@ -106,9 +112,9 @@ $translate2 = $translations['cerca-avan'] ?? [];
         transition: transform 0.25s ease, box-shadow 0.25s ease;
     }
 
-    .timeline .card:hover {
+    .timeline .timeline-item:hover .card {
         transform: translateY(-4px);
-        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+        box-shadow: 0 12px 26px rgba(0, 0, 0, 0.18);
     }
 
     .antecedent-detail {
@@ -120,5 +126,49 @@ $translate2 = $translations['cerca-avan'] ?? [];
     .antecedent-detail.d-none {
         opacity: 0;
         transform: translateY(12px);
+    }
+
+    /* estado activo del punto del timeline */
+    .timeline-item.active::before {
+        background-color: #B39B7C;
+        transform: scale(1.25) translateX(-50%);
+        box-shadow: 0 0 0 4px rgba(179, 155, 124, 0.25);
+    }
+
+    /* animación suave */
+    .timeline-item::before {
+        transition: all 0.25s ease;
+    }
+
+    .timeline-item:nth-child(even).active::before {
+        transform: scale(1.25) translateX(50%);
+    }
+
+    /* ===== Timeline en móvil ===== */
+    @media (max-width: 768px) {
+
+        /* quitar la línea central */
+        .timeline::before {
+            display: none;
+        }
+
+        /* cada item ocupa todo el ancho */
+        .timeline-item {
+            width: 100%;
+            align-self: center !important;
+            text-align: left !important;
+            padding: 15px 0;
+            margin-bottom: 10px;
+        }
+
+        /* quitar los puntos laterales */
+        .timeline-item::before {
+            display: none;
+        }
+
+        /* card ocupa todo el ancho */
+        .timeline .card {
+            max-width: 100%;
+        }
     }
 </style>
