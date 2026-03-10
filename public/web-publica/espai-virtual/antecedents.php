@@ -101,4 +101,24 @@ $translate2 = $translations['cerca-avan'] ?? [];
             max-width: 100%
         }
     }
+
+    .timeline .card {
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .timeline .card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+    }
+
+    .antecedent-detail {
+        opacity: 1;
+        transform: translateY(0);
+        transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .antecedent-detail.d-none {
+        opacity: 0;
+        transform: translateY(12px);
+    }
 </style>
