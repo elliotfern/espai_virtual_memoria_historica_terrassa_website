@@ -16,37 +16,31 @@ interface FitxaAntecedent {
 
   any_text_ca: string;
   titol_ca: string;
-  resum_timeline_ca: string;
   contingut_html_ca: string;
   link_url_ca: string;
 
   any_text_es: string;
   titol_es: string;
-  resum_timeline_es: string;
   contingut_html_es: string;
   link_url_es: string;
 
   any_text_en: string;
   titol_en: string;
-  resum_timeline_en: string;
   contingut_html_en: string;
   link_url_en: string;
 
   any_text_fr: string;
   titol_fr: string;
-  resum_timeline_fr: string;
   contingut_html_fr: string;
   link_url_fr: string;
 
   any_text_it: string;
   titol_it: string;
-  resum_timeline_it: string;
   contingut_html_it: string;
   link_url_it: string;
 
   any_text_pt: string;
   titol_pt: string;
-  resum_timeline_pt: string;
   contingut_html_pt: string;
   link_url_pt: string;
 }
@@ -110,37 +104,31 @@ export async function formAntecedent(isUpdate: boolean, id?: number): Promise<vo
 
     any_text_ca: '',
     titol_ca: '',
-    resum_timeline_ca: '',
     contingut_html_ca: '',
     link_url_ca: '',
 
     any_text_es: '',
     titol_es: '',
-    resum_timeline_es: '',
     contingut_html_es: '',
     link_url_es: '',
 
     any_text_en: '',
     titol_en: '',
-    resum_timeline_en: '',
     contingut_html_en: '',
     link_url_en: '',
 
     any_text_fr: '',
     titol_fr: '',
-    resum_timeline_fr: '',
     contingut_html_fr: '',
     link_url_fr: '',
 
     any_text_it: '',
     titol_it: '',
-    resum_timeline_it: '',
     contingut_html_it: '',
     link_url_it: '',
 
     any_text_pt: '',
     titol_pt: '',
-    resum_timeline_pt: '',
     contingut_html_pt: '',
     link_url_pt: '',
   };

@@ -116,7 +116,6 @@ if ($slug === 'antecedents') {
             lang,
             any_text,
             titol,
-            resum_timeline,
             contingut_html,
             link_url
         FROM db_web_antecedents_i18n
@@ -186,7 +185,6 @@ if ($slug === 'antecedents') {
             lang,
             any_text,
             titol,
-            resum_timeline,
             contingut_html,
             link_url
         FROM db_web_antecedents_i18n
@@ -212,37 +210,31 @@ if ($slug === 'antecedents') {
 
             'any_text_ca' => '',
             'titol_ca' => '',
-            'resum_timeline_ca' => '',
             'contingut_html_ca' => '',
             'link_url_ca' => '',
 
             'any_text_es' => '',
             'titol_es' => '',
-            'resum_timeline_es' => '',
             'contingut_html_es' => '',
             'link_url_es' => '',
 
             'any_text_en' => '',
             'titol_en' => '',
-            'resum_timeline_en' => '',
             'contingut_html_en' => '',
             'link_url_en' => '',
 
             'any_text_fr' => '',
             'titol_fr' => '',
-            'resum_timeline_fr' => '',
             'contingut_html_fr' => '',
             'link_url_fr' => '',
 
             'any_text_it' => '',
             'titol_it' => '',
-            'resum_timeline_it' => '',
             'contingut_html_it' => '',
             'link_url_it' => '',
 
             'any_text_pt' => '',
             'titol_pt' => '',
-            'resum_timeline_pt' => '',
             'contingut_html_pt' => '',
             'link_url_pt' => '',
         ];
@@ -257,7 +249,6 @@ if ($slug === 'antecedents') {
 
                 $data['any_text_' . $lang] = $row['any_text'] ?? '';
                 $data['titol_' . $lang] = $row['titol'] ?? '';
-                $data['resum_timeline_' . $lang] = $row['resum_timeline'] ?? '';
                 $data['contingut_html_' . $lang] = $row['contingut_html'] ?? '';
                 $data['link_url_' . $lang] = $row['link_url'] ?? '';
             }

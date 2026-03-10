@@ -67,42 +67,36 @@ if ($slug === "antecedent") {
     // I18N català
     $anyTextCa = isset($data['any_text_ca']) ? trim((string)$data['any_text_ca']) : '';
     $titolCa = isset($data['titol_ca']) ? trim((string)$data['titol_ca']) : '';
-    $resumTimelineCa = isset($data['resum_timeline_ca']) ? trim((string)$data['resum_timeline_ca']) : '';
     $contingutHtmlCa = isset($data['contingut_html_ca']) ? trim((string)$data['contingut_html_ca']) : '';
     $linkUrlCa = isset($data['link_url_ca']) ? trim((string)$data['link_url_ca']) : '';
 
     // I18N castellà
     $anyTextEs = isset($data['any_text_es']) ? trim((string)$data['any_text_es']) : '';
     $titolEs = isset($data['titol_es']) ? trim((string)$data['titol_es']) : '';
-    $resumTimelineEs = isset($data['resum_timeline_es']) ? trim((string)$data['resum_timeline_es']) : '';
     $contingutHtmlEs = isset($data['contingut_html_es']) ? trim((string)$data['contingut_html_es']) : '';
     $linkUrlEs = isset($data['link_url_es']) ? trim((string)$data['link_url_es']) : '';
 
     // I18N anglès
     $anyTextEn = isset($data['any_text_en']) ? trim((string)$data['any_text_en']) : '';
     $titolEn = isset($data['titol_en']) ? trim((string)$data['titol_en']) : '';
-    $resumTimelineEn = isset($data['resum_timeline_en']) ? trim((string)$data['resum_timeline_en']) : '';
     $contingutHtmlEn = isset($data['contingut_html_en']) ? trim((string)$data['contingut_html_en']) : '';
     $linkUrlEn = isset($data['link_url_en']) ? trim((string)$data['link_url_en']) : '';
 
     // I18N francès
     $anyTextFr = isset($data['any_text_fr']) ? trim((string)$data['any_text_fr']) : '';
     $titolFr = isset($data['titol_fr']) ? trim((string)$data['titol_fr']) : '';
-    $resumTimelineFr = isset($data['resum_timeline_fr']) ? trim((string)$data['resum_timeline_fr']) : '';
     $contingutHtmlFr = isset($data['contingut_html_fr']) ? trim((string)$data['contingut_html_fr']) : '';
     $linkUrlFr = isset($data['link_url_fr']) ? trim((string)$data['link_url_fr']) : '';
 
     // I18N italià
     $anyTextIt = isset($data['any_text_it']) ? trim((string)$data['any_text_it']) : '';
     $titolIt = isset($data['titol_it']) ? trim((string)$data['titol_it']) : '';
-    $resumTimelineIt = isset($data['resum_timeline_it']) ? trim((string)$data['resum_timeline_it']) : '';
     $contingutHtmlIt = isset($data['contingut_html_it']) ? trim((string)$data['contingut_html_it']) : '';
     $linkUrlIt = isset($data['link_url_it']) ? trim((string)$data['link_url_it']) : '';
 
     // I18N portuguès
     $anyTextPt = isset($data['any_text_pt']) ? trim((string)$data['any_text_pt']) : '';
     $titolPt = isset($data['titol_pt']) ? trim((string)$data['titol_pt']) : '';
-    $resumTimelinePt = isset($data['resum_timeline_pt']) ? trim((string)$data['resum_timeline_pt']) : '';
     $contingutHtmlPt = isset($data['contingut_html_pt']) ? trim((string)$data['contingut_html_pt']) : '';
     $linkUrlPt = isset($data['link_url_pt']) ? trim((string)$data['link_url_pt']) : '';
 
@@ -133,17 +127,12 @@ if ($slug === "antecedent") {
         $errors[] = "El camp 'titol_ca' és obligatori.";
     }
 
-    if ($resumTimelineCa === '') {
-        $errors[] = "El camp 'resum_timeline_ca' és obligatori.";
-    }
-
     if ($contingutHtmlCa === '') {
         $errors[] = "El camp 'contingut_html_ca' és obligatori.";
     }
 
     $maxAnyTextLen = 150;
     $maxTitolLen = 255;
-    $maxResumLen = 1000;
     $maxUrlLen = 500;
 
     foreach (
@@ -173,21 +162,6 @@ if ($slug === "antecedent") {
     ) {
         if ($value !== '' && mb_strlen($value, 'UTF-8') > $maxTitolLen) {
             $errors[] = "El camp '{$field}' no pot superar {$maxTitolLen} caràcters.";
-        }
-    }
-
-    foreach (
-        [
-            'resum_timeline_ca' => $resumTimelineCa,
-            'resum_timeline_es' => $resumTimelineEs,
-            'resum_timeline_en' => $resumTimelineEn,
-            'resum_timeline_fr' => $resumTimelineFr,
-            'resum_timeline_it' => $resumTimelineIt,
-            'resum_timeline_pt' => $resumTimelinePt,
-        ] as $field => $value
-    ) {
-        if ($value !== '' && mb_strlen($value, 'UTF-8') > $maxResumLen) {
-            $errors[] = "El camp '{$field}' no pot superar {$maxResumLen} caràcters.";
         }
     }
 
@@ -282,42 +256,36 @@ if ($slug === "antecedent") {
             'ca' => [
                 'any_text' => $anyTextCa,
                 'titol' => $titolCa,
-                'resum_timeline' => $resumTimelineCa,
                 'contingut_html' => $contingutHtmlCa,
                 'link_url' => $linkUrlCa,
             ],
             'es' => [
                 'any_text' => $anyTextEs,
                 'titol' => $titolEs,
-                'resum_timeline' => $resumTimelineEs,
                 'contingut_html' => $contingutHtmlEs,
                 'link_url' => $linkUrlEs,
             ],
             'en' => [
                 'any_text' => $anyTextEn,
                 'titol' => $titolEn,
-                'resum_timeline' => $resumTimelineEn,
                 'contingut_html' => $contingutHtmlEn,
                 'link_url' => $linkUrlEn,
             ],
             'fr' => [
                 'any_text' => $anyTextFr,
                 'titol' => $titolFr,
-                'resum_timeline' => $resumTimelineFr,
                 'contingut_html' => $contingutHtmlFr,
                 'link_url' => $linkUrlFr,
             ],
             'it' => [
                 'any_text' => $anyTextIt,
                 'titol' => $titolIt,
-                'resum_timeline' => $resumTimelineIt,
                 'contingut_html' => $contingutHtmlIt,
                 'link_url' => $linkUrlIt,
             ],
             'pt' => [
                 'any_text' => $anyTextPt,
                 'titol' => $titolPt,
-                'resum_timeline' => $resumTimelinePt,
                 'contingut_html' => $contingutHtmlPt,
                 'link_url' => $linkUrlPt,
             ],
@@ -325,9 +293,9 @@ if ($slug === "antecedent") {
 
         $sqlI18n = "
             INSERT INTO db_web_antecedents_i18n
-                (antecedent_id, lang, any_text, titol, resum_timeline, contingut_html, link_url)
+                (antecedent_id, lang, any_text, titol, contingut_html, link_url)
             VALUES
-                (:antecedent_id, :lang, :any_text, :titol, :resum_timeline, :contingut_html, :link_url)
+                (:antecedent_id, :lang, :any_text, :titol, :contingut_html, :link_url)
         ";
         $stmtI18n = $conn->prepare($sqlI18n);
 
@@ -335,7 +303,6 @@ if ($slug === "antecedent") {
             $hasContent = (
                 $row['any_text'] !== '' ||
                 $row['titol'] !== '' ||
-                $row['resum_timeline'] !== '' ||
                 $row['contingut_html'] !== '' ||
                 $row['link_url'] !== ''
             );
@@ -348,7 +315,6 @@ if ($slug === "antecedent") {
             $stmtI18n->bindValue(':lang', $lang, PDO::PARAM_STR);
             $stmtI18n->bindValue(':any_text', $row['any_text'] !== '' ? $row['any_text'] : null, $row['any_text'] !== '' ? PDO::PARAM_STR : PDO::PARAM_NULL);
             $stmtI18n->bindValue(':titol', $row['titol'] !== '' ? $row['titol'] : null, $row['titol'] !== '' ? PDO::PARAM_STR : PDO::PARAM_NULL);
-            $stmtI18n->bindValue(':resum_timeline', $row['resum_timeline'] !== '' ? $row['resum_timeline'] : null, $row['resum_timeline'] !== '' ? PDO::PARAM_STR : PDO::PARAM_NULL);
             $stmtI18n->bindValue(':contingut_html', $row['contingut_html'] !== '' ? $row['contingut_html'] : null, $row['contingut_html'] !== '' ? PDO::PARAM_STR : PDO::PARAM_NULL);
             $stmtI18n->bindValue(':link_url', $row['link_url'] !== '' ? $row['link_url'] : null, $row['link_url'] !== '' ? PDO::PARAM_STR : PDO::PARAM_NULL);
             $stmtI18n->execute();

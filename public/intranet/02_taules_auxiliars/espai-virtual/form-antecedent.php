@@ -72,14 +72,6 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
                 </div>
 
                 <div class="col-md-12 mb-4">
-                    <label for="resum_timeline_ca" class="form-label negreta">Resum timeline (català):</label>
-                    <textarea class="form-control" id="resum_timeline_ca" name="resum_timeline_ca" rows="3"></textarea>
-                    <div class="avis-form">
-                        * Camp obligatori
-                    </div>
-                </div>
-
-                <div class="col-md-12 mb-4">
                     <label for="link_url_ca" class="form-label negreta">URL enllaç (català):</label>
                     <input type="text" class="form-control" id="link_url_ca" name="link_url_ca" value="">
                 </div>
@@ -114,11 +106,6 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
                     </div>
 
                     <div class="col-md-12 mb-4">
-                        <label for="resum_timeline_es" class="form-label negreta">Resum timeline (castellà):</label>
-                        <textarea class="form-control" id="resum_timeline_es" name="resum_timeline_es" rows="3"></textarea>
-                    </div>
-
-                    <div class="col-md-12 mb-4">
                         <label for="link_url_es" class="form-label negreta">URL enllaç (castellà):</label>
                         <input type="text" class="form-control" id="link_url_es" name="link_url_es" value="">
                     </div>
@@ -140,11 +127,6 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
                     <div class="col-md-8 mb-4">
                         <label for="titol_en" class="form-label negreta">Títol (anglès):</label>
                         <input type="text" class="form-control" id="titol_en" name="titol_en" value="">
-                    </div>
-
-                    <div class="col-md-12 mb-4">
-                        <label for="resum_timeline_en" class="form-label negreta">Resum timeline (anglès):</label>
-                        <textarea class="form-control" id="resum_timeline_en" name="resum_timeline_en" rows="3"></textarea>
                     </div>
 
                     <div class="col-md-12 mb-4">
@@ -172,11 +154,6 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
                     </div>
 
                     <div class="col-md-12 mb-4">
-                        <label for="resum_timeline_fr" class="form-label negreta">Resum timeline (francès):</label>
-                        <textarea class="form-control" id="resum_timeline_fr" name="resum_timeline_fr" rows="3"></textarea>
-                    </div>
-
-                    <div class="col-md-12 mb-4">
                         <label for="link_url_fr" class="form-label negreta">URL enllaç (francès):</label>
                         <input type="text" class="form-control" id="link_url_fr" name="link_url_fr" value="">
                     </div>
@@ -201,11 +178,6 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
                     </div>
 
                     <div class="col-md-12 mb-4">
-                        <label for="resum_timeline_it" class="form-label negreta">Resum timeline (italià):</label>
-                        <textarea class="form-control" id="resum_timeline_it" name="resum_timeline_it" rows="3"></textarea>
-                    </div>
-
-                    <div class="col-md-12 mb-4">
                         <label for="link_url_it" class="form-label negreta">URL enllaç (italià):</label>
                         <input type="text" class="form-control" id="link_url_it" name="link_url_it" value="">
                     </div>
@@ -227,11 +199,6 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
                     <div class="col-md-8 mb-4">
                         <label for="titol_pt" class="form-label negreta">Títol (portuguès):</label>
                         <input type="text" class="form-control" id="titol_pt" name="titol_pt" value="">
-                    </div>
-
-                    <div class="col-md-12 mb-4">
-                        <label for="resum_timeline_pt" class="form-label negreta">Resum timeline (portuguès):</label>
-                        <textarea class="form-control" id="resum_timeline_pt" name="resum_timeline_pt" rows="3"></textarea>
                     </div>
 
                     <div class="col-md-12 mb-4">
