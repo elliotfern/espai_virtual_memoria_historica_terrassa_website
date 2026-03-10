@@ -140,10 +140,6 @@ $translate2 = $translations['cerca-avan'] ?? [];
         transition: all 0.25s ease;
     }
 
-    .timeline-item:nth-child(even).active::before {
-        transform: scale(1.25) translateX(50%);
-    }
-
     /* ===== Timeline en móvil ===== */
     @media (max-width: 768px) {
 
