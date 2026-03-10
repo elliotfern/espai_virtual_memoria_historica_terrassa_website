@@ -57,6 +57,7 @@ import { formAparicioPremsa } from './formAparicioPremsa';
 import { initFitxaDetallsAparicioMitja } from './fitxaAparicioPremsa';
 import { formAparicioPremsaI18n } from './formAparicioPremsaI18n';
 import { estudis } from './estudis/estudis';
+import { espaiVirtual } from './espai-virtual/espaiVirtual';
 
 export async function auxiliars() {
   const url = window.location.href;
@@ -558,5 +559,7 @@ export async function auxiliars() {
     formAparicioPremsaI18n(id);
   } else if (pageType[2] === 'estudis') {
     estudis();
+  } else if (pageType[2] === 'espai-virtual') {
+    espaiVirtual();
   }
 }

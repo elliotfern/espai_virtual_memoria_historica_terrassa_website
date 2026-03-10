@@ -2517,6 +2517,35 @@ ORDER BY
         Response::error(MissatgesAPI::error('errorBD'), [$e->getMessage()], 500);
         return;
     }
+    // GET : Antecedents - imatges (select, tipus = 4)
+    // URL: /api/auxiliars/get/antecedentsImatges
+} else if ($slug === "antecedentsImatges") {
+
+    $db = new Database();
+
+    $query = "SELECT
+                id,
+                nomImatge
+              FROM aux_imatges
+              WHERE tipus = 6
+              ORDER BY nomImatge ASC";
+
+    try {
+
+        $result = $db->getData($query);
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
 } else {
     // Si el parámetro 'type' no coincide con ninguno de los casos anteriores, mostramos un error
     echo json_encode(["error" => "Tipo no válido"]);

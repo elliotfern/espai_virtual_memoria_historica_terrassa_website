@@ -275,6 +275,13 @@ $routes = [
 
     '/api/estudis/put/{slug}' => ['view' => 'src/backend/api/db_estudis/put-estudis.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
 
+    // ANTECEDENTS
+    '/api/antecedents/get/{slug}' => ['view' => 'src/backend/api/db_antecedents/get-antecedents.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+
+    '/api/antecedents/post/{slug}' => ['view' => 'src/backend/api/db_antecedents/post-antecedents.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+
+    '/api/antecedents/put/{slug}' => ['view' => 'src/backend/api/db_antecedents/put-antecedents.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+
 ];
 
 return $routes;

@@ -34,6 +34,7 @@ const TIPUS_IMATGE_LABELS: Record<number, string> = {
   3: 'Galeria multimèdia',
   4: 'Premsa',
   5: 'Estudis',
+  6: 'Web',
 };
 
 export async function taulaImatges() {
@@ -77,6 +78,9 @@ export async function taulaImatges() {
             break;
           case 5:
             basePath = 'https://media.memoriaterrassa.cat/assets_estudis/';
+            break;
+          case 6:
+            basePath = 'https://media.memoriaterrassa.cat/assets_web/';
             break;
           default:
             return '';
@@ -134,6 +138,8 @@ export async function taulaImatges() {
             return `<span class="badge bg-warning text-dark">Premsa</span>`;
           case 5:
             return `<span class="badge bg-warning text-dark">Estudis</span>`;
+          case 6:
+            return `<span class="badge bg-warning text-info">Web</span>`;
           default:
             return `<span class="badge bg-light text-dark">—</span>`;
         }

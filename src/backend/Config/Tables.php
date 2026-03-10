@@ -87,6 +87,8 @@ final class Tables
     public const DB_ESTUDIS_TIPUS = 'db_estudis_tipus';
     public const DB_ESTUDIS = 'db_estudis';
 
+    public const DB_WEB_ANTECEDENTS = 'db_antecedents';
+
     // USUARIS
     public const DB_AUTH_USERS_I18N = 'auth_users_i18n';
 }

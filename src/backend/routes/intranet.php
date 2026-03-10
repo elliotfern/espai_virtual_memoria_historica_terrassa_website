@@ -722,6 +722,22 @@ $routes = [
         'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/estudis/form-estudi.php'
     ]),
 
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/espai-virtual/llistat-antecedents' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/espai-virtual/llistat-antecedents.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/espai-virtual/fitxa-antecedent/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/espai-virtual/fitxa-antecedent.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/espai-virtual/nou-antecedent' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/espai-virtual/form-antecedent.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/espai-virtual/modifica-antecedent/{id}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/espai-virtual/form-antecedent.php'
+    ]),
+
     // Gestió familiars
     APP_INTRANET . $urlIntranet['familiars'] . '/modifica-familiar/{id}/{id}' => array_merge($defaultProtectedConfig, [
         'view' => BACKEND_URL . $urlIntranetDir['familiars'] . '/form-familiar.php'

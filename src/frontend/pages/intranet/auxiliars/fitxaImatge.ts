@@ -85,6 +85,10 @@ function renderTipusBadge(tipus: number): string {
       return `<span class="badge bg-primary">Galeria multimèdia</span>`;
     case 4:
       return `<span class="badge bg-warning text-dark">Premsa</span>`;
+    case 5:
+      return `<span class="badge bg-warning text-dark">Estudis pdf</span>`;
+    case 6:
+      return `<span class="badge bg-warning text-dark">Asset web</span>`;
     default:
       return `<span class="badge bg-light text-dark">—</span>`;
   }
@@ -107,6 +111,12 @@ function buildImatgeUrl(tipus: number, nomArxiu: string, mime: string): string {
 
     case 4:
       return `https://media.memoriaterrassa.cat/assets_premsa/${nomArxiu}.${ext}`;
+
+    case 5:
+      return `https://media.memoriaterrassa.cat/assets_estudis/${nomArxiu}.${ext}`;
+
+    case 6:
+      return `https://media.memoriaterrassa.cat/assets_web/${nomArxiu}.${ext}`;
 
     default:
       return `https://media.memoriaterrassa.cat/assets_represaliats/${nomArxiu}.${ext}`;

@@ -75,6 +75,7 @@ export type ApiUrls = {
     TERRITORI_ID: (id: number) => string;
     ESTUDIS_TIPUS_ID: (id: number) => string;
     ESTUDI_ID: (id: number) => string;
+    FORM_ANTECEDENT_ID: (id: number) => string;
   };
   POST: {
     MUNICIPI: string;
@@ -117,6 +118,7 @@ export type ApiUrls = {
     ESTUDIS_TERRITORI: string;
     ESTUDIS_TIPUS: string;
     ESTUDI: string;
+    ANTECEDENT: string;
   };
   PUT: {
     MUNICIPI: string;
@@ -161,6 +163,7 @@ export type ApiUrls = {
     ESTUDIS_TERRITORI: string;
     ESTUDIS_TIPUS: string;
     ESTUDI: string;
+    ANTECEDENT: string;
   };
   DELETE: {
     MUNICIPI: string;
