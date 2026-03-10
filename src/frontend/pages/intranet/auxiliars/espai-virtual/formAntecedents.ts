@@ -118,7 +118,7 @@ export async function formAntecedent(isUpdate: boolean, id?: number): Promise<vo
     renderFormInputs(data);
 
     // Selects auxiliars
-    await auxiliarSelect(data.image_id ?? 0, 'antecedentsImatges', 'image_id', 'nom');
+    await auxiliarSelect(data.image_id ?? 0, 'antecedentsImatges', 'image_id', 'nomImatge');
 
     btnAntecedent.textContent = 'Modificar dades';
 
@@ -129,7 +129,7 @@ export async function formAntecedent(isUpdate: boolean, id?: number): Promise<vo
     divTitol.innerHTML = '<h2>Creació de nou antecedent</h2>';
 
     // Selects auxiliars
-    await auxiliarSelect(0, 'antecedentsImatges', 'image_id', 'nom');
+    await auxiliarSelect(0, 'antecedentsImatges', 'image_id', 'nomImatge');
 
     btnAntecedent.textContent = 'Inserir dades';
 
