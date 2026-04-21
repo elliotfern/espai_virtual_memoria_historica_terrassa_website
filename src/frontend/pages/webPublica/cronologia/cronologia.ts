@@ -237,11 +237,13 @@ async function load(lang: Lang): Promise<void> {
       const page = Number((btn as HTMLElement).dataset.page);
       state.pagina = page;
 
-      load(lang);
-
-      document.getElementById('statusCronologia')?.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
+      load(lang).then(() => {
+        requestAnimationFrame(() => {
+          document.getElementById('statusCronologia')?.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start',
+          });
+        });
       });
     });
   });
