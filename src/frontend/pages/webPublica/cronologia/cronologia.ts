@@ -277,16 +277,19 @@ async function load(lang: Lang): Promise<void> {
 
     html += `
       <div class="p-3 mb-2" style="background:#fff;border-left:5px solid #c2af96;border-radius:6px;">
+
+      <div style="font-weight:600;margin-bottom:6px;">
+          <span class="titol mitja lora negreta" style="line-height:1.15;display:block;">
+            ${ev.diaInici ? ev.diaInici + ' ' : ''}${ev.mes ?? ''} ${ev.any}
+          </span>
+        </div>
+
         <div class="mb-2">
           ${badge(t(lang, 'territori'), areaLabel(lang, ev.area))}
           ${ev.tema ? badge(t(lang, 'tematica'), temaLabel(lang, ev.tema)) : ''}
         </div>
 
-        <div style="font-weight:600;margin-bottom:6px;">
-          ${ev.diaInici ? ev.diaInici + ' ' : ''}${ev.mes ?? ''} ${ev.any}
-        </div>
-
-        <div>${ev.textCa}</div>
+        <div style="margin-top:15px">${ev.textCa}</div>
       </div>
     `;
   }
