@@ -250,7 +250,7 @@ async function load(lang: Lang): Promise<void> {
 }
 
 function renderPagination(totalPages: number): string {
-  let html = `<div class="d-flex gap-2 mt-3">`;
+  let html = `<div class="d-flex flex-wrap gap-2 mt-3 justify-content-center">`;
 
   for (let i = 1; i <= totalPages; i++) {
     html += `
