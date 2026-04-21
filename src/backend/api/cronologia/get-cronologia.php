@@ -50,7 +50,9 @@ $lang = $_GET['lang'] ?? 'ca';
 global $conn;
 
 // Obtener el parámetro del año
-$any = $_GET['any'] ?? 'tots';
+$any = isset($_GET['any']) && $_GET['any'] !== 'tots'
+    ? (int)$_GET['any']
+    : 'tots';
 
 $sql = "SELECT c.id, c.any, m.mesCa AS mes, m.ordre AS mesOrdre, c.diaInici, c.diaFi, c.mesFi, c.tema, c.area, c.textCa 
     FROM db_cronologia AS c

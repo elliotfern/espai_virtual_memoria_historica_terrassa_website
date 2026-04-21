@@ -137,7 +137,7 @@ export function initCronologia(lang: Lang): void {
 
   // 🔥 2. luego eventos
   setTimeout(() => {
-    bindEvents();
+    bindEvents(lang);
     load(lang);
   }, 0);
 }
@@ -146,44 +146,45 @@ export function initCronologia(lang: Lang): void {
    EVENTS
 ========================= */
 
-function bindEvents(): void {
+function bindEvents(lang: Lang): void {
   const tryBind = () => {
     const fAny = document.getElementById('fAny') as HTMLSelectElement | null;
     const fPeriod = document.getElementById('fPeriod') as HTMLSelectElement | null;
     const fArea = document.getElementById('fArea') as HTMLSelectElement | null;
     const fTema = document.getElementById('fTema') as HTMLSelectElement | null;
 
-    if (!fAny || !fPeriod || !fArea || !fTema) {
-      return false;
-    }
+    if (!fAny || !fPeriod || !fArea || !fTema) return false;
 
     fAny.addEventListener('change', () => {
       state.any = fAny.value || 'tots';
+      load(lang); // 🔥 ESTO ES LO QUE TE FALTABA
     });
 
     fArea.addEventListener('change', () => {
       state.area = fArea.value || 'tots';
+      load(lang);
     });
 
     fTema.addEventListener('change', () => {
       state.tema = fTema.value || 'tots';
+      load(lang); // 🔥
     });
 
     fPeriod.addEventListener('change', () => {
       state.period = (fPeriod.value || 'tots') as PeriodKey;
+
+      // 🔥 REGENERAR AÑOS SEGÚN PERIODO
+      const event = new Event('change');
+      document.getElementById('fAny')?.dispatchEvent(event);
     });
 
     return true;
   };
 
-  // intenta inmediatamente
   if (tryBind()) return;
 
-  // si no existe aún el DOM, reintenta hasta que exista
   const interval = setInterval(() => {
-    if (tryBind()) {
-      clearInterval(interval);
-    }
+    if (tryBind()) clearInterval(interval);
   }, 50);
 }
 
