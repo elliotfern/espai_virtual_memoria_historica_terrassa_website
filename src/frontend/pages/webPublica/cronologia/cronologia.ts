@@ -2,6 +2,8 @@ import { initCronologiaSelects } from './selectsCronologia';
 
 export type Lang = 'ca' | 'es' | 'en' | 'fr' | 'it' | 'pt';
 
+type PeriodKey = 'tots' | 'restauracio' | 'republica' | 'dictadura';
+
 interface CronologiaEvent {
   id: number;
   any: number;
@@ -17,23 +19,15 @@ interface CronologiaEvent {
 interface ApiResponse {
   eventos: CronologiaEvent[];
   totalEventos: number;
-  totalPaginas: number;
 }
 
 /* =========================
-   STATE CENTRAL
+   STATE
 ========================= */
 
-type State = {
-  any: string;
-  period: string;
-  area: string;
-  tema: string;
-};
-
-const state: State = {
+const state = {
   any: 'tots',
-  period: 'tots',
+  period: 'tots' as PeriodKey,
   area: 'tots',
   tema: 'tots',
 };
@@ -63,7 +57,7 @@ function temaLabel(lang: Lang, id: number): string {
 }
 
 /* =========================
-   BADGE UI (igual estudis)
+   BADGE (ESTUDIS STYLE EXACTO)
 ========================= */
 
 function badge(text: string): string {
@@ -96,13 +90,11 @@ async function fetchCronologia(lang: Lang): Promise<ApiResponse> {
   params.append('pagina', '1');
 
   const res = await fetch(`/api/cronologia/get/?${params.toString()}&lang=${lang}`);
-  if (!res.ok) throw new Error('HTTP ' + res.status);
-
   return res.json();
 }
 
 /* =========================
-   1. INIT MAIN
+   INIT
 ========================= */
 
 export function initCronologia(lang: Lang): void {
@@ -114,24 +106,16 @@ export function initCronologia(lang: Lang): void {
     <div id="listCronologia"></div>
   `;
 
-  initFilters(lang);
-  bindEvents(lang);
+  initCronologiaSelects(lang);
+  bindEvents();
   load(lang);
 }
 
 /* =========================
-   2. INIT FILTERS
+   EVENTS
 ========================= */
 
-function initFilters(lang: Lang): void {
-  initCronologiaSelects(lang);
-}
-
-/* =========================
-   3. BIND EVENTS
-========================= */
-
-function bindEvents(lang: Lang): void {
+function bindEvents(): void {
   const fAny = document.getElementById('fAny') as HTMLSelectElement;
   const fPeriod = document.getElementById('fPeriod') as HTMLSelectElement;
   const fArea = document.getElementById('fArea') as HTMLSelectElement;
@@ -139,26 +123,23 @@ function bindEvents(lang: Lang): void {
 
   fAny.addEventListener('change', () => {
     state.any = fAny.value || 'tots';
-    load(lang);
   });
 
   fArea.addEventListener('change', () => {
     state.area = fArea.value || 'tots';
-    load(lang);
   });
 
   fTema.addEventListener('change', () => {
     state.tema = fTema.value || 'tots';
-    load(lang);
   });
 
   fPeriod.addEventListener('change', () => {
-    state.period = fPeriod.value || 'tots';
+    state.period = (fPeriod.value || 'tots') as PeriodKey;
   });
 }
 
 /* =========================
-   LOAD + RENDER
+   LOAD
 ========================= */
 
 async function load(lang: Lang): Promise<void> {
@@ -166,12 +147,6 @@ async function load(lang: Lang): Promise<void> {
   const status = document.getElementById('statusCronologia') as HTMLDivElement;
 
   const data = await fetchCronologia(lang);
-
-  if (!data.eventos.length) {
-    status.textContent = '0 resultat(s)';
-    list.innerHTML = '';
-    return;
-  }
 
   let html = '';
   let lastYear: number | null = null;
