@@ -19,6 +19,7 @@ interface CronologiaEvent {
 interface ApiResponse {
   eventos: CronologiaEvent[];
   totalEventos: number;
+  totalPaginas: number;
 }
 
 /* =========================
@@ -30,6 +31,7 @@ const state = {
   period: 'tots' as PeriodKey,
   area: 'tots',
   tema: 'tots',
+  pagina: 1,
 };
 
 /* =========================
@@ -87,7 +89,7 @@ async function fetchCronologia(lang: Lang): Promise<ApiResponse> {
   if (state.tema !== 'tots') params.append('tema', state.tema);
   if (state.any !== 'tots') params.append('any', state.any);
 
-  params.append('pagina', '1');
+  params.append('pagina', String(state.pagina));
 
   const res = await fetch(`/api/cronologia/get/?${params.toString()}&lang=${lang}`);
   return res.json();
@@ -157,21 +159,25 @@ function bindEvents(lang: Lang): void {
 
     fAny.addEventListener('change', () => {
       state.any = fAny.value || 'tots';
-      load(lang); // 🔥 ESTO ES LO QUE TE FALTABA
+      state.pagina = 1;
+      load(lang);
     });
 
     fArea.addEventListener('change', () => {
       state.area = fArea.value || 'tots';
+      state.pagina = 1;
       load(lang);
     });
 
     fTema.addEventListener('change', () => {
       state.tema = fTema.value || 'tots';
-      load(lang); // 🔥
+      state.pagina = 1;
+      load(lang);
     });
 
     fPeriod.addEventListener('change', () => {
       state.period = (fPeriod.value || 'tots') as PeriodKey;
+      state.pagina = 1;
 
       // 🔥 REGENERAR AÑOS SEGÚN PERIODO
       const event = new Event('change');
@@ -224,5 +230,29 @@ async function load(lang: Lang): Promise<void> {
   }
 
   status.textContent = `${data.totalEventos} resultat(s)`;
-  list.innerHTML = html;
+  list.innerHTML = html + renderPagination(data.totalPaginas);
+
+  document.querySelectorAll('[data-page]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const page = Number((btn as HTMLElement).dataset.page);
+      state.pagina = page;
+      load(lang);
+    });
+  });
+}
+
+function renderPagination(totalPages: number): string {
+  let html = `<div class="d-flex gap-2 mt-3">`;
+
+  for (let i = 1; i <= totalPages; i++) {
+    html += `
+      <button class="btn btn-sm ${i === state.pagina ? 'btn-dark' : 'btn-outline-dark'}"
+        data-page="${i}">
+        ${i}
+      </button>
+    `;
+  }
+
+  html += `</div>`;
+  return html;
 }
