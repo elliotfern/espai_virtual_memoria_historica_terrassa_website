@@ -3,6 +3,7 @@ import { initCronologiaSelects } from './selectsCronologia';
 export type Lang = 'ca' | 'es' | 'en' | 'fr' | 'it' | 'pt';
 
 type PeriodKey = 'tots' | 'restauracio' | 'republica' | 'dictadura';
+type DictKey = 'periode' | 'any' | 'territori' | 'tematica';
 
 interface CronologiaEvent {
   id: number;
@@ -20,6 +21,62 @@ interface ApiResponse {
   eventos: CronologiaEvent[];
   totalEventos: number;
   totalPaginas: number;
+}
+
+const dict: Record<Lang, Record<DictKey, string>> = {
+  ca: {
+    periode: 'Període',
+    any: 'Any',
+    territori: 'Territori',
+    tematica: 'Temàtica',
+  },
+  es: {
+    periode: 'Período',
+    any: 'Año',
+    territori: 'Territorio',
+    tematica: 'Temática',
+  },
+  en: {
+    periode: 'Period',
+    any: 'Year',
+    territori: 'Territory',
+    tematica: 'Theme',
+  },
+  fr: {
+    periode: 'Période',
+    any: 'Année',
+    territori: 'Territoire',
+    tematica: 'Thématique',
+  },
+  it: {
+    periode: 'Periodo',
+    any: 'Anno',
+    territori: 'Territorio',
+    tematica: 'Tematica',
+  },
+  pt: {
+    periode: 'Período',
+    any: 'Ano',
+    territori: 'Território',
+    tematica: 'Temática',
+  },
+};
+
+function t(lang: Lang, key: DictKey): string {
+  return dict[lang]?.[key] || key;
+}
+
+function tResults(lang: Lang, count: number): string {
+  const forms = {
+    en: count === 1 ? 'result' : 'results',
+    es: count === 1 ? 'resultado' : 'resultados',
+    ca: count === 1 ? 'resultat' : 'resultats',
+    fr: count === 1 ? 'résultat' : 'résultats',
+    it: count === 1 ? 'risultato' : 'risultati',
+    pt: count === 1 ? 'resultado' : 'resultados',
+  };
+
+  return `${count} ${forms[lang]}`;
 }
 
 /* =========================
@@ -62,7 +119,7 @@ function temaLabel(lang: Lang, id: number): string {
    BADGE (ESTUDIS STYLE EXACTO)
 ========================= */
 
-function badge(text: string): string {
+function badge(label: string, value: string): string {
   return `
     <span style="
       background-color:#c2af96;
@@ -74,7 +131,10 @@ function badge(text: string): string {
       align-items:center;
       font-size:0.92rem;
       margin-right:6px;
-    ">${text}</span>
+      gap:4px;
+    ">
+      <strong>${label}:</strong> ${value}
+    </span>
   `;
 }
 
@@ -109,22 +169,22 @@ export function initCronologia(lang: Lang): void {
       <div class="row g-3">
 
       <div class="col-md-3">
-          <label class="form-label fw-bold raleway">Període</label>
+          <label class="form-label fw-bold raleway">${t(lang, 'periode')}</label>
           <select id="fPeriod" class="form-select shadow-sm"></select>
         </div>
 
         <div class="col-md-3">
-          <label class="form-label fw-bold raleway">Any</label>
+          <label class="form-label fw-bold raleway">${t(lang, 'any')}</label>
           <select id="fAny" class="form-select shadow-sm"></select>
         </div>
 
         <div class="col-md-3">
-          <label class="form-label fw-bold raleway">Territori</label>
+          <label class="form-label fw-bold raleway">${t(lang, 'territori')}</label>
           <select id="fArea" class="form-select shadow-sm"></select>
         </div>
 
         <div class="col-md-3">
-          <label class="form-label fw-bold raleway">Temàtica</label>
+          <label class="form-label fw-bold raleway">${t(lang, 'tematica')}</label>
           <select id="fTema" class="form-select shadow-sm"></select>
         </div>
 
@@ -218,8 +278,8 @@ async function load(lang: Lang): Promise<void> {
     html += `
       <div class="p-3 mb-2" style="background:#fff;border-left:5px solid #c2af96;border-radius:6px;">
         <div class="mb-2">
-          ${badge(areaLabel(lang, ev.area))}
-          ${ev.tema ? badge(temaLabel(lang, ev.tema)) : ''}
+          ${badge(t(lang, 'territori'), areaLabel(lang, ev.area))}
+          ${ev.tema ? badge(t(lang, 'tematica'), temaLabel(lang, ev.tema)) : ''}
         </div>
 
         <div style="font-weight:600;margin-bottom:6px;">
@@ -231,7 +291,7 @@ async function load(lang: Lang): Promise<void> {
     `;
   }
 
-  status.textContent = `${data.totalEventos} resultat(s)`;
+  status.textContent = tResults(lang, data.totalEventos);
   list.innerHTML = html + renderPagination(data.totalPaginas);
 
   document.querySelectorAll('[data-page]').forEach((btn) => {
