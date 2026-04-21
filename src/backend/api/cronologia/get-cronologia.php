@@ -115,7 +115,9 @@ $eventos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 // =============================
 // Cálculo del total de eventos
 // =============================
-$countSql = "SELECT COUNT(*) FROM db_cronologia WHERE 1=1";
+$countSql = "SELECT COUNT(*) 
+    FROM db_cronologia AS c
+    WHERE 1=1";
 
 if ($area !== 'tots') {
     $countSql .= " AND area = :area";
@@ -123,11 +125,13 @@ if ($area !== 'tots') {
 if ($tema !== 'tots') {
     $countSql .= " AND tema = :tema";
 }
-if ($any !== 'tots') {
+
+if ($any !== null) {
     $countSql .= " AND any = :any";
-} elseif ($period !== 'tots') {
-    $countSql .= " AND any BETWEEN :anyFrom AND :anyTo";
+} elseif ($rangeFrom !== null) {
+    $countSql .= " AND any BETWEEN :rangeFrom AND :rangeTo";
 }
+
 $countStmt = $conn->prepare($countSql);
 
 // Asignar parámetros a la consulta de conteo
@@ -137,8 +141,12 @@ if ($area !== 'tots') {
 if ($tema !== 'tots') {
     $countStmt->bindParam(':tema', $tema, PDO::PARAM_INT);
 }
-if ($any !== 'tots') {
+
+if ($any !== null) {
     $countStmt->bindParam(':any', $any, PDO::PARAM_INT);
+} elseif ($rangeFrom !== null) {
+    $countStmt->bindValue(':rangeFrom', $rangeFrom, PDO::PARAM_INT);
+    $countStmt->bindValue(':rangeTo', $rangeTo, PDO::PARAM_INT);
 }
 
 $countStmt->execute();
