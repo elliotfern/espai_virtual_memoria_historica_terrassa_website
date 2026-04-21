@@ -118,6 +118,7 @@ $eventos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $countSql = "SELECT COUNT(*) 
     FROM db_cronologia AS c
     WHERE 1=1";
+// canvi
 
 if ($area !== 'tots') {
     $countSql .= " AND area = :area";
