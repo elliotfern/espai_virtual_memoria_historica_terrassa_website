@@ -163,7 +163,6 @@ export function initCronologiaSelects(lang: Lang): void {
 
   /* PERIOD */
   fillSelect(fPeriod, [
-    { value: 'tots', label: periodLabel(lang, 'tots') },
     { value: 'restauracio', label: periodLabel(lang, 'restauracio') },
     { value: 'republica', label: periodLabel(lang, 'republica') },
     { value: 'dictadura', label: periodLabel(lang, 'dictadura') },

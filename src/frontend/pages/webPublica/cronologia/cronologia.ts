@@ -239,9 +239,9 @@ async function load(lang: Lang): Promise<void> {
 
       load(lang);
 
-      window.scrollTo({
-        top: 0,
+      document.getElementById('statusCronologia')?.scrollIntoView({
         behavior: 'smooth',
+        block: 'start',
       });
     });
   });
