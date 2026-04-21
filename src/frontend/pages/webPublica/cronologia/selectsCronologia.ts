@@ -13,6 +13,8 @@ const PERIOD_RANGES: Record<Exclude<PeriodKey, 'tots'>, PeriodRange> = {
   dictadura: { from: 1939, to: 1979 },
 };
 
+const GLOBAL_RANGE = { from: 1910, to: 1979 };
+
 /* ================= LABELS ================= */
 
 function periodLabel(lang: Lang, key: PeriodKey): string {
@@ -123,12 +125,11 @@ function fillSelect(select: HTMLSelectElement | null, options: { value: string; 
 }
 
 function getYears(period: PeriodKey): number[] {
-  if (period === 'tots') return [];
+  const range = period === 'tots' ? GLOBAL_RANGE : PERIOD_RANGES[period];
 
-  const r = PERIOD_RANGES[period];
   const out: number[] = [];
 
-  for (let y = r.from; y <= r.to; y++) {
+  for (let y = range.from; y <= range.to; y++) {
     out.push(y);
   }
 
