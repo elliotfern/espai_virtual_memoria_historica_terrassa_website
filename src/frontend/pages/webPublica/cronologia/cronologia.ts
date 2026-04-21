@@ -23,19 +23,61 @@ interface ApiResponse {
 /* ---------------- I18N ---------------- */
 
 const dict: Record<Lang, Record<string, string>> = {
-  ca: { noResults: 'No hi ha resultats', search: 'Cerca', year: 'Any', period: 'Període', territory: 'Territori', theme: 'Temàtica' },
-  es: { noResults: 'Sin resultados', search: 'Buscar', year: 'Año', period: 'Periodo', territory: 'Territorio', theme: 'Temática' },
-  en: { noResults: 'No results', search: 'Search', year: 'Year', period: 'Period', territory: 'Territory', theme: 'Theme' },
-  fr: { noResults: 'Aucun résultat', search: 'Recherche', year: 'Année', period: 'Période', territory: 'Territoire', theme: 'Thème' },
-  it: { noResults: 'Nessun risultato', search: 'Cerca', year: 'Anno', period: 'Periodo', territory: 'Territorio', theme: 'Tema' },
-  pt: { noResults: 'Sem resultados', search: 'Pesquisar', year: 'Ano', period: 'Período', territory: 'Território', theme: 'Tema' },
+  ca: {
+    noResults: 'No hi ha resultats',
+    search: 'Cerca',
+    year: 'Any',
+    period: 'Període',
+    territory: 'Territori',
+    theme: 'Temàtica',
+  },
+  es: {
+    noResults: 'Sin resultados',
+    search: 'Buscar',
+    year: 'Año',
+    period: 'Periodo',
+    territory: 'Territorio',
+    theme: 'Temática',
+  },
+  en: {
+    noResults: 'No results',
+    search: 'Search',
+    year: 'Year',
+    period: 'Period',
+    territory: 'Territory',
+    theme: 'Theme',
+  },
+  fr: {
+    noResults: 'Aucun résultat',
+    search: 'Recherche',
+    year: 'Année',
+    period: 'Période',
+    territory: 'Territoire',
+    theme: 'Thème',
+  },
+  it: {
+    noResults: 'Nessun risultato',
+    search: 'Cerca',
+    year: 'Anno',
+    period: 'Periodo',
+    territory: 'Territorio',
+    theme: 'Tema',
+  },
+  pt: {
+    noResults: 'Sem resultados',
+    search: 'Pesquisar',
+    year: 'Ano',
+    period: 'Período',
+    territory: 'Território',
+    theme: 'Tema',
+  },
 };
 
 function t(lang: Lang, key: string): string {
   return dict[lang][key] ?? key;
 }
 
-/* ---------------- AREA ---------------- */
+/* ---------------- LABELS ---------------- */
 
 function areaLabel(lang: Lang, area: number): string {
   const labels: Record<number, Record<Lang, string>> = {
@@ -46,13 +88,11 @@ function areaLabel(lang: Lang, area: number): string {
     5: { ca: 'Món', es: 'Mundo', en: 'World', fr: 'Monde', it: 'Mondo', pt: 'Mundo' },
   };
 
-  return labels[area]?.[lang] ?? String(area);
+  return labels[area]?.[lang] ?? '';
 }
 
-/* ---------------- TEMA ---------------- */
-
 function temaLabel(lang: Lang, tema: number | null): string {
-  if (tema === null) return '';
+  if (!tema) return '';
 
   const labels: Record<number, Record<Lang, string>> = {
     1: {
@@ -73,26 +113,24 @@ function temaLabel(lang: Lang, tema: number | null): string {
     },
     3: {
       ca: 'Esdeveniments del moviment obrer',
-      es: 'Acontecimientos del movimiento obrero',
+      es: 'Movimiento obrero',
       en: 'Labor movement events',
-      fr: 'Événements du mouvement ouvrier',
-      it: 'Eventi del movimento operaio',
-      pt: 'Eventos do movimento operário',
+      fr: 'Mouvement ouvrier',
+      it: 'Movimento operaio',
+      pt: 'Movimento operário',
     },
   };
 
-  return labels[tema]?.[lang] ?? `T${tema}`;
+  return labels[tema]?.[lang] ?? '';
 }
+
+/* ---------------- HELPERS ---------------- */
 
 function mustGetElement<T extends HTMLElement>(id: string): T {
   const el = document.getElementById(id);
-  if (!el) {
-    throw new Error(`Element not found: ${id}`);
-  }
+  if (!el) throw new Error(`Element not found: ${id}`);
   return el as T;
 }
-
-/* ---------------- API ---------------- */
 
 async function fetchCronologia(lang: Lang, params: URLSearchParams): Promise<ApiResponse> {
   const url = `/api/cronologia/get/?${params.toString()}&lang=${lang}`;
@@ -103,7 +141,7 @@ async function fetchCronologia(lang: Lang, params: URLSearchParams): Promise<Api
 
 /* ---------------- BADGE ---------------- */
 
-function badge(text: string): string {
+function badge(label: string, value: string): string {
   return `
     <span style="
       background:#c2af96;
@@ -112,8 +150,22 @@ function badge(text: string): string {
       margin-right:6px;
       font-size:12px;
       display:inline-block;
-    ">${text}</span>
+    ">
+      <strong>${label}:</strong> ${value}
+    </span>
   `;
+}
+
+/* ---------------- OPTIONS ---------------- */
+
+function fillSelect(select: HTMLSelectElement, values: string[]): void {
+  select.innerHTML = `<option value="tots">Tots</option>`;
+  for (const v of values) {
+    const opt = document.createElement('option');
+    opt.value = v;
+    opt.textContent = v;
+    select.appendChild(opt);
+  }
 }
 
 /* ---------------- MAIN ---------------- */
@@ -123,31 +175,27 @@ export function initCronologia(lang: Lang): void {
   if (!container) return;
 
   container.innerHTML = `
-    <div class="mb-3">
-      <h2 class="lora fw-bold">${t(lang, 'search')}</h2>
-    </div>
-
     <div class="p-4 mb-3 rounded-3" style="background-color:#EEEAD9;">
       <div class="row g-3">
 
         <div class="col-md-3">
-          <label class="form-label fw-bold raleway">${t(lang, 'year')}</label>
-          <select id="fAny" class="form-select shadow-sm"></select>
-        </div>
-
-        <div class="col-md-3">
-          <label class="form-label fw-bold raleway">${t(lang, 'period')}</label>
-          <select id="fPeriod" class="form-select shadow-sm"></select>
-        </div>
-
-        <div class="col-md-3">
           <label class="form-label fw-bold raleway">${t(lang, 'territory')}</label>
-          <select id="fArea" class="form-select shadow-sm"></select>
+          <select id="fArea" class="form-select"></select>
         </div>
 
         <div class="col-md-3">
           <label class="form-label fw-bold raleway">${t(lang, 'theme')}</label>
-          <select id="fTema" class="form-select shadow-sm"></select>
+          <select id="fTema" class="form-select"></select>
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label fw-bold raleway">${t(lang, 'period')}</label>
+          <select id="fPeriod" class="form-select"></select>
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label fw-bold raleway">${t(lang, 'year')}</label>
+          <select id="fAny" class="form-select"></select>
         </div>
 
       </div>
@@ -164,13 +212,13 @@ export function initCronologia(lang: Lang): void {
   const fArea = mustGetElement<HTMLSelectElement>('fArea');
   const fTema = mustGetElement<HTMLSelectElement>('fTema');
 
-  if (!status || !list || !fAny || !fPeriod || !fArea || !fTema) return;
-
   let area = 'tots';
   let tema = 'tots';
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   let period: PeriodKey = 'tots';
   let any = 'tots';
+
+  /* ---------------- LOAD ---------------- */
 
   function buildParams(): URLSearchParams {
     return new URLSearchParams({
@@ -198,7 +246,10 @@ export function initCronologia(lang: Lang): void {
         lastYear = ev.any;
       }
 
-      const badges = badge(areaLabel(lang, ev.area)) + (ev.tema !== null ? badge(temaLabel(lang, ev.tema)) : '');
+      const areaText = areaLabel(lang, ev.area);
+      const temaText = temaLabel(lang, ev.tema);
+
+      const badges = badge('Territori', areaText) + (temaText ? badge('Temàtica', temaText) : '');
 
       html += `
         <div class="p-3 mb-2" style="background:#fff;border-left:5px solid #c2af96;border-radius:6px;">
@@ -208,8 +259,8 @@ export function initCronologia(lang: Lang): void {
       `;
     }
 
+    status.textContent = `${data.totalEventos} resultat(s)`;
     list.innerHTML = html;
-    status.textContent = `${data.totalEventos}`;
   }
 
   async function load(): Promise<void> {
@@ -217,16 +268,25 @@ export function initCronologia(lang: Lang): void {
     render(data);
   }
 
+  /* ---------------- EVENTS ---------------- */
+
   document.addEventListener('change', (e: Event) => {
     const el = e.target as HTMLSelectElement;
 
-    if (el.id === 'fAny') any = el.value || 'tots';
-    if (el.id === 'fPeriod') period = (el.value || 'tots') as PeriodKey;
-    if (el.id === 'fArea') area = el.value || 'tots';
-    if (el.id === 'fTema') tema = el.value || 'tots';
+    if (el.id === 'fAny') any = el.value;
+    if (el.id === 'fPeriod') period = el.value as PeriodKey;
+    if (el.id === 'fArea') area = el.value;
+    if (el.id === 'fTema') tema = el.value;
 
     load();
   });
+
+  /* ---------------- INIT SELECTS ---------------- */
+
+  fillSelect(fArea, ['Terrassa', 'Catalunya', 'Espanya', 'Europa', 'Món']);
+  fillSelect(fTema, ['Fets econòmic-laborals', 'Fets polítics i socials', 'Esdeveniments del moviment obrer']);
+  fillSelect(fPeriod, ['restauracio', 'republca', 'dictadura']);
+  fillSelect(fAny, ['2026', '2025', '2024']); // idealmente dinámico desde API
 
   load();
 }
