@@ -2,7 +2,7 @@
   "compilerOptions": {
     "module": "ESNext",            // Usar módulos ESNext para importaciones
     "target": "ES2022",            // Establecer el target a ES2020
-    "moduleResolution": "node",    // Resolver módulos de acuerdo con Node.js
+    "moduleResolution": "bundler",    // Resolver módulos de acuerdo con Node.js
     "esModuleInterop": true,       // Compatibilidad con CommonJS y ES Modules
     "strict": true,                // Habilitar todas las comprobaciones estrictas
     "allowJs": true,               // Permitir archivos .js

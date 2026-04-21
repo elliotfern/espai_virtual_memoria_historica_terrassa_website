@@ -5,8 +5,7 @@ type PeriodKey = 'tots' | 'restauracio' | 'republca' | 'dictadura';
 interface CronologiaEvent {
   id: number;
   any: number;
-  mes: string | null;
-  mesOrdre: number | null;
+  mes: number | null;
   mesFi: number | null;
   diaInici: number | null;
   diaFi: number | null;
@@ -24,61 +23,19 @@ interface ApiResponse {
 /* ---------------- I18N ---------------- */
 
 const dict: Record<Lang, Record<string, string>> = {
-  ca: {
-    noResults: 'No hi ha resultats',
-    search: 'Cerca',
-    year: 'Any',
-    period: 'Període històric',
-    territory: 'Territori',
-    theme: 'Temàtica',
-  },
-  es: {
-    noResults: 'Sin resultados',
-    search: 'Buscar',
-    year: 'Año',
-    period: 'Periodo histórico',
-    territory: 'Territorio',
-    theme: 'Temática',
-  },
-  en: {
-    noResults: 'No results',
-    search: 'Search',
-    year: 'Year',
-    period: 'Historical period',
-    territory: 'Territory',
-    theme: 'Theme',
-  },
-  fr: {
-    noResults: 'Aucun résultat',
-    search: 'Recherche',
-    year: 'Année',
-    period: 'Période historique',
-    territory: 'Territoire',
-    theme: 'Thème',
-  },
-  it: {
-    noResults: 'Nessun risultato',
-    search: 'Cerca',
-    year: 'Anno',
-    period: 'Periodo storico',
-    territory: 'Territorio',
-    theme: 'Tema',
-  },
-  pt: {
-    noResults: 'Sem resultados',
-    search: 'Pesquisar',
-    year: 'Ano',
-    period: 'Período histórico',
-    territory: 'Território',
-    theme: 'Tema',
-  },
+  ca: { noResults: 'No hi ha resultats', search: 'Cerca', year: 'Any', period: 'Període', territory: 'Territori', theme: 'Temàtica' },
+  es: { noResults: 'Sin resultados', search: 'Buscar', year: 'Año', period: 'Periodo', territory: 'Territorio', theme: 'Temática' },
+  en: { noResults: 'No results', search: 'Search', year: 'Year', period: 'Period', territory: 'Territory', theme: 'Theme' },
+  fr: { noResults: 'Aucun résultat', search: 'Recherche', year: 'Année', period: 'Période', territory: 'Territoire', theme: 'Thème' },
+  it: { noResults: 'Nessun risultato', search: 'Cerca', year: 'Anno', period: 'Periodo', territory: 'Territorio', theme: 'Tema' },
+  pt: { noResults: 'Sem resultados', search: 'Pesquisar', year: 'Ano', period: 'Período', territory: 'Território', theme: 'Tema' },
 };
 
-function t(lang: Lang, key: keyof (typeof dict)['ca']): string {
+function t(lang: Lang, key: string): string {
   return dict[lang][key] ?? key;
 }
 
-/* ---------------- AREA LABELS ---------------- */
+/* ---------------- AREA ---------------- */
 
 function areaLabel(lang: Lang, area: number): string {
   const labels: Record<number, Record<Lang, string>> = {
@@ -92,183 +49,184 @@ function areaLabel(lang: Lang, area: number): string {
   return labels[area]?.[lang] ?? String(area);
 }
 
-/* ---------------- PERIODS ---------------- */
+/* ---------------- TEMA ---------------- */
 
-const PERIODS: Record<PeriodKey, { start: number; end: number }> = {
-  tots: { start: 0, end: 9999 },
-  restauracio: { start: 1910, end: 1930 },
-  republca: { start: 1931, end: 1939 },
-  dictadura: { start: 1939, end: 1979 },
-};
+function temaLabel(lang: Lang, tema: number | null): string {
+  if (tema === null) return '';
+
+  const labels: Record<number, Record<Lang, string>> = {
+    1: {
+      ca: 'Fets econòmico-laborals',
+      es: 'Hechos económico-laborales',
+      en: 'Economic and labor events',
+      fr: 'Faits économiques et sociaux',
+      it: 'Fatti economico-lavorativi',
+      pt: 'Factos económico-laborais',
+    },
+    2: {
+      ca: 'Fets polítics i socials',
+      es: 'Hechos políticos y sociales',
+      en: 'Political and social events',
+      fr: 'Faits politiques et sociaux',
+      it: 'Fatti politici e sociali',
+      pt: 'Factos políticos e sociais',
+    },
+    3: {
+      ca: 'Esdeveniments del moviment obrer',
+      es: 'Acontecimientos del movimiento obrero',
+      en: 'Labor movement events',
+      fr: 'Événements du mouvement ouvrier',
+      it: 'Eventi del movimento operaio',
+      pt: 'Eventos do movimento operário',
+    },
+  };
+
+  return labels[tema]?.[lang] ?? `T${tema}`;
+}
+
+function mustGetElement<T extends HTMLElement>(id: string): T {
+  const el = document.getElementById(id);
+  if (!el) {
+    throw new Error(`Element not found: ${id}`);
+  }
+  return el as T;
+}
 
 /* ---------------- API ---------------- */
 
 async function fetchCronologia(lang: Lang, params: URLSearchParams): Promise<ApiResponse> {
-  const url = `/api/cronologia/get/?${params.toString()}`;
-
+  const url = `/api/cronologia/get/?${params.toString()}&lang=${lang}`;
   const res = await fetch(url);
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
-
   return (await res.json()) as ApiResponse;
 }
 
 /* ---------------- BADGE ---------------- */
 
 function badge(text: string): string {
-  return `<span style="background:#c2af96;padding:4px 10px;border-radius:6px;margin-right:6px;font-size:12px;display:inline-block">${text}</span>`;
-}
-
-/* ---------------- UI HELPERS ---------------- */
-
-function el(id: string): HTMLElement | null {
-  return document.getElementById(id);
+  return `
+    <span style="
+      background:#c2af96;
+      padding:4px 10px;
+      border-radius:6px;
+      margin-right:6px;
+      font-size:12px;
+      display:inline-block;
+    ">${text}</span>
+  `;
 }
 
 /* ---------------- MAIN ---------------- */
 
 export function initCronologia(lang: Lang): void {
-  const container = el('cronologia') as HTMLDivElement | null;
+  const container = document.getElementById('cronologia') as HTMLDivElement | null;
   if (!container) return;
 
-  /* ---------------- STATE ---------------- */
-
-  let area: string = 'tots';
-  let tema: string = 'tots';
-  let period: PeriodKey = 'tots';
-  let any: string = 'tots';
-  let page = 1;
-
-  /* ---------------- RENDER FILTERS ---------------- */
-
   container.innerHTML = `
-    <div style="margin-bottom:20px">
-      <select id="fArea"></select>
-      <select id="fTema"></select>
-      <select id="fPeriod"></select>
-      <select id="fAny"></select>
+    <div class="mb-3">
+      <h2 class="lora fw-bold">${t(lang, 'search')}</h2>
     </div>
 
-    <div id="cronologiaList"></div>
+    <div class="p-4 mb-3 rounded-3" style="background-color:#EEEAD9;">
+      <div class="row g-3">
+
+        <div class="col-md-3">
+          <label class="form-label fw-bold raleway">${t(lang, 'year')}</label>
+          <select id="fAny" class="form-select shadow-sm"></select>
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label fw-bold raleway">${t(lang, 'period')}</label>
+          <select id="fPeriod" class="form-select shadow-sm"></select>
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label fw-bold raleway">${t(lang, 'territory')}</label>
+          <select id="fArea" class="form-select shadow-sm"></select>
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label fw-bold raleway">${t(lang, 'theme')}</label>
+          <select id="fTema" class="form-select shadow-sm"></select>
+        </div>
+
+      </div>
+    </div>
+
+    <div id="statusCronologia" class="text-muted raleway"></div>
+    <div id="listCronologia"></div>
   `;
 
-  const list = el('cronologiaList') as HTMLDivElement;
-  const fArea = el('fArea') as HTMLSelectElement;
-  const fTema = el('fTema') as HTMLSelectElement;
-  const fPeriod = el('fPeriod') as HTMLSelectElement;
-  const fAny = el('fAny') as HTMLSelectElement;
+  const list = mustGetElement<HTMLDivElement>('listCronologia');
+  const status = mustGetElement<HTMLDivElement>('statusCronologia');
+  const fAny = mustGetElement<HTMLSelectElement>('fAny');
+  const fPeriod = mustGetElement<HTMLSelectElement>('fPeriod');
+  const fArea = mustGetElement<HTMLSelectElement>('fArea');
+  const fTema = mustGetElement<HTMLSelectElement>('fTema');
 
-  /* ---------------- OPTIONS ---------------- */
+  if (!status || !list || !fAny || !fPeriod || !fArea || !fTema) return;
 
-  fArea.innerHTML = `
-    <option value="tots">Tots els territoris</option>
-    <option value="1">Terrassa</option>
-    <option value="2">Catalunya</option>
-    <option value="3">Espanya</option>
-    <option value="4">Europa</option>
-    <option value="5">Món</option>
-  `;
+  let area = 'tots';
+  let tema = 'tots';
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  let period: PeriodKey = 'tots';
+  let any = 'tots';
 
-  fTema.innerHTML = `
-    <option value="tots">Totes les temàtiques</option>
-    <option value="1">Econòmic-laboral</option>
-    <option value="2">Polític-social</option>
-    <option value="3">Moviment obrer</option>
-  `;
-
-  fPeriod.innerHTML = `
-    <option value="tots">Tots els períodes</option>
-    <option value="restauracio">1910-1930</option>
-    <option value="republca">1931-1939</option>
-    <option value="dictadura">1939-1979</option>
-  `;
-
-  function updateYears(): void {
-    const p = PERIODS[period];
-    fAny.innerHTML = `<option value="tots">Tots els anys</option>`;
-
-    for (let y = p.start; y <= p.end; y++) {
-      const opt = document.createElement('option');
-      opt.value = String(y);
-      opt.textContent = String(y);
-      fAny.appendChild(opt);
-    }
-  }
-
-  updateYears();
-
-  /* ---------------- LOAD ---------------- */
-
-  async function load(): Promise<void> {
-    const params = new URLSearchParams({
+  function buildParams(): URLSearchParams {
+    return new URLSearchParams({
       area,
       tema,
       any,
-      pagina: String(page),
+      pagina: '1',
     });
-
-    const data = await fetchCronologia(lang, params);
-
-    render(data);
   }
 
-  /* ---------------- RENDER ---------------- */
-
   function render(data: ApiResponse): void {
+    list.innerHTML = '';
+
     if (!data.eventos.length) {
-      list.innerHTML = `<p>${t(lang, 'noResults')}</p>`;
+      status.textContent = t(lang, 'noResults');
       return;
     }
 
     let html = '';
     let lastYear: number | null = null;
 
-    const sorted = [...data.eventos].sort((a, b) => a.any - b.any || (a.mesOrdre ?? 0) - (b.mesOrdre ?? 0) || (a.diaInici ?? 0) - (b.diaInici ?? 0));
-
-    for (const ev of sorted) {
+    for (const ev of data.eventos) {
       if (ev.any !== lastYear) {
-        html += `<h2 style="margin-top:20px">${ev.any}</h2>`;
+        html += `<h2 class="mt-3">${ev.any}</h2>`;
         lastYear = ev.any;
       }
 
+      const badges = badge(areaLabel(lang, ev.area)) + (ev.tema !== null ? badge(temaLabel(lang, ev.tema)) : '');
+
       html += `
-        <div style="background:#fff;padding:12px;margin-bottom:10px;border-left:5px solid #007BFF;border-radius:6px">
-          ${badge(areaLabel(lang, ev.area))}
-          ${ev.tema ? badge('T' + ev.tema) : ''}
-          <div style="margin-top:6px">${ev.textCa}</div>
+        <div class="p-3 mb-2" style="background:#fff;border-left:5px solid #c2af96;border-radius:6px;">
+          <div class="mb-2">${badges}</div>
+          <div>${ev.textCa}</div>
         </div>
       `;
     }
 
     list.innerHTML = html;
+    status.textContent = `${data.totalEventos}`;
   }
 
-  /* ---------------- EVENTS ---------------- */
+  async function load(): Promise<void> {
+    const data = await fetchCronologia(lang, buildParams());
+    render(data);
+  }
 
-  fArea.onchange = () => {
-    area = fArea.value;
-    page = 1;
-    load();
-  };
+  document.addEventListener('change', (e: Event) => {
+    const el = e.target as HTMLSelectElement;
 
-  fTema.onchange = () => {
-    tema = fTema.value;
-    page = 1;
-    load();
-  };
+    if (el.id === 'fAny') any = el.value || 'tots';
+    if (el.id === 'fPeriod') period = (el.value || 'tots') as PeriodKey;
+    if (el.id === 'fArea') area = el.value || 'tots';
+    if (el.id === 'fTema') tema = el.value || 'tots';
 
-  fPeriod.onchange = () => {
-    period = fPeriod.value as PeriodKey;
-    any = 'tots';
-    updateYears();
-    page = 1;
     load();
-  };
-
-  fAny.onchange = () => {
-    any = fAny.value;
-    page = 1;
-    load();
-  };
+  });
 
   load();
 }
