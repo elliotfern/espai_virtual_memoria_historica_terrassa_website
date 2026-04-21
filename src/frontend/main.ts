@@ -14,6 +14,7 @@ import { homePage } from './pages/webPublica/homePage/homePage';
 import { credits } from './pages/webPublica/credits/credits';
 import { espaiVirtualWebPublica } from './pages/webPublica/espaiVirtual/espaiVirtual';
 import { initPublicEstudisList } from './pages/webPublica/estudis/estudis';
+import { initCronologia } from './pages/webPublica/cronologia/cronologia';
 
 nameUser();
 
@@ -51,6 +52,8 @@ document.addEventListener('DOMContentLoaded', () => {
     espaiVirtualWebPublica('ca');
   } else if (pageType[0] === 'documents-estudis') {
     initPublicEstudisList('ca');
+  } else if (pageType[0] === 'cronologia') {
+    initCronologia('ca');
   }
 
   if (pageType[0] === 'es') {

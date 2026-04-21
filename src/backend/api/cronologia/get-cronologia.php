@@ -45,6 +45,7 @@ $tema = $_GET['tema'] ?? 'tots';
 $pagina = isset($_GET['pagina']) ? intval($_GET['pagina']) : 1;
 $limite = 20; // Número de eventos por página
 $offset = ($pagina - 1) * $limite;
+$lang = $_GET['lang'] ?? 'ca';
 
 global $conn;
 
