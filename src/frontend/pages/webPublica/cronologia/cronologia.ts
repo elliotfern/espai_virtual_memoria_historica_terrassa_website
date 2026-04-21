@@ -107,8 +107,12 @@ export function initCronologia(lang: Lang): void {
   `;
 
   initCronologiaSelects(lang);
-  bindEvents();
-  load(lang);
+
+  // 🔥 importante: esperar al DOM real de selects
+  setTimeout(() => {
+    bindEvents();
+    load(lang);
+  }, 0);
 }
 
 /* =========================
@@ -116,26 +120,44 @@ export function initCronologia(lang: Lang): void {
 ========================= */
 
 function bindEvents(): void {
-  const fAny = document.getElementById('fAny') as HTMLSelectElement;
-  const fPeriod = document.getElementById('fPeriod') as HTMLSelectElement;
-  const fArea = document.getElementById('fArea') as HTMLSelectElement;
-  const fTema = document.getElementById('fTema') as HTMLSelectElement;
+  const tryBind = () => {
+    const fAny = document.getElementById('fAny') as HTMLSelectElement | null;
+    const fPeriod = document.getElementById('fPeriod') as HTMLSelectElement | null;
+    const fArea = document.getElementById('fArea') as HTMLSelectElement | null;
+    const fTema = document.getElementById('fTema') as HTMLSelectElement | null;
 
-  fAny.addEventListener('change', () => {
-    state.any = fAny.value || 'tots';
-  });
+    if (!fAny || !fPeriod || !fArea || !fTema) {
+      return false;
+    }
 
-  fArea.addEventListener('change', () => {
-    state.area = fArea.value || 'tots';
-  });
+    fAny.addEventListener('change', () => {
+      state.any = fAny.value || 'tots';
+    });
 
-  fTema.addEventListener('change', () => {
-    state.tema = fTema.value || 'tots';
-  });
+    fArea.addEventListener('change', () => {
+      state.area = fArea.value || 'tots';
+    });
 
-  fPeriod.addEventListener('change', () => {
-    state.period = (fPeriod.value || 'tots') as PeriodKey;
-  });
+    fTema.addEventListener('change', () => {
+      state.tema = fTema.value || 'tots';
+    });
+
+    fPeriod.addEventListener('change', () => {
+      state.period = (fPeriod.value || 'tots') as PeriodKey;
+    });
+
+    return true;
+  };
+
+  // intenta inmediatamente
+  if (tryBind()) return;
+
+  // si no existe aún el DOM, reintenta hasta que exista
+  const interval = setInterval(() => {
+    if (tryBind()) {
+      clearInterval(interval);
+    }
+  }, 50);
 }
 
 /* =========================
