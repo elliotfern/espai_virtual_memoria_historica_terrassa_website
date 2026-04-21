@@ -119,14 +119,6 @@ export function initCronologia(lang: Lang): void {
   const list = document.getElementById('listCronologia') as HTMLDivElement;
   const status = document.getElementById('statusCronologia') as HTMLDivElement;
 
-  /* 🔥 IMPORTANT: inicializa selects */
-  initCronologiaSelects(lang);
-
-  const fAny = document.getElementById('fAny') as HTMLSelectElement;
-  const fPeriod = document.getElementById('fPeriod') as HTMLSelectElement;
-  const fArea = document.getElementById('fArea') as HTMLSelectElement;
-  const fTema = document.getElementById('fTema') as HTMLSelectElement;
-
   const state = {
     any: 'tots',
     period: 'tots',
@@ -142,7 +134,6 @@ export function initCronologia(lang: Lang): void {
     if (state.any !== 'tots') p.append('any', state.any);
 
     p.append('pagina', '1');
-
     return p;
   }
 
@@ -164,7 +155,6 @@ export function initCronologia(lang: Lang): void {
 
       html += `
         <div class="p-3 mb-2" style="background:#fff;border-left:5px solid #c2af96;border-radius:6px;">
-          
           <div class="mb-2">
             ${badge(areaLabel(lang, ev.area))}
             ${ev.tema ? badge(temaLabel(lang, ev.tema)) : ''}
@@ -188,26 +178,37 @@ export function initCronologia(lang: Lang): void {
     render(data);
   }
 
-  /* ---------------- EVENTS ---------------- */
+  /* ---------------- 🔥 IMPORTANT FIX ---------------- */
 
-  fAny.addEventListener('change', () => {
-    state.any = fAny.value || 'tots';
+  requestAnimationFrame(() => {
+    initCronologiaSelects(lang);
+
+    const fAny = document.getElementById('fAny') as HTMLSelectElement | null;
+    const fPeriod = document.getElementById('fPeriod') as HTMLSelectElement | null;
+    const fArea = document.getElementById('fArea') as HTMLSelectElement | null;
+    const fTema = document.getElementById('fTema') as HTMLSelectElement | null;
+
+    if (!fAny || !fPeriod || !fArea || !fTema) return;
+
+    fAny.addEventListener('change', () => {
+      state.any = fAny.value || 'tots';
+      load();
+    });
+
+    fArea.addEventListener('change', () => {
+      state.area = fArea.value || 'tots';
+      load();
+    });
+
+    fTema.addEventListener('change', () => {
+      state.tema = fTema.value || 'tots';
+      load();
+    });
+
+    fPeriod.addEventListener('change', () => {
+      state.period = fPeriod.value || 'tots';
+    });
+
     load();
   });
-
-  fArea.addEventListener('change', () => {
-    state.area = fArea.value || 'tots';
-    load();
-  });
-
-  fTema.addEventListener('change', () => {
-    state.tema = fTema.value || 'tots';
-    load();
-  });
-
-  fPeriod.addEventListener('change', () => {
-    state.period = fPeriod.value || 'tots';
-  });
-
-  load();
 }
