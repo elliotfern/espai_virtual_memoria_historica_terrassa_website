@@ -88,6 +88,7 @@ async function fetchCronologia(lang: Lang): Promise<ApiResponse> {
   if (state.area !== 'tots') params.append('area', state.area);
   if (state.tema !== 'tots') params.append('tema', state.tema);
   if (state.any !== 'tots') params.append('any', state.any);
+  if (state.period !== 'tots') params.append('period', state.period);
 
   params.append('pagina', String(state.pagina));
 
@@ -182,6 +183,7 @@ function bindEvents(lang: Lang): void {
       // 🔥 REGENERAR AÑOS SEGÚN PERIODO
       const event = new Event('change');
       document.getElementById('fAny')?.dispatchEvent(event);
+      load(lang);
     });
 
     return true;

@@ -47,6 +47,14 @@ $limite = 20; // Número de eventos por página
 $offset = ($pagina - 1) * $limite;
 $lang = $_GET['lang'] ?? 'ca';
 
+$period = $_GET['period'] ?? 'tots';
+
+$periodRanges = [
+    'restauracio' => [1910, 1930],
+    'republica'   => [1931, 1939],
+    'dictadura'   => [1939, 1979],
+];
+
 global $conn;
 
 // Obtener el parámetro del año
@@ -67,6 +75,8 @@ if ($tema !== 'tots') {
 }
 if ($any !== 'tots') {
     $sql .= " AND c.any = :any";
+} elseif ($period !== 'tots') {
+    $sql .= " AND c.any BETWEEN :anyFrom AND :anyTo";
 }
 
 $sql .= " ORDER BY c.any ASC, mesOrdre ASC, c.diaInici ASC LIMIT :limite OFFSET :offset";
@@ -82,7 +92,14 @@ if ($tema !== 'tots') {
 }
 if ($any !== 'tots') {
     $stmt->bindParam(':any', $any, PDO::PARAM_INT);
+} elseif ($period !== 'tots') {
+    $from = $periodRanges[$period][0];
+    $to = $periodRanges[$period][1];
+
+    $stmt->bindParam(':anyFrom', $from, PDO::PARAM_INT);
+    $stmt->bindParam(':anyTo', $to, PDO::PARAM_INT);
 }
+
 $stmt->bindParam(':limite', $limite, PDO::PARAM_INT);
 $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
 
@@ -102,8 +119,9 @@ if ($tema !== 'tots') {
 }
 if ($any !== 'tots') {
     $countSql .= " AND any = :any";
+} elseif ($period !== 'tots') {
+    $countSql .= " AND any BETWEEN :anyFrom AND :anyTo";
 }
-
 $countStmt = $conn->prepare($countSql);
 
 // Asignar parámetros a la consulta de conteo
