@@ -102,13 +102,40 @@ export function initCronologia(lang: Lang): void {
   if (!container) return;
 
   container.innerHTML = `
+    <div class="p-4 mb-3 rounded-3" style="background-color:#EEEAD9;">
+      <div class="row g-3">
+
+      <div class="col-md-3">
+          <label class="form-label fw-bold raleway">Període</label>
+          <select id="fPeriod" class="form-select shadow-sm"></select>
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label fw-bold raleway">Any</label>
+          <select id="fAny" class="form-select shadow-sm"></select>
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label fw-bold raleway">Territori</label>
+          <select id="fArea" class="form-select shadow-sm"></select>
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label fw-bold raleway">Temàtica</label>
+          <select id="fTema" class="form-select shadow-sm"></select>
+        </div>
+
+      </div>
+    </div>
+
     <div id="statusCronologia" class="text-muted raleway mb-2"></div>
     <div id="listCronologia"></div>
   `;
 
+  // 🔥 1. PRIMERO crear selects
   initCronologiaSelects(lang);
 
-  // 🔥 importante: esperar al DOM real de selects
+  // 🔥 2. luego eventos
   setTimeout(() => {
     bindEvents();
     load(lang);
