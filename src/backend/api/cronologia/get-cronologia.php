@@ -38,6 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
 // 1) POST esdeveniment
 // ruta POST => "/api/cronologia/post/
 header("Content-Type: application/json");
+global $conn;
 
 // Parámetros de la consulta
 $area = $_GET['area'] ?? 'tots';
@@ -47,6 +48,10 @@ $limite = 20; // Número de eventos por página
 $offset = ($pagina - 1) * $limite;
 $lang = $_GET['lang'] ?? 'ca';
 
+$any = isset($_GET['any']) && $_GET['any'] !== 'tots'
+    ? (int)$_GET['any']
+    : null;
+
 $period = $_GET['period'] ?? 'tots';
 
 $periodRanges = [
@@ -55,12 +60,13 @@ $periodRanges = [
     'dictadura'   => [1939, 1979],
 ];
 
-global $conn;
+$rangeFrom = null;
+$rangeTo = null;
 
-// Obtener el parámetro del año
-$any = isset($_GET['any']) && $_GET['any'] !== 'tots'
-    ? (int)$_GET['any']
-    : 'tots';
+if ($any === null && $period !== 'tots' && isset($periodRanges[$period])) {
+    $rangeFrom = $periodRanges[$period][0];
+    $rangeTo = $periodRanges[$period][1];
+}
 
 $sql = "SELECT c.id, c.any, m.mesCa AS mes, m.ordre AS mesOrdre, c.diaInici, c.diaFi, c.mesFi, c.tema, c.area, c.textCa 
     FROM db_cronologia AS c
@@ -70,13 +76,15 @@ $sql = "SELECT c.id, c.any, m.mesCa AS mes, m.ordre AS mesOrdre, c.diaInici, c.d
 if ($area !== 'tots') {
     $sql .= " AND c.area = :area";
 }
+
 if ($tema !== 'tots') {
     $sql .= " AND c.tema = :tema";
 }
-if ($any !== 'tots') {
+
+if ($any !== null) {
     $sql .= " AND c.any = :any";
-} elseif ($period !== 'tots') {
-    $sql .= " AND c.any BETWEEN :anyFrom AND :anyTo";
+} elseif ($rangeFrom !== null) {
+    $sql .= " AND c.any BETWEEN :rangeFrom AND :rangeTo";
 }
 
 $sql .= " ORDER BY c.any ASC, mesOrdre ASC, c.diaInici ASC LIMIT :limite OFFSET :offset";
@@ -90,14 +98,12 @@ if ($area !== 'tots') {
 if ($tema !== 'tots') {
     $stmt->bindParam(':tema', $tema, PDO::PARAM_INT);
 }
-if ($any !== 'tots') {
-    $stmt->bindParam(':any', $any, PDO::PARAM_INT);
-} elseif ($period !== 'tots') {
-    $from = $periodRanges[$period][0];
-    $to = $periodRanges[$period][1];
 
-    $stmt->bindParam(':anyFrom', $from, PDO::PARAM_INT);
-    $stmt->bindParam(':anyTo', $to, PDO::PARAM_INT);
+if ($any !== null) {
+    $stmt->bindParam(':any', $any, PDO::PARAM_INT);
+} elseif ($rangeFrom !== null) {
+    $stmt->bindValue(':rangeFrom', $rangeFrom, PDO::PARAM_INT);
+    $stmt->bindValue(':rangeTo', $rangeTo, PDO::PARAM_INT);
 }
 
 $stmt->bindParam(':limite', $limite, PDO::PARAM_INT);
