@@ -236,7 +236,13 @@ async function load(lang: Lang): Promise<void> {
     btn.addEventListener('click', () => {
       const page = Number((btn as HTMLElement).dataset.page);
       state.pagina = page;
+
       load(lang);
+
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      });
     });
   });
 }

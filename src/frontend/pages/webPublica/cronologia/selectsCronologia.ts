@@ -103,12 +103,15 @@ function temaLabel(lang: Lang, id: number): string {
 
 /* ================= CORE ================= */
 
-function fillSelect(select: HTMLSelectElement, options: { value: string; label: string }[]): void {
+function fillSelect(select: HTMLSelectElement | null, options: { value: string; label: string }[]): void {
+  if (!select) return;
+
   select.innerHTML = '';
 
   const empty = document.createElement('option');
   empty.value = 'tots';
   empty.textContent = 'Tots';
+  empty.selected = true;
   select.appendChild(empty);
 
   for (const opt of options) {
