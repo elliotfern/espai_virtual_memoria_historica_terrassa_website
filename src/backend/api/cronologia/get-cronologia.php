@@ -95,7 +95,14 @@ if ($tema !== 'tots') {
 if ($any !== null) {
     $sql .= " AND c.any = :any";
 } elseif ($rangeFrom !== null) {
-    $sql .= " AND $dateExpr BETWEEN :rangeFrom AND :rangeTo";
+    $sql .= " AND STR_TO_DATE(
+    CONCAT(
+      c.any, '-',
+      LPAD(COALESCE(m.ordre, 1), 2, '0'), '-',
+      LPAD(COALESCE(c.diaInici, 1), 2, '0')
+    ),
+    '%Y-%m-%d'
+) BETWEEN :rangeFrom AND :rangeTo";
 }
 
 $sql .= " ORDER BY c.any ASC, mesOrdre ASC, c.diaInici ASC LIMIT :limite OFFSET :offset";
@@ -141,7 +148,14 @@ if ($tema !== 'tots') {
 if ($any !== null) {
     $countSql .= " AND any = :any";
 } elseif ($rangeFrom !== null) {
-    $countSql .= " AND $dateExpr BETWEEN :rangeFrom AND :rangeTo";
+    $countSql .= " AND STR_TO_DATE(
+    CONCAT(
+      c.any, '-',
+      LPAD(COALESCE(m.ordre, 1), 2, '0'), '-',
+      LPAD(COALESCE(c.diaInici, 1), 2, '0')
+    ),
+    '%Y-%m-%d'
+) BETWEEN :rangeFrom AND :rangeTo";
 }
 
 $countStmt = $conn->prepare($countSql);
