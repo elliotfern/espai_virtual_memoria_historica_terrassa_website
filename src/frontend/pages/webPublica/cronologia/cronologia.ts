@@ -15,6 +15,7 @@ interface CronologiaEvent {
   tema: number | null;
   area: number;
   textCa: string;
+  textEs: string;
 }
 
 interface ApiResponse {
