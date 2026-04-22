@@ -3,21 +3,19 @@ export type Lang = 'ca' | 'es' | 'en' | 'fr' | 'it' | 'pt';
 type PeriodKey = 'tots' | 'restauracio' | 'republica' | 'dictadura';
 
 interface PeriodRange {
-  from: number;
-  to: number;
+  from: string; // formato YYYY-MM-DD
+  to: string;
 }
-
 const PERIOD_RANGES: Record<Exclude<PeriodKey, 'tots'>, PeriodRange> = {
-  restauracio: { from: 1910, to: 1930 },
-  republica: { from: 1931, to: 1939 },
-  dictadura: { from: 1939, to: 1979 },
+  restauracio: { from: '1910-01-01', to: '1931-04-11' },
+  republica: { from: '1931-04-12', to: '1939-04-01' },
+  dictadura: { from: '1939-04-01', to: '1979-12-31' },
 };
-
 const GLOBAL_RANGE = { from: 1910, to: 1979 };
 
 /* ================= LABELS ================= */
 
-function periodLabel(lang: Lang, key: PeriodKey): string {
+export function periodLabel(lang: Lang, key: PeriodKey): string {
   const dict: Record<PeriodKey, Record<Lang, string>> = {
     tots: {
       ca: 'Tots',
@@ -28,12 +26,12 @@ function periodLabel(lang: Lang, key: PeriodKey): string {
       pt: 'Todos',
     },
     restauracio: {
-      ca: 'Restauració (1910–1930)',
-      es: 'Restauración (1910–1930)',
-      en: 'Restoration (1910–1930)',
-      fr: 'Restauration (1910–1930)',
-      it: 'Restaurazione (1910–1930)',
-      pt: 'Restauração (1910–1930)',
+      ca: 'Restauració (1910–1931)',
+      es: 'Restauración (1910–1931)',
+      en: 'Restoration (1910–1931)',
+      fr: 'Restauration (1910–1931)',
+      it: 'Restaurazione (1910–1931)',
+      pt: 'Restauração (1910–1931)',
     },
     republica: {
       ca: 'Segona República (1931–1939)',
@@ -127,9 +125,13 @@ function fillSelect(select: HTMLSelectElement | null, options: { value: string; 
 function getYears(period: PeriodKey): number[] {
   const range = period === 'tots' ? GLOBAL_RANGE : PERIOD_RANGES[period];
 
+  const fromYear = typeof range.from === 'string' ? parseInt(range.from.slice(0, 4)) : range.from;
+
+  const toYear = typeof range.to === 'string' ? parseInt(range.to.slice(0, 4)) : range.to;
+
   const out: number[] = [];
 
-  for (let y = range.from; y <= range.to; y++) {
+  for (let y = fromYear; y <= toYear; y++) {
     out.push(y);
   }
 

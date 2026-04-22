@@ -1,4 +1,4 @@
-import { initCronologiaSelects } from './selectsCronologia';
+import { initCronologiaSelects, periodLabel } from './selectsCronologia';
 
 export type Lang = 'ca' | 'es' | 'en' | 'fr' | 'it' | 'pt';
 
@@ -285,8 +285,9 @@ async function load(lang: Lang): Promise<void> {
         </div>
 
         <div class="mb-2" style="margin-top:15px;margin-bottom:15px">
-          ${badge(t(lang, 'territori'), areaLabel(lang, ev.area))}
-          ${ev.tema ? badge(t(lang, 'tematica'), temaLabel(lang, ev.tema)) : ''}
+            ${badge(t(lang, 'periode'), periodLabel(lang, state.period))}
+            ${badge(t(lang, 'territori'), areaLabel(lang, ev.area))}
+            ${ev.tema ? badge(t(lang, 'tematica'), temaLabel(lang, ev.tema)) : ''}
         </div>
 
         <div style="margin-top:5px" class="raleway mt-3">${ev.textCa}</div>

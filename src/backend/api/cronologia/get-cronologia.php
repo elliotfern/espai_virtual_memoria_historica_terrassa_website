@@ -55,13 +55,24 @@ $any = isset($_GET['any']) && $_GET['any'] !== 'tots'
 $period = $_GET['period'] ?? 'tots';
 
 $periodRanges = [
-    'restauracio' => [1910, 1930],
-    'republica'   => [1931, 1939],
-    'dictadura'   => [1939, 1979],
+    'restauracio' => ['1910-01-01', '1931-04-11'],
+    'republica'   => ['1931-04-12', '1939-04-01'],
+    'dictadura'   => ['1939-04-01', '1979-12-31'],
 ];
 
 $rangeFrom = null;
 $rangeTo = null;
+
+$dateExpr = "
+STR_TO_DATE(
+  CONCAT(
+    c.any, '-',
+    LPAD(COALESCE(m.ordre, 1), 2, '0'), '-',
+    LPAD(COALESCE(c.diaInici, 1), 2, '0')
+  ),
+  '%Y-%m-%d'
+)
+";
 
 if ($any === null && $period !== 'tots' && isset($periodRanges[$period])) {
     $rangeFrom = $periodRanges[$period][0];
@@ -84,7 +95,7 @@ if ($tema !== 'tots') {
 if ($any !== null) {
     $sql .= " AND c.any = :any";
 } elseif ($rangeFrom !== null) {
-    $sql .= " AND c.any BETWEEN :rangeFrom AND :rangeTo";
+    $sql .= " AND $dateExpr BETWEEN :rangeFrom AND :rangeTo";
 }
 
 $sql .= " ORDER BY c.any ASC, mesOrdre ASC, c.diaInici ASC LIMIT :limite OFFSET :offset";
@@ -102,8 +113,8 @@ if ($tema !== 'tots') {
 if ($any !== null) {
     $stmt->bindParam(':any', $any, PDO::PARAM_INT);
 } elseif ($rangeFrom !== null) {
-    $stmt->bindValue(':rangeFrom', $rangeFrom, PDO::PARAM_INT);
-    $stmt->bindValue(':rangeTo', $rangeTo, PDO::PARAM_INT);
+    $stmt->bindValue(':rangeFrom', $rangeFrom);
+    $stmt->bindValue(':rangeTo', $rangeTo);
 }
 
 $stmt->bindParam(':limite', $limite, PDO::PARAM_INT);
@@ -116,9 +127,9 @@ $eventos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 // Cálculo del total de eventos
 // =============================
 $countSql = "SELECT COUNT(*) 
-    FROM db_cronologia AS c
-    WHERE 1=1";
-// canvi
+FROM db_cronologia AS c
+LEFT JOIN aux_cronologia_mes AS m ON c.mes = m.id
+WHERE 1=1";
 
 if ($area !== 'tots') {
     $countSql .= " AND area = :area";
@@ -130,7 +141,7 @@ if ($tema !== 'tots') {
 if ($any !== null) {
     $countSql .= " AND any = :any";
 } elseif ($rangeFrom !== null) {
-    $countSql .= " AND any BETWEEN :rangeFrom AND :rangeTo";
+    $countSql .= " AND $dateExpr BETWEEN :rangeFrom AND :rangeTo";
 }
 
 $countStmt = $conn->prepare($countSql);
@@ -146,8 +157,8 @@ if ($tema !== 'tots') {
 if ($any !== null) {
     $countStmt->bindParam(':any', $any, PDO::PARAM_INT);
 } elseif ($rangeFrom !== null) {
-    $countStmt->bindValue(':rangeFrom', $rangeFrom, PDO::PARAM_INT);
-    $countStmt->bindValue(':rangeTo', $rangeTo, PDO::PARAM_INT);
+    $stmt->bindValue(':rangeFrom', $rangeFrom);
+    $stmt->bindValue(':rangeTo', $rangeTo);
 }
 
 $countStmt->execute();
