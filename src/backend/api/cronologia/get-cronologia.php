@@ -171,8 +171,8 @@ if ($tema !== 'tots') {
 if ($any !== null) {
     $countStmt->bindParam(':any', $any, PDO::PARAM_INT);
 } elseif ($rangeFrom !== null) {
-    $stmt->bindValue(':rangeFrom', $rangeFrom);
-    $stmt->bindValue(':rangeTo', $rangeTo);
+    $countStmt->bindValue(':rangeFrom', $rangeFrom);
+    $countStmt->bindValue(':rangeTo', $rangeTo);
 }
 
 $countStmt->execute();
