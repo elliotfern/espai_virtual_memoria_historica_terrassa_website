@@ -97,4 +97,5 @@ final class Tables
     public const AUX_SECRETARIS_INSTRUCTORS = 'aux_secretaris_instructors';
     public const AUX_PRESIDENTS_TRIBUNAL = 'aux_presidents_tribunal';
     public const AUX_DEFENSORS = 'aux_defensors';
+    public const AUX_FISCALS = 'aux_fiscals';
 }
