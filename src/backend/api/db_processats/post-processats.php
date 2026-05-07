@@ -273,6 +273,23 @@ try {
         }
     }
 
+    // PONENTS
+    if (!empty($data['ponents']) && is_array($data['ponents'])) {
+
+        $sqlInsert = "INSERT INTO db_processats_ponents 
+    (processat_id, ponent_id)
+    VALUES (:processat_id, :ponent_id)";
+
+        $stmtIns = $conn->prepare($sqlInsert);
+
+        foreach ($data['ponents'] as $ponentId) {
+            $stmtIns->execute([
+                ':processat_id' => $id,
+                ':ponent_id' => $ponentId
+            ]);
+        }
+    }
+
     // Si la inserció té èxit, cal registrar la inserció en la base de control de canvis
     $detalls = "Creació fitxa repressió processats/empresonats";
     $tipusOperacio = "INSERT";

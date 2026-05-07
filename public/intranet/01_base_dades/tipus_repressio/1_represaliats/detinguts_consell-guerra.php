@@ -311,8 +311,25 @@
                 </div>
 
                 <div class="col-md-4 mb-4">
-                    <label for="ponent" class="form-label negreta">Ponent:</label>
-                    <input type="text" class="form-control" id="ponent" name="ponent" value="">
+                    <label for="ponent" class="form-label negreta">Ponent - ANTIC NO TOCAR:</label>
+                    <input type="text" class="form-control" id="ponent" name="ponent" value="" readonly>
+                </div>
+
+                <div class="col-md-4 mb-4">
+                    <label for="ponents" class="form-label negreta">
+                        Ponents:
+                    </label>
+
+                    <select
+                        class="form-control"
+                        id="ponents"
+                        name="ponents[]"
+                        multiple>
+                    </select>
+                    <div class="mt-2">
+                        <a href="https://memoriaterrassa.cat/gestio/auxiliars/nou-ponent" target="_blank" class="btn btn-secondary btn-sm" id="afegir16">Afegir ponent</a>
+                        <button id="refreshButton16" class="btn btn-primary btn-sm">Actualitzar llistat</button>
+                    </div>
                 </div>
 
                 <div class="col-md-4 mb-4">
