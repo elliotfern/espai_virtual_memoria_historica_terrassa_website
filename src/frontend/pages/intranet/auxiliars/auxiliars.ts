@@ -58,6 +58,7 @@ import { initFitxaDetallsAparicioMitja } from './fitxaAparicioPremsa';
 import { formAparicioPremsaI18n } from './formAparicioPremsaI18n';
 import { estudis } from './estudis/estudis';
 import { espaiVirtual } from './espai-virtual/espaiVirtual';
+import { formJutgeInstructor } from './formJutgeInstructor';
 
 export async function auxiliars() {
   const url = window.location.href;
@@ -557,6 +558,8 @@ export async function auxiliars() {
   } else if (pageType[2] === 'modifica-aparicio-premsa-i18n') {
     const id = Number(pageType[3]);
     formAparicioPremsaI18n(id);
+  } else if (pageType[2] === 'nou-jutge-instructor') {
+    formJutgeInstructor(false);
   } else if (pageType[2] === 'estudis') {
     estudis();
   } else if (pageType[2] === 'espai-virtual') {

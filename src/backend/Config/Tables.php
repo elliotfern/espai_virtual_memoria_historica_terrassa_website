@@ -91,4 +91,7 @@ final class Tables
 
     // USUARIS
     public const DB_AUTH_USERS_I18N = 'auth_users_i18n';
+
+    // AUXILIARS CONSELLS DE GUERRA
+    public const AUX_JUTGES_INSTRUCTORS = 'aux_jutges_instructors';
 }

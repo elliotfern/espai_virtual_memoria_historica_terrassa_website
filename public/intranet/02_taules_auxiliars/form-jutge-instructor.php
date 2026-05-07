@@ -9,8 +9,7 @@ require_once APP_ROOT . '/public/intranet/includes/header.php';
 
             <div id="titolForm" class="mb-3"></div>
 
-
-            <form id="mitjaI18nForm">
+            <form id="jutgeForm">
                 <div class="row g-4">
 
                     <div class="alert alert-success" role="alert" id="okMessage" style="display:none">
