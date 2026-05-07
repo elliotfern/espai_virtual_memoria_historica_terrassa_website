@@ -62,6 +62,7 @@ import { formJutgeInstructor } from './formJutgeInstructor';
 import { formSecretariInstructor } from './formSecretariInstructor';
 import { formPresidentTribunal } from './formPresidentTribunal';
 import { formDefensor } from './formDefensor';
+import { formFiscal } from './formFiscal';
 
 export async function auxiliars() {
   const url = window.location.href;
@@ -581,6 +582,11 @@ export async function auxiliars() {
   } else if (pageType[2] === 'modifica-defensor') {
     const id = Number(pageType[3]);
     formDefensor(true, id);
+  } else if (pageType[2] === 'nou-fiscal') {
+    formFiscal(false);
+  } else if (pageType[2] === 'modifica-fiscal') {
+    const id = Number(pageType[3]);
+    formFiscal(true, id);
   } else if (pageType[2] === 'estudis') {
     estudis();
   } else if (pageType[2] === 'espai-virtual') {

@@ -767,6 +767,13 @@ $routes = [
         'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-defensor.php'
     ]),
 
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/nou-fiscal' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-fiscal.php'
+    ]),
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/modifica-fiscal/{slug}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-fiscal.php'
+    ]),
+
 
     // Gestió familiars
     APP_INTRANET . $urlIntranet['familiars'] . '/modifica-familiar/{id}/{id}' => array_merge($defaultProtectedConfig, [
