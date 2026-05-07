@@ -31,6 +31,20 @@ export function renderFormInputs<T extends Record<string, unknown>>(data: T): vo
       continue;
     }
 
+    // MULTISELECT / ARRAYS (Choices.js compatible)
+    if (Array.isArray(value)) {
+      if (el instanceof HTMLSelectElement) {
+        // marcar opciones seleccionadas
+        const values = value.map(String);
+
+        Array.from(el.options).forEach((option) => {
+          option.selected = values.includes(option.value);
+        });
+      }
+
+      continue;
+    }
+
     el.value = String(value);
   }
 }

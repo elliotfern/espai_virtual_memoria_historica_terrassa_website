@@ -165,7 +165,7 @@ if ($slug === 'fitxaRepressio') {
 
     // GET : fitxa detingut/consell de guerra Intranet (per ID)
     // URL: /api/processats/get/fitxaIntranetId?id=${id}
-} elseif ($slug === 'fitxaIntranetId') {
+} else if ($slug === 'fitxaIntranetId') {
     $id = $_GET['id'];
 
     $db = new Database();
@@ -205,6 +205,10 @@ if ($slug === 'fitxaRepressio') {
     FROM db_processats AS p
     WHERE p.id = :id";
 
+    $queryJutges = "SELECT jutge_id
+    FROM db_processats_jutges_instructors
+    WHERE processat_id = :id";
+
     try {
         $params = [':id' => $id];
         $result = $db->getData($query, $params, true);
@@ -217,6 +221,23 @@ if ($slug === 'fitxaRepressio') {
             );
             return;
         }
+
+        $result = $result[0];
+
+        $jutges = $db->getData(
+            $queryJutges,
+            [':id' => $id],
+            false
+        );
+
+        // array de IDs
+        $result['jutges_instructors'] = array_map(
+            fn($row) => (int)$row['jutge_id'],
+            $jutges ?? []
+        );
+
+        // legacy temporal
+        $result['jutge_instructor_old'] = $result['jutge_instructor'];
 
         Response::success(
             MissatgesAPI::success('get'),

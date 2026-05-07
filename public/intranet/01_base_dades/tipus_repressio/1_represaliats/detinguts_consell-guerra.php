@@ -178,7 +178,20 @@
 
                 <div class="col-md-4 mb-4">
                     <label for="jutge_instructor" class="form-label negreta">Jutge instructor:</label>
-                    <input type="text" class="form-control" id="jutge_instructor" name="jutge_instructor" value="">
+                    <input type="text" class="form-control" id="jutge_instructor" name="jutge_instructor" value="" readonly>
+                </div>
+
+                <div class="col-md-4 mb-4">
+                    <label for="jutges_instructors" class="form-label negreta">
+                        Jutges instructors:
+                    </label>
+
+                    <select
+                        class="form-control"
+                        id="jutges_instructors"
+                        name="jutges_instructors[]"
+                        multiple>
+                    </select>
                 </div>
 
                 <div class="col-md-4 mb-4">

@@ -8,6 +8,8 @@ import { formatDatesForm } from '../../../../services/formatDates/dates';
 import { DOMAIN_API, DOMAIN_WEB } from '../../../../config/constants';
 import { renderTaulaCercadorFiltres } from '../../../../services/renderTaula/renderTaulaCercadorFiltres';
 import { initDeleteHandlers, registerDeleteCallback } from '../../../../services/fetchData/handleDelete';
+import Choices from 'choices.js';
+import { auxiliarMultiSelect } from '../../../../services/fetchData/auxiliarMultipleSelect';
 
 interface Fitxa {
   [key: string]: unknown;
@@ -25,6 +27,7 @@ interface Fitxa {
   pena: number;
   lloc_detencio: number;
   copia_exp: number;
+  jutges_instructors?: Array<number>;
 }
 
 interface EspaiRow {
@@ -201,6 +204,7 @@ export async function formDetingutConsellGuerra(idRepresaliat: number, id?: numb
   const container = document.getElementById('fitxaNomCognoms');
   const processatForm = document.getElementById('processatForm');
   const inputIdPersona = document.getElementById('idPersona') as HTMLInputElement | null;
+  const selectJutges = document.getElementById('jutges_instructors') as HTMLSelectElement | null;
 
   if (!response || !response.data) {
     if (btnForm) {
@@ -226,7 +230,21 @@ export async function formDetingutConsellGuerra(idRepresaliat: number, id?: numb
     container.innerHTML = `<h4>Fitxa: <a href="${url}" target="_blank">${nomComplet}</a></h4>`;
   }
 
+  let choicesJutges: Choices | undefined;
+
+  if (selectJutges) {
+    choicesJutges = new Choices(selectJutges, {
+      removeItemButton: true,
+      placeholder: true,
+      placeholderValue: 'Selecciona jutges...',
+    });
+  }
+
   renderFormInputs(data);
+
+  if (choicesJutges && Array.isArray(data?.jutges_instructors)) {
+    choicesJutges.setValue(data.jutges_instructors.map(String));
+  }
 
   if (btn1 && btn2 && btn3 && btn4 && btn5 && btn6 && btn7 && btn8 && btn10) {
     btn1.addEventListener('click', function (event) {
@@ -285,6 +303,7 @@ export async function formDetingutConsellGuerra(idRepresaliat: number, id?: numb
   await auxiliarSelect(data?.sentencia, 'sentencies', 'sentencia', 'sentencia_ca');
   await auxiliarSelect(data?.pena, 'penes', 'pena', 'pena_ca');
   await auxiliarSelect(data?.copia_exp, 'digitalitzat', 'copia_exp', 'nom');
+  await auxiliarMultiSelect(data?.jutges_instructors, 'jutges_instructors', 'jutges_instructors', 'nom_complet');
 
   if (!response) {
     if (processatForm) {

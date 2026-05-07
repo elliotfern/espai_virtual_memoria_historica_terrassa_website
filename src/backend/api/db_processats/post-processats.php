@@ -116,7 +116,6 @@ $copia_exp = !empty($data['copia_exp']) ? $data['copia_exp'] : NULL;
 $tipus_procediment = !empty($data['tipus_procediment']) ? $data['tipus_procediment'] : NULL;
 $tipus_judici = !empty($data['tipus_judici']) ? $data['tipus_judici'] : NULL;
 $num_causa = !empty($data['num_causa']) ? $data['num_causa'] : NULL;
-$jutge_instructor = !empty($data['jutge_instructor']) ? $data['jutge_instructor'] : NULL;
 $secretari_instructor = !empty($data['secretari_instructor']) ? $data['secretari_instructor'] : NULL;
 $jutjat = !empty($data['jutjat']) ? $data['jutjat'] : NULL;
 $any_inicial = !empty($data['any_inicial']) ? $data['any_inicial'] : NULL;
@@ -147,13 +146,13 @@ try {
     // Crear la consulta SQL
     $sql = "INSERT INTO db_processats (
     idPersona, tipus_procediment, tipus_judici, num_causa,
-    data_inici_proces, jutge_instructor, secretari_instructor, jutjat, any_inicial,
+    data_inici_proces, secretari_instructor, jutjat, any_inicial,
     any_final, consell_guerra_data, lloc_consell_guerra, president_tribunal, defensor,
     fiscal, ponent, tribunal_vocals, acusacio, acusacio_2, testimoni_acusacio,
     sentencia_data, sentencia, pena, commutacio, observacions, anyDetingut, data_detencio, lloc_detencio, num_registre, copia_exp
         ) VALUES (
     :idPersona, :tipus_procediment, :tipus_judici, :num_causa,
-    :data_inici_proces, :jutge_instructor, :secretari_instructor, :jutjat, :any_inicial,
+    :data_inici_proces, :secretari_instructor, :jutjat, :any_inicial,
     :any_final, :consell_guerra_data, :lloc_consell_guerra, :president_tribunal, :defensor,
     :fiscal, :ponent, :tribunal_vocals, :acusacio, :acusacio_2, :testimoni_acusacio,
     :sentencia_data, :sentencia, :pena, :commutacio, :observacions, :anyDetingut, :data_detencio, :lloc_detencio, :num_registre, :copia_exp
@@ -170,7 +169,6 @@ try {
     $stmt->bindParam(':tipus_judici', $tipus_judici, PDO::PARAM_INT);
     $stmt->bindParam(':num_causa', $num_causa, PDO::PARAM_STR);
     $stmt->bindParam(':data_inici_proces', $data_inici_procesFormat, PDO::PARAM_STR);
-    $stmt->bindParam(':jutge_instructor', $jutge_instructor, PDO::PARAM_STR);
     $stmt->bindParam(':secretari_instructor', $secretari_instructor, PDO::PARAM_STR);
     $stmt->bindParam(':jutjat', $jutjat, PDO::PARAM_INT);
     $stmt->bindParam(':any_inicial', $any_inicial, PDO::PARAM_STR);
@@ -199,6 +197,21 @@ try {
 
     // Recuperar el ID del registro creado
     $id = $conn->lastInsertId();
+
+    $sqlJutges = "INSERT INTO db_processats_jutges_instructors 
+        (processat_id, jutge_id) 
+        VALUES (:processat_id, :jutge_id)";
+
+    $stmtJutges = $conn->prepare($sqlJutges);
+
+    if (!empty($data['jutges_instructors']) && is_array($data['jutges_instructors'])) {
+        foreach ($data['jutges_instructors'] as $jutgeId) {
+            $stmtJutges->execute([
+                ':processat_id' => $id,
+                ':jutge_id' => $jutgeId
+            ]);
+        }
+    }
 
     // Si la inserció té èxit, cal registrar la inserció en la base de control de canvis
     $detalls = "Creació fitxa repressió processats/empresonats";
