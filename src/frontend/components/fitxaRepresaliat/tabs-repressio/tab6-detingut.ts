@@ -4,6 +4,29 @@ import { DEFAULT_LANG, isLang, t } from '../../../services/i18n/i18n';
 import { valorTextDesconegut } from '../../../services/formatDates/valorTextDesconegut';
 import { LABELS_JUD } from '../../../services/i18n/fitxaRepresaliatRepressio/label-tab6-detingut';
 
+type PersonaRelacionada = {
+  id: number | string;
+  nom?: string | null;
+  cognoms?: string | null;
+  carrec?: string | null;
+};
+
+function renderPersones(list?: PersonaRelacionada[] | null): string {
+  if (!Array.isArray(list) || list.length === 0) return '-';
+
+  return list
+    .map((p) => {
+      const nom = p.nom ?? '';
+      const cognoms = p.cognoms ?? '';
+      const carrec = p.carrec ? ` (${p.carrec})` : '';
+
+      const text = `${nom} ${cognoms}`.trim();
+
+      return carrec ? `${text}${carrec}` : text;
+    })
+    .join('; ');
+}
+
 export function tab6Detingut(dada: DetingutProcesat, htmlContent: string, lang: string): string {
   const l = isLang(lang) ? lang : DEFAULT_LANG;
 
@@ -35,20 +58,20 @@ export function tab6Detingut(dada: DetingutProcesat, htmlContent: string, lang: 
 
   // Detall
   const jutjat = valorTextDesconegut(dada.jutjat, 2, l);
-  const jutgeInstructor = valorTextDesconegut(dada.jutge_instructor, 2, l);
-  const secretariInstructor = valorTextDesconegut(dada.secretari_instructor, 2, l);
+
+  const defensor = renderPersones(dada.defensors);
+  const fiscal = renderPersones(dada.fiscals);
+  const ponent = renderPersones(dada.ponents);
+  const tribunalVocals = renderPersones(dada.tribunals_vocals);
+  const testimoniAcusacio = renderPersones(dada.testimonis_acusacions);
+  const jutgeInstructor = renderPersones(dada.jutges_instructors);
+  const secretariInstructor = renderPersones(dada.secretaris_instructors);
+  const presidentTribunal = renderPersones(dada.presidents_tribunal);
 
   const consellGuerraData = valorTextDesconegut(dada.consell_guerra_data?.trim() ? formatDatesForm(dada.consell_guerra_data) : null, 4, l);
-
   const llocConsellGuerra = valorTextDesconegut(dada.lloc_consell_guerra, 2, l);
-  const presidentTribunal = valorTextDesconegut(dada.president_tribunal, 2, l);
-  const defensor = valorTextDesconegut(dada.defensor, 2, l);
-  const fiscal = valorTextDesconegut(dada.fiscal, 2, l);
-  const ponent = valorTextDesconegut(dada.ponent, 2, l);
-  const tribunalVocals = valorTextDesconegut(dada.tribunal_vocals, 2, l);
   const acusacio = valorTextDesconegut(dada.acusacio, 5, l); // femení
   const acusacio2 = valorTextDesconegut(dada.acusacio_2, 5, l); // femení
-  const testimoniAcusacio = valorTextDesconegut(dada.testimoni_acusacio, 2, l);
   const observacions = valorTextDesconegut(dada.observacions, 1, l); // "Sense dades"
 
   // Render

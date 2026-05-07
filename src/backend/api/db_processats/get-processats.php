@@ -205,6 +205,13 @@ if ($slug === 'fitxaRepressio') {
             WHERE pt.processat_id = :id
         ", [':id' => $id], false);
 
+        $fitxa['presidents_tribunal'] = $db->getData("
+        SELECT p.id, p.nom, p.cognoms, p.carrec
+        FROM db_processats_presidents_tribunal pp
+        LEFT JOIN aux_presidents_tribunal p ON p.id = pp.president_id
+        WHERE pp.processat_id = :id
+    ", [':id' => $id], false);
+
         // =====================================================
 
         Response::success(
