@@ -343,6 +343,27 @@ try {
         }
     }
 
+    // VOCALS DE TRIBUNALS
+    $sqlDelete = "DELETE FROM db_processats_tribunal_vocals WHERE processat_id = :id";
+    $stmtDel = $conn->prepare($sqlDelete);
+    $stmtDel->execute([':id' => $id]);
+
+    if (!empty($data['tribunals_vocals']) && is_array($data['tribunals_vocals'])) {
+
+        $sqlInsert = "INSERT INTO db_processats_tribunal_vocals 
+        (processat_id, vocal_id)
+        VALUES (:processat_id, :vocal_id)";
+
+        $stmtIns = $conn->prepare($sqlInsert);
+
+        foreach ($data['tribunals_vocals'] as $vocalId) {
+            $stmtIns->execute([
+                ':processat_id' => $id,
+                ':vocal_id' => $vocalId
+            ]);
+        }
+    }
+
     // Si la inserció té èxit, cal registrar la inserció en la base de control de canvis
     $detalls = "Modificació fitxa repressió processats/empresonats";
     $tipusOperacio = "UPDATE";

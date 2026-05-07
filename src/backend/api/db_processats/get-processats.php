@@ -232,6 +232,10 @@ if ($slug === 'fitxaRepressio') {
     FROM db_processats_ponents
     WHERE processat_id = :id";
 
+    $queryTribunalsVocals = "SELECT vocal_id
+    FROM db_processats_tribunal_vocals
+    WHERE processat_id = :id";
+
     try {
         $params = [':id' => $id];
         $result = $db->getData($query, $params, true);
@@ -269,6 +273,11 @@ if ($slug === 'fitxaRepressio') {
             [':id' => $id],
             false
         );
+        $tribunalsVocals = $db->getData(
+            $queryTribunalsVocals,
+            [':id' => $id],
+            false
+        );
 
         // array de IDs
         $result['jutges_instructors'] = array_map(
@@ -301,6 +310,11 @@ if ($slug === 'fitxaRepressio') {
             $ponents ?: []
         );
 
+        $result['tribunals_vocals'] = array_map(
+            fn($row) => (int)($row['vocal_id'] ?? 0),
+            $tribunalsVocals ?: []
+        );
+
         // legacy temporal
         $result['jutge_instructor_old'] = $result['jutge_instructor'] ?? null;
         $result['secretari_instructor_old'] = $result['secretari_instructor'] ?? null;
@@ -308,6 +322,7 @@ if ($slug === 'fitxaRepressio') {
         $result['defensor_old'] = $result['defensor'] ?? null;
         $result['fiscal_old'] = $result['fiscal'] ?? null;
         $result['ponent_old'] = $result['ponent'] ?? null;
+        $result['tribunal_vocals_old'] = $result['tribunal_vocals'] ?? null;
 
         Response::success(
             MissatgesAPI::success('get'),

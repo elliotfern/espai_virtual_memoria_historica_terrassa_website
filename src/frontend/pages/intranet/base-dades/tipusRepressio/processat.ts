@@ -32,6 +32,7 @@ interface Fitxa {
   defensors?: Array<number>;
   fiscals?: Array<number>;
   ponents?: Array<number>;
+  tribunals_vocals?: Array<number>;
 }
 
 interface EspaiRow {
@@ -211,6 +212,8 @@ export async function formDetingutConsellGuerra(idRepresaliat: number, id?: numb
   const btn14 = document.getElementById('refreshButton14');
   const btn15 = document.getElementById('refreshButton15');
   const btn16 = document.getElementById('refreshButton16');
+  const btn17 = document.getElementById('refreshButton17');
+
   const container = document.getElementById('fitxaNomCognoms');
   const processatForm = document.getElementById('processatForm');
   const inputIdPersona = document.getElementById('idPersona') as HTMLInputElement | null;
@@ -241,7 +244,7 @@ export async function formDetingutConsellGuerra(idRepresaliat: number, id?: numb
 
   renderFormInputs(data);
 
-  if (btn1 && btn2 && btn3 && btn4 && btn5 && btn6 && btn7 && btn8 && btn10 && btn11 && btn12 && btn13 && btn14 && btn15 && btn16) {
+  if (btn1 && btn2 && btn3 && btn4 && btn5 && btn6 && btn7 && btn8 && btn10 && btn11 && btn12 && btn13 && btn14 && btn15 && btn16 && btn17) {
     btn1.addEventListener('click', function (event) {
       event.preventDefault();
       auxiliarSelect(data?.tipus_procediment, 'procediments', 'tipus_procediment', 'procediment_ca');
@@ -311,9 +314,15 @@ export async function formDetingutConsellGuerra(idRepresaliat: number, id?: numb
       event.preventDefault();
       auxiliarMultiSelect(data?.fiscals, 'fiscals', 'fiscals', 'nom_complet');
     });
+
     btn16.addEventListener('click', function (event) {
       event.preventDefault();
       auxiliarMultiSelect(data?.ponents, 'ponents', 'ponents', 'nom_complet');
+    });
+
+    btn17.addEventListener('click', function (event) {
+      event.preventDefault();
+      auxiliarMultiSelect(data?.tribunals_vocals, 'tribunals_vocals', 'tribunals_vocals', 'nom_complet');
     });
   }
 
@@ -333,6 +342,7 @@ export async function formDetingutConsellGuerra(idRepresaliat: number, id?: numb
   await auxiliarMultiSelect(data?.defensors, 'defensors', 'defensors', 'nom_complet');
   await auxiliarMultiSelect(data?.fiscals, 'fiscals', 'fiscals', 'nom_complet');
   await auxiliarMultiSelect(data?.ponents, 'ponents', 'ponents', 'nom_complet');
+  await auxiliarMultiSelect(data?.tribunals_vocals, 'tribunals_vocals', 'tribunals_vocals', 'nom_complet');
 
   if (!response) {
     if (processatForm) {

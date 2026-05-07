@@ -333,8 +333,25 @@
                 </div>
 
                 <div class="col-md-4 mb-4">
-                    <label for="tribunal_vocals" class="form-label negreta">Vocals del tribunal:</label>
-                    <input type="text" class="form-control" id="tribunal_vocals" name="tribunal_vocals" value="">
+                    <label for="tribunal_vocals" class="form-label negreta">Vocals del tribunal - ANTIC NO TOCAR:</label>
+                    <input type="text" class="form-control" id="tribunal_vocals" name="tribunal_vocals" value="" readonly>
+                </div>
+
+                <div class="col-md-4 mb-4">
+                    <label for="tribunals_vocals" class="form-label negreta">
+                        Vocals del tribunal:
+                    </label>
+
+                    <select
+                        class="form-control"
+                        id="tribunals_vocals"
+                        name="tribunals_vocals[]"
+                        multiple>
+                    </select>
+                    <div class="mt-2">
+                        <a href="https://memoriaterrassa.cat/gestio/auxiliars/nou-vocal-tribunal" target="_blank" class="btn btn-secondary btn-sm" id="afegir17">Afegir vocal</a>
+                        <button id="refreshButton17" class="btn btn-primary btn-sm">Actualitzar llistat</button>
+                    </div>
                 </div>
 
                 <h4>5) Detalls de l'acusació fiscalia</h4>
