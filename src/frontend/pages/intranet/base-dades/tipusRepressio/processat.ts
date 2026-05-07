@@ -30,6 +30,7 @@ interface Fitxa {
   secretaris_instructors?: Array<number>;
   presidents_tribunals?: Array<number>;
   defensors?: Array<number>;
+  fiscals?: Array<number>;
 }
 
 interface EspaiRow {
@@ -203,6 +204,10 @@ export async function formDetingutConsellGuerra(idRepresaliat: number, id?: numb
   const btn7 = document.getElementById('refreshButton7');
   const btn8 = document.getElementById('refreshButton8');
   const btn10 = document.getElementById('refreshButton10');
+  const btn11 = document.getElementById('refreshButton11');
+  const btn12 = document.getElementById('refreshButton12');
+  const btn13 = document.getElementById('refreshButton13');
+  const btn14 = document.getElementById('refreshButton14');
   const container = document.getElementById('fitxaNomCognoms');
   const processatForm = document.getElementById('processatForm');
   const inputIdPersona = document.getElementById('idPersona') as HTMLInputElement | null;
@@ -233,7 +238,7 @@ export async function formDetingutConsellGuerra(idRepresaliat: number, id?: numb
 
   renderFormInputs(data);
 
-  if (btn1 && btn2 && btn3 && btn4 && btn5 && btn6 && btn7 && btn8 && btn10) {
+  if (btn1 && btn2 && btn3 && btn4 && btn5 && btn6 && btn7 && btn8 && btn10 && btn11 && btn12 && btn13 && btn14) {
     btn1.addEventListener('click', function (event) {
       event.preventDefault();
       auxiliarSelect(data?.tipus_procediment, 'procediments', 'tipus_procediment', 'procediment_ca');
@@ -278,6 +283,26 @@ export async function formDetingutConsellGuerra(idRepresaliat: number, id?: numb
       event.preventDefault();
       auxiliarSelect(data?.lloc_detencio, 'municipis', 'lloc_detencio', 'ciutat');
     });
+
+    btn11.addEventListener('click', function (event) {
+      event.preventDefault();
+      auxiliarMultiSelect(data?.jutges_instructors, 'jutges_instructors', 'jutges_instructors', 'nom_complet');
+    });
+
+    btn12.addEventListener('click', function (event) {
+      event.preventDefault();
+      auxiliarMultiSelect(data?.secretaris_instructors, 'secretaris_instructors', 'secretaris_instructors', 'nom_complet');
+    });
+
+    btn13.addEventListener('click', function (event) {
+      event.preventDefault();
+      auxiliarMultiSelect(data?.presidents_tribunals, 'presidents_tribunals', 'presidents_tribunals', 'nom_complet');
+    });
+
+    btn14.addEventListener('click', function (event) {
+      event.preventDefault();
+      auxiliarMultiSelect(data?.defensors, 'defensors', 'defensors', 'nom_complet');
+    });
   }
 
   auxiliarSelect(data?.lloc_detencio, 'municipis', 'lloc_detencio', 'ciutat');
@@ -294,6 +319,7 @@ export async function formDetingutConsellGuerra(idRepresaliat: number, id?: numb
   await auxiliarMultiSelect(data?.secretaris_instructors, 'secretaris_instructors', 'secretaris_instructors', 'nom_complet');
   await auxiliarMultiSelect(data?.presidents_tribunals, 'presidents_tribunals', 'presidents_tribunals', 'nom_complet');
   await auxiliarMultiSelect(data?.defensors, 'defensors', 'defensors', 'nom_complet');
+  await auxiliarMultiSelect(data?.fiscals, 'fiscals', 'fiscals', 'nom_complet');
 
   if (!response) {
     if (processatForm) {

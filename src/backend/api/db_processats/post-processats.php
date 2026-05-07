@@ -121,7 +121,6 @@ $jutjat = !empty($data['jutjat']) ? $data['jutjat'] : NULL;
 $any_inicial = !empty($data['any_inicial']) ? $data['any_inicial'] : NULL;
 $any_final = !empty($data['any_final']) ? $data['any_final'] : NULL;
 $lloc_consell_guerra = !empty($data['lloc_consell_guerra']) ? $data['lloc_consell_guerra'] : NULL;
-$fiscal = !empty($data['fiscal']) ? $data['fiscal'] : NULL;
 $ponent = !empty($data['ponent']) ? $data['ponent'] : NULL;
 $tribunal_vocals = !empty($data['tribunal_vocals']) ? $data['tribunal_vocals'] : NULL;
 $acusacio = !empty($data['acusacio']) ? $data['acusacio'] : NULL;
@@ -145,12 +144,12 @@ try {
     $sql = "INSERT INTO db_processats (
     idPersona, tipus_procediment, tipus_judici, num_causa,
     data_inici_proces, secretari_instructor, jutjat, any_inicial,
-    any_final, consell_guerra_data, lloc_consell_guerra, fiscal, ponent, tribunal_vocals, acusacio, acusacio_2, testimoni_acusacio,
+    any_final, consell_guerra_data, lloc_consell_guerra, ponent, tribunal_vocals, acusacio, acusacio_2, testimoni_acusacio,
     sentencia_data, sentencia, pena, commutacio, observacions, anyDetingut, data_detencio, lloc_detencio, num_registre, copia_exp
         ) VALUES (
     :idPersona, :tipus_procediment, :tipus_judici, :num_causa,
     :data_inici_proces, :secretari_instructor, :jutjat, :any_inicial,
-    :any_final, :consell_guerra_data, :lloc_consell_guerra, fiscal, :ponent, :tribunal_vocals, :acusacio, :acusacio_2, :testimoni_acusacio,
+    :any_final, :consell_guerra_data, :lloc_consell_guerra, :ponent, :tribunal_vocals, :acusacio, :acusacio_2, :testimoni_acusacio,
     :sentencia_data, :sentencia, :pena, :commutacio, :observacions, :anyDetingut, :data_detencio, :lloc_detencio, :num_registre, :copia_exp
 )";
 
@@ -171,7 +170,6 @@ try {
     $stmt->bindParam(':any_final', $any_final, PDO::PARAM_STR);
     $stmt->bindParam(':consell_guerra_data', $consell_guerra_dataFormat, PDO::PARAM_STR);
     $stmt->bindParam(':lloc_consell_guerra', $lloc_consell_guerra, PDO::PARAM_INT);
-    $stmt->bindParam(':fiscal', $fiscal, PDO::PARAM_STR);
     $stmt->bindParam(':ponent', $ponent, PDO::PARAM_STR);
     $stmt->bindParam(':tribunal_vocals', $tribunal_vocals, PDO::PARAM_STR);
     $stmt->bindParam(':acusacio', $acusacio, PDO::PARAM_INT);
@@ -257,6 +255,24 @@ try {
             ]);
         }
     }
+
+    if (!empty($data['fiscals']) && is_array($data['fiscals'])) {
+
+        $sqlInsert = "
+        INSERT INTO db_processats_fiscals (processat_id, fiscal_id)
+        VALUES (:processat_id, :fiscal_id)
+    ";
+
+        $stmtIns = $conn->prepare($sqlInsert);
+
+        foreach ($data['fiscals'] as $fiscalId) {
+            $stmtIns->execute([
+                ':processat_id' => $id,
+                ':fiscal_id' => $fiscalId
+            ]);
+        }
+    }
+
     // Si la inserció té èxit, cal registrar la inserció en la base de control de canvis
     $detalls = "Creació fitxa repressió processats/empresonats";
     $tipusOperacio = "INSERT";

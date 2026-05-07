@@ -118,7 +118,6 @@ $jutjat = !empty($data['jutjat']) ? $data['jutjat'] : NULL;
 $any_inicial = !empty($data['any_inicial']) ? $data['any_inicial'] : NULL;
 $any_final = !empty($data['any_final']) ? $data['any_final'] : NULL;
 $lloc_consell_guerra = !empty($data['lloc_consell_guerra']) ? $data['lloc_consell_guerra'] : NULL;
-$fiscal = !empty($data['fiscal']) ? $data['fiscal'] : NULL;
 $ponent = !empty($data['ponent']) ? $data['ponent'] : NULL;
 $tribunal_vocals = !empty($data['tribunal_vocals']) ? $data['tribunal_vocals'] : NULL;
 $acusacio = !empty($data['acusacio']) ? $data['acusacio'] : NULL;
@@ -150,7 +149,6 @@ try {
             any_final = :any_final,
             consell_guerra_data = :consell_guerra_data,
             lloc_consell_guerra = :lloc_consell_guerra,
-            fiscal = :fiscal,
             ponent = :ponent,
             tribunal_vocals = :tribunal_vocals,
             acusacio = :acusacio,
@@ -185,7 +183,6 @@ try {
     $stmt->bindParam(':any_final', $any_final, PDO::PARAM_STR);
     $stmt->bindParam(':consell_guerra_data', $consell_guerra_dataFormat, PDO::PARAM_STR);
     $stmt->bindParam(':lloc_consell_guerra', $lloc_consell_guerra, PDO::PARAM_INT);
-    $stmt->bindParam(':fiscal', $fiscal, PDO::PARAM_STR);
     $stmt->bindParam(':ponent', $ponent, PDO::PARAM_STR);
     $stmt->bindParam(':tribunal_vocals', $tribunal_vocals, PDO::PARAM_STR);
     $stmt->bindParam(':acusacio', $acusacio, PDO::PARAM_INT);
@@ -295,6 +292,32 @@ try {
             $stmt->execute([
                 ':processat_id' => $id,
                 ':defensor_id' => $idDefensor
+            ]);
+        }
+    }
+
+    // FISCALS
+    $sqlDeleteFiscals = "
+    DELETE FROM db_processats_fiscals
+    WHERE processat_id = :id
+    ";
+
+    $stmtDelFiscals = $conn->prepare($sqlDeleteFiscals);
+    $stmtDelFiscals->execute([':id' => $id]);
+
+    if (!empty($data['fiscals']) && is_array($data['fiscals'])) {
+
+        $sqlInsert = "
+        INSERT INTO db_processats_fiscals (processat_id, fiscal_id)
+        VALUES (:processat_id, :fiscal_id)
+    ";
+
+        $stmtIns = $conn->prepare($sqlInsert);
+
+        foreach ($data['fiscals'] as $fiscalId) {
+            $stmtIns->execute([
+                ':processat_id' => $id,
+                ':fiscal_id' => $fiscalId
             ]);
         }
     }

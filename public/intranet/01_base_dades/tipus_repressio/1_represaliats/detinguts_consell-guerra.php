@@ -192,6 +192,12 @@
                         name="jutges_instructors[]"
                         multiple>
                     </select>
+
+                    <div class="mt-2">
+                        <a href="https://memoriaterrassa.cat/gestio/auxiliars/nou-jutge-instructor" target="_blank" class="btn btn-secondary btn-sm" id="afegir11">Afegir jutge instructor</a>
+                        <button id="refreshButton11" class="btn btn-primary btn-sm">Actualitzar llistat</button>
+                    </div>
+
                 </div>
 
                 <div class="col-md-4 mb-4">
@@ -210,6 +216,12 @@
                         name="secretaris_instructors[]"
                         multiple>
                     </select>
+
+                    <div class="mt-2">
+                        <a href="https://memoriaterrassa.cat/gestio/auxiliars/nou-secretari-instructor" target="_blank" class="btn btn-secondary btn-sm" id="afegir12">Afegir secretari</a>
+                        <button id="refreshButton12" class="btn btn-primary btn-sm">Actualitzar llistat</button>
+                    </div>
+
                 </div>
 
                 <div class="col-md-4 mb-4">
@@ -246,6 +258,11 @@
                         name="presidents_tribunals[]"
                         multiple>
                     </select>
+
+                    <div class="mt-2">
+                        <a href="https://memoriaterrassa.cat/gestio/auxiliars/nou-president-tribunal" target="_blank" class="btn btn-secondary btn-sm" id="afegir13">Afegir president</a>
+                        <button id="refreshButton13" class="btn btn-primary btn-sm">Actualitzar llistat</button>
+                    </div>
                 </div>
 
                 <div class="col-md-4 mb-4">
@@ -264,11 +281,33 @@
                         name="defensors[]"
                         multiple>
                     </select>
+
+                    <div class="mt-2">
+                        <a href="https://memoriaterrassa.cat/gestio/auxiliars/nou-defensor" target="_blank" class="btn btn-secondary btn-sm" id="afegir14">Afegir defensor</a>
+                        <button id="refreshButton14" class="btn btn-primary btn-sm">Actualitzar llistat</button>
+                    </div>
                 </div>
 
                 <div class="col-md-4 mb-4">
-                    <label for="fiscal" class="form-label negreta">Fiscal:</label>
-                    <input type="text" class="form-control" id="fiscal" name="fiscal" value="">
+                    <label for="fiscal" class="form-label negreta">Fiscal - CAMP ANTIC NO TOCAR:</label>
+                    <input type="text" class="form-control" id="fiscal" name="fiscal" value="" readonly>
+                </div>
+
+                <div class="col-md-4 mb-4">
+                    <label for="fiscals" class="form-label negreta">
+                        Fiscals:
+                    </label>
+
+                    <select
+                        class="form-control"
+                        id="fiscals"
+                        name="fiscals[]"
+                        multiple>
+                    </select>
+                    <div class="mt-2">
+                        <a href="https://memoriaterrassa.cat/gestio/auxiliars/nou-fiscal" target="_blank" class="btn btn-secondary btn-sm" id="afegir15">Afegir fiscal</a>
+                        <button id="refreshButton15" class="btn btn-primary btn-sm">Actualitzar llistat</button>
+                    </div>
                 </div>
 
                 <div class="col-md-4 mb-4">
