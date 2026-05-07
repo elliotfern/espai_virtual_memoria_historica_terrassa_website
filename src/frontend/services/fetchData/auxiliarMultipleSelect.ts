@@ -3,6 +3,10 @@ import 'choices.js/public/assets/styles/choices.min.css';
 
 type Item = { id: number | string; [key: string]: unknown };
 
+type SelectWithChoices = HTMLSelectElement & {
+  choicesInstance?: Choices;
+};
+
 export async function auxiliarMultiSelect(selectedIds: (number | string)[] | null | undefined, api: string, elementId: string, valorText: string, config?: Partial<Choices['config']>): Promise<Choices | void> {
   const baseUrl = `https://${window.location.hostname}`;
   const urlAjax = `${baseUrl}/api/auxiliars/get/${api}`;
@@ -22,12 +26,20 @@ export async function auxiliarMultiSelect(selectedIds: (number | string)[] | nul
     const raw = Array.isArray(json?.data) ? json.data : json;
     const data: Item[] = Array.isArray(raw) ? raw : [];
 
-    const selectElement = document.getElementById(elementId) as HTMLSelectElement | null;
+    const selectElement = document.getElementById(elementId) as SelectWithChoices | null;
+
     if (!selectElement) return;
+
+    // destruir instancia previa ANTES de modificar DOM
+    if (selectElement.choicesInstance) {
+      selectElement.choicesInstance.destroy();
+      selectElement.choicesInstance = undefined;
+    }
 
     // limpiar options
     selectElement.innerHTML = '';
 
+    // placeholder
     const placeholder = document.createElement('option');
     placeholder.value = '';
     placeholder.textContent = 'Selecciona una opció:';
@@ -36,6 +48,7 @@ export async function auxiliarMultiSelect(selectedIds: (number | string)[] | nul
     // opciones
     for (const item of data) {
       const opt = document.createElement('option');
+
       opt.value = String(item.id);
 
       const label = item[valorText];
@@ -55,7 +68,11 @@ export async function auxiliarMultiSelect(selectedIds: (number | string)[] | nul
       ...config,
     });
 
-    if (Array.isArray(selectedIds)) {
+    // guardar referencia
+    selectElement.choicesInstance = choices;
+
+    // seleccionar valores
+    if (Array.isArray(selectedIds) && selectedIds.length > 0) {
       const values = selectedIds.map(String);
 
       requestAnimationFrame(() => {

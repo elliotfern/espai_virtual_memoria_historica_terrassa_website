@@ -208,6 +208,7 @@ export async function formDetingutConsellGuerra(idRepresaliat: number, id?: numb
   const btn12 = document.getElementById('refreshButton12');
   const btn13 = document.getElementById('refreshButton13');
   const btn14 = document.getElementById('refreshButton14');
+  const btn15 = document.getElementById('refreshButton15');
   const container = document.getElementById('fitxaNomCognoms');
   const processatForm = document.getElementById('processatForm');
   const inputIdPersona = document.getElementById('idPersona') as HTMLInputElement | null;
@@ -238,7 +239,7 @@ export async function formDetingutConsellGuerra(idRepresaliat: number, id?: numb
 
   renderFormInputs(data);
 
-  if (btn1 && btn2 && btn3 && btn4 && btn5 && btn6 && btn7 && btn8 && btn10 && btn11 && btn12 && btn13 && btn14) {
+  if (btn1 && btn2 && btn3 && btn4 && btn5 && btn6 && btn7 && btn8 && btn10 && btn11 && btn12 && btn13 && btn14 && btn15) {
     btn1.addEventListener('click', function (event) {
       event.preventDefault();
       auxiliarSelect(data?.tipus_procediment, 'procediments', 'tipus_procediment', 'procediment_ca');
@@ -302,6 +303,11 @@ export async function formDetingutConsellGuerra(idRepresaliat: number, id?: numb
     btn14.addEventListener('click', function (event) {
       event.preventDefault();
       auxiliarMultiSelect(data?.defensors, 'defensors', 'defensors', 'nom_complet');
+    });
+
+    btn15.addEventListener('click', function (event) {
+      event.preventDefault();
+      auxiliarMultiSelect(data?.fiscals, 'fiscals', 'fiscals', 'nom_complet');
     });
   }
 
