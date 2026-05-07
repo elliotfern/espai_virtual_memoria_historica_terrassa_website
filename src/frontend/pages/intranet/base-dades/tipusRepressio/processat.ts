@@ -29,6 +29,7 @@ interface Fitxa {
   jutges_instructors?: Array<number>;
   secretaris_instructors?: Array<number>;
   presidents_tribunals?: Array<number>;
+  defensors?: Array<number>;
 }
 
 interface EspaiRow {
@@ -292,6 +293,7 @@ export async function formDetingutConsellGuerra(idRepresaliat: number, id?: numb
   await auxiliarMultiSelect(data?.jutges_instructors, 'jutges_instructors', 'jutges_instructors', 'nom_complet');
   await auxiliarMultiSelect(data?.secretaris_instructors, 'secretaris_instructors', 'secretaris_instructors', 'nom_complet');
   await auxiliarMultiSelect(data?.presidents_tribunals, 'presidents_tribunals', 'presidents_tribunals', 'nom_complet');
+  await auxiliarMultiSelect(data?.defensors, 'defensors', 'defensors', 'nom_complet');
 
   if (!response) {
     if (processatForm) {

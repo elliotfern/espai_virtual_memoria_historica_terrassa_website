@@ -121,8 +121,6 @@ $jutjat = !empty($data['jutjat']) ? $data['jutjat'] : NULL;
 $any_inicial = !empty($data['any_inicial']) ? $data['any_inicial'] : NULL;
 $any_final = !empty($data['any_final']) ? $data['any_final'] : NULL;
 $lloc_consell_guerra = !empty($data['lloc_consell_guerra']) ? $data['lloc_consell_guerra'] : NULL;
-$president_tribunal = !empty($data['president_tribunal']) ? $data['president_tribunal'] : NULL;
-$defensor = !empty($data['defensor']) ? $data['defensor'] : NULL;
 $fiscal = !empty($data['fiscal']) ? $data['fiscal'] : NULL;
 $ponent = !empty($data['ponent']) ? $data['ponent'] : NULL;
 $tribunal_vocals = !empty($data['tribunal_vocals']) ? $data['tribunal_vocals'] : NULL;
@@ -147,14 +145,12 @@ try {
     $sql = "INSERT INTO db_processats (
     idPersona, tipus_procediment, tipus_judici, num_causa,
     data_inici_proces, secretari_instructor, jutjat, any_inicial,
-    any_final, consell_guerra_data, lloc_consell_guerra, president_tribunal, defensor,
-    fiscal, ponent, tribunal_vocals, acusacio, acusacio_2, testimoni_acusacio,
+    any_final, consell_guerra_data, lloc_consell_guerra, fiscal, ponent, tribunal_vocals, acusacio, acusacio_2, testimoni_acusacio,
     sentencia_data, sentencia, pena, commutacio, observacions, anyDetingut, data_detencio, lloc_detencio, num_registre, copia_exp
         ) VALUES (
     :idPersona, :tipus_procediment, :tipus_judici, :num_causa,
     :data_inici_proces, :secretari_instructor, :jutjat, :any_inicial,
-    :any_final, :consell_guerra_data, :lloc_consell_guerra, :president_tribunal, :defensor,
-    :fiscal, :ponent, :tribunal_vocals, :acusacio, :acusacio_2, :testimoni_acusacio,
+    :any_final, :consell_guerra_data, :lloc_consell_guerra, fiscal, :ponent, :tribunal_vocals, :acusacio, :acusacio_2, :testimoni_acusacio,
     :sentencia_data, :sentencia, :pena, :commutacio, :observacions, :anyDetingut, :data_detencio, :lloc_detencio, :num_registre, :copia_exp
 )";
 
@@ -175,8 +171,6 @@ try {
     $stmt->bindParam(':any_final', $any_final, PDO::PARAM_STR);
     $stmt->bindParam(':consell_guerra_data', $consell_guerra_dataFormat, PDO::PARAM_STR);
     $stmt->bindParam(':lloc_consell_guerra', $lloc_consell_guerra, PDO::PARAM_INT);
-    $stmt->bindParam(':president_tribunal', $president_tribunal, PDO::PARAM_STR);
-    $stmt->bindParam(':defensor', $defensor, PDO::PARAM_STR);
     $stmt->bindParam(':fiscal', $fiscal, PDO::PARAM_STR);
     $stmt->bindParam(':ponent', $ponent, PDO::PARAM_STR);
     $stmt->bindParam(':tribunal_vocals', $tribunal_vocals, PDO::PARAM_STR);
@@ -245,6 +239,21 @@ try {
             $stmtIns->execute([
                 ':processat_id' => $id,
                 ':president_id' => $presidentId
+            ]);
+        }
+    }
+
+    if (!empty($data['defensor']) && is_array($data['defensor'])) {
+
+        $sql = "INSERT INTO db_processats_defensors (processat_id, persona_id)
+            VALUES (:processat_id, :persona_id)";
+
+        $stmt = $conn->prepare($sql);
+
+        foreach ($data['defensor'] as $idPersona) {
+            $stmt->execute([
+                ':processat_id' => $id,
+                ':persona_id' => $idPersona
             ]);
         }
     }

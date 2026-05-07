@@ -249,8 +249,21 @@
                 </div>
 
                 <div class="col-md-4 mb-4">
-                    <label for="defensor" class="form-label negreta">Defensor:</label>
-                    <input type="text" class="form-control" id="defensor" name="defensor" value="">
+                    <label for="defensor" class="form-label negreta">Defensor - CAMP ANTIC NO TOCAR:</label>
+                    <input type="text" class="form-control" id="defensor" name="defensor" value="" readonly>
+                </div>
+
+                <div class="col-md-4 mb-4">
+                    <label for="defensors" class="form-label negreta">
+                        Defensors:
+                    </label>
+
+                    <select
+                        class="form-control"
+                        id="defensors"
+                        name="defensors[]"
+                        multiple>
+                    </select>
                 </div>
 
                 <div class="col-md-4 mb-4">
