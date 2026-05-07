@@ -192,7 +192,7 @@ if ($slug === 'fitxaRepressio') {
         // 🔹 TRIBUNALS VOCALS
         $fitxa['tribunals_vocals'] = $db->getData("
             SELECT t.id, t.nom, t.cognoms, t.carrec
-            FROM db_processats_tribunals_vocals pt
+            FROM db_processats_tribunal_vocals pt
             LEFT JOIN aux_tribunals_vocals t ON t.id = pt.tribunal_vocal_id
             WHERE pt.processat_id = :id
         ", [':id' => $id], false);
