@@ -55,10 +55,12 @@ export async function auxiliarMultiSelect(selectedIds: (number | string)[] | nul
       ...config,
     });
 
-    // set valores múltiples
     if (Array.isArray(selectedIds)) {
       const values = selectedIds.map(String);
-      choices.setValue(values);
+
+      requestAnimationFrame(() => {
+        choices.setChoiceByValue(values);
+      });
     }
 
     return choices;
