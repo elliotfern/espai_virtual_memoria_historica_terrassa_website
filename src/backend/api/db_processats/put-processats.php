@@ -286,15 +286,15 @@ try {
 
     if (!empty($data['defensors']) && is_array($data['defensors'])) {
 
-        $sql = "INSERT INTO db_processats_defensors (processat_id, persona_id)
-            VALUES (:processat_id, :persona_id)";
+        $sql = "INSERT INTO db_processats_defensors (processat_id, defensor_id)
+            VALUES (:processat_id, :defensor_id)";
 
         $stmt = $conn->prepare($sql);
 
-        foreach ($data['defensors'] as $idPersona) {
+        foreach ($data['defensors'] as $idDefensor) {
             $stmt->execute([
                 ':processat_id' => $id,
-                ':persona_id' => $idPersona
+                ':defensor_id' => $idDefensor
             ]);
         }
     }
