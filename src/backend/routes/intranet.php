@@ -760,6 +760,13 @@ $routes = [
         'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-president-tribunal.php'
     ]),
 
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/nou-defensor' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-defensor.php'
+    ]),
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/modifica-defensor/{slug}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-defensor.php'
+    ]),
+
 
     // Gestió familiars
     APP_INTRANET . $urlIntranet['familiars'] . '/modifica-familiar/{id}/{id}' => array_merge($defaultProtectedConfig, [
