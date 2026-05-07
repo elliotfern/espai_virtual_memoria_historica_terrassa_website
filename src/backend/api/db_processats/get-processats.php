@@ -222,7 +222,9 @@ if ($slug === 'fitxaRepressio') {
             return;
         }
 
-        $result = $result[0];
+        if (isset($result[0])) {
+            $result = $result[0];
+        }
 
         $jutges = $db->getData(
             $queryJutges,
@@ -232,12 +234,12 @@ if ($slug === 'fitxaRepressio') {
 
         // array de IDs
         $result['jutges_instructors'] = array_map(
-            fn($row) => (int)$row['jutge_id'],
-            $jutges ?? []
+            fn($row) => (int)($row['jutge_id'] ?? 0),
+            $jutges ?: []
         );
 
         // legacy temporal
-        $result['jutge_instructor_old'] = $result['jutge_instructor'];
+        $result['jutge_instructor_old'] = $result['jutge_instructor'] ?? null;
 
         Response::success(
             MissatgesAPI::success('get'),
