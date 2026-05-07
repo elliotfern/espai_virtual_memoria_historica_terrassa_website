@@ -209,6 +209,10 @@ if ($slug === 'fitxaRepressio') {
     FROM db_processats_jutges_instructors
     WHERE processat_id = :id";
 
+    $querySecretaris = "SELECT secretari_id
+    FROM db_processats_secretaris_instructors
+    WHERE processat_id = :id";
+
     try {
         $params = [':id' => $id];
         $result = $db->getData($query, $params, true);
@@ -232,14 +236,26 @@ if ($slug === 'fitxaRepressio') {
             false
         );
 
+        $secretaris = $db->getData(
+            $querySecretaris,
+            [':id' => $id],
+            false
+        );
+
         // array de IDs
         $result['jutges_instructors'] = array_map(
             fn($row) => (int)($row['jutge_id'] ?? 0),
             $jutges ?: []
         );
 
+        $result['secretaris_instructors'] = array_map(
+            fn($row) => (int)($row['secretari_id'] ?? 0),
+            $secretaris ?: []
+        );
+
         // legacy temporal
         $result['jutge_instructor_old'] = $result['jutge_instructor'] ?? null;
+        $result['secretari_instructor_old'] = $result['secretari_instructor'] ?? null;
 
         Response::success(
             MissatgesAPI::success('get'),

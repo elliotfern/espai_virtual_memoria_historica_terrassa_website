@@ -213,6 +213,24 @@ try {
         }
     }
 
+    if (!empty($data['secretaris_instructors']) && is_array($data['secretaris_instructors'])) {
+
+        $sqlInsertSecretaris = "
+        INSERT INTO db_processats_secretaris_instructors
+        (processat_id, secretari_id)
+        VALUES (:processat_id, :secretari_id)
+        ";
+
+        $stmtInsSec = $conn->prepare($sqlInsertSecretaris);
+
+        foreach ($data['secretaris_instructors'] as $secretariId) {
+            $stmtInsSec->execute([
+                ':processat_id' => $id,
+                ':secretari_id' => $secretariId
+            ]);
+        }
+    }
+
     // Si la inserció té èxit, cal registrar la inserció en la base de control de canvis
     $detalls = "Creació fitxa repressió processats/empresonats";
     $tipusOperacio = "INSERT";

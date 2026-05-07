@@ -177,7 +177,7 @@
                 </div>
 
                 <div class="col-md-4 mb-4">
-                    <label for="jutge_instructor" class="form-label negreta">Jutge instructor:</label>
+                    <label for="jutge_instructor" class="form-label negreta">Jutge instructor - CAMP ANTIC NO TOCAR:</label>
                     <input type="text" class="form-control" id="jutge_instructor" name="jutge_instructor" value="" readonly>
                 </div>
 
@@ -195,8 +195,21 @@
                 </div>
 
                 <div class="col-md-4 mb-4">
-                    <label for="secretari_instructor" class="form-label negreta">Secretari instructor:</label>
-                    <input type="text" class="form-control" id="secretari_instructor" name="secretari_instructor" value="">
+                    <label for="secretari_instructor" class="form-label negreta">Secretari instructor - CAMP ANTIC NO TOCAR:</label>
+                    <input type="text" class="form-control" id="secretari_instructor" name="secretari_instructor" value="" readonly>
+                </div>
+
+                <div class="col-md-4 mb-4">
+                    <label for="secretaris_instructors" class="form-label negreta">
+                        Secretaris instructors:
+                    </label>
+
+                    <select
+                        class="form-control"
+                        id="secretaris_instructors"
+                        name="secretaris_instructors[]"
+                        multiple>
+                    </select>
                 </div>
 
                 <div class="col-md-4 mb-4">

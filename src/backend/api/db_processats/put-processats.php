@@ -114,7 +114,6 @@ $copia_exp = !empty($data['copia_exp']) ? $data['copia_exp'] : NULL;
 $tipus_procediment = !empty($data['tipus_procediment']) ? $data['tipus_procediment'] : NULL;
 $tipus_judici = !empty($data['tipus_judici']) ? $data['tipus_judici'] : NULL;
 $num_causa = !empty($data['num_causa']) ? $data['num_causa'] : NULL;
-$secretari_instructor = !empty($data['secretari_instructor']) ? $data['secretari_instructor'] : NULL;
 $jutjat = !empty($data['jutjat']) ? $data['jutjat'] : NULL;
 $any_inicial = !empty($data['any_inicial']) ? $data['any_inicial'] : NULL;
 $any_final = !empty($data['any_final']) ? $data['any_final'] : NULL;
@@ -148,7 +147,6 @@ try {
             tipus_judici = :tipus_judici,
             num_causa = :num_causa,
             data_inici_proces = :data_inici_proces,
-            secretari_instructor = :secretari_instructor,
             jutjat = :jutjat,
             any_inicial = :any_inicial,
             any_final = :any_final,
@@ -186,7 +184,6 @@ try {
     $stmt->bindParam(':tipus_judici', $tipus_judici, PDO::PARAM_INT);
     $stmt->bindParam(':num_causa', $num_causa, PDO::PARAM_STR);
     $stmt->bindParam(':data_inici_proces', $data_inici_procesFormat, PDO::PARAM_STR);
-    $stmt->bindParam(':secretari_instructor', $secretari_instructor, PDO::PARAM_STR);
     $stmt->bindParam(':jutjat', $jutjat, PDO::PARAM_INT);
     $stmt->bindParam(':any_inicial', $any_inicial, PDO::PARAM_STR);
     $stmt->bindParam(':any_final', $any_final, PDO::PARAM_STR);
@@ -231,6 +228,31 @@ try {
         }
     }
 
+    $sqlDeleteSecretaris = "
+        DELETE FROM db_processats_secretaris_instructors
+        WHERE processat_id = :id
+        ";
+
+    $stmtDelSec = $conn->prepare($sqlDeleteSecretaris);
+    $stmtDelSec->execute([':id' => $id]);
+
+    if (!empty($data['secretaris_instructors']) && is_array($data['secretaris_instructors'])) {
+
+        $sqlInsertSecretaris = "
+        INSERT INTO db_processats_secretaris_instructors
+        (processat_id, secretari_id)
+        VALUES (:processat_id, :secretari_id)
+        ";
+
+        $stmtInsSec = $conn->prepare($sqlInsertSecretaris);
+
+        foreach ($data['secretaris_instructors'] as $secretariId) {
+            $stmtInsSec->execute([
+                ':processat_id' => $id,
+                ':secretari_id' => $secretariId
+            ]);
+        }
+    }
 
     // Si la inserció té èxit, cal registrar la inserció en la base de control de canvis
     $detalls = "Modificació fitxa repressió processats/empresonats";
