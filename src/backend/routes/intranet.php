@@ -738,6 +738,11 @@ $routes = [
         'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/espai-virtual/form-antecedent.php'
     ]),
 
+    // Auxiliars consells de guerra
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/nou-jutge-instructor' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-jutge-instructor.php'
+    ]),
+
     // Gestió familiars
     APP_INTRANET . $urlIntranet['familiars'] . '/modifica-familiar/{id}/{id}' => array_merge($defaultProtectedConfig, [
         'view' => BACKEND_URL . $urlIntranetDir['familiars'] . '/form-familiar.php'
