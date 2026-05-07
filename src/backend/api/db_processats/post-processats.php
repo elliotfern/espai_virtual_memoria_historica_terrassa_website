@@ -243,14 +243,14 @@ try {
         }
     }
 
-    if (!empty($data['defensor']) && is_array($data['defensor'])) {
+    if (!empty($data['defensors']) && is_array($data['defensors'])) {
 
         $sql = "INSERT INTO db_processats_defensors (processat_id, persona_id)
             VALUES (:processat_id, :persona_id)";
 
         $stmt = $conn->prepare($sql);
 
-        foreach ($data['defensor'] as $idPersona) {
+        foreach ($data['defensors'] as $idPersona) {
             $stmt->execute([
                 ':processat_id' => $id,
                 ':persona_id' => $idPersona
