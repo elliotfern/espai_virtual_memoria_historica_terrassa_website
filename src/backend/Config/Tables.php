@@ -95,4 +95,5 @@ final class Tables
     // AUXILIARS CONSELLS DE GUERRA
     public const AUX_JUTGES_INSTRUCTORS = 'aux_jutges_instructors';
     public const AUX_SECRETARIS_INSTRUCTORS = 'aux_secretaris_instructors';
+    public const AUX_PRESIDENTS_TRIBUNAL = 'aux_presidents_tribunal';
 }

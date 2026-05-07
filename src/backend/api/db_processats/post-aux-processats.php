@@ -57,10 +57,6 @@ if ($slug === 'jutgesInstructors') {
         $errors[] = ValidacioErrors::requerit('cognoms');
     }
 
-    if (empty($data['carrec'])) {
-        $errors[] = ValidacioErrors::requerit('carrec');
-    }
-
     // Si hay errores
     if (!empty($errors)) {
         Response::error(
@@ -140,9 +136,6 @@ if ($slug === 'jutgesInstructors') {
         $errors[] = ValidacioErrors::requerit('cognoms');
     }
 
-    if (empty($data['carrec'])) {
-        $errors[] = ValidacioErrors::requerit('carrec');
-    }
 
     if (!empty($errors)) {
         Response::error(
@@ -190,6 +183,85 @@ if ($slug === 'jutgesInstructors') {
             "INSERT",
             "Creació secretari instructor auxiliar",
             Tables::AUX_SECRETARIS_INSTRUCTORS,
+            $id
+        );
+
+        Response::success(
+            MissatgesAPI::success('create'),
+            ['id' => $id],
+            201
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+} else if ($slug === 'presidentTribunal') {
+
+    $inputData = file_get_contents('php://input');
+    $data = json_decode($inputData, true);
+
+    $errors = [];
+
+    // -------------------------
+    // VALIDACIÓN
+    // -------------------------
+    if (empty($data['nom'])) {
+        $errors[] = ValidacioErrors::requerit('nom');
+    }
+
+    if (empty($data['cognoms'])) {
+        $errors[] = ValidacioErrors::requerit('cognoms');
+    }
+
+    if (!empty($errors)) {
+        Response::error(
+            MissatgesAPI::error('validacio'),
+            $errors,
+            400
+        );
+    }
+
+    // -------------------------
+    // SANITIZACIÓN
+    // -------------------------
+    $nom = trim($data['nom']);
+    $cognoms = trim($data['cognoms']);
+    $carrec = trim($data['carrec']);
+
+    try {
+
+        $sql = "INSERT INTO aux_presidents_tribunal (
+                    nom,
+                    cognoms,
+                    carrec
+                ) VALUES (
+                    :nom,
+                    :cognoms,
+                    :carrec
+                )";
+
+        $stmt = $conn->prepare($sql);
+
+        $stmt->bindParam(':nom', $nom, PDO::PARAM_STR);
+        $stmt->bindParam(':cognoms', $cognoms, PDO::PARAM_STR);
+        $stmt->bindParam(':carrec', $carrec, PDO::PARAM_STR);
+
+        $stmt->execute();
+
+        $id = $conn->lastInsertId();
+
+        // -------------------------
+        // AUDITORIA
+        // -------------------------
+        Audit::registrarCanvi(
+            $conn,
+            $userId,
+            "INSERT",
+            "Creació president tribunal auxiliar",
+            Tables::AUX_PRESIDENTS_TRIBUNAL,
             $id
         );
 

@@ -60,6 +60,7 @@ import { estudis } from './estudis/estudis';
 import { espaiVirtual } from './espai-virtual/espaiVirtual';
 import { formJutgeInstructor } from './formJutgeInstructor';
 import { formSecretariInstructor } from './formSecretariInstructor';
+import { formPresidentTribunal } from './formPresidentTribunal';
 
 export async function auxiliars() {
   const url = window.location.href;
@@ -569,6 +570,11 @@ export async function auxiliars() {
   } else if (pageType[2] === 'modifica-secretari-instructor') {
     const id = Number(pageType[3]);
     formSecretariInstructor(true, id);
+  } else if (pageType[2] === 'nou-president-tribunal') {
+    formPresidentTribunal(false);
+  } else if (pageType[2] === 'modifica-president-tribunal') {
+    const id = Number(pageType[3]);
+    formPresidentTribunal(true, id);
   } else if (pageType[2] === 'estudis') {
     estudis();
   } else if (pageType[2] === 'espai-virtual') {

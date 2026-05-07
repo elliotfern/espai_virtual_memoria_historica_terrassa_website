@@ -492,4 +492,42 @@ if ($slug === 'fitxaRepressio') {
             500
         );
     }
+
+    // GET > President tribunal
+    // URL
+} else if ($slug === "presidentTribunal") {
+    $id = $_GET['id'];
+    $db = new Database();
+
+    $query = "SELECT j.id, j.cognoms, j.nom, j.carrec
+    FROM aux_presidents_tribunal AS j
+    WHERE j.id = :id
+    LIMIT 1";
+
+    try {
+
+        $params = [':id' => $id];
+        $result = $db->getData($query, $params, true);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
 }

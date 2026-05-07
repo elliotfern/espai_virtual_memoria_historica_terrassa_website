@@ -753,7 +753,12 @@ $routes = [
         'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-secretar-instructor.php'
     ]),
 
-
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/nou-president-tribunal' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-president-tribunal.php'
+    ]),
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/modifica-president-tribunal/{slug}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-president-tribunal.php'
+    ]),
 
 
     // Gestió familiars
