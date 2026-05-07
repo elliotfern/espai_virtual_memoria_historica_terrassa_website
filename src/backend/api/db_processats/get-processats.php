@@ -153,7 +153,7 @@ if ($slug === 'fitxaRepressio') {
         $fitxa['jutges_instructors'] = $db->getData("
             SELECT j.id, j.nom, j.cognoms, j.carrec
             FROM db_processats_jutges_instructors pj
-            LEFT JOIN aux_jutges j ON j.id = pj.jutge_id
+            LEFT JOIN aux_jutges_instructors j ON j.id = pj.jutge_id
             WHERE pj.processat_id = :id
         ", [':id' => $id], false);
 
@@ -161,7 +161,7 @@ if ($slug === 'fitxaRepressio') {
         $fitxa['secretaris_instructors'] = $db->getData("
             SELECT s.id, s.nom, s.cognoms, s.carrec
             FROM db_processats_secretaris_instructors ps
-            LEFT JOIN aux_secretaris s ON s.id = ps.secretari_id
+            LEFT JOIN aux_secretaris_instructors s ON s.id = ps.secretari_id
             WHERE ps.processat_id = :id
         ", [':id' => $id], false);
 
