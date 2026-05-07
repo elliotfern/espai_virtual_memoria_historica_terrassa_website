@@ -231,8 +231,21 @@
                 </div>
 
                 <div class="col-md-4 mb-4">
-                    <label for="president_tribunal" class="form-label negreta">President Tribunal:</label>
-                    <input type="text" class="form-control" id="president_tribunal" name="president_tribunal" value="">
+                    <label for="president_tribunal" class="form-label negreta">President Tribunal - CAMP ANTIC NO TOCAR:</label>
+                    <input type="text" class="form-control" id="president_tribunal" name="president_tribunal" value="" readonly>
+                </div>
+
+                <div class="col-md-4 mb-4">
+                    <label for="presidents_tribunals" class="form-label negreta">
+                        President tribunal:
+                    </label>
+
+                    <select
+                        class="form-control"
+                        id="presidents_tribunals"
+                        name="presidents_tribunals[]"
+                        multiple>
+                    </select>
                 </div>
 
                 <div class="col-md-4 mb-4">

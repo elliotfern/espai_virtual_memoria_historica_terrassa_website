@@ -213,6 +213,11 @@ if ($slug === 'fitxaRepressio') {
     FROM db_processats_secretaris_instructors
     WHERE processat_id = :id";
 
+    $queryPresident = "SELECT president_id
+    FROM db_processats_presidents_tribunal
+    WHERE processat_id = :id
+    ";
+
     try {
         $params = [':id' => $id];
         $result = $db->getData($query, $params, true);
@@ -242,6 +247,8 @@ if ($slug === 'fitxaRepressio') {
             false
         );
 
+        $presidents = $db->getData($queryPresident, [':id' => $id], false);
+
         // array de IDs
         $result['jutges_instructors'] = array_map(
             fn($row) => (int)($row['jutge_id'] ?? 0),
@@ -253,9 +260,15 @@ if ($slug === 'fitxaRepressio') {
             $secretaris ?: []
         );
 
+        $result['presidents_tribunals'] = array_map(
+            fn($row) => (int)($row['president_id'] ?? 0),
+            $presidents ?: []
+        );
+
         // legacy temporal
         $result['jutge_instructor_old'] = $result['jutge_instructor'] ?? null;
         $result['secretari_instructor_old'] = $result['secretari_instructor'] ?? null;
+        $result['president_tribunal_old'] = $result['president_tribunal'] ?? null;
 
         Response::success(
             MissatgesAPI::success('get'),

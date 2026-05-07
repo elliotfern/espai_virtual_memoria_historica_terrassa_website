@@ -231,6 +231,24 @@ try {
         }
     }
 
+    if (!empty($data['presidents_tribunals']) && is_array($data['presidents_tribunals'])) {
+
+        $sqlInsert = "
+        INSERT INTO db_processats_presidents_tribunal
+        (processat_id, president_id)
+        VALUES (:processat_id, :president_id)
+        ";
+
+        $stmtIns = $conn->prepare($sqlInsert);
+
+        foreach ($data['presidents_tribunals'] as $presidentId) {
+            $stmtIns->execute([
+                ':processat_id' => $id,
+                ':president_id' => $presidentId
+            ]);
+        }
+    }
+
     // Si la inserció té èxit, cal registrar la inserció en la base de control de canvis
     $detalls = "Creació fitxa repressió processats/empresonats";
     $tipusOperacio = "INSERT";

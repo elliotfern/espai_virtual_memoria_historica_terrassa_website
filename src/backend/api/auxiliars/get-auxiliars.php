@@ -2622,6 +2622,44 @@ ORDER BY
             500
         );
     }
+
+    // GET > Presidents tribunals
+    // URL
+} else if ($slug === "presidents_tribunals") {
+
+    $db = new Database();
+
+    $query = "SELECT 
+    j.id,
+    CONCAT(j.cognoms, ', ', j.nom) AS nom_complet
+    FROM aux_presidents_tribunal AS j
+    ORDER BY j.cognoms ASC, j.nom ASC";
+
+    try {
+
+        $result = $db->getData($query);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
 } else {
     // Si el parámetro 'type' no coincide con ninguno de los casos anteriores, mostramos un error
     echo json_encode(["error" => "Tipo no válido"]);

@@ -208,6 +208,8 @@ try {
     // Ejecutar la consulta
     $stmt->execute();
 
+    // 1. JUTGES INSTRUCTORS
+
     $sqlDelete = "DELETE FROM db_processats_jutges_instructors WHERE processat_id = :id";
     $stmtDel = $conn->prepare($sqlDelete);
     $stmtDel->execute([':id' => $id]);
@@ -228,6 +230,7 @@ try {
         }
     }
 
+    // 2. SECRETARIS JUDICIALS
     $sqlDeleteSecretaris = "
         DELETE FROM db_processats_secretaris_instructors
         WHERE processat_id = :id
@@ -250,6 +253,35 @@ try {
             $stmtInsSec->execute([
                 ':processat_id' => $id,
                 ':secretari_id' => $secretariId
+            ]);
+        }
+    }
+
+    // PRESIDENTS TRIBUNALS
+    // DELETE
+    $sqlDelete = "
+    DELETE FROM db_processats_presidents_tribunal
+    WHERE processat_id = :id
+    ";
+
+    $stmtDel = $conn->prepare($sqlDelete);
+    $stmtDel->execute([':id' => $id]);
+
+    // INSERT
+    if (!empty($data['presidents_tribunals']) && is_array($data['presidents_tribunals'])) {
+
+        $sqlInsert = "
+        INSERT INTO db_processats_presidents_tribunal
+        (processat_id, president_id)
+        VALUES (:processat_id, :president_id)
+        ";
+
+        $stmtIns = $conn->prepare($sqlInsert);
+
+        foreach ($data['presidents_tribunals'] as $presidentId) {
+            $stmtIns->execute([
+                ':processat_id' => $id,
+                ':president_id' => $presidentId
             ]);
         }
     }
