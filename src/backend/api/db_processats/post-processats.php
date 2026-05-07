@@ -307,6 +307,23 @@ try {
         }
     }
 
+    // TESTIMONIS ACUSACIO
+    if (!empty($data['testimonis_acusacions']) && is_array($data['testimonis_acusacions'])) {
+
+        $sqlInsert = "INSERT INTO db_processats_testimonis_acusacions 
+        (processat_id, testimoni_id)
+        VALUES (:processat_id, :testimoni_id)";
+
+        $stmtIns = $conn->prepare($sqlInsert);
+
+        foreach ($data['testimonis_acusacions'] as $testimoniId) {
+            $stmtIns->execute([
+                ':processat_id' => $id,
+                ':testimoni_id' => $testimoniId
+            ]);
+        }
+    }
+
     // Si la inserció té èxit, cal registrar la inserció en la base de control de canvis
     $detalls = "Creació fitxa repressió processats/empresonats";
     $tipusOperacio = "INSERT";

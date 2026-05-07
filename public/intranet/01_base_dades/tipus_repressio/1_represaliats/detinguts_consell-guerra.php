@@ -177,11 +177,6 @@
                 </div>
 
                 <div class="col-md-4 mb-4">
-                    <label for="jutge_instructor" class="form-label negreta">Jutge instructor - CAMP ANTIC NO TOCAR:</label>
-                    <input type="text" class="form-control" id="jutge_instructor" name="jutge_instructor" value="" readonly>
-                </div>
-
-                <div class="col-md-4 mb-4">
                     <label for="jutges_instructors" class="form-label negreta">
                         Jutges instructors:
                     </label>
@@ -197,12 +192,6 @@
                         <a href="https://memoriaterrassa.cat/gestio/auxiliars/nou-jutge-instructor" target="_blank" class="btn btn-secondary btn-sm" id="afegir11">Afegir jutge instructor</a>
                         <button id="refreshButton11" class="btn btn-primary btn-sm">Actualitzar llistat</button>
                     </div>
-
-                </div>
-
-                <div class="col-md-4 mb-4">
-                    <label for="secretari_instructor" class="form-label negreta">Secretari instructor - CAMP ANTIC NO TOCAR:</label>
-                    <input type="text" class="form-control" id="secretari_instructor" name="secretari_instructor" value="" readonly>
                 </div>
 
                 <div class="col-md-4 mb-4">
@@ -243,11 +232,6 @@
                 </div>
 
                 <div class="col-md-4 mb-4">
-                    <label for="president_tribunal" class="form-label negreta">President Tribunal - CAMP ANTIC NO TOCAR:</label>
-                    <input type="text" class="form-control" id="president_tribunal" name="president_tribunal" value="" readonly>
-                </div>
-
-                <div class="col-md-4 mb-4">
                     <label for="presidents_tribunals" class="form-label negreta">
                         President tribunal:
                     </label>
@@ -266,11 +250,6 @@
                 </div>
 
                 <div class="col-md-4 mb-4">
-                    <label for="defensor" class="form-label negreta">Defensor - CAMP ANTIC NO TOCAR:</label>
-                    <input type="text" class="form-control" id="defensor" name="defensor" value="" readonly>
-                </div>
-
-                <div class="col-md-4 mb-4">
                     <label for="defensors" class="form-label negreta">
                         Defensors:
                     </label>
@@ -286,11 +265,6 @@
                         <a href="https://memoriaterrassa.cat/gestio/auxiliars/nou-defensor" target="_blank" class="btn btn-secondary btn-sm" id="afegir14">Afegir defensor</a>
                         <button id="refreshButton14" class="btn btn-primary btn-sm">Actualitzar llistat</button>
                     </div>
-                </div>
-
-                <div class="col-md-4 mb-4">
-                    <label for="fiscal" class="form-label negreta">Fiscal - CAMP ANTIC NO TOCAR:</label>
-                    <input type="text" class="form-control" id="fiscal" name="fiscal" value="" readonly>
                 </div>
 
                 <div class="col-md-4 mb-4">
@@ -333,11 +307,6 @@
                 </div>
 
                 <div class="col-md-4 mb-4">
-                    <label for="tribunal_vocals" class="form-label negreta">Vocals del tribunal - ANTIC NO TOCAR:</label>
-                    <input type="text" class="form-control" id="tribunal_vocals" name="tribunal_vocals" value="" readonly>
-                </div>
-
-                <div class="col-md-4 mb-4">
                     <label for="tribunals_vocals" class="form-label negreta">
                         Vocals del tribunal:
                     </label>
@@ -375,14 +344,68 @@
                     </div>
                 </div>
 
-                <div class="col-md-12 mb-4">
-                    <label for="testimoni_acusacio" class="form-label negreta">Testimoni acusació:</label>
-                    <input type="text" class="form-control" id="testimoni_acusacio" name="testimoni_acusacio" value="">
+                <div class="col-md-4 mb-4">
+                    <label for="testimonis_acusacions" class="form-label negreta">
+                        Testimonis de l'acusació:
+                    </label>
+
+                    <select
+                        class="form-control"
+                        id="testimonis_acusacions"
+                        name="testimonis_acusacions[]"
+                        multiple>
+                    </select>
+                    <div class="mt-2">
+                        <a href="https://memoriaterrassa.cat/gestio/auxiliars/nou-testimoni" target="_blank" class="btn btn-secondary btn-sm" id="afegir18">Afegir testimoni</a>
+                        <button id="refreshButton18" class="btn btn-primary btn-sm">Actualitzar llistat</button>
+                    </div>
                 </div>
 
                 <div class="col-md-12 mb-4">
                     <label for="observacions" class="form-label negreta">Observacions:</label>
                     <textarea class="form-control" id="observacions" name="observacions" rows="4"></textarea>
+                </div>
+
+                <h4>CAMPS ANTICS A ELIMINAR</h4>
+
+                <div class="col-md-4 mb-4">
+                    <label for="jutge_instructor" class="form-label negreta">Jutge instructor - CAMP ANTIC NO TOCAR:</label>
+                    <input type="text" class="form-control" id="jutge_instructor" name="jutge_instructor" value="" readonly>
+                </div>
+
+                <div class="col-md-4 mb-4">
+                    <label for="secretari_instructor" class="form-label negreta">Secretari instructor - CAMP ANTIC NO TOCAR:</label>
+                    <input type="text" class="form-control" id="secretari_instructor" name="secretari_instructor" value="" readonly>
+                </div>
+
+                <div class="col-md-4 mb-4">
+                    <label for="president_tribunal" class="form-label negreta">President Tribunal - CAMP ANTIC NO TOCAR:</label>
+                    <input type="text" class="form-control" id="president_tribunal" name="president_tribunal" value="" readonly>
+                </div>
+
+                <div class="col-md-4 mb-4">
+                    <label for="defensor" class="form-label negreta">Defensor - CAMP ANTIC NO TOCAR:</label>
+                    <input type="text" class="form-control" id="defensor" name="defensor" value="" readonly>
+                </div>
+
+                <div class="col-md-4 mb-4">
+                    <label for="fiscal" class="form-label negreta">Fiscal - CAMP ANTIC NO TOCAR:</label>
+                    <input type="text" class="form-control" id="fiscal" name="fiscal" value="" readonly>
+                </div>
+
+                <div class="col-md-4 mb-4">
+                    <label for="tribunal_vocals" class="form-label negreta">Vocals del tribunal - ANTIC NO TOCAR:</label>
+                    <input type="text" class="form-control" id="tribunal_vocals" name="tribunal_vocals" value="" readonly>
+                </div>
+
+                <div class="col-md-12 mb-4">
+                    <label for="testimoni_acusacio" class="form-label negreta">Testimoni acusació - ANTIC NO TOCAR:</label>
+                    <textarea
+                        class="form-control"
+                        id="testimoni_acusacio"
+                        name="testimoni_acusacio"
+                        rows="2"
+                        readonly></textarea>
                 </div>
 
                 <div class="row espai-superior" style="border-top: 1px solid black;padding-top:25px">

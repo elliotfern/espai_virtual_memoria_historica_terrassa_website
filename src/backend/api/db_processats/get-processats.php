@@ -236,6 +236,10 @@ if ($slug === 'fitxaRepressio') {
     FROM db_processats_tribunal_vocals
     WHERE processat_id = :id";
 
+    $queryTestimonisAcusacions = "SELECT testimoni_id
+    FROM db_processats_testimonis_acusacions
+    WHERE processat_id = :id";
+
     try {
         $params = [':id' => $id];
         $result = $db->getData($query, $params, true);
@@ -279,6 +283,12 @@ if ($slug === 'fitxaRepressio') {
             false
         );
 
+        $testimonis = $db->getData(
+            $queryTestimonisAcusacions,
+            [':id' => $id],
+            false
+        );
+
         // array de IDs
         $result['jutges_instructors'] = array_map(
             fn($row) => (int)($row['jutge_id'] ?? 0),
@@ -315,6 +325,11 @@ if ($slug === 'fitxaRepressio') {
             $tribunalsVocals ?: []
         );
 
+        $result['testimonis_acusacions'] = array_map(
+            fn($row) => (int)($row['testimoni_id'] ?? 0),
+            $testimonis ?: []
+        );
+
         // legacy temporal
         $result['jutge_instructor_old'] = $result['jutge_instructor'] ?? null;
         $result['secretari_instructor_old'] = $result['secretari_instructor'] ?? null;
@@ -323,6 +338,7 @@ if ($slug === 'fitxaRepressio') {
         $result['fiscal_old'] = $result['fiscal'] ?? null;
         $result['ponent_old'] = $result['ponent'] ?? null;
         $result['tribunal_vocals_old'] = $result['tribunal_vocals'] ?? null;
+        $result['testimoni_acusacio_old'] = $result['testimoni_acusacio'] ?? null;
 
         Response::success(
             MissatgesAPI::success('get'),
