@@ -89,57 +89,50 @@ if ($slug === 'fitxaRepressio') {
 
     // GET : fitxa processat ID
     // URL: /api/processats/get/fitxaId?id=${id}
-} elseif ($slug === 'fitxaId') {
+} else if ($slug === 'fitxaId') {
     $id = $_GET['id'];
 
     $db = new Database();
 
-    $query = "SELECT 
-    p.id,
-    p.idPersona,
-    p.data_detencio,
-    m2.ciutat AS lloc_detencio,
-    p.copia_exp,
-    pj.procediment_ca AS tipus_procediment,
-    tp.tipusJudici_ca AS tipus_judici,
-    p.num_causa,
-    p.data_inici_proces,
-    p.jutge_instructor,
-    p.secretari_instructor,
-    j.jutjat_ca AS jutjat,
-    p.any_inicial,
-    p.any_final,
-    p.consell_guerra_data,
-    m.ciutat AS lloc_consell_guerra,
-    p.president_tribunal,
-    p.defensor,
-    p.fiscal,
-    p.ponent,
-    p.tribunal_vocals,
-    a1.acusacio_ca AS acusacio,
-    a2.acusacio_ca AS acusacio_2,
-    p.testimoni_acusacio,
-    p.sentencia_data,
-    pe.pena_ca AS pena,
-    se.sentencia_ca AS sentencia,
-    p.commutacio,
-    p.observacions,
-    p.anyDetingut
-    FROM db_processats AS p
-    LEFT JOIN aux_procediment_judicial AS pj ON p.tipus_procediment = pj.id
-    LEFT JOIN aux_tipus_judici AS tp ON p.tipus_judici = tp.id
-    LEFT JOIN aux_jutjats AS j ON p.jutjat = j.id
-    LEFT JOIN aux_dades_municipis AS m ON p.lloc_consell_guerra = m.id
-    LEFT JOIN aux_acusacions AS a1 ON p.acusacio = a1.id
-    LEFT JOIN aux_acusacions AS a2 ON p.acusacio_2 = a2.id
-    LEFT JOIN aux_sentencies AS se ON p.sentencia = se.id
-    LEFT JOIN aux_penes AS pe ON p.pena = pe.id
-    LEFT JOIN aux_dades_municipis AS m2 ON p.lloc_detencio = m2.id
-    WHERE idPersona = :idPersona";
-
     try {
-        $params = [':idPersona' => $id];
-        $result = $db->getData($query, $params);
+
+        // 🔹 DATOS PRINCIPALES
+        $query = "SELECT 
+            p.id,
+            p.idPersona,
+            p.data_detencio,
+            m2.ciutat AS lloc_detencio,
+            p.copia_exp,
+            pj.procediment_ca AS tipus_procediment,
+            tp.tipusJudici_ca AS tipus_judici,
+            p.num_causa,
+            p.data_inici_proces,
+            j.jutjat_ca AS jutjat,
+            p.any_inicial,
+            p.any_final,
+            p.consell_guerra_data,
+            m.ciutat AS lloc_consell_guerra,
+            a1.acusacio_ca AS acusacio,
+            a2.acusacio_ca AS acusacio_2,
+            p.sentencia_data,
+            se.sentencia_ca AS sentencia,
+            pe.pena_ca AS pena,
+            p.commutacio,
+            p.observacions,
+            p.anyDetingut
+        FROM db_processats AS p
+        LEFT JOIN aux_procediment_judicial AS pj ON p.tipus_procediment = pj.id
+        LEFT JOIN aux_tipus_judici AS tp ON p.tipus_judici = tp.id
+        LEFT JOIN aux_jutjats AS j ON p.jutjat = j.id
+        LEFT JOIN aux_dades_municipis AS m ON p.lloc_consell_guerra = m.id
+        LEFT JOIN aux_dades_municipis AS m2 ON p.lloc_detencio = m2.id
+        LEFT JOIN aux_acusacions AS a1 ON p.acusacio = a1.id
+        LEFT JOIN aux_acusacions AS a2 ON p.acusacio_2 = a2.id
+        LEFT JOIN aux_sentencies AS se ON p.sentencia = se.id
+        LEFT JOIN aux_penes AS pe ON p.pena = pe.id
+        WHERE p.id = :id";
+
+        $result = $db->getData($query, [':id' => $id]);
 
         if (empty($result)) {
             Response::error(
@@ -150,9 +143,73 @@ if ($slug === 'fitxaRepressio') {
             return;
         }
 
+        $fitxa = $result[0];
+
+        // =====================================================
+        // 🔥 RELACIONES MULTI (OBJETOS COMPLETOS)
+        // =====================================================
+
+        // 🔹 JUECES INSTRUCTORES
+        $fitxa['jutges_instructors'] = $db->getData("
+            SELECT j.id, j.nom, j.cognoms, j.carrec
+            FROM db_processats_jutges_instructors pj
+            LEFT JOIN aux_jutges j ON j.id = pj.jutge_id
+            WHERE pj.processat_id = :id
+        ", [':id' => $id], false);
+
+        // 🔹 SECRETARIOS INSTRUCTORES (NUEVO)
+        $fitxa['secretaris_instructors'] = $db->getData("
+            SELECT s.id, s.nom, s.cognoms, s.carrec
+            FROM db_processats_secretaris_instructors ps
+            LEFT JOIN aux_secretaris s ON s.id = ps.secretari_id
+            WHERE ps.processat_id = :id
+        ", [':id' => $id], false);
+
+        // 🔹 DEFENSORS
+        $fitxa['defensors'] = $db->getData("
+            SELECT d.id, d.nom, d.cognoms, d.carrec
+            FROM db_processats_defensors pd
+            LEFT JOIN aux_defensors d ON d.id = pd.defensor_id
+            WHERE pd.processat_id = :id
+        ", [':id' => $id], false);
+
+        // 🔹 FISCALS
+        $fitxa['fiscals'] = $db->getData("
+            SELECT f.id, f.nom, f.cognoms, f.carrec
+            FROM db_processats_fiscals pf
+            LEFT JOIN aux_fiscals f ON f.id = pf.fiscal_id
+            WHERE pf.processat_id = :id
+        ", [':id' => $id], false);
+
+        // 🔹 PONENTS
+        $fitxa['ponents'] = $db->getData("
+            SELECT p2.id, p2.nom, p2.cognoms, p2.carrec
+            FROM db_processats_ponents pp
+            LEFT JOIN aux_ponents p2 ON p2.id = pp.ponent_id
+            WHERE pp.processat_id = :id
+        ", [':id' => $id], false);
+
+        // 🔹 TRIBUNALS VOCALS
+        $fitxa['tribunals_vocals'] = $db->getData("
+            SELECT t.id, t.nom, t.cognoms, t.carrec
+            FROM db_processats_tribunals_vocals pt
+            LEFT JOIN aux_tribunals_vocals t ON t.id = pt.tribunal_vocal_id
+            WHERE pt.processat_id = :id
+        ", [':id' => $id], false);
+
+        // 🔹 TESTIMONIS ACUSACIÓ
+        $fitxa['testimonis_acusacions'] = $db->getData("
+            SELECT t.id, t.nom, t.cognoms, t.carrec
+            FROM db_processats_testimonis_acusacions pt
+            LEFT JOIN aux_testimonis_acusacions t ON t.id = pt.testimoni_id
+            WHERE pt.processat_id = :id
+        ", [':id' => $id], false);
+
+        // =====================================================
+
         Response::success(
             MissatgesAPI::success('get'),
-            $result,
+            $fitxa,
             200
         );
     } catch (PDOException $e) {

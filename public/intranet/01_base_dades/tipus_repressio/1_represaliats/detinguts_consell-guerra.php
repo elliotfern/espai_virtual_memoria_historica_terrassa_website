@@ -285,11 +285,6 @@
                 </div>
 
                 <div class="col-md-4 mb-4">
-                    <label for="ponent" class="form-label negreta">Ponent - ANTIC NO TOCAR:</label>
-                    <input type="text" class="form-control" id="ponent" name="ponent" value="" readonly>
-                </div>
-
-                <div class="col-md-4 mb-4">
                     <label for="ponents" class="form-label negreta">
                         Ponents:
                     </label>
@@ -398,13 +393,18 @@
                     <input type="text" class="form-control" id="tribunal_vocals" name="tribunal_vocals" value="" readonly>
                 </div>
 
+                <div class="col-md-4 mb-4">
+                    <label for="ponent" class="form-label negreta">Ponent - ANTIC NO TOCAR:</label>
+                    <input type="text" class="form-control" id="ponent" name="ponent" value="" readonly>
+                </div>
+
                 <div class="col-md-12 mb-4">
                     <label for="testimoni_acusacio" class="form-label negreta">Testimoni acusació - ANTIC NO TOCAR:</label>
                     <textarea
                         class="form-control"
                         id="testimoni_acusacio"
                         name="testimoni_acusacio"
-                        rows="2"
+                        rows="4"
                         readonly></textarea>
                 </div>
 
