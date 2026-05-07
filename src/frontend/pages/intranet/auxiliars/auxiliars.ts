@@ -59,6 +59,7 @@ import { formAparicioPremsaI18n } from './formAparicioPremsaI18n';
 import { estudis } from './estudis/estudis';
 import { espaiVirtual } from './espai-virtual/espaiVirtual';
 import { formJutgeInstructor } from './formJutgeInstructor';
+import { formSecretariInstructor } from './formSecretariInstructor';
 
 export async function auxiliars() {
   const url = window.location.href;
@@ -560,6 +561,14 @@ export async function auxiliars() {
     formAparicioPremsaI18n(id);
   } else if (pageType[2] === 'nou-jutge-instructor') {
     formJutgeInstructor(false);
+  } else if (pageType[2] === 'modifica-jutge-instructor') {
+    const id = Number(pageType[3]);
+    formJutgeInstructor(true, id);
+  } else if (pageType[2] === 'nou-secretari-instructor') {
+    formSecretariInstructor(false);
+  } else if (pageType[2] === 'modifica-secretari-instructor') {
+    const id = Number(pageType[3]);
+    formSecretariInstructor(true, id);
   } else if (pageType[2] === 'estudis') {
     estudis();
   } else if (pageType[2] === 'espai-virtual') {

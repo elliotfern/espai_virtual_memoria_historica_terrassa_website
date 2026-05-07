@@ -123,4 +123,88 @@ if ($slug === 'jutgesInstructors') {
             500
         );
     }
+} else if ($slug === 'secretarisInstructors') {
+
+    $inputData = file_get_contents('php://input');
+    $data = json_decode($inputData, true);
+
+    $errors = [];
+
+    // -------------------------
+    // VALIDACIÓN
+    // -------------------------
+    if (empty($data['id'])) {
+        $errors[] = ValidacioErrors::requerit('id');
+    }
+
+    if (empty($data['nom'])) {
+        $errors[] = ValidacioErrors::requerit('nom');
+    }
+
+    if (empty($data['cognoms'])) {
+        $errors[] = ValidacioErrors::requerit('cognoms');
+    }
+
+    if (empty($data['carrec'])) {
+        $errors[] = ValidacioErrors::requerit('carrec');
+    }
+
+    if (!empty($errors)) {
+        Response::error(
+            MissatgesAPI::error('validacio'),
+            $errors,
+            400
+        );
+    }
+
+    // -------------------------
+    // SANITIZACIÓN
+    // -------------------------
+    $id = (int) $data['id'];
+    $nom = trim($data['nom']);
+    $cognoms = trim($data['cognoms']);
+    $carrec = trim($data['carrec']);
+
+    try {
+
+        $sql = "UPDATE aux_secretaris_instructors
+                SET
+                    nom = :nom,
+                    cognoms = :cognoms,
+                    carrec = :carrec
+                WHERE id = :id";
+
+        $stmt = $conn->prepare($sql);
+
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->bindParam(':nom', $nom, PDO::PARAM_STR);
+        $stmt->bindParam(':cognoms', $cognoms, PDO::PARAM_STR);
+        $stmt->bindParam(':carrec', $carrec, PDO::PARAM_STR);
+
+        $stmt->execute();
+
+        // -------------------------
+        // AUDITORIA
+        // -------------------------
+        Audit::registrarCanvi(
+            $conn,
+            $userId,
+            "UPDATE",
+            "Modificació secretari instructor auxiliar",
+            Tables::AUX_SECRETARIS_INSTRUCTORS,
+            $id
+        );
+
+        Response::success(
+            MissatgesAPI::success('update'),
+            ['id' => $id],
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
 }

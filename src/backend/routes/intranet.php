@@ -742,6 +742,19 @@ $routes = [
     APP_INTRANET . $urlIntranet['auxiliars'] . '/nou-jutge-instructor' => array_merge($defaultProtectedConfig, [
         'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-jutge-instructor.php'
     ]),
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/modifica-jutge-instructor/{slug}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-jutge-instructor.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/nou-secretari-instructor' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-secretari-instructor.php'
+    ]),
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/modifica-secretari-instructor/{slug}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-secretar-instructor.php'
+    ]),
+
+
+
 
     // Gestió familiars
     APP_INTRANET . $urlIntranet['familiars'] . '/modifica-familiar/{id}/{id}' => array_merge($defaultProtectedConfig, [
