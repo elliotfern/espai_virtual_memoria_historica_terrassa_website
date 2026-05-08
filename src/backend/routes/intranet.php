@@ -788,7 +788,12 @@ $routes = [
         'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-vocal-tribunal.php'
     ]),
 
-
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/nou-testimoni' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-testimoni.php'
+    ]),
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/modifica-testimoni/{slug}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-testimoni.php'
+    ]),
 
     // Gestió familiars
     APP_INTRANET . $urlIntranet['familiars'] . '/modifica-familiar/{id}/{id}' => array_merge($defaultProtectedConfig, [

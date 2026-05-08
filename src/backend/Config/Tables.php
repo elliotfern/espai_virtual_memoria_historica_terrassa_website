@@ -100,4 +100,5 @@ final class Tables
     public const AUX_FISCALS = 'aux_fiscals';
     public const AUX_PONENTS = 'aux_ponents';
     public const AUX_TRIBUNAL_VOCALS = 'aux_tribunal_vocals';
+    public const AUX_TESTIMONIS_ACUSACIONS = 'aux_testimonis_acusacions';
 }
