@@ -66,6 +66,7 @@ import { formFiscal } from './formFiscal';
 import { formPonent } from './formPonent';
 import { formVocalTribunal } from './formVocalTribunal';
 import { formTestimoni } from './formTestimoni';
+import { llistatJutgesInstructors } from './llistatJutgesInstructors';
 
 export async function auxiliars() {
   const url = window.location.href;
@@ -605,6 +606,22 @@ export async function auxiliars() {
   } else if (pageType[2] === 'modifica-testimoni') {
     const id = Number(pageType[3]);
     formTestimoni(true, id);
+  } else if (pageType[2] === 'llistat-jutges-instructors') {
+    llistatJutgesInstructors();
+  } else if (pageType[2] === 'llistat-secretaris-instructors') {
+    llistatSecretarisInstructors();
+  } else if (pageType[2] === 'llistat-presidents-tribunal') {
+    llistatPresidentsTribunal();
+  } else if (pageType[2] === 'llistat-defensors') {
+    llistatDefensors();
+  } else if (pageType[2] === 'llistat-fiscals') {
+    llistatFiscals();
+  } else if (pageType[2] === 'llistat-ponents') {
+    llistatPonent();
+  } else if (pageType[2] === 'llistat-tribunal-vocals') {
+    llistatTribunalVocals();
+  } else if (pageType[2] === 'llistat-testimonis-acusacions') {
+    llistatTestimonisAcusacions();
   } else if (pageType[2] === 'estudis') {
     estudis();
   } else if (pageType[2] === 'espai-virtual') {

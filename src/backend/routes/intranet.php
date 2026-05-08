@@ -795,6 +795,39 @@ $routes = [
         'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-testimoni.php'
     ]),
 
+    // llistats consells de guerra
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/llistat-jutges-instructors' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/llistat-jutges-instructors.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/llistat-secretaris-instructors' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/llistat-secretaris-instructors.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/llistat-presidents-tribunal' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/llistat-presidents-tribunal.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/llistat-defensors' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/llistat-defensors.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/llistat-fiscals' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/llistat-fiscals.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/llistat-ponents' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/llistat-ponents.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/llistat-tribunal-vocals' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/llistat-tribunal-vocals.php'
+    ]),
+
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/llistat-testimonis-acusacions' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/llistat-testimonis-acusacions.php'
+    ]),
+
     // Gestió familiars
     APP_INTRANET . $urlIntranet['familiars'] . '/modifica-familiar/{id}/{id}' => array_merge($defaultProtectedConfig, [
         'view' => BACKEND_URL . $urlIntranetDir['familiars'] . '/form-familiar.php'

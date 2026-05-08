@@ -156,6 +156,25 @@
                 <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['auxiliars']; ?>/estudis/llistat-tipus-estudis">Taula llistat tipus d'estudis</a></li>
             </ul>
 
+            <h4>12. Taules auxiliars Consells de Guerra</h4>
+            <ul>
+                <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['auxiliars']; ?>/llistat-jutges-instructors">Taula llistat de jutges instructors</a></li>
+
+                <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['auxiliars']; ?>/llistat-secretaris-instructors">Taula llistat de secretaris instructors</a></li>
+
+                <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['auxiliars']; ?>/llistat-presidents-tribunal">Taula llistat de presidents de tribunal</a></li>
+
+                <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['auxiliars']; ?>/llistat-defensors">Taula llistat de defensors</a></li>
+
+                <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['auxiliars']; ?>/llistat-fiscals">Taula llistat de fiscals</a></li>
+
+                <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['auxiliars']; ?>/llistat-ponents">Taula llistat de ponents</a></li>
+
+                <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['auxiliars']; ?>/llistat-tribunal-vocals">Taula llistat de vocals del tribunal</a></li>
+
+                <li><a href="<?php echo APP_SERVER . APP_INTRANET . $urlIntranet['auxiliars']; ?>/llistat-testimonis-acusacions">Taula llistat de testimonis d'acusació</a></li>
+            </ul>
+
         <?php endif; ?>
     </div>
 </div>
