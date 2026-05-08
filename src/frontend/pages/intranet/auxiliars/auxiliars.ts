@@ -63,6 +63,7 @@ import { formSecretariInstructor } from './formSecretariInstructor';
 import { formPresidentTribunal } from './formPresidentTribunal';
 import { formDefensor } from './formDefensor';
 import { formFiscal } from './formFiscal';
+import { formPonent } from './formPonent';
 
 export async function auxiliars() {
   const url = window.location.href;
@@ -587,6 +588,11 @@ export async function auxiliars() {
   } else if (pageType[2] === 'modifica-fiscal') {
     const id = Number(pageType[3]);
     formFiscal(true, id);
+  } else if (pageType[2] === 'nou-ponent') {
+    formPonent(false);
+  } else if (pageType[2] === 'modifica-ponent') {
+    const id = Number(pageType[3]);
+    formPonent(true, id);
   } else if (pageType[2] === 'estudis') {
     estudis();
   } else if (pageType[2] === 'espai-virtual') {
