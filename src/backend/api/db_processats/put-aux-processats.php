@@ -525,4 +525,86 @@ if ($slug === 'jutgesInstructors') {
             500
         );
     }
+} else if ($slug === "tribunalVocals") {
+
+    $inputData = file_get_contents('php://input');
+    $data = json_decode($inputData, true);
+
+    $errors = [];
+
+    // -------------------------
+    // VALIDACIÓN
+    // -------------------------
+    if (empty($data['id'])) {
+        $errors[] = ValidacioErrors::requerit('id');
+    }
+
+    if (empty($data['nom'])) {
+        $errors[] = ValidacioErrors::requerit('nom');
+    }
+
+    if (empty($data['cognoms'])) {
+        $errors[] = ValidacioErrors::requerit('cognoms');
+    }
+
+    // carrec NO es obligatorio
+
+    if (!empty($errors)) {
+        Response::error(
+            MissatgesAPI::error('validacio'),
+            $errors,
+            400
+        );
+    }
+
+    // -------------------------
+    // SANITIZACIÓN
+    // -------------------------
+    $id = (int) $data['id'];
+    $nom = trim($data['nom']);
+    $cognoms = trim($data['cognoms']);
+    $carrec = !empty($data['carrec']) ? trim($data['carrec']) : null;
+
+    try {
+
+        $sql = "UPDATE aux_tribunal_vocals
+                SET
+                    nom = :nom,
+                    cognoms = :cognoms,
+                    carrec = :carrec
+                WHERE id = :id";
+
+        $stmt = $conn->prepare($sql);
+
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->bindParam(':nom', $nom, PDO::PARAM_STR);
+        $stmt->bindParam(':cognoms', $cognoms, PDO::PARAM_STR);
+        $stmt->bindParam(':carrec', $carrec, PDO::PARAM_STR);
+
+        $stmt->execute();
+
+        // -------------------------
+        // AUDITORIA
+        // -------------------------
+        Audit::registrarCanvi(
+            $conn,
+            $userId,
+            "UPDATE",
+            "Modificació tribunal vocal auxiliar",
+            Tables::AUX_TRIBUNAL_VOCALS,
+            $id
+        );
+
+        Response::success(
+            MissatgesAPI::success('update'),
+            ['id' => $id],
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
 }

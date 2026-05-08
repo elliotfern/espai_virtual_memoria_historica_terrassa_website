@@ -781,6 +781,14 @@ $routes = [
         'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-ponent.php'
     ]),
 
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/nou-vocal-tribunal' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-vocal-tribunal.php'
+    ]),
+    APP_INTRANET . $urlIntranet['auxiliars'] . '/modifica-vocal-tribunal/{slug}' => array_merge($defaultProtectedConfig, [
+        'view' => BACKEND_URL . $urlIntranetDir['auxiliars'] . '/form-vocal-tribunal.php'
+    ]),
+
+
 
     // Gestió familiars
     APP_INTRANET . $urlIntranet['familiars'] . '/modifica-familiar/{id}/{id}' => array_merge($defaultProtectedConfig, [

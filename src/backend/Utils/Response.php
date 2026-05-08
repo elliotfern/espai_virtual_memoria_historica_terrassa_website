@@ -4,8 +4,14 @@ namespace App\Utils;
 
 class Response
 {
-    public static function success(string $message = '', $data = null): void
-    {
+    public static function success(
+        string $message = '',
+        $data = null,
+        int $httpCode = 200
+    ): void {
+
+        http_response_code($httpCode);
+
         self::send([
             'status' => 'success',
             'message' => $message,

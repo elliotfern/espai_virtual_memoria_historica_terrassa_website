@@ -64,6 +64,7 @@ import { formPresidentTribunal } from './formPresidentTribunal';
 import { formDefensor } from './formDefensor';
 import { formFiscal } from './formFiscal';
 import { formPonent } from './formPonent';
+import { formVocalTribunal } from './formVocalTribunal';
 
 export async function auxiliars() {
   const url = window.location.href;
@@ -593,6 +594,11 @@ export async function auxiliars() {
   } else if (pageType[2] === 'modifica-ponent') {
     const id = Number(pageType[3]);
     formPonent(true, id);
+  } else if (pageType[2] === 'nou-vocal-tribunal') {
+    formVocalTribunal(false);
+  } else if (pageType[2] === 'modifica-vocal-tribunal') {
+    const id = Number(pageType[3]);
+    formVocalTribunal(true, id);
   } else if (pageType[2] === 'estudis') {
     estudis();
   } else if (pageType[2] === 'espai-virtual') {
