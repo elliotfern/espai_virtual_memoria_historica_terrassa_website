@@ -2593,7 +2593,7 @@ ORDER BY
 
     $query = "SELECT 
     j.id,
-    CONCAT(j.cognoms, ', ', j.nom) AS nom_complet
+    CONCAT(j.cognoms, ', ', j.nom) AS nom_complet, j.carrec, j.cognoms, j.nom
     FROM aux_secretaris_instructors AS j
     ORDER BY j.cognoms ASC, j.nom ASC";
 
@@ -2631,7 +2631,7 @@ ORDER BY
 
     $query = "SELECT 
     j.id,
-    CONCAT(j.cognoms, ', ', j.nom) AS nom_complet
+    CONCAT(j.cognoms, ', ', j.nom) AS nom_complet, j.carrec, j.cognoms, j.nom
     FROM aux_presidents_tribunal AS j
     ORDER BY j.cognoms ASC, j.nom ASC";
 
@@ -2669,7 +2669,7 @@ ORDER BY
 
     $query = "SELECT 
     j.id,
-    CONCAT(j.cognoms, ', ', j.nom) AS nom_complet
+    CONCAT(j.cognoms, ', ', j.nom) AS nom_complet, j.carrec, j.cognoms, j.nom
     FROM aux_defensors AS j
     ORDER BY j.cognoms ASC, j.nom ASC";
 
@@ -2707,7 +2707,7 @@ ORDER BY
 
     $query = "SELECT 
     j.id,
-    CONCAT(j.cognoms, ', ', j.nom) AS nom_complet
+    CONCAT(j.cognoms, ', ', j.nom) AS nom_complet, j.carrec, j.cognoms, j.nom
     FROM aux_fiscals AS j
     ORDER BY j.cognoms ASC, j.nom ASC";
 
@@ -2745,7 +2745,7 @@ ORDER BY
 
     $query = "SELECT 
     j.id,
-    CONCAT(j.cognoms, ', ', j.nom) AS nom_complet
+    CONCAT(j.cognoms, ', ', j.nom) AS nom_complet, j.carrec, j.cognoms, j.nom
     FROM aux_ponents AS j
     ORDER BY j.cognoms ASC, j.nom ASC";
 
@@ -2783,7 +2783,7 @@ ORDER BY
 
     $query = "SELECT 
     j.id,
-    CONCAT(j.cognoms, ', ', j.nom) AS nom_complet
+    CONCAT(j.cognoms, ', ', j.nom) AS nom_complet, j.carrec, j.cognoms, j.nom
     FROM aux_tribunal_vocals AS j
     ORDER BY j.cognoms ASC, j.nom ASC";
 
@@ -2821,7 +2821,7 @@ ORDER BY
 
     $query = "SELECT 
     j.id,
-    CONCAT(j.cognoms, ', ', j.nom) AS nom_complet
+    CONCAT(j.cognoms, ', ', j.nom) AS nom_complet, j.carrec, j.cognoms, j.nom
     FROM aux_testimonis_acusacions AS j
     ORDER BY j.cognoms ASC, j.nom ASC";
 

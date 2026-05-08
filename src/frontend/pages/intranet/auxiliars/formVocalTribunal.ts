@@ -33,7 +33,7 @@ export async function formVocalTribunal(isUpdate: boolean, id?: number) {
   if (!divTitol || !btnForm || !form) return;
 
   if (id && isUpdate) {
-    const response = await fetchDataGet<ApiResponse<Fitxa>>(`https://memoriaterrassa.cat/api/processats/get/tribunalVocals?id=${id}`);
+    const response = await fetchDataGet<ApiResponse<Fitxa>>(`/api/processats/get/tribunalVocals?id=${id}`);
 
     if (!response || !response.data) return;
     data = response.data;

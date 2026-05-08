@@ -33,7 +33,7 @@ export async function formPonent(isUpdate: boolean, id?: number) {
   if (!divTitol || !btnForm || !form) return;
 
   if (id && isUpdate) {
-    const response = await fetchDataGet<ApiResponse<Fitxa>>(`https://memoriaterrassa.cat/api/processats/get/ponent?id=${id}`);
+    const response = await fetchDataGet<ApiResponse<Fitxa>>(`/api/processats/get/ponent?id=${id}`);
 
     if (!response || !response.data) return;
     data = response.data;

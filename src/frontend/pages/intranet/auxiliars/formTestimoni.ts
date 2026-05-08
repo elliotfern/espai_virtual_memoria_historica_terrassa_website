@@ -33,7 +33,7 @@ export async function formTestimoni(isUpdate: boolean, id?: number) {
   if (!divTitol || !btnForm || !form) return;
 
   if (id && isUpdate) {
-    const response = await fetchDataGet<ApiResponse<Fitxa>>(`https://memoriaterrassa.cat/api/processats/get/testimoniAcusacio?id=${id}`);
+    const response = await fetchDataGet<ApiResponse<Fitxa>>(`/api/processats/get/testimoniAcusacio?id=${id}`);
 
     if (!response || !response.data) return;
     data = response.data;
