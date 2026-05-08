@@ -609,19 +609,19 @@ export async function auxiliars() {
   } else if (pageType[2] === 'llistat-jutges-instructors') {
     llistatJutgesInstructors();
   } else if (pageType[2] === 'llistat-secretaris-instructors') {
-    llistatSecretarisInstructors();
+    //llistatSecretarisInstructors();
   } else if (pageType[2] === 'llistat-presidents-tribunal') {
-    llistatPresidentsTribunal();
+    //llistatPresidentsTribunal();
   } else if (pageType[2] === 'llistat-defensors') {
-    llistatDefensors();
+    //llistatDefensors();
   } else if (pageType[2] === 'llistat-fiscals') {
-    llistatFiscals();
+    //llistatFiscals();
   } else if (pageType[2] === 'llistat-ponents') {
-    llistatPonent();
+    //llistatPonent();
   } else if (pageType[2] === 'llistat-tribunal-vocals') {
-    llistatTribunalVocals();
+    //llistatTribunalVocals();
   } else if (pageType[2] === 'llistat-testimonis-acusacions') {
-    llistatTestimonisAcusacions();
+    //llistatTestimonisAcusacions();
   } else if (pageType[2] === 'estudis') {
     estudis();
   } else if (pageType[2] === 'espai-virtual') {
