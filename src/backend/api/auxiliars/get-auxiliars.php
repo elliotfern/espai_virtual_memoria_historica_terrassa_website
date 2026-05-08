@@ -2555,7 +2555,7 @@ ORDER BY
 
     $query = "SELECT 
     j.id,
-    CONCAT(j.cognoms, ', ', j.nom) AS nom_complet, j.carrec
+    CONCAT(j.cognoms, ', ', j.nom) AS nom_complet, j.carrec, j.cognoms, j.nom
     FROM aux_jutges_instructors AS j
     ORDER BY j.cognoms ASC, j.nom ASC";
 
