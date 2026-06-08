@@ -27,8 +27,8 @@ define("APP_INTRANET", '/gestio');
 
 // Definicio de constants
 define("APP_API", '/api');
-define("BACKEND_API", 'src/backend/api');
-define("BACKEND_URL", 'public/intranet');
+define("BACKEND_API", '../src/backend/api');
+define("BACKEND_URL", './intranet');
 define("FRONTEND_URL", './web-publica');
 
 // definicio de url
