@@ -3,7 +3,13 @@ declare global {
     dataLayer: unknown[];
     gtag: GtagFunction;
   }
-  // Definimos el tipo de GtagFunction
-  type GtagFunction = (command: string, eventName: string, eventParams: Record<string, unknown>) => void;
+
+  type GtagFunction = {
+    (command: 'js', date: Date): void;
+    (command: 'config', targetId: string, params?: Record<string, unknown>): void;
+    (command: 'consent', action: string, params: Record<string, unknown>): void;
+    (command: 'event', eventName: string, params?: Record<string, unknown>): void;
+    (command: string, ...args: unknown[]): void; // fallback genérico
+  };
 }
 export {};

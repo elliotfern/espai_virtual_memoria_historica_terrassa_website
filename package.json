@@ -1,4 +1,16 @@
 {
+  "name": "memoriaterrassa.cat",
+  "version": "1.0.0",
+  "description": "",
+  "main": "/src/frontend/main.ts",
+  "type": "commonjs",
+  "scripts": {
+    "dev": "NODE_ENV=development webpack --mode development",
+    "build": "NODE_ENV=production webpack --mode production",
+    "test": "vendor/bin/phpunit --testdox --colors=always"
+  },
+  "author": "",
+  "license": "ISC",
   "devDependencies": {
     "@eslint/js": "^9.11.1",
     "@types/bootstrap": "^5.2.10",
@@ -7,9 +19,9 @@
     "@types/gtag.js": "^0.0.20",
     "@types/leaflet": "^1.9.20",
     "@types/leaflet.markercluster": "^1.5.5",
-    "@types/node": "^22.15.30",
+    "@types/node": "^22.19.20",
     "css-loader": "^7.1.2",
-    "dotenv": "^16.5.0",
+    "dotenv": "^16.6.1",
     "dotenv-webpack": "^8.1.0",
     "esbuild-loader": "^4.3.0",
     "eslint": "^9.11.1",
@@ -21,27 +33,28 @@
     "typescript": "^5.7.3",
     "typescript-eslint": "^8.8.0",
     "vite": "^6.3.5",
-    "webpack": "^5.97.1",
-    "webpack-cli": "^6.0.1"
+    "webpack": "^5.9",
+    "webpack-cli": "^7.0.3"
   },
-  "name": "memoria_intranet",
-  "version": "1.0.0",
-  "description": "Arxius backend i frontend de la web.",
-  "main": "./src/main.ts",
-  "scripts": {
-    "build": "ts-node -O '{\"module\":\"CommonJS\"}' ./node_modules/webpack/bin/webpack.js --config webpack.config.ts --mode production",
-    "dev": "webpack serve --config webpack.config.ts --mode development",
-    "start": "npm run dev"
+  "directories": {
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/elliotfern/elliotfern-intranet.git"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/elliotfern/elliotfern-intranet/issues"
+  },
+  "homepage": "https://github.com/elliotfern/elliotfern-intranet#readme",
   "dependencies": {
     "bootstrap": "^5.3.3",
     "choices.js": "^11.1.0",
     "dayjs": "^1.11.13",
     "leaflet": "^1.9.4",
     "leaflet.markercluster": "^1.5.3",
+    "process": "^0.11.10",
     "trix": "^2.1.15"
   },
   "lint-staged": {

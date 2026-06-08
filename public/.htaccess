@@ -1,0 +1,31 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Sitemap
+    RewriteRule ^sitemap\.xml$ - [L]
+    RewriteRule ^sitemaps/ - [L]
+
+    # Eliminar barra final (excepto raíz)
+    RewriteCond %{REQUEST_URI} !^/$
+    RewriteRule ^(.+)/$ /$1 [R=301,L]
+
+    # Redirección /ca -> /
+    RewriteRule ^ca/?$ / [R=301,L]
+
+    # Front Controller
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ index.php?uri=$1 [QSA,L]
+</IfModule>
+
+<IfModule mod_headers.c>
+    Header set Access-Control-Allow-Origin "*"
+    Header set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+    Header set Access-Control-Allow-Headers "Content-Type"
+</IfModule>
+
+<FilesMatch "\.svg$">
+    <IfModule mod_headers.c>
+        Header set Content-Type "image/svg+xml"
+    </IfModule>
+</FilesMatch>

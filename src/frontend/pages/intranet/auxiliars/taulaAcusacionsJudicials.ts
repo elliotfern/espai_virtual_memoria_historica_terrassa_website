@@ -56,7 +56,7 @@ export async function taulaAcusacionsJudicials() {
     url: API_URLS.GET.ACUSACIONS_JUDICIALS,
     containerId: 'taulaAcusacionsJudicials',
     columns,
-    filterKeys: ['acusacio_cat'],
+    filterKeys: ['acusacio_ca'],
     //filterByField: 'sector_cat',
   });
 

@@ -18,8 +18,8 @@ export function loadGoogleAnalytics() {
 
   // Una vez cargado el script, configuramos Google Analytics
   script.onload = () => {
-    window.gtag('js', new Date());
-    window.gtag('config', 'G-CLFHEHQQK5'); // Inicia la configuración de GA
+    window.gtag('js', new Date(), undefined);
+    window.gtag('config', 'G-CLFHEHQQK5', undefined);
 
     // Aquí puedes enviar eventos si quieres
     window.gtag('event', 'page_view', {

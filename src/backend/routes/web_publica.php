@@ -28,65 +28,65 @@ $defaultRoutesUserLoggedConfig = [
 // Define las rutas base que quieres traducir
 $base_routes = [
     // 00. Homepage
-    '/' => 'public/web-publica/index.php',
-    '/benvinguda' => 'public/web-publica/index.php',
-    '/inici' => 'public/web-publica/inici.php',
+    '/' => './web-publica/index.php',
+    '/benvinguda' => './web-publica/index.php',
+    '/inici' => './web-publica/inici.php',
 
     // Accés intranet i recuperació contrasenya
-    '/acces' => 'public/web-publica/auth/login.php',
+    '/acces' => './web-publica/auth/login.php',
 
-    'recuperacio-contrasenya' => 'public/web-publica/auth/recuperacio-contrasenya.php',
+    'recuperacio-contrasenya' => './web-publica/auth/recuperacio-contrasenya.php',
 
     // 1. Base de dades
-    '/base-dades/general' => 'public/web-publica/base-dades/base-dades-global.php',
-    '/base-dades/cost-huma' => 'public/web-publica/base-dades/filtre-pagina-cost-huma.php',
-    '/base-dades/represaliats' => 'public/web-publica/base-dades/base-dades-represaliats.php',
-    '/base-dades/exiliats-deportats' => 'public/web-publica/base-dades/filtre-pagina-exiliats.php',
-    '/base-dades/geolocalitzacio' => 'public/web-publica/base-dades/geolocalitzacio.php',
+    '/base-dades/general' => './web-publica/base-dades/base-dades-global.php',
+    '/base-dades/cost-huma' => './web-publica/base-dades/filtre-pagina-cost-huma.php',
+    '/base-dades/represaliats' => './web-publica/base-dades/base-dades-represaliats.php',
+    '/base-dades/exiliats-deportats' => './web-publica/base-dades/filtre-pagina-exiliats.php',
+    '/base-dades/geolocalitzacio' => './web-publica/base-dades/geolocalitzacio.php',
 
 
-    '/fitxa/{id}' => 'public/web-publica/base-dades/fitxa-represaliat.php',
-    '/cerca-represaliat' => 'public/web-publica/base-dades/cerca-represaliat.php',
+    '/fitxa/{id}' => './web-publica/base-dades/fitxa-represaliat.php',
+    '/cerca-represaliat' => './web-publica/base-dades/cerca-represaliat.php',
 
     // 2. Estudis
-    '/documents-estudis' => 'public/web-publica/estudis/estudis.php',
+    '/documents-estudis' => './web-publica/estudis/estudis.php',
 
-    '/documents-estudis/fitxa/{id}' => 'public/web-publica/estudis/estudi-detalls.php',
+    '/documents-estudis/fitxa/{id}' => './web-publica/estudis/estudi-detalls.php',
 
     // 3. Fonts documentals
-    '/fonts-documentals' => 'public/web-publica/fonts.php',
+    '/fonts-documentals' => './web-publica/fonts.php',
 
     // 4. Espai virtual
-    'espai-virtual/que-es-espai-virtual' => 'public/web-publica/espai-virtual/espai-virtual.php',
+    'espai-virtual/que-es-espai-virtual' => './web-publica/espai-virtual/espai-virtual.php',
 
     // 4.1. Antecedents
-    '/espai-virtual/antecedents' => 'public/web-publica/espai-virtual/antecedents.php',
+    '/espai-virtual/antecedents' => './web-publica/espai-virtual/antecedents.php',
 
     // 4.2. Aparicions premsa
-    '/espai-virtual/premsa' => 'public/web-publica/espai-virtual/premsa.php',
+    '/espai-virtual/premsa' => './web-publica/espai-virtual/premsa.php',
 
-    '/espai-virtual/premsa-aparicio/{id}' => 'public/web-publica/espai-virtual/premsa-aparicio-detalls.php',
+    '/espai-virtual/premsa-aparicio/{id}' => './web-publica/espai-virtual/premsa-aparicio-detalls.php',
 
     // 4.2. Materials comunicacio
-    '/espai-virtual/materials-comunicacio' => 'public/web-publica/espai-virtual/materials.php',
+    '/espai-virtual/materials-comunicacio' => './web-publica/espai-virtual/materials.php',
 
     // 5. Contacte
-    '/contacte' => 'public/web-publica/contacte.php',
+    '/contacte' => './web-publica/contacte.php',
 
     // 6. Equip investigadors
-    '/equip/{slug}' => 'public/web-publica/equip/plantilla.php',
+    '/equip/{slug}' => './web-publica/equip/plantilla.php',
 
     // 7. Cronologia
-    '/cronologia' => 'public/web-publica/cronologia.php',
+    '/cronologia' => './web-publica/cronologia.php',
 
     // 8. Links
-    '/links' => 'public/web-publica/links.php',
+    '/links' => './web-publica/links.php',
 
     // Altres pagines
-    '/credits' => 'public/web-publica/legal/credits.php',
-    '/avis-legal' => 'public/web-publica/legal/avis-legal.php',
-    '/politica-privacitat' => 'public/web-publica/legal/politica-privacitat.php',
-    '/politica-cookies' => 'public/web-publica/legal/politica-cookies.php',
+    '/credits' => './web-publica/legal/credits.php',
+    '/avis-legal' => './web-publica/legal/avis-legal.php',
+    '/politica-privacitat' => './web-publica/legal/politica-privacitat.php',
+    '/politica-cookies' => './web-publica/legal/politica-cookies.php',
 
 ];
 
@@ -120,49 +120,49 @@ $routes = [
 
     // 02. Base de dades
     '/base-dades/general' => [
-        'view' => 'public/web-publica/base-dades/base-dades-global.php',
+        'view' => './web-publica/base-dades/base-dades-global.php',
         'needs_session' => false,
         'header_footer' => false,
         'header_menu_footer' => true
     ],
 
     '/base-dades/cost-huma' => [
-        'view' => 'public/web-publica/base-dades/filtre-pagina-cost-huma.php',
+        'view' => './web-publica/base-dades/filtre-pagina-cost-huma.php',
         'needs_session' => false,
         'header_footer' => false,
         'header_menu_footer' => true
     ],
 
     '/base-dades/represaliats' => [
-        'view' => 'public/web-publica/base-dades/base-dades-represaliats.php',
+        'view' => './web-publica/base-dades/base-dades-represaliats.php',
         'needs_session' => false,
         'header_footer' => false,
         'header_menu_footer' => true
     ],
 
     '/base-dades/exiliats' => [
-        'view' => 'public/web-publica/base-dades/filtre-pagina-exiliats.php',
+        'view' => './web-publica/base-dades/filtre-pagina-exiliats.php',
         'needs_session' => false,
         'header_footer' => false,
         'header_menu_footer' => true
     ],
 
     '/base-dades/fitxa/{id}' =>  [
-        'view' => 'public/web-publica/base-dades/fitxa-represaliat.php',
+        'view' => './web-publica/base-dades/fitxa-represaliat.php',
         'needs_session' => false,
         'header_footer' => false,
         'header_menu_footer' => true
     ],
 
     '/base-dades/cerca-represaliat' =>  [
-        'view' => 'public/web-publica/base-dades/cerca-represaliat.php',
+        'view' => './web-publica/base-dades/cerca-represaliat.php',
         'needs_session' => false,
         'header_footer' => false,
         'header_menu_footer' => true
     ],
 
     '/base-dades/geolocalitzacio' =>  [
-        'view' => 'public/web-publica/base-dades/geolocalitzacio.php',
+        'view' => './web-publica/base-dades/geolocalitzacio.php',
         'needs_session' => false,
         'header_footer' => false,
         'header_menu_footer' => true
@@ -170,14 +170,14 @@ $routes = [
 
     // 2. Estudis
     '/documents-estudis' =>  [
-        'view' => 'public/web-publica/estudis/estudis.php',
+        'view' => './web-publica/estudis/estudis.php',
         'needs_session' => false,
         'header_footer' => false,
         'header_menu_footer' => true
     ],
 
     '/documents-estudis/fitxa/{id}' =>  [
-        'view' => 'public/web-publica/estudis/estudi-detalls.php',
+        'view' => './web-publica/estudis/estudi-detalls.php',
         'needs_session' => false,
         'header_footer' => false,
         'header_menu_footer' => true
@@ -185,7 +185,7 @@ $routes = [
 
     // 3. Fonts documentals
     '/fonts-documentals'  =>  [
-        'view' => 'public/web-publica/fonts.php',
+        'view' => './web-publica/fonts.php',
         'needs_session' => false,
         'header_footer' => false,
         'header_menu_footer' => true
@@ -193,35 +193,35 @@ $routes = [
 
     // 4. Espai virtual
     '/espai-virtual/que-es-espai-virtual' =>  [
-        'view' => 'public/web-publica/espai-virtual/espai-virtual.php',
+        'view' => './web-publica/espai-virtual/espai-virtual.php',
         'needs_session' => false,
         'header_footer' => false,
         'header_menu_footer' => true
     ],
 
     '/espai-virtual/antecedents' =>  [
-        'view' => 'public/web-publica/espai-virtual/antecedents.php',
+        'view' => './web-publica/espai-virtual/antecedents.php',
         'needs_session' => false,
         'header_footer' => false,
         'header_menu_footer' => true
     ],
 
     '/espai-virtual/premsa' =>  [
-        'view' => 'public/web-publica/espai-virtual/premsa.php',
+        'view' => './web-publica/espai-virtual/premsa.php',
         'needs_session' => false,
         'header_footer' => false,
         'header_menu_footer' => true
     ],
 
     '/espai-virtual/premsa-aparicio/{id}' =>  [
-        'view' => 'public/web-publica/espai-virtual/premsa-aparicio-detalls.php',
+        'view' => './web-publica/espai-virtual/premsa-aparicio-detalls.php',
         'needs_session' => false,
         'header_footer' => false,
         'header_menu_footer' => true
     ],
 
     '/espai-virtual/materials-comunicacio' =>  [
-        'view' => 'public/web-publica/materials.php',
+        'view' => './web-publica/materials.php',
         'needs_session' => false,
         'header_footer' => false,
         'header_menu_footer' => true
@@ -229,7 +229,7 @@ $routes = [
 
     // 5. Contacte
     '/contacte'  =>  [
-        'view' => 'public/web-publica/contacte.php',
+        'view' => './web-publica/contacte.php',
         'needs_session' => false,
         'header_footer' => false,
         'header_menu_footer' => true
@@ -237,7 +237,7 @@ $routes = [
 
     // 6. Equip investigadors
     '/equip/{slug}'  =>  [
-        'view' => 'public/web-publica/equip/plantilla.php',
+        'view' => './web-publica/equip/plantilla.php',
         'needs_session' => false,
         'header_footer' => false,
         'header_menu_footer' => true
@@ -245,7 +245,7 @@ $routes = [
 
     // Cronologia
     '/cronologia'  =>  [
-        'view' => 'public/web-publica/cronologia.php',
+        'view' => './web-publica/cronologia.php',
         'needs_session' => false,
         'header_footer' => false,
         'header_menu_footer' => true
@@ -253,7 +253,7 @@ $routes = [
 
     // 8. Links
     '/links'  =>  [
-        'view' => 'public/web-publica/links.php',
+        'view' => './web-publica/links.php',
         'needs_session' => false,
         'header_footer' => false,
         'header_menu_footer' => true
@@ -261,28 +261,28 @@ $routes = [
 
     // Altres pagines
     '/credits' => [
-        'view' => 'public/web-publica/legal/credits.php',
+        'view' => './web-publica/legal/credits.php',
         'needs_session' => false,
         'header_footer' => false,
         'header_menu_footer' => true
     ],
 
     '/avis-legal' => [
-        'view' => 'public/web-publica/legal/avis-legal.php',
+        'view' => './web-publica/legal/avis-legal.php',
         'needs_session' => false,
         'header_footer' => false,
         'header_menu_footer' => true
     ],
 
     '/politica-privacitat' => [
-        'view' => 'public/web-publica/legal/politica-privacitat.php',
+        'view' => './web-publica/legal/politica-privacitat.php',
         'needs_session' => false,
         'header_footer' => false,
         'header_menu_footer' => true
     ],
 
     '/politica-cookies' => [
-        'view' => 'public/web-publica/legal/politica-cookies.php',
+        'view' => './web-publica/legal/politica-cookies.php',
         'needs_session' => false,
         'header_footer' => false,
         'header_menu_footer' => true

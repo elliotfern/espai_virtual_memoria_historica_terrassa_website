@@ -6,13 +6,7 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 // Incluir configuraciones y rutas
-require_once __DIR__ . '/src/backend/Config/funcions.php';
-require_once __DIR__ . '/src/backend/Config/config.php';
-require_once __DIR__ . '/src/backend/Config/connection.php'; // cal eliminar-ho
-require_once __DIR__ . '/src/backend/Utils/verificacioSessio.php';
-require_once __DIR__ . '/src/backend/Utils/convertirDates.php';
-require_once __DIR__ . '/src/backend/Utils/sanitizerHtml.php';
-require_once __DIR__ . '/src/backend/routes/routes.php';
+require_once __DIR__ . '/../src/backend/bootstrap.php';
 
 // ---------------------------------------------------------
 // 1) URI normalizada
@@ -46,14 +40,14 @@ if (preg_match($langPattern, $requestUri, $m)) {
 }
 
 // Cargar traducciones correspondientes
-$translations = require __DIR__ . "/src/backend/locales/{$language2}.php";
+$translations = require __DIR__ . "/../src/backend/locales/{$language2}.php";
 
 // ---------------------------------------------------------
 // 3) Resolver rutas usando $uriForRouting (sin /es, /fr...)
 // ---------------------------------------------------------
 $routeParams = [];
 $routeFound = false;
-$view = 'public/includes/404.php';
+$view = './includes/404.php';
 $noHeaderFooter = false;
 $headerMenu = true;
 $apiSenseHTML = false;
@@ -87,29 +81,28 @@ foreach ($routes as $route => $routeInfo) {
 //    pero con patrón de segmento completo
 // ---------------------------------------------------------
 if (preg_match('#^/(es|fr|en|pt|it)(/|$)#', $requestUri) && preg_match('#^/(es|fr|en|pt|it)$#', $requestUri)) {
-    // Si es exactamente "/es" o "/fr" etc (sin más segmentos)
-    include 'public/includes/header.php';
-    include 'public/web-publica/index.php';
-    include 'public/includes/footer-end.php';
+    include __DIR__ . '/includes/header.php';
+    include __DIR__ . '/web-publica/index.php';
+    include __DIR__ . '/includes/footer-end.php';
 } else {
     if ($noHeaderFooter) {
-        include 'public/includes/header.php';
+        include './includes/header.php';
         include $view;
-        include 'public/includes/footer-end.php';
+        include './includes/footer-end.php';
     } elseif ($headerMenu) {
-        include 'public/includes/header.php';
-        include 'public/includes/header-menu.php';
+        include './includes/header.php';
+        include './includes/header-menu.php';
         include $view;
-        include 'public/includes/footer.php';
-        include 'public/includes/footer-end.php';
+        include './includes/footer.php';
+        include './includes/footer-end.php';
     } elseif ($apiSenseHTML) {
         include $view;
     } else {
         // Por seguridad, si alguna ruta no define flags bien
-        include 'public/includes/header.php';
-        include 'public/includes/header-menu.php';
+        include './includes/header.php';
+        include './includes/header-menu.php';
         include $view;
-        include 'public/includes/footer.php';
-        include 'public/includes/footer-end.php';
+        include './includes/footer.php';
+        include './includes/footer-end.php';
     }
 }

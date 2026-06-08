@@ -1,27 +1,21 @@
 {
   "compilerOptions": {
-    "module": "ESNext",            // Usar módulos ESNext para importaciones
-    "target": "ES2022",            // Establecer el target a ES2020
-    "moduleResolution": "bundler",    // Resolver módulos de acuerdo con Node.js
-    "esModuleInterop": true,       // Compatibilidad con CommonJS y ES Modules
-    "strict": true,                // Habilitar todas las comprobaciones estrictas
-    "allowJs": true,               // Permitir archivos .js
-    "outDir": "./dist",            // Directorio de salida para los archivos compilados
-    "rootDir": "./src/frontend",   // Directorio raíz de tu código fuente
-    "lib": ["es2021", "dom"],      // Incluir las bibliotecas necesarias
+    "target": "es2021",
+    "lib": ["DOM", "DOM.Iterable", "ES2021"],
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "allowJs": false,
+    "outDir": "./public/dist",
+    "rootDir": "./src/",
+    "sourceMap": false,
+    "types": ["node"],
     "forceConsistentCasingInFileNames": true,
-    "incremental": true,
-    "types": ["leaflet", "leaflet.markercluster"],
-    "typeRoots": [
-      "node_modules/@types",
-      "src/frontend/types",
-    ]
+    "typeRoots": ["./node_modules/@types", "src/frontend/types"]
   },
-  "include": [
-    "src/frontend",
-    "src/frontend/types/global.d.ts",
-    "src/frontend/types",
-    "src/frontend/types/vite-env.d.ts",
-  ],
+
+  "include": ["src", "src/types/**/*.d.ts", "src/frontend", "src/frontend/types/global.d.ts", "src/frontend/types", "src/frontend/types/vite-env.d.ts"],
   "exclude": ["node_modules"]
 }
