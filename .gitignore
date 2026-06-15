@@ -16,7 +16,7 @@ Thumbs.db
 # Ignorar archivos de configuración local (ejemplo para PHP)
 .env
 .env.local
-.env.production
+.env.prod
 .env.test
 .env.staging
 pass.txt
