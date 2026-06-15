@@ -1,7 +1,11 @@
 import { renderTaulaCercadorFiltres } from '../../../services/renderTaula/renderTaulaCercadorFiltres';
-import { initDeleteHandlers, registerDeleteCallback } from '../../../services/fetchData/handleDelete';
+import {
+  initDeleteHandlers,
+  registerDeleteCallback,
+} from '../../../services/fetchData/handleDelete';
 import { getIsAdmin } from '../../../services/auth/getIsAdmin';
 import { getIsAutor } from '../../../services/auth/getIsAutor';
+import { ENV } from '../../../config/env';
 
 interface EspaiRow {
   id: number;
@@ -39,7 +43,8 @@ export async function llistatPresidentsTribunal() {
     columns.push({
       header: 'Accions',
       field: 'id',
-      render: (_: unknown, row: EspaiRow) => `<a id="${row.id}" title="Modifica" href="https://${window.location.hostname}/gestio/auxiliars/modifica-president-tribunal/${row.id}"><button type="button" class="btn btn-warning btn-sm">Modifica</button></a>`,
+      render: (_: unknown, row: EspaiRow) =>
+        `<a id="${row.id}" title="Modifica" href="${ENV.domainWeb}/gestio/auxiliars/modifica-president-tribunal/${row.id}"><button type="button" class="btn btn-warning btn-sm">Modifica</button></a>`,
     });
   }
 
@@ -52,7 +57,7 @@ export async function llistatPresidentsTribunal() {
           type="button"
           class="btn btn-danger btn-sm delete-button"
           data-id="${row.id}" 
-          data-url="/api/auxiliars/delete/tipusJudici/${row.id}"
+          data-url="${ENV.apiBaseUrl}/auxiliars/delete/tipusJudici/${row.id}"
           data-reload-callback="${reloadKey}"
         >
           Elimina
@@ -61,7 +66,7 @@ export async function llistatPresidentsTribunal() {
   }
 
   renderTaulaCercadorFiltres<EspaiRow>({
-    url: `https://memoriaterrassa.cat/api/auxiliars/get/presidents_tribunals`,
+    url: `${ENV.apiBaseUrl}/auxiliars/get/presidents_tribunals`,
     containerId: 'tabla1',
     columns,
     //filterKeys: ,

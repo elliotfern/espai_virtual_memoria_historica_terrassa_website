@@ -16,6 +16,6 @@
     "typeRoots": ["./node_modules/@types", "src/frontend/types"]
   },
 
-  "include": ["src", "src/types/**/*.d.ts", "src/frontend", "src/frontend/types/global.d.ts", "src/frontend/types", "src/frontend/types/vite-env.d.ts"],
+  "include": ["src", "src/types/**/*.d.ts", "src/frontend", "src/frontend/types/global.d.ts", "src/frontend/types"],
   "exclude": ["node_modules"]
 }

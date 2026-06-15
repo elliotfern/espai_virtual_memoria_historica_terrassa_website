@@ -2,6 +2,7 @@
 // Pàgina pública: detalls d'una aparició de premsa
 // Endpoint: /api/auxiliars/get/premsaAparicioI18n?id=123
 
+import { ENV } from '../../../config/env';
 import { formatDatesForm } from '../../../services/formatDates/dates';
 
 type Lang = 'ca' | 'es' | 'en' | 'fr' | 'it' | 'pt';
@@ -59,7 +60,12 @@ type PremsaAparicioDetalls = {
 const LANGS: Lang[] = ['ca', 'es', 'en', 'fr', 'it', 'pt'];
 
 function escapeHtml(input: string): string {
-  return input.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#039;');
+  return input
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;');
 }
 
 function formatDatePublic(dateYmd: string | null): string {
@@ -116,7 +122,7 @@ function buildImgUrlPremsa(nomArxiu: string | null, mime: string | null): string
   if (!nomArxiu || !mime) return null;
   const ext = mimeToExt(mime);
   if (!ext) return null;
-  return `https://media.memoriaterrassa.cat/assets_premsa/${encodeURIComponent(nomArxiu)}.${ext}`;
+  return `${ENV.domainImg}/assets_premsa/${encodeURIComponent(nomArxiu)}.${ext}`;
 }
 
 // ✅ DailyMotion embed
@@ -130,7 +136,10 @@ function dailymotionIdFromUrl(url: string): string | null {
   // - https://dai.ly/x7xyz12
   // - https://www.dailymotion.com/embed/video/x7xyz12
   // - https://www.dailymotion.com/video/x7xyz12?some=...
-  const m = u.match(/dailymotion\.com\/video\/([a-zA-Z0-9]+)/) || u.match(/dailymotion\.com\/embed\/video\/([a-zA-Z0-9]+)/) || u.match(/dai\.ly\/([a-zA-Z0-9]+)/);
+  const m =
+    u.match(/dailymotion\.com\/video\/([a-zA-Z0-9]+)/) ||
+    u.match(/dailymotion\.com\/embed\/video\/([a-zA-Z0-9]+)/) ||
+    u.match(/dai\.ly\/([a-zA-Z0-9]+)/);
 
   return m?.[1] ?? null;
 }

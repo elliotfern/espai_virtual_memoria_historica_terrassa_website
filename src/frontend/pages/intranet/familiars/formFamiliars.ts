@@ -5,6 +5,7 @@ import { renderFormInputs } from '../../../services/fetchData/renderInputsForm';
 import 'trix'; // carga Trix (extiende el DOM con <trix-editor>)
 import { auxiliarSelect } from '../../../services/fetchData/auxiliarSelect';
 import { wireForm } from '../../../helpers/transmissioHelper';
+import { ENV } from '../../../config/env';
 
 interface Fitxa {
   [key: string]: unknown;
@@ -57,20 +58,26 @@ export async function formFamiliars(isUpdate: boolean, idParent?: number, id?: n
   if (!divTitol || !btnUsuari || !usuariForm) return;
 
   if (id && isUpdate) {
-    const url = `https://memoriaterrassa.cat/api/familiars/get/familiarsFitxa?id=${id}`;
+    const url = `${ENV.apiBaseUrl}/familiars/get/familiarsFitxa?id=${id}`;
     const response = await fetchDataGet<ApiResponse<Fitxa>>(url, true);
 
     if (!response || !response.data) return;
     data = response.data;
 
-    const nomComplet = [data.nom_represaliat as string, data.cognom1_represaliat as string, data.cognom2_represaliat as string].filter(Boolean).join(' ');
+    const nomComplet = [
+      data.nom_represaliat as string,
+      data.cognom1_represaliat as string,
+      data.cognom2_represaliat as string,
+    ]
+      .filter(Boolean)
+      .join(' ');
     const slug = (data.slug as string) ?? '';
 
     divTitol.innerHTML = `
             <h2>Relació de dades familiars: Modificació dades parent</h2>
             <h4>
               Fitxa represaliat:
-              <a href="https://memoriaterrassa.cat/fitxa/${slug}" target="_blank" rel="noopener noreferrer">
+              <a href="${ENV.domainWeb}/fitxa/${slug}" target="_blank" rel="noopener noreferrer">
                 ${nomComplet}
               </a>
             </h4>
@@ -81,33 +88,58 @@ export async function formFamiliars(isUpdate: boolean, idParent?: number, id?: n
     btnUsuari.textContent = 'Modificar dades';
 
     usuariForm.addEventListener('submit', function (event) {
-      transmissioDadesDB(event, 'PUT', 'familiarForm', 'https://memoriaterrassa.cat/api/familiars/put');
+      transmissioDadesDB(event, 'PUT', 'familiarForm', `${ENV.apiBaseUrl}/familiars/put`);
     });
 
-    await auxiliarSelect(data.relacio_parentiu ?? 0, 'relacions_parentiu', 'relacio_parentiu', 'relacio_parentiu');
-    await auxiliarSelect(data.idParent ?? 0, 'llistat_complert_represaliats', 'idParent', 'nom_complert');
+    await auxiliarSelect(
+      data.relacio_parentiu ?? 0,
+      'relacions_parentiu',
+      'relacio_parentiu',
+      'relacio_parentiu'
+    );
+    await auxiliarSelect(
+      data.idParent ?? 0,
+      'llistat_complert_represaliats',
+      'idParent',
+      'nom_complert'
+    );
   } else {
     // ——— CREAR
     // Si viene un id de represaliat, precargamos su ficha básica
     if (idParent) {
-      const res = await fetchDataGet<ApiResponse2<Fitxa[]>>(API_URLS.GET.REPRESALIAT_ID(idParent), true);
+      const res = await fetchDataGet<ApiResponse2<Fitxa[]>>(
+        API_URLS.GET.REPRESALIAT_ID(idParent),
+        true
+      );
       const fitxa = res?.data?.[0];
       if (!fitxa) {
         divTitol.innerHTML = `<h2>Relació de dades familiars: /h2><p>No s'han trobat dades de la fitxa.</p>`;
         return;
       }
 
-      await auxiliarSelect(fitxa.relacio_parantiu ?? 0, 'relacions_parentiu', 'relacio_parentiu', 'relacio_parentiu');
-      await auxiliarSelect(fitxa.idRepresaliat ?? 0, 'llistat_complert_represaliats', 'idParent', 'nom_complert');
+      await auxiliarSelect(
+        fitxa.relacio_parantiu ?? 0,
+        'relacions_parentiu',
+        'relacio_parentiu',
+        'relacio_parentiu'
+      );
+      await auxiliarSelect(
+        fitxa.idRepresaliat ?? 0,
+        'llistat_complert_represaliats',
+        'idParent',
+        'nom_complert'
+      );
 
-      const nomComplet = [fitxa.nom as string, fitxa.cognom1 as string, fitxa.cognom2 as string].filter(Boolean).join(' ');
+      const nomComplet = [fitxa.nom as string, fitxa.cognom1 as string, fitxa.cognom2 as string]
+        .filter(Boolean)
+        .join(' ');
       const slug = (fitxa.slug as string) ?? '';
 
       divTitol.innerHTML = `
             <h2>Relació de dades familiars: creació de nou parent</h2>
             <h4>
               Fitxa represaliat:
-              <a href="https://memoriaterrassa.cat/fitxa/${slug}" target="_blank" rel="noopener noreferrer">
+              <a href="${ENV.domainWeb}/fitxa/${slug}" target="_blank" rel="noopener noreferrer">
                 ${nomComplet}
               </a>
             </h4>
@@ -118,7 +150,7 @@ export async function formFamiliars(isUpdate: boolean, idParent?: number, id?: n
       // Ocultar el form en éxito y hacer scroll automático a #okMessage
       wireForm({
         formId: 'familiarForm',
-        urlAjax: 'https://memoriaterrassa.cat/api/familiars/post',
+        urlAjax: `${ENV.apiBaseUrl}/familiars/post`,
         successBehavior: 'none', // oculta el formulario
         scrollOnSuccess: true, // opcional; ya se activa por defecto al usar 'hide'
         //scrollOffset: 96,             // si tienes un header fijo alto
@@ -130,13 +162,26 @@ export async function formFamiliars(isUpdate: boolean, idParent?: number, id?: n
         if (!idParent) return;
 
         try {
-          const res = await fetchDataGet<ApiResponse2<Fitxa[]>>(API_URLS.GET.REPRESALIAT_ID(idParent), true);
+          const res = await fetchDataGet<ApiResponse2<Fitxa[]>>(
+            API_URLS.GET.REPRESALIAT_ID(idParent),
+            true
+          );
           const fitxa = res?.data?.[0];
           if (!fitxa) return;
 
           // vuelves a repintar selects / campos
-          await auxiliarSelect(fitxa.relacio_parentiu ?? 0, 'relacions_parentiu', 'relacio_parentiu', 'relacio_parentiu');
-          await auxiliarSelect(fitxa.idRepresaliat ?? 0, 'llistat_complert_represaliats', 'idParent', 'nom_complert');
+          await auxiliarSelect(
+            fitxa.relacio_parentiu ?? 0,
+            'relacions_parentiu',
+            'relacio_parentiu',
+            'relacio_parentiu'
+          );
+          await auxiliarSelect(
+            fitxa.idRepresaliat ?? 0,
+            'llistat_complert_represaliats',
+            'idParent',
+            'nom_complert'
+          );
         } catch (err) {
           console.error('Error re-cargando fitxa després de POST', err);
         }

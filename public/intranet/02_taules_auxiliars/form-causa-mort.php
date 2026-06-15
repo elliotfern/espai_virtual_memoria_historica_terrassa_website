@@ -7,7 +7,6 @@ $conn = DatabaseConnection::getConnection();
 if (!$conn) {
     die("No se pudo establecer conexión a la base de datos.");
 }
-require_once APP_ROOT . '/public/intranet/includes/header.php';
 
 // Obtener la URL completa
 $url2 = $_SERVER['REQUEST_URI'];

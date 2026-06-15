@@ -1,5 +1,4 @@
 <?php
-require_once APP_ROOT . '/public/intranet/includes/header.php';
 
 use App\Config\DatabaseConnection;
 

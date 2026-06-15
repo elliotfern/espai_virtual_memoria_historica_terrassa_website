@@ -1,16 +1,14 @@
-import { DOMAIN_WEB } from '../../config/constants';
+import { ENV } from '../../config/env';
 
 // src/pages/fitxaRepresaliat/sindicats.ts
 type ApiWrapper<T> = { status?: string; message?: string; errors?: unknown[]; data?: T[] };
 type Sindicat = { id: number; sindicat: string; sigles?: string | null };
 
-const base = DOMAIN_WEB;
-
 async function fetchAux<T>(endpoint: string): Promise<T[]> {
-  const res = await fetch(`${base}/api/auxiliars/get/${endpoint}`);
+  const res = await fetch(`${ENV.apiBaseUrl}/auxiliars/get/${endpoint}`);
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   const json = (await res.json()) as ApiWrapper<T> | T[];
-  const arr = Array.isArray(json) ? json : json.data ?? [];
+  const arr = Array.isArray(json) ? json : (json.data ?? []);
   if (!Array.isArray(arr)) throw new Error('Formato de respuesta inesperado');
   return arr;
 }

@@ -1,5 +1,3 @@
-<?php require_once APP_ROOT . '/public/intranet/includes/header.php'; ?>
-
 <div class="container">
     <?php if ($isAdmin || $isAutor): ?>
         <h2>Llistat quadre general de víctimes</h2>

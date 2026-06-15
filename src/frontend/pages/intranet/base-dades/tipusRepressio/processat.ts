@@ -5,10 +5,10 @@ import { transmissioDadesDB } from '../../../../services/fetchData/transmissioDa
 import { getIsAdmin } from '../../../../services/auth/getIsAdmin';
 import { getIsAutor } from '../../../../services/auth/getIsAutor';
 import { formatDatesForm } from '../../../../services/formatDates/dates';
-import { DOMAIN_API, DOMAIN_WEB } from '../../../../config/constants';
 import { renderTaulaCercadorFiltres } from '../../../../services/renderTaula/renderTaulaCercadorFiltres';
 import { initDeleteHandlers, registerDeleteCallback } from '../../../../services/fetchData/handleDelete';
 import { auxiliarMultiSelect } from '../../../../services/fetchData/auxiliarMultipleSelect';
+import { ENV } from '../../../../config/env';
 
 interface Fitxa {
   [key: string]: unknown;
@@ -69,7 +69,7 @@ export async function llistatDetingutConsellGuerra(idRepresaliat: number) {
     if (!container) return;
 
     const nomComplet = `${data2.nom} ${data2.cognom1} ${data2.cognom2}`;
-    const url = `${DOMAIN_WEB}/fitxa/${data2.slug}`;
+    const url = `${ENV.domainWeb}/fitxa/${data2.slug}`;
 
     container.innerHTML = `<h4>Fitxa: <a href="${url}" target="_blank">${nomComplet}</a></h4>`;
   }
@@ -139,7 +139,7 @@ export async function llistatDetingutConsellGuerra(idRepresaliat: number) {
     columns.push({
       header: 'Accions',
       field: 'id',
-      render: (_: unknown, row: EspaiRow) => `<a id="${row.id}" title="Modifica" href="${DOMAIN_WEB}/gestio/base-dades/detinguts-consell-guerra/modifica-detingut-consell-guerra/${idRepresaliat}/${row.id}"><button type="button" class="btn btn-warning btn-sm">Modifica</button></a>`,
+      render: (_: unknown, row: EspaiRow) => `<a id="${row.id}" title="Modifica" href="${ENV.domainWeb}/gestio/base-dades/detinguts-consell-guerra/modifica-detingut-consell-guerra/${idRepresaliat}/${row.id}"><button type="button" class="btn btn-warning btn-sm">Modifica</button></a>`,
     });
   }
 
@@ -152,7 +152,7 @@ export async function llistatDetingutConsellGuerra(idRepresaliat: number) {
             type="button"
             class="btn btn-danger btn-sm delete-button"
             data-id="${row.id}" 
-            data-url="${DOMAIN_API}/presoModel/delete/${row.id}"
+            data-url="${ENV.apiBaseUrl}/presoModel/delete/${row.id}"
             data-reload-callback="${reloadKey}"
           >
             Elimina
@@ -161,7 +161,7 @@ export async function llistatDetingutConsellGuerra(idRepresaliat: number) {
   }
 
   renderTaulaCercadorFiltres<EspaiRow>({
-    url: `${DOMAIN_API}/processats/get/fitxaId?id=${idRepresaliat}`,
+    url: `${ENV.apiBaseUrl}/processats/get/fitxaId?id=${idRepresaliat}`,
     containerId: 'taulaLlistatConsellGuerra',
     columns,
     filterKeys: ['num_causa'],
@@ -191,10 +191,10 @@ export async function formDetingutConsellGuerra(idRepresaliat: number, id?: numb
 
   let response: Fitxa | null = null;
 
-  const data2 = await fetchDataGet<Fitxa>(`/api/dades_personals/get/?type=nomCognoms&id=${idRepresaliat}`);
+  const data2 = await fetchDataGet<Fitxa>(`${ENV.apiBaseUrl}/dades_personals/get/?type=nomCognoms&id=${idRepresaliat}`);
 
   if (id) {
-    response = await fetchDataGet<Fitxa>(`/api/processats/get/fitxaIntranetId?id=${id}`);
+    response = await fetchDataGet<Fitxa>(`${ENV.apiBaseUrl}/processats/get/fitxaIntranetId?id=${id}`);
   }
 
   const btnForm = document.getElementById('btnProcessat') as HTMLButtonElement;
@@ -239,7 +239,7 @@ export async function formDetingutConsellGuerra(idRepresaliat: number, id?: numb
     }
 
     const nomComplet = `${data2.nom} ${data2.cognom1} ${data2.cognom2}`;
-    const url = `https://memoriaterrassa.cat/fitxa/${data2.slug}`;
+    const url = `${ENV.domainWeb}/fitxa/${data2.slug}`;
 
     container.innerHTML = `<h4>Fitxa: <a href="${url}" target="_blank">${nomComplet}</a></h4>`;
   }
@@ -355,13 +355,13 @@ export async function formDetingutConsellGuerra(idRepresaliat: number, id?: numb
   if (!response) {
     if (processatForm) {
       processatForm.addEventListener('submit', function (event) {
-        transmissioDadesDB(event, 'POST', 'processatForm', '/api/processats/post', true);
+        transmissioDadesDB(event, 'POST', 'processatForm', `${ENV.apiBaseUrl}/processats/post`, true);
       });
     }
   } else {
     if (processatForm) {
       processatForm.addEventListener('submit', function (event) {
-        transmissioDadesDB(event, 'PUT', 'processatForm', '/api/processats/put');
+        transmissioDadesDB(event, 'PUT', 'processatForm', `${ENV.apiBaseUrl}/processats/put`);
       });
     }
   }

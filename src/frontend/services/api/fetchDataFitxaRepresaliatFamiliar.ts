@@ -1,5 +1,5 @@
 // src/services/api/fetchDataFitxaRepresaliatFamiliar.ts
-import { DOMAIN_API } from '../../config/constants';
+import { ENV } from '../../config/env';
 import type { FitxaFamiliars } from '../../types/types';
 import { fetchData } from './api';
 
@@ -20,7 +20,7 @@ type ApiResponseError = {
 type ApiResponse<T> = ApiResponseSuccess<T> | ApiResponseError;
 
 export async function fetchDataFitxaRepresaliatFamiliar(idPersona: number): Promise<FitxaFamiliars[]> {
-  const url = `${DOMAIN_API}/api/dades_personals/get/?type=fitxaDadesFamiliars&id=${idPersona}`;
+  const url = `${ENV.apiBaseUrl}/dades_personals/get/?type=fitxaDadesFamiliars&id=${idPersona}`;
 
   try {
     const res = (await fetchData(url)) as ApiResponse<FitxaFamiliars>;

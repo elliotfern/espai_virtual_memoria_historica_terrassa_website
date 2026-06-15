@@ -20,9 +20,9 @@ nameUser();
 
 const url = window.location.href;
 const pageType = getPageType(url);
-console.log(pageType);
 
 document.addEventListener('DOMContentLoaded', () => {
+  console.log(pageType);
   initCookieConsent();
 
   if (pageType[0] === 'acces') {

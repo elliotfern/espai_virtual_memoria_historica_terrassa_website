@@ -1,5 +1,4 @@
 <?php
-require_once APP_ROOT . '/public/intranet/includes/header.php';
 
 // Obtener la URL completa
 $url2 = $_SERVER['REQUEST_URI'];

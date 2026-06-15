@@ -1,8 +1,16 @@
 // src/buscador/render.ts
+import { ENV } from '../../config/env';
 import { OpcionesFiltros, Persona, SortKey } from './types';
 import { fullName, norm } from './utils';
 
-export function renderResultsPaginated(personas: Persona[], opciones: OpcionesFiltros, sortKey: SortKey, page: number, pageSize: number, onPageChange: (newPage: number) => void): { currentPage: number; totalPages: number } {
+export function renderResultsPaginated(
+  personas: Persona[],
+  opciones: OpcionesFiltros,
+  sortKey: SortKey,
+  page: number,
+  pageSize: number,
+  onPageChange: (newPage: number) => void
+): { currentPage: number; totalPages: number } {
   const cont = document.getElementById('tabla-resultados');
   const info = document.getElementById('pageInfo');
   const prev = document.getElementById('prevPage') as HTMLButtonElement | null;
@@ -16,9 +24,17 @@ export function renderResultsPaginated(personas: Persona[], opciones: OpcionesFi
   // ——— Ordenación ———
   const sorted = [...personas];
   if (sortKey === 'cognoms') {
-    sorted.sort((a, b) => norm(`${a.cognom1} ${a.cognom2}`).localeCompare(norm(`${b.cognom1} ${b.cognom2}`)) || norm(a.nom).localeCompare(norm(b.nom)));
+    sorted.sort(
+      (a, b) =>
+        norm(`${a.cognom1} ${a.cognom2}`).localeCompare(norm(`${b.cognom1} ${b.cognom2}`)) ||
+        norm(a.nom).localeCompare(norm(b.nom))
+    );
   } else if (sortKey === 'nom') {
-    sorted.sort((a, b) => norm(a.nom).localeCompare(norm(b.nom)) || norm(`${a.cognom1} ${a.cognom2}`).localeCompare(norm(`${b.cognom1} ${b.cognom2}`)));
+    sorted.sort(
+      (a, b) =>
+        norm(a.nom).localeCompare(norm(b.nom)) ||
+        norm(`${a.cognom1} ${a.cognom2}`).localeCompare(norm(`${b.cognom1} ${b.cognom2}`))
+    );
   } else if (sortKey === 'municipi') {
     sorted.sort((a, b) => {
       const ma = opciones.municipis.find((m) => m.id === a.municipi_naixement)?.ciutat || '';
@@ -52,7 +68,7 @@ export function renderResultsPaginated(personas: Persona[], opciones: OpcionesFi
         const birthStr = born || mN ? `${born}${mN ? ` (${mN})` : ''}` : '';
         const defStr = died || mD ? `${died}${mD ? ` (${mD})` : ''}` : '';
         const datesStr = [birthStr, defStr].filter(Boolean).join(' / ');
-        const href = `https://memoriaterrassa.cat/fitxa/${p.slug}`;
+        const href = `${ENV.apiBaseUrl}/fitxa/${p.slug}`;
         return `
           <div class="fila-persona" style="margin-top:20px">
             <div>
@@ -66,7 +82,8 @@ export function renderResultsPaginated(personas: Persona[], opciones: OpcionesFi
   }
 
   // ——— Contador y controles ———
-  contador.textContent = total === 0 ? '0 resultats' : `Mostrant ${startIdx + 1}–${endIdx} de ${total} resultats`;
+  contador.textContent =
+    total === 0 ? '0 resultats' : `Mostrant ${startIdx + 1}–${endIdx} de ${total} resultats`;
   info.textContent = `Pàgina ${currentPage} / ${totalPages}`;
   prev.disabled = currentPage <= 1;
   next.disabled = currentPage >= totalPages;

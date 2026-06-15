@@ -1,3 +1,5 @@
+import { ENV } from '../../../config/env';
+
 // Tipus de la resposta de la API (missatge original)
 interface MissatgeData {
   id: number;
@@ -69,7 +71,12 @@ interface ItemFil {
 // Escapar HTML per seguretat
 function escapeHtml(str: string | null | undefined): string {
   if (!str) return '';
-  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
 }
 
 // --- HELPERS FECHA/HORA ---
@@ -90,7 +97,14 @@ function parseApiDateUtc(value: string): Date | null {
   const minute = Number(minuteStr);
   const second = Number(secondStr);
 
-  if (Number.isNaN(year) || Number.isNaN(month) || Number.isNaN(day) || Number.isNaN(hour) || Number.isNaN(minute) || Number.isNaN(second)) {
+  if (
+    Number.isNaN(year) ||
+    Number.isNaN(month) ||
+    Number.isNaN(day) ||
+    Number.isNaN(hour) ||
+    Number.isNaN(minute) ||
+    Number.isNaN(second)
+  ) {
     return null;
   }
 
@@ -173,8 +187,8 @@ function construirFilConversacio(data: ConversacioData): ItemFil[] {
 
 // --- RENDER DE LA CONVERSA COMPLETA ---
 
-const CONVERSACIO_API_URL = 'https://memoriaterrassa.cat/api/form_contacte/get/conversacio';
-const TANCAR_CONVERSACIO_API_URL = 'https://memoriaterrassa.cat/api/form_contacte/post-tancar';
+const CONVERSACIO_API_URL = `${ENV.apiBaseUrl}/form_contacte/get/conversacio`;
+const TANCAR_CONVERSACIO_API_URL = `${ENV.apiBaseUrl}/form_contacte/post-tancar`;
 
 export async function carregarConversacioMissatge(id: number): Promise<void> {
   const container = document.getElementById('missatgeId');
@@ -233,7 +247,10 @@ function renderConversacio(resp: ConversacioApiResponse): void {
   const dataHoraFormatejada = formatDataHoraEs(m.dataEnviament);
 
   // Badge d'estat
-  const estatBadge = m.estat === 4 ? '<span class="badge bg-dark text-uppercase ms-2">Conversació tancada</span>' : '<span class="badge bg-success text-uppercase ms-2">Conversació oberta</span>';
+  const estatBadge =
+    m.estat === 4
+      ? '<span class="badge bg-dark text-uppercase ms-2">Conversació tancada</span>'
+      : '<span class="badge bg-success text-uppercase ms-2">Conversació oberta</span>';
 
   // Card del missatge original
   let html = `
@@ -279,7 +296,7 @@ function renderConversacio(resp: ConversacioApiResponse): void {
         </div>
 
         <a 
-          href="https://memoriaterrassa.cat/gestio/missatges/respondre-missatge/${m.id}" 
+          href="${ENV.domainWeb}/gestio/missatges/respondre-missatge/${m.id}" 
           class="btn btn-primary"
         >
           Respondre missatge
@@ -330,7 +347,10 @@ function renderConversacio(resp: ConversacioApiResponse): void {
       // El missatge original ja s'ha pintat a la card principal
       if (item.tipus === 'missatge_original') continue;
 
-      const badge = item.tipus === 'resposta_gestor' ? '<span class="badge bg-info text-dark ms-2">Resposta gestor</span>' : '<span class="badge bg-secondary ms-2">Resposta usuari (email)</span>';
+      const badge =
+        item.tipus === 'resposta_gestor'
+          ? '<span class="badge bg-info text-dark ms-2">Resposta gestor</span>'
+          : '<span class="badge bg-secondary ms-2">Resposta usuari (email)</span>';
 
       // Botó "Respondre" només per missatges de l'usuari (via email)
       const respondButtonHtml =
@@ -338,7 +358,7 @@ function renderConversacio(resp: ConversacioApiResponse): void {
           ? `
             <div class="mt-2 text-end">
               <a 
-                href="https://memoriaterrassa.cat/gestio/missatges/respondre-missatge/${m.id}" 
+                href="${ENV.domainWeb}/gestio/missatges/respondre-missatge/${m.id}" 
                 class="btn btn-sm btn-outline-primary"
               >
                 Respondre
@@ -388,7 +408,9 @@ function renderConversacio(resp: ConversacioApiResponse): void {
 
   if (btnTancar) {
     btnTancar.addEventListener('click', async () => {
-      const confirmat = window.confirm('Segur que vols tancar aquesta conversació? Ja no quedarà pendent de resposta.');
+      const confirmat = window.confirm(
+        'Segur que vols tancar aquesta conversació? Ja no quedarà pendent de resposta.'
+      );
       if (!confirmat) return;
 
       btnTancar.disabled = true;
@@ -408,7 +430,8 @@ function renderConversacio(resp: ConversacioApiResponse): void {
         const data = await response.json().catch(() => null);
 
         if (!response.ok || !data || data.status !== 'success') {
-          const msg = data && data.message ? data.message : "S'ha produït un error en tancar la conversació.";
+          const msg =
+            data && data.message ? data.message : "S'ha produït un error en tancar la conversació.";
           alert(msg);
           btnTancar.disabled = false;
           btnTancar.textContent = 'Tancar conversació';

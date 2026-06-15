@@ -51,6 +51,7 @@ $view = './includes/404.php';
 $noHeaderFooter = false;
 $headerMenu = true;
 $apiSenseHTML = false;
+$intranet = false;
 
 foreach ($routes as $route => $routeInfo) {
     $pattern = preg_replace('/\{[a-zA-Z0-9_]+\}/', '([a-zA-Z0-9_-]+)', $route);
@@ -70,7 +71,7 @@ foreach ($routes as $route => $routeInfo) {
         $noHeaderFooter = $routeInfo['header_footer'] ?? false;
         $headerMenu = $routeInfo['header_menu_footer'] ?? false;
         $apiSenseHTML = $routeInfo['apiSenseHTML'] ?? false;
-
+        $intranet = $routeInfo['intranet'] ?? false;
         break;
     }
 }
@@ -85,7 +86,14 @@ if (preg_match('#^/(es|fr|en|pt|it)(/|$)#', $requestUri) && preg_match('#^/(es|f
     include __DIR__ . '/web-publica/index.php';
     include __DIR__ . '/includes/footer-end.php';
 } else {
-    if ($noHeaderFooter) {
+    if ($intranet) {                                    // ← NUEVO CASO
+        include './includes/header.php';
+        include './includes/header-menu.php';    // ← faltaba este
+        include './includes/header-intranet.php';
+        include $view;
+        include './includes/footer.php';
+        include './includes/footer-end.php';
+    } elseif ($noHeaderFooter) {
         include './includes/header.php';
         include $view;
         include './includes/footer-end.php';

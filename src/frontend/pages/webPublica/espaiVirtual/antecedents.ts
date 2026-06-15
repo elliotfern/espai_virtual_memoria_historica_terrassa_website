@@ -1,3 +1,4 @@
+import { ENV } from '../../../config/env';
 import { API_URLS } from '../../../services/api/ApiUrls';
 import { fetchDataGet } from '../../../services/fetchData/fetchDataGet';
 
@@ -32,42 +33,48 @@ function getLabels(lang: Lang) {
   const map = {
     ca: {
       sectionTitle: 'Un recorregut per història del projecte',
-      sectionSubtitle: "Explora els moments clau en la creació i evolució d'aquest<br> espai dedicat a la memòria històrica de Terrassa.",
+      sectionSubtitle:
+        "Explora els moments clau en la creació i evolució d'aquest<br> espai dedicat a la memòria històrica de Terrassa.",
       showMore: 'veure més',
       showLess: 'veure menys',
       moreInfo: 'més informació',
     },
     es: {
       sectionTitle: 'Un recorrido por la historia del proyecto',
-      sectionSubtitle: 'Explora los momentos clave en la creación y evolución de este<br> espacio dedicado a la memoria histórica de Terrassa.',
+      sectionSubtitle:
+        'Explora los momentos clave en la creación y evolución de este<br> espacio dedicado a la memoria histórica de Terrassa.',
       showMore: 'ver más',
       showLess: 'ver menos',
       moreInfo: 'más información',
     },
     en: {
       sectionTitle: 'A journey through the history of the project',
-      sectionSubtitle: 'Explore the key moments in the creation and evolution of this<br> space dedicated to the historical memory of Terrassa.',
+      sectionSubtitle:
+        'Explore the key moments in the creation and evolution of this<br> space dedicated to the historical memory of Terrassa.',
       showMore: 'see more',
       showLess: 'see less',
       moreInfo: 'more information',
     },
     fr: {
       sectionTitle: 'Un parcours à travers l’histoire du projet',
-      sectionSubtitle: "Explorez les moments clés de la création et de l'évolution de cet<br> espace consacré à la mémoire historique de Terrassa.",
+      sectionSubtitle:
+        "Explorez les moments clés de la création et de l'évolution de cet<br> espace consacré à la mémoire historique de Terrassa.",
       showMore: 'voir plus',
       showLess: 'voir moins',
       moreInfo: "plus d'informations",
     },
     it: {
       sectionTitle: 'Un percorso nella storia del progetto',
-      sectionSubtitle: 'Esplora i momenti chiave nella creazione e nell’evoluzione di questo<br> spazio dedicato alla memoria storica di Terrassa.',
+      sectionSubtitle:
+        'Esplora i momenti chiave nella creazione e nell’evoluzione di questo<br> spazio dedicato alla memoria storica di Terrassa.',
       showMore: 'vedi di più',
       showLess: 'vedi di meno',
       moreInfo: 'maggiori informazioni',
     },
     pt: {
       sectionTitle: 'Um percurso pela história do projeto',
-      sectionSubtitle: 'Explora os momentos-chave na criação e evolução deste<br> espaço dedicado à memória histórica de Terrassa.',
+      sectionSubtitle:
+        'Explora os momentos-chave na criação e evolução deste<br> espaço dedicado à memória histórica de Terrassa.',
       showMore: 'ver mais',
       showLess: 'ver menos',
       moreInfo: 'mais informação',
@@ -111,7 +118,7 @@ function renderDetailImage(item: AntecedentPublicRow): string {
 
   return `
     <div class="col-md-4 text-center">
-      <img src="https://media.memoriaterrassa.cat/assets_web/${escapeHtml(item.image_url)}.jpg" class="img-fluid" alt="${escapeHtml(item.titol || '')}">
+      <img src="${ENV.domainImg}/assets_web/${escapeHtml(item.image_url)}.jpg" class="img-fluid" alt="${escapeHtml(item.titol || '')}">
     </div>
   `;
 }
@@ -181,8 +188,12 @@ function renderAntecedentsSection(items: AntecedentPublicRow[], lang: Lang): str
 }
 
 function initAntecedentToggle(container: HTMLElement, lang: Lang): void {
-  const buttons = Array.from(container.querySelectorAll('.btn-antecedent-toggle')) as HTMLButtonElement[];
-  const detailBlocks = Array.from(container.querySelectorAll('.antecedent-detail')) as HTMLDivElement[];
+  const buttons = Array.from(
+    container.querySelectorAll('.btn-antecedent-toggle')
+  ) as HTMLButtonElement[];
+  const detailBlocks = Array.from(
+    container.querySelectorAll('.antecedent-detail')
+  ) as HTMLDivElement[];
   const labels = getLabels(lang);
 
   const hideAllDetails = () => {
@@ -229,7 +240,10 @@ export async function blocAntecedentsPublic(lang: Lang): Promise<void> {
   const container = document.getElementById('blocAntecedents') as HTMLDivElement | null;
   if (!container) return;
 
-  const response = await fetchDataGet<ApiResponse<AntecedentPublicRow[]>>(API_URLS.GET.PUBLIC_ANTECEDENTS(lang), false);
+  const response = await fetchDataGet<ApiResponse<AntecedentPublicRow[]>>(
+    API_URLS.GET.PUBLIC_ANTECEDENTS(lang),
+    false
+  );
 
   if (!response || !response.data) {
     container.innerHTML = '';

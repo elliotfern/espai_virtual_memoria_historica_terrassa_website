@@ -105,7 +105,7 @@ if ($slug === "login") {
         $cookie_options = array(
             'expires' => time() + 604800,
             'path' => '/',
-            'domain' => 'memoriaterrassa.cat',
+            'domain' => $_ENV['COOKIE_DOMAIN'],
             'secure' => true,
             'httponly' => true,
             'samesite' => 'Strict'

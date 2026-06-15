@@ -1,8 +1,3 @@
-<?php
-
-require_once APP_ROOT . '/public/intranet/includes/header.php';
-?>
-
 <div class="container" style="margin-bottom:50px;">
 
     <?php if ($isAdmin): ?>

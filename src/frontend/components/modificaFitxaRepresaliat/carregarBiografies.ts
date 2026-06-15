@@ -1,3 +1,5 @@
+import { ENV } from '../../config/env';
+
 type Biografia = {
   id: number;
   idRepresaliat: number;
@@ -16,7 +18,7 @@ export async function carregarBiografies(id: number | string): Promise<void> {
   quadre.innerHTML = 'Carregant biografies...';
 
   try {
-    const response = await fetch(`https://memoriaterrassa.cat/api/biografies/get/fitxaBiografia?id=${id}`);
+    const response = await fetch(`${ENV.apiBaseUrl}/biografies/get/fitxaBiografia?id=${id}`);
     const data: Biografia[] = await response.json();
 
     if (!Array.isArray(data) || data.length === 0) {
@@ -128,10 +130,10 @@ function crearBoto(idPersona: number | string, tieneBiografia: boolean) {
   link.target = '_blank';
 
   if (tieneBiografia) {
-    link.href = `https://memoriaterrassa.cat/gestio/biografies/modifica-biografia/${idPersona}`;
+    link.href = `${ENV.domainWeb}/gestio/biografies/modifica-biografia/${idPersona}`;
     link.textContent = 'Modifica biografies';
   } else {
-    link.href = `https://memoriaterrassa.cat/gestio/biografies/nova-biografia/${idPersona}`;
+    link.href = `${ENV.domainWeb}/gestio/biografies/nova-biografia/${idPersona}`;
     link.textContent = 'Afegir biografia';
   }
 

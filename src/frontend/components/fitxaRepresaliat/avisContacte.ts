@@ -1,4 +1,4 @@
-import { DOMAIN_WEB } from '../../config/constants';
+import { ENV } from '../../config/env';
 
 export function renderAvisContacte(): void {
   const container = document.getElementById('avisContacte');
@@ -19,7 +19,7 @@ export function renderAvisContacte(): void {
   btn.className = 'btn btn-primary btn-custom-2';
   btn.textContent = "Contact'ns";
   btn.addEventListener('click', () => {
-    window.location.href = `${DOMAIN_WEB}/contacte`;
+    window.location.href = `${ENV.domainWeb}/contacte`;
   });
 
   container.append(p, btn);

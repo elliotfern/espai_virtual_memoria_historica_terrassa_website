@@ -1,3 +1,4 @@
+import { ENV } from '../../../config/env';
 import { API_URLS } from '../../../services/api/ApiUrls';
 import { fetchDataGet } from '../../../services/fetchData/fetchDataGet';
 
@@ -16,7 +17,7 @@ interface ApiResponse<T> {
   data: T | null;
 }
 
-const MEDIA_BASE = 'https://media.memoriaterrassa.cat/assets_usuaris/';
+const MEDIA_BASE = `${ENV.domainImg}/assets_usuaris/`;
 
 function buildUserImgSrc(urlImatge?: unknown): string {
   if (!urlImatge) return '';
@@ -30,7 +31,12 @@ function templateReplace(tpl: string, ctx: Record<string, unknown>): string {
   return tpl.replace(/\{([^}]+)\}/g, (_, k) => String(ctx[k] ?? ''));
 }
 
-function applyValueToElement(el: HTMLElement, key: string, value: unknown, record: Record<string, unknown>): void {
+function applyValueToElement(
+  el: HTMLElement,
+  key: string,
+  value: unknown,
+  record: Record<string, unknown>
+): void {
   if (el instanceof HTMLImageElement) {
     const v = String(value ?? '');
     if (v.startsWith('http') || v.startsWith('/')) {
@@ -107,7 +113,10 @@ function render404(apiMessage?: unknown): void {
 /* ---------- Main ---------- */
 export async function equip(lang: string, slug: string): Promise<void> {
   try {
-    const res = await fetchDataGet<ApiResponse<UsuariWeb>>(API_URLS.GET.USUARI_WEB_ID(slug, lang), true);
+    const res = await fetchDataGet<ApiResponse<UsuariWeb>>(
+      API_URLS.GET.USUARI_WEB_ID(slug, lang),
+      true
+    );
 
     // Si la API informa error o no trae datos → 404 en pantalla con el mensaje del backend
     if (!res || res.status !== 'success' || !res.data) {

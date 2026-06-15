@@ -2,6 +2,7 @@ import { fetchDataGet } from '../../../../services/fetchData/fetchDataGet';
 import { auxiliarSelect } from '../../../../services/fetchData/auxiliarSelect';
 import { renderFormInputs } from '../../../../services/fetchData/renderInputsForm';
 import { transmissioDadesDB } from '../../../../services/fetchData/transmissioDades';
+import { ENV } from '../../../../config/env';
 
 interface Fitxa {
   [key: string]: unknown;
@@ -44,8 +45,12 @@ export async function costHumaCombat(idRepresaliat: number) {
     desaparegut_lloc_aparicio: 0,
   };
 
-  const response = await fetchDataGet<Fitxa>(`/api/cost_huma_front/get/fitxaRepressio?id=${idRepresaliat}`);
-  const data2 = await fetchDataGet<Fitxa>(`/api/dades_personals/get/?type=nomCognoms&id=${idRepresaliat}`);
+  const response = await fetchDataGet<Fitxa>(
+    `${ENV.apiBaseUrl}/cost_huma_front/get/fitxaRepressio?id=${idRepresaliat}`
+  );
+  const data2 = await fetchDataGet<Fitxa>(
+    `${ENV.apiBaseUrl}/dades_personals/get/?type=nomCognoms&id=${idRepresaliat}`
+  );
   const btn = document.getElementById('btnMortsCombat') as HTMLButtonElement;
 
   if (!response || response.status === 'error') {
@@ -64,7 +69,7 @@ export async function costHumaCombat(idRepresaliat: number) {
     if (!container) return;
 
     const nomComplet = `${data2.nom} ${data2.cognom1} ${data2.cognom2}`;
-    const url = `https://memoriaterrassa.cat/fitxa/${data2.slug}`;
+    const url = `${ENV.domainWeb}/fitxa/${data2.slug}`;
 
     container.innerHTML = `<h4>Fitxa: <a href="${url}" target="_blank">${nomComplet}</a></h4>`;
   }
@@ -84,9 +89,19 @@ export async function costHumaCombat(idRepresaliat: number) {
   await auxiliarSelect(data?.condicio, 'condicio_civil_militar', 'condicio', 'condicio_ca');
   await auxiliarSelect(data?.bandol, 'bandols_guerra', 'bandol', 'bandol_ca');
   await auxiliarSelect(data?.cos, 'cossos_militars', 'cos', 'cos_militar_ca');
-  await auxiliarSelect(data?.circumstancia_mort, 'causa_defuncio_repressio?tipus=1', 'circumstancia_mort', 'causa_defuncio_ca');
+  await auxiliarSelect(
+    data?.circumstancia_mort,
+    'causa_defuncio_repressio?tipus=1',
+    'circumstancia_mort',
+    'causa_defuncio_ca'
+  );
   await auxiliarSelect(data?.desaparegut_lloc, 'municipis', 'desaparegut_lloc', 'ciutat');
-  await auxiliarSelect(data?.desaparegut_lloc_aparicio, 'municipis', 'desaparegut_lloc_aparicio', 'ciutat');
+  await auxiliarSelect(
+    data?.desaparegut_lloc_aparicio,
+    'municipis',
+    'desaparegut_lloc_aparicio',
+    'ciutat'
+  );
   await auxiliarSelect(data?.reaparegut, 'reaparegut', 'reaparegut', 'value');
 
   const btn1 = document.getElementById('refreshButton2');
@@ -95,7 +110,12 @@ export async function costHumaCombat(idRepresaliat: number) {
   if (btn1 && btn2) {
     btn1.addEventListener('click', function (event) {
       event.preventDefault();
-      auxiliarSelect(data?.desaparegut_lloc_aparicio, 'municipis', 'desaparegut_lloc_aparicio', 'ciutat');
+      auxiliarSelect(
+        data?.desaparegut_lloc_aparicio,
+        'municipis',
+        'desaparegut_lloc_aparicio',
+        'ciutat'
+      );
     });
 
     btn2.addEventListener('click', function (event) {
@@ -108,9 +128,15 @@ export async function costHumaCombat(idRepresaliat: number) {
   if (mortCombatForm) {
     mortCombatForm.addEventListener('submit', function (event) {
       if (!response || response.status === 'error') {
-        transmissioDadesDB(event, 'POST', 'mortCombatForm', '/api/cost_huma_front/post', true);
+        transmissioDadesDB(
+          event,
+          'POST',
+          'mortCombatForm',
+          `${ENV.apiBaseUrl}/cost_huma_front/post`,
+          true
+        );
       } else {
-        transmissioDadesDB(event, 'PUT', 'mortCombatForm', '/api/cost_huma_front/put');
+        transmissioDadesDB(event, 'PUT', 'mortCombatForm', `${ENV.apiBaseUrl}/cost_huma_front/put`);
       }
     });
   }

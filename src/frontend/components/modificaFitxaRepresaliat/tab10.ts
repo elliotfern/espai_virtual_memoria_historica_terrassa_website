@@ -1,5 +1,4 @@
-// src/pages/fitxa/tabs/tab10.ts
-import { DOMAIN_IMG, DOMAIN_WEB } from '../../config/constants';
+import { ENV } from '../../config/env';
 import { Fitxa } from '../../types/types';
 
 type UploadResponse = {
@@ -10,9 +9,9 @@ type UploadResponse = {
 
 type ClearResponse = { status: 'ok' | 'error'; message?: string };
 
-const API_UPLOAD = DOMAIN_WEB + `/api/aux_imatges/upload`;
-const API_CLEAR = DOMAIN_WEB + `/api/aux_imatges/clear-image`;
-const IMATGE_URL = DOMAIN_IMG + `/assets_represaliats/img/`;
+const API_UPLOAD = ENV.apiBaseUrl + `/aux_imatges/upload`;
+const API_CLEAR = ENV.apiBaseUrl + `/aux_imatges/clear-image`;
+const IMATGE_URL = ENV.domainImg + `/assets_represaliats/img/`;
 const MAX_BYTES = 3 * 1024 * 1024; // 3 MB
 const JPG_MIME = 'image/jpeg';
 

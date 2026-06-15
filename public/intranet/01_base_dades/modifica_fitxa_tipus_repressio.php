@@ -10,8 +10,6 @@ if (!is_int($categoriaId) || $categoriaId >= 23) {
     exit();
 }
 
-require_once APP_ROOT . '/public/intranet/includes/header.php';
-
 switch ($categoriaId) {
     case 1:
         require_once APP_ROOT . '/public/intranet/01_base_dades/tipus_repressio/1_represaliats/afusellats.php';

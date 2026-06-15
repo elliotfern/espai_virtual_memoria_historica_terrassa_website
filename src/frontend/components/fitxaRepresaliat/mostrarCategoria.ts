@@ -1,4 +1,4 @@
-import { DOMAIN_WEB } from '../../config/constants';
+import { ENV } from '../../config/env';
 import { getApiArray } from '../../services/api/http';
 import { FitxaJudicial } from '../../types/types';
 import { fitxaTipusRepressio } from './tab_tipus_repressio';
@@ -12,8 +12,7 @@ export async function mostrarCategoria(categoriaNumerica: string, idPersona: num
   divInfo.innerHTML = '';
   divInfo.dataset.categoria = categoriaNumerica;
 
-  const devDirectory = DOMAIN_WEB;
-  const urlAjax2 = getApiUrlForCategoria(categoriaNumerica, idPersona, devDirectory);
+  const urlAjax2 = getApiUrlForCategoria(categoriaNumerica, idPersona, ENV.apiBaseUrl);
   if (urlAjax2 === null) {
     console.error('Categoria no válida:', categoriaNumerica);
     return;
@@ -54,40 +53,40 @@ export async function mostrarCategoria(categoriaNumerica: string, idPersona: num
 function getApiUrlForCategoria(categoriaNumerica: string, idPersona: number, baseUrl: string): string | null {
   switch (parseInt(categoriaNumerica)) {
     case 1:
-      return `${baseUrl}/api/afusellats/get/fitxaId?id=${idPersona}`;
+      return `${baseUrl}/afusellats/get/fitxaId?id=${idPersona}`;
     case 2:
-      return `${baseUrl}/api/deportats/get/fitxaId?id=${idPersona}`;
+      return `${baseUrl}/deportats/get/fitxaId?id=${idPersona}`;
     case 3:
-      return `${baseUrl}/api/cost_huma_front/get/fitxaId?id=${idPersona}`;
+      return `${baseUrl}/cost_huma_front/get/fitxaId?id=${idPersona}`;
     case 4:
     case 5:
-      return `${baseUrl}/api/cost_huma_civils/get/fitxaId?id=${idPersona}`;
+      return `${baseUrl}/cost_huma_civils/get/fitxaId?id=${idPersona}`;
     case 6:
-      return `${baseUrl}/api/processats/get/fitxaId?id=${idPersona}`;
+      return `${baseUrl}/processats/get/fitxaId?id=${idPersona}`;
     case 7:
-      return `${baseUrl}/api/depurats/get/fitxaId?id=${idPersona}`;
+      return `${baseUrl}/depurats/get/fitxaId?id=${idPersona}`;
     case 8:
-      return `${baseUrl}/api/dones/get/fitxaId?id=${idPersona}`;
+      return `${baseUrl}/dones/get/fitxaId?id=${idPersona}`;
     case 10:
-      return `${baseUrl}/api/exiliats/get/fitxaId?id=${idPersona}`;
+      return `${baseUrl}/exiliats/get/fitxaId?id=${idPersona}`;
     case 11:
       return null;
     case 12:
-      return `${baseUrl}/api/preso_model/get/fitxaId?id=${idPersona}`;
+      return `${baseUrl}/preso_model/get/fitxaId?id=${idPersona}`;
     case 13:
       return null;
     case 16:
-      return `${baseUrl}/api/detinguts_guardia_urbana/get/fitxaId?id=${idPersona}`;
+      return `${baseUrl}/detinguts_guardia_urbana/get/fitxaId?id=${idPersona}`;
     case 14:
-      return `${baseUrl}/api/comite_solidaritat/get/fitxaId?id=${idPersona}`;
+      return `${baseUrl}/comite_solidaritat/get/fitxaId?id=${idPersona}`;
     case 15:
-      return `${baseUrl}/api/responsabilitats_politiques/get/fitxaId?id=${idPersona}`;
+      return `${baseUrl}/responsabilitats_politiques/get/fitxaId?id=${idPersona}`;
     case 17:
-      return `${baseUrl}/api/top/get/fitxaId?id=${idPersona}`;
+      return `${baseUrl}/top/get/fitxaId?id=${idPersona}`;
     case 18:
-      return `${baseUrl}/api/comite_relacions_solidaritat/get/fitxaId?id=${idPersona}`;
+      return `${baseUrl}/comite_relacions_solidaritat/get/fitxaId?id=${idPersona}`;
     case 22:
-      return `${baseUrl}/api/cost_huma_front/get/fitxaId?id=${idPersona}`;
+      return `${baseUrl}/cost_huma_front/get/fitxaId?id=${idPersona}`;
     default:
       return null;
   }

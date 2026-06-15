@@ -1,4 +1,6 @@
-const RESPOSTA_API_URL = 'https://memoriaterrassa.cat/api/form_contacte/resposta/post';
+import { ENV } from '../../../config/env';
+
+const RESPOSTA_API_URL = `${ENV.apiBaseUrl}/form_contacte/resposta/post`;
 
 export function renderRespostaForm(missatgeId: number): void {
   const container = document.getElementById('missatgeRespostaId');
@@ -106,7 +108,8 @@ export function renderRespostaForm(missatgeId: number): void {
       const data = await response.json().catch(() => null);
 
       if (!response.ok || !data || data.status !== 'success') {
-        const message = data && data.message ? data.message : "S'ha produït un error en enviar la resposta.";
+        const message =
+          data && data.message ? data.message : "S'ha produït un error en enviar la resposta.";
 
         alertBox.style.display = 'block';
         alertBox.className = 'alert alert-danger';

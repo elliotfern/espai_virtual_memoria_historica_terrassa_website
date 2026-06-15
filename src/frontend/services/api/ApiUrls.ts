@@ -1,8 +1,8 @@
-import { DOMAIN_API } from '../../config/constants';
+import { ENV } from '../../config/env';
 import { ApiUrls } from '../../types/apiTypes';
 
 // Accede al dominio desde la variable de entorno
-const BASE_URL = 'https://memoriaterrassa.cat';
+const BASE_URL = ENV.domainWeb;
 const API = 'api';
 
 // Mapa de Endpoints
@@ -206,10 +206,10 @@ export const API_URLS: ApiUrls = {
     LLISTAT_EXILIATS_INTRANET: `${BASE_URL}/${API}/${RESOURCES.DADES_PERSONALS}/${TIPUS.GET}/${ENDPOINTS.LLISTAT_EXILIATS_INTRANET}`,
     LLISTAT_COSTHUMA_INTRANET: `${BASE_URL}/${API}/${RESOURCES.DADES_PERSONALS}/${TIPUS.GET}/${ENDPOINTS.LLISTAT_COSTHUMA_INTRANET}`,
     USUARI_WEB_ID: (id: string, lang: string) => `${BASE_URL}/${API}/${RESOURCES.AUTH}/${TIPUS.GET}/${ENDPOINTS.USUARI_WEB_ID}?slug=${id}&lang=${lang}`,
-    FITXA_REPRESALIAT_WEB: (slug: string, lang: string) => `${DOMAIN_API}/${RESOURCES.DADES_PERSONALS}/${TIPUS.GET}/${ENDPOINTS.FITXA_REPRESALIAT_WEB}?slug=${slug}&lang=${lang}`,
-    FITXA_REPRESALIAT_DADES_FAMILIARS_WEB: (id: number, lang: string) => `${DOMAIN_API}/${RESOURCES.DADES_PERSONALS}/${TIPUS.GET}/${ENDPOINTS.FITXA_REPRESALIAT_DADES_FAMILIARS_WEB}?id=${id}&lang=${lang}`,
+    FITXA_REPRESALIAT_WEB: (slug: string, lang: string) => `${ENV.apiBaseUrl}/${RESOURCES.DADES_PERSONALS}/${TIPUS.GET}/${ENDPOINTS.FITXA_REPRESALIAT_WEB}?slug=${slug}&lang=${lang}`,
+    FITXA_REPRESALIAT_DADES_FAMILIARS_WEB: (id: number, lang: string) => `${ENV.apiBaseUrl}/${RESOURCES.DADES_PERSONALS}/${TIPUS.GET}/${ENDPOINTS.FITXA_REPRESALIAT_DADES_FAMILIARS_WEB}?id=${id}&lang=${lang}`,
     LLISTAT_MITJANS: `${BASE_URL}/${API}/${RESOURCES.AUXILIARS}/${TIPUS.GET}/${ENDPOINTS.LLISTAT_MITJANS}`,
-    FITXA_MITJA: (slug: string) => `${DOMAIN_API}/${RESOURCES.AUXILIARS}/${TIPUS.GET}/${ENDPOINTS.FITXA_MITJA}?slug=${slug}`,
+    FITXA_MITJA: (slug: string) => `${ENV.apiBaseUrl}/${RESOURCES.AUXILIARS}/${TIPUS.GET}/${ENDPOINTS.FITXA_MITJA}?slug=${slug}`,
     LLISTAT_APARICIONS: `${BASE_URL}/${API}/${RESOURCES.AUXILIARS}/${TIPUS.GET}/${ENDPOINTS.LLISTAT_APARICIONS}`,
     APARICIO_ID: (id: number) => `${BASE_URL}/${API}/${RESOURCES.AUXILIARS}/${TIPUS.GET}/${ENDPOINTS.APARICIO_ID}?id=${id}`,
     LLISTAT_IMATGES: `${BASE_URL}/${API}/${RESOURCES.AUXILIARS}/${TIPUS.GET}/${ENDPOINTS.LLISTAT_IMATGES}`,

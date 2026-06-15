@@ -5,7 +5,8 @@ $defaultProtectedConfig = [
     'needs_session' => true,
     'header_footer' => false,
     'header_menu_footer' => true,
-    'apiSenseHTML' => false
+    'apiSenseHTML' => false,
+    'intranet' => true   // ← AÑADIR AQUÍ
 ];
 
 // Rutas principales sin idioma explícito (solo para el idioma por defecto)

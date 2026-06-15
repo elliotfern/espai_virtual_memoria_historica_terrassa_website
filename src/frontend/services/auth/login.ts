@@ -1,3 +1,5 @@
+import { ENV } from '../../config/env';
+
 interface LoginResponse {
   status: string;
   idUser: string;
@@ -6,6 +8,7 @@ interface LoginResponse {
 }
 
 export function loginPage() {
+  console.log('carga login ?');
   const btnLogin = document.querySelector('#btnLogin') as HTMLButtonElement;
 
   // Mostrar mensaje de error
@@ -53,8 +56,7 @@ export function loginPage() {
 }
 
 export async function login(userName: string, password: string): Promise<void> {
-  const devDirectory = `https://${window.location.hostname}`;
-  const urlAjax = `${devDirectory}/api/auth/post/login`;
+  const urlAjax = `${ENV.apiBaseUrl}/auth/post/login`;
 
   localStorage.removeItem('isAdmin');
   localStorage.removeItem('isAutor');
@@ -87,7 +89,7 @@ export async function login(userName: string, password: string): Promise<void> {
       loginMessageOk.style.display = 'block';
 
       setTimeout(() => {
-        window.location.href = `${devDirectory}/gestio/admin`;
+        window.location.href = `${ENV.domainWeb}/gestio/admin`;
       }, 1300);
     } else {
       // ❌ Login fallido: mostrar mensaje de error (puedes ajustar según el contenido del backend)

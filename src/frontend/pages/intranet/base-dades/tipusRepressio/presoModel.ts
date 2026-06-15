@@ -7,7 +7,7 @@ import { initDeleteHandlers, registerDeleteCallback } from '../../../../services
 import { getIsAdmin } from '../../../../services/auth/getIsAdmin';
 import { getIsAutor } from '../../../../services/auth/getIsAutor';
 import { formatDatesForm } from '../../../../services/formatDates/dates';
-import { DOMAIN_API, DOMAIN_WEB } from '../../../../config/constants';
+import { ENV } from '../../../../config/env';
 
 interface Fitxa {
   [key: string]: unknown;
@@ -57,7 +57,7 @@ export async function empresonatsPresoModel(idRepresaliat: number) {
     if (!container) return;
 
     const nomComplet = `${data2.nom} ${data2.cognom1} ${data2.cognom2}`;
-    const url = `${DOMAIN_WEB}/fitxa/${data2.slug}`;
+    const url = `${ENV.domainWeb}/fitxa/${data2.slug}`;
 
     container.innerHTML = `<h4>Fitxa: <a href="${url}" target="_blank">${nomComplet}</a></h4>`;
   }
@@ -75,7 +75,7 @@ export async function empresonatsPresoModel(idRepresaliat: number) {
     columns.push({
       header: 'Accions',
       field: 'id',
-      render: (_: unknown, row: EspaiRow) => `<a id="${row.id}" title="Modifica" href="${DOMAIN_WEB}/gestio/base-dades/empresonaments-preso-model/modifica-empresonament/${idRepresaliat}/${row.id}"><button type="button" class="btn btn-warning btn-sm">Modifica</button></a>`,
+      render: (_: unknown, row: EspaiRow) => `<a id="${row.id}" title="Modifica" href="${ENV.domainWeb}/gestio/base-dades/empresonaments-preso-model/modifica-empresonament/${idRepresaliat}/${row.id}"><button type="button" class="btn btn-warning btn-sm">Modifica</button></a>`,
     });
   }
 
@@ -88,7 +88,7 @@ export async function empresonatsPresoModel(idRepresaliat: number) {
             type="button"
             class="btn btn-danger btn-sm delete-button"
             data-id="${row.id}" 
-            data-url="${DOMAIN_API}/presoModel/delete/${row.id}"
+            data-url="${ENV.apiBaseUrl}/presoModel/delete/${row.id}"
             data-reload-callback="${reloadKey}"
           >
             Elimina
@@ -97,7 +97,7 @@ export async function empresonatsPresoModel(idRepresaliat: number) {
   }
 
   renderTaulaCercadorFiltres<EspaiRow>({
-    url: `${DOMAIN_API}/preso_model/get/empresonatId?id=${idRepresaliat}`,
+    url: `${ENV.apiBaseUrl}/preso_model/get/empresonatId?id=${idRepresaliat}`,
     containerId: 'taulaLlistatDetencionsPresoModel',
     columns,
     filterKeys: ['arxiu'],
@@ -121,10 +121,10 @@ export async function formPresoModel(idRepresaliat: number, id?: number) {
   let response: Fitxa | null = null;
 
   if (id) {
-    response = await fetchDataGet<Fitxa>(`/api/preso_model/get/fitxaRepressio?id=${id}`);
+    response = await fetchDataGet<Fitxa>(`${ENV.apiBaseUrl}/preso_model/get/fitxaRepressio?id=${id}`);
   }
 
-  const data2 = await fetchDataGet<Fitxa>(`/api/dades_personals/get/?type=nomCognoms&id=${idRepresaliat}`);
+  const data2 = await fetchDataGet<Fitxa>(`${ENV.apiBaseUrl}/dades_personals/get/?type=nomCognoms&id=${idRepresaliat}`);
 
   const btnForm = document.getElementById('btnPresoModel') as HTMLButtonElement;
   const container = document.getElementById('fitxaNomCognoms');
@@ -151,7 +151,7 @@ export async function formPresoModel(idRepresaliat: number, id?: number) {
     }
 
     const nomComplet = `${data2.nom} ${data2.cognom1} ${data2.cognom2}`;
-    const url = `${DOMAIN_WEB}/fitxa/${data2.slug}`;
+    const url = `${ENV.domainWeb}/fitxa/${data2.slug}`;
 
     container.innerHTML = `<h4>Fitxa: <a href="${url}" target="_blank">${nomComplet}</a></h4>`;
   }

@@ -4,6 +4,7 @@ import 'leaflet.markercluster/dist/MarkerCluster.css';
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
 import L from 'leaflet';
 import 'leaflet.markercluster';
+import { ENV } from '../../config/env';
 
 interface ApiResponseData {
   status: string;
@@ -26,7 +27,7 @@ interface PersonGeo {
   adreca_num?: string; // <-- mantenemos esta
 }
 
-const API_URL = 'https://memoriaterrassa.cat/api/dades_personals/get/?type=geolocalitzacio';
+const API_URL = `${ENV.apiBaseUrl}/dades_personals/get/?type=geolocalitzacio`;
 
 function createPersonIcon(): L.Icon {
   return L.icon({
@@ -77,11 +78,31 @@ function toPersonGeo(obj: unknown): PersonGeo | null {
   // Acepta número como string o number:
   let adreca_num: string | undefined;
   if (typeof r['adreca_num'] === 'string') adreca_num = r['adreca_num'].trim();
-  else if (typeof r['adreca_num'] === 'number' && Number.isFinite(r['adreca_num'])) adreca_num = String(r['adreca_num']);
+  else if (typeof r['adreca_num'] === 'number' && Number.isFinite(r['adreca_num']))
+    adreca_num = String(r['adreca_num']);
 
-  const tipus_ca = typeof r['tipus_ca'] === 'string' && r['tipus_ca'].trim() !== '' ? r['tipus_ca'].trim() : typeof r['tipus_via_ca'] === 'string' && r['tipus_via_ca'].trim() !== '' ? r['tipus_via_ca'].trim() : typeof r['tipus_via'] === 'string' && r['tipus_via'].trim() !== '' ? r['tipus_via'].trim() : undefined;
+  const tipus_ca =
+    typeof r['tipus_ca'] === 'string' && r['tipus_ca'].trim() !== ''
+      ? r['tipus_ca'].trim()
+      : typeof r['tipus_via_ca'] === 'string' && r['tipus_via_ca'].trim() !== ''
+        ? r['tipus_via_ca'].trim()
+        : typeof r['tipus_via'] === 'string' && r['tipus_via'].trim() !== ''
+          ? r['tipus_via'].trim()
+          : undefined;
 
-  return { id: idNum, slug, nom, cognom1, cognom2, lat: latNum, lng: lngNum, adreca, ciutat, tipus_ca, adreca_num };
+  return {
+    id: idNum,
+    slug,
+    nom,
+    cognom1,
+    cognom2,
+    lat: latNum,
+    lng: lngNum,
+    adreca,
+    ciutat,
+    tipus_ca,
+    adreca_num,
+  };
 }
 
 async function fetchAllPeople(): Promise<PersonGeo[]> {
@@ -99,7 +120,15 @@ async function fetchAllPeople(): Promise<PersonGeo[]> {
 
   const parsed = arrRaw.map(toPersonGeo).filter((p): p is PersonGeo => p !== null);
 
-  return parsed.filter((p) => isFiniteNumber(p.lat) && isFiniteNumber(p.lng) && p.lat >= -90 && p.lat <= 90 && p.lng >= -180 && p.lng <= 180);
+  return parsed.filter(
+    (p) =>
+      isFiniteNumber(p.lat) &&
+      isFiniteNumber(p.lng) &&
+      p.lat >= -90 &&
+      p.lat <= 90 &&
+      p.lng >= -180 &&
+      p.lng <= 180
+  );
 }
 
 function fullName(p: PersonGeo): string {
@@ -108,7 +137,7 @@ function fullName(p: PersonGeo): string {
 
 function buildPopupHtml(p: PersonGeo): string {
   const name = fullName(p);
-  const url = p.slug ? `https://memoriaterrassa.cat/fitxa/${encodeURIComponent(p.slug)}` : '';
+  const url = p.slug ? `${ENV.domainWeb}/fitxa/${encodeURIComponent(p.slug)}` : '';
   const tipus = p.tipus_ca?.trim();
   const adreca = p.adreca?.trim();
   const ciutat = p.ciutat?.trim();
@@ -150,7 +179,8 @@ export async function renderMapaGeolocalitzacio(): Promise<void> {
   });
 
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    attribution:
+      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     maxZoom: 19,
   }).addTo(map);
 

@@ -1,8 +1,12 @@
 import { renderTaulaCercadorFiltres } from '../../../services/renderTaula/renderTaulaCercadorFiltres';
-import { initDeleteHandlers, registerDeleteCallback } from '../../../services/fetchData/handleDelete';
+import {
+  initDeleteHandlers,
+  registerDeleteCallback,
+} from '../../../services/fetchData/handleDelete';
 import { getIsAdmin } from '../../../services/auth/getIsAdmin';
 import { API_URLS } from '../../../services/api/ApiUrls';
 import { formatDatesForm } from '../../../services/formatDates/dates';
+import { ENV } from '../../../config/env';
 
 interface ImatgeRow {
   id: number;
@@ -68,19 +72,19 @@ export async function taulaImatges() {
         switch (row.tipus) {
           case 1:
           case 3:
-            basePath = 'https://media.memoriaterrassa.cat/assets_represaliats/img/';
+            basePath = `${ENV.domainImg}/assets_represaliats/img/`;
             break;
           case 2:
-            basePath = 'https://media.memoriaterrassa.cat/assets_usuaris/';
+            basePath = `${ENV.domainImg}/assets_usuaris/`;
             break;
           case 4:
-            basePath = 'https://media.memoriaterrassa.cat/assets_premsa/';
+            basePath = `${ENV.domainImg}/assets_premsa/`;
             break;
           case 5:
-            basePath = 'https://media.memoriaterrassa.cat/assets_estudis/';
+            basePath = `${ENV.domainImg}/assets_estudis/`;
             break;
           case 6:
-            basePath = 'https://media.memoriaterrassa.cat/assets_web/';
+            basePath = `${ENV.domainImg}/assets_web/`;
             break;
           default:
             return '';
@@ -162,7 +166,7 @@ export async function taulaImatges() {
 
         return `
       <a
-        href="https://memoriaterrassa.cat/fitxa/${row.slug}"
+        href="${ENV.domainWeb}/fitxa/${row.slug}"
         target="_blank"
         rel="noopener noreferrer"
         title="Obrir fitxa de ${nom}"
@@ -173,8 +177,17 @@ export async function taulaImatges() {
       },
     },
 
-    { header: 'Creat', field: 'dateCreated', render: (_: unknown, row: ImatgeRow) => formatDatesForm(row.dateCreated) },
-    { header: 'Modificat', field: 'dateModified', render: (_: unknown, row: ImatgeRow) => (formatDatesForm(row.dateModified) ? String(formatDatesForm(row.dateModified)) : '') },
+    {
+      header: 'Creat',
+      field: 'dateCreated',
+      render: (_: unknown, row: ImatgeRow) => formatDatesForm(row.dateCreated),
+    },
+    {
+      header: 'Modificat',
+      field: 'dateModified',
+      render: (_: unknown, row: ImatgeRow) =>
+        formatDatesForm(row.dateModified) ? String(formatDatesForm(row.dateModified)) : '',
+    },
   ];
 
   if (isAdmin) {
@@ -182,7 +195,7 @@ export async function taulaImatges() {
       header: 'Detalls',
       field: 'id',
       render: (_: unknown, row: ImatgeRow) =>
-        `<a id="${row.id}" title="Detalls" href="https://${window.location.hostname}/gestio/auxiliars/fitxa-imatge/${row.id}">
+        `<a id="${row.id}" title="Detalls" href="${ENV.domainWeb}/gestio/auxiliars/fitxa-imatge/${row.id}">
           <button type="button" class="btn btn-warning btn-sm">Detalls</button>
         </a>`,
     });
@@ -191,7 +204,7 @@ export async function taulaImatges() {
       header: 'Accions',
       field: 'id',
       render: (_: unknown, row: ImatgeRow) =>
-        `<a id="${row.id}" title="Modifica" href="https://${window.location.hostname}/gestio/auxiliars/modifica-imatge/${row.id}">
+        `<a id="${row.id}" title="Modifica" href="${ENV.domainWeb}/gestio/auxiliars/modifica-imatge/${row.id}">
           <button type="button" class="btn btn-warning btn-sm">Modifica</button>
         </a>`,
     });
@@ -204,7 +217,7 @@ export async function taulaImatges() {
           type="button"
           class="btn btn-danger btn-sm delete-button"
           data-id="${row.id}" 
-          data-url="/api/auxiliars/delete/imatge/${row.id}"
+          data-url="${ENV.apiBaseUrl}/auxiliars/delete/imatge/${row.id}"
           data-reload-callback="${reloadKey}"
         >
           Elimina

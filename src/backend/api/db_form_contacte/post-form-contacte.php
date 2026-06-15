@@ -110,8 +110,8 @@ if (($currentTimestamp - $formTimestamp) < $minSeconds) {
 }
 
 $ip = $_SERVER['REMOTE_ADDR'];
-$limite = 1;
-$intervaloMinutos = 30;
+$limite = 5; // antes era 1
+$intervaloMinutos = 10;
 
 $sql = "SELECT COUNT(*) as total 
         FROM db_form_contacte
@@ -344,7 +344,7 @@ try {
     }
 
     // Respuesta de éxito
-    echo json_encode(["status" => "success", "message" => "Les dades s'han actualitzat correctament a la base de dades."]);
+    echo json_encode(["status" => "success", "message" => "Formulari de contacte enviat correctament. Ens posarem en contacte el més aviat possible."]);
 } catch (PDOException $e) {
     // En caso de error en la conexión o ejecución de la consulta
     http_response_code(500); // Internal Server Error

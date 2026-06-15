@@ -1,5 +1,3 @@
-<?php require_once APP_ROOT . '/public/intranet/includes/header.php'; ?>
-
 <div class="container" style="padding:25px;margin-top:25px;margin-bottom:50px;">
 
     <h3 style="margin-bottom:25px">Registre horari</h3>

@@ -1,5 +1,3 @@
-<?php require_once APP_ROOT . '/public/intranet/includes/header.php'; ?>
-
 <div class="container" style="margin-bottom:55px">
     <?php if ($isAdmin || $isAutor ||  $isUserRepresaliats): ?>
         <h2>Llistat de represaliats (1939-1979):</h2>

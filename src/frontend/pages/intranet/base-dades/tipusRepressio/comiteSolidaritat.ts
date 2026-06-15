@@ -3,9 +3,13 @@ import { auxiliarSelect } from '../../../../services/fetchData/auxiliarSelect';
 import { renderFormInputs } from '../../../../services/fetchData/renderInputsForm';
 import { transmissioDadesDB } from '../../../../services/fetchData/transmissioDades';
 import { renderTaulaCercadorFiltres } from '../../../../services/renderTaula/renderTaulaCercadorFiltres';
-import { initDeleteHandlers, registerDeleteCallback } from '../../../../services/fetchData/handleDelete';
+import {
+  initDeleteHandlers,
+  registerDeleteCallback,
+} from '../../../../services/fetchData/handleDelete';
 import { getIsAdmin } from '../../../../services/auth/getIsAdmin';
 import { getIsAutor } from '../../../../services/auth/getIsAutor';
+import { ENV } from '../../../../config/env';
 
 interface Fitxa {
   [key: string]: unknown;
@@ -42,13 +46,15 @@ export async function comiteSolidaritat(idRepresaliat: number) {
   const reloadKey = 'reload-taula-taulaLlistatDetencionsComiteSolidaritat';
   const container = document.getElementById('fitxaNomCognoms');
 
-  const data2 = await fetchDataGet<Fitxa>(`/api/dades_personals/get/?type=nomCognoms&id=${idRepresaliat}`);
+  const data2 = await fetchDataGet<Fitxa>(
+    `${ENV.apiBaseUrl}/dades_personals/get/?type=nomCognoms&id=${idRepresaliat}`
+  );
 
   if (data2) {
     if (!container) return;
 
     const nomComplet = `${data2.nom} ${data2.cognom1} ${data2.cognom2}`;
-    const url = `https://memoriaterrassa.cat/fitxa/${data2.slug}`;
+    const url = `${ENV.domainWeb}/fitxa/${data2.slug}`;
 
     container.innerHTML = `<h4>Fitxa: <a href="${url}" target="_blank">${nomComplet}</a></h4>`;
   }
@@ -66,7 +72,8 @@ export async function comiteSolidaritat(idRepresaliat: number) {
     columns.push({
       header: 'Accions',
       field: 'id',
-      render: (_: unknown, row: EspaiRow) => `<a id="${row.id}" title="Modifica" href="https://${window.location.hostname}/gestio/base-dades/empresonaments-comite-solidaritat/modifica-empresonament/${idRepresaliat}/${row.id}"><button type="button" class="btn btn-warning btn-sm">Modifica</button></a>`,
+      render: (_: unknown, row: EspaiRow) =>
+        `<a id="${row.id}" title="Modifica" href="${ENV.domainWeb}/gestio/base-dades/empresonaments-comite-solidaritat/modifica-empresonament/${idRepresaliat}/${row.id}"><button type="button" class="btn btn-warning btn-sm">Modifica</button></a>`,
     });
   }
 
@@ -88,7 +95,7 @@ export async function comiteSolidaritat(idRepresaliat: number) {
   }
 
   renderTaulaCercadorFiltres<EspaiRow>({
-    url: `/api/comite_solidaritat/get/empresonatId?id=${idRepresaliat}`,
+    url: `${ENV.apiBaseUrl}/comite_solidaritat/get/empresonatId?id=${idRepresaliat}`,
     containerId: 'taulaLlistatDetencionsComiteSolidaritat',
     columns,
     filterKeys: ['motiu'],
@@ -113,10 +120,14 @@ export async function formcomiteSolidaritat(idRepresaliat: number, id?: number) 
   let response: Fitxa | null = null;
 
   if (id) {
-    response = await fetchDataGet<Fitxa>(`/api/comite_solidaritat/get/fitxaRepressio?id=${id}`);
+    response = await fetchDataGet<Fitxa>(
+      `${ENV.apiBaseUrl}/comite_solidaritat/get/fitxaRepressio?id=${id}`
+    );
   }
 
-  const data2 = await fetchDataGet<Fitxa>(`/api/dades_personals/get/?type=nomCognoms&id=${idRepresaliat}`);
+  const data2 = await fetchDataGet<Fitxa>(
+    `${ENV.apiBaseUrl}/dades_personals/get/?type=nomCognoms&id=${idRepresaliat}`
+  );
 
   const btnForm = document.getElementById('btnCS') as HTMLButtonElement;
   const container = document.getElementById('fitxaNomCognoms');
@@ -143,7 +154,7 @@ export async function formcomiteSolidaritat(idRepresaliat: number, id?: number) 
     }
 
     const nomComplet = `${data2.nom} ${data2.cognom1} ${data2.cognom2}`;
-    const url = `https://memoriaterrassa.cat/fitxa/${data2.id}`;
+    const url = `${ENV.domainWeb}/fitxa/${data2.id}`;
 
     container.innerHTML = `<h4>Fitxa: <a href="${url}" target="_blank">${nomComplet}</a></h4>`;
   }
@@ -162,13 +173,24 @@ export async function formcomiteSolidaritat(idRepresaliat: number, id?: number) 
   if (!response) {
     if (htmlForm) {
       htmlForm.addEventListener('submit', function (event) {
-        transmissioDadesDB(event, 'POST', 'comiteSolidaritatForm', '/api/comite_solidaritat/post', true);
+        transmissioDadesDB(
+          event,
+          'POST',
+          'comiteSolidaritatForm',
+          `${ENV.apiBaseUrl}/comite_solidaritat/post`,
+          true
+        );
       });
     }
   } else {
     if (htmlForm) {
       htmlForm.addEventListener('submit', function (event) {
-        transmissioDadesDB(event, 'PUT', 'comiteSolidaritatForm', '/api/comite_solidaritat/put');
+        transmissioDadesDB(
+          event,
+          'PUT',
+          'comiteSolidaritatForm',
+          `${ENV.domainWeb}/comite_solidaritat/put`
+        );
       });
     }
   }

@@ -1,4 +1,4 @@
-import { DOMAIN_API, DOMAIN_WEB } from '../../config/constants';
+import { ENV } from '../../config/env';
 import { getApiArray } from '../../services/api/http';
 import { normalizeText } from '../../services/formatDates/formatText';
 import { LABELS_SEARCH } from '../../services/i18n/homePage/cercador';
@@ -14,7 +14,7 @@ interface Persona {
 
 function fitxaHref(slug: string, lang: string): string {
   // en catalán no se añade prefijo, en el resto sí
-  return lang === 'ca' ? `${DOMAIN_WEB}/fitxa/${slug}` : `${DOMAIN_WEB}/${lang}/fitxa/${slug}`;
+  return lang === 'ca' ? `${ENV.domainWeb}/fitxa/${slug}` : `${ENV.domainWeb}/${lang}/fitxa/${slug}`;
 }
 
 // Mostrar resultados
@@ -57,7 +57,7 @@ export async function initBuscador(lang: string): Promise<void> {
 
     if (!searchInput || !resultsDiv) return;
 
-    const url = `${DOMAIN_API}/dades_personals/get/llistatPersonesCercador`;
+    const url = `${ENV.apiBaseUrl}/dades_personals/get/llistatPersonesCercador`;
     const persones = await getApiArray<Persona>(url);
 
     searchInput.addEventListener('input', () => {

@@ -2,6 +2,7 @@ import { fetchDataGet } from '../../../../services/fetchData/fetchDataGet';
 import { auxiliarSelect } from '../../../../services/fetchData/auxiliarSelect';
 import { renderFormInputs } from '../../../../services/fetchData/renderInputsForm';
 import { transmissioDadesDB } from '../../../../services/fetchData/transmissioDades';
+import { ENV } from '../../../../config/env';
 
 interface Fitxa {
   [key: string]: unknown;
@@ -19,8 +20,12 @@ export async function afusellat(idRepresaliat: number) {
     lloc_execucio_enterrament: 0,
   };
 
-  const response = await fetchDataGet<Fitxa>(`/api/afusellats/get/fitxaRepressio?id=${idRepresaliat}`);
-  const data2 = await fetchDataGet<Fitxa>(`/api/dades_personals/get/?type=nomCognoms&id=${idRepresaliat}`);
+  const response = await fetchDataGet<Fitxa>(
+    `${ENV.apiBaseUrl}/afusellats/get/fitxaRepressio?id=${idRepresaliat}`
+  );
+  const data2 = await fetchDataGet<Fitxa>(
+    `${ENV.apiBaseUrl}/dades_personals/get/?type=nomCognoms&id=${idRepresaliat}`
+  );
 
   const btnForm = document.getElementById('btnAfusellat') as HTMLButtonElement;
   const btn1 = document.getElementById('refreshButton1');
@@ -48,7 +53,7 @@ export async function afusellat(idRepresaliat: number) {
     }
 
     const nomComplet = `${data2.nom} ${data2.cognom1} ${data2.cognom2}`;
-    const url = `https://memoriaterrassa.cat/fitxa/${data2.slug}`;
+    const url = `${ENV.domainWeb}/fitxa/${data2.slug}`;
 
     container.innerHTML = `<h4>Fitxa: <a href="${url}" target="_blank">${nomComplet}</a></h4>`;
   }
@@ -58,7 +63,12 @@ export async function afusellat(idRepresaliat: number) {
   if (btn1 && btn2) {
     btn1.addEventListener('click', function (event) {
       event.preventDefault();
-      auxiliarSelect(data?.lloc_execucio_enterrament, 'espais', 'lloc_execucio_enterrament', 'espai_cat');
+      auxiliarSelect(
+        data?.lloc_execucio_enterrament,
+        'espais',
+        'lloc_execucio_enterrament',
+        'espai_cat'
+      );
     });
 
     btn2.addEventListener('click', function (event) {
@@ -67,19 +77,30 @@ export async function afusellat(idRepresaliat: number) {
     });
   }
 
-  await auxiliarSelect(data?.lloc_execucio_enterrament, 'espais', 'lloc_execucio_enterrament', 'espai_cat');
+  await auxiliarSelect(
+    data?.lloc_execucio_enterrament,
+    'espais',
+    'lloc_execucio_enterrament',
+    'espai_cat'
+  );
   await auxiliarSelect(data?.enterrament_lloc, 'espais', 'enterrament_lloc', 'espai_cat');
 
   if (!response) {
     if (afusellatForm) {
       afusellatForm.addEventListener('submit', function (event) {
-        transmissioDadesDB(event, 'POST', 'afusellatForm', '/api/afusellats/post', true);
+        transmissioDadesDB(
+          event,
+          'POST',
+          'afusellatForm',
+          `${ENV.apiBaseUrl}/afusellats/post`,
+          true
+        );
       });
     }
   } else {
     if (afusellatForm) {
       afusellatForm.addEventListener('submit', function (event) {
-        transmissioDadesDB(event, 'PUT', 'afusellatForm', '/api/afusellats/put');
+        transmissioDadesDB(event, 'PUT', 'afusellatForm', `${ENV.apiBaseUrl}/afusellats/put`);
       });
     }
   }

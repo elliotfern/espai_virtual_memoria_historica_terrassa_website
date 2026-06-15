@@ -1,5 +1,17 @@
 // src/buscador/api.ts
-import { Persona, OpcionesFiltros, Municipio, EstatCivil, Estudi, Ofici, PartitPolitic, Sindicat, Causa, CategoriaRepressio } from './types';
+import { ENV } from '../../config/env';
+import {
+  Persona,
+  OpcionesFiltros,
+  Municipio,
+  EstatCivil,
+  Estudi,
+  Ofici,
+  PartitPolitic,
+  Sindicat,
+  Causa,
+  CategoriaRepressio,
+} from './types';
 
 // ---- Helpers HTTP ----
 async function fetchJSON<T>(url: string): Promise<T> {
@@ -61,7 +73,7 @@ interface PersonaRaw {
 export interface FetchPersonasOptions {
   /** Valor del query param `type`, p.ej. "filtreExiliats", "filtreRepresaliats", etc. */
   type: string;
-  /** Dominio base, por defecto https://memoriaterrassa.cat */
+  /** Dominio base */
   baseUrl?: string;
   /** Idioma opcional para algunos endpoints que lo aceptan (si aplica) */
   lang?: string;
@@ -73,14 +85,22 @@ export interface FetchPersonasOptions {
  *  - string => se interpreta como `type`
  *  - objeto => opciones completas
  */
-export async function fetchPersonas(typeOrOpts: string | FetchPersonasOptions = 'filtreExiliats'): Promise<Persona[]> {
-  const opts: FetchPersonasOptions = typeof typeOrOpts === 'string' ? { type: typeOrOpts } : typeOrOpts;
+export async function fetchPersonas(
+  typeOrOpts: string | FetchPersonasOptions = 'filtreExiliats'
+): Promise<Persona[]> {
+  const opts: FetchPersonasOptions =
+    typeof typeOrOpts === 'string'
+      ? {
+          type: typeOrOpts,
+        }
+      : typeOrOpts;
 
-  const base = (opts.baseUrl ?? 'https://memoriaterrassa.cat').replace(/\/+$/, '');
   const langQS = opts.lang ? `&lang=${encodeURIComponent(opts.lang)}` : '';
-  const url = `${base}/api/dades_personals/get/?type=${encodeURIComponent(opts.type)}${langQS}`;
+  const url = `${ENV.apiBaseUrl}/dades_personals/get/?type=${encodeURIComponent(opts.type)}${langQS}`;
 
-  const json = await fetchJSON<{ data: PersonaRaw[] }>(url);
+  const json = await fetchJSON<{
+    data: PersonaRaw[];
+  }>(url);
 
   return (json.data || []).map((r) => ({
     id: r.id,
@@ -108,7 +128,9 @@ export async function fetchPersonas(typeOrOpts: string | FetchPersonasOptions = 
     data_exili: r.data_exili ?? null,
     primer_desti_exili: r.primer_desti_exili ? Number(r.primer_desti_exili) : null,
     deportat: r.deportat ? Number(r.deportat) : null,
-    participacio_resistencia: r.participacio_resistencia ? Number(r.participacio_resistencia) : null,
+    participacio_resistencia: r.participacio_resistencia
+      ? Number(r.participacio_resistencia)
+      : null,
   }));
 }
 
@@ -118,11 +140,38 @@ export interface FetchOpcionesOptions {
   lang?: string; // para categories
 }
 
-export async function fetchOpcionesFiltros(opts: FetchOpcionesOptions = {}): Promise<OpcionesFiltros> {
-  const base = (opts.baseUrl ?? 'https://memoriaterrassa.cat').replace(/\/+$/, '');
+export async function fetchOpcionesFiltros(
+  opts: FetchOpcionesOptions = {}
+): Promise<OpcionesFiltros> {
   const langQS = `?lang=${encodeURIComponent(opts.lang ?? 'ca')}`;
 
-  const [municipis, estats_civils, estudis, oficis, partits, sindicats, causes, categoriesRaw] = await Promise.all([fetchJSON<{ data: Municipio[] }>(`${base}/api/auxiliars/get/municipis/`).then((r) => r.data), fetchJSON<{ data: EstatCivil[] }>(`${base}/api/auxiliars/get/estats_civils/`).then((r) => r.data), fetchJSON<{ data: Estudi[] }>(`${base}/api/auxiliars/get/estudis/`).then((r) => r.data), fetchJSON<{ data: Ofici[] }>(`${base}/api/auxiliars/get/oficis/`).then((r) => r.data), fetchJSON<{ data: PartitPolitic[] }>(`${base}/api/auxiliars/get/partitsPolitics/`).then((r) => r.data), fetchJSON<{ data: Sindicat[] }>(`${base}/api/auxiliars/get/sindicats/`).then((r) => r.data), fetchJSON<{ data: Causa[] }>(`${base}/api/auxiliars/get/causa_defuncio/`).then((r) => r.data), fetchJSON<{ data: CategoriaRepressio[] }>(`${base}/api/auxiliars/get/categoriesRepressio${langQS}`).then((r) => r.data)]);
+  const [municipis, estats_civils, estudis, oficis, partits, sindicats, causes, categoriesRaw] =
+    await Promise.all([
+      fetchJSON<{
+        data: Municipio[];
+      }>(`${ENV.apiBaseUrl}/auxiliars/get/municipis/`).then((r) => r.data),
+      fetchJSON<{
+        data: EstatCivil[];
+      }>(`${ENV.apiBaseUrl}/auxiliars/get/estats_civils/`).then((r) => r.data),
+      fetchJSON<{
+        data: Estudi[];
+      }>(`${ENV.apiBaseUrl}/auxiliars/get/estudis/`).then((r) => r.data),
+      fetchJSON<{
+        data: Ofici[];
+      }>(`${ENV.apiBaseUrl}/auxiliars/get/oficis/`).then((r) => r.data),
+      fetchJSON<{
+        data: PartitPolitic[];
+      }>(`${ENV.apiBaseUrl}/auxiliars/get/partitsPolitics/`).then((r) => r.data),
+      fetchJSON<{
+        data: Sindicat[];
+      }>(`${ENV.apiBaseUrl}/auxiliars/get/sindicats/`).then((r) => r.data),
+      fetchJSON<{
+        data: Causa[];
+      }>(`${ENV.apiBaseUrl}/auxiliars/get/causa_defuncio/`).then((r) => r.data),
+      fetchJSON<{
+        data: CategoriaRepressio[];
+      }>(`${ENV.apiBaseUrl}/auxiliars/get/categoriesRepressio${langQS}`).then((r) => r.data),
+    ]);
 
   // Normaliza el campo name de categorías sin usar `any`
   const categories: CategoriaRepressio[] = (categoriesRaw || []).map((c) => ({
@@ -130,5 +179,14 @@ export async function fetchOpcionesFiltros(opts: FetchOpcionesOptions = {}): Pro
     name: c.name ?? c.categoria_ca ?? c.categoria ?? `#${c.id}`,
   }));
 
-  return { municipis, estats_civils, estudis, oficis, partits, sindicats, causes, categories };
+  return {
+    municipis,
+    estats_civils,
+    estudis,
+    oficis,
+    partits,
+    sindicats,
+    causes,
+    categories,
+  };
 }

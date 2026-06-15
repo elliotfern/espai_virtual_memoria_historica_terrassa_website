@@ -1,7 +1,3 @@
-<?php
-require_once APP_ROOT . '/public/intranet/includes/header.php';
-?>
-
 <div class="container mb-5 border rounded p-4" style="background-color:#eaeaea">
     <div class="container">
         <div class="row">

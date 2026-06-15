@@ -1,3 +1,4 @@
+import { ENV } from '../../../config/env';
 import { renderTaula } from '../../../services/renderTaula/renderTaula';
 
 type Usuari = {
@@ -16,7 +17,7 @@ type ApiResponse<T> = {
 };
 
 export async function taulaDadesUsuaris() {
-  const url = 'https://memoriaterrassa.cat/api/auth/get/llistatUsuaris';
+  const url = `${ENV.apiBaseUrl}/auth/get/llistatUsuaris`;
 
   const container = document.getElementById('tabla1');
   if (!container) {
@@ -55,12 +56,12 @@ export async function taulaDadesUsuaris() {
       tipus: (val) => `${val}`,
       idBio: (val, row) => {
         const id = row.id as string;
-        return `<a href="https://${window.location.host}/gestio/auxiliars/modifica-bio-usuari/${id}">
+        return `<a href="${ENV.domainWeb}/gestio/auxiliars/modifica-bio-usuari/${id}">
                         <button class="btn btn-secondary btn-sm">Modifica biografia</button></a>`;
       },
       id: (val, row) => {
         const id = row.id as string;
-        return `<a href="https://${window.location.host}/gestio/auxiliars/modifica-usuari/${id}">
+        return `<a href="${ENV.domainWeb}/gestio/auxiliars/modifica-usuari/${id}">
                         <button class="btn btn-secondary btn-sm">Modifica</button></a>`;
       },
     },

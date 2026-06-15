@@ -3,10 +3,14 @@ import { auxiliarSelect } from '../../../../services/fetchData/auxiliarSelect';
 import { renderFormInputs } from '../../../../services/fetchData/renderInputsForm';
 import { transmissioDadesDB } from '../../../../services/fetchData/transmissioDades';
 import { renderTaulaCercadorFiltres } from '../../../../services/renderTaula/renderTaulaCercadorFiltres';
-import { initDeleteHandlers, registerDeleteCallback } from '../../../../services/fetchData/handleDelete';
+import {
+  initDeleteHandlers,
+  registerDeleteCallback,
+} from '../../../../services/fetchData/handleDelete';
 import { getIsAdmin } from '../../../../services/auth/getIsAdmin';
 import { getIsAutor } from '../../../../services/auth/getIsAutor';
 import { formatDatesForm } from '../../../../services/formatDates/dates';
+import { ENV } from '../../../../config/env';
 
 interface Fitxa {
   [key: string]: unknown;
@@ -42,19 +46,25 @@ export async function detingutsGuardiaUrbana(idRepresaliat: number) {
   const reloadKey = 'reload-taula-taulaLlistatArxius';
   const container = document.getElementById('fitxaNomCognoms');
 
-  const data2 = await fetchDataGet<Fitxa>(`/api/dades_personals/get/?type=nomCognoms&id=${idRepresaliat}`);
+  const data2 = await fetchDataGet<Fitxa>(
+    `/api/dades_personals/get/?type=nomCognoms&id=${idRepresaliat}`
+  );
 
   if (data2) {
     if (!container) return;
 
     const nomComplet = `${data2.nom} ${data2.cognom1} ${data2.cognom2}`;
-    const url = `https://memoriaterrassa.cat/fitxa/${data2.slug}`;
+    const url = `${ENV.domainWeb}/fitxa/${data2.slug}`;
 
     container.innerHTML = `<h4>Fitxa: <a href="${url}" target="_blank">${nomComplet}</a></h4>`;
   }
 
   const columns: Column<EspaiRow>[] = [
-    { header: 'Data entrada', field: 'data_empresonament', render: (_: unknown, row: EspaiRow) => `${formatDatesForm(row.data_empresonament)}` },
+    {
+      header: 'Data entrada',
+      field: 'data_empresonament',
+      render: (_: unknown, row: EspaiRow) => `${formatDatesForm(row.data_empresonament)}`,
+    },
     {
       header: 'Data sortida',
       field: 'data_sortida',
@@ -67,7 +77,8 @@ export async function detingutsGuardiaUrbana(idRepresaliat: number) {
     columns.push({
       header: 'Accions',
       field: 'id',
-      render: (_: unknown, row: EspaiRow) => `<a id="${row.id}" title="Modifica" href="https://${window.location.hostname}/gestio/base-dades/empresonaments/modifica-empresonament/${idRepresaliat}/${row.id}"><button type="button" class="btn btn-warning btn-sm">Modifica</button></a>`,
+      render: (_: unknown, row: EspaiRow) =>
+        `<a id="${row.id}" title="Modifica" href="${ENV.domainWeb}/gestio/base-dades/empresonaments/modifica-empresonament/${idRepresaliat}/${row.id}"><button type="button" class="btn btn-warning btn-sm">Modifica</button></a>`,
     });
   }
 
@@ -89,7 +100,7 @@ export async function detingutsGuardiaUrbana(idRepresaliat: number) {
   }
 
   renderTaulaCercadorFiltres<EspaiRow>({
-    url: `/api/detinguts_guardia_urbana/get/empresonatId?id=${idRepresaliat}`,
+    url: `${ENV.apiBaseUrl}detinguts_guardia_urbana/get/empresonatId?id=${idRepresaliat}`,
     containerId: 'taulaLlistatDetencions',
     columns,
     filterKeys: ['arxiu'],
@@ -114,10 +125,14 @@ export async function formDetingutsGuardiaUrbana(idRepresaliat: number, id?: num
   let response: Fitxa | null = null;
 
   if (id) {
-    response = await fetchDataGet<Fitxa>(`/api/detinguts_guardia_urbana/get/fitxaRepressio?id=${id}`);
+    response = await fetchDataGet<Fitxa>(
+      `${ENV.apiBaseUrl}/detinguts_guardia_urbana/get/fitxaRepressio?id=${id}`
+    );
   }
 
-  const data2 = await fetchDataGet<Fitxa>(`/api/dades_personals/get/?type=nomCognoms&id=${idRepresaliat}`);
+  const data2 = await fetchDataGet<Fitxa>(
+    `/api/dades_personals/get/?type=nomCognoms&id=${idRepresaliat}`
+  );
 
   const btnForm = document.getElementById('btndetingutGU') as HTMLButtonElement;
   const container = document.getElementById('fitxaNomCognoms');
@@ -145,39 +160,70 @@ export async function formDetingutsGuardiaUrbana(idRepresaliat: number, id?: num
     }
 
     const nomComplet = `${data2.nom} ${data2.cognom1} ${data2.cognom2}`;
-    const url = `https://memoriaterrassa.cat/fitxa/${data2.id}`;
+    const url = `${ENV.domainWeb}/fitxa/${data2.id}`;
 
     container.innerHTML = `<h4>Fitxa: <a href="${url}" target="_blank">${nomComplet}</a></h4>`;
   }
 
   renderFormInputs(data);
 
-  await auxiliarSelect(data?.motiu_empresonament, 'motiusEmpresonament', 'motiu_empresonament', 'motiuEmpresonament_ca');
-  await auxiliarSelect(data?.qui_ordena_detencio, 'sistemaRepressiu', 'qui_ordena_detencio', 'carrec');
+  await auxiliarSelect(
+    data?.motiu_empresonament,
+    'motiusEmpresonament',
+    'motiu_empresonament',
+    'motiuEmpresonament_ca'
+  );
+  await auxiliarSelect(
+    data?.qui_ordena_detencio,
+    'sistemaRepressiu',
+    'qui_ordena_detencio',
+    'carrec'
+  );
   await auxiliarSelect(data?.top, 'top', 'top', 'ordena_top', '2');
 
   if (btn1 && btn2) {
     btn1.addEventListener('click', function (event) {
       event.preventDefault();
-      auxiliarSelect(data?.motiu_empresonament, 'motiusEmpresonament', 'motiu_empresonament', 'motiuEmpresonament_ca');
+      auxiliarSelect(
+        data?.motiu_empresonament,
+        'motiusEmpresonament',
+        'motiu_empresonament',
+        'motiuEmpresonament_ca'
+      );
     });
 
     btn2.addEventListener('click', function (event) {
       event.preventDefault();
-      auxiliarSelect(data?.qui_ordena_detencio, 'sistemaRepressiu', 'qui_ordena_detencio', 'carrec');
+      auxiliarSelect(
+        data?.qui_ordena_detencio,
+        'sistemaRepressiu',
+        'qui_ordena_detencio',
+        'carrec'
+      );
     });
   }
 
   if (!response) {
     if (htmlForm) {
       htmlForm.addEventListener('submit', function (event) {
-        transmissioDadesDB(event, 'POST', 'detingutGUForm', '/api/detinguts_guardia_urbana/post', true);
+        transmissioDadesDB(
+          event,
+          'POST',
+          'detingutGUForm',
+          `${ENV.apiBaseUrl}/detinguts_guardia_urbana/post`,
+          true
+        );
       });
     }
   } else {
     if (htmlForm) {
       htmlForm.addEventListener('submit', function (event) {
-        transmissioDadesDB(event, 'PUT', 'detingutGUForm', '/api/detinguts_guardia_urbana/put');
+        transmissioDadesDB(
+          event,
+          'PUT',
+          'detingutGUForm',
+          `${ENV.apiBaseUrl}/detinguts_guardia_urbana/put`
+        );
       });
     }
   }

@@ -9,7 +9,7 @@
         <div class="alert alert-danger" id="loginMessageErr" style="display:none" role="alert">
         </div>
 
-        <form action="" method="post" class="login" style="margin-bottom:20px;margin-top:25px">
+        <div class="login" style="margin-bottom:20px;margin-top:25px">
           <div class="row g-3">
 
             <label for="username" class="negreta">Correu electrònic</label>
@@ -27,11 +27,10 @@
             <div class="invalid-feedback" id="passwordFeedback"></div>
 
 
-            <button name="login" id="btnLogin" class="btn btn-primary">Entra</button>
+            <button name="login" type="button" id="btnLogin" class="btn btn-primary">Entra</button>
           </div>
 
-
-        </form>
+        </div>
         <a href="<?php echo APP_WEB; ?>/recuperacio-contrasenya">No recordes la teva contrasenya? Clica aquí per iniciar el procés de recuperació.</a>
       </div>
     </div>

@@ -1,5 +1,5 @@
 // src/services/api/fetchDataFitxaRepresaliat.ts
-import { DOMAIN_API } from '../../config/constants';
+import { ENV } from '../../config/env';
 import type { Fitxa } from '../../types/types';
 import { fetchData } from './api';
 
@@ -20,7 +20,7 @@ type ApiResponseError = {
 type ApiResponse<T> = ApiResponseSuccess<T> | ApiResponseError;
 
 export async function fetchDataFitxaRepresaliat(slug: string): Promise<Fitxa | null> {
-  const url = `${DOMAIN_API}/api/dades_personals/get/?type=fitxaRepresaliat&slug=${encodeURIComponent(slug)}`;
+  const url = `${ENV.apiBaseUrl}/dades_personals/get/?type=fitxaRepresaliat&slug=${encodeURIComponent(slug)}`;
 
   try {
     const res = (await fetchData(url)) as ApiResponse<Fitxa>;

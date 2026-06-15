@@ -5,6 +5,7 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { LABELS_MAP } from '../../../services/i18n/fitxaRepresaliat/labels-tab9';
 import { t } from '../../../services/i18n/i18n';
+import { ENV } from '../../../config/env';
 
 function crearIconoPersona() {
   // Icono SVG inline para no depender de assets
@@ -60,7 +61,7 @@ export function renderTab9(fitxa: Fitxa, label: string, lang: string): void {
   const nombre = [fitxa.nom, fitxa.cognom1, fitxa.cognom2].filter(Boolean).join(' ') || 'Sense nom';
 
   const slug = fitxa.slug;
-  const urlFicha = slug ? `https://memoriaterrassa.cat/fitxa/${encodeURIComponent(slug)}` : '';
+  const urlFicha = slug ? `${ENV.domainWeb}/fitxa/${encodeURIComponent(slug)}` : '';
 
   // Crear mapa
   const container = document.getElementById(mapId)!;
@@ -72,7 +73,8 @@ export function renderTab9(fitxa: Fitxa, label: string, lang: string): void {
 
   // Capa base: OSM (ideal para desarrollo/uso ligero)
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    attribution:
+      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     maxZoom: 19,
   }).addTo(map);
 

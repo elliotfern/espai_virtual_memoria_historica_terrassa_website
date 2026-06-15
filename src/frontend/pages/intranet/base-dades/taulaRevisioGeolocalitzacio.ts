@@ -1,9 +1,13 @@
 import { API_URLS } from '../../../services/api/ApiUrls';
 import { renderTaulaCercadorFiltres } from '../../../services/renderTaula/renderTaulaCercadorFiltres';
-import { initDeleteHandlers, registerDeleteCallback } from '../../../services/fetchData/handleDelete';
+import {
+  initDeleteHandlers,
+  registerDeleteCallback,
+} from '../../../services/fetchData/handleDelete';
 import { getIsAdmin } from '../../../services/auth/getIsAdmin';
 import { getIsAutor } from '../../../services/auth/getIsAutor';
 import { getIsLogged } from '../../../services/auth/getIsLogged';
+import { ENV } from '../../../config/env';
 
 interface EspaiRow {
   id: number;
@@ -30,7 +34,7 @@ type Column<T> = {
 };
 
 // ==== Configura aquí TU endpoint real ====
-const GEOCODE_ENDPOINT = `https://memoriaterrassa.cat/api/dades_personals/geo/put`;
+const GEOCODE_ENDPOINT = `${ENV.apiBaseUrl}/dades_personals/geo/put`;
 
 type GeoSuccess = {
   status: 'success';
@@ -125,12 +129,14 @@ export async function taulaRevisioGeolocalitzacio() {
     {
       header: 'Nom i cognoms',
       field: 'id',
-      render: (_: unknown, row: EspaiRow) => `<a id="${row.id}" title="Fitxa" href="https://${window.location.hostname}/fitxa/${row.slug}" target="_blank">${row.cognom1} ${row.cognom2}, ${row.nom}</a>`,
+      render: (_: unknown, row: EspaiRow) =>
+        `<a id="${row.id}" title="Fitxa" href="${ENV.domainWeb}/fitxa/${row.slug}" target="_blank">${row.cognom1} ${row.cognom2}, ${row.nom}</a>`,
     },
     {
       header: 'Adreça',
       field: 'adreca',
-      render: (_: unknown, row: EspaiRow) => `${row.tipus_ca?.trim() || ''} ${row.adreca} ${row.adreca_num || ''} ${row.ciutat}`,
+      render: (_: unknown, row: EspaiRow) =>
+        `${row.tipus_ca?.trim() || ''} ${row.adreca} ${row.adreca_num || ''} ${row.ciutat}`,
     },
     { header: 'Latitud', field: 'lat', render: (_: unknown, row: EspaiRow) => `${row.lat ?? ''}` },
     { header: 'Longitud', field: 'lng', render: (_: unknown, row: EspaiRow) => `${row.lng ?? ''}` },
@@ -150,7 +156,7 @@ export async function taulaRevisioGeolocalitzacio() {
         header: 'Accions',
         field: 'id',
         render: (_: unknown, row: EspaiRow) =>
-          `<a id="${row.id}" title="Modifica" target="_blank" href="https://${window.location.hostname}/gestio/base-dades/modifica-fitxa/${row.id}">
+          `<a id="${row.id}" title="Modifica" target="_blank" href="${ENV.domainWeb}/gestio/base-dades/modifica-fitxa/${row.id}">
              <button type="button" class="btn btn-success btn-sm">Modifica dades fitxa</button>
            </a>`,
       }
@@ -166,7 +172,7 @@ export async function taulaRevisioGeolocalitzacio() {
           type="button"
           class="btn btn-danger btn-sm delete-button"
           data-id="${row.id}" 
-          data-url="/api/dades_personals/delete/eliminaDuplicat?id=${row.id}"
+          data-url="${ENV.apiBaseUrl}/dades_personals/delete/eliminaDuplicat?id=${row.id}"
           data-reload-callback="${reloadKey}"
         >
           Elimina

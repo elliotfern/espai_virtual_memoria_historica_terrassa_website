@@ -8,7 +8,6 @@ if (!$conn) {
     die("No se pudo establecer conexión a la base de datos.");
 }
 
-require_once APP_ROOT . '/public/intranet/includes/header.php';
 ?>
 
 <div class="container" style="margin-bottom:50px;border: 1px solid gray;border-radius: 10px;padding:25px;background-color:#eaeaea">

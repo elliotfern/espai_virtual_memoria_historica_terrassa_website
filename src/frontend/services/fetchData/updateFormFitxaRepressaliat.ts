@@ -1,8 +1,13 @@
 import { missatgesBackend } from './missatgesBackend';
 import { resetForm } from './resetForm';
 import { Missatges } from '../textosIdiomes/missatges';
+import { ENV } from '../../config/env';
 
-export async function enviarDadesFormFitxaRepressaliat(event: Event, method: 'POST' | 'PUT' = 'PUT', neteja?: boolean): Promise<void> {
+export async function enviarDadesFormFitxaRepressaliat(
+  event: Event,
+  method: 'POST' | 'PUT' = 'PUT',
+  neteja?: boolean
+): Promise<void> {
   event.preventDefault();
 
   const form = document.getElementById('formFitxaRepressaliat') as HTMLFormElement | null;
@@ -85,19 +90,20 @@ export async function enviarDadesFormFitxaRepressaliat(event: Event, method: 'PO
             if (!id || !slug) {
               const warn = document.createElement('div');
               warn.className = 'alert alert-warning mb-3';
-              warn.textContent = "Creació completada, però no s'ha pogut obtenir id/slug per generar els enllaços.";
+              warn.textContent =
+                "Creació completada, però no s'ha pogut obtenir id/slug per generar els enllaços.";
               btnPost.appendChild(warn);
             } else {
               const group = document.createElement('div');
               group.setAttribute('role', 'group');
 
               const btnModifica = document.createElement('a');
-              btnModifica.href = `https://memoriaterrassa.cat/gestio/base-dades/modifica-fitxa/${id}`;
+              btnModifica.href = `${ENV.domainWeb}/gestio/base-dades/modifica-fitxa/${id}`;
               btnModifica.textContent = 'Modificar fitxa';
               btnModifica.className = 'btn btn-primary me-2';
 
               const btnVeure = document.createElement('a');
-              btnVeure.href = `https://memoriaterrassa.cat/fitxa/${slug}`;
+              btnVeure.href = `${ENV.domainWeb}/fitxa/${slug}`;
               btnVeure.textContent = 'Veure fitxa';
               btnVeure.className = 'btn btn-secondary';
 
@@ -119,7 +125,9 @@ export async function enviarDadesFormFitxaRepressaliat(event: Event, method: 'PO
                 btnPost.style.display = 'none';
 
                 // Llevar foco al primer campo y hacer scroll
-                const firstInput = form.querySelector<HTMLElement>('input, select, textarea, [contenteditable="true"]');
+                const firstInput = form.querySelector<HTMLElement>(
+                  'input, select, textarea, [contenteditable="true"]'
+                );
                 firstInput?.focus();
                 form.scrollIntoView({ behavior: 'smooth', block: 'start' });
               });
@@ -166,7 +174,10 @@ export async function enviarDadesFormFitxaRepressaliat(event: Event, method: 'PO
     const errTextDiv = document.getElementById('errText');
     if (!errMessageDiv || !errTextDiv) return;
 
-    const errorMessage = typeof error === 'object' && error && 'message' in error ? String((error as { message: string }).message) : "S'ha produït un error a la xarxa.";
+    const errorMessage =
+      typeof error === 'object' && error && 'message' in error
+        ? String((error as { message: string }).message)
+        : "S'ha produït un error a la xarxa.";
 
     missatgesBackend({
       tipus: 'error',

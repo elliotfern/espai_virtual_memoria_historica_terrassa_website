@@ -2,6 +2,7 @@ import { fetchDataGet } from '../../../../services/fetchData/fetchDataGet';
 import { auxiliarSelect } from '../../../../services/fetchData/auxiliarSelect';
 import { renderFormInputs } from '../../../../services/fetchData/renderInputsForm';
 import { transmissioDadesDB } from '../../../../services/fetchData/transmissioDades';
+import { ENV } from '../../../../config/env';
 
 interface Fitxa {
   [key: string]: unknown;
@@ -24,8 +25,12 @@ export async function responsabilitatsPolitiques(idRepresaliat: number) {
     qui_ordena_detencio: 0,
   };
 
-  const response = await fetchDataGet<Fitxa>(`/api/responsabilitats_politiques/get/fitxaRepressio?id=${idRepresaliat}`);
-  const data2 = await fetchDataGet<Fitxa>(`/api/dades_personals/get/?type=nomCognoms&id=${idRepresaliat}`);
+  const response = await fetchDataGet<Fitxa>(
+    `/api/responsabilitats_politiques/get/fitxaRepressio?id=${idRepresaliat}`
+  );
+  const data2 = await fetchDataGet<Fitxa>(
+    `/api/dades_personals/get/?type=nomCognoms&id=${idRepresaliat}`
+  );
 
   const btnForm = document.getElementById('btnResponsabilitats') as HTMLButtonElement;
   const container = document.getElementById('fitxaNomCognoms');
@@ -53,7 +58,7 @@ export async function responsabilitatsPolitiques(idRepresaliat: number) {
     }
 
     const nomComplet = `${data2.nom} ${data2.cognom1} ${data2.cognom2}`;
-    const url = `https://memoriaterrassa.cat/fitxa/${data2.slug}`;
+    const url = `${ENV.domainWeb}/fitxa/${data2.slug}`;
 
     container.innerHTML = `<h4>Fitxa: <a href="${url}" target="_blank">${nomComplet}</a></h4>`;
   }
@@ -78,13 +83,24 @@ export async function responsabilitatsPolitiques(idRepresaliat: number) {
   if (!response) {
     if (htmlForm) {
       htmlForm.addEventListener('submit', function (event) {
-        transmissioDadesDB(event, 'POST', 'responsabilitatsPolitiquesForm', '/api/responsabilitats_politiques/post', true);
+        transmissioDadesDB(
+          event,
+          'POST',
+          'responsabilitatsPolitiquesForm',
+          `${ENV.apiBaseUrl}/responsabilitats_politiques/post`,
+          true
+        );
       });
     }
   } else {
     if (htmlForm) {
       htmlForm.addEventListener('submit', function (event) {
-        transmissioDadesDB(event, 'PUT', 'responsabilitatsPolitiquesForm', '/api/responsabilitats_politiques/put');
+        transmissioDadesDB(
+          event,
+          'PUT',
+          'responsabilitatsPolitiquesForm',
+          `${ENV.apiBaseUrl}/responsabilitats_politiques/put`
+        );
       });
     }
   }

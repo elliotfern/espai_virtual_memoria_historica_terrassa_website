@@ -1,5 +1,6 @@
 // publicAparicionsPremsaList.ts
 
+import { ENV } from '../../../config/env';
 import { formatDatesForm } from '../../../services/formatDates/dates';
 
 type Lang = 'ca' | 'es' | 'en' | 'fr' | 'it' | 'pt';
@@ -27,7 +28,12 @@ interface AparicioPublica {
 }
 
 function escapeHtml(input: string): string {
-  return input.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#039;');
+  return input
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;');
 }
 
 function mimeToExt(mime: string | null): string {
@@ -47,7 +53,7 @@ function buildImgUrlPremsa(nomArxiu: string | null, mime: string | null): string
   if (!nomArxiu || !mime) return null;
   const ext = mimeToExt(mime);
   if (!ext) return null;
-  return `https://media.memoriaterrassa.cat/assets_premsa/${encodeURIComponent(nomArxiu)}.${ext}`;
+  return `${ENV.domainImg}/assets_premsa/${encodeURIComponent(nomArxiu)}.${ext}`;
 }
 
 function yearFromYmd(dateYmd: string | null): string {
@@ -85,7 +91,7 @@ function tipusAparicioHuman(tipus: string | null): string {
 }
 
 async function fetchAparicions(lang: Lang): Promise<AparicioPublica[]> {
-  const url = `/api/auxiliars/get/premsaAparicionsPublic?lang=${encodeURIComponent(lang)}`;
+  const url = `${ENV.apiBaseUrl}/auxiliars/get/premsaAparicionsPublic?lang=${encodeURIComponent(lang)}`;
   const res = await fetch(url, { headers: { Accept: 'application/json' } });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
@@ -129,7 +135,10 @@ function renderCard(item: AparicioPublica, detailHref: string): string {
   const data = formatDatePublic(item.data_aparicio);
   const tipus = tipusAparicioHuman(item.tipus_aparicio);
 
-  const destacatBadge = (item.destacat ?? 0) === 1 ? `<span class="badge rounded-pill" style="background-color:#B39B7C;">Destacat</span>` : '';
+  const destacatBadge =
+    (item.destacat ?? 0) === 1
+      ? `<span class="badge rounded-pill" style="background-color:#B39B7C;">Destacat</span>`
+      : '';
 
   // ✅ Link en imagen + título
   const imgHtml = imgUrl
@@ -235,7 +244,9 @@ export async function initPublicAparicionsPremsaList(lang: Lang): Promise<void> 
     .reverse();
   fillSelect(fAny, anys);
 
-  const mitjans = Array.from(new Set(all.map((x) => (x.nomMitja ?? '').trim()).filter(Boolean))).sort((a, b) => a.localeCompare(b));
+  const mitjans = Array.from(
+    new Set(all.map((x) => (x.nomMitja ?? '').trim()).filter(Boolean))
+  ).sort((a, b) => a.localeCompare(b));
   fillSelect(fMitja, mitjans);
 
   const prefix = lang === 'ca' ? '' : `/${lang}`;
@@ -246,7 +257,10 @@ export async function initPublicAparicionsPremsaList(lang: Lang): Promise<void> 
     const mitja = fMitja.value;
 
     const filtered = all.filter((x) => {
-      const okQ = !q || (x.titol ?? '').toLowerCase().includes(q) || (x.nomMitja ?? '').toLowerCase().includes(q);
+      const okQ =
+        !q ||
+        (x.titol ?? '').toLowerCase().includes(q) ||
+        (x.nomMitja ?? '').toLowerCase().includes(q);
       const okAny = !any || yearFromYmd(x.data_aparicio) === any;
       const okMitja = !mitja || (x.nomMitja ?? '') === mitja;
       return okQ && okAny && okMitja;

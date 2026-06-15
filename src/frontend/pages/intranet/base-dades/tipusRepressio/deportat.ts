@@ -3,6 +3,7 @@ import { auxiliarSelect } from '../../../../services/fetchData/auxiliarSelect';
 import { renderFormInputs } from '../../../../services/fetchData/renderInputsForm';
 import { transmissioDadesDB } from '../../../../services/fetchData/transmissioDades';
 import { wireForm } from '../../../../helpers/transmissioHelper';
+import { ENV } from '../../../../config/env';
 
 interface Fitxa {
   [key: string]: unknown;
@@ -32,9 +33,13 @@ interface Fitxa {
 }
 
 export async function deportat(idRepresaliat: number) {
-  const data = await fetchDataGet<Fitxa>(`/api/deportats/get/fitxaRepressio?id=${idRepresaliat}`);
+  const data = await fetchDataGet<Fitxa>(
+    `${ENV.apiBaseUrl}/deportats/get/fitxaRepressio?id=${idRepresaliat}`
+  );
 
-  const data2 = await fetchDataGet<Fitxa>(`/api/dades_personals/get/?type=nomCognoms&id=${idRepresaliat}`);
+  const data2 = await fetchDataGet<Fitxa>(
+    `${ENV.apiBaseUrl}/dades_personals/get/?type=nomCognoms&id=${idRepresaliat}`
+  );
 
   if (data2) {
     const container = document.getElementById('fitxaNomCognoms');
@@ -42,7 +47,7 @@ export async function deportat(idRepresaliat: number) {
     if (!container) return;
 
     const nomComplet = `${data2.nom} ${data2.cognom1} ${data2.cognom2}`;
-    const url = `https://memoriaterrassa.cat/fitxa/${data2.slug}`;
+    const url = `${ENV.domainWeb}/fitxa/${data2.slug}`;
 
     container.innerHTML = `<h4>Fitxa: <a href="${url}" target="_blank">${nomComplet}</a></h4>`;
 
@@ -62,7 +67,12 @@ export async function deportat(idRepresaliat: number) {
     if (btn && btn1 && btn2 && btn3 && btn4 && btn5) {
       btn.addEventListener('click', function (event) {
         event.preventDefault();
-        auxiliarSelect(data?.lloc_mort_alliberament, 'municipis', 'lloc_mort_alliberament', 'ciutat');
+        auxiliarSelect(
+          data?.lloc_mort_alliberament,
+          'municipis',
+          'lloc_mort_alliberament',
+          'ciutat'
+        );
       });
 
       btn1.addEventListener('click', function (event) {
@@ -72,12 +82,22 @@ export async function deportat(idRepresaliat: number) {
 
       btn2.addEventListener('click', function (event) {
         event.preventDefault();
-        auxiliarSelect(data?.presoClasificacio1, 'deportacioPreso', 'presoClasificacio1', 'nom_camp');
+        auxiliarSelect(
+          data?.presoClasificacio1,
+          'deportacioPreso',
+          'presoClasificacio1',
+          'nom_camp'
+        );
       });
 
       btn3.addEventListener('click', function (event) {
         event.preventDefault();
-        auxiliarSelect(data?.presoClasificacio2, 'deportacioPreso', 'presoClasificacio2', 'nom_camp');
+        auxiliarSelect(
+          data?.presoClasificacio2,
+          'deportacioPreso',
+          'presoClasificacio2',
+          'nom_camp'
+        );
       });
 
       btn4.addEventListener('click', function (event) {
@@ -87,7 +107,12 @@ export async function deportat(idRepresaliat: number) {
 
       btn5.addEventListener('click', function (event) {
         event.preventDefault();
-        auxiliarSelect(data?.deportacio_subcamp, 'campsConcentracio', 'deportacio_subcamp', 'nom_camp');
+        auxiliarSelect(
+          data?.deportacio_subcamp,
+          'campsConcentracio',
+          'deportacio_subcamp',
+          'nom_camp'
+        );
       });
     }
 
@@ -107,7 +132,7 @@ export async function deportat(idRepresaliat: number) {
       // Ocultar el form en éxito y hacer scroll automático a #okMessage
       wireForm({
         formId: 'deportatForm',
-        urlAjax: '/api/deportats/post',
+        urlAjax: `${ENV.apiBaseUrl}/deportats/post`,
         successBehavior: 'hide', // oculta el formulario
         scrollOnSuccess: true, // opcional; ya se activa por defecto al usar 'hide'
         //scrollOffset: 96,             // si tienes un header fijo alto
@@ -124,7 +149,12 @@ export async function deportat(idRepresaliat: number) {
     if (btn && btn1 && btn2 && btn3 && btn4 && btn5) {
       btn.addEventListener('click', function (event) {
         event.preventDefault();
-        auxiliarSelect(data.lloc_mort_alliberament, 'municipis', 'lloc_mort_alliberament', 'ciutat');
+        auxiliarSelect(
+          data.lloc_mort_alliberament,
+          'municipis',
+          'lloc_mort_alliberament',
+          'ciutat'
+        );
       });
 
       btn1.addEventListener('click', function (event) {
@@ -134,12 +164,22 @@ export async function deportat(idRepresaliat: number) {
 
       btn2.addEventListener('click', function (event) {
         event.preventDefault();
-        auxiliarSelect(data.presoClasificacio1, 'deportacioPreso', 'presoClasificacio1', 'nom_camp');
+        auxiliarSelect(
+          data.presoClasificacio1,
+          'deportacioPreso',
+          'presoClasificacio1',
+          'nom_camp'
+        );
       });
 
       btn3.addEventListener('click', function (event) {
         event.preventDefault();
-        auxiliarSelect(data.presoClasificacio2, 'deportacioPreso', 'presoClasificacio2', 'nom_camp');
+        auxiliarSelect(
+          data.presoClasificacio2,
+          'deportacioPreso',
+          'presoClasificacio2',
+          'nom_camp'
+        );
       });
 
       btn4.addEventListener('click', function (event) {
@@ -149,7 +189,12 @@ export async function deportat(idRepresaliat: number) {
 
       btn5.addEventListener('click', function (event) {
         event.preventDefault();
-        auxiliarSelect(data.deportacio_subcamp, 'campsConcentracio', 'deportacio_subcamp', 'nom_camp');
+        auxiliarSelect(
+          data.deportacio_subcamp,
+          'campsConcentracio',
+          'deportacio_subcamp',
+          'nom_camp'
+        );
       });
     }
 
@@ -174,7 +219,7 @@ export async function deportat(idRepresaliat: number) {
     const deportatForm = document.getElementById('deportatForm');
     if (deportatForm) {
       deportatForm.addEventListener('submit', function (event) {
-        transmissioDadesDB(event, 'PUT', 'deportatForm', '/api/deportats/put');
+        transmissioDadesDB(event, 'PUT', 'deportatForm', `${ENV.apiBaseUrl}/deportats/put`);
       });
     }
   }

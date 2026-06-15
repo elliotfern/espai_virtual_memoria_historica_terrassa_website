@@ -18,8 +18,6 @@ $urlParts = explode('/', $url);
 $categoriaId = $urlParts[4] ?? '';
 $idPersona = $routeParams[0];
 
-require_once APP_ROOT . '/public/intranet/includes/header.php';
-
 $modificaBtn = "";
 $idRepresaliat = "";
 

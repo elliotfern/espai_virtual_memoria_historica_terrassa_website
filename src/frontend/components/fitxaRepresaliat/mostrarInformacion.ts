@@ -1,5 +1,4 @@
-// src/pages/fitxaRepresaliat/mostrarInformacion.ts
-import { DOMAIN_API, DOMAIN_IMG } from '../../config/constants';
+import { ENV } from '../../config/env';
 import { fmt, t } from '../../services/i18n/i18n';
 import { LABELS_ACTIONS } from '../../services/i18n/label-action';
 import { cache } from './cache';
@@ -33,10 +32,10 @@ export function mostrarInformacion(tabId: string, id: number, label: string, lan
 
   // Comprobamos si la variable fitxa.img tiene un valor válido
   if (imatgeRepresaliatAlt && fitxa.img && fitxa.img !== '' && fitxa.img !== null && imagen) {
-    imagen.src = DOMAIN_IMG + `/assets_represaliats/img/${fitxa.img}.jpg`; // Si es válida, usamos la imagen de la variable
+    imagen.src = ENV.domainImg + `/assets_represaliats/img/${fitxa.img}.jpg`; // Si es válida, usamos la imagen de la variable
     imatgeRepresaliatAlt.textContent = fitxa.nomImatge;
   } else {
-    imagen.src = DOMAIN_IMG + `/assets_represaliats/img/foto_defecte.jpg`; // Si no, mostramos la imagen por defecto
+    imagen.src = ENV.domainImg + `/assets_represaliats/img/foto_defecte.jpg`; // Si no, mostramos la imagen por defecto
   }
 
   // Aquí puedes mantener el contenido de divAdditionalInfo si es necesario
@@ -74,9 +73,9 @@ export function mostrarInformacion(tabId: string, id: number, label: string, lan
   }
 
   // ==== Botones de exportación (individual) ====
-  const EXPORT_CSV_URL = DOMAIN_API + '/export/persones_csv/' + lang;
-  const EXPORT_XLSX_URL = DOMAIN_API + '/export/persones_xlsx/' + lang;
-  const EXPORT_PDF_URL = DOMAIN_API + '/export/persones_pdf/' + lang;
+  const EXPORT_CSV_URL = ENV.apiBaseUrl + '/export/persones_csv/' + lang;
+  const EXPORT_XLSX_URL = ENV.apiBaseUrl + '/export/persones_xlsx/' + lang;
+  const EXPORT_PDF_URL = ENV.apiBaseUrl + '/export/persones_pdf/' + lang;
 
   // evita duplicados si se re-renderiza
   const oldInline = divAdditionalInfo.querySelector('.export-inline');

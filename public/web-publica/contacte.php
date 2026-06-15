@@ -127,63 +127,69 @@ $translate2 = $translations['cerca-avan'] ?? [];
 
         // Convertir los datos del formulario a JSON
         const jsonData = JSON.stringify(formData);
-        const devDirectory = `https://${window.location.hostname}`;
-        let urlAjax = devDirectory + "/api/form_contacte/post";
+        let urlAjax = "/api/form_contacte/post";
 
         // Hacer la solicitud con fetch y await
-        const response = await fetch(urlAjax, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: jsonData,
-        });
 
-        const data = await response.json(); // 👈 Importante: parsear antes de usar
+        try {
+            const response = await fetch(urlAjax, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: jsonData,
+            });
 
-        if (!response.ok) {
-            const errMessageDiv = document.getElementById("errMessage");
-            const errTextDiv = document.getElementById("errText");
+            const data = await response.json();
 
-            if (errMessageDiv && errTextDiv) {
-                errMessageDiv.style.display = "block";
+            if (!response.ok) {
+                const errMessageDiv = document.getElementById("errMessage");
+                const errTextDiv = document.getElementById("errText");
 
-                // Mostrar errores múltiples si vienen en array
-                if (Array.isArray(data.errors)) {
-                    errTextDiv.innerHTML = `<ul>${data.errors.map(e => `<li>${e}</li>`).join("")}</ul>`;
-                } else {
-                    errTextDiv.textContent = data.message || "S'ha produït un error a la base de dades.";
+                if (errMessageDiv && errTextDiv) {
+                    errMessageDiv.style.display = "block";
+
+                    // Mostrar errores múltiples si vienen en array
+                    if (Array.isArray(data.errors)) {
+                        errTextDiv.innerHTML = `<ul>${data.errors.map(e => `<li>${e}</li>`).join("")}</ul>`;
+                    } else {
+                        errTextDiv.textContent = data.message || "S'ha produït un error a la base de dades.";
+                    }
+
+                    // Desplazar al mensaje de error
+                    errMessageDiv.scrollIntoView({
+                        behavior: "smooth",
+                        block: "center"
+                    });
                 }
 
-                // Desplazar al mensaje de error
-                errMessageDiv.scrollIntoView({
+                return; // Salir de la función después de mostrar el error
+            }
+
+            // Si la respuesta es exitosa y status es success
+            if (data.status === "success") {
+                const okMessageDiv = document.getElementById("okMessage");
+                const okTextDiv = document.getElementById("okText");
+                const errMessageDiv = document.getElementById("errMessage");
+
+                if (okMessageDiv && okTextDiv && errMessageDiv) {
+                    okMessageDiv.style.display = "block";
+                    okTextDiv.textContent = data.message || "Formulari enviat correctament.";
+                    errMessageDiv.style.display = "none";
+                }
+
+                // Desplazar al mensaje de éxito
+                okMessageDiv.scrollIntoView({
                     behavior: "smooth",
                     block: "center"
                 });
+
+                form.reset(); // Opcional: limpiar el formulario
             }
-
-            return; // Salir de la función después de mostrar el error
-        }
-
-        // Si la respuesta es exitosa y status es success
-        if (data.status === "success") {
-            const okMessageDiv = document.getElementById("okMessage");
-            const okTextDiv = document.getElementById("okText");
-            const errMessageDiv = document.getElementById("errMessage");
-
-            if (okMessageDiv && okTextDiv && errMessageDiv) {
-                okMessageDiv.style.display = "block";
-                okTextDiv.textContent = data.message || "Formulari enviat correctament.";
-                errMessageDiv.style.display = "none";
-            }
-
-            // Desplazar al mensaje de éxito
-            okMessageDiv.scrollIntoView({
-                behavior: "smooth",
-                block: "center"
-            });
-
-            form.reset(); // Opcional: limpiar el formulario
+        } catch (err) {
+            console.error("Error en enviar el formulari:", err);
+            document.getElementById("errMessage").style.display = "block";
+            document.getElementById("errText").textContent = "No s'ha pogut connectar amb el servidor.";
         }
 
     }

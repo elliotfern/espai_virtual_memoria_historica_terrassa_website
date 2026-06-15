@@ -3,6 +3,7 @@ import { API_URLS } from '../../../services/api/ApiUrls';
 import { fetchDataGet } from '../../../services/fetchData/fetchDataGet';
 import { renderFormInputs } from '../../../services/fetchData/renderInputsForm';
 import 'trix'; // carga Trix (extiende el DOM con <trix-editor>)
+import { ENV } from '../../../config/env';
 
 interface Fitxa {
   [key: string]: unknown;
@@ -32,10 +33,15 @@ interface Fitxa {
 }
 
 /** Espera a que exista un trix-editor vinculado a un input concreto y devuelve ese editor */
-async function getTrixEditorForInput(inputId: string, timeoutMs = 2000): Promise<HTMLTrixEditorElement> {
+async function getTrixEditorForInput(
+  inputId: string,
+  timeoutMs = 2000
+): Promise<HTMLTrixEditorElement> {
   const start = performance.now();
   while (performance.now() - start < timeoutMs) {
-    const editor = document.querySelector(`trix-editor[input="${inputId}"]`) as HTMLTrixEditorElement | null;
+    const editor = document.querySelector(
+      `trix-editor[input="${inputId}"]`
+    ) as HTMLTrixEditorElement | null;
 
     if (editor && editor.editor) return editor;
     await new Promise((r) => setTimeout(r, 50));
@@ -106,7 +112,7 @@ export async function formBiografies(isUpdate: boolean, id?: number) {
       <h2>Biografies: modificació de biografies</h2>
       <h4>
         Fitxa represaliat:
-        <a href="https://memoriaterrassa.cat/fitxa/${slug}" target="_blank" rel="noopener noreferrer">
+        <a href="${ENV.domainWeb}/fitxa/${slug}" target="_blank" rel="noopener noreferrer">
           ${[nom, c1, c2].filter(Boolean).join(' ')}
         </a>
       </h4>
@@ -120,7 +126,8 @@ export async function formBiografies(isUpdate: boolean, id?: number) {
     if (hiddenId && typeof data.id === 'number') hiddenId.value = String(data.id);
 
     const hiddenIdRep = document.getElementById('idRepresaliat') as HTMLInputElement | null;
-    if (hiddenIdRep && typeof data.idRepresaliat === 'number') hiddenIdRep.value = String(data.idRepresaliat);
+    if (hiddenIdRep && typeof data.idRepresaliat === 'number')
+      hiddenIdRep.value = String(data.idRepresaliat);
 
     // Contenido de biografías (acepta camelCase o snake_case según venga)
     const bioCa = (data.biografiaCa as string) ?? (data.biografia_ca as string) ?? '';
@@ -143,8 +150,12 @@ export async function formBiografies(isUpdate: boolean, id?: number) {
       (event) => {
         // Asegura que el hidden está sincronizado (por si el usuario no tocó nada)
         // (Trix ya lo hace, pero no cuesta nada)
-        (document.getElementById(INPUT_CA) as HTMLInputElement | null)?.dispatchEvent(new Event('change'));
-        (document.getElementById(INPUT_ES) as HTMLInputElement | null)?.dispatchEvent(new Event('change'));
+        (document.getElementById(INPUT_CA) as HTMLInputElement | null)?.dispatchEvent(
+          new Event('change')
+        );
+        (document.getElementById(INPUT_ES) as HTMLInputElement | null)?.dispatchEvent(
+          new Event('change')
+        );
 
         transmissioDadesDB(event, 'PUT', 'BiografiesForm', API_URLS.PUT.BIOGRAFIES);
       },
@@ -161,14 +172,16 @@ export async function formBiografies(isUpdate: boolean, id?: number) {
         return;
       }
 
-      const nomComplet = [fitxa.nom as string, fitxa.cognom1 as string, fitxa.cognom2 as string].filter(Boolean).join(' ');
+      const nomComplet = [fitxa.nom as string, fitxa.cognom1 as string, fitxa.cognom2 as string]
+        .filter(Boolean)
+        .join(' ');
       const slug = (fitxa.slug as string) ?? '';
 
       divTitol.innerHTML = `
         <h2>Biografies: creació de nova biografia</h2>
         <h4>
           Fitxa represaliat:
-          <a href="https://memoriaterrassa.cat/fitxa/${slug}" target="_blank" rel="noopener noreferrer">
+          <a href="${ENV.domainWeb}/fitxa/${slug}" target="_blank" rel="noopener noreferrer">
             ${nomComplet}
           </a>
         </h4>
@@ -198,10 +211,21 @@ export async function formBiografies(isUpdate: boolean, id?: number) {
     biografiesForm.addEventListener(
       'submit',
       (event) => {
-        (document.getElementById(INPUT_CA) as HTMLInputElement | null)?.dispatchEvent(new Event('change'));
-        (document.getElementById(INPUT_ES) as HTMLInputElement | null)?.dispatchEvent(new Event('change'));
+        (document.getElementById(INPUT_CA) as HTMLInputElement | null)?.dispatchEvent(
+          new Event('change')
+        );
+        (document.getElementById(INPUT_ES) as HTMLInputElement | null)?.dispatchEvent(
+          new Event('change')
+        );
 
-        transmissioDadesDB(event, 'POST', 'BiografiesForm', API_URLS.POST.BIOGRAFIES, false, 'hide');
+        transmissioDadesDB(
+          event,
+          'POST',
+          'BiografiesForm',
+          API_URLS.POST.BIOGRAFIES,
+          false,
+          'hide'
+        );
       },
       { once: true }
     );

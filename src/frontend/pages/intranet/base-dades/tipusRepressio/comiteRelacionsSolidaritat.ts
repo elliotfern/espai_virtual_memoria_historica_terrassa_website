@@ -2,9 +2,13 @@ import { fetchDataGet } from '../../../../services/fetchData/fetchDataGet';
 import { renderFormInputs } from '../../../../services/fetchData/renderInputsForm';
 import { transmissioDadesDB } from '../../../../services/fetchData/transmissioDades';
 import { renderTaulaCercadorFiltres } from '../../../../services/renderTaula/renderTaulaCercadorFiltres';
-import { initDeleteHandlers, registerDeleteCallback } from '../../../../services/fetchData/handleDelete';
+import {
+  initDeleteHandlers,
+  registerDeleteCallback,
+} from '../../../../services/fetchData/handleDelete';
 import { getIsAdmin } from '../../../../services/auth/getIsAdmin';
 import { getIsAutor } from '../../../../services/auth/getIsAutor';
+import { ENV } from '../../../../config/env';
 
 interface Fitxa {
   [key: string]: unknown;
@@ -41,13 +45,15 @@ export async function comiteRelacionsSolidaritat(idRepresaliat: number) {
   const reloadKey = 'reload-taula-taulaLlistatDetencionsComiteSolidaritat';
   const container = document.getElementById('fitxaNomCognoms');
 
-  const data2 = await fetchDataGet<Fitxa>(`/api/dades_personals/get/?type=nomCognoms&id=${idRepresaliat}`);
+  const data2 = await fetchDataGet<Fitxa>(
+    `/api/dades_personals/get/?type=nomCognoms&id=${idRepresaliat}`
+  );
 
   if (data2) {
     if (!container) return;
 
     const nomComplet = `${data2.nom} ${data2.cognom1} ${data2.cognom2}`;
-    const url = `https://memoriaterrassa.cat/fitxa/${data2.slug}`;
+    const url = `${ENV.domainWeb}/fitxa/${data2.slug}`;
 
     container.innerHTML = `<h4>Fitxa: <a href="${url}" target="_blank">${nomComplet}</a></h4>`;
   }
@@ -58,7 +64,8 @@ export async function comiteRelacionsSolidaritat(idRepresaliat: number) {
     columns.push({
       header: 'Accions',
       field: 'id',
-      render: (_: unknown, row: EspaiRow) => `<a id="${row.id}" title="Modifica" href="https://${window.location.hostname}/gestio/base-dades/empresonaments-comite-relacions-solidaritat/modifica-empresonament/${idRepresaliat}/${row.id}"><button type="button" class="btn btn-warning btn-sm">Modifica</button></a>`,
+      render: (_: unknown, row: EspaiRow) =>
+        `<a id="${row.id}" title="Modifica" href="${ENV.domainWeb}/gestio/base-dades/empresonaments-comite-relacions-solidaritat/modifica-empresonament/${idRepresaliat}/${row.id}"><button type="button" class="btn btn-warning btn-sm">Modifica</button></a>`,
     });
   }
 
@@ -71,7 +78,7 @@ export async function comiteRelacionsSolidaritat(idRepresaliat: number) {
             type="button"
             class="btn btn-danger btn-sm delete-button"
             data-id="${row.id}" 
-            data-url="/api/comite_relacions_solidaritat/delete/${row.id}"
+            data-url="${ENV.apiBaseUrl}/comite_relacions_solidaritat/delete/${row.id}"
             data-reload-callback="${reloadKey}"
           >
             Elimina
@@ -80,7 +87,7 @@ export async function comiteRelacionsSolidaritat(idRepresaliat: number) {
   }
 
   renderTaulaCercadorFiltres<EspaiRow>({
-    url: `/api/comite_relacions_solidaritat/get/empresonatId?id=${idRepresaliat}`,
+    url: `${ENV.apiBaseUrl}/comite_relacions_solidaritat/get/empresonatId?id=${idRepresaliat}`,
     containerId: 'taulaLlistatDetencionsComiteRelacionsSolidaritat',
     columns,
     filterKeys: ['nom'],
@@ -105,10 +112,14 @@ export async function formcomiteRelacionsSolidaritat(idRepresaliat: number, id?:
   let response: Fitxa | null = null;
 
   if (id) {
-    response = await fetchDataGet<Fitxa>(`/api/comite_relacions_solidaritat/get/fitxaRepressio?id=${id}`);
+    response = await fetchDataGet<Fitxa>(
+      `${ENV.apiBaseUrl}/comite_relacions_solidaritat/get/fitxaRepressio?id=${id}`
+    );
   }
 
-  const data2 = await fetchDataGet<Fitxa>(`/api/dades_personals/get/?type=nomCognoms&id=${idRepresaliat}`);
+  const data2 = await fetchDataGet<Fitxa>(
+    `${ENV.apiBaseUrl}/dades_personals/get/?type=nomCognoms&id=${idRepresaliat}`
+  );
 
   const btnForm = document.getElementById('btnCRS') as HTMLButtonElement;
   const container = document.getElementById('fitxaNomCognoms');
@@ -134,7 +145,7 @@ export async function formcomiteRelacionsSolidaritat(idRepresaliat: number, id?:
     }
 
     const nomComplet = `${data2.nom} ${data2.cognom1} ${data2.cognom2}`;
-    const url = `https://memoriaterrassa.cat/fitxa/${data2.id}`;
+    const url = `${ENV.domainWeb}/fitxa/${data2.id}`;
 
     container.innerHTML = `<h4>Fitxa: <a href="${url}" target="_blank">${nomComplet}</a></h4>`;
   }
@@ -144,13 +155,24 @@ export async function formcomiteRelacionsSolidaritat(idRepresaliat: number, id?:
   if (!response) {
     if (htmlForm) {
       htmlForm.addEventListener('submit', function (event) {
-        transmissioDadesDB(event, 'POST', 'comiteRelacionsSolidaritatForm', '/api/comite_relacions_solidaritat/post', true);
+        transmissioDadesDB(
+          event,
+          'POST',
+          'comiteRelacionsSolidaritatForm',
+          `${ENV.apiBaseUrl}/comite_relacions_solidaritat/post`,
+          true
+        );
       });
     }
   } else {
     if (htmlForm) {
       htmlForm.addEventListener('submit', function (event) {
-        transmissioDadesDB(event, 'PUT', 'comiteRelacionsSolidaritatForm', '/api/comite_relacions_solidaritat/put');
+        transmissioDadesDB(
+          event,
+          'PUT',
+          'comiteRelacionsSolidaritatForm',
+          `${ENV.apiBaseUrl}/comite_relacions_solidaritat/put`
+        );
       });
     }
   }

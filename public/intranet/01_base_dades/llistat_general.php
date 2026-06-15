@@ -1,5 +1,3 @@
-<?php require_once APP_ROOT . '/public/intranet/includes/header.php'; ?>
-
 <div class="container" style="margin-bottom:55px">
     <?php if ($isAdmin || $isAutor): ?>
         <h2>Llistat complert de víctimes i represaliats</h2>

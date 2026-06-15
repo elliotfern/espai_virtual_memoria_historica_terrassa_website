@@ -1,4 +1,4 @@
-import { DOMAIN_WEB } from '../../config/constants';
+import { ENV } from '../../config/env';
 
 // admin/renderBotonsAdminSimple.ts
 type Ctx = {
@@ -66,7 +66,7 @@ export function renderBotonsAdminSimple(ctx: Ctx): void {
   editLink.target = '_blank';
   editLink.rel = 'noopener';
   // Usa el host actual para que funcione en dev/test/prod
-  editLink.href = `${DOMAIN_WEB}/gestio/base-dades/modifica-fitxa/${ctx.id}`;
+  editLink.href = `${ENV.domainWeb}/gestio/base-dades/modifica-fitxa/${ctx.id}`;
   editLink.textContent = 'Modifica la fitxa';
 
   const colEdit = document.createElement('div');

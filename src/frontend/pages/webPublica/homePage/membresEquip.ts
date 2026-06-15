@@ -1,4 +1,5 @@
 // modules/equip/llistatMembresEquip.ts
+import { ENV } from '../../../config/env';
 import { fetchDataGet } from '../../../services/fetchData/fetchDataGet';
 import { LABELS_EQUIP } from '../../../services/i18n/homePage/equip';
 import { DEFAULT_LANG, isLang, t } from '../../../services/i18n/i18n';
@@ -20,10 +21,11 @@ interface ApiResponse<T> {
 
 type Lang = 'ca' | 'es' | 'en' | 'fr' | 'it' | 'pt';
 
-const API_LIST = (lang: string) => `https://memoriaterrassa.cat/api/auth/get/usuarisLlistaWeb?lang=${encodeURIComponent(lang)}`;
+const API_LIST = (lang: string) =>
+  `${ENV.apiBaseUrl}/auth/get/usuarisLlistaWeb?lang=${encodeURIComponent(lang)}`;
 
-const MEDIA_BASE = 'https://media.memoriaterrassa.cat/assets_usuaris/';
-const WEB_ASSETS = 'https://media.memoriaterrassa.cat/assets_web/';
+const MEDIA_BASE = `${ENV.domainImg}/assets_usuaris/`;
+const WEB_ASSETS = `${ENV.domainImg}/assets_web/`;
 
 // Orden de grupos: 2 → 1 → 3
 const GROUP_ORDER: number[] = [2, 1, 3];
@@ -134,7 +136,12 @@ function createCard(item: UsuariItem, lang: string, withLeftBorder: boolean): HT
   return col;
 }
 
-function renderGroup(container: HTMLElement, title: string, people: UsuariItem[], lang: string): void {
+function renderGroup(
+  container: HTMLElement,
+  title: string,
+  people: UsuariItem[],
+  lang: string
+): void {
   if (people.length === 0) return;
 
   const L = normLang(lang);

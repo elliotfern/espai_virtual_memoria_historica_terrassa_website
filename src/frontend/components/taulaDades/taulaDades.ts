@@ -8,11 +8,9 @@ import { getIsLogged } from '../../services/auth/getIsLogged';
 import { formatDatesForm } from '../../services/formatDates/dates';
 import { registerDeleteCallback } from '../../services/fetchData/handleDelete';
 import { initDeleteHandlers } from '../../services/fetchData/handleDelete';
-import { DOMAIN_WEB } from '../../config/constants';
+import { ENV } from '../../config/env';
 
 export async function cargarTabla(pag: string, context: number, completat: number | null = null) {
-  const devDirectory = DOMAIN_WEB;
-
   const isAdmin = await getIsAdmin();
   const isAutor = await getIsAutor();
   const isLogged = await getIsLogged();
@@ -73,9 +71,9 @@ export async function cargarTabla(pag: string, context: number, completat: numbe
     webTarget = '_self';
 
     if (pagNet === 'general') {
-      urlAjax = `${devDirectory}/api/dades_personals/get/?type=llistatComplertWeb`;
+      urlAjax = `${ENV.apiBaseUrl}/dades_personals/get/?type=llistatComplertWeb`;
     } else if (pagNet === 'represaliats' || pagNet === 'exiliats-deportats' || pagNet === 'cost-huma') {
-      urlAjax = `${devDirectory}/api/dades_personals/get/?type=totesCategoriesWeb&categoria=${pagNet}`;
+      urlAjax = `${ENV.apiBaseUrl}/dades_personals/get/?type=totesCategoriesWeb&categoria=${pagNet}`;
     }
   } else if (context === 2) {
     webFitxa = `/fitxa/`;
@@ -88,9 +86,9 @@ export async function cargarTabla(pag: string, context: number, completat: numbe
     }
 
     if (pagNet === 'general') {
-      urlAjax = `${devDirectory}/api/dades_personals/get/?type=llistatComplertIntranet&completat=${completat}`;
+      urlAjax = `${ENV.apiBaseUrl}/dades_personals/get/?type=llistatComplertIntranet&completat=${completat}`;
     } else if (pagNet === 'represaliats' || pagNet === 'exiliats-deportats' || pagNet === 'cost-huma') {
-      urlAjax = `${devDirectory}/api/dades_personals/get/?type=totesCategoriesIntranet&categoria=${pagNet}&completat=${completat}`;
+      urlAjax = `${ENV.apiBaseUrl}/dades_personals/get/?type=totesCategoriesIntranet&categoria=${pagNet}&completat=${completat}`;
     }
   }
 

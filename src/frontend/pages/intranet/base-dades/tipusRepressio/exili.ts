@@ -3,6 +3,7 @@ import { auxiliarSelect } from '../../../../services/fetchData/auxiliarSelect';
 import { renderFormInputs } from '../../../../services/fetchData/renderInputsForm';
 import { transmissioDadesDB } from '../../../../services/fetchData/transmissioDades';
 import { wireForm } from '../../../../helpers/transmissioHelper';
+import { ENV } from '../../../../config/env';
 
 interface Fitxa {
   [key: string]: unknown;
@@ -45,7 +46,9 @@ interface Fitxa {
 export async function exili(idRepresaliat: number) {
   const data = await fetchDataGet<Fitxa>(`/api/exiliats/get/fitxaRepressio?id=${idRepresaliat}`);
 
-  const data2 = await fetchDataGet<Fitxa>(`/api/dades_personals/get/?type=nomCognoms&id=${idRepresaliat}`);
+  const data2 = await fetchDataGet<Fitxa>(
+    `/api/dades_personals/get/?type=nomCognoms&id=${idRepresaliat}`
+  );
 
   if (data2) {
     const container = document.getElementById('fitxaNomCognoms');
@@ -53,7 +56,7 @@ export async function exili(idRepresaliat: number) {
     if (!container) return;
 
     const nomComplet = `${data2.nom} ${data2.cognom1} ${data2.cognom2}`;
-    const url = `https://memoriaterrassa.cat/fitxa/${data2.slug}`;
+    const url = `${ENV.domainWeb}/fitxa/${data2.slug}`;
 
     container.innerHTML = `<h4>Fitxa: <a href="${url}" target="_blank">${nomComplet}</a></h4>`;
 
@@ -73,7 +76,12 @@ export async function exili(idRepresaliat: number) {
     if (btn1 && btn2 && btn3 && btn4 && btn5 && btn6) {
       btn1.addEventListener('click', function (event) {
         event.preventDefault();
-        auxiliarSelect(data?.tipologia_ultim_desti, 'tipologia_espaisExili', 'tipologia_ultim_desti', 'tipologia_espai_ca');
+        auxiliarSelect(
+          data?.tipologia_ultim_desti,
+          'tipologia_espaisExili',
+          'tipologia_ultim_desti',
+          'tipologia_espai_ca'
+        );
       });
 
       btn2.addEventListener('click', function (event) {
@@ -93,7 +101,12 @@ export async function exili(idRepresaliat: number) {
 
       btn5.addEventListener('click', function (event) {
         event.preventDefault();
-        auxiliarSelect(data?.tipologia_primer_desti, 'tipologia_espaisExili', 'tipologia_primer_desti', 'tipologia_espai_ca');
+        auxiliarSelect(
+          data?.tipologia_primer_desti,
+          'tipologia_espaisExili',
+          'tipologia_primer_desti',
+          'tipologia_espai_ca'
+        );
       });
 
       btn6.addEventListener('click', function (event) {
@@ -105,9 +118,19 @@ export async function exili(idRepresaliat: number) {
     await auxiliarSelect(data?.lloc_partida, 'municipis', 'lloc_partida', 'ciutat');
     await auxiliarSelect(data?.lloc_pas_frontera, 'municipis', 'lloc_pas_frontera', 'ciutat');
     await auxiliarSelect(data?.primer_desti_exili, 'municipis', 'primer_desti_exili', 'ciutat');
-    await auxiliarSelect(data?.tipologia_primer_desti, 'tipologia_espaisExili', 'tipologia_primer_desti', 'tipologia_espai_ca');
+    await auxiliarSelect(
+      data?.tipologia_primer_desti,
+      'tipologia_espaisExili',
+      'tipologia_primer_desti',
+      'tipologia_espai_ca'
+    );
     await auxiliarSelect(data?.ultim_desti_exili, 'municipis', 'ultim_desti_exili', 'ciutat');
-    await auxiliarSelect(data?.tipologia_ultim_desti, 'tipologia_espaisExili', 'tipologia_ultim_desti', 'tipologia_espai_ca');
+    await auxiliarSelect(
+      data?.tipologia_ultim_desti,
+      'tipologia_espaisExili',
+      'tipologia_ultim_desti',
+      'tipologia_espai_ca'
+    );
 
     const exiliatForm = document.getElementById('exiliatForm');
     if (exiliatForm) {
@@ -131,7 +154,12 @@ export async function exili(idRepresaliat: number) {
     if (btn1 && btn2 && btn3 && btn4 && btn5 && btn6) {
       btn1.addEventListener('click', function (event) {
         event.preventDefault();
-        auxiliarSelect(data.tipologia_ultim_desti, 'tipologia_espaisExili', 'tipologia_ultim_desti', 'tipologia_espai_ca');
+        auxiliarSelect(
+          data.tipologia_ultim_desti,
+          'tipologia_espaisExili',
+          'tipologia_ultim_desti',
+          'tipologia_espai_ca'
+        );
       });
 
       btn2.addEventListener('click', function (event) {
@@ -151,7 +179,12 @@ export async function exili(idRepresaliat: number) {
 
       btn5.addEventListener('click', function (event) {
         event.preventDefault();
-        auxiliarSelect(data.tipologia_primer_desti, 'tipologia_espaisExili', 'tipologia_primer_desti', 'tipologia_espai_ca');
+        auxiliarSelect(
+          data.tipologia_primer_desti,
+          'tipologia_espaisExili',
+          'tipologia_primer_desti',
+          'tipologia_espai_ca'
+        );
       });
 
       btn6.addEventListener('click', function (event) {
@@ -163,9 +196,19 @@ export async function exili(idRepresaliat: number) {
     await auxiliarSelect(data.lloc_partida, 'municipis', 'lloc_partida', 'ciutat');
     await auxiliarSelect(data.lloc_pas_frontera, 'municipis', 'lloc_pas_frontera', 'ciutat');
     await auxiliarSelect(data.primer_desti_exili, 'municipis', 'primer_desti_exili', 'ciutat');
-    await auxiliarSelect(data.tipologia_primer_desti, 'tipologia_espais', 'tipologia_primer_desti', 'tipologia_espai_ca');
+    await auxiliarSelect(
+      data.tipologia_primer_desti,
+      'tipologia_espais',
+      'tipologia_primer_desti',
+      'tipologia_espai_ca'
+    );
     await auxiliarSelect(data.ultim_desti_exili, 'municipis', 'ultim_desti_exili', 'ciutat');
-    await auxiliarSelect(data.tipologia_ultim_desti, 'tipologia_espais', 'tipologia_ultim_desti', 'tipologia_espai_ca');
+    await auxiliarSelect(
+      data.tipologia_ultim_desti,
+      'tipologia_espais',
+      'tipologia_ultim_desti',
+      'tipologia_espai_ca'
+    );
 
     renderFormInputs(data);
 
