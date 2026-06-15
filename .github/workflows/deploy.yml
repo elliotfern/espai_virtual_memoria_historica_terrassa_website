@@ -24,8 +24,15 @@ jobs:
       - name: Install dependencies (npm)
         run: npm ci
 
+      # 🔥 FIX CLAVE: inyectar env en build
       - name: Build (npm)
         run: npm run build
+        env:
+          NODE_ENV: production
+          APP_ENV: production
+          API_BASE_URL: ${{ secrets.API_BASE_URL }}
+          DOMAIN_IMG: ${{ secrets.DOMAIN_IMG }}
+          DOMAIN_WEB: ${{ secrets.DOMAIN_WEB }}
 
       - name: Start SSH agent
         uses: webfactory/ssh-agent@v0.8.0
