@@ -1,6 +1,7 @@
 // src/utils/auxiliarSelect.ts
 import Choices from 'choices.js';
 import 'choices.js/public/assets/styles/choices.min.css';
+import { ENV } from '../../config/env';
 
 type Item = { id: number | string; [key: string]: unknown };
 
@@ -13,9 +14,15 @@ const removeItemHandlerRegistry = new Map<string, (e: Event) => void>();
  * - No rompe formularios existentes: mantiene placeholder y permite "vaciar" con la X.
  * - Evita que el placeholder quede seleccionado "a la fuerza" (bug de value="").
  */
-export async function auxiliarSelect(idAux: number | string | null | undefined, api: string, elementId: string, valorText: string, fallbackValue?: number | string, config?: Partial<Choices['config']>): Promise<Choices | void> {
-  const baseUrl = `https://${window.location.hostname}`;
-  const urlAjax = `${baseUrl}/api/auxiliars/get/${api}`;
+export async function auxiliarSelect(
+  idAux: number | string | null | undefined,
+  api: string,
+  elementId: string,
+  valorText: string,
+  fallbackValue?: number | string,
+  config?: Partial<Choices['config']>
+): Promise<Choices | void> {
+  const urlAjax = `${ENV.apiBaseUrl}/auxiliars/get/${api}`;
 
   try {
     const response = await fetch(urlAjax, {
@@ -72,7 +79,12 @@ export async function auxiliarSelect(idAux: number | string | null | undefined, 
     // - Si idAux viene definido y no es 0 -> ese
     // - Si no, y hay fallbackValue -> fallback
     // - Si no -> vacío (placeholder)
-    const initial = idAux !== null && idAux !== undefined && String(idAux) !== '' && String(idAux) !== '0' ? String(idAux) : fallbackValue !== undefined && String(fallbackValue) !== '' ? String(fallbackValue) : '';
+    const initial =
+      idAux !== null && idAux !== undefined && String(idAux) !== '' && String(idAux) !== '0'
+        ? String(idAux)
+        : fallbackValue !== undefined && String(fallbackValue) !== ''
+          ? String(fallbackValue)
+          : '';
 
     // Setear el value ANTES de Choices, para que Choices lo lea correctamente
     selectElement.value = initial;

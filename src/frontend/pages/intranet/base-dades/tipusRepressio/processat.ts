@@ -6,7 +6,10 @@ import { getIsAdmin } from '../../../../services/auth/getIsAdmin';
 import { getIsAutor } from '../../../../services/auth/getIsAutor';
 import { formatDatesForm } from '../../../../services/formatDates/dates';
 import { renderTaulaCercadorFiltres } from '../../../../services/renderTaula/renderTaulaCercadorFiltres';
-import { initDeleteHandlers, registerDeleteCallback } from '../../../../services/fetchData/handleDelete';
+import {
+  initDeleteHandlers,
+  registerDeleteCallback,
+} from '../../../../services/fetchData/handleDelete';
 import { auxiliarMultiSelect } from '../../../../services/fetchData/auxiliarMultipleSelect';
 import { ENV } from '../../../../config/env';
 
@@ -63,7 +66,9 @@ export async function llistatDetingutConsellGuerra(idRepresaliat: number) {
   const reloadKey = 'reload-taula-taulaLlistatConsellGuerra';
   const container = document.getElementById('fitxaNomCognoms');
 
-  const data2 = await fetchDataGet<Fitxa>(`/api/dades_personals/get/?type=nomCognoms&id=${idRepresaliat}`);
+  const data2 = await fetchDataGet<Fitxa>(
+    `${ENV.apiBaseUrl}/dades_personals/get/?type=nomCognoms&id=${idRepresaliat}`
+  );
 
   if (data2) {
     if (!container) return;
@@ -139,7 +144,8 @@ export async function llistatDetingutConsellGuerra(idRepresaliat: number) {
     columns.push({
       header: 'Accions',
       field: 'id',
-      render: (_: unknown, row: EspaiRow) => `<a id="${row.id}" title="Modifica" href="${ENV.domainWeb}/gestio/base-dades/detinguts-consell-guerra/modifica-detingut-consell-guerra/${idRepresaliat}/${row.id}"><button type="button" class="btn btn-warning btn-sm">Modifica</button></a>`,
+      render: (_: unknown, row: EspaiRow) =>
+        `<a id="${row.id}" title="Modifica" href="${ENV.domainWeb}/gestio/base-dades/detinguts-consell-guerra/modifica-detingut-consell-guerra/${idRepresaliat}/${row.id}"><button type="button" class="btn btn-warning btn-sm">Modifica</button></a>`,
     });
   }
 
@@ -191,10 +197,14 @@ export async function formDetingutConsellGuerra(idRepresaliat: number, id?: numb
 
   let response: Fitxa | null = null;
 
-  const data2 = await fetchDataGet<Fitxa>(`${ENV.apiBaseUrl}/dades_personals/get/?type=nomCognoms&id=${idRepresaliat}`);
+  const data2 = await fetchDataGet<Fitxa>(
+    `${ENV.apiBaseUrl}/dades_personals/get/?type=nomCognoms&id=${idRepresaliat}`
+  );
 
   if (id) {
-    response = await fetchDataGet<Fitxa>(`${ENV.apiBaseUrl}/processats/get/fitxaIntranetId?id=${id}`);
+    response = await fetchDataGet<Fitxa>(
+      `${ENV.apiBaseUrl}/processats/get/fitxaIntranetId?id=${id}`
+    );
   }
 
   const btnForm = document.getElementById('btnProcessat') as HTMLButtonElement;
@@ -246,10 +256,33 @@ export async function formDetingutConsellGuerra(idRepresaliat: number, id?: numb
 
   renderFormInputs(data);
 
-  if (btn1 && btn2 && btn3 && btn4 && btn5 && btn6 && btn7 && btn8 && btn10 && btn11 && btn12 && btn13 && btn14 && btn15 && btn16 && btn17 && btn18) {
+  if (
+    btn1 &&
+    btn2 &&
+    btn3 &&
+    btn4 &&
+    btn5 &&
+    btn6 &&
+    btn7 &&
+    btn8 &&
+    btn10 &&
+    btn11 &&
+    btn12 &&
+    btn13 &&
+    btn14 &&
+    btn15 &&
+    btn16 &&
+    btn17 &&
+    btn18
+  ) {
     btn1.addEventListener('click', function (event) {
       event.preventDefault();
-      auxiliarSelect(data?.tipus_procediment, 'procediments', 'tipus_procediment', 'procediment_ca');
+      auxiliarSelect(
+        data?.tipus_procediment,
+        'procediments',
+        'tipus_procediment',
+        'procediment_ca'
+      );
     });
 
     btn2.addEventListener('click', function (event) {
@@ -294,17 +327,32 @@ export async function formDetingutConsellGuerra(idRepresaliat: number, id?: numb
 
     btn11.addEventListener('click', function (event) {
       event.preventDefault();
-      auxiliarMultiSelect(data?.jutges_instructors, 'jutges_instructors', 'jutges_instructors', 'nom_complet');
+      auxiliarMultiSelect(
+        data?.jutges_instructors,
+        'jutges_instructors',
+        'jutges_instructors',
+        'nom_complet'
+      );
     });
 
     btn12.addEventListener('click', function (event) {
       event.preventDefault();
-      auxiliarMultiSelect(data?.secretaris_instructors, 'secretaris_instructors', 'secretaris_instructors', 'nom_complet');
+      auxiliarMultiSelect(
+        data?.secretaris_instructors,
+        'secretaris_instructors',
+        'secretaris_instructors',
+        'nom_complet'
+      );
     });
 
     btn13.addEventListener('click', function (event) {
       event.preventDefault();
-      auxiliarMultiSelect(data?.presidents_tribunals, 'presidents_tribunals', 'presidents_tribunals', 'nom_complet');
+      auxiliarMultiSelect(
+        data?.presidents_tribunals,
+        'presidents_tribunals',
+        'presidents_tribunals',
+        'nom_complet'
+      );
     });
 
     btn14.addEventListener('click', function (event) {
@@ -324,17 +372,32 @@ export async function formDetingutConsellGuerra(idRepresaliat: number, id?: numb
 
     btn17.addEventListener('click', function (event) {
       event.preventDefault();
-      auxiliarMultiSelect(data?.tribunals_vocals, 'tribunals_vocals', 'tribunals_vocals', 'nom_complet');
+      auxiliarMultiSelect(
+        data?.tribunals_vocals,
+        'tribunals_vocals',
+        'tribunals_vocals',
+        'nom_complet'
+      );
     });
 
     btn18.addEventListener('click', function (event) {
       event.preventDefault();
-      auxiliarMultiSelect(data?.testimonis_acusacions, 'testimonis_acusacions', 'testimonis_acusacions', 'nom_complet');
+      auxiliarMultiSelect(
+        data?.testimonis_acusacions,
+        'testimonis_acusacions',
+        'testimonis_acusacions',
+        'nom_complet'
+      );
     });
   }
 
   auxiliarSelect(data?.lloc_detencio, 'municipis', 'lloc_detencio', 'ciutat');
-  await auxiliarSelect(data?.tipus_procediment, 'procediments', 'tipus_procediment', 'procediment_ca');
+  await auxiliarSelect(
+    data?.tipus_procediment,
+    'procediments',
+    'tipus_procediment',
+    'procediment_ca'
+  );
   await auxiliarSelect(data?.tipus_judici, 'tipusJudici', 'tipus_judici', 'tipusJudici_ca');
   await auxiliarSelect(data?.jutjat, 'jutjats', 'jutjat', 'jutjat_ca');
   await auxiliarSelect(data?.lloc_consell_guerra, 'municipis', 'lloc_consell_guerra', 'ciutat');
@@ -343,19 +406,50 @@ export async function formDetingutConsellGuerra(idRepresaliat: number, id?: numb
   await auxiliarSelect(data?.sentencia, 'sentencies', 'sentencia', 'sentencia_ca');
   await auxiliarSelect(data?.pena, 'penes', 'pena', 'pena_ca');
   await auxiliarSelect(data?.copia_exp, 'digitalitzat', 'copia_exp', 'nom');
-  await auxiliarMultiSelect(data?.jutges_instructors, 'jutges_instructors', 'jutges_instructors', 'nom_complet');
-  await auxiliarMultiSelect(data?.secretaris_instructors, 'secretaris_instructors', 'secretaris_instructors', 'nom_complet');
-  await auxiliarMultiSelect(data?.presidents_tribunals, 'presidents_tribunals', 'presidents_tribunals', 'nom_complet');
+  await auxiliarMultiSelect(
+    data?.jutges_instructors,
+    'jutges_instructors',
+    'jutges_instructors',
+    'nom_complet'
+  );
+  await auxiliarMultiSelect(
+    data?.secretaris_instructors,
+    'secretaris_instructors',
+    'secretaris_instructors',
+    'nom_complet'
+  );
+  await auxiliarMultiSelect(
+    data?.presidents_tribunals,
+    'presidents_tribunals',
+    'presidents_tribunals',
+    'nom_complet'
+  );
   await auxiliarMultiSelect(data?.defensors, 'defensors', 'defensors', 'nom_complet');
   await auxiliarMultiSelect(data?.fiscals, 'fiscals', 'fiscals', 'nom_complet');
   await auxiliarMultiSelect(data?.ponents, 'ponents', 'ponents', 'nom_complet');
-  await auxiliarMultiSelect(data?.tribunals_vocals, 'tribunals_vocals', 'tribunals_vocals', 'nom_complet');
-  await auxiliarMultiSelect(data?.testimonis_acusacions, 'testimonis_acusacions', 'testimonis_acusacions', 'nom_complet');
+  await auxiliarMultiSelect(
+    data?.tribunals_vocals,
+    'tribunals_vocals',
+    'tribunals_vocals',
+    'nom_complet'
+  );
+  await auxiliarMultiSelect(
+    data?.testimonis_acusacions,
+    'testimonis_acusacions',
+    'testimonis_acusacions',
+    'nom_complet'
+  );
 
   if (!response) {
     if (processatForm) {
       processatForm.addEventListener('submit', function (event) {
-        transmissioDadesDB(event, 'POST', 'processatForm', `${ENV.apiBaseUrl}/processats/post`, true);
+        transmissioDadesDB(
+          event,
+          'POST',
+          'processatForm',
+          `${ENV.apiBaseUrl}/processats/post`,
+          true
+        );
       });
     }
   } else {

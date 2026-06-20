@@ -1,5 +1,6 @@
 import Choices from 'choices.js';
 import 'choices.js/public/assets/styles/choices.min.css';
+import { ENV } from '../../config/env';
 
 type Item = { id: number | string; [key: string]: unknown };
 
@@ -7,9 +8,14 @@ type SelectWithChoices = HTMLSelectElement & {
   choicesInstance?: Choices;
 };
 
-export async function auxiliarMultiSelect(selectedIds: (number | string)[] | null | undefined, api: string, elementId: string, valorText: string, config?: Partial<Choices['config']>): Promise<Choices | void> {
-  const baseUrl = `https://${window.location.hostname}`;
-  const urlAjax = `${baseUrl}/api/auxiliars/get/${api}`;
+export async function auxiliarMultiSelect(
+  selectedIds: (number | string)[] | null | undefined,
+  api: string,
+  elementId: string,
+  valorText: string,
+  config?: Partial<Choices['config']>
+): Promise<Choices | void> {
+  const urlAjax = `${ENV.apiBaseUrl}/auxiliars/get/${api}`;
 
   try {
     const response = await fetch(urlAjax, {

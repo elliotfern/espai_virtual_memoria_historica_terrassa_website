@@ -1,14 +1,6 @@
-export async function fetchDataGet<T>(relativeUrl: string, url?: boolean): Promise<T | null> {
-  let fullUrl = '';
-  if (!url) {
-    const devDirectory = `https://${window.location.hostname}`;
-    fullUrl = `${devDirectory}${relativeUrl}`;
-  } else {
-    fullUrl = `${relativeUrl}`;
-  }
-
+export async function fetchDataGet<T>(relativeUrl: string): Promise<T | null> {
   try {
-    const response = await fetch(fullUrl, {
+    const response = await fetch(relativeUrl, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });
