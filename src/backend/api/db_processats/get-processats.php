@@ -130,7 +130,7 @@ if ($slug === 'fitxaRepressio') {
         LEFT JOIN aux_acusacions AS a2 ON p.acusacio_2 = a2.id
         LEFT JOIN aux_sentencies AS se ON p.sentencia = se.id
         LEFT JOIN aux_penes AS pe ON p.pena = pe.id
-        WHERE p.id = :id";
+        WHERE p.idPersona = :id";
 
         $result = $db->getData($query, [':id' => $id]);
 
