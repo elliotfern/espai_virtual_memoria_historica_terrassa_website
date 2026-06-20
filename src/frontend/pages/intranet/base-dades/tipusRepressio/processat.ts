@@ -167,7 +167,7 @@ export async function llistatDetingutConsellGuerra(idRepresaliat: number) {
   }
 
   renderTaulaCercadorFiltres<EspaiRow>({
-    url: `${ENV.apiBaseUrl}/processats/get/fitxaId?id=${idRepresaliat}`,
+    url: `${ENV.apiBaseUrl}/processats/get/fitxaIdLlistat?id=${idRepresaliat}`,
     containerId: 'taulaLlistatConsellGuerra',
     columns,
     filterKeys: ['num_causa'],

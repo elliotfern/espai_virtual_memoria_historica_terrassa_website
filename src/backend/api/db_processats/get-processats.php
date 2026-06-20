@@ -227,6 +227,53 @@ if ($slug === 'fitxaRepressio') {
         );
     }
 
+    // GET : LLISTAT consells de guerra per persona
+    // URL: /api/processats/get/fitxaIdLlistat?id=${id}
+} else if ($slug === 'fitxaIdLlistat') {
+    $id = $_GET['id'];
+
+    $db = new Database();
+
+    try {
+
+        // 🔹 DATOS PRINCIPALES
+        $query = "SELECT 
+            p.id,
+            p.idPersona,
+            p.num_causa,
+            p.any_inicial,
+            p.any_final,
+             pj.procediment_ca AS tipus_procediment,
+            tp.tipusJudici_ca AS tipus_judici
+        FROM db_processats AS p
+        LEFT JOIN aux_procediment_judicial AS pj ON p.tipus_procediment = pj.id
+        LEFT JOIN aux_tipus_judici AS tp ON p.tipus_judici = tp.id
+         WHERE p.idPersona = :id";
+
+        $result = $db->getData($query, [':id' => $id]);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
+
     // GET : fitxa detingut/consell de guerra Intranet (per ID)
     // URL: /api/processats/get/fitxaIntranetId?id=${id}
 } else if ($slug === 'fitxaIntranetId') {
