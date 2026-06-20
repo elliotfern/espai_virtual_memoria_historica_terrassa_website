@@ -12,59 +12,59 @@ if (!is_int($categoriaId) || $categoriaId >= 23) {
 
 switch ($categoriaId) {
     case 1:
-        require_once APP_ROOT . '/public/intranet/01_base_dades/tipus_repressio/1_represaliats/afusellats.php';
+        require_once __DIR__ . '/tipus_repressio/1_represaliats/afusellats.php';
         break;
     case 2:
-        require_once APP_ROOT . '/public/intranet/01_base_dades/tipus_repressio/2_exiliats/deportats.php';
+        require_once __DIR__ . '/tipus_repressio/2_exiliats/deportats.php';
         break;
     case 3:
-        require_once APP_ROOT . '/public/intranet/01_base_dades/tipus_repressio/3_cost_huma/morts_combat.php';
+        require_once __DIR__ . '/tipus_repressio/3_cost_huma/morts_combat.php';
         break;
     case 4:
-        require_once APP_ROOT . '/public/intranet/01_base_dades/tipus_repressio/3_cost_huma/morts_civils.php';
+        require_once __DIR__ . '/tipus_repressio/3_cost_huma/morts_civils.php';
         break;
     case 5:
         break;
     case 6:
-        require_once APP_ROOT . '/public/intranet/01_base_dades/tipus_repressio/1_represaliats/llistat-detinguts-consells-guerra.php';
+        require_once __DIR__ . '/tipus_repressio/1_represaliats/llistat-detinguts-consells-guerra.php';
         break;
     case 7:
-        require_once APP_ROOT . '/public/intranet/01_base_dades/tipus_repressio/1_represaliats/depurats.php';
+        require_once __DIR__ . '/tipus_repressio/1_represaliats/depurats.php';
         break;
     case 8:
         // dona
         break;
     case 9:
-        require_once APP_ROOT . '/public/intranet/01_base_dades/tipus_repressio/1_represaliats/llistat-detinguts-consells-guerra.php';
+        require_once __DIR__ . '/tipus_repressio/1_represaliats/llistat-detinguts-consells-guerra.php';
         break;
     case 10:
-        require_once APP_ROOT . '/public/intranet/01_base_dades/tipus_repressio/2_exiliats/exiliats.php';
+        require_once __DIR__ . '/tipus_repressio/2_exiliats/exiliats.php';
         break;
     case 11:
-        require_once APP_ROOT . '/public/intranet/01_base_dades/tipus_repressio/1_represaliats/pendents.php';
+        require_once __DIR__ . '/tipus_repressio/1_represaliats/pendents.php';
         break;
     case 12:
-        require_once APP_ROOT . '/public/intranet/01_base_dades/tipus_repressio/1_represaliats/llistat-detinguts_preso_model.php';
+        require_once __DIR__ . '/tipus_repressio/1_represaliats/llistat-detinguts_preso_model.php';
         break;
     case 13:
-        require_once APP_ROOT . '/public/intranet/01_base_dades/tipus_repressio/1_represaliats/llistat-detinguts_guardia_urbana.php';
+        require_once __DIR__ . '/tipus_repressio/1_represaliats/llistat-detinguts_guardia_urbana.php';
         break;
     case 14:
-        require_once APP_ROOT . '/public/intranet/01_base_dades/tipus_repressio/1_represaliats/llistat-detinguts_comite_solidaritat.php';
+        require_once __DIR__ . '/tipus_repressio/1_represaliats/llistat-detinguts_comite_solidaritat.php';
         break;
     case 15:
-        require_once APP_ROOT . '/public/intranet/01_base_dades/tipus_repressio/1_represaliats/responsabilitats_politiques.php';
+        require_once __DIR__ . '/tipus_repressio/1_represaliats/responsabilitats_politiques.php';
         break;
     case 16:
-        require_once APP_ROOT . '/public/intranet/01_base_dades/tipus_repressio/1_represaliats/llistat-detinguts_guardia_urbana.php';
+        require_once __DIR__ . '/tipus_repressio/1_represaliats/llistat-detinguts_guardia_urbana.php';
         break;
     case 17:
-        require_once APP_ROOT . '/public/intranet/01_base_dades/tipus_repressio/1_represaliats/tribunal_orden_publico.php';
+        require_once __DIR__ . '/tipus_repressio/1_represaliats/tribunal_orden_publico.php';
         break;
     case 18:
-        require_once APP_ROOT . '/public/intranet/01_base_dades/tipus_repressio/1_represaliats/llistat-detinguts_comite_relacions_solidaritat.php';
+        require_once __DIR__ . '/tipus_repressio/1_represaliats/llistat-detinguts_comite_relacions_solidaritat.php';
         break;
     case 22:
-        require_once APP_ROOT . '/public/intranet/01_base_dades/tipus_repressio/3_cost_huma/morts_combat.php';
+        require_once __DIR__ . '/tipus_repressio/3_cost_huma/morts_combat.php';
         break;
 }

@@ -18,6 +18,7 @@ Thumbs.db
 .env.local
 .env.prod
 .env.test
+.end.dev
 .env.staging
 pass.txt
 contra.php
