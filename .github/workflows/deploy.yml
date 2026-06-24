@@ -24,7 +24,6 @@ jobs:
       - name: Install dependencies (npm)
         run: npm ci
 
-      # 🔥 FIX CLAVE: inyectar env en build
       - name: Build (npm)
         run: npm run build
         env:
@@ -34,14 +33,11 @@ jobs:
           DOMAIN_IMG: ${{ secrets.DOMAIN_IMG }}
           DOMAIN_WEB: ${{ secrets.DOMAIN_WEB }}
 
-      - name: Start SSH agent
-        uses: webfactory/ssh-agent@v0.9.0
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-      - name: Add server to known_hosts
+      - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H 87.98.230.129 >> ~/.ssh/known_hosts
 
       - name: Sync project to shared hosting (rsync)
