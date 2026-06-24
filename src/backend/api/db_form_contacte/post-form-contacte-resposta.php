@@ -1,27 +1,18 @@
 <?php
 
 use App\Config\DatabaseConnection;
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
+use App\Utils\Mailer;
 
-// Si no lo haces en un bootstrap común:
 session_start();
-
-$brevoApiKey = $_ENV['BREVO_API_KEY'] ?? '';
-if (empty($brevoApiKey)) {
-    // Lo ideal es configurar esto en tu .env
-    // y no dejarlo hardcodeado.
-}
 
 // Conexión a BD
 $conn = DatabaseConnection::getConnection();
 if (!$conn) {
-    throw new Exception("No es pot establir connexió amb la base de dades.");
+    throw new RuntimeException("No es pot establir connexió amb la base de dades.");
 }
 
 /**
  * Limpia un mensaje proveniente de un <textarea> para almacenarlo de forma segura.
- * Reutilizo tu misma función sanitizeHtml.
  */
 function sanitizeHtml(?string $raw, int $maxLength = 5000, int $maxLines = 400): string
 {
@@ -29,15 +20,12 @@ function sanitizeHtml(?string $raw, int $maxLength = 5000, int $maxLines = 400):
 
     if (!mb_check_encoding($s, 'UTF-8')) {
         $s = @mb_convert_encoding($s, 'UTF-8', 'auto');
-        if ($s === false) {
-            $s = '';
-        }
+        if ($s === false) $s = '';
     }
 
     $s = preg_replace('/^\xEF\xBB\xBF/u', '', $s);
     $s = str_replace("\0", '', $s);
     $s = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/u', '', $s);
-
     $s = str_replace(["\r\n", "\r"], "\n", $s);
     $s = strip_tags($s);
 
@@ -57,21 +45,18 @@ function sanitizeHtml(?string $raw, int $maxLength = 5000, int $maxLines = 400):
     return $s;
 }
 
-// Configuración cabeceras
 header("Content-Type: application/json");
 header("Access-Control-Allow-Methods: POST");
 
 $allowedOrigin = DOMAIN;
 checkReferer($allowedOrigin);
 
-// Solo POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
     echo json_encode(['status' => 'error', 'message' => 'Method not allowed']);
     exit;
 }
 
-// Comprobar usuario logueado en intranet
 $usuariId = getAuthenticatedUserId();
 if (!$usuariId) {
     http_response_code(401);
@@ -79,21 +64,17 @@ if (!$usuariId) {
     exit;
 }
 
-// Leer JSON
 $inputData = file_get_contents('php://input');
 $data = json_decode($inputData, true) ?? [];
 
-// Validación básica
 $errors = [];
 
-// missatge_id
 if (empty($data['missatge_id']) || !ctype_digit((string)$data['missatge_id'])) {
     $errors[] = "Identificador de missatge no vàlid.";
 } else {
     $missatgeId = (int)$data['missatge_id'];
 }
 
-// subject (assumpte base, encara sense token)
 if (empty($data['subject'])) {
     $subjectBase = "Resposta al teu missatge a Memòria Terrassa";
 } else {
@@ -103,7 +84,6 @@ if (empty($data['subject'])) {
     }
 }
 
-// resposta_text
 if (empty($data['resposta_text'])) {
     $errors[] = "El missatge de resposta és obligatori.";
 } else {
@@ -120,244 +100,128 @@ if (!empty($errors)) {
     exit;
 }
 
-// Config SMTP Brevo desde .env
-$brevoHost     = $_ENV['BREVO_SMTP_HOST']     ?? 'smtp-relay.brevo.com';
-$brevoPort     = (int)($_ENV['BREVO_SMTP_PORT'] ?? 587);
-$brevoUser     = $_ENV['BREVO_SMTP_USER']     ?? '';
-$brevoPass     = $_ENV['BREVO_SMTP_PASS']     ?? '';
-$brevoFrom     = $_ENV['BREVO_SMTP_FROM']     ?? 'email@memoriaterrassa.cat';
-$brevoFromName = $_ENV['BREVO_SMTP_FROM_NAME'] ?? 'Espai Virtual de la Memòria Història de Terrassa';
-
-if (empty($brevoUser) || empty($brevoPass)) {
-    http_response_code(500);
-    echo json_encode([
-        'status'  => 'error',
-        'message' => 'Configuració SMTP de Brevo no disponible.',
-    ]);
-    exit;
-}
-
 try {
-    /** @var PDO $conn */
-
-    // 1) Recuperar el missatge original (email + nomCognoms)
-    $sql = "SELECT nomCognoms, email, token_assumpte
-            FROM db_form_contacte
-            WHERE id = :id";
-    $stmt = $conn->prepare($sql);
+    // 1) Recuperar el missatge original
+    $stmt = $conn->prepare("
+        SELECT nomCognoms, email, token_assumpte
+        FROM db_form_contacte
+        WHERE id = :id
+    ");
     $stmt->execute([':id' => $missatgeId]);
     $original = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if (!$original) {
         http_response_code(404);
-        echo json_encode([
-            'status'  => 'error',
-            'message' => 'No s\'ha trobat el missatge original.',
-        ]);
+        echo json_encode(['status' => 'error', 'message' => "No s'ha trobat el missatge original."]);
         exit;
     }
 
-    $nomCognoms       = (string)$original['nomCognoms'];
-    $emailDestinatari = (string)$original['email'];
+    $nomCognoms       = (string) $original['nomCognoms'];
+    $emailDestinatari = (string) $original['email'];
     $tokenAssumpte    = $original['token_assumpte'] ?? null;
 
     if (!filter_var($emailDestinatari, FILTER_VALIDATE_EMAIL)) {
         http_response_code(400);
-        echo json_encode([
-            'status'  => 'error',
-            'message' => 'El correu del destinatari no és vàlid.',
-        ]);
+        echo json_encode(['status' => 'error', 'message' => 'El correu del destinatari no és vàlid.']);
         exit;
     }
 
-    // Si por lo que sea no tuviera token (casos antics), el generem sobre la marxa
     if (empty($tokenAssumpte)) {
         $tokenAssumpte = 'MT-' . str_pad((string)$missatgeId, 6, '0', STR_PAD_LEFT);
-
-        // Opcional però recomanable: actualitzar la taula perquè no torni a estar buit
-        $sqlUpdateToken = "UPDATE db_form_contacte 
-                       SET token_assumpte = :token 
-                       WHERE id = :id";
-        $stmtUpdateToken = $conn->prepare($sqlUpdateToken);
-        $stmtUpdateToken->execute([
-            ':token' => $tokenAssumpte,
-            ':id'    => $missatgeId,
-        ]);
+        $stmtUpdateToken = $conn->prepare("UPDATE db_form_contacte SET token_assumpte = :token WHERE id = :id");
+        $stmtUpdateToken->execute([':token' => $tokenAssumpte, ':id' => $missatgeId]);
     }
 
-    // Construim l'assumpte final amb el token
-    // Format: [MT-000123] Assumpte base
     $subject = '[' . $tokenAssumpte . '] ' . $subjectBase;
-
-    // Ens assegurem que no superi 255 caràcters
     if (mb_strlen($subject, 'UTF-8') > 255) {
         $subject = mb_substr($subject, 0, 255, 'UTF-8');
     }
 
-
-    // 2) Insertar la resposta a la taula db_form_contacte_respostes
-    $sql = "INSERT INTO db_form_contacte_respostes (
-                missatge_id,
-                usuari_id,
-                resposta_subject,
-                resposta_text,
-                email_destinatari,
-                data_resposta
-            )
-            VALUES (
-                :missatge_id,
-                :usuari_id,
-                :resposta_subject,
-                :resposta_text,
-                :email_destinatari,
-                NOW()
-            )";
-
-    $stmt = $conn->prepare($sql);
+    // 2) Insertar la resposta
+    $stmt = $conn->prepare("
+        INSERT INTO db_form_contacte_respostes (
+            missatge_id, usuari_id, resposta_subject,
+            resposta_text, email_destinatari, data_resposta
+        ) VALUES (
+            :missatge_id, :usuari_id, :resposta_subject,
+            :resposta_text, :email_destinatari, NOW()
+        )
+    ");
     $stmt->execute([
-        ':missatge_id'      => $missatgeId,
-        ':usuari_id'        => $usuariId,
-        ':resposta_subject'  => $subject,       // ✅ ahora es el subject con [TOKEN]
-        ':resposta_text'    => $respostaText,
+        ':missatge_id'       => $missatgeId,
+        ':usuari_id'         => $usuariId,
+        ':resposta_subject'  => $subject,
+        ':resposta_text'     => $respostaText,
         ':email_destinatari' => $emailDestinatari,
     ]);
 
+    $respostaId = (int) $conn->lastInsertId();
 
+    // 3) Enviar el correu
+    $respostaHtml = nl2br(htmlspecialchars($respostaText, ENT_QUOTES, 'UTF-8'));
 
-    $respostaId = (int)$conn->lastInsertId();
-
-    // 3) Enviar el correu via SMTP de Brevo + PHPMailer
-    $mail = new PHPMailer(true);
-
-    try {
-        $mail->isSMTP();
-        $mail->Host       = $brevoHost;
-        $mail->SMTPAuth   = true;
-        $mail->Username   = $brevoUser;
-        $mail->Password   = $brevoPass;
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-        $mail->Port       = $brevoPort;
-        $mail->CharSet    = 'UTF-8';
-        $mail->Encoding   = 'base64';
-
-        $mail->setFrom($brevoFrom, $brevoFromName);
-        $mail->addReplyTo('email@memoriaterrassa.cat', 'Espai Virtual de la Memòria Història de Terrassa');
-        $mail->addAddress($emailDestinatari, $nomCognoms);
-
-        $mail->Subject = $subject; // ✅ subject con [MT-000123]
-        $mail->isHTML(true);
-
-        // HTML: convertimos saltos de línea a <br>
-        $respostaHtml = nl2br(htmlspecialchars($respostaText, ENT_QUOTES, 'UTF-8'));
-
-        $mail->Body = '
-            <!DOCTYPE html>
-            <html lang="ca">
-            <head>
-            <meta charset="UTF-8">
-            <style>
-                body {
-                    margin: 0;
-                    padding: 0;
-                    font-family: Arial, sans-serif;
-                    background-color: #f6f4eb;
-                    color: #333333;
-                }
-                .wrapper {
-                    width: 100%;
-                    padding: 20px 0;
-                    background-color: #f6f4eb;
-                }
-                .container {
-                    max-width: 600px;
-                    margin: 0 auto;
-                    background: #ffffff;
-                    border-radius: 8px;
-                    box-shadow: 0 0 10px rgba(0,0,0,0.05);
-                    padding: 24px 24px 30px 24px;
-                }
-                .header {
-                    text-align: center;
-                    margin-bottom: 20px;
-                }
-                .logo {
-                    max-width: 220px;
-                    height: auto;
-                    display: block;
-                    margin: 0 auto;
-                }
-                .footer {
-                    margin-top: 30px;
-                    font-size: 12px;
-                    color: #999999;
-                    text-align: center;
-                }
-                .divider {
-                    border: 0;
-                    border-top: 1px solid #e0e0e0;
-                    margin: 20px 0;
-                }
-            </style>
-            </head>
-            <body>
-            <div class="wrapper">
-                <div class="container">
-                    <div class="header">
-                        <img 
-                            src="https://media.memoriaterrassa.cat/assets_web/logo_web.png" 
-                            alt="Memòria Terrassa" 
-                            class="logo"
-                        />
-                    </div>
-
-                    <p>Hola ' . htmlspecialchars($nomCognoms, ENT_QUOTES, 'UTF-8') . ',</p>
-                    <p>Et responem al missatge que vas enviar al web de Memòria Terrassa:</p>
-
-                    <hr class="divider" />
-
-                    <p>' . $respostaHtml . '</p>
-
-                    <hr class="divider" />
-
-                    <div class="footer">
-                        Aquest correu s\'ha enviat automàticament des del web memoriaterrassa.cat.
-                    </div>
+    $htmlBody = '
+        <!DOCTYPE html>
+        <html lang="ca">
+        <head>
+        <meta charset="UTF-8">
+        <style>
+            body { margin:0; padding:0; font-family:Arial,sans-serif; background-color:#f6f4eb; color:#333; }
+            .wrapper { width:100%; padding:20px 0; background-color:#f6f4eb; }
+            .container { max-width:600px; margin:0 auto; background:#fff; border-radius:8px; box-shadow:0 0 10px rgba(0,0,0,0.05); padding:24px 24px 30px; }
+            .header { text-align:center; margin-bottom:20px; }
+            .logo { max-width:220px; height:auto; display:block; margin:0 auto; }
+            .footer { margin-top:30px; font-size:12px; color:#999; text-align:center; }
+            .divider { border:0; border-top:1px solid #e0e0e0; margin:20px 0; }
+        </style>
+        </head>
+        <body>
+        <div class="wrapper">
+            <div class="container">
+                <div class="header">
+                    <img src="https://media.memoriaterrassa.cat/assets_web/logo_web.png" alt="Memòria Terrassa" class="logo" />
+                </div>
+                <p>Hola ' . htmlspecialchars($nomCognoms, ENT_QUOTES, 'UTF-8') . ',</p>
+                <p>Et responem al missatge que vas enviar al web de Memòria Terrassa:</p>
+                <hr class="divider" />
+                <p>' . $respostaHtml . '</p>
+                <hr class="divider" />
+                <div class="footer">
+                    Aquest correu s\'ha enviat automàticament des del web memoriaterrassa.cat.
                 </div>
             </div>
-            </body>
-            </html>';
+        </div>
+        </body>
+        </html>';
 
+    $mailer = new Mailer();
+    $sent = $mailer->send(
+        to: $emailDestinatari,
+        toName: $nomCognoms,
+        subject: $subject,
+        htmlBody: $htmlBody,
+        plainText: $respostaText,
+        replyTo: 'email@memoriaterrassa.cat',
+    );
 
-        $mail->AltBody = $respostaText;
-
-        $mail->send();
-
-        // 4) Actualitzar l'estat del missatge original a 2 (Resposta enviada)
-        $updateSql = "UPDATE db_form_contacte SET estat = 2 WHERE id = :id";
-        $updateStmt = $conn->prepare($updateSql);
-        $updateStmt->execute([':id' => $missatgeId]);
-
-        echo json_encode([
-            'status'      => 'success',
-            'message'     => 'Resposta enviada correctament.',
-            'resposta_id' => $respostaId,
-        ]);
-    } catch (Exception $e) {
-        // Aquí podrías, si quieres, actualizar la fila de resposta con info de error_enviament
-        // pero tu tabla actual no tiene esa columna; de momento solo devolvemos error.
-        http_response_code(502);
-        echo json_encode([
-            'status'      => 'error',
-            'message'     => 'Error en enviar el correu de resposta.',
-            'detail'      => $e->getMessage(),
-            'resposta_id' => $respostaId,
-        ]);
+    if (!$sent) {
+        throw new \RuntimeException('Mailer::send() devolvió false.');
     }
-} catch (Throwable $e) {
+
+    // 4) Actualitzar estat del missatge original a 2 (Resposta enviada)
+    $updateStmt = $conn->prepare("UPDATE db_form_contacte SET estat = 2 WHERE id = :id");
+    $updateStmt->execute([':id' => $missatgeId]);
+
+    echo json_encode([
+        'status'      => 'success',
+        'message'     => 'Resposta enviada correctament.',
+        'resposta_id' => $respostaId,
+    ]);
+} catch (\Throwable $e) {
     http_response_code(500);
     echo json_encode([
         'status'  => 'error',
-        'message' => 'S\'ha produït un error al servidor.',
+        'message' => "S'ha produït un error al servidor.",
         'detail'  => $e->getMessage(),
     ]);
 }

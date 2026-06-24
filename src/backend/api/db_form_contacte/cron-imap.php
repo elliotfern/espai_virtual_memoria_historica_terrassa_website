@@ -1,29 +1,10 @@
 <?php
 
 use App\Config\DatabaseConnection;
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
+use App\Utils\Mailer;
 
 // ------ Configuración IMAP ------
-$emailPass = $_ENV['EMAIL_PASS'] ?? '';
-$brevoApiKey = $_ENV['BREVO_API_KEY'] ?? '';
-if (empty($brevoApiKey)) {
-    // Lo ideal es configurar esto en tu .env
-    // y no dejarlo hardcodeado.
-}
-
-if (empty($emailPass)) {
-    echo "ERROR: EMAIL_PASS no està definit a \$_ENV.\n";
-    exit(1);
-}
-
-// Config SMTP Brevo desde .env
-$brevoHost     = $_ENV['BREVO_SMTP_HOST']      ?? 'smtp-relay.brevo.com';
-$brevoPort     = (int)($_ENV['BREVO_SMTP_PORT'] ?? 587);
-$brevoUser     = $_ENV['BREVO_SMTP_USER']      ?? '';
-$brevoPass     = $brevoApiKey;
-$brevoFrom     = 'email@memoriaterrassa.cat';
-$brevoFromName = 'Espai Virtual de la Memòria Història de Terrassa';
+$emailPass = $_ENV['SMTP_PASS'] ?? '';
 
 // Ajusta estos valores a tu servidor de correo real
 $hostname = '{hl121.lucushost.org:993/imap/ssl}INBOX';
@@ -287,7 +268,7 @@ function extractEmailFromHeader(string $headerValue): string
 }
 
 /**
- * Envia un email d'avís quan arriba una nova resposta via IMAP, usant SMTP Brevo.
+ * Envia un email d'avís quan arriba una nova resposta via IMAP.
  */
 function sendNewReplyNotification(
     string $to,
@@ -299,19 +280,9 @@ function sendNewReplyNotification(
     int $missatgeId,
     string $rebutA
 ): void {
-    // Accedim a la config Brevo definida a l'inici del fitxer
-    global $brevoHost, $brevoPort, $brevoUser, $brevoPass, $brevoFrom, $brevoFromName;
-
-    if (!$brevoUser || !$brevoPass) {
-        echo "AVÍS: Configuració Brevo incompleta (usuari o password buits). No s'envia l'avís.\n";
-        return;
-    }
-
-    // Assumpte del correu d'avís
     $tokenPart   = $token ? " [$token]" : '';
     $subjectAvis = "Nova resposta rebuda$tokenPart";
 
-    // Resum del cos original
     $bodyPreview = trim(mb_substr($bodyOriginal, 0, 600));
     if (mb_strlen($bodyOriginal) > 600) {
         $bodyPreview .= "\n...\n";
@@ -322,11 +293,11 @@ function sendNewReplyNotification(
         "",
         "Dades de la resposta:",
         "----------------------------------------",
-        "Token:         " . ($token ?: '—'),
-        "Missatge ID:   " . $missatgeId,
-        "Rebut a:       " . $rebutA,
-        "Email remitent: $emailRemitent",
-        "Email rebut:    $emailRebut",
+        "Token:          " . ($token ?: '—'),
+        "Missatge ID:    " . $missatgeId,
+        "Rebut a:        " . $rebutA,
+        "Email remitent: " . $emailRemitent,
+        "Email rebut:    " . $emailRebut,
         "",
         "Assumpte original:",
         $subjectOriginal,
@@ -341,35 +312,22 @@ function sendNewReplyNotification(
 
     $bodyAvis = implode("\n", $lines);
 
-    $mail = new PHPMailer(true);
-
     try {
-        // Config SMTP Brevo
-        $mail->isSMTP();
-        $mail->Host       = $brevoHost;
-        $mail->Port       = $brevoPort;
-        $mail->SMTPAuth   = true;
-        $mail->Username   = $brevoUser;
-        $mail->Password   = $brevoPass;
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; // Brevo acostuma a usar TLS a 587
+        $mailer = new Mailer();
+        $sent = $mailer->send(
+            to: $to,
+            toName: $to,
+            subject: $subjectAvis,
+            htmlBody: nl2br(htmlspecialchars($bodyAvis)),
+            plainText: $bodyAvis,
+        );
 
-        $mail->CharSet = 'UTF-8';
+        if (!$sent) {
+            throw new \RuntimeException('Mailer::send() devolvió false.');
+        }
 
-        // Remitent i destinatari
-        $mail->setFrom($brevoFrom, $brevoFromName);
-        $mail->addAddress($to);
-
-        // Assumpte i cos
-        $mail->Subject = $subjectAvis;
-        $mail->Body    = $bodyAvis;
-        $mail->AltBody = $bodyAvis; // text/plain ja
-
-        // Enviar
-        $mail->send();
         echo "Email d'avís enviat a $to per la nova resposta (missatge ID $missatgeId).\n";
-    } catch (Exception $e) {
-        echo "AVÍS: no s'ha pogut enviar l'email d'avís a $to. Error PHPMailer: {$mail->ErrorInfo}\n";
-    } catch (Throwable $e) {
-        echo "AVÍS: error inesperat en enviar l'email d'avís a $to: " . $e->getMessage() . "\n";
+    } catch (\Throwable $e) {
+        echo "AVÍS: no s'ha pogut enviar l'email d'avís a $to. Error: " . $e->getMessage() . "\n";
     }
 }
