@@ -3,9 +3,8 @@
 $slug = $routeParams[0];
 
 use Firebase\JWT\JWT;
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
 use App\Config\DatabaseConnection;
+use App\Utils\Mailer;
 use App\Utils\MissatgesAPI;
 
 $conn = DatabaseConnection::getConnection();
@@ -183,10 +182,6 @@ if ($slug === "login") {
         exit;
     }
 
-    global $conn;
-    /** @var PDO $conn */
-
-    // Verificar si el usuario existe
     $stmt = $conn->prepare("SELECT id FROM auth_users WHERE email = ?");
     $stmt->execute([$email]);
     $user = $stmt->fetch();
@@ -194,98 +189,59 @@ if ($slug === "login") {
     if ($user) {
         $token = bin2hex(random_bytes(32));
         $tokenHash = password_hash($token, PASSWORD_DEFAULT);
-        $expires = date('Y-m-d H:i:s', time() + 900); // 1 hora
+        $expires = date('Y-m-d H:i:s', time() + 900);
 
-        // Eliminar tokens antiguos (opcional pero recomendado)
         $conn->prepare("DELETE FROM auth_users_password_resets WHERE email = ?")->execute([$email]);
 
-        // Insertar el nuevo token
         $stmt = $conn->prepare("INSERT INTO auth_users_password_resets (email, token_hash, expires_at) VALUES (?, ?, ?)");
         $stmt->execute([$email, $tokenHash, $expires]);
 
-        // 5. Preparar y enviar email
         $resetLink = "https://memoriaterrassa.cat/restabliment-contrasenya?token=$token&email=" . urlencode($email);
-        // Enviar el correo con PHPMailer
-        $mail = new PHPMailer(true);
-        try {
-            $mail->isSMTP();
-            $mail->Host = 'hl121.lucushost.org';
-            $mail->SMTPAuth = true;
-            $mail->Username = 'email@memoriaterrassa.cat';
-            $mail->Password = $emailPass;
-            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-            $mail->Port = 587;
-            $mail->CharSet = 'UTF-8';
-            $mail->Encoding = 'base64';
 
-            $mail->setFrom('no-reply@memoriaterrassa.cat', 'Memòria Terrassa');
-            $mail->addAddress($email);
-            $mail->Subject = 'Restabliment de contrasenya';
-            $mail->isHTML(true);
-            $mail->Subject = 'Recuperació de contrasenya';
-
-            $mail->Body = '
-                <!DOCTYPE html>
-                <html lang="ca">
-                <head>
-                <meta charset="UTF-8">
-                <style>
-                    body {
-                    font-family: Arial, sans-serif;
-                    background-color: #f4f4f4;
-                    color: #333;
-                    padding: 20px;
-                    }
-                    .container {
-                    max-width: 600px;
-                    margin: auto;
-                    background: #ffffff;
-                    border-radius: 8px;
-                    box-shadow: 0 0 10px rgba(0,0,0,0.05);
-                    padding: 30px;
-                    }
-                    .button {
-                    display: inline-block;
-                    background-color: #007bff;
-                    color: #ffffff;
-                    padding: 12px 20px;
-                    text-decoration: none;
-                    border-radius: 5px;
-                    margin-top: 20px;
-                    }
-                    .footer {
-                    margin-top: 30px;
-                    font-size: 12px;
-                    color: #999;
-                    }
-                </style>
-                </head>
-                <body>
-                <div class="container">
-                    <h2>Recuperació de contrasenya</h2>
-                    <p>Hola,</p>
-                    <p>Hem rebut una sol·licitud per restablir la contrasenya del teu compte.</p>
-                    <p>Fes clic al següent botó per continuar amb el procés:</p>
-                    <a class="button" href="' . htmlspecialchars($resetLink) . '">Restablir contrasenya</a>
-                    <p>Si no has demanat aquest canvi, pots ignorar aquest missatge.</p>
-
-                    <div class="footer">
+        $htmlBody = '
+            <!DOCTYPE html>
+            <html lang="ca">
+            <head>
+            <meta charset="UTF-8">
+            <style>
+                body { font-family:Arial,sans-serif; background-color:#f4f4f4; color:#333; padding:20px; }
+                .container { max-width:600px; margin:auto; background:#fff; border-radius:8px; box-shadow:0 0 10px rgba(0,0,0,0.05); padding:30px; }
+                .button { display:inline-block; background-color:#007bff; color:#fff; padding:12px 20px; text-decoration:none; border-radius:5px; margin-top:20px; }
+                .footer { margin-top:30px; font-size:12px; color:#999; }
+            </style>
+            </head>
+            <body>
+            <div class="container">
+                <h2>Recuperació de contrasenya</h2>
+                <p>Hola,</p>
+                <p>Hem rebut una sol·licitud per restablir la contrasenya del teu compte.</p>
+                <p>Fes clic al següent botó per continuar amb el procés:</p>
+                <a class="button" href="' . htmlspecialchars($resetLink) . '">Restablir contrasenya</a>
+                <p>Si no has demanat aquest canvi, pots ignorar aquest missatge.</p>
+                <div class="footer">
                     Aquest missatge s\'ha enviat automàticament. Si tens cap dubte, contacta amb nosaltres.
-                    </div>
                 </div>
-                </body>
-                </html>';
+            </div>
+            </body>
+            </html>';
 
-            $mail->send();
-        } catch (Exception $e) {
-            // Log en tu servidor si quieres depurar
+        try {
+            $mailer = new Mailer();
+            $mailer->send(
+                to: $email,
+                toName: $email,
+                subject: 'Recuperació de contrasenya',
+                htmlBody: $htmlBody,
+            );
+        } catch (\Throwable $e) {
+            error_log('[MEMORIA] Error enviant email recuperació: ' . $e->getMessage());
         }
     }
 
     // Siempre la misma respuesta por seguridad
     echo json_encode([
-        'status' => 'ok',
-        'message' => 'Si el correu introduït és correcte, rebràs un enllaç de recuperació a la teva bústia.'
+        'status'  => 'ok',
+        'message' => 'Si el correu introduït és correcte, rebràs un enllaç de recuperació a la teva bústia.',
     ]);
 
     // POST : procés de creació de nova contrasenya

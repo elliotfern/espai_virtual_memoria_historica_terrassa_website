@@ -1,8 +1,7 @@
 <?php
 
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
 use App\Config\DatabaseConnection;
+use App\Utils\Mailer;
 
 $emailPass = $_ENV['EMAIL_PASS'];
 
@@ -265,85 +264,52 @@ try {
     // 5. Preparar y enviar email
     $resetLink = "https://memoriaterrassa.cat/gestio";
 
-    // Enviar el correo con PHPMailer
-    $mail = new PHPMailer(true);
+    // Enviar el correo
+
+    $htmlBody = '
+        <!DOCTYPE html>
+        <html lang="ca">
+        <head>
+        <meta charset="UTF-8">
+        <style>
+            body { font-family:Arial,sans-serif; background-color:#f4f4f4; color:#333; padding:20px; }
+            .container { max-width:600px; margin:auto; background:#fff; border-radius:8px; box-shadow:0 0 10px rgba(0,0,0,0.05); padding:30px; }
+            .button { display:inline-block; background-color:#007bff; color:#fff; padding:12px 20px; text-decoration:none; border-radius:5px; margin-top:20px; }
+            .footer { margin-top:30px; font-size:12px; color:#999; }
+        </style>
+        </head>
+        <body>
+        <div class="container">
+            <h2>Nou formulari de contacte</h2>
+            <p>Hola,</p>
+            <p>Hem rebut un nou formulari de contacte</p>
+            <p>Enviat per: ' . htmlspecialchars($nomCognoms) . '</p>
+            <p>Missatge: ' . nl2br(htmlspecialchars($missatge)) . '</p>
+            <br>
+            <p>Fes clic al següent botó per veure el missatge:</p>
+            <a class="button" href="https://memoriaterrassa.cat/gestio">Intranet web</a>
+            <div class="footer">
+                Aquest missatge s\'ha enviat automàticament.
+            </div>
+        </div>
+        </body>
+        </html>';
+
     try {
-        $mail->isSMTP();
-        $mail->Host = 'hl121.lucushost.org';
-        $mail->SMTPAuth = true;
-        $mail->Username = 'email@memoriaterrassa.cat';
-        $mail->Password = $emailPass;
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-        $mail->Port = 587;
-        $mail->CharSet = 'UTF-8';
-        $mail->Encoding = 'base64';
-
-        $mail->setFrom('no-reply@memoriaterrassa.cat', 'Memòria Terrassa');
-        $mail->addAddress('elliot@hispantic.com');
-        $mail->addAddress('manel.marquez@gmail.com');
-        $mail->Subject = 'Rebut un formulari de contacte al web';
-        $mail->isHTML(true);
-
-        $mail->Body = '
-                <!DOCTYPE html>
-                <html lang="ca">
-                <head>
-                <meta charset="UTF-8">
-                <style>
-                    body {
-                    font-family: Arial, sans-serif;
-                    background-color: #f4f4f4;
-                    color: #333;
-                    padding: 20px;
-                    }
-                    .container {
-                    max-width: 600px;
-                    margin: auto;
-                    background: #ffffff;
-                    border-radius: 8px;
-                    box-shadow: 0 0 10px rgba(0,0,0,0.05);
-                    padding: 30px;
-                    }
-                    .button {
-                    display: inline-block;
-                    background-color: #007bff;
-                    color: #ffffff;
-                    padding: 12px 20px;
-                    text-decoration: none;
-                    border-radius: 5px;
-                    margin-top: 20px;
-                    }
-                    .footer {
-                    margin-top: 30px;
-                    font-size: 12px;
-                    color: #999;
-                    }
-                </style>
-                </head>
-                <body>
-                <div class="container">
-                    <h2>Nou formulari de contacte</h2>
-                    <p>Hola,</p>
-                    <p>Hem rebut un nou formulari de contacte</p>
-                    <p>Enviat per: ' . htmlspecialchars($nomCognoms) . '</p>
-                    <p>Missatge: ' . htmlspecialchars($missatge) . '</p>
-                    <br><br>
-                    <p>Fes clic al següent botó per veure el missatge:</p>
-                    <a class="button" href="' . htmlspecialchars($resetLink) . '">Intranet web</a>
-
-                    <div class="footer">
-                    Aquest missatge s\'ha enviat automàticament.
-                    </div>
-                </div>
-                </body>
-                </html>';
-
-        $mail->send();
-    } catch (Exception $e) {
-        // Log en tu servidor si quieres depurar
+        $mailer = new Mailer();
+        $mailer->send(
+            to: 'elliot@hispantic.com',
+            toName: 'Elliot',
+            subject: 'Rebut un formulari de contacte al web',
+            htmlBody: $htmlBody,
+            bcc: [
+                'manel.marquez@gmail.com' => 'Manel',
+            ],
+        );
+    } catch (\Throwable $e) {
+        error_log('[MEMORIA] Error enviant formulari contacte: ' . $e->getMessage());
     }
 
-    // Respuesta de éxito
     echo json_encode(["status" => "success", "message" => "Formulari de contacte enviat correctament. Ens posarem en contacte el més aviat possible."]);
 } catch (PDOException $e) {
     // En caso de error en la conexión o ejecución de la consulta
