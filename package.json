@@ -24,7 +24,7 @@
     "dotenv": "^17.4.2",
     "dotenv-cli": "^11.0.0",
     "esbuild-loader": "^4.5.0",
-    "eslint": "^10.5.0",
+    "eslint": "^10.6.0",
     "globals": "^17.7.0",
     "lint-staged": "^17.0.8",
     "style-loader": "^4.0.0",
