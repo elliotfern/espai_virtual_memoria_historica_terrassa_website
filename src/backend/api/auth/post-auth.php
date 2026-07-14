@@ -15,7 +15,6 @@ if (!$conn) {
 
 // Cargar variables de entorno desde .env
 $jwtSecret = $_ENV['TOKEN'];
-$emailPass = $_ENV['EMAIL_PASS'];
 
 // Configuración de cabeceras para aceptar JSON y responder JSON
 header("Content-Type: application/json");

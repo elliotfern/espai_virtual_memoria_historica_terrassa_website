@@ -1906,6 +1906,12 @@ if ($slug === "municipis") {
             return;
         }
 
+        foreach ($result as &$row) {
+            $row['id'] = (int) $row['id'];
+            $row['mitja_id'] = (int) $row['mitja_id'];
+            $row['destacat'] = (int) $row['destacat'];
+        }
+
         Response::success(
             MissatgesAPI::success('get'),
             $result,
