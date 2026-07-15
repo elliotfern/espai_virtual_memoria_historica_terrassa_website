@@ -96,7 +96,7 @@ export async function fetchPersonas(
       : typeOrOpts;
 
   const langQS = opts.lang ? `&lang=${encodeURIComponent(opts.lang)}` : '';
-  const url = `${ENV.apiBaseUrl}/dades_personals/get/?type=${encodeURIComponent(opts.type)}${langQS}`;
+  const url = `${ENV.apiBaseUrl}/dades_personals/get?type=${encodeURIComponent(opts.type)}${langQS}`;
 
   const json = await fetchJSON<{
     data: PersonaRaw[];
@@ -149,25 +149,25 @@ export async function fetchOpcionesFiltros(
     await Promise.all([
       fetchJSON<{
         data: Municipio[];
-      }>(`${ENV.apiBaseUrl}/auxiliars/get/municipis/`).then((r) => r.data),
+      }>(`${ENV.apiBaseUrl}/auxiliars/get/municipis`).then((r) => r.data),
       fetchJSON<{
         data: EstatCivil[];
-      }>(`${ENV.apiBaseUrl}/auxiliars/get/estats_civils/`).then((r) => r.data),
+      }>(`${ENV.apiBaseUrl}/auxiliars/get/estats_civils`).then((r) => r.data),
       fetchJSON<{
         data: Estudi[];
-      }>(`${ENV.apiBaseUrl}/auxiliars/get/estudis/`).then((r) => r.data),
+      }>(`${ENV.apiBaseUrl}/auxiliars/get/estudis`).then((r) => r.data),
       fetchJSON<{
         data: Ofici[];
-      }>(`${ENV.apiBaseUrl}/auxiliars/get/oficis/`).then((r) => r.data),
+      }>(`${ENV.apiBaseUrl}/auxiliars/get/oficis`).then((r) => r.data),
       fetchJSON<{
         data: PartitPolitic[];
-      }>(`${ENV.apiBaseUrl}/auxiliars/get/partitsPolitics/`).then((r) => r.data),
+      }>(`${ENV.apiBaseUrl}/auxiliars/get/partitsPolitics`).then((r) => r.data),
       fetchJSON<{
         data: Sindicat[];
-      }>(`${ENV.apiBaseUrl}/auxiliars/get/sindicats/`).then((r) => r.data),
+      }>(`${ENV.apiBaseUrl}/auxiliars/get/sindicats`).then((r) => r.data),
       fetchJSON<{
         data: Causa[];
-      }>(`${ENV.apiBaseUrl}/auxiliars/get/causa_defuncio/`).then((r) => r.data),
+      }>(`${ENV.apiBaseUrl}/auxiliars/get/causa_defuncio`).then((r) => r.data),
       fetchJSON<{
         data: CategoriaRepressio[];
       }>(`${ENV.apiBaseUrl}/auxiliars/get/categoriesRepressio${langQS}`).then((r) => r.data),
