@@ -68,7 +68,7 @@ export function renderResultsPaginated(
         const birthStr = born || mN ? `${born}${mN ? ` (${mN})` : ''}` : '';
         const defStr = died || mD ? `${died}${mD ? ` (${mD})` : ''}` : '';
         const datesStr = [birthStr, defStr].filter(Boolean).join(' / ');
-        const href = `${ENV.apiBaseUrl}/fitxa/${p.slug}`;
+        const href = `${ENV.domainWeb}/fitxa/${p.slug}`;
         return `
           <div class="fila-persona" style="margin-top:20px">
             <div>
