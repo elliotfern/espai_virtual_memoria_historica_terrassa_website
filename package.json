@@ -34,7 +34,7 @@
     "typescript-eslint": "^8.65.0",
     "vite": "^8.2.0",
     "webpack": "^5.109",
-    "webpack-cli": "^7.2.1"
+    "webpack-cli": "^7.2.2"
   },
   "directories": {
     "test": "tests"
