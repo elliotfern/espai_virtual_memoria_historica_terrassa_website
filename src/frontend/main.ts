@@ -32,7 +32,6 @@ document.addEventListener('DOMContentLoaded', () => {
   } else if (pageType[0] === 'base-dades') {
     baseDadesWebPublica();
   } else if (pageType[0] === 'fitxa') {
-    // const id = pageType[1];
     const slug = pageType[1];
     const lang = 'ca';
     fitxaRepresaliat(slug, lang);
