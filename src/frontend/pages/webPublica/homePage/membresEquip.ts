@@ -196,11 +196,20 @@ export async function llistatMembresEquip(lang: string): Promise<void> {
 
     const items = res.data;
 
+    const normalizedItems: UsuariItem[] = items.map((item) => ({
+      ...item,
+      grup: Number(item.grup),
+      ordre: Number(item.ordre),
+    }));
+
     // Agrupar por grup
     const byGroup = new Map<number, UsuariItem[]>();
-    for (const item of items) {
+
+    for (const item of normalizedItems) {
       const g = item.grup;
+
       if (!byGroup.has(g)) byGroup.set(g, []);
+
       byGroup.get(g)!.push(item);
     }
 

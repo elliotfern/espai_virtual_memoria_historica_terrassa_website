@@ -40,13 +40,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/elliotfern/elliotfern-intranet.git"
+    "url": "git+https://github.com/elliotfern/espai_virtual_memoria_historica_terrassa_website.git"
   },
   "keywords": [],
   "bugs": {
-    "url": "https://github.com/elliotfern/elliotfern-intranet/issues"
+    "url": "https://github.com/elliotfern/espai_virtual_memoria_historica_terrassa_website/issues"
   },
-  "homepage": "https://github.com/elliotfern/elliotfern-intranet#readme",
+  "homepage": "https://github.com/elliotfern/espai_virtual_memoria_historica_terrassa_website#readme",
   "dependencies": {
     "bootstrap": "^5.3.8",
     "choices.js": "^11.2.3",

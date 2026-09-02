@@ -35,7 +35,6 @@ use Firebase\JWT\Key;
 $jwtSecret = $_ENV['TOKEN'];
 
 
-
 // Definir el dominio permitido
 $allowedOrigin = DOMAIN;
 
