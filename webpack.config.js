@@ -11,20 +11,25 @@ const nodeEnv = process.env.NODE_ENV || 'local';
  * 🔥 SOLO usamos dotenv en local / desarrollo
  * En CI o producción confiamos en process.env del sistema
  */
-const isLocal = nodeEnv === 'local';
+
+const envFiles = {
+  local: '.env.local',
+  dev: '.env.dev',
+  test: '.env.test',
+  production: '.env.prod',
+};
 
 let env = {};
 
-/**
- * Cargar .env solo en local (o si quieres staging local)
- */
-if (isLocal) {
+const envFile = envFiles[nodeEnv];
+
+if (envFile) {
   const result = dotenv.config({
-    path: `.env.${nodeEnv}`,
+    path: envFile,
   });
 
   if (result.error) {
-    throw new Error(`❌ Error loading .env.${nodeEnv}`);
+    throw new Error(`❌ Error loading ${envFile}`);
   }
 
   env = result.parsed || {};
@@ -33,7 +38,7 @@ if (isLocal) {
 }
 
 /**
- * 🔥 SOLO variables permitidas (evita filtrar basura del sistema)
+ * 🔥 SOLO variables permitidas
  */
 const allowedKeys = ['API_BASE_URL', 'APP_ENV', 'DOMAIN_IMG', 'DOMAIN_WEB'];
 
@@ -69,7 +74,20 @@ module.exports = {
       {
         test: /\.ts$/,
         exclude: /node_modules/,
-        use: 'ts-loader',
+        use: {
+          loader: 'swc-loader',
+          options: {
+            jsc: {
+              parser: {
+                syntax: 'typescript',
+              },
+              target: 'es2021',
+            },
+            module: {
+              type: 'es6',
+            },
+          },
+        },
       },
       {
         test: /\.css$/,
