@@ -14,9 +14,8 @@ const nodeEnv = process.env.NODE_ENV || 'local';
 
 const envFiles = {
   local: '.env.local',
-  dev: '.env.dev',
+  development: '.env.dev',
   test: '.env.test',
-  production: '.env.prod',
 };
 
 let env = {};
@@ -34,6 +33,7 @@ if (envFile) {
 
   env = result.parsed || {};
 } else {
+  // Production / GitHub Actions
   env = process.env;
 }
 
