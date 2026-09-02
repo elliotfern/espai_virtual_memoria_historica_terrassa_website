@@ -23,20 +23,15 @@ export async function formSecretariInstructor(isUpdate: boolean, id?: number) {
   const btnForm = document.getElementById('btn') as HTMLButtonElement;
   const form = document.getElementById('secretariForm');
 
-  let data: Partial<Fitxa> = {
-    comarca: 0,
-    provincia: 0,
-    comunitat: 0,
-    estat: 0,
-  };
-
   if (!divTitol || !btnForm || !form) return;
 
   if (id && isUpdate) {
-    const response = await fetchDataGet<ApiResponse<Fitxa>>(`/api/processats/get/secretarisInstructors?id=${id}`);
+    const response = await fetchDataGet<ApiResponse<Fitxa>>(
+      `/api/processats/get/secretarisInstructors?id=${id}`
+    );
 
     if (!response || !response.data) return;
-    data = response.data;
+    const data = response.data;
 
     divTitol.innerHTML = `<h2>Modificació Secretari instructor: ${data.nom} ${data.cognoms}</h2>`;
 
@@ -45,14 +40,25 @@ export async function formSecretariInstructor(isUpdate: boolean, id?: number) {
     btnForm.textContent = 'Modificar dades';
 
     form.addEventListener('submit', function (event) {
-      transmissioDadesDB(event, 'PUT', 'secretariForm', `https://memoriaterrassa.cat/api/processats/aux/put/secretarisInstructors`);
+      transmissioDadesDB(
+        event,
+        'PUT',
+        'secretariForm',
+        `https://memoriaterrassa.cat/api/processats/aux/put/secretarisInstructors`
+      );
     });
   } else {
     divTitol.innerHTML = `<h2>Alta d'un nou Secretari instructor</h2>`;
     btnForm.textContent = 'Inserir dades';
 
     form.addEventListener('submit', function (event) {
-      transmissioDadesDB(event, 'POST', 'secretariForm', `https://memoriaterrassa.cat/api/processats/aux/post/secretarisInstructors`, true);
+      transmissioDadesDB(
+        event,
+        'POST',
+        'secretariForm',
+        `https://memoriaterrassa.cat/api/processats/aux/post/secretarisInstructors`,
+        true
+      );
     });
   }
 }

@@ -9,16 +9,19 @@ export function tab2Deportat(dada: DeportatData, htmlContent: string, lang: stri
   const l = isLang(lang) ? lang : DEFAULT_LANG;
 
   // helper cortos
-  const orUnknownM = (s?: string | null) => (s && s.trim() !== '' ? s : t(LABELS_VTD, 'unknownM', l));
-  const orUnknownF = (s?: string | null) => (s && s.trim() !== '' ? s : t(LABELS_VTD, 'unknownF', l));
+  const orUnknownM = (s?: string | null) =>
+    s && s.trim() !== '' ? s : t(LABELS_VTD, 'unknownM', l);
+  const orUnknownF = (s?: string | null) =>
+    s && s.trim() !== '' ? s : t(LABELS_VTD, 'unknownF', l);
   const orNoData = (s?: string | null) => (s && s.trim() !== '' ? s : t(LABELS_VTD, 'noData', l));
-  const orUnknownDt = (s?: string | null, fmt?: (x: string) => string) => (s && s.trim() !== '' ? (fmt ? fmt(s) : s) : t(LABELS_VTD, 'unknownDate', l));
+  const orUnknownDt = (s?: string | null, fmt?: (x: string) => string) =>
+    s && s.trim() !== '' ? (fmt ? fmt(s) : s) : t(LABELS_VTD, 'unknownDate', l);
 
   const situacioDeportat = orUnknownM(dada.situacio);
   const situacioId = dada.situacioId;
 
-  let alliberamentMort = '';
-  let municipiMort = '';
+  let alliberamentMort: string;
+  let municipiMort: string;
 
   if (situacioId === 1) {
     alliberamentMort = t(LABELS, 'dod', l); // "Data de defunció"
@@ -46,18 +49,26 @@ export function tab2Deportat(dada: DeportatData, htmlContent: string, lang: stri
   const tipusPreso1 = orNoData(dada.tipusPreso1);
   const nomPreso1 = orNoData(dada.nomPreso1);
   const ciutatPreso1 = orNoData(dada.ciutatPreso1);
-  const presoClasificacioData1 = orNoData(dada.presoClasificacioData1 ? formatDatesForm(dada.presoClasificacioData1) : '');
+  const presoClasificacioData1 = orNoData(
+    dada.presoClasificacioData1 ? formatDatesForm(dada.presoClasificacioData1) : ''
+  );
 
-  const presoClasificacioDataEntrada1 = orNoData(dada.presoClasificacioDataEntrada1 ? formatDatesForm(dada.presoClasificacioDataEntrada1) : '');
+  const presoClasificacioDataEntrada1 = orNoData(
+    dada.presoClasificacioDataEntrada1 ? formatDatesForm(dada.presoClasificacioDataEntrada1) : ''
+  );
   const presoClasificacioMatr1 = orNoData(dada.presoClasificacioMatr1);
 
-  const presoClasificacioDataEntrada2 = orNoData(dada.presoClasificacioDataEntrada2 ? formatDatesForm(dada.presoClasificacioDataEntrada2) : '');
+  const presoClasificacioDataEntrada2 = orNoData(
+    dada.presoClasificacioDataEntrada2 ? formatDatesForm(dada.presoClasificacioDataEntrada2) : ''
+  );
   const presoClasificacioMatr2 = orNoData(dada.presoClasificacioMatr2);
 
   const tipusPreso2 = orNoData(dada.tipusPreso2);
   const nomPreso2 = orNoData(dada.nomPreso2);
   const ciutatPreso2 = orNoData(dada.ciutatPreso2);
-  const presoClasificacioData2 = orNoData(dada.presoClasificacioData2 ? formatDatesForm(dada.presoClasificacioData2) : '');
+  const presoClasificacioData2 = orNoData(
+    dada.presoClasificacioData2 ? formatDatesForm(dada.presoClasificacioData2) : ''
+  );
 
   const deportacio_observacions = orNoData(dada.deportacio_observacions);
 

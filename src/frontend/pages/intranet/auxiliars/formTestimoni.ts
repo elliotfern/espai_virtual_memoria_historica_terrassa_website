@@ -23,20 +23,15 @@ export async function formTestimoni(isUpdate: boolean, id?: number) {
   const btnForm = document.getElementById('btn') as HTMLButtonElement;
   const form = document.getElementById('testimoniForm');
 
-  let data: Partial<Fitxa> = {
-    comarca: 0,
-    provincia: 0,
-    comunitat: 0,
-    estat: 0,
-  };
-
   if (!divTitol || !btnForm || !form) return;
 
   if (id && isUpdate) {
-    const response = await fetchDataGet<ApiResponse<Fitxa>>(`/api/processats/get/testimoniAcusacio?id=${id}`);
+    const response = await fetchDataGet<ApiResponse<Fitxa>>(
+      `/api/processats/get/testimoniAcusacio?id=${id}`
+    );
 
     if (!response || !response.data) return;
-    data = response.data;
+    const data = response.data;
 
     divTitol.innerHTML = `<h2>Modificació testimoni: ${data.nom} ${data.cognoms}</h2>`;
 
@@ -45,14 +40,25 @@ export async function formTestimoni(isUpdate: boolean, id?: number) {
     btnForm.textContent = 'Modificar dades';
 
     form.addEventListener('submit', function (event) {
-      transmissioDadesDB(event, 'PUT', 'testimoniForm', `https://memoriaterrassa.cat/api/processats/aux/put/testimoniAcusacio`);
+      transmissioDadesDB(
+        event,
+        'PUT',
+        'testimoniForm',
+        `https://memoriaterrassa.cat/api/processats/aux/put/testimoniAcusacio`
+      );
     });
   } else {
     divTitol.innerHTML = `<h2>Alta d'un nou testimoni</h2>`;
     btnForm.textContent = 'Inserir dades';
 
     form.addEventListener('submit', function (event) {
-      transmissioDadesDB(event, 'POST', 'testimoniForm', `https://memoriaterrassa.cat/api/processats/aux/post/testimoniAcusacio`, true);
+      transmissioDadesDB(
+        event,
+        'POST',
+        'testimoniForm',
+        `https://memoriaterrassa.cat/api/processats/aux/post/testimoniAcusacio`,
+        true
+      );
     });
   }
 }

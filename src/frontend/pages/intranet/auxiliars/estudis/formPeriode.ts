@@ -26,24 +26,17 @@ export async function formPeriode(isUpdate: boolean, id?: number): Promise<void>
   const btnPeriode = document.getElementById('btnSubmitPeriode') as HTMLButtonElement | null;
   const periodeForm = document.getElementById('periodeForm') as HTMLFormElement | null;
 
-  let data: Partial<FitxaPeriode> = {
-    sort_order: 0,
-    nom_ca: '',
-    nom_es: '',
-    nom_en: '',
-    nom_fr: '',
-    nom_it: '',
-    nom_pt: '',
-  };
-
   if (!divTitol || !btnPeriode || !periodeForm) return;
 
   if (id && isUpdate) {
-    const response = await fetchDataGet<ApiResponse<FitxaPeriode>>(API_URLS.GET.ESTUDIS_PERIODE_ID(id), true);
+    const response = await fetchDataGet<ApiResponse<FitxaPeriode>>(
+      API_URLS.GET.ESTUDIS_PERIODE_ID(id),
+      true
+    );
 
     if (!response || !response.data) return;
 
-    data = response.data;
+    const data = response.data;
 
     divTitol.innerHTML = `<h2>Modificació període històric: ${data.nom_ca ?? ''}</h2>`;
 

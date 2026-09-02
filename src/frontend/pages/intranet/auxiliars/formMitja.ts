@@ -11,6 +11,7 @@ interface ApiResponse<T> {
 }
 
 interface MitjaFormData {
+  [key: string]: unknown;
   id: number;
   slug: string;
   tipus: string;
@@ -56,25 +57,20 @@ export async function formMitjaPremsa(isUpdate: boolean, slugMitja?: string): Pr
 
   if (!divTitol || !btnSubmit || !form) return;
 
-  let data: Partial<MitjaFormData> = {
-    id: 0,
-    slug: '',
-    tipus: '',
-    web_url: null,
-    nom_ca: '',
-    descripcio_ca: '',
-  };
-
   if (isUpdate) {
     if (!slugMitja || slugMitja.trim().length === 0) return;
 
-    const response = await fetchDataGet<ApiResponse<ApiRowPremsaMitja[]>>(API_URLS.GET.FITXA_MITJA(slugMitja), true);
+    const response = await fetchDataGet<ApiResponse<ApiRowPremsaMitja[]>>(
+      API_URLS.GET.FITXA_MITJA(slugMitja),
+      true
+    );
     if (!response || response.status !== 'success' || !response.data) return;
 
-    data = mapRowsToMitjaFormData(response.data);
+    const data = mapRowsToMitjaFormData(response.data);
 
     // ✅ Pintar siempre, aunque nom_ca esté vacío
-    const titol = (data.nom_ca ?? '').trim().length > 0 ? (data.nom_ca as string) : (data.slug ?? slugMitja);
+    const titol =
+      (data.nom_ca ?? '').trim().length > 0 ? (data.nom_ca as string) : (data.slug ?? slugMitja);
     divTitol.innerHTML = `<h2>Modificació mitjà: ${titol}</h2>`;
 
     renderFormInputs(data);

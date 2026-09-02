@@ -184,7 +184,7 @@ export async function renderMapaGeolocalitzacio(): Promise<void> {
     maxZoom: 19,
   }).addTo(map);
 
-  let people: PersonGeo[] = [];
+  let people: PersonGeo[];
   try {
     people = await fetchAllPeople();
   } catch (e) {

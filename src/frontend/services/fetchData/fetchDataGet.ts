@@ -1,8 +1,4 @@
-export async function fetchDataGet<T>(relativeUrl: string, url?: boolean): Promise<T | null> {
-  if (url) {
-    url = true;
-  }
-
+export async function fetchDataGet<T>(relativeUrl: string): Promise<T | null> {
   try {
     const response = await fetch(relativeUrl, {
       method: 'GET',

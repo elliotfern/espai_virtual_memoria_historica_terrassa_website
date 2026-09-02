@@ -51,39 +51,6 @@ export async function formEstudi(isUpdate: boolean, id?: number): Promise<void> 
   const btnEstudi = document.getElementById('btnSubmitEstudi') as HTMLButtonElement | null;
   const estudiForm = document.getElementById('estudiForm') as HTMLFormElement | null;
 
-  let data: Partial<FitxaEstudi> = {
-    slug: '',
-    any_publicacio: null,
-    periode_id: 0,
-    territori_id: 0,
-    tipus_id: 0,
-    autors: [],
-
-    titol_ca: '',
-    resum_ca: '',
-    url_document_ca: '',
-
-    titol_es: '',
-    resum_es: '',
-    url_document_es: '',
-
-    titol_en: '',
-    resum_en: '',
-    url_document_en: '',
-
-    titol_fr: '',
-    resum_fr: '',
-    url_document_fr: '',
-
-    titol_it: '',
-    resum_it: '',
-    url_document_it: '',
-
-    titol_pt: '',
-    resum_pt: '',
-    url_document_pt: '',
-  };
-
   if (!divTitol || !btnEstudi || !estudiForm) return;
 
   if (id && isUpdate) {
@@ -91,7 +58,7 @@ export async function formEstudi(isUpdate: boolean, id?: number): Promise<void> 
 
     if (!response || !response.data) return;
 
-    data = response.data;
+    const data = response.data;
 
     divTitol.innerHTML = `<h2>Modificació estudi: ${data.titol_ca ?? ''}</h2>`;
 

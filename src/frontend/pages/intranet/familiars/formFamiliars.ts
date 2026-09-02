@@ -48,13 +48,6 @@ export async function formFamiliars(isUpdate: boolean, idParent?: number, id?: n
   const btnUsuari = document.getElementById('btnFamiliars') as HTMLButtonElement;
   const usuariForm = document.getElementById('familiarForm');
 
-  let data: Partial<Fitxa> = {
-    comarca: 0,
-    provincia: 0,
-    comunitat: 0,
-    estat: 0,
-  };
-
   if (!divTitol || !btnUsuari || !usuariForm) return;
 
   if (id && isUpdate) {
@@ -62,7 +55,7 @@ export async function formFamiliars(isUpdate: boolean, idParent?: number, id?: n
     const response = await fetchDataGet<ApiResponse<Fitxa>>(url, true);
 
     if (!response || !response.data) return;
-    data = response.data;
+    const data = response.data;
 
     const nomComplet = [
       data.nom_represaliat as string,

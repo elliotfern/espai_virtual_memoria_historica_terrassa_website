@@ -26,24 +26,17 @@ export async function formTipus(isUpdate: boolean, id?: number): Promise<void> {
   const btnTipus = document.getElementById('btnSubmitTipus') as HTMLButtonElement | null;
   const tipusForm = document.getElementById('tipusForm') as HTMLFormElement | null;
 
-  let data: Partial<FitxaTipus> = {
-    sort_order: 0,
-    nom_ca: '',
-    nom_es: '',
-    nom_en: '',
-    nom_fr: '',
-    nom_it: '',
-    nom_pt: '',
-  };
-
   if (!divTitol || !btnTipus || !tipusForm) return;
 
   if (id && isUpdate) {
-    const response = await fetchDataGet<ApiResponse<FitxaTipus>>(API_URLS.GET.ESTUDIS_TIPUS_ID(id), true);
+    const response = await fetchDataGet<ApiResponse<FitxaTipus>>(
+      API_URLS.GET.ESTUDIS_TIPUS_ID(id),
+      true
+    );
 
     if (!response || !response.data) return;
 
-    data = response.data;
+    const data = response.data;
 
     divTitol.innerHTML = `<h2>Modificació tipus: ${data.nom_ca ?? ''}</h2>`;
 

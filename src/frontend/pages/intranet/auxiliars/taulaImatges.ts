@@ -52,7 +52,7 @@ export async function taulaImatges() {
       render: (_: unknown, row: ImatgeRow) => {
         if (!row.nomArxiu || !row.mime) return '';
 
-        let ext: string | null = null;
+        let ext: string;
 
         switch (row.mime) {
           case 'image/jpeg':
@@ -68,7 +68,7 @@ export async function taulaImatges() {
             return '';
         }
 
-        let basePath = '';
+        let basePath: string;
         switch (row.tipus) {
           case 1:
           case 3:

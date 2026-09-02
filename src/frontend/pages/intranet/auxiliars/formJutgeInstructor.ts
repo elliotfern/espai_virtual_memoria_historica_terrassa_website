@@ -23,20 +23,15 @@ export async function formJutgeInstructor(isUpdate: boolean, id?: number) {
   const btnForm = document.getElementById('btn') as HTMLButtonElement;
   const form = document.getElementById('jutgeForm');
 
-  let data: Partial<Fitxa> = {
-    comarca: 0,
-    provincia: 0,
-    comunitat: 0,
-    estat: 0,
-  };
-
   if (!divTitol || !btnForm || !form) return;
 
   if (id && isUpdate) {
-    const response = await fetchDataGet<ApiResponse<Fitxa>>(`/api/processats/get/jutgesInstructors?id=${id}`);
+    const response = await fetchDataGet<ApiResponse<Fitxa>>(
+      `/api/processats/get/jutgesInstructors?id=${id}`
+    );
 
     if (!response || !response.data) return;
-    data = response.data;
+    const data = response.data;
 
     divTitol.innerHTML = `<h2>Modificació Jutge instructor: ${data.nom} ${data.cognoms}</h2>`;
 
@@ -45,14 +40,25 @@ export async function formJutgeInstructor(isUpdate: boolean, id?: number) {
     btnForm.textContent = 'Modificar dades';
 
     form.addEventListener('submit', function (event) {
-      transmissioDadesDB(event, 'PUT', 'jutgeForm', `https://memoriaterrassa.cat/api/processats/aux/put/jutgesInstructors`);
+      transmissioDadesDB(
+        event,
+        'PUT',
+        'jutgeForm',
+        `https://memoriaterrassa.cat/api/processats/aux/put/jutgesInstructors`
+      );
     });
   } else {
     divTitol.innerHTML = `<h2>Alta d'un nou Jutge instructor</h2>`;
     btnForm.textContent = 'Inserir dades';
 
     form.addEventListener('submit', function (event) {
-      transmissioDadesDB(event, 'POST', 'jutgeForm', `https://memoriaterrassa.cat/api/processats/aux/post/jutgesInstructors`, true);
+      transmissioDadesDB(
+        event,
+        'POST',
+        'jutgeForm',
+        `https://memoriaterrassa.cat/api/processats/aux/post/jutgesInstructors`,
+        true
+      );
     });
   }
 }

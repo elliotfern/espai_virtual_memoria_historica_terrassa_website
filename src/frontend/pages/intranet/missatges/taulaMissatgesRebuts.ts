@@ -1,5 +1,8 @@
 import { renderTaulaCercadorFiltres } from '../../../services/renderTaula/renderTaulaCercadorFiltres';
-import { initDeleteHandlers, registerDeleteCallback } from '../../../services/fetchData/handleDelete';
+import {
+  initDeleteHandlers,
+  registerDeleteCallback,
+} from '../../../services/fetchData/handleDelete';
 import { getIsAdmin } from '../../../services/auth/getIsAdmin';
 
 interface EspaiRow {
@@ -70,8 +73,8 @@ export async function taulaMissatgesRebuts() {
         // Por si la API devuelve "1", "2", "3" como string:
         const estat = typeof row.estat === 'string' ? parseInt(row.estat, 10) : row.estat;
 
-        let label = '';
-        let btnClass = '';
+        let label: string;
+        let btnClass: string;
 
         switch (estat) {
           case 1:
@@ -103,7 +106,8 @@ export async function taulaMissatgesRebuts() {
     {
       header: 'Veure missatge',
       field: 'id',
-      render: (_: unknown, row: EspaiRow) => `<a id="${row.id}" title="Veure missatges" href="https://${window.location.hostname}/gestio/missatges/veure-missatge/${row.id}"><button type="button" class="btn btn-primary btn-sm">Veure missatges</button></a>`,
+      render: (_: unknown, row: EspaiRow) =>
+        `<a id="${row.id}" title="Veure missatges" href="https://${window.location.hostname}/gestio/missatges/veure-missatge/${row.id}"><button type="button" class="btn btn-primary btn-sm">Veure missatges</button></a>`,
     },
   ];
 

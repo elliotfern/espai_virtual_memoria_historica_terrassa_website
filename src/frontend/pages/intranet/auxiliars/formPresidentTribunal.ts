@@ -23,20 +23,15 @@ export async function formPresidentTribunal(isUpdate: boolean, id?: number) {
   const btnForm = document.getElementById('btn') as HTMLButtonElement;
   const form = document.getElementById('presidentForm');
 
-  let data: Partial<Fitxa> = {
-    comarca: 0,
-    provincia: 0,
-    comunitat: 0,
-    estat: 0,
-  };
-
   if (!divTitol || !btnForm || !form) return;
 
   if (id && isUpdate) {
-    const response = await fetchDataGet<ApiResponse<Fitxa>>(`/api/processats/get/presidentTribunal?id=${id}`);
+    const response = await fetchDataGet<ApiResponse<Fitxa>>(
+      `/api/processats/get/presidentTribunal?id=${id}`
+    );
 
     if (!response || !response.data) return;
-    data = response.data;
+    const data = response.data;
 
     divTitol.innerHTML = `<h2>Modificació President tribunal: ${data.nom} ${data.cognoms}</h2>`;
 
@@ -45,14 +40,25 @@ export async function formPresidentTribunal(isUpdate: boolean, id?: number) {
     btnForm.textContent = 'Modificar dades';
 
     form.addEventListener('submit', function (event) {
-      transmissioDadesDB(event, 'PUT', 'presidentForm', `https://memoriaterrassa.cat/api/processats/aux/put/presidentTribunal`);
+      transmissioDadesDB(
+        event,
+        'PUT',
+        'presidentForm',
+        `https://memoriaterrassa.cat/api/processats/aux/put/presidentTribunal`
+      );
     });
   } else {
     divTitol.innerHTML = `<h2>Alta d'un nou President tribunal</h2>`;
     btnForm.textContent = 'Inserir dades';
 
     form.addEventListener('submit', function (event) {
-      transmissioDadesDB(event, 'POST', 'presidentForm', `https://memoriaterrassa.cat/api/processats/aux/post/presidentTribunal`, true);
+      transmissioDadesDB(
+        event,
+        'POST',
+        'presidentForm',
+        `https://memoriaterrassa.cat/api/processats/aux/post/presidentTribunal`,
+        true
+      );
     });
   }
 }

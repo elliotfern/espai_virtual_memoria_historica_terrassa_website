@@ -28,20 +28,13 @@ export async function formEmpresa(isUpdate: boolean, id?: number) {
   const btnForm = document.getElementById('btnSubmitEmpresa') as HTMLButtonElement;
   const form = document.getElementById('empresaForm');
 
-  let data: Partial<Fitxa> = {
-    comarca: 0,
-    provincia: 0,
-    comunitat: 0,
-    estat: 0,
-  };
-
   if (!divTitol || !btnForm || !form) return;
 
   if (id && isUpdate) {
     const response = await fetchDataGet<ApiResponse<Fitxa>>(API_URLS.GET.EMPRESA_ID(id), true);
 
     if (!response || !response.data) return;
-    data = response.data;
+    const data = response.data;
 
     divTitol.innerHTML = `<h2>Modificació empresa / organisme públic: ${data.empresa_ca}</h2>`;
 
