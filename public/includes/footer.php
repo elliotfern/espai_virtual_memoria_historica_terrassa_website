@@ -41,6 +41,9 @@
                     <a href="https://www.ccoo.cat/vocc-catc/" target="_blank"> <img src="<?php echo IMG_DOMAIN; ?>/assets_web/ccoo_valles.jpg" alt="CCOO Comissions Obreres Catalunya" class="logosFooter"></a>
                 </div>
 
+                <div class="col-12 col-md-4 col-lg-3">
+                    <a href="https://vocc.ugtcatalunya.cat/" target="_blank"> <img src="<?php echo IMG_DOMAIN; ?>/assets_web/ugt_valles_occidental.png" alt="UGT Unió General dels Treballadors" class="logosFooter"></a>
+                </div>
 
                 <div class="col-12 col-md-4 col-lg-3">
                     <a href="https://amical-mauthausen.org/ca/" target="_blank"> <img src="<?php echo IMG_DOMAIN; ?>/assets_web/amical_mauthausen.jpg" alt="Amical Mauthausen" class="logosFooter"></a>
