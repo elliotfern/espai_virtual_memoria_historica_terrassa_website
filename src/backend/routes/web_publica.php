@@ -31,6 +31,7 @@ $base_routes = [
     '/' => './web-publica/index.php',
     '/benvinguda' => './web-publica/index.php',
     '/inici' => './web-publica/inici.php',
+    '/donatius' => './web-publica/campanya-donatius.php',
 
     // Accés intranet i recuperació contrasenya
     '/acces' => './web-publica/auth/login.php',
@@ -286,6 +287,13 @@ $routes = [
         'needs_session' => false,
         'header_footer' => false,
         'header_menu_footer' => true
+    ],
+
+    '/donatius' => [
+        'view' => './web-publica/campanya-donatius.php',
+        'needs_session' => false,
+        'header_footer' => false,
+        'header_menu_footer' => false
     ],
 
 ];

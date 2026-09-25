@@ -13,6 +13,19 @@ $language = $matches[1] ?? '';
 $translate = $translations['benvinguda'] ?? [];
 ?>
 
+<div class="container" style="margin-bottom:25px">
+    <a
+        href="/donatius"
+        class="d-block"
+        aria-label="Campanya de donacions de l'Espai Virtual de la Memòria Històrica de Terrassa">
+        <img
+            src="https://media.memoriaterrassa.cat/assets_web/banner_donatius.png"
+            alt="La memòria històrica té noms i cognoms. Campanya de donacions per continuar recuperant les històries de les persones represaliades de Terrassa."
+            class="img-fluid w-100">
+    </a>
+</div>
+
+
 <!-- Secció amb container-fluid -->
 <div class="container-fluid bg-image2">
     <div class="container px-4">
