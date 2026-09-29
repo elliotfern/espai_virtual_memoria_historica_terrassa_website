@@ -89,6 +89,8 @@ $base_routes = [
     '/politica-privacitat' => './web-publica/legal/politica-privacitat.php',
     '/politica-cookies' => './web-publica/legal/politica-cookies.php',
 
+    '/transparencia-economica' => './web-publica/transparencia.php',
+
 ];
 
 // Rutas principales sin idioma explícito (solo para el idioma por defecto)

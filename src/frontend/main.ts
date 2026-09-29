@@ -15,6 +15,7 @@ import { credits } from './pages/webPublica/credits/credits';
 import { espaiVirtualWebPublica } from './pages/webPublica/espaiVirtual/espaiVirtual';
 import { initPublicEstudisList } from './pages/webPublica/estudis/estudis';
 import { initCronologia } from './pages/webPublica/cronologia/cronologia';
+import { initTransparencia } from './pages/webPublica/transparenciaEconomica/transparencia';
 
 nameUser();
 
@@ -31,6 +32,8 @@ document.addEventListener('DOMContentLoaded', () => {
     intranet();
   } else if (pageType[0] === 'base-dades') {
     baseDadesWebPublica();
+  } else if (pageType[0] === 'transparencia-economica') {
+    initTransparencia();
   } else if (pageType[0] === 'fitxa') {
     const slug = pageType[1];
     const lang = 'ca';
