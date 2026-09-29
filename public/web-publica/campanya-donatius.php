@@ -83,7 +83,7 @@
 
     <p>
         <strong>
-            Les aportacions, a partir de 25 euros, es destinaran directament
+            Les aportacions es destinaran directament
             a finançar el treball dels investigadors que estan fent possible
             aquest buidatge documental
         </strong>:
@@ -162,7 +162,7 @@
 
     <p>
         Qualsevol persona que vulgui contribuir a aquesta tasca pot fer una
-        aportació econòmica a partir de 25 euros. La campanya estarà oberta
+        aportació econòmica variable segons el que cadascú vulgui aportar. La campanya estarà oberta
         fins a finals de 2026 i tota la informació per col·laborar-hi es pot
         consultar a
         <a href="/donatius"><strong>memoriaterrassa.cat/donatius</strong></a>.
@@ -230,7 +230,7 @@
         <div class="bloc2-text">
 
             <p>
-                <strong>Transferència bancària, a partir de 25 €</strong>
+                <strong>Transferència bancària</strong>
             </p>
 
             <p class="mb-2">
