@@ -12,15 +12,15 @@ type ApiResponseArr<T> = {
 };
 
 interface ActeAgenda {
-  id: number;
+  id: string;
   titol: string | null;
   slug: string | null;
   descripcio: string | null;
   data: string | null; // YYYY-MM-DD o YYYY-MM-DD HH:MM:SS
   lloc: string | null;
   adreca: string | null;
-  imatge: number | null;
-  actiu: number | null;
+  imatge: number | string | null;
+  actiu: number | string | null;
   nomArxiu: string | null;
 
   // Pendiente de añadir en el SELECT (ver notas)
@@ -234,7 +234,7 @@ export async function initPublicAgendaList(lang: Lang): Promise<void> {
   let all: ActeAgenda[] = [];
   try {
     const raw = await fetchActes();
-    all = raw.filter((x) => (x.actiu ?? 1) === 1); // solo actos activos
+    all = raw.filter((x) => Number(x.actiu ?? 1) === 1); // solo actos activos
   } catch (e) {
     container.innerHTML = `<div class="text-muted raleway">No s'ha pogut carregar l'agenda.</div>`;
     console.log(e);
