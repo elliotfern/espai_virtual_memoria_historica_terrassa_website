@@ -1,4 +1,5 @@
 import { getPageType } from '../../../services/url/splitUrl';
+import { initPublicAgendaList } from './agendaActivitats';
 import { blocAntecedentsPublic } from './antecedents';
 import { initPublicAparicioPremsaDetalls } from './aparicioDetalls';
 import { initPublicAparicionsPremsaList } from './aparicionsPremsaList';
@@ -19,5 +20,7 @@ export function espaiVirtualWebPublica(lang: Lang) {
     initPublicAparicioPremsaDetalls(id, lang);
   } else if (pageType[1] === 'antecedents' || pageType[2] === 'antecedents') {
     blocAntecedentsPublic(lang);
+  } else if (pageType[1] === 'agenda-activitats' || pageType[2] === 'agenda-activitats') {
+    initPublicAgendaList(lang);
   }
 }

@@ -27,7 +27,7 @@ return [
         'represaliats' => 'Reprimidos',
         'estudis' => 'Estudos',
         'documents' => 'Fontes documentais',
-        'espai-virtual' => 'Espaço virtual',
+        'agenda' => 'Agenda d\'activitats',
         'contacta' => 'Contactar',
         'cronologia' => 'Cronologia',
         'links' => 'Links',

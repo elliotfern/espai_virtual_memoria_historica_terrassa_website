@@ -31,7 +31,7 @@
                                 <option value="4">Aparició Premsa</option>
                                 <option value="5">Estudis - documents pdf</option>
                                 <option value="6">Assets web imatge</option>
-                                <option value="7">Activitats Agendae</option>
+                                <option value="7">Activitats Agenda</option>
                             </select>
                         </div>
 

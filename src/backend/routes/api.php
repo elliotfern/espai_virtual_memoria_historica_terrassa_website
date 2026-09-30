@@ -289,7 +289,10 @@ $routes = [
     '/api/antecedents/put/{slug}' => ['view' => '../src/backend/api/db_antecedents/put-antecedents.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
 
     // TRANSPARENCIA ECONOMICA
-    '/api/transparencia/get/{slug}' => ['view' => '../src/backend/api/db_transparencia/get-transparencia.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true]
+    '/api/transparencia/get/{slug}' => ['view' => '../src/backend/api/db_transparencia/get-transparencia.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
+
+    // AGENDA
+    '/api/agenda/get/{slug}' => ['view' => '../src/backend/api/db_agenda/get-agenda.php', 'needs_session' => false, 'header_footer' => false, 'header_menu_footer' => false,  'apiSenseHTML' => true],
 
 ];
 

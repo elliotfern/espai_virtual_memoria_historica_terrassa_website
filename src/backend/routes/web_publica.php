@@ -65,11 +65,12 @@ $base_routes = [
 
     // 4.2. Aparicions premsa
     '/espai-virtual/premsa' => './web-publica/espai-virtual/premsa.php',
-
     '/espai-virtual/premsa-aparicio/{id}' => './web-publica/espai-virtual/premsa-aparicio-detalls.php',
+    '/espai-virtual/agenda-activitats' => './web-publica/espai-virtual/agenda-activitats.php',
+    '/espai-virtual/agenda-activitat/{id}' => './web-publica/espai-virtual/agenda-activitat-detalls.php',
 
     // 4.2. Materials comunicacio
-    '/espai-virtual/materials-comunicacio' => './web-publica/espai-virtual/materials.php',
+    '/espai-virtual/pla-comunicacio' => './web-publica/espai-virtual/pla-comunicacio.php',
 
     // 5. Contacte
     '/contacte' => './web-publica/contacte.php',
@@ -223,8 +224,22 @@ $routes = [
         'header_menu_footer' => true
     ],
 
-    '/espai-virtual/materials-comunicacio' =>  [
-        'view' => './web-publica/materials.php',
+    '/espai-virtual/pla-comunicacio' =>  [
+        'view' => './web-publica/espai-virtual/pla-comunicacio.php',
+        'needs_session' => false,
+        'header_footer' => false,
+        'header_menu_footer' => true
+    ],
+
+    '/espai-virtual/agenda-activitats' =>  [
+        'view' => './web-publica/espai-virtual/agenda-activitats.php',
+        'needs_session' => false,
+        'header_footer' => false,
+        'header_menu_footer' => true
+    ],
+
+    '/espai-virtual/agenda-activitat/{id}' =>  [
+        'view' => './web-publica/espai-virtual/agenda-activitat-detalls.php',
         'needs_session' => false,
         'header_footer' => false,
         'header_menu_footer' => true

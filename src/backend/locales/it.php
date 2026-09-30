@@ -27,6 +27,7 @@ return [
         'antecedents' => 'Antecedenti',
         'premsa' => 'Stampa',
         'materials' => 'Materiali di comunicazione',
+        'agenda' => 'Agenda d\'activitats',
         'contacta' => 'Contatta',
         'cronologia' => 'Cronologia',
         'links' => 'Links',
