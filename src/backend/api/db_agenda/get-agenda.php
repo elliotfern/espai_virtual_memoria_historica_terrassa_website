@@ -63,6 +63,53 @@ if ($slug === 'llistatActivitats') {
             500
         );
     }
+
+    // GET : Activitat detalls per slug
+    // URL: /api/agenda/get/activitatId?slug=presentacio
+} else if ($slug === 'activitatId') {
+
+    $slug = isset($_GET['slug']) ? trim((string) $_GET['slug']) : '';
+    $db = new Database();
+
+    $query = "SELECT
+                LOWER(HEX(a.id)) AS id,
+                a.titol,
+                a.slug,
+                a.descripcio,
+                a.data,
+                a.lloc,
+                a.adreca,
+                a.imatge,
+                a.actiu,
+                i.nomArxiu
+              FROM db_agenda AS a
+              LEFT JOIN aux_imatges AS i ON a.imatge = i.id
+              WHERE a.slug = :slug";
+
+    try {
+        $result = $db->getData($query,  ['slug' => $slug], true);
+
+        if (empty($result)) {
+            Response::error(
+                MissatgesAPI::error('not_found'),
+                [],
+                404
+            );
+            return;
+        }
+
+        Response::success(
+            MissatgesAPI::success('get'),
+            $result,
+            200
+        );
+    } catch (PDOException $e) {
+        Response::error(
+            MissatgesAPI::error('errorBD'),
+            [$e->getMessage()],
+            500
+        );
+    }
 } else {
     header('HTTP/1.1 403 Forbidden');
     echo json_encode(['error' => 'Something get wrong']);
