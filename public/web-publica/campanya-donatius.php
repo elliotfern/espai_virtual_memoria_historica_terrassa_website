@@ -218,7 +218,42 @@
         }
     </style>
 
-    <div class="bloc1 border p-4">
+
+    <div class="container">
+        <div class="row justify-content-center g-4">
+
+            <div class="bloc1-text text-center">
+                <p class="mb-4" style="color:black">
+                    Fes-hi una donació:
+                </p>
+            </div>
+
+            <div class="col-auto">
+                <div class="donacio-import">
+                    <span class="quantitat">10</span>
+                    <span class="moneda">euros</span>
+                </div>
+            </div>
+
+            <div class="col-auto">
+                <div class="donacio-import">
+                    <span class="quantitat">25</span>
+                    <span class="moneda">euros</span>
+                </div>
+            </div>
+
+            <div class="col-auto">
+                <div class="donacio-import">
+                    <span class="quantitat">50</span>
+                    <span class="moneda">euros</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <div class="bloc1 border p-4 text-center" style="margin-top:25px">
 
         <div class="bloc1-text">
             <p class="mb-4">
@@ -262,3 +297,31 @@
     </div>
 
 </div>
+
+<style>
+    .donacio-import {
+        width: 110px;
+        height: 110px;
+        border-radius: 50%;
+        background-color: #133b7c;
+        color: #fff;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        line-height: 1;
+    }
+
+    .donacio-import .quantitat {
+        font-size: 2.8rem;
+        font-weight: 700;
+    }
+
+    .donacio-import .moneda {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-top: 4px;
+    }
+</style>

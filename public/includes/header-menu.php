@@ -182,9 +182,9 @@ $langCode2 = getLanguageFromUrl();
                                     <ul class="dropdown-menu" aria-labelledby="submenuEspaiVirtual">
                                         <li><a class="dropdown-item" href="<?php echo $langCode2 === 'ca' ? '/' : '/' . $langCode2 . '/'; ?>espai-virtual/que-es-espai-virtual"> <?php echo $translate['que-es-espai-virtual']; ?></a></li>
                                         <li><a class="dropdown-item" href="<?php echo $langCode2 === 'ca' ? '/' : '/' . $langCode2 . '/'; ?>espai-virtual/antecedents"> <?php echo $translate['antecedents']; ?></a></li>
+                                        <li><a class="dropdown-item" href="<?php echo $langCode2 === 'ca' ? '/' : '/' . $langCode2 . '/'; ?>espai-virtual/agenda-activitats"> <?php echo $translate['agenda']; ?></a></li>
                                         <li><a class="dropdown-item" href="<?php echo $langCode2 === 'ca' ? '/' : '/' . $langCode2 . '/'; ?>espai-virtual/premsa"> <?php echo $translate['premsa']; ?></a></li>
                                         <li><a class="dropdown-item" href="<?php echo $langCode2 === 'ca' ? '/' : '/' . $langCode2 . '/'; ?>espai-virtual/pla-comunicacio"> <?php echo $translate['materials']; ?></a></li>
-                                        <li><a class="dropdown-item" href="<?php echo $langCode2 === 'ca' ? '/' : '/' . $langCode2 . '/'; ?>espai-virtual/agenda-activitats"> <?php echo $translate['agenda']; ?></a></li>
                                     </ul>
                                 </li>
 
