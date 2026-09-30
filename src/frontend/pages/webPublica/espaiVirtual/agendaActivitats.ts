@@ -132,7 +132,7 @@ function renderFilters(showTipus: boolean): string {
 }
 
 function renderCard(item: ActeAgenda, detailHref: string): string {
-  const imgUrl = buildImgUrlAgenda(item.nomArxiu, item.mime);
+  const imgUrl = buildImgUrlAgenda(item.nomArxiu);
   const titol = item.titol ? escapeHtml(item.titol) : '—';
   const data = formatDatePublic(item.data);
   const hora = timeFromDate(item.data);
