@@ -75,6 +75,15 @@ if ($slug === "municipis") {
             return;  // o exit; según cómo funcione Response::error
         }
 
+        // Normalitzar tipus de dades
+        $result = array_map(
+            static function (array $row): array {
+                $row['id'] = (int) $row['id'];
+                return $row;
+            },
+            $result
+        );
+
         Response::success(
             MissatgesAPI::success('get'),
             $result,
@@ -184,6 +193,15 @@ if ($slug === "municipis") {
             return;
         }
 
+        // Normalitzar tipus de dades
+        $result = array_map(
+            static function (array $row): array {
+                $row['id'] = (int) $row['id'];
+                return $row;
+            },
+            $result
+        );
+
         Response::success(
             MissatgesAPI::success('get'),
             $result,
@@ -221,6 +239,15 @@ if ($slug === "municipis") {
             );
             return;
         }
+
+        // Normalitzar tipus de dades
+        $result = array_map(
+            static function (array $row): array {
+                $row['id'] = (int) $row['id'];
+                return $row;
+            },
+            $result
+        );
 
         Response::success(
             MissatgesAPI::success('get'),
@@ -343,6 +370,15 @@ if ($slug === "municipis") {
             return;
         }
 
+        // Normalitzar tipus de dades
+        $result = array_map(
+            static function (array $row): array {
+                $row['id'] = (int) $row['id'];
+                return $row;
+            },
+            $result
+        );
+
         Response::success(
             MissatgesAPI::success('get'),
             $result,
@@ -378,6 +414,15 @@ if ($slug === "municipis") {
             );
             return;
         }
+
+        // Normalitzar tipus de dades
+        $result = array_map(
+            static function (array $row): array {
+                $row['id'] = (int) $row['id'];
+                return $row;
+            },
+            $result
+        );
 
         Response::success(
             MissatgesAPI::success('get'),
@@ -494,6 +539,15 @@ if ($slug === "municipis") {
             return;
         }
 
+        // Normalitzar tipus de dades
+        $result = array_map(
+            static function (array $row): array {
+                $row['id'] = (int) $row['id'];
+                return $row;
+            },
+            $result
+        );
+
         Response::success(
             MissatgesAPI::success('get'),
             $result,
@@ -596,6 +650,15 @@ if ($slug === "municipis") {
             return;
         }
 
+        // Normalitzar tipus de dades
+        $result = array_map(
+            static function (array $row): array {
+                $row['id'] = (int) $row['id'];
+                return $row;
+            },
+            $result
+        );
+
         Response::success(
             MissatgesAPI::success('get'),
             $result,
@@ -629,6 +692,15 @@ if ($slug === "municipis") {
             );
             return;
         }
+
+        // Normalitzar tipus de dades
+        $result = array_map(
+            static function (array $row): array {
+                $row['id'] = (int) $row['id'];
+                return $row;
+            },
+            $result
+        );
 
         Response::success(
             MissatgesAPI::success('get'),
@@ -1031,6 +1103,15 @@ if ($slug === "municipis") {
             return;
         }
 
+        // Normalitzar tipus de dades
+        $result = array_map(
+            static function (array $row): array {
+                $row['id'] = (int) $row['id'];
+                return $row;
+            },
+            $result
+        );
+
         Response::success(
             MissatgesAPI::success('get'),
             $result,
@@ -1069,6 +1150,14 @@ if ($slug === "municipis") {
             );
             return;
         }
+        // Normalitzar tipus de dades
+        $result = array_map(
+            static function (array $row): array {
+                $row['id'] = (int) $row['id'];
+                return $row;
+            },
+            $result
+        );
 
         Response::success(
             MissatgesAPI::success('get'),
@@ -1103,6 +1192,15 @@ if ($slug === "municipis") {
             );
             return;
         }
+
+        // Normalitzar tipus de dades
+        $result = array_map(
+            static function (array $row): array {
+                $row['id'] = (int) $row['id'];
+                return $row;
+            },
+            $result
+        );
 
         Response::success(
             MissatgesAPI::success('get'),
@@ -1143,6 +1241,15 @@ if ($slug === "municipis") {
             return;  // o exit; según cómo funcione Response::error
         }
 
+        // Normalitzar tipus de dades
+        $result = array_map(
+            static function (array $row): array {
+                $row['id'] = (int) $row['id'];
+                return $row;
+            },
+            $result
+        );
+
         Response::success(
             MissatgesAPI::success('get'),
             $result,
@@ -1165,6 +1272,15 @@ if ($slug === "municipis") {
         ["id" => 2, "tipus_ca" => "Empleat sector públic (professor educació pública)"],
         ["id" => 3, "tipus_ca" => "Empleat sector privat"]
     ];
+
+    // Normalitzar tipus de dades
+    $result = array_map(
+        static function (array $row): array {
+            $row['id'] = (int) $row['id'];
+            return $row;
+        },
+        $result
+    );
 
     Response::success(
         MissatgesAPI::success('get'),
