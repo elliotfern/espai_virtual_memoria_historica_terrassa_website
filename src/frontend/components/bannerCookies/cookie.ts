@@ -10,8 +10,6 @@ export function initCookieConsent() {
   document.body.appendChild(createChangePreferencesButton());
 
   if (consent === 'true') {
-    // Usuario ya dio consentimiento, carga GA con consentimiento actualizado
-    document.cookie = 'cookie_consent=true; path=/; max-age=31536000'; // 1 año
     loadGoogleAnalytics();
   } else if (consent === null) {
     // Mostrar banner para pedir consentimiento
