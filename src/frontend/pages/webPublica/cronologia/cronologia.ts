@@ -1,3 +1,4 @@
+import { ENV } from '../../../config/env';
 import { initCronologiaSelects, periodLabel } from './selectsCronologia';
 
 export type Lang = 'ca' | 'es' | 'en' | 'fr' | 'it' | 'pt';
@@ -98,8 +99,22 @@ const state = {
 
 function areaLabel(lang: Lang, id: number): string {
   const dict: Record<number, Record<Lang, string>> = {
-    1: { ca: 'Terrassa', es: 'Terrassa', en: 'Terrassa', fr: 'Terrassa', it: 'Terrassa', pt: 'Terrassa' },
-    2: { ca: 'Catalunya', es: 'Cataluña', en: 'Catalonia', fr: 'Catalogne', it: 'Catalogna', pt: 'Catalunha' },
+    1: {
+      ca: 'Terrassa',
+      es: 'Terrassa',
+      en: 'Terrassa',
+      fr: 'Terrassa',
+      it: 'Terrassa',
+      pt: 'Terrassa',
+    },
+    2: {
+      ca: 'Catalunya',
+      es: 'Cataluña',
+      en: 'Catalonia',
+      fr: 'Catalogne',
+      it: 'Catalogna',
+      pt: 'Catalunha',
+    },
     3: { ca: 'Espanya', es: 'España', en: 'Spain', fr: 'Espagne', it: 'Spagna', pt: 'Espanha' },
     4: { ca: 'Europa', es: 'Europa', en: 'Europe', fr: 'Europe', it: 'Europa', pt: 'Europa' },
     5: { ca: 'Món', es: 'Mundo', en: 'World', fr: 'Monde', it: 'Mondo', pt: 'Mundo' },
@@ -109,9 +124,30 @@ function areaLabel(lang: Lang, id: number): string {
 
 function temaLabel(lang: Lang, id: number): string {
   const dict: Record<number, Record<Lang, string>> = {
-    1: { ca: 'Econòmic-laboral', es: 'Económico-laboral', en: 'Economic-labor', fr: 'Économique', it: 'Economico', pt: 'Económico' },
-    2: { ca: 'Polític-social', es: 'Político-social', en: 'Political-social', fr: 'Politique', it: 'Politico', pt: 'Político' },
-    3: { ca: 'Moviment obrer', es: 'Movimiento obrero', en: 'Labor movement', fr: 'Mouvement ouvrier', it: 'Movimento operaio', pt: 'Movimento operário' },
+    1: {
+      ca: 'Econòmic-laboral',
+      es: 'Económico-laboral',
+      en: 'Economic-labor',
+      fr: 'Économique',
+      it: 'Economico',
+      pt: 'Económico',
+    },
+    2: {
+      ca: 'Polític-social',
+      es: 'Político-social',
+      en: 'Political-social',
+      fr: 'Politique',
+      it: 'Politico',
+      pt: 'Político',
+    },
+    3: {
+      ca: 'Moviment obrer',
+      es: 'Movimiento obrero',
+      en: 'Labor movement',
+      fr: 'Mouvement ouvrier',
+      it: 'Movimento operaio',
+      pt: 'Movimento operário',
+    },
   };
   return dict[id]?.[lang] ?? String(id);
 }
@@ -166,6 +202,12 @@ export function initCronologia(lang: Lang): void {
   if (!container) return;
 
   container.innerHTML = `
+    <div class="p-3 mb-3" style="background:#fff;border-left:5px solid #c2af96;border-radius:6px;">
+      <div class="raleway">
+        Els autors de la cronologia són: <strong><a href="${ENV.domainWeb}/equip/manel-marquez">Manel Márquez Berrocal</a> i <a href="${ENV.domainWeb}/equip/josep-lluis-lacueva"">Josep Lluís Lacueva Moreno</a></strong>
+      </div>
+    </div>
+
     <div class="p-4 mb-3 rounded-3" style="background-color:#EEEAD9;">
       <div class="row g-3">
 
