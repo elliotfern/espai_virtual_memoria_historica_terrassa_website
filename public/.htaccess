@@ -1,6 +1,9 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
+    # Eina interna EVMHT
+    RewriteRule ^eines/?$ - [L]
+
     # Sitemap
     RewriteRule ^sitemap\.xml$ - [L]
     RewriteRule ^sitemaps/ - [L]

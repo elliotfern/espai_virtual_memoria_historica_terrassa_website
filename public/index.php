@@ -1,11 +1,19 @@
 <?php
 
-// Configuración inicial para mostrar errores en desarrollo
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
+// Accés directe a l'eina interna EVMHT.
+$requestPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ?? '/';
+
+if ($requestPath === '/eines' || $requestPath === '/eines/') {
+    require __DIR__ . '/eines/index.php';
+    exit;
+}
+
+// Configuració inicial per mostrar errors en desenvolupament.
+ini_set('display_errors', '1');
+ini_set('display_startup_errors', '1');
 error_reporting(E_ALL);
 
-// Incluir configuraciones y rutas
+// A partir d'aquí continua el teu enrutador habitual.
 require_once __DIR__ . '/../src/backend/bootstrap.php';
 
 // ---------------------------------------------------------
