@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Config;
 
 use PDO;
@@ -18,11 +20,20 @@ class DatabaseConnection
             $dbName = $_ENV['DB_DBNAME'] ?? '';
 
             try {
-                self::$conn = new PDO("mysql:host=$dbHost;dbname=$dbName", $dbUser, $dbPass);
-                self::$conn->exec("SET NAMES utf8");
-                self::$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                self::$conn = new PDO(
+                    "mysql:host={$dbHost};dbname={$dbName};charset=utf8mb4",
+                    $dbUser,
+                    $dbPass,
+                    [
+                        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                        PDO::ATTR_STRINGIFY_FETCHES => false,
+                        PDO::ATTR_EMULATE_PREPARES => false,
+                    ]
+                );
             } catch (PDOException $e) {
-                error_log("Error de conexión: " . $e->getMessage());
+                error_log('Error de conexión: ' . $e->getMessage());
+
                 return null;
             }
         }

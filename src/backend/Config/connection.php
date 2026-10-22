@@ -10,7 +10,17 @@ $conn = "";
 
 // Ejemplo de conexión PDO
 try {
-    $conn = new PDO("mysql:host=$dbHost;dbname=$dbname", $dbUser, $dbPass);
+    $conn = new PDO(
+        "mysql:host={$dbHost};dbname={$dbname};charset=utf8mb4",
+        $dbUser,
+        $dbPass,
+        [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            PDO::ATTR_STRINGIFY_FETCHES => false,
+            PDO::ATTR_EMULATE_PREPARES => false,
+        ]
+    );
 
     $conn->exec("SET NAMES utf8");
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

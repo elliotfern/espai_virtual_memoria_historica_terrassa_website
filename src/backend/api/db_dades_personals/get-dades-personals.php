@@ -503,6 +503,48 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
 
     $baseUrl = 'https://media.memoriaterrassa.cat/assets_represaliats/img/';
 
+    $integerFields = [
+        'id',
+        'ciutat_naixement_id',
+        'ciutat_residencia_id',
+        'ciutat_defuncio_id',
+        'tipologia_lloc_defuncio_id',
+        'causa_defuncio_id',
+        'estat_civil_id',
+        'estudis_id',
+        'ofici_id',
+        'empresa_id',
+        'partit_politic_id',
+        'sindicat_id',
+        'sector_id',
+        'sub_sector_id',
+        'carrecs_empresa_id',
+        'autor_id',
+        'autor_id2',
+        'autor_id3',
+        'colab1_id',
+        'imatgePerfil',
+        'completat',
+        'visibilitat',
+        'tipus_via_id',
+    ];
+
+    foreach ($rows as &$row) {
+        foreach ($integerFields as $field) {
+            if (isset($row[$field]) && is_numeric($row[$field])) {
+                $row[$field] = (int) $row[$field];
+            }
+        }
+
+        // Coordenades: són nombres decimals, no enters.
+        foreach (['lat', 'lng'] as $field) {
+            if (isset($row[$field]) && is_numeric($row[$field])) {
+                $row[$field] = (float) $row[$field];
+            }
+        }
+    }
+    unset($row);
+
     foreach ($rows as &$row) {
         if (!isset($row['id'])) {
             $row['adjunts'] = [];
