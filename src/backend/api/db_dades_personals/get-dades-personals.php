@@ -623,9 +623,11 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
             dp.data_naixement,
             dp.data_defuncio,
             m1.id AS ciutat_naixement_id,
-            CASE
-                WHEN :lang = 'ca' THEN COALESCE(m1.ciutat_ca, m1.ciutat)
-                WHEN :lang IN ('es','en','eng','it','pt', 'fr') THEN m1.ciutat
+           CASE
+                WHEN :lang_naixement = 'ca'
+                    THEN COALESCE(m1.ciutat_ca, m1.ciutat)
+                WHEN :lang_naixement IN ('es','en','eng','it','pt','fr')
+                    THEN m1.ciutat
                 ELSE m1.ciutat
             END AS ciutat_naixement,
             COALESCE(m1a.comarca_ca, m1a.comarca) AS comarca_naixement,
@@ -634,9 +636,11 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
             m1d.estat_$sfx AS pais_naixement,
 
             m2.id AS ciutat_residencia_id,
-            CASE
-                WHEN :lang = 'ca' THEN COALESCE(m2.ciutat_ca, m2.ciutat)
-                WHEN :lang IN ('es','en','eng','it','pt', 'fr') THEN m2.ciutat
+           CASE
+                WHEN :lang_residencia = 'ca'
+                    THEN COALESCE(m2.ciutat_ca, m2.ciutat)
+                WHEN :lang_residencia IN ('es','en','eng','it','pt','fr')
+                    THEN m2.ciutat
                 ELSE m2.ciutat
             END AS ciutat_residencia,
             COALESCE(m2a.comarca_ca, m2a.comarca) AS comarca_residencia,
@@ -645,9 +649,11 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
             m2d.estat_$sfx AS pais_residencia,
 
             m3.id AS ciutat_defuncio_id,
-            CASE
-                WHEN :lang = 'ca' THEN COALESCE(m3.ciutat_ca, m3.ciutat)
-                WHEN :lang IN ('es','en','eng','it','pt', 'fr') THEN m3.ciutat
+           CASE
+                WHEN :lang_defuncio = 'ca'
+                    THEN COALESCE(m3.ciutat_ca, m3.ciutat)
+                WHEN :lang_defuncio IN ('es','en','eng','it','pt','fr')
+                    THEN m3.ciutat
                 ELSE m3.ciutat
             END AS ciutat_defuncio,
             COALESCE(m3a.comarca_ca, m3a.comarca) AS comarca_defuncio,
@@ -750,7 +756,12 @@ if (isset($_GET['type']) && $_GET['type'] == 'llistatComplertWeb') {
             WHERE dp.slug = :slug";
 
     try {
-        $params = [':slug' => $slug, ':lang' => $lang];
+        $params = [
+            ':slug' => $slug,
+            ':lang_naixement' => $lang,
+            ':lang_residencia' => $lang,
+            ':lang_defuncio' => $lang,
+        ];
         $result = $db->getData($query, $params, false);
 
         if (empty($result)) {
