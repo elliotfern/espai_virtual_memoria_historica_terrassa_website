@@ -92,7 +92,7 @@ function renderFitxaProcessat(dada: DetingutProcesat, lang: string): string {
     <section class="negreta raleway mb-5">
 
       <h4 class="blau1 mb-4">
-        Referència consell de guerra núm. causa ${numCausa}
+        Referència consell de guerra núm. causa ${numCausa}:
       </h4>
 
       <div style="margin-top:25px">

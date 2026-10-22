@@ -151,7 +151,8 @@ if ($slug === 'fitxaRepressio') {
             ON p.sentencia = se.id
         LEFT JOIN aux_penes AS pe
             ON p.pena = pe.id
-        WHERE p.idPersona = :id";
+        WHERE p.idPersona = :id
+        ORDER BY p.data_inici_proces";
 
         $params = [':id' => $id];
         $result = $db->getData($query, $params, false);
