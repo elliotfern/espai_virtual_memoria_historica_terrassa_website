@@ -90,14 +90,26 @@ if ($slug === 'fitxaRepressio') {
     // GET : fitxa processat ID
     // URL: /api/processats/get/fitxaId?id=${id}
 } else if ($slug === 'fitxaId') {
-    $id = $_GET['id'];
 
     $db = new Database();
 
-    try {
+    $id = $_GET['id'] ?? null;
 
-        // 🔹 DATOS PRINCIPALES
-        $query = "SELECT 
+    if ($id === null || $id === '') {
+        Response::error(
+            MissatgesAPI::error('not_found'),
+            [],
+            400
+        );
+        return;
+    }
+
+    try {
+        // =====================================================
+        // 1. DADES PRINCIPALS: TOTS ELS PROCESSATS DE LA PERSONA
+        // =====================================================
+
+        $query = "SELECT
             p.id,
             p.idPersona,
             p.data_detencio,
@@ -121,18 +133,28 @@ if ($slug === 'fitxaRepressio') {
             p.observacions,
             p.anyDetingut
         FROM db_processats AS p
-        LEFT JOIN aux_procediment_judicial AS pj ON p.tipus_procediment = pj.id
-        LEFT JOIN aux_tipus_judici AS tp ON p.tipus_judici = tp.id
-        LEFT JOIN aux_jutjats AS j ON p.jutjat = j.id
-        LEFT JOIN aux_dades_municipis AS m ON p.lloc_consell_guerra = m.id
-        LEFT JOIN aux_dades_municipis AS m2 ON p.lloc_detencio = m2.id
-        LEFT JOIN aux_acusacions AS a1 ON p.acusacio = a1.id
-        LEFT JOIN aux_acusacions AS a2 ON p.acusacio_2 = a2.id
-        LEFT JOIN aux_sentencies AS se ON p.sentencia = se.id
-        LEFT JOIN aux_penes AS pe ON p.pena = pe.id
+        LEFT JOIN aux_procediment_judicial AS pj
+            ON p.tipus_procediment = pj.id
+        LEFT JOIN aux_tipus_judici AS tp
+            ON p.tipus_judici = tp.id
+        LEFT JOIN aux_jutjats AS j
+            ON p.jutjat = j.id
+        LEFT JOIN aux_dades_municipis AS m
+            ON p.lloc_consell_guerra = m.id
+        LEFT JOIN aux_dades_municipis AS m2
+            ON p.lloc_detencio = m2.id
+        LEFT JOIN aux_acusacions AS a1
+            ON p.acusacio = a1.id
+        LEFT JOIN aux_acusacions AS a2
+            ON p.acusacio_2 = a2.id
+        LEFT JOIN aux_sentencies AS se
+            ON p.sentencia = se.id
+        LEFT JOIN aux_penes AS pe
+            ON p.pena = pe.id
         WHERE p.idPersona = :id";
 
-        $result = $db->getData($query, [':id' => $id]);
+        $params = [':id' => $id];
+        $result = $db->getData($query, $params, false);
 
         if (empty($result)) {
             Response::error(
@@ -143,80 +165,187 @@ if ($slug === 'fitxaRepressio') {
             return;
         }
 
-        $fitxa = $result[0];
-
         // =====================================================
-        // 🔥 RELACIONES MULTI (OBJETOS COMPLETOS)
+        // 2. PREPARAR ELS IDENTIFICADORS DELS PROCESSATS
         // =====================================================
 
-        // 🔹 JUECES INSTRUCTORES
-        $fitxa['jutges_instructors'] = $db->getData("
-            SELECT j.id, j.nom, j.cognoms, j.carrec
-            FROM db_processats_jutges_instructors pj
-            LEFT JOIN aux_jutges_instructors j ON j.id = pj.jutge_id
-            WHERE pj.processat_id = :id
-        ", [':id' => $id], false);
+        $processatIds = array_column($result, 'id');
 
-        // 🔹 SECRETARIOS INSTRUCTORES (NUEVO)
-        $fitxa['secretaris_instructors'] = $db->getData("
-            SELECT s.id, s.nom, s.cognoms, s.carrec
-            FROM db_processats_secretaris_instructors ps
-            LEFT JOIN aux_secretaris_instructors s ON s.id = ps.secretari_id
-            WHERE ps.processat_id = :id
-        ", [':id' => $id], false);
+        $placeholders = [];
+        $params = [];
 
-        // 🔹 DEFENSORS
-        $fitxa['defensors'] = $db->getData("
-            SELECT d.id, d.nom, d.cognoms, d.carrec
-            FROM db_processats_defensors pd
-            LEFT JOIN aux_defensors d ON d.id = pd.defensor_id
-            WHERE pd.processat_id = :id
-        ", [':id' => $id], false);
+        foreach ($processatIds as $index => $processatId) {
+            $placeholder = ':processat_' . $index;
 
-        // 🔹 FISCALS
-        $fitxa['fiscals'] = $db->getData("
-            SELECT f.id, f.nom, f.cognoms, f.carrec
-            FROM db_processats_fiscals pf
-            LEFT JOIN aux_fiscals f ON f.id = pf.fiscal_id
-            WHERE pf.processat_id = :id
-        ", [':id' => $id], false);
+            $placeholders[] = $placeholder;
+            $params[$placeholder] = $processatId;
+        }
 
-        // 🔹 PONENTS
-        $fitxa['ponents'] = $db->getData("
-            SELECT p2.id, p2.nom, p2.cognoms, p2.carrec
-            FROM db_processats_ponents pp
-            LEFT JOIN aux_ponents p2 ON p2.id = pp.ponent_id
-            WHERE pp.processat_id = :id
-        ", [':id' => $id], false);
+        $in = implode(', ', $placeholders);
 
-        // 🔹 TRIBUNALS VOCALS
-        $fitxa['tribunals_vocals'] = $db->getData("
-            SELECT t.id, t.nom, t.cognoms, t.carrec
-            FROM db_processats_tribunal_vocals pt
-            LEFT JOIN aux_tribunal_vocals t ON t.id = pt.vocal_id
-            WHERE pt.processat_id = :id
-        ", [':id' => $id], false);
+        // =====================================================
+        // 3. DEFINIR LES RELACIONS
+        // =====================================================
 
-        // 🔹 TESTIMONIS ACUSACIÓ
-        $fitxa['testimonis_acusacions'] = $db->getData("
-            SELECT t.id, t.nom, t.cognoms, t.carrec
-            FROM db_processats_testimonis_acusacions pt
-            LEFT JOIN aux_testimonis_acusacions t ON t.id = pt.testimoni_id
-            WHERE pt.processat_id = :id
-        ", [':id' => $id], false);
+        $relacions = [
+            'jutges_instructors' => "
+                SELECT
+                    pj.processat_id,
+                    j.id,
+                    j.nom,
+                    j.cognoms,
+                    j.carrec
+                FROM db_processats_jutges_instructors AS pj
+                INNER JOIN aux_jutges_instructors AS j
+                    ON j.id = pj.jutge_id
+                WHERE pj.processat_id IN ($in)
+            ",
 
-        $fitxa['presidents_tribunal'] = $db->getData("
-        SELECT p.id, p.nom, p.cognoms, p.carrec
-        FROM db_processats_presidents_tribunal pp
-        LEFT JOIN aux_presidents_tribunal p ON p.id = pp.president_id
-        WHERE pp.processat_id = :id
-    ", [':id' => $id], false);
+            'secretaris_instructors' => "
+                SELECT
+                    ps.processat_id,
+                    s.id,
+                    s.nom,
+                    s.cognoms,
+                    s.carrec
+                FROM db_processats_secretaris_instructors AS ps
+                INNER JOIN aux_secretaris_instructors AS s
+                    ON s.id = ps.secretari_id
+                WHERE ps.processat_id IN ($in)
+            ",
 
+            'defensors' => "
+                SELECT
+                    pd.processat_id,
+                    d.id,
+                    d.nom,
+                    d.cognoms,
+                    d.carrec
+                FROM db_processats_defensors AS pd
+                INNER JOIN aux_defensors AS d
+                    ON d.id = pd.defensor_id
+                WHERE pd.processat_id IN ($in)
+            ",
+
+            'fiscals' => "
+                SELECT
+                    pf.processat_id,
+                    f.id,
+                    f.nom,
+                    f.cognoms,
+                    f.carrec
+                FROM db_processats_fiscals AS pf
+                INNER JOIN aux_fiscals AS f
+                    ON f.id = pf.fiscal_id
+                WHERE pf.processat_id IN ($in)
+            ",
+
+            'ponents' => "
+                SELECT
+                    pp.processat_id,
+                    p2.id,
+                    p2.nom,
+                    p2.cognoms,
+                    p2.carrec
+                FROM db_processats_ponents AS pp
+                INNER JOIN aux_ponents AS p2
+                    ON p2.id = pp.ponent_id
+                WHERE pp.processat_id IN ($in)
+            ",
+
+            'tribunals_vocals' => "
+                SELECT
+                    pt.processat_id,
+                    t.id,
+                    t.nom,
+                    t.cognoms,
+                    t.carrec
+                FROM db_processats_tribunal_vocals AS pt
+                INNER JOIN aux_tribunal_vocals AS t
+                    ON t.id = pt.vocal_id
+                WHERE pt.processat_id IN ($in)
+            ",
+
+            'testimonis_acusacions' => "
+                SELECT
+                    pt.processat_id,
+                    t.id,
+                    t.nom,
+                    t.cognoms,
+                    t.carrec
+                FROM db_processats_testimonis_acusacions AS pt
+                INNER JOIN aux_testimonis_acusacions AS t
+                    ON t.id = pt.testimoni_id
+                WHERE pt.processat_id IN ($in)
+            ",
+
+            'presidents_tribunal' => "
+                SELECT
+                    pp.processat_id,
+                    p2.id,
+                    p2.nom,
+                    p2.cognoms,
+                    p2.carrec
+                FROM db_processats_presidents_tribunal AS pp
+                INNER JOIN aux_presidents_tribunal AS p2
+                    ON p2.id = pp.president_id
+                WHERE pp.processat_id IN ($in)
+            "
+        ];
+
+        // =====================================================
+        // 4. INICIALITZAR LES RELACIONS DE CADA PROCESSAT
+        // =====================================================
+
+        $indexProcessats = [];
+
+        foreach ($result as &$fitxa) {
+            $processatId = (string) $fitxa['id'];
+
+            $indexProcessats[$processatId] = true;
+
+            foreach (array_keys($relacions) as $nomRelacio) {
+                $fitxa[$nomRelacio] = [];
+            }
+        }
+
+        unset($fitxa);
+
+        // =====================================================
+        // 5. CARREGAR TOTES LES RELACIONS EN BLOC
+        // =====================================================
+
+        foreach ($relacions as $nomRelacio => $sql) {
+            $dadesRelacio = $db->getData($sql, $params);
+
+            if (empty($dadesRelacio)) {
+                continue;
+            }
+
+            foreach ($dadesRelacio as $element) {
+                $processatId = (string) $element['processat_id'];
+
+                unset($element['processat_id']);
+
+                // Afegir la relació al processat corresponent.
+                foreach ($result as &$fitxa) {
+                    if ((string) $fitxa['id'] === $processatId) {
+                        $fitxa[$nomRelacio][] = $element;
+                        break;
+                    }
+                }
+
+                unset($fitxa);
+            }
+        }
+
+        // =====================================================
+        // 6. RETORNAR TOTES LES FITXES
         // =====================================================
 
         Response::success(
             MissatgesAPI::success('get'),
-            $fitxa,
+            $result,
             200
         );
     } catch (PDOException $e) {

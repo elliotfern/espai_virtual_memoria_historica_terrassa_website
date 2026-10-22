@@ -19,42 +19,52 @@ function renderPersones(list?: PersonaRelacionada[] | null): string {
       const nom = p.nom ?? '';
       const cognoms = p.cognoms ?? '';
       const carrec = p.carrec ? ` (${p.carrec})` : '';
-
       const text = `${nom} ${cognoms}`.trim();
 
-      return carrec ? `${text}${carrec}` : text;
+      return `${text}${carrec}`;
     })
     .join('; ');
 }
 
-export function tab6Detingut(dada: DetingutProcesat, htmlContent: string, lang: string): string {
+function renderFitxaProcessat(dada: DetingutProcesat, lang: string): string {
   const l = isLang(lang) ? lang : DEFAULT_LANG;
 
   // Detenció
   const dataDetencio = valorTextDesconegut(
     dada.data_detencio?.trim() ? formatDatesForm(dada.data_detencio) : null,
-    4, // unknownDate
+    4,
     l
   );
-  const llocDetencio = valorTextDesconegut(dada.lloc_detencio, 1, l); // noData (tu código original)
+  const llocDetencio = valorTextDesconegut(dada.lloc_detencio, 1, l);
 
   // Procés bàsic
-  const tipusProcediment = valorTextDesconegut(dada.tipus_procediment, 2, l); // unknownM
+  const tipusProcediment = valorTextDesconegut(dada.tipus_procediment, 2, l);
   const tipusJudici = valorTextDesconegut(dada.tipus_judici, 2, l);
   const numCausa = valorTextDesconegut(dada.num_causa, 2, l);
 
-  const anyDetingut = dada.anyDetingut && dada.anyDetingut.trim() !== '' ? `${dada.anyDetingut} ${t(LABELS_JUD, 'years', l)}` : valorTextDesconegut(null, 2, l);
+  const anyDetingut =
+    dada.anyDetingut && dada.anyDetingut.trim() !== ''
+      ? `${dada.anyDetingut} ${t(LABELS_JUD, 'years', l)}`
+      : valorTextDesconegut(null, 2, l);
 
   const anyInici = valorTextDesconegut(dada.any_inicial, 2, l);
   const anyFinal = valorTextDesconegut(dada.any_final, 2, l);
 
-  const dataInici = valorTextDesconegut(dada.data_inici_proces?.trim() ? formatDatesForm(dada.data_inici_proces) : null, 4, l);
-  const dataSentencia = valorTextDesconegut(dada.sentencia_data?.trim() ? formatDatesForm(dada.sentencia_data) : null, 4, l);
+  const dataInici = valorTextDesconegut(
+    dada.data_inici_proces?.trim() ? formatDatesForm(dada.data_inici_proces) : null,
+    4,
+    l
+  );
+  const dataSentencia = valorTextDesconegut(
+    dada.sentencia_data?.trim() ? formatDatesForm(dada.sentencia_data) : null,
+    4,
+    l
+  );
 
   // Resolució
-  const sentencia = valorTextDesconegut(dada.sentencia, 5, l); // femení: "Desconeguda"
-  const pena = valorTextDesconegut(dada.pena, 5, l); // femení
-  const commutacio = dada.commutacio?.trim() ? dada.commutacio : '-'; // tal com ho feies
+  const sentencia = valorTextDesconegut(dada.sentencia, 5, l);
+  const pena = valorTextDesconegut(dada.pena, 5, l);
+  const commutacio = dada.commutacio?.trim() ? dada.commutacio : '-';
 
   // Detall
   const jutjat = valorTextDesconegut(dada.jutjat, 2, l);
@@ -68,63 +78,80 @@ export function tab6Detingut(dada: DetingutProcesat, htmlContent: string, lang: 
   const secretariInstructor = renderPersones(dada.secretaris_instructors);
   const presidentTribunal = renderPersones(dada.presidents_tribunal);
 
-  const consellGuerraData = valorTextDesconegut(dada.consell_guerra_data?.trim() ? formatDatesForm(dada.consell_guerra_data) : null, 4, l);
+  const consellGuerraData = valorTextDesconegut(
+    dada.consell_guerra_data?.trim() ? formatDatesForm(dada.consell_guerra_data) : null,
+    4,
+    l
+  );
   const llocConsellGuerra = valorTextDesconegut(dada.lloc_consell_guerra, 2, l);
-  const acusacio = valorTextDesconegut(dada.acusacio, 5, l); // femení
-  const acusacio2 = valorTextDesconegut(dada.acusacio_2, 5, l); // femení
-  const observacions = valorTextDesconegut(dada.observacions, 1, l); // "Sense dades"
+  const acusacio = valorTextDesconegut(dada.acusacio, 5, l);
+  const acusacio2 = valorTextDesconegut(dada.acusacio_2, 5, l);
+  const observacions = valorTextDesconegut(dada.observacions, 1, l);
 
-  // Render
-  htmlContent += `
-    <div class="negreta raleway">
+  return `
+    <section class="negreta raleway mb-5">
+
+      <h4 class="blau1 mb-4">
+        Referència consell de guerra núm. causa ${numCausa}
+      </h4>
 
       <div style="margin-top:25px">
         <h5><span class="negreta blau1">${t(LABELS_JUD, 's1_title', l)}</span></h5>
-        <p><span class='marro2'>${t(LABELS_JUD, 'arrestDate', l)} </span><span class='blau1'>${dataDetencio}</span></p>
-        <p><span class='marro2'>${t(LABELS_JUD, 'arrestPlace', l)}</span> <span class='blau1'>${llocDetencio}</span></p>
+        <p><span class="marro2">${t(LABELS_JUD, 'arrestDate', l)} </span><span class="blau1">${dataDetencio}</span></p>
+        <p><span class="marro2">${t(LABELS_JUD, 'arrestPlace', l)}</span> <span class="blau1">${llocDetencio}</span></p>
       </div>
 
       <div style="margin-top:45px">
         <h5><span class="negreta blau1">${t(LABELS_JUD, 's2_title', l)}</span></h5>
-        <p><span class='marro2'>${t(LABELS_JUD, 'procedureType', l)} </span><span class='blau1'>${tipusProcediment}</span></p>
-        <p><span class='marro2'>${t(LABELS_JUD, 'trialType', l)}</span> <span class='blau1'>${tipusJudici}</span></p>
-        <p><span class='marro2'>${t(LABELS_JUD, 'caseNumber', l)}</span> <span class='blau1'>${numCausa}</span></p>
-        <p><span class='marro2'>${t(LABELS_JUD, 'ageAtArrest', l)}</span> <span class='blau1'>${anyDetingut}</span></p>
-        <p><span class='marro2'>${t(LABELS_JUD, 'startYear', l)} </span><span class='blau1'>${anyInici}</span></p>
-        <p><span class='marro2'>${t(LABELS_JUD, 'endYear', l)} </span><span class='blau1'>${anyFinal}</span></p>
-        <p><span class='marro2'>${t(LABELS_JUD, 'processStartDate', l)} </span><span class='blau1'>${dataInici}</span></p>
-        <p><span class='marro2'>${t(LABELS_JUD, 'sentenceDate', l)} </span><span class='blau1'>${dataSentencia}</span></p>
+        <p><span class="marro2">${t(LABELS_JUD, 'procedureType', l)} </span><span class="blau1">${tipusProcediment}</span></p>
+        <p><span class="marro2">${t(LABELS_JUD, 'trialType', l)}</span> <span class="blau1">${tipusJudici}</span></p>
+        <p><span class="marro2">${t(LABELS_JUD, 'caseNumber', l)}</span> <span class="blau1">${numCausa}</span></p>
+        <p><span class="marro2">${t(LABELS_JUD, 'ageAtArrest', l)}</span> <span class="blau1">${anyDetingut}</span></p>
+        <p><span class="marro2">${t(LABELS_JUD, 'startYear', l)} </span><span class="blau1">${anyInici}</span></p>
+        <p><span class="marro2">${t(LABELS_JUD, 'endYear', l)} </span><span class="blau1">${anyFinal}</span></p>
+        <p><span class="marro2">${t(LABELS_JUD, 'processStartDate', l)} </span><span class="blau1">${dataInici}</span></p>
+        <p><span class="marro2">${t(LABELS_JUD, 'sentenceDate', l)} </span><span class="blau1">${dataSentencia}</span></p>
       </div>
 
       <div style="margin-top:45px">
         <h5><span class="negreta blau1">${t(LABELS_JUD, 's3_title', l)}</span></h5>
-        <p><span class='marro2'>${t(LABELS_JUD, 'sentence', l)} </span><span class='blau1'>${sentencia}</span></p>
-        <p><span class='marro2'>${t(LABELS_JUD, 'penalty', l)} </span><span class='blau1'>${pena}</span></p>
-        <p><span class='marro2'>${t(LABELS_JUD, 'commutation', l)} </span><span class='blau1'>${commutacio}</span></p>
+        <p><span class="marro2">${t(LABELS_JUD, 'sentence', l)} </span><span class="blau1">${sentencia}</span></p>
+        <p><span class="marro2">${t(LABELS_JUD, 'penalty', l)} </span><span class="blau1">${pena}</span></p>
+        <p><span class="marro2">${t(LABELS_JUD, 'commutation', l)} </span><span class="blau1">${commutacio}</span></p>
       </div>
 
       <div style="margin-top:45px">
         <h5><span class="negreta blau1">${t(LABELS_JUD, 's4_title', l)}</span></h5>
-        <p><span class='marro2'>${t(LABELS_JUD, 'court', l)} </span><span class='blau1'>${jutjat}</span></p>
-        <p><span class='marro2'>${t(LABELS_JUD, 'investigatingJudge', l)} </span><span class='blau1'>${jutgeInstructor}</span></p>
-        <p><span class='marro2'>${t(LABELS_JUD, 'investigatingSecretary', l)}</span> <span class='blau1'>${secretariInstructor}</span></p>
-        <p><span class='marro2'>${t(LABELS_JUD, 'hearingDate', l)}</span> <span class='blau1'>${consellGuerraData}</span></p>
-        <p><span class='marro2'>${t(LABELS_JUD, 'hearingCity', l)}</span> <span class='blau1'>${llocConsellGuerra}</span></p>
-        <p><span class='marro2'>${t(LABELS_JUD, 'courtPresident', l)}</span> <span class='blau1'>${presidentTribunal}</span></p>
-        <p><span class='marro2'>${t(LABELS_JUD, 'defenseCounsel', l)}</span> <span class='blau1'>${defensor}</span></p>
-        <p><span class='marro2'>${t(LABELS_JUD, 'prosecutor', l)}</span> <span class='blau1'>${fiscal}</span></p>
-        <p><span class='marro2'>${t(LABELS_JUD, 'reportingJudge', l)}</span> <span class='blau1'>${ponent}</span></p>
-        <p><span class='marro2'>${t(LABELS_JUD, 'courtMembers', l)}</span> <span class='blau1'>${tribunalVocals}</span></p>
-        <p><span class='marro2'>${t(LABELS_JUD, 'charge', l)}</span> <span class='blau1'>${acusacio}</span></p>
-        <p><span class='marro2'>${t(LABELS_JUD, 'charge2', l)}</span> <span class='blau1'>${acusacio2}</span></p>
-        <p><span class='marro2'>${t(LABELS_JUD, 'chargeWitness', l)}</span> <span class='blau1'>${testimoniAcusacio}</span></p>
+        <p><span class="marro2">${t(LABELS_JUD, 'court', l)} </span><span class="blau1">${jutjat}</span></p>
+        <p><span class="marro2">${t(LABELS_JUD, 'investigatingJudge', l)} </span><span class="blau1">${jutgeInstructor}</span></p>
+        <p><span class="marro2">${t(LABELS_JUD, 'investigatingSecretary', l)}</span> <span class="blau1">${secretariInstructor}</span></p>
+        <p><span class="marro2">${t(LABELS_JUD, 'hearingDate', l)}</span> <span class="blau1">${consellGuerraData}</span></p>
+        <p><span class="marro2">${t(LABELS_JUD, 'hearingCity', l)}</span> <span class="blau1">${llocConsellGuerra}</span></p>
+        <p><span class="marro2">${t(LABELS_JUD, 'courtPresident', l)}</span> <span class="blau1">${presidentTribunal}</span></p>
+        <p><span class="marro2">${t(LABELS_JUD, 'defenseCounsel', l)}</span> <span class="blau1">${defensor}</span></p>
+        <p><span class="marro2">${t(LABELS_JUD, 'prosecutor', l)}</span> <span class="blau1">${fiscal}</span></p>
+        <p><span class="marro2">${t(LABELS_JUD, 'reportingJudge', l)}</span> <span class="blau1">${ponent}</span></p>
+        <p><span class="marro2">${t(LABELS_JUD, 'courtMembers', l)}</span> <span class="blau1">${tribunalVocals}</span></p>
+        <p><span class="marro2">${t(LABELS_JUD, 'charge', l)}</span> <span class="blau1">${acusacio}</span></p>
+        <p><span class="marro2">${t(LABELS_JUD, 'charge2', l)}</span> <span class="blau1">${acusacio2}</span></p>
+        <p><span class="marro2">${t(LABELS_JUD, 'chargeWitness', l)}</span> <span class="blau1">${testimoniAcusacio}</span></p>
       </div>
 
       <div style="margin-top:45px">
         <h5><span class="negreta blau1">${t(LABELS_JUD, 's5_title', l)}</span></h5>
-        <p><span class='marro2'>${t(LABELS_JUD, 'observations', l)}</span> <span class='blau1'>${observacions}</span></p>
+        <p><span class="marro2">${t(LABELS_JUD, 'observations', l)}</span> <span class="blau1">${observacions}</span></p>
       </div>
-    </div>`;
 
-  return htmlContent;
+    </section>
+  `;
+}
+
+export function tab6Detingut(dades: DetingutProcesat[], htmlContent: string, lang: string): string {
+  if (!Array.isArray(dades) || dades.length === 0) {
+    return htmlContent;
+  }
+
+  const contingut = dades.map((dada) => renderFitxaProcessat(dada, lang)).join('');
+
+  return `${htmlContent}${contingut}`;
 }
