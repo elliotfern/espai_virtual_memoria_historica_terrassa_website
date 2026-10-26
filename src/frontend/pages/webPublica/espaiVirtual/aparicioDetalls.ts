@@ -89,6 +89,8 @@ function tipusAparicioHuman(tipus: string | null): string {
       return 'Nota de premsa';
     case 'publicacio_xarxes':
       return 'Publicació xarxes';
+    case 'article':
+      return 'Article';
     case 'altres':
       return 'Altres';
     default:

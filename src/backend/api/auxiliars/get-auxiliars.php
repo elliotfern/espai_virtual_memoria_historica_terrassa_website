@@ -2075,6 +2075,10 @@ if ($slug === "municipis") {
             'nom' => 'Publicació xarxes'
         ],
         [
+            'id' => 'article',
+            'nom' => 'Article'
+        ],
+        [
             'id' => 'altres',
             'nom' => 'Altres'
         ]
