@@ -280,15 +280,23 @@ function renderAparicioDetall(target: HTMLElement, detall: AparicioDetall): void
 
   const previewHtml = base.imageUrl
     ? `
-      <div class="ratio ratio-4x3 border rounded bg-light overflow-hidden">
-        <img
-          src="${escapeHtml(base.imageUrl)}"
-          alt="${escapeHtml(title)}"
-          class="w-100 h-100"
-          style="object-fit: contain;"
-          loading="lazy"
+      <div class="text-center">
+        <a
+          href="${escapeHtml(base.imageUrl)}"
+          target="_blank"
+          rel="noopener noreferrer"
+          title="Obrir la imatge a mida completa"
         >
+          <img
+            src="${escapeHtml(base.imageUrl)}"
+            alt="${escapeHtml(title)}"
+            class="img-fluid border rounded"
+            style="width: 50%; height: auto;"
+            loading="lazy"
+          >
+        </a>
       </div>
+
       <div class="small text-muted mt-2">
         <span><strong>Arxiu:</strong> <code>${escapeHtml(base.nomArxiu ?? '')}</code></span>
         <span class="mx-2">·</span>
