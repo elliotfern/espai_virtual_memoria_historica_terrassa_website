@@ -190,6 +190,7 @@ function buildDetalls(rows: PremsaAparicioI18nRow[]): PremsaAparicioDetalls {
       id: first.aparicio_id,
       dataAparicio: first.data_aparicio ?? null,
       tipusAparicio: first.tipus_aparicio ?? null,
+      autor: first.autor ?? null,
       mitjaId: first.mitja_id ?? null,
       urlNoticia: first.url_noticia ?? null,
       nomMitja: first.nomMitja ?? null,
