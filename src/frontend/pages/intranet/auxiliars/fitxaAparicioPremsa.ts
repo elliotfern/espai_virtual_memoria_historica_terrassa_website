@@ -14,6 +14,7 @@ interface ApiRowPremsaAparicio {
   id: number;
   data_aparicio: string; // YYYY-MM-DD
   tipus_aparicio: string;
+  autor: string;
   mitja_id: number;
   nomMitja?: string | null; // ✅ lo añades en API
   url_noticia: string | null;
@@ -40,6 +41,7 @@ interface AparicioBase {
   id: number;
   dataAparicio: string;
   tipusAparicio: string;
+  autor: string;
   mitjaId: number;
   nomMitja: string | null;
   urlNoticia: string | null;
@@ -69,7 +71,12 @@ interface AparicioDetall {
 
 /** ---------- Utils ---------- */
 function escapeHtml(input: string): string {
-  return input.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#039;');
+  return input
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;');
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -78,7 +85,12 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 
 function isApiResponse(value: unknown): value is ApiResponse<unknown> {
   if (!isRecord(value)) return false;
-  return typeof value['status'] === 'string' && typeof value['message'] === 'string' && Array.isArray(value['errors']) && 'data' in value;
+  return (
+    typeof value['status'] === 'string' &&
+    typeof value['message'] === 'string' &&
+    Array.isArray(value['errors']) &&
+    'data' in value
+  );
 }
 
 function normalizeLang(raw: string): Lang | null {
@@ -124,11 +136,15 @@ function safeUrlLink(url: string | null): string {
 }
 
 function badgeEstat(estat: 'draft' | 'publicat'): string {
-  return estat === 'publicat' ? `<span class="badge bg-success">Publicat</span>` : `<span class="badge bg-secondary">Esborrany</span>`;
+  return estat === 'publicat'
+    ? `<span class="badge bg-success">Publicat</span>`
+    : `<span class="badge bg-secondary">Esborrany</span>`;
 }
 
 function badgeDestacat(destacat: number): string {
-  return destacat === 1 ? `<span class="badge bg-warning text-dark">Destacat</span>` : `<span class="badge bg-light text-dark">No</span>`;
+  return destacat === 1
+    ? `<span class="badge bg-warning text-dark">Destacat</span>`
+    : `<span class="badge bg-light text-dark">No</span>`;
 }
 
 function langHasContent(e: AparicioI18nEntry): boolean {
@@ -141,13 +157,18 @@ function isApiRowPremsaAparicio(value: unknown): value is ApiRowPremsaAparicio {
   if (typeof value['id'] !== 'number') return false;
   if (typeof value['data_aparicio'] !== 'string') return false;
   if (typeof value['tipus_aparicio'] !== 'string') return false;
+  if (typeof value['autor'] !== 'string') return false;
   if (typeof value['mitja_id'] !== 'number') return false;
 
   const nomMitja = value['nomMitja'];
   if (!(typeof nomMitja === 'string' || nomMitja === null || nomMitja === undefined)) return false;
 
+  const autor = value['autor'];
+  if (!(typeof autor === 'string' || autor === null || autor === undefined)) return false;
+
   const urlNoticia = value['url_noticia'];
-  if (!(typeof urlNoticia === 'string' || urlNoticia === null || urlNoticia === undefined)) return false;
+  if (!(typeof urlNoticia === 'string' || urlNoticia === null || urlNoticia === undefined))
+    return false;
 
   const imageId = value['image_id'];
   if (!(typeof imageId === 'number' || imageId === null || imageId === undefined)) return false;
@@ -204,7 +225,8 @@ async function fetchAparicioRows(id: number): Promise<ApiRowPremsaAparicio[]> {
 
   const rows: ApiRowPremsaAparicio[] = [];
   for (const item of payload) {
-    if (!isApiRowPremsaAparicio(item)) throw new Error('Resposta inesperada: format de fila incorrecte.');
+    if (!isApiRowPremsaAparicio(item))
+      throw new Error('Resposta inesperada: format de fila incorrecte.');
     rows.push(item);
   }
   return rows;
@@ -220,6 +242,7 @@ function mapRowsToDetall(rows: ApiRowPremsaAparicio[]): AparicioDetall {
     id: first.id,
     dataAparicio: first.data_aparicio,
     tipusAparicio: first.tipus_aparicio,
+    autor: first.autor,
     mitjaId: first.mitja_id,
     nomMitja: first.nomMitja ?? null,
     urlNoticia: first.url_noticia ?? null,
@@ -282,7 +305,9 @@ function renderAparicioDetall(target: HTMLElement, detall: AparicioDetall): void
     const notes = entry.notes ? escapeHtml(entry.notes) : `<span class="text-muted">—</span>`;
     const pdf = entry.pdfUrl ? safeUrlLink(entry.pdfUrl) : `<span class="text-muted">—</span>`;
 
-    const dot = langHasContent(entry) ? `<span class="d-inline-block rounded-circle bg-success" style="width:10px;height:10px" title="Traducció present"></span>` : `<span class="d-inline-block rounded-circle bg-secondary" style="width:10px;height:10px" title="Sense traducció"></span>`;
+    const dot = langHasContent(entry)
+      ? `<span class="d-inline-block rounded-circle bg-success" style="width:10px;height:10px" title="Traducció present"></span>`
+      : `<span class="d-inline-block rounded-circle bg-secondary" style="width:10px;height:10px" title="Sense traducció"></span>`;
 
     return `
       <tr>
@@ -311,6 +336,8 @@ function renderAparicioDetall(target: HTMLElement, detall: AparicioDetall): void
             <span><strong>Data:</strong> ${escapeHtml(base.dataAparicio)}</span>
             <span class="mx-2">·</span>
             <span><strong>Tipus:</strong> <code>${escapeHtml(base.tipusAparicio)}</code></span>
+            <span class="mx-2">·</span>
+            <span><strong>Autor:</strong> <code>${escapeHtml(base.autor)}</code></span>
           </div>
         </div>
 
@@ -372,14 +399,18 @@ function renderAparicioDetall(target: HTMLElement, detall: AparicioDetall): void
   `;
 
   // Eventos (solo 2 botones)
-  const btnEditBase = target.querySelector<HTMLButtonElement>('button[data-action="edit-aparicio"]');
+  const btnEditBase = target.querySelector<HTMLButtonElement>(
+    'button[data-action="edit-aparicio"]'
+  );
   if (btnEditBase) {
     btnEditBase.addEventListener('click', () => {
       window.location.href = `/gestio/auxiliars/modifica-aparicio-premsa/${encodeURIComponent(String(base.id))}`;
     });
   }
 
-  const btnEditI18n = target.querySelector<HTMLButtonElement>('button[data-action="edit-i18n-all"]');
+  const btnEditI18n = target.querySelector<HTMLButtonElement>(
+    'button[data-action="edit-i18n-all"]'
+  );
   if (btnEditI18n) {
     btnEditI18n.addEventListener('click', () => {
       window.location.href = `/gestio/auxiliars/modifica-aparicio-premsa-i18n/${encodeURIComponent(String(base.id))}`;

@@ -25,6 +25,7 @@ type PremsaAparicioI18nRow = {
   data_aparicio: string | null; // YYYY-MM-DD
   tipus_aparicio: string | null;
   mitja_id: number | null;
+  autor: string;
   url_noticia: string | null;
   nomMitja: string | null;
 
@@ -43,6 +44,7 @@ type PremsaAparicioDetalls = {
     dataAparicio: string | null;
     tipusAparicio: string | null;
     mitjaId: number | null;
+    autor: string;
     urlNoticia: string | null;
     nomMitja: string | null;
 
@@ -253,15 +255,19 @@ function renderSkeleton(): string {
 
         <div class="p-3" style="background-color:#EEEAD9;border-radius:6px;">
           <div class="row g-3">
-            <div class="col-12 col-md-4">
+            <div class="col-12 col-md-3">
               <div class="text-muted raleway">Data</div>
               <div class="raleway negreta" id="apData">—</div>
             </div>
-            <div class="col-12 col-md-4">
+            <div class="col-12 col-md-3">
               <div class="text-muted raleway">Mitjà</div>
               <div class="raleway negreta" id="apMitja">—</div>
             </div>
-            <div class="col-12 col-md-4">
+             <div class="col-12 col-md-3">
+              <div class="text-muted raleway">Autor</div>
+              <div class="raleway negreta" id="autor">—</div>
+            </div>
+            <div class="col-12 col-md-3">
               <div class="text-muted raleway">Tipus</div>
               <div class="raleway negreta" id="apTipus">—</div>
             </div>
@@ -334,6 +340,7 @@ function renderDetalls(detalls: PremsaAparicioDetalls, lang: Lang): void {
   const $data = document.getElementById('apData');
   const $mitja = document.getElementById('apMitja');
   const $tipus = document.getElementById('apTipus');
+  const $autor = document.getElementById('autor');
 
   const $urlNoticia = document.getElementById('apUrlNoticia') as HTMLAnchorElement | null;
   const $pdf = document.getElementById('apPdf') as HTMLAnchorElement | null;
@@ -359,10 +366,12 @@ function renderDetalls(detalls: PremsaAparicioDetalls, lang: Lang): void {
   const dataTxt = formatDatePublic(detalls.base.dataAparicio);
   const mitjaTxt = detalls.base.nomMitja ? detalls.base.nomMitja : '—';
   const tipusTxt = tipusAparicioHuman(detalls.base.tipusAparicio);
+  const autor = detalls.base.autor ? detalls.base.autor : '—';
 
   if ($data) $data.textContent = dataTxt;
   if ($mitja) $mitja.textContent = mitjaTxt;
   if ($tipus) $tipus.textContent = tipusTxt;
+  if ($autor) $autor.textContent = autor;
 
   if ($metaTop) {
     const parts = [dataTxt, mitjaTxt, tipusTxt].filter((x) => x && x !== '—');

@@ -3569,6 +3569,7 @@ if ($slug === "municipi") {
     // Variables base
     $dataAparicio  = $data['data_aparicio'];
     $tipusAparicio = $data['tipus_aparicio'];
+    $autor = $data['autor'];
     $mitjaId       = (int)$data['mitja_id'];
 
     $urlNoticia = !empty($data['url_noticia']) ? $data['url_noticia'] : NULL;
@@ -3610,7 +3611,8 @@ if ($slug === "municipi") {
                     url_video = :url_video,
                     image_id = :image_id,
                     destacat = :destacat,
-                    estat = :estat
+                    estat = :estat,
+                    autr = :autor
                 WHERE id = :id";
 
         $stmt = $conn->prepare($sql);
@@ -3618,6 +3620,7 @@ if ($slug === "municipi") {
         $stmt->bindParam(':tipus_aparicio', $tipusAparicio, PDO::PARAM_STR);
         $stmt->bindParam(':mitja_id', $mitjaId, PDO::PARAM_INT);
         $stmt->bindParam(':url_noticia', $urlNoticia, PDO::PARAM_STR);
+        $stmt->bindParam(':autor', $autor, PDO::PARAM_STR);
         $stmt->bindParam(':url_video', $urlVideo, PDO::PARAM_STR);
         $stmt->bindParam(':image_id', $imageId, PDO::PARAM_INT);
         $stmt->bindParam(':destacat', $destacat, PDO::PARAM_INT);

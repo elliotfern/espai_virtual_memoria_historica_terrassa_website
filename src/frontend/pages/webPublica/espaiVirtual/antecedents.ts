@@ -241,8 +241,7 @@ export async function blocAntecedentsPublic(lang: Lang): Promise<void> {
   if (!container) return;
 
   const response = await fetchDataGet<ApiResponse<AntecedentPublicRow[]>>(
-    API_URLS.GET.PUBLIC_ANTECEDENTS(lang),
-    false
+    API_URLS.GET.PUBLIC_ANTECEDENTS(lang)
   );
 
   if (!response || !response.data) {

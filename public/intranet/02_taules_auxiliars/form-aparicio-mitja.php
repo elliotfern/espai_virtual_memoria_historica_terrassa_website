@@ -45,6 +45,11 @@
                         </div>
 
                         <div class="col-12">
+                            <label for="autor" class="form-label fw-bold">Autor</label>
+                            <input type="text" class="form-control" id="autor" name="autor">
+                        </div>
+
+                        <div class="col-12">
                             <label for="url_noticia" class="form-label fw-bold">URL notícia</label>
                             <input type="url" class="form-control" id="url_noticia" name="url_noticia" placeholder="https://…">
                             <div class="form-text">Opcional. Enllaç a la notícia/publicació.</div>

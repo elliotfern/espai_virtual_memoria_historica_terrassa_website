@@ -15,6 +15,7 @@ interface AparicioPublica {
   id: number;
   data_aparicio: string | null; // YYYY-MM-DD
   tipus_aparicio: string | null;
+  autor: string;
 
   nomMitja: string | null;
   url_noticia: string | null;
@@ -136,6 +137,7 @@ function renderCard(item: AparicioPublica, detailHref: string): string {
   const mitja = item.nomMitja ? escapeHtml(item.nomMitja) : '—';
   const data = formatDatePublic(item.data_aparicio);
   const tipus = tipusAparicioHuman(item.tipus_aparicio);
+  const autor = item.autor ? escapeHtml(item.autor) : '—';
 
   const destacatBadge =
     (item.destacat ?? 0) === 1
@@ -180,6 +182,8 @@ function renderCard(item: AparicioPublica, detailHref: string): string {
               <span>${escapeHtml(String(data))}</span>
               <span class="mx-2">·</span>
               <span class="negreta">${mitja}</span>
+              <span class="mx-2">·</span>
+              <span>${escapeHtml(autor)}</span>
               <span class="mx-2">·</span>
               <span>${escapeHtml(tipus)}</span>
             </div>
