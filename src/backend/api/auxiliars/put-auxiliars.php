@@ -3612,7 +3612,7 @@ if ($slug === "municipi") {
                     image_id = :image_id,
                     destacat = :destacat,
                     estat = :estat,
-                    autr = :autor
+                    autor = :autor
                 WHERE id = :id";
 
         $stmt = $conn->prepare($sql);
