@@ -57,7 +57,7 @@
   },
   "homepage": "https://github.com/elliotfern/espai_virtual_memoria_historica_terrassa_website#readme",
   "dependencies": {
-    "bootstrap": "^5.3.8",
+    "bootstrap": "^5.3.9",
     "choices.js": "^11.2.3",
     "dayjs": "^1.11.21",
     "leaflet": "^1.9.4",
