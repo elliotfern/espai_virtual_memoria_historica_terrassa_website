@@ -40,6 +40,8 @@ jobs:
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
+          set -euo pipefail
+
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
 
@@ -48,16 +50,7 @@ jobs:
 
           ssh-keyscan -H 87.98.230.129 >> ~/.ssh/known_hosts
 
-            - name: Copy build to staging server
-              run: |
-                  set -euo pipefail
-
-                  scp \
-                    -o BatchMode=yes \
-                    -o IdentitiesOnly=yes \
-                    -i ~/.ssh/id_ed25519 \
-                    app-staging.tar.gz \
-                    epgylzqu@87.98.230.129:/home/epgylzqu/deploy/app-staging.tar.gz
+          ssh-keygen -y -f ~/.ssh/id_ed25519 | ssh-keygen -lf -
 
       - name: Sync project to shared hosting (rsync)
         run: |
