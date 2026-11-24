@@ -49,6 +49,10 @@
                     <a href="https://amical-mauthausen.org/ca/" target="_blank"> <img src="<?php echo IMG_DOMAIN; ?>/assets_web/amical_mauthausen.jpg" alt="Amical Mauthausen" class="logosFooter"></a>
                 </div>
 
+                <div class="col-12 col-md-4 col-lg-3">
+                    <a href="https://www.expresospoliticsdelfranquisme.com/" target="_blank"> <img src="<?php echo IMG_DOMAIN; ?>/assets_web/acpepf.png" alt="Associació Catalana de Persones Ex-preses Polítiques del Franquisme" class="logosFooter"></a>
+                </div>
+
             </div>
 
         </div>
