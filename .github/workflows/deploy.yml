@@ -37,14 +37,44 @@ jobs:
           DOMAIN_WEB: ${{ secrets.DOMAIN_WEB }}
 
       - name: Setup SSH
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_PASSPHRASE: ${{ secrets.SSH_PASSPHRASE }}
         run: |
+          set -euo pipefail
+
           mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          echo "Huella de la clave utilizada por GitHub Actions:"
-          ssh-keygen -y -f ~/.ssh/id_rsa | ssh-keygen -lf -
-            
+          chmod 700 ~/.ssh
+
+          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+
+          # Iniciar agente SSH.
+          eval "$(ssh-agent -s)"
+
+          # Preparar lectura no interactiva de la passphrase.
+          cat > ~/.ssh/askpass.sh <<'ASKPASS'
+          #!/bin/sh
+          printf '%s\n' "$SSH_PASSPHRASE"
+          ASKPASS
+
+          chmod 700 ~/.ssh/askpass.sh
+
+          # Desbloquear y cargar la clave privada.
+          SSH_ASKPASS="$HOME/.ssh/askpass.sh" \
+          SSH_ASKPASS_REQUIRE=force \
+          DISPLAY=:0 \
+          ssh-add ~/.ssh/id_ed25519
+
+          # Comprobar la huella de la clave cargada.
+          ssh-add -l
+
+          # Configurar el servidor SSH.
           ssh-keyscan -H 87.98.230.129 >> ~/.ssh/known_hosts
+
+          # Conservar el agente para los siguientes pasos.
+          echo "SSH_AUTH_SOCK=$SSH_AUTH_SOCK" >> "$GITHUB_ENV"
+          echo "SSH_AGENT_PID=$SSH_AGENT_PID" >> "$GITHUB_ENV"
 
       - name: Sync project to shared hosting (rsync)
         run: |
